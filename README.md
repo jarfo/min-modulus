@@ -2,8 +2,8 @@
 
 This repository is the Lean 4 formalization accompanying the paper
 
-> José A. R. Fonollosa, *Minimum modulus for the unique multiset-sum problem,
-> with an application to computing the permanent*, arXiv:XXXX.XXXXX, 2026.
+> José A. R. Fonollosa, *Minimum modulus for the unique multiset-sum problem*,
+> [arXiv:2607.08366](https://arxiv.org/abs/2607.08366), 2026.
 
 The main theorem of the paper is kernel-checked end-to-end: `nmin_eq` builds
 with **0 errors, 0 sorries** and uses only the standard axioms
