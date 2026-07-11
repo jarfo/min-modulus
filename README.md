@@ -9,6 +9,13 @@ The main theorem of the paper is kernel-checked end-to-end: `nmin_eq` builds
 with **0 errors, 0 sorries** and uses only the standard axioms
 (`propext`, `Classical.choice`, `Quot.sound`, checked with `#print axioms nmin_eq`).
 
+The repository also formalizes Proposition 2 of the paper (optimality among
+elementary abelian $`2`$-groups): if $`g_0, \dots, g_{n-1} \in (\mathbb{Z}_2)^k`$
+have unique multiset sums, then $`k \ge n - 1`$, so the least such group has
+order $`2^{n-1}`$. This is a separate Lean project in [`lean2/`](lean2/) —
+see [lean2/README.md](lean2/README.md) for the statement, proof outline, and
+verification status (also 0 sorries, standard axioms only).
+
 ## The problem and the theorem
 
 Fix $`n \ge 2`$. A set $`A = \{a_0 < \dots < a_{n-1}\}`$ of residues in
