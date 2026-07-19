@@ -57,12 +57,12 @@ scripts/check_axioms.lean       -- axiom audit, run in CI
 
 | | |
 |---|---|
-| Toolchain | Lean 4 `v4.31.0`, Mathlib pinned `v4.31.0` (prebuilt cache) |
+| Toolchain | Lean 4 `v4.32.0`, Mathlib pinned `v4.32.0` (prebuilt cache) |
 | Build | `lake build` — green (0 errors, 0 warnings, 0 sorries) |
 | Axioms | `propext`, `Classical.choice`, `Quot.sound` only |
 
 With [elan](https://github.com/leanprover/elan) on your `PATH` (it reads
-`lean-toolchain` and fetches Lean `v4.31.0` automatically):
+`lean-toolchain` and fetches Lean `v4.32.0` automatically):
 
 ```sh
 lake exe cache get   # fetch the prebuilt Mathlib cache
@@ -152,7 +152,7 @@ and meets the bound with equality.
   products (`j * N`) as atoms — provide bridging equations by `ring` and let
   omega finish linearly. Corners that are vacuous on paper via pow semantics
   need explicit case splits feeding omega the reduced facts.
-- Mathlib v4.31 names: `Nat.lt_two_pow_self` (argument implicit),
+- Mathlib v4.32 names: `Nat.lt_two_pow_self` (argument implicit),
   `Function.update_of_ne` / `Function.update_self`,
   `Nat.log_eq_of_pow_le_of_lt_pow` for concrete `Nat.log` values (does **not**
   reduce by `decide`). Note `Finset.range_subset` now means
