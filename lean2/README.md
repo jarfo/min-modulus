@@ -6,6 +6,8 @@ This is a Lean project to formalize the proof of Proposition 2
 > José A. R. Fonollosa, *Minimum modulus for the unique multiset-sum problem*,
 > [arXiv:2607.08366](https://arxiv.org/abs/2607.08366), 2026.
 
+The code in this subproject is licensed under the Apache License 2.0; see [../LICENSE](../LICENSE).
+
 The Lean proof follows the pencil-and-paper proof sketch in the paper.
 
 Target statement:
