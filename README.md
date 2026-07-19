@@ -1,4 +1,4 @@
-# min-modulus — Lean proof for the minimum-modulus paper
+# Minimum modulus for the unique multiset-sum problem
 
 [![Lean CI](https://github.com/jarfo/min-modulus/actions/workflows/build.yml/badge.svg)](https://github.com/jarfo/min-modulus/actions/workflows/build.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -77,9 +77,6 @@ To reproduce the axiom audit:
 ```sh
 lake env lean scripts/check_axioms.lean
 ```
-
-Both are run on every push by [CI](.github/workflows/build.yml), which also
-fails the build on any `sorry` or non-standard axiom.
 
 ## What is formalized
 
