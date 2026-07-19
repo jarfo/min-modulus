@@ -1,6 +1,6 @@
 import Mathlib
 
-namespace Lean2
+namespace MinModulus
 
 open scoped BigOperators
 open Module
@@ -250,4 +250,4 @@ theorem elementaryAbelianTwoGroups_optimal
 
   omega
 
-end Lean2
+end MinModulus

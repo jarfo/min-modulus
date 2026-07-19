@@ -121,7 +121,7 @@ lemma supp_mono {e w : ℕ} (h : e ≤ w) {k : ℕ → ℕ} (hs : Supp e k) : Su
 lemma val_pad {e w : ℕ} (h : e ≤ w) {k : ℕ → ℕ} (hs : Supp e k) :
     val w k = val e k := by
   unfold val
-  refine (Finset.sum_subset (Finset.range_subset.mpr h) fun i _ hni => ?_).symm
+  refine (Finset.sum_subset (Finset.range_subset_range.mpr h) fun i _ hni => ?_).symm
   have he : e ≤ i := by
     by_contra hc
     exact hni (Finset.mem_range.mpr (by omega))
@@ -130,7 +130,7 @@ lemma val_pad {e w : ℕ} (h : e ≤ w) {k : ℕ → ℕ} (hs : Supp e k) :
 lemma dsum_pad {e w : ℕ} (h : e ≤ w) {k : ℕ → ℕ} (hs : Supp e k) :
     dsum w k = dsum e k := by
   unfold dsum
-  refine (Finset.sum_subset (Finset.range_subset.mpr h) fun i _ hni => ?_).symm
+  refine (Finset.sum_subset (Finset.range_subset_range.mpr h) fun i _ hni => ?_).symm
   have he : e ≤ i := by
     by_contra hc
     exact hni (Finset.mem_range.mpr (by omega))
@@ -354,7 +354,7 @@ lemma exists_rep_compl : ∀ w s : ℕ, s < 2 ^ w → s ≠ 0 → (¬ ∃ e, s =
         obtain ⟨e, rfl⟩ := hqp
         have hew : e < w := by
           by_contra hc
-          push_neg at hc
+          push Not at hc
           have hle' : 2 ^ w ≤ 2 ^ e := Nat.pow_le_pow_right (by norm_num) hc
           omega
         have he2 : 2 ^ (e + 1) = 2 * 2 ^ e := by rw [pow_succ]; ring
@@ -380,7 +380,7 @@ lemma dsum_succ_of_lt {n M s : ℕ}
   -- some index i ≥ 1 carries a coin, else value = digit sum
   have hex : ∃ i, 1 ≤ i ∧ i < n ∧ 1 ≤ k i := by
     by_contra hno
-    push_neg at hno
+    push Not at hno
     have hvd : val n k = dsum n k := by
       unfold val dsum
       refine Finset.sum_congr rfl fun i hi => ?_
@@ -549,13 +549,13 @@ theorem theoremB {n N : ℕ} (hn : 2 ≤ n) (hN2 : 2 ≤ N)
       obtain ⟨e, he⟩ := hpw
       have hme : m < e := by
         by_contra hc
-        push_neg at hc
+        push Not at hc
         have hle' : 2 ^ e ≤ 2 ^ m := Nat.pow_le_pow_right (by norm_num) hc
         omega
       have he2 : 2 ^ (m + 1) ≤ 2 ^ e := Nat.pow_le_pow_right (by norm_num) (by omega)
       have hen : e ≤ n - 1 := by
         by_contra hc
-        push_neg at hc
+        push Not at hc
         have := Nat.pow_le_pow_right (by norm_num : 1 ≤ 2) hc.le
         omega
       obtain ⟨k0, hs0, hv0, hd0⟩ := ones_rep e
@@ -921,7 +921,7 @@ theorem nmin_eq {n : ℕ} (hn : 2 ≤ n) :
   have hnlt : n < 2 ^ n := Nat.lt_two_pow_self
   have hmlt : Nat.log 2 n < n := by
     by_contra hc
-    push_neg at hc
+    push Not at hc
     have := Nat.pow_le_pow_right (by norm_num : 1 ≤ 2) hc
     omega
   have hple : 2 ^ Nat.log 2 n ≤ 2 ^ (n - 1) :=
@@ -937,7 +937,7 @@ theorem nmin_eq {n : ℕ} (hn : 2 ≤ n) :
   · exact ⟨by omega, theoremA hn⟩
   · rintro N ⟨hN2, hNv⟩
     by_contra hc
-    push_neg at hc
+    push Not at hc
     exact theoremB hn hN2 hc hNv
 
 end MinModulus

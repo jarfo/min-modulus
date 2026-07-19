@@ -14,9 +14,8 @@ with **0 errors, 0 sorries** and uses only the standard axioms
 The repository also formalizes Proposition 2 of the paper (optimality among
 elementary abelian $`2`$-groups): if $`g_0, \dots, g_{n-1} \in (\mathbb{Z}_2)^k`$
 have unique multiset sums, then $`k \ge n - 1`$, so the least such group has
-order $`2^{n-1}`$. This is a separate Lean project in [`lean2/`](lean2/) —
-see [lean2/README.md](lean2/README.md) for the statement, proof outline, and
-verification status (also 0 sorries, standard axioms only).
+order $`2^{n-1}`$. See [Proposition 2](#proposition-2-elementary-abelian-2-groups)
+below (also 0 sorries, standard axioms only).
 
 ## The problem and the theorem
 
@@ -41,19 +40,43 @@ That this $`N`$ is minimal over *all* residue sets (not just the
 super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not formalized.
 
+## Layout
+
+A single Lake package rooted at the repository root:
+
+```
+lakefile.toml, lean-toolchain, lake-manifest.json
+MinModulus.lean                 -- root module, imports both files below
+MinModulus/
+  UniqueSums.lean               -- Theorems A, B and the main theorem `nmin_eq`
+  ElemAbelian2.lean             -- Proposition 2 (elementary abelian 2-groups)
+scripts/check_axioms.lean       -- axiom audit, run in CI
+```
+
 ## Build
 
 | | |
 |---|---|
-| File | `lean/MinModulus/Basic.lean` (~940 lines, single file) |
-| Toolchain | Lean 4 `v4.15.0`, Mathlib pinned `v4.15.0` (prebuilt cache) |
-| Build | `cd lean && lake build` — green (0 errors, 0 sorries) |
+| Toolchain | Lean 4 `v4.31.0`, Mathlib pinned `v4.31.0` (prebuilt cache) |
+| Build | `lake build` — green (0 errors, 0 warnings, 0 sorries) |
 | Axioms | `propext`, `Classical.choice`, `Quot.sound` only |
 
+With [elan](https://github.com/leanprover/elan) on your `PATH` (it reads
+`lean-toolchain` and fetches Lean `v4.31.0` automatically):
+
 ```sh
-export PATH=$HOME/.elan/bin:$PATH
-cd lean && lake build   # ~seconds warm; Mathlib comes from the cache in lean/.lake
+lake exe cache get   # fetch the prebuilt Mathlib cache
+lake build
 ```
+
+To reproduce the axiom audit:
+
+```sh
+lake env lean scripts/check_axioms.lean
+```
+
+Both are run on every push by [CI](.github/workflows/build.yml), which also
+fails the build on any `sorry` or non-standard axiom.
 
 ## What is formalized
 
@@ -81,6 +104,31 @@ integer subtraction anywhere.
 | **`theoremA`** | **§5 Theorem A — upper bound / validity** | ✅ **proved** |
 | **`nmin_eq`** | **Main theorem, `IsLeast {N ∣ 2 ≤ N ∧ Valid n N} (2^n − 2^m)`** | ✅ **proved** |
 
+## Proposition 2: elementary abelian 2-groups
+
+[`MinModulus/ElemAbelian2.lean`](MinModulus/ElemAbelian2.lean) formalizes
+Proposition 2: if $`g_0, \dots, g_{n-1} \in (\mathbb{Z}_2)^k`$ have unique
+multiset sums, then $`k \ge n - 1`$. Equivalently, the least elementary abelian
+$`2`$-group admitting such a family has order $`2^{n-1}`$.
+
+The theorem `MinModulus.elementaryAbelianTwoGroups_optimal` matches the paper's
+statement: `UniqueMultisetSums` quantifies over multiplicity vectors
+$`m : \mathrm{Fin}\ n \to \mathbb{N}`$ with $`\sum_i m_i = n`$, and casting
+$`m_i`$ into $`\mathbb{Z}_2`$ before scaling gives the correct multiset sum in
+$`(\mathbb{Z}_2)^k`$. The conclusion `n - 1 ≤ k` (truncated subtraction) is
+equivalent to $`k \ge n - 1`$.
+
+The proof follows the paper's argument: the map $`\Lambda(x) = \sum_i x_i g_i`$
+and the coordinate-sum functional are built as linear maps; a nonzero
+$`u \in \ker \Lambda \cap \ker(\mathrm{sum})`$ has even positive support $`S`$,
+and doubling half of $`S`$ while dropping the other half yields a size-$`n`$
+multiset with the same group sum but a multiplicity $`\ne 1`$, contradicting
+uniqueness; rank–nullity then gives
+$`n = \operatorname{rank} \Lambda + \dim \ker \Lambda \le k + 1`$.
+
+The hypothesis is non-vacuous: $`n = 2`$, $`k = 1`$, $`g = (0, 1)`$ satisfies it
+and meets the bound with equality.
+
 ## Deviations from the paper proof
 
 * **Theorem B** constructs the four witness representations directly by
@@ -104,10 +152,12 @@ integer subtraction anywhere.
   products (`j * N`) as atoms — provide bridging equations by `ring` and let
   omega finish linearly. Corners that are vacuous on paper via pow semantics
   need explicit case splits feeding omega the reduced facts.
-- Mathlib v4.15 names: `Nat.lt_two_pow_self` (argument implicit),
+- Mathlib v4.31 names: `Nat.lt_two_pow_self` (argument implicit),
   `Function.update_of_ne` / `Function.update_self`,
   `Nat.log_eq_of_pow_le_of_lt_pow` for concrete `Nat.log` values (does **not**
-  reduce by `decide`).
+  reduce by `decide`). Note `Finset.range_subset` now means
+  `range n ⊆ s ↔ ∀ x < n, x ∈ s`; the `range m ⊆ range n ↔ m ≤ n` form is
+  `Finset.range_subset_range`.
 - Goals of the form `val w (fun i => …) = …` are stated about a lambda;
   `rw`/`omega` need the beta-reduced shape — open such proofs with `show`,
   or reuse `shift_*` through a pointwise `Finset.sum_congr`.

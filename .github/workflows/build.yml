@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (fetches the prebuilt Mathlib cache)
+        uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: true
+          build-args: "--wfail"
+
+      - name: Check for sorry
+        run: |
+          if grep -rn '\bsorry\b' MinModulus/ MinModulus.lean; then
+            echo "::error::found 'sorry' in the development"
+            exit 1
+          fi
+
+      - name: Check axioms of the main results
+        run: |
+          lake env lean scripts/check_axioms.lean | tee axioms.txt
+          if grep -q 'sorryAx' axioms.txt; then
+            echo "::error::a main result depends on sorryAx"
+            exit 1
+          fi
+          # Every reported dependency must be one of the three standard axioms.
+          if grep -oP "(?<=depends on axioms: \[).*(?=\])" axioms.txt \
+             | tr ',' '\n' | sed 's/ //g' | sort -u \
+             | grep -vxE 'propext|Classical\.choice|Quot\.sound'; then
+            echo "::error::a main result depends on a non-standard axiom"
+            exit 1
+          fi
+          echo "All main results depend only on propext, Classical.choice, Quot.sound."

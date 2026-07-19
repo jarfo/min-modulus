@@ -1,10 +1,16 @@
 name = "MinModulus"
+version = "1.0.0"
 defaultTargets = ["MinModulus"]
 
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
-rev = "v4.15.0"
+rev = "v4.31.0"
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
 
 [[lean_lib]]
 name = "MinModulus"
