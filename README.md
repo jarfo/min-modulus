@@ -1,5 +1,8 @@
 # min-modulus — Lean proof for the minimum-modulus paper
 
+[![Lean CI](https://github.com/jarfo/min-modulus/actions/workflows/build.yml/badge.svg)](https://github.com/jarfo/min-modulus/actions/workflows/build.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 This repository is the Lean 4 formalization accompanying the paper
 
 > José A. R. Fonollosa, *Minimum modulus for the unique multiset-sum problem*,
