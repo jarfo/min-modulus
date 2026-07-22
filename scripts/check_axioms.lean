@@ -23,4 +23,6 @@ import MinModulus
 #print axioms MinModulus.card_ge          -- lower bound: valid ⟹ 2^m ≤ |G|
 #print axioms MinModulus.elem_valid       -- sharpness: standard tuple is valid
 #print axioms MinModulus.elem_card        -- the extremal group has order 2^m
+#print axioms MinModulus.mab_isLeast      -- headline: m_ab(n) = 2^(n-1) (IsLeast)
 #print axioms MinModulus.equality_classification  -- classification at equality
+#print axioms MinModulus.equality_addEquiv        -- explicit φ : G ≃+ (ZMod 2)^m

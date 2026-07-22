@@ -16,9 +16,13 @@ subset sums are distinct (`ssum_injective`).  This gives:
 * `card_ge`      — lower bound: a valid tuple forces `2^(n-1) ≤ |G|`;
 * `elem_valid` / `elem_card` — sharpness: the standard-basis tuple in
   `(ZMod 2)^(n-1)` is valid and its group has order `2^(n-1)`;
+* `mab_isLeast`  — the headline `m_ab(n) = 2^(n-1)`, as an `IsLeast` statement;
 * `equality_classification` — equality: if `|G| = 2^(n-1)`, then `G` has
   exponent two and the subset-sum map is a bijection, so the differences form
-  an `𝔽₂`-basis.
+  an `𝔽₂`-basis;
+* `equality_addEquiv` — the explicit isomorphism `φ : G ≃+ (ZMod 2)^(n-1)`
+  with `φ (g_{i+1} - g_0) = e_i`: up to translation and isomorphism, the only
+  extremal tuple is `(0, e_1, …, e_{n-1})`.
 
 Every result is proved in full (no proof holes); the axiom audit in
 `scripts/check_axioms.lean` confirms only `propext`, `Classical.choice`,
@@ -252,6 +256,25 @@ theorem elem_valid (m : ℕ) : ValidTuple (elemTuple m) := by
     omega
   exact fun i => Fin.cases hk0 htail1 i
 
+/-! ### The main theorem: `m_ab(n) = 2^(n-1)` -/
+
+/-- **Main theorem (Inal, Theorem 1.1), headline form.**  `2^(n-1)` is the least
+order of a finite abelian group carrying a valid `n`-tuple (with `n = m + 1`):
+it is a lower bound for every such group (`card_ge`), and it is attained by the
+standard-basis tuple in `(ZMod 2)^(n-1)` (`elem_valid`, `elem_card`).
+
+The set ranges over groups in `Type`; since the order of a finite group is
+universe-invariant and `card_ge` is universe-polymorphic, this loses no
+generality. -/
+theorem mab_isLeast (m : ℕ) :
+    IsLeast {N : ℕ | ∃ (G : Type) (_ : AddCommGroup G) (_ : Fintype G),
+      Fintype.card G = N ∧ ∃ g : Fin (m + 1) → G, ValidTuple g} (2 ^ m) := by
+  constructor
+  · exact ⟨Fin m → ZMod 2, inferInstance, inferInstance, elem_card m,
+      elemTuple m, elem_valid m⟩
+  · rintro N ⟨G, _, _, rfl, g, hg⟩
+    exact card_ge g hg
+
 /-! ### Classification of the equality case -/
 
 section Equality
@@ -378,6 +401,63 @@ theorem equality_classification [Fintype G] (g : Fin (m + 1) → G) (hg : ValidT
     (hcard : Fintype.card G = 2 ^ m) :
     (∀ x : G, 2 • x = 0) ∧ Function.Bijective (ssum g) :=
   ⟨equality_order_two g hg hcard, ssum_bijective g hg hcard⟩
+
+/-- **The explicit isomorphism (Inal, Theorem 1.1, equality statement).**  At
+equality there is a group isomorphism `φ : G ≃+ (ZMod 2)^m` sending each
+difference `g_{i+1} - g_0` to the standard basis vector `e_i`.  Hence, up to a
+common translation and a group isomorphism, the extremal tuple is
+`(0, e_1, …, e_m)` — the tuple `elemTuple m`.
+
+The proof is the paper's Lemma 2.3 in action: `G` carries a `ZMod 2`-module
+structure by `equality_order_two`; dissociation (`ssum_injective`) becomes
+`𝔽₂`-linear independence, surjectivity of the subset-sum map gives spanning,
+so the differences form a basis, and coordinates in that basis provide `φ`. -/
+theorem equality_addEquiv [Fintype G] (g : Fin (m + 1) → G) (hg : ValidTuple g)
+    (hcard : Fintype.card G = 2 ^ m) :
+    ∃ φ : G ≃+ (Fin m → ZMod 2), ∀ i : Fin m, φ (diff g i) = Pi.single i 1 := by
+  have h2 : ∀ x : G, 2 • x = 0 := equality_order_two g hg hcard
+  letI : Module (ZMod 2) G := AddCommGroup.zmodModule h2
+  have hZ2 : ∀ x : ZMod 2, x = 0 ∨ x = 1 := by decide
+  -- Lemma 2.3, one direction: dissociation gives `𝔽₂`-linear independence.
+  have hli : LinearIndependent (ZMod 2) (diff g) := by
+    rw [Fintype.linearIndependent_iff]
+    intro c hc
+    set S : Finset (Fin m) := univ.filter (fun j => c j = 1) with hSdef
+    -- The support of `c` is a subset-sum collision with `∅`.
+    have hterm : ∀ j : Fin m, c j • diff g j = if j ∈ S then diff g j else 0 := by
+      intro j
+      by_cases hj : c j = 1
+      · have hjS : j ∈ S := by simp [hSdef, hj]
+        rw [if_pos hjS, hj, one_smul]
+      · have h0 : c j = 0 := (hZ2 (c j)).resolve_right hj
+        have hjS : j ∉ S := by simp [hSdef, hj]
+        rw [if_neg hjS, h0, zero_smul]
+    rw [Finset.sum_congr rfl (fun j _ => hterm j), Finset.sum_ite_mem,
+      Finset.univ_inter] at hc
+    have hSempty : S = ∅ := ssum_injective g hg (by
+      rw [ssum, ssum, Finset.sum_empty]; exact hc)
+    intro i
+    by_cases hi : c i = 1
+    · exfalso
+      have hiS : i ∈ S := by simp [hSdef, hi]
+      rw [hSempty] at hiS
+      exact absurd hiS (Finset.notMem_empty i)
+    · exact (hZ2 (c i)).resolve_right hi
+  -- Surjectivity of the subset-sum map gives spanning.
+  have hspan : ⊤ ≤ Submodule.span (ZMod 2) (Set.range (diff g)) := by
+    intro x _
+    obtain ⟨S, hS⟩ := (ssum_bijective g hg hcard).surjective x
+    rw [← hS, ssum]
+    exact Submodule.sum_mem _ (fun j _ => Submodule.subset_span ⟨j, rfl⟩)
+  -- The differences are a basis; coordinates give the isomorphism.
+  refine ⟨(Module.Basis.mk hli hspan).equivFun.toAddEquiv, fun i => ?_⟩
+  have hbi : Module.Basis.mk hli hspan i = diff g i := Module.Basis.mk_apply hli hspan i
+  show (Module.Basis.mk hli hspan).equivFun (diff g i) = Pi.single i 1
+  funext j
+  rw [← hbi, Module.Basis.equivFun_self]
+  by_cases h : j = i
+  · subst h; rw [if_pos rfl, Pi.single_eq_same]
+  · rw [if_neg (fun hij => h hij.symm), Pi.single_eq_of_ne h]
 
 end Equality
 
