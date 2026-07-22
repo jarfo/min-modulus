@@ -17,3 +17,10 @@ import MinModulus
 
 -- Proposition 2: optimality among elementary abelian 2-groups.
 #print axioms MinModulus.elementaryAbelianTwoGroups_optimal
+
+-- Inal's theorem (open problem 4): the exact minimum order for unique multiset
+-- sums in finite abelian groups is `2^(n-1)`.
+#print axioms MinModulus.card_ge          -- lower bound: valid ⟹ 2^m ≤ |G|
+#print axioms MinModulus.elem_valid       -- sharpness: standard tuple is valid
+#print axioms MinModulus.elem_card        -- the extremal group has order 2^m
+#print axioms MinModulus.equality_classification  -- classification at equality

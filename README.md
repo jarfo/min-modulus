@@ -20,6 +20,19 @@ have unique multiset sums, then $`k \ge n - 1`$, so the least such group has
 order $`2^{n-1}`$. See [Proposition 2](#proposition-2-elementary-abelian-2-groups)
 below (also 0 sorries, standard axioms only).
 
+Finally, the repository formalizes the resolution of **open problem 4** of the
+paper — the exact minimum order for unique multiset sums over *all* finite
+abelian groups — following
+
+> Michael Inal, *The Exact Minimum Order for Unique Multiset Sums in Finite
+> Abelian Groups*, 2026.
+
+The answer is $`m_{\mathrm{ab}}(n) = 2^{n-1}`$: a lower bound valid over every
+finite abelian group (not just elementary abelian ones), matched by the
+elementary abelian construction, with a classification of the extremal case.
+See [Open problem 4](#open-problem-4-all-finite-abelian-groups) below (0
+sorries, standard axioms only).
+
 ## The problem and the theorem
 
 Fix $`n \ge 2`$. A set $`A = \{a_0 < \dots < a_{n-1}\}`$ of residues in
@@ -49,10 +62,11 @@ A single Lake package rooted at the repository root:
 
 ```
 lakefile.toml, lean-toolchain, lake-manifest.json
-MinModulus.lean                 -- root module, imports both files below
+MinModulus.lean                 -- root module, imports the three files below
 MinModulus/
   UniqueSums.lean               -- Theorems A, B and the main theorem `nmin_eq`
   ElemAbelian2.lean             -- Proposition 2 (elementary abelian 2-groups)
+  AbelianMin.lean               -- Open problem 4 (all finite abelian groups)
 scripts/check_axioms.lean       -- axiom audit, run in CI
 ```
 
@@ -128,6 +142,43 @@ $`n = \operatorname{rank} \Lambda + \dim \ker \Lambda \le k + 1`$.
 
 The hypothesis is non-vacuous: $`n = 2`$, $`k = 1`$, $`g = (0, 1)`$ satisfies it
 and meets the bound with equality.
+
+## Open problem 4: all finite abelian groups
+
+[`MinModulus/AbelianMin.lean`](MinModulus/AbelianMin.lean) formalizes Inal's
+resolution of the paper's fourth open problem. Write $`n = m + 1`$. A tuple
+`g : Fin (m+1) → G` in a finite abelian group `G` is **valid** (`ValidTuple`) if
+the all-ones vector is the only $`k : \mathrm{Fin}\ (m+1) \to \mathbb{N}`$ with
+$`\sum_i k_i = m + 1`$ and $`\sum_i k_i \cdot g_i = \sum_i g_i`$. Let
+$`m_{\mathrm{ab}}(n)`$ be the least order of a finite abelian group admitting a
+valid tuple. Then $`m_{\mathrm{ab}}(n) = 2^{n-1}`$.
+
+The key observation is that validity forces the translated differences
+$`g_{j+1} - g_0`$ to be **dissociated**: their subset-sum map
+`ssum g : Finset (Fin m) → G` is injective (`ssum_injective`), which embeds the
+Boolean cube into `G`.
+
+| Lean declaration | Corresponds to (Inal) | Status |
+|---|---|---|
+| `ValidTuple`, `diff`, `ssum` | Definitions (validity, differences, subset-sum map) | ✅ defined |
+| `not_collision_disjoint`, `ssum_injective` | Lemma 3.1 — validity forces dissociation | ✅ proved |
+| **`card_ge`** | **Cor. 3.4 — lower bound `2^(n-1) ≤ |G|`** | ✅ **proved** |
+| `elem_valid`, `elem_card` | Prop. 3.5 — sharpness (standard tuple in $`(\mathbb{Z}_2)^{n-1}`$) | ✅ proved |
+| `diff_order_two`, `equality_order_two`, `ssum_bijective` | Thm. 4.1 — the extremal group is elementary abelian | ✅ proved |
+| **`equality_classification`** | **Thm. 4.1 — differences form an $`\mathbb{F}_2`$-basis** | ✅ **proved** |
+
+The lower bound `card_ge` holds for *every* finite abelian group, strengthening
+Proposition 2 (which is restricted to elementary abelian $`2`$-groups) and the
+previously available counting bound $`\binom{2n}{n}/2^n`$. At equality, a second
+use of validity (representing $`2(g_i - g_0)`$ as a subset sum and rivalling the
+all-ones vector with a multiplicity-3 entry) shows every difference has order
+two; combined with the bijectivity of `ssum`, the differences form an
+$`\mathbb{F}_2`$-basis, so — up to translation and isomorphism — the only
+extremal tuple is $`(0, e_1, \dots, e_{n-1})`$ in $`(\mathbb{Z}_2)^{n-1}`$.
+
+This settles the abelian minimum-order question (open problem 4). It is separate
+from Conjecture 1 (minimality of $`N`$ over all residue sets in $`\mathbb{Z}_N`$),
+which remains open.
 
 ## Deviations from the paper proof
 
