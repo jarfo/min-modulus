@@ -25,7 +25,7 @@ paper — the exact minimum order for unique multiset sums over *all* finite
 abelian groups — following
 
 > Michael Inal, *The Exact Minimum Order for Unique Multiset Sums in Finite
-> Abelian Groups*, 2026.
+> Abelian Groups*, [OSF preprint](https://doi.org/10.17605/OSF.IO/C58Q9), 2026.
 
 The answer is $`m_{\mathrm{ab}}(n) = 2^{n-1}`$: a lower bound valid over every
 finite abelian group (not just elementary abelian ones), matched by the
