@@ -138,7 +138,7 @@ $`u \in \ker \Lambda \cap \ker(\mathrm{sum})`$ has even positive support $`S`$,
 and doubling half of $`S`$ while dropping the other half yields a size-$`n`$
 multiset with the same group sum but a multiplicity $`\ne 1`$, contradicting
 uniqueness; rank–nullity then gives
-$`n = \operatorname{rank} \Lambda + \dim \ker \Lambda \le k + 1`$.
+$`n = \mathrm{rank}\ \Lambda + \dim \ker \Lambda \le k + 1`$.
 
 The hypothesis is non-vacuous: $`n = 2`$, $`k = 1`$, $`g = (0, 1)`$ satisfies it
 and meets the bound with equality.
