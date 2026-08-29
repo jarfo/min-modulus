@@ -25,6 +25,12 @@ Writing `c = k - 1` for a multiplicity vector `k`, a **witness at `h`**
 * `pair_descent`: if two entries differ by `h ≠ 0`, deletion applies at the
   smaller one — the clean rung `N ≥ 2 · N_min(n-1)` of the descent.
 * `nat_card_quotient_two_smul`: `|G ⧸ ⟨h⟩| * 2 = |G|` for `h ≠ 0`, `h + h = 0`.
+
+The final section instantiates the descent at `G = ZMod (2*M)`, `h = M`:
+validity transports along injective additive maps (`validTuple_comp`), the
+quotient is identified with `ZMod M` (`quotZMultiplesEquivZMod`), and the three
+branches become `exists_validTuple_half_of_no_witness` / `_of_delete` /
+`_of_pair` — each producing a valid tuple in `ZMod M` from one in `ZMod (2*M)`.
 -/
 import MinModulus.AbelianMin
 
@@ -298,5 +304,123 @@ theorem nat_card_quotient_two_smul (hne0 : h ≠ 0) (hh : h + h = 0) :
   exact (AddSubgroup.card_eq_card_quotient_mul_card_addSubgroup _).symm
 
 end Quotient
+
+/-! ### Transport of validity along additive maps -/
+
+section Transport
+
+variable {H : Type*} [AddCommGroup H]
+
+/-- Validity is preserved by postcomposition with an injective additive map. -/
+theorem validTuple_comp {g : Fin n → G} (hg : ValidTuple g) (φ : G →+ H)
+    (hφ : Function.Injective φ) : ValidTuple (fun i => φ (g i)) := by
+  intro k hsum hval
+  refine hg k hsum (hφ ?_)
+  rw [map_sum, map_sum]
+  calc (∑ i, φ (k i • g i)) = ∑ i, k i • φ (g i) :=
+        Finset.sum_congr rfl fun i _ => map_nsmul φ _ _
+    _ = ∑ i, φ (g i) := hval
+
+/-- Validity is reflected by postcomposition with any additive map. -/
+theorem validTuple_of_comp {g : Fin n → G} (φ : G →+ H)
+    (hφg : ValidTuple (fun i => φ (g i))) : ValidTuple g := by
+  intro k hsum hval
+  refine hφg k hsum ?_
+  calc (∑ i, k i • φ (g i)) = ∑ i, φ (k i • g i) :=
+        Finset.sum_congr rfl fun i _ => (map_nsmul φ _ _).symm
+    _ = φ (∑ i, k i • g i) := (map_sum φ _ _).symm
+    _ = φ (∑ i, g i) := by rw [hval]
+    _ = ∑ i, φ (g i) := map_sum φ _ _
+
+end Transport
+
+/-! ### The cyclic instance: `G = ZMod (2*M)`, `h = M` -/
+
+section ZModHalf
+
+variable {N M : ℕ}
+
+/-- In `ZMod (2*M)` the element `M` is an involution. -/
+lemma half_add_half (hN : N = 2 * M) : (M : ZMod N) + M = 0 := by
+  have h1 : (M : ZMod N) + M = ((M + M : ℕ) : ZMod N) := by push_cast; ring
+  rw [h1, show M + M = N by omega, ZMod.natCast_self]
+
+/-- In `ZMod (2*M)` with `M > 0`, the involution `M` is nonzero. -/
+lemma half_ne_zero (hN : N = 2 * M) (hM : 0 < M) : (M : ZMod N) ≠ 0 := by
+  intro h0
+  rw [ZMod.natCast_eq_zero_iff] at h0
+  have := Nat.le_of_dvd hM h0
+  omega
+
+/-- Reduction mod `M` identifies `ZMod N ⧸ ⟨M⟩` with `ZMod M` when `M ∣ N`:
+the reduction map `ZMod N →+ ZMod M` is surjective with kernel exactly the
+multiples of `M`. -/
+noncomputable def quotZMultiplesEquivZMod [NeZero N] [NeZero M] (hdvd : M ∣ N) :
+    (ZMod N ⧸ AddSubgroup.zmultiples ((M : ℕ) : ZMod N)) ≃+ ZMod M := by
+  refine (QuotientAddGroup.quotientAddEquivOfEq (G := ZMod N) ?_).trans
+    (QuotientAddGroup.quotientKerEquivOfSurjective
+      (ZMod.castHom hdvd (ZMod M)).toAddMonoidHom ?_)
+  · -- `⟨M⟩` is the kernel of the reduction
+    apply le_antisymm
+    · rw [AddSubgroup.zmultiples_le, AddMonoidHom.mem_ker]
+      show ZMod.castHom hdvd (ZMod M) ((M : ℕ) : ZMod N) = 0
+      rw [map_natCast, ZMod.natCast_self]
+    · intro x hx
+      rw [AddMonoidHom.mem_ker] at hx
+      have hx0 : ZMod.castHom hdvd (ZMod M) x = 0 := hx
+      rw [ZMod.castHom_apply, ← ZMod.natCast_val, ZMod.natCast_eq_zero_iff] at hx0
+      obtain ⟨q, hq⟩ := hx0
+      rw [AddSubgroup.mem_zmultiples_iff]
+      refine ⟨(q : ℤ), ?_⟩
+      have h1 : (q : ZMod N) * ((M : ℕ) : ZMod N) = ((M * q : ℕ) : ZMod N) := by
+        push_cast; ring
+      rw [natCast_zsmul, nsmul_eq_mul, h1, ← hq, ZMod.natCast_zmod_val]
+  · -- surjectivity of the reduction
+    intro y
+    obtain ⟨a, rfl⟩ := ZMod.natCast_zmod_surjective y
+    exact ⟨(a : ZMod N), map_natCast (ZMod.castHom hdvd (ZMod M)) a⟩
+
+/-- **Halving, cyclic form.**  A valid `n`-tuple mod `2M` with no witness at
+`M` yields a valid `n`-tuple mod `M`. -/
+theorem exists_validTuple_half_of_no_witness (hN : N = 2 * M) (hM : 0 < M)
+    {g : Fin n → ZMod N} (hg : ValidTuple g)
+    (hnow : ∀ c : Fin n → ℤ, ¬ Witness g (M : ZMod N) c) :
+    ∃ g' : Fin n → ZMod M, ValidTuple g' := by
+  haveI : NeZero N := ⟨by omega⟩
+  haveI : NeZero M := ⟨by omega⟩
+  have hdvd : M ∣ N := ⟨2, by omega⟩
+  have hq := quotient_valid_of_no_witness g hg (half_add_half hN) hnow
+  exact ⟨_, validTuple_comp hq (quotZMultiplesEquivZMod hdvd).toAddMonoidHom
+    (quotZMultiplesEquivZMod hdvd).injective⟩
+
+/-- **Deletion, cyclic form.**  If some coordinate `j` is touched by every
+witness at `M`, deleting `g j` yields a valid `n`-tuple mod `M` from a valid
+`(n+1)`-tuple mod `2M`. -/
+theorem exists_validTuple_half_of_delete (hN : N = 2 * M) (hM : 0 < M)
+    {g : Fin (n + 1) → ZMod N} (hg : ValidTuple g) (j : Fin (n + 1))
+    (hj : ∀ c : Fin (n + 1) → ℤ, Witness g (M : ZMod N) c → c j ≠ 0) :
+    ∃ g' : Fin n → ZMod M, ValidTuple g' := by
+  haveI : NeZero N := ⟨by omega⟩
+  haveI : NeZero M := ⟨by omega⟩
+  have hdvd : M ∣ N := ⟨2, by omega⟩
+  have hq := deletion_descent g hg (half_add_half hN) j hj
+  exact ⟨_, validTuple_comp hq (quotZMultiplesEquivZMod hdvd).toAddMonoidHom
+    (quotZMultiplesEquivZMod hdvd).injective⟩
+
+/-- **Pair descent, cyclic form.**  Two entries of a valid `(n+1)`-tuple mod
+`2M` differing by `M` yield a valid `n`-tuple mod `M`: the rung
+`N_min(n+1) ≥ 2 · N_min(n)` of the two-adic descent. -/
+theorem exists_validTuple_half_of_pair (hN : N = 2 * M) (hM : 0 < M)
+    {g : Fin (n + 1) → ZMod N} (hg : ValidTuple g)
+    {a b : Fin (n + 1)} (hab : g a - g b = (M : ZMod N)) :
+    ∃ g' : Fin n → ZMod M, ValidTuple g' := by
+  haveI : NeZero N := ⟨by omega⟩
+  haveI : NeZero M := ⟨by omega⟩
+  have hdvd : M ∣ N := ⟨2, by omega⟩
+  have hq := pair_descent g hg (half_add_half hN) (half_ne_zero hN hM) hab
+  exact ⟨_, validTuple_comp hq (quotZMultiplesEquivZMod hdvd).toAddMonoidHom
+    (quotZMultiplesEquivZMod hdvd).injective⟩
+
+end ZModHalf
 
 end MinModulus

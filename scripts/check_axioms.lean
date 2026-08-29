@@ -35,3 +35,8 @@ import MinModulus
 #print axioms MinModulus.deletion_descent           -- Lemma B
 #print axioms MinModulus.pair_descent               -- the clean descent rung
 #print axioms MinModulus.nat_card_quotient_two_smul -- |G/⟨h⟩| * 2 = |G|
+#print axioms MinModulus.validTuple_comp            -- transport along injective maps
+#print axioms MinModulus.quotZMultiplesEquivZMod    -- ZMod N / <M>  ≃+  ZMod M
+#print axioms MinModulus.exists_validTuple_half_of_no_witness  -- halving, cyclic
+#print axioms MinModulus.exists_validTuple_half_of_delete      -- deletion, cyclic
+#print axioms MinModulus.exists_validTuple_half_of_pair        -- pair descent, cyclic
