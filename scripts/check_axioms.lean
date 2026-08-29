@@ -26,3 +26,12 @@ import MinModulus
 #print axioms MinModulus.mab_isLeast      -- headline: m_ab(n) = 2^(n-1) (IsLeast)
 #print axioms MinModulus.equality_classification  -- classification at equality
 #print axioms MinModulus.equality_addEquiv        -- explicit φ : G ≃+ (ZMod 2)^m
+
+-- Descent lemmas toward the global optimality conjecture (open problem 1):
+-- combination and deletion for witnesses at an order-two element.
+#print axioms MinModulus.validTuple_iff_no_zero_witness
+#print axioms MinModulus.witness_combination        -- Lemma A
+#print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch
+#print axioms MinModulus.deletion_descent           -- Lemma B
+#print axioms MinModulus.pair_descent               -- the clean descent rung
+#print axioms MinModulus.nat_card_quotient_two_smul -- |G/⟨h⟩| * 2 = |G|
