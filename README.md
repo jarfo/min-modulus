@@ -62,11 +62,15 @@ A single Lake package rooted at the repository root:
 
 ```
 lakefile.toml, lean-toolchain, lake-manifest.json
-MinModulus.lean                 -- root module, imports the three files below
+MinModulus.lean                 -- root module, imports the files below
 MinModulus/
   UniqueSums.lean               -- Theorems A, B and the main theorem `nmin_eq`
   ElemAbelian2.lean             -- Proposition 2 (elementary abelian 2-groups)
   AbelianMin.lean               -- Open problem 4 (all finite abelian groups)
+  Descent.lean                  -- two-adic halving/deletion lemmas toward Conjecture 1
+  OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
+  QuadraticWedge.lean           -- SHC bridge and quadratic/multi-level lemmas
+  GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 ```
 
@@ -181,6 +185,28 @@ extremal tuple is $`(0, e_1, \dots, e_{n-1})`$ in $`(\mathbb{Z}_2)^{n-1}`$.
 This settles the abelian minimum-order question (open problem 4). It is separate
 from Conjecture 1 (minimality of $`N`$ over all residue sets in $`\mathbb{Z}_N`$),
 which remains open.
+
+## Progress toward Conjecture 1
+
+The `descent` branch also formalizes the current proof program for global
+cyclic optimality.  These results do **not** prove Conjecture 1, but they make
+its remaining inputs explicit and kernel-check the reusable parts:
+
+| File / declaration | Result |
+|---|---|
+| `Descent.lean`: `witness_combination`, `deletion_descent`, `pair_descent` | halving and deletion at the order-two element |
+| `common_touched_of_unique_omission` | G1 holds when one half-witness has a unique omitted coordinate |
+| `three_witnesses_sum_ne_zero` | excludes the exact minimal cyclic three-witness pattern in G1 |
+| `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
+| `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
+| `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
+| `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
+| `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
+| `GlobalRoadmap.lean` | definitions of G1/G2/G3, predicate transport and endpoint existence, the G1 descent dichotomy, and the proof that G1+G2+G3 imply all stratum bounds and Conjecture 1 |
+
+The outstanding mathematical statements are the full common-touch theorem
+(G1), the complete odd-stratum lower bound (G2), and the exceptional lift
+obstruction at $`2B(n-1)`$ (G3).
 
 ## Deviations from the paper proof
 

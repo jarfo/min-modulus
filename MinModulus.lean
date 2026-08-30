@@ -4,3 +4,4 @@ import MinModulus.AbelianMin
 import MinModulus.Descent
 import MinModulus.OddOrder
 import MinModulus.QuadraticWedge
+import MinModulus.GlobalRoadmap

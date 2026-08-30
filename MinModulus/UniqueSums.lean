@@ -828,17 +828,17 @@ lemma ones_unique : ∀ n (k : ℕ → ℕ), val n k = 2 ^ n - 1 → dsum n k = 
 
 /-! ### Theorem A and the main theorem -/
 
-/-- **Theorem A** (upper bound, paper §5): the super-increasing set is valid at
-`N = 2^n − 2^⌊log₂ n⌋`.  Pass to `M = val n k ≡ 2^n − 1 [MOD N]` and split:
+/-- **Power-gap validity.**  The super-increasing set is valid at every
+stratum endpoint `N = 2^n - 2^t` for which `2^t ≤ n`.  Pass to
+`M = val n k ≡ 2^n − 1 [MOD N]` and split:
 `M < 2^n − 1` falls below the floor (`2^m ≤ n` — the only place `⌊log₂⌋`
 enters); `M = 2^n − 1` is `ones_unique`; and `M = 2^n − 1 + jN` has greedy
 digit sum at least `n + j > n` by `slack` — uniformly in `j ≥ 1` and `n ≥ 2`,
 with no range restriction and no small-`n` cases. -/
-theorem theoremA {n : ℕ} (hn : 2 ≤ n) :
-    Valid n (2 ^ n - 2 ^ Nat.log 2 n) := by
-  have hmn : 2 ^ Nat.log 2 n ≤ n := Nat.pow_log_le_self 2 (by omega)
-  have hnm : n < 2 ^ (Nat.log 2 n + 1) := Nat.lt_pow_succ_log_self (by norm_num) n
-  set m := Nat.log 2 n with hm
+theorem valid_gap {n t : ℕ} (hn : 2 ≤ n) (htn : 2 ^ t ≤ n) :
+    Valid n (2 ^ n - 2 ^ t) := by
+  set m := t with hm
+  have hmn : 2 ^ m ≤ n := by simpa [hm] using htn
   set N := 2 ^ n - 2 ^ m with hN
   have h1m : 1 ≤ 2 ^ m := Nat.one_le_pow _ _ (by norm_num)
   have hnlt : n < 2 ^ n := Nat.lt_two_pow_self
@@ -912,6 +912,12 @@ theorem theoremA {n : ℕ} (hn : 2 ≤ n) :
       omega
     rw [harg, hw] at hs
     omega
+
+/-- **Theorem A** (upper bound, paper §5): the super-increasing set is valid at
+`N = 2^n − 2^⌊log₂ n⌋`. -/
+theorem theoremA {n : ℕ} (hn : 2 ≤ n) :
+    Valid n (2 ^ n - 2 ^ Nat.log 2 n) :=
+  valid_gap hn (Nat.pow_log_le_self 2 (by omega))
 
 /-- **Main theorem**: `Nmin(n) = 2^n − 2^⌊log₂ n⌋` — it is valid there, and
 every smaller modulus (≥ 2) is invalid.  (Modulo `theoremA`.) -/

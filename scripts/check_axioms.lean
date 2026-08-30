@@ -12,6 +12,7 @@ import MinModulus
 -- Theorem A (validity / upper bound), Theorem B (optimality / lower bound),
 -- and the main theorem `Nmin(n) = 2^n - 2^⌊log₂ n⌋`.
 #print axioms MinModulus.theoremA
+#print axioms MinModulus.valid_gap
 #print axioms MinModulus.theoremB
 #print axioms MinModulus.nmin_eq
 
@@ -31,6 +32,8 @@ import MinModulus
 -- combination and deletion for witnesses at an order-two element.
 #print axioms MinModulus.validTuple_iff_no_zero_witness
 #print axioms MinModulus.witness_combination        -- Lemma A
+#print axioms MinModulus.common_touched_of_unique_omission
+#print axioms MinModulus.three_witnesses_sum_ne_zero
 #print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch
 #print axioms MinModulus.deletion_descent           -- Lemma B
 #print axioms MinModulus.pair_descent               -- the clean descent rung
@@ -41,12 +44,29 @@ import MinModulus
 #print axioms MinModulus.exists_validTuple_half_of_delete      -- deletion, cyclic
 #print axioms MinModulus.exists_validTuple_half_of_pair        -- pair descent, cyclic
 #print axioms MinModulus.card_ge_of_odd     -- odd order: |G| >= 2^m + 2m (m >= 3)
+#print axioms MinModulus.validTuple_cons_zero_iff_no_diff_relation
 #print axioms MinModulus.card_ge_of_odd'    -- odd order: |G| >= 2^m + m
 #print axioms MinModulus.valid_odd_zmod_bound
 #print axioms MinModulus.odd_min_three      -- least odd valid modulus = 7 for n = 3
 #print axioms MinModulus.odd_min_four       -- least odd valid modulus = 15 for n = 4 (G2, n <= 4)
 #print axioms MinModulus.chain_card_bound   -- the SI-shape chain pins |G| >= 2^(m+1) - 1
+#print axioms MinModulus.chain_order_eq
+#print axioms MinModulus.chain_quotient_card_bound
+#print axioms MinModulus.chain_mem_zmultiples
+#print axioms MinModulus.chain_quotient_card_bound_of_joint_dissociated
 #print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2
 #print axioms MinModulus.survival22        -- two (2,2)-reps of one value: |M1∩P2| + |M2∩P1| >= 2
 #print axioms MinModulus.cluster22         -- pairwise-surviving families have <= 13 members
 #print axioms MinModulus.quadratic_wedge   -- C(m,2) <= 3(m + (|G| - 2^m) + 14)
+#print axioms MinModulus.shc_diff_of_valid
+#print axioms MinModulus.bottom_wedge_of_valid
+#print axioms MinModulus.quadratic_wedge_of_valid
+#print axioms MinModulus.valid_odd_zmod_bottom_wedge
+#print axioms MinModulus.valid_odd_zmod_quadratic_wedge
+#print axioms MinModulus.shc_shift_target_card_gt
+#print axioms MinModulus.card_le_of_two_smul_add_sum_eq
+#print axioms MinModulus.admits_half_or_delete_of_g1
+#print axioms MinModulus.validTuple_fixed_of_valid
+#print axioms MinModulus.admitsValidTuple_gap
+#print axioms MinModulus.stratum_lower_bound_of_gaps
+#print axioms MinModulus.global_lower_bound_of_gaps

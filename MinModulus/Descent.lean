@@ -149,6 +149,48 @@ theorem witness_combination (g : Fin n → G) (hg : ValidTuple g) {h : G}
       rw [Pi.add_apply, add_smul]
     rw [Finset.sum_congr rfl fun i _ => h1 i, Finset.sum_add_distrib, hval, hval', hh]
 
+/-- If one witness at an involution has a unique `-1` coordinate `b`, then
+`b` is touched by every witness at that involution.  Consequently the first
+open G1 configuration must have at least two omissions in every witness. -/
+theorem common_touched_of_unique_omission (g : Fin n → G) (hg : ValidTuple g)
+    {h : G} (hh : h + h = 0) {c : Fin n → ℤ} (hc : Witness g h c)
+    (b : Fin n) (hcb : c b = -1) (huniq : ∀ i, c i = -1 → i = b) :
+    ∀ c' : Fin n → ℤ, Witness g h c' → c' b ≠ 0 := by
+  intro c' hc' hcb0
+  have hshare : ∀ i, ¬(c i = -1 ∧ c' i = -1) := by
+    intro i hi
+    have hib : i = b := huniq i hi.1
+    subst hib
+    rw [hcb0] at hi
+    omega
+  have hneg := witness_combination g hg hh hc hc' hshare
+  have hb := congrFun hneg b
+  simp only [Pi.neg_apply, hcb] at hb
+  omega
+
+/-- Three witnesses at a nonzero involution cannot sum to the zero coefficient
+vector: their values would sum to `3h = h`, not zero.  This rules out the
+minimal omission triangle with cyclic coefficient vectors
+`(-1,-1,2)`, `(2,-1,-1)`, and `(-1,2,-1)`. -/
+theorem three_witnesses_sum_ne_zero (g : Fin n → G) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    {c₁ c₂ c₃ : Fin n → ℤ} (hc₁ : Witness g h c₁)
+    (hc₂ : Witness g h c₂) (hc₃ : Witness g h c₃) :
+    c₁ + c₂ + c₃ ≠ 0 := by
+  intro hsum
+  have hz : (∑ i, (c₁ + c₂ + c₃) i • g i) = 0 := by
+    rw [hsum]
+    simp
+  have hval : (∑ i, (c₁ + c₂ + c₃) i • g i) = h + h + h := by
+    have hterm : ∀ i, (c₁ + c₂ + c₃) i • g i
+        = c₁ i • g i + c₂ i • g i + c₃ i • g i := by
+      intro i
+      simp only [Pi.add_apply, add_smul]
+    rw [Finset.sum_congr rfl fun i _ => hterm i, Finset.sum_add_distrib,
+      Finset.sum_add_distrib, hc₁.2.2.2, hc₂.2.2.2, hc₃.2.2.2]
+  rw [hval, hh, zero_add] at hz
+  exact hne hz
+
 section Quotient
 
 variable {h : G}

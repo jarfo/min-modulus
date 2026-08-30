@@ -36,7 +36,7 @@ variable {m : ℕ} {G : Type*} [AddCommGroup G]
 
 /-- A nonzero integer vector `d ≥ -1` on the differences with `∑ d ≤ 1` and
 `∑ dⱼ • (g_{j+1} - g₀) = 0` contradicts validity: pad with `-∑ d` at `0`. -/
-private lemma no_diff_relation (g : Fin (m + 1) → G) (hg : ValidTuple g)
+lemma validTuple_no_diff_relation (g : Fin (m + 1) → G) (hg : ValidTuple g)
     {d : Fin m → ℤ} (hne : d ≠ 0) (hge : ∀ j, -1 ≤ d j) (hsum : (∑ j, d j) ≤ 1)
     (hval : (∑ j, d j • diff g j) = 0) : False := by
   refine (validTuple_iff_no_zero_witness g).mp hg (Fin.cons (-(∑ j, d j)) d)
@@ -63,8 +63,48 @@ private lemma no_diff_relation (g : Fin (m + 1) → G) (hg : ValidTuple g)
     have h3 : (∑ j, d j • g j.succ) = (∑ j, d j) • g 0 := sub_eq_zero.mp hval
     rw [h3, neg_smul, neg_add_cancel]
 
+/-- For a tuple anchored at zero, validity is exactly the absence of any
+nonzero difference relation with coefficients at least `-1` and total sum at
+most `1`.  This isolates the precise content missing from the conjectural
+`SHC → validity` direction at odd thresholds. -/
+theorem validTuple_cons_zero_iff_no_diff_relation (h : Fin m → G) :
+    ValidTuple (Fin.cons 0 h) ↔
+      ∀ d : Fin m → ℤ, d ≠ 0 → (∀ j, -1 ≤ d j) → (∑ j, d j) ≤ 1 →
+        (∑ j, d j • h j) ≠ 0 := by
+  constructor
+  · intro hg d hdne hdge hdsum hdval
+    exact validTuple_no_diff_relation (Fin.cons 0 h) hg hdne hdge hdsum (by
+      simpa [diff] using hdval)
+  · intro hno
+    rw [validTuple_iff_no_zero_witness]
+    intro c hc
+    obtain ⟨hcne, hcge, hcsum, hcval⟩ := hc
+    let d : Fin m → ℤ := fun j => c j.succ
+    have hdne : d ≠ 0 := by
+      intro hd0
+      have htail : (∑ j : Fin m, c j.succ) = 0 := by simp [d, hd0]
+      have hc0 : c 0 = 0 := by
+        rw [Fin.sum_univ_succ] at hcsum
+        omega
+      apply hcne
+      funext i
+      refine Fin.cases ?_ (fun j => ?_) i
+      · simpa using hc0
+      · simpa [d] using congrFun hd0 j
+    have hdge : ∀ j, -1 ≤ d j := fun j => hcge j.succ
+    have hdsum : (∑ j, d j) ≤ 1 := by
+      have hc0 := hcge (0 : Fin (m + 1))
+      rw [Fin.sum_univ_succ] at hcsum
+      simp only [d]
+      omega
+    have hdval : (∑ j, d j • h j) = 0 := by
+      rw [Fin.sum_univ_succ] at hcval
+      simp only [Fin.cons_zero, Fin.cons_succ, smul_zero, zero_add] at hcval
+      simpa [d] using hcval
+    exact hno d hdne hdge hdsum hdval
+
 /-- `∑ⱼ (if j = i then a else 0) • xⱼ = a • xᵢ`. -/
-private lemma sum_single_smul (x : Fin m → G) (i : Fin m) (a : ℤ) :
+lemma sum_single_smul (x : Fin m → G) (i : Fin m) (a : ℤ) :
     (∑ j, (if j = i then a else 0) • x j) = a • x i := by
   have h : ∀ j, (if j = i then a else 0) • x j = if j = i then a • x j else 0 := by
     intro j; split_ifs <;> simp
@@ -72,7 +112,7 @@ private lemma sum_single_smul (x : Fin m → G) (i : Fin m) (a : ℤ) :
   simp
 
 /-- `∑ⱼ (if j ∈ T then 1 else 0) • xⱼ = ∑_{j ∈ T} xⱼ`. -/
-private lemma sum_indicator_smul (x : Fin m → G) (T : Finset (Fin m)) :
+lemma sum_indicator_smul (x : Fin m → G) (T : Finset (Fin m)) :
     (∑ j, (if j ∈ T then (1 : ℤ) else 0) • x j) = ∑ j ∈ T, x j := by
   have h : ∀ j, (if j ∈ T then (1 : ℤ) else 0) • x j = if j ∈ T then x j else 0 := by
     intro j; split_ifs <;> simp
@@ -118,7 +158,7 @@ private lemma ssum_ne_two_smul (T : Finset (Fin m)) (i : Fin m) :
   rcases T.eq_empty_or_nonempty with rfl | hT
   · rw [ssum, Finset.sum_empty] at h
     exact diff_ne_zero g hg i (eq_zero_of_two_zsmul hinj h.symm)
-  · refine no_diff_relation g hg
+  · refine validTuple_no_diff_relation g hg
       (d := fun j => (if j = i then 2 else 0) - (if j ∈ T then 1 else 0))
       ?_ ?_ ?_ ?_
     · intro h0
@@ -152,7 +192,7 @@ private lemma ssum_ne_reflected (T : Finset (Fin m)) (i : Fin m) :
   · subst hT
     have h1 : (2 : ℤ) • diff g i = 0 := sub_eq_self.mp h.symm
     exact diff_ne_zero g hg i (eq_zero_of_two_zsmul hinj h1)
-  · refine no_diff_relation g hg
+  · refine validTuple_no_diff_relation g hg
       (d := fun j => (if j ∈ T then 1 else 0) + (if j = i then 2 else 0) - 1)
       ?_ ?_ ?_ ?_
     · intro h0
@@ -192,7 +232,7 @@ include hg in
 private lemma two_smul_ne_reflected (hm : 3 ≤ m) (i j : Fin m) :
     (2 : ℤ) • diff g i ≠ ssum g univ - (2 : ℤ) • diff g j := by
   intro h
-  refine no_diff_relation g hg
+  refine validTuple_no_diff_relation g hg
     (d := fun k => (if k = i then 2 else 0) + (if k = j then 2 else 0) - 1)
     ?_ ?_ ?_ ?_
   · intro h0
@@ -281,7 +321,7 @@ theorem card_ge_of_odd' [Fintype G] (g : Fin (m + 1) → G)
 /-! ### The cyclic corollaries -/
 
 /-- Doubling is injective mod odd `N`. -/
-private lemma add_self_injective_zmod {N : ℕ} (hN : Odd N) [NeZero N] :
+lemma add_self_injective_zmod {N : ℕ} (hN : Odd N) [NeZero N] :
     ∀ x y : ZMod N, x + x = y + y → x = y := by
   intro x y hxy
   have h2 : IsUnit (2 : ZMod N) := by
@@ -325,21 +365,22 @@ section Chain
 
 variable {G : Type*} [AddCommGroup G] [Fintype G]
 
-/-- **Chain theorem.**  If `lam 0, …, lam (m-1)` satisfy the super-increasing
+/-- **Chain order theorem.**  If `lam 0, …, lam (m-1)` satisfy the
+super-increasing
 chain relations `lam (i+1) = 2 • lam i + lam 0` with terminal sink
 `2 • lam (m-1) + lam 0 = 0`, and their `2^m` subset sums are pairwise
-distinct, then `2^(m+1) - 1 ≤ |G|`.
+distinct, then the base element has order exactly `2^(m+1) - 1`.
 
 The base element is squeezed from both sides: the telescoped sink relation
 gives `(2^(m+1) - 1) • lam 0 = 0`, so its additive order divides the odd
 number `2^(m+1) - 1`; the distinct subset sums give order at least `2^m`;
 and every proper divisor of an odd number `< 3 · 2^m` is `< 2^m`.  Hence the
 order is exactly `2^(m+1) - 1`, which divides `|G|`. -/
-theorem chain_card_bound {m : ℕ} (hm : 1 ≤ m) (lam : ℕ → G)
+theorem chain_order_eq {m : ℕ} (hm : 1 ≤ m) (lam : ℕ → G)
     (hchain : ∀ i, i + 1 < m → lam (i + 1) = 2 • lam i + lam 0)
     (hsink : 2 • lam (m - 1) + lam 0 = 0)
     (hdis : Function.Injective fun S : Finset (Fin m) => ∑ j ∈ S, lam j.val) :
-    2 ^ (m + 1) - 1 ≤ Fintype.card G := by
+    addOrderOf (lam 0) = 2 ^ (m + 1) - 1 := by
   have hA : 1 ≤ 2 ^ m := Nat.one_le_two_pow
   -- closed form along the chain
   have hclosed : ∀ i, i < m → lam i = (2 ^ (i + 1) - 1) • lam 0 := by
@@ -405,9 +446,145 @@ theorem chain_card_bound {m : ℕ} (hm : 1 ≤ m) (lam : ℕ → G)
       have h3 : d * 3 ≤ d * (2 * t + 1) := Nat.mul_le_mul_left d (by omega)
       have h4 : 2 ^ m * 3 ≤ d * 3 := Nat.mul_le_mul_right 3 hcard
       omega
-  have hdvd_card : d ∣ Fintype.card G := addOrderOf_dvd_card
-  calc 2 ^ (m + 1) - 1 = d := hd_eq.symm
-    _ ≤ Fintype.card G := Nat.le_of_dvd Fintype.card_pos hdvd_card
+  simpa [hd] using hd_eq
+
+omit [Fintype G] in
+/-- Every element of an SI chain belongs to the cyclic subgroup generated by
+its base.  This is the subgroup-containment input for the automatic residual
+separation theorem below. -/
+theorem chain_mem_zmultiples {k : ℕ} (lam : ℕ → G)
+    (hchain : ∀ i, i + 1 < k → lam (i + 1) = 2 • lam i + lam 0) :
+    ∀ i, i < k → lam i ∈ AddSubgroup.zmultiples (lam 0) := by
+  intro i
+  induction i with
+  | zero =>
+      intro _
+      rw [AddSubgroup.mem_zmultiples_iff]
+      exact ⟨1, by simp⟩
+  | succ i ih =>
+      intro hi
+      rw [hchain i hi]
+      exact AddSubgroup.add_mem _ (nsmul_mem (ih (by omega)) 2) (by
+        rw [AddSubgroup.mem_zmultiples_iff]
+        exact ⟨1, by simp⟩)
+
+/-- **Chain theorem.**  The full SI chain forces
+`2^(m+1) - 1 ≤ |G|`. -/
+theorem chain_card_bound {m : ℕ} (hm : 1 ≤ m) (lam : ℕ → G)
+    (hchain : ∀ i, i + 1 < m → lam (i + 1) = 2 • lam i + lam 0)
+    (hsink : 2 • lam (m - 1) + lam 0 = 0)
+    (hdis : Function.Injective fun S : Finset (Fin m) => ∑ j ∈ S, lam j.val) :
+    2 ^ (m + 1) - 1 ≤ Fintype.card G := by
+  have horder := chain_order_eq hm lam hchain hsink hdis
+  have hdvd : addOrderOf (lam 0) ∣ Fintype.card G := addOrderOf_dvd_card
+  rw [horder] at hdvd
+  exact Nat.le_of_dvd Fintype.card_pos hdvd
+
+/-- **Chain × quotient rigidity.**  Suppose `lam` is an SI chain of length
+`k`, and the subset sums of `r` residual elements remain distinct after
+quotienting by the cyclic subgroup generated by the chain.  Then
+
+`(2^(k+1) - 1) * 2^r ≤ |G|`.
+
+Thus a chain of codimension `r` reaches within `2^r` of the full odd
+threshold; this is the quantitative form needed by top-window extraction. -/
+theorem chain_quotient_card_bound {k r : ℕ} (hk : 1 ≤ k) (lam : ℕ → G)
+    (rho : Fin r → G)
+    (hchain : ∀ i, i + 1 < k → lam (i + 1) = 2 • lam i + lam 0)
+    (hsink : 2 • lam (k - 1) + lam 0 = 0)
+    (hdis : Function.Injective fun S : Finset (Fin k) => ∑ j ∈ S, lam j.val)
+    (hres : Function.Injective fun S : Finset (Fin r) =>
+      QuotientAddGroup.mk' (AddSubgroup.zmultiples (lam 0)) (∑ j ∈ S, rho j)) :
+    (2 ^ (k + 1) - 1) * 2 ^ r ≤ Fintype.card G := by
+  let H : AddSubgroup G := AddSubgroup.zmultiples (lam 0)
+  have horder := chain_order_eq hk lam hchain hsink hdis
+  have hH : Nat.card H = 2 ^ (k + 1) - 1 := by
+    change Nat.card (AddSubgroup.zmultiples (lam 0)) = 2 ^ (k + 1) - 1
+    rw [Nat.card_zmultiples, horder]
+  have hq : 2 ^ r ≤ Nat.card (G ⧸ H) := by
+    have hcard := Fintype.card_le_of_injective _ hres
+    simpa [Nat.card_eq_fintype_card] using hcard
+  calc
+    (2 ^ (k + 1) - 1) * 2 ^ r ≤ (2 ^ (k + 1) - 1) * Nat.card (G ⧸ H) :=
+      Nat.mul_le_mul_left _ hq
+    _ = Nat.card (G ⧸ H) * Nat.card H := by rw [hH, Nat.mul_comm]
+    _ = Nat.card G := (AddSubgroup.card_eq_card_quotient_mul_card_addSubgroup H).symm
+    _ = Fintype.card G := Nat.card_eq_fintype_card
+
+/-- **Automatic residual separation.**  In `chain_quotient_card_bound`, the
+quotient-injectivity hypothesis follows from joint dissociation of the chain
+and residual coordinates.
+
+Indeed, if two residual subset sums represented the same chain coset, two
+copies of the `2^k` chain subset sums would inject into the chain subgroup.
+But `chain_order_eq` makes that subgroup have only `2^(k+1)-1` elements. -/
+theorem chain_quotient_card_bound_of_joint_dissociated {k r : ℕ}
+    (hk : 1 ≤ k) (lam : ℕ → G) (rho : Fin r → G)
+    (hchain : ∀ i, i + 1 < k → lam (i + 1) = 2 • lam i + lam 0)
+    (hsink : 2 • lam (k - 1) + lam 0 = 0)
+    (hjoint : Function.Injective fun p : Finset (Fin k) × Finset (Fin r) =>
+      (∑ j ∈ p.1, lam j.val) + ∑ j ∈ p.2, rho j) :
+    (2 ^ (k + 1) - 1) * 2 ^ r ≤ Fintype.card G := by
+  classical
+  let σ : Finset (Fin k) → G := fun S => ∑ j ∈ S, lam j.val
+  let τ : Finset (Fin r) → G := fun S => ∑ j ∈ S, rho j
+  let H : AddSubgroup G := AddSubgroup.zmultiples (lam 0)
+  have hdis : Function.Injective σ := by
+    intro P Q hPQ
+    have hp : (P, ∅) = (Q, ∅) := hjoint (by simpa [σ, τ] using hPQ)
+    exact congrArg Prod.fst hp
+  have horder := chain_order_eq hk lam hchain hsink hdis
+  have hH : Nat.card H = 2 ^ (k + 1) - 1 := by
+    change Nat.card (AddSubgroup.zmultiples (lam 0)) = 2 ^ (k + 1) - 1
+    rw [Nat.card_zmultiples, horder]
+  have hσmem : ∀ P : Finset (Fin k), σ P ∈ H := by
+    intro P
+    exact sum_mem fun i hi => chain_mem_zmultiples lam hchain i i.isLt
+  have hres : Function.Injective fun S : Finset (Fin r) =>
+      QuotientAddGroup.mk' H (τ S) := by
+    intro S T hST
+    by_contra hne
+    have hdmem : τ S - τ T ∈ H := QuotientAddGroup.eq_iff_sub_mem.mp hST
+    let d : H := ⟨τ S - τ T, hdmem⟩
+    let f : Finset (Fin k) ⊕ Finset (Fin k) → H
+      | Sum.inl P => ⟨σ P, hσmem P⟩
+      | Sum.inr P => d + ⟨σ P, hσmem P⟩
+    have hf : Function.Injective f := by
+      intro x y hxy
+      rcases x with P | P <;> rcases y with Q | Q
+      · apply congrArg Sum.inl
+        apply hdis
+        exact congrArg Subtype.val hxy
+      · exfalso
+        have hval := congrArg Subtype.val hxy
+        have heq : σ P + τ T = σ Q + τ S := by
+          change σ P = (τ S - τ T) + σ Q at hval
+          rw [hval]
+          abel
+        have hp : (P, T) = (Q, S) := hjoint (by simpa [σ, τ] using heq)
+        exact hne (congrArg Prod.snd hp).symm
+      · exfalso
+        have hval := congrArg Subtype.val hxy
+        have heq : σ Q + τ T = σ P + τ S := by
+          change (τ S - τ T) + σ P = σ Q at hval
+          rw [← hval]
+          abel
+        have hp : (Q, T) = (P, S) := hjoint (by simpa [σ, τ] using heq)
+        exact hne (congrArg Prod.snd hp).symm
+      · apply congrArg Sum.inr
+        apply hdis
+        have hval := congrArg Subtype.val hxy
+        change (τ S - τ T) + σ P = (τ S - τ T) + σ Q at hval
+        exact add_left_cancel hval
+    have hcard := Fintype.card_le_of_injective f hf
+    have hHF : Fintype.card H = 2 ^ (k + 1) - 1 := by
+      simpa [Nat.card_eq_fintype_card] using hH
+    simp only [Fintype.card_sum, Fintype.card_finset, Fintype.card_fin, hHF] at hcard
+    rw [pow_succ] at hcard
+    have hp : 0 < 2 ^ k := pow_pos (by omega) _
+    omega
+  apply chain_quotient_card_bound hk lam rho hchain hsink hdis
+  simpa [H, τ] using hres
 
 end Chain
 

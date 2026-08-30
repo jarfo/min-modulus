@@ -38,6 +38,95 @@ structure SHC (h : Fin m → G) : Prop where
   sh3 : ∀ (x : Fin m) (P M : Finset (Fin m)), x ∉ P → x ∉ M → Disjoint P M →
     P.card + 2 ≤ M.card → 3 • h x + ∑ j ∈ P, h j ≠ ∑ j ∈ M, h j
 
+/-- Validity of an anchored tuple implies the SHC conditions for its translated
+differences.  This is the bridge from the original min-modulus problem to the
+linear and quadratic wedge theorems: dissociation is `ssum_injective`, while a
+forbidden head-`2` or head-`3` relation pads at the anchor to a zero witness. -/
+theorem shc_diff_of_valid (g : Fin (m + 1) → G) (hg : ValidTuple g)
+    (hinj2 : ∀ x y : G, x + x = y + y → x = y) : SHC (diff g) := by
+  refine ⟨hinj2, ssum_injective g hg, ?_, ?_⟩
+  · intro x P M hxP hxM hPM hcard heq
+    refine validTuple_no_diff_relation g hg
+      (d := fun j => (if j = x then 2 else 0) + (if j ∈ P then 1 else 0)
+        - (if j ∈ M then 1 else 0)) ?_ ?_ ?_ ?_
+    · intro h0
+      have h1 := congrFun h0 x
+      simp [hxP, hxM] at h1
+    · intro j
+      show (-1 : ℤ) ≤ (if j = x then 2 else 0) + (if j ∈ P then 1 else 0)
+        - (if j ∈ M then 1 else 0)
+      split_ifs <;> omega
+    · have hsum :
+          (∑ j, ((if j = x then (2 : ℤ) else 0) + (if j ∈ P then 1 else 0)
+            - (if j ∈ M then 1 else 0))) = 2 + (P.card : ℤ) - (M.card : ℤ) := by
+        rw [Finset.sum_sub_distrib, Finset.sum_add_distrib,
+          Finset.sum_ite_eq' univ x fun _ => (2 : ℤ)]
+        simp
+      rw [hsum]
+      have hcard' : (P.card : ℤ) + 1 ≤ (M.card : ℤ) := by exact_mod_cast hcard
+      omega
+    · have hterm : ∀ j,
+          ((if j = x then (2 : ℤ) else 0) + (if j ∈ P then 1 else 0)
+            - (if j ∈ M then 1 else 0)) • diff g j
+          = ((if j = x then (2 : ℤ) else 0) • diff g j
+              + (if j ∈ P then (1 : ℤ) else 0) • diff g j)
+            - (if j ∈ M then (1 : ℤ) else 0) • diff g j := by
+          intro j
+          rw [sub_smul, add_smul]
+      rw [Finset.sum_congr rfl fun j _ => hterm j, Finset.sum_sub_distrib,
+        Finset.sum_add_distrib, sum_single_smul, sum_indicator_smul,
+        sum_indicator_smul]
+      have heq' : (2 : ℤ) • diff g x + ∑ j ∈ P, diff g j = ∑ j ∈ M, diff g j := by
+        simpa [two_zsmul, two_nsmul] using heq
+      rw [heq', sub_self]
+  · intro x P M hxP hxM hPM hcard heq
+    refine validTuple_no_diff_relation g hg
+      (d := fun j => (if j = x then 3 else 0) + (if j ∈ P then 1 else 0)
+        - (if j ∈ M then 1 else 0)) ?_ ?_ ?_ ?_
+    · intro h0
+      have h1 := congrFun h0 x
+      simp [hxP, hxM] at h1
+    · intro j
+      show (-1 : ℤ) ≤ (if j = x then 3 else 0) + (if j ∈ P then 1 else 0)
+        - (if j ∈ M then 1 else 0)
+      split_ifs <;> omega
+    · have hsum :
+          (∑ j, ((if j = x then (3 : ℤ) else 0) + (if j ∈ P then 1 else 0)
+            - (if j ∈ M then 1 else 0))) = 3 + (P.card : ℤ) - (M.card : ℤ) := by
+        rw [Finset.sum_sub_distrib, Finset.sum_add_distrib,
+          Finset.sum_ite_eq' univ x fun _ => (3 : ℤ)]
+        simp
+      rw [hsum]
+      have hcard' : (P.card : ℤ) + 2 ≤ (M.card : ℤ) := by exact_mod_cast hcard
+      omega
+    · have hterm : ∀ j,
+          ((if j = x then (3 : ℤ) else 0) + (if j ∈ P then 1 else 0)
+            - (if j ∈ M then 1 else 0)) • diff g j
+          = ((if j = x then (3 : ℤ) else 0) • diff g j
+              + (if j ∈ P then (1 : ℤ) else 0) • diff g j)
+            - (if j ∈ M then (1 : ℤ) else 0) • diff g j := by
+          intro j
+          rw [sub_smul, add_smul]
+      rw [Finset.sum_congr rfl fun j _ => hterm j, Finset.sum_sub_distrib,
+        Finset.sum_add_distrib, sum_single_smul, sum_indicator_smul,
+        sum_indicator_smul]
+      have heq' : (3 : ℤ) • diff g x + ∑ j ∈ P, diff g j = ∑ j ∈ M, diff g j := by
+        have hthree : (3 : ℤ) • diff g x = diff g x + (diff g x + diff g x) := by
+          calc
+            (3 : ℤ) • diff g x = ((1 : ℤ) + 2) • diff g x := by norm_num
+            _ = (1 : ℤ) • diff g x + (2 : ℤ) • diff g x := by rw [add_zsmul]
+            _ = diff g x + (diff g x + diff g x) := by rw [one_zsmul, two_zsmul]
+        rw [hthree]
+        simpa [three_nsmul] using heq
+      rw [heq', sub_self]
+
+/-- The linear wedge stated directly for a valid tuple. -/
+theorem bottom_wedge_of_valid [Fintype G] (g : Fin (m + 1) → G) (hg : ValidTuple g)
+    (hinj2 : ∀ x y : G, x + x = y + y → x = y) :
+    2 ^ (m + 1) + m ≤ 2 * Fintype.card G + 2 := by
+  have hs := shc_diff_of_valid g hg hinj2
+  exact bottom_wedge (diff g) hs.inj2 hs.dis hs.sh2 hs.sh3
+
 variable {h : Fin m → G}
 
 /-- Subset sums of two disjoint sets add. -/
@@ -429,6 +518,37 @@ private lemma head3_target (hs : SHC h) (x : Fin m) (Y T : Finset (Fin m)) (hxY 
   · exact hs.sh3 x (Y \ T) (T \ Y) (fun hx' => hxY (Finset.mem_sdiff.mp hx').1)
       (fun hx' => hxT (Finset.mem_sdiff.mp hx').1) disjoint_sdiff_sdiff (by omega) hrel
 
+/-- **All-level target lemma.**  Translation of a subset sum by `2 • h x`
+cannot increase its level.  If `x ∉ Y`, this is the head-2 shell condition;
+if `x ∈ Y`, splitting off `h x` turns it into the head-3 condition. -/
+theorem shc_shift_target_card_gt (hs : SHC h) (x : Fin m)
+    (Y T : Finset (Fin m)) (hcard : Y.card < T.card) :
+    2 • h x + ∑ j ∈ Y, h j ≠ ∑ j ∈ T, h j := by
+  classical
+  by_cases hxY : x ∈ Y
+  · intro heq
+    have hsplit : (∑ j ∈ Y, h j) = h x + ∑ j ∈ Y.erase x, h j :=
+      (Finset.add_sum_erase Y h hxY).symm
+    refine head3_target hs x (Y.erase x) T (Finset.notMem_erase x Y) ?_ ?_
+    · rw [Finset.card_erase_of_mem hxY]
+      have hypos : 0 < Y.card := Finset.card_pos.mpr ⟨x, hxY⟩
+      omega
+    · calc
+        3 • h x + ∑ j ∈ Y.erase x, h j
+            = 2 • h x + ∑ j ∈ Y, h j := by
+                rw [hsplit, show (3 : ℕ) = 2 + 1 from rfl, succ_nsmul]
+                abel
+        _ = ∑ j ∈ T, h j := heq
+  · exact head2_target hs x Y T hxY (by omega)
+
+/-- Equality after a `2 • h x` shift forces the target subset to have no
+larger cardinality than the source subset. -/
+theorem card_le_of_two_smul_add_sum_eq (hs : SHC h) (x : Fin m)
+    (Y T : Finset (Fin m))
+    (heq : 2 • h x + ∑ j ∈ Y, h j = ∑ j ∈ T, h j) : T.card ≤ Y.card := by
+  by_contra hnot
+  exact shc_shift_target_card_gt hs x Y T (by omega) heq
+
 /-- Consequences of dissociation and no 3-APs used in the charging argument. -/
 private lemma shc_inj (hs : SHC h) : Function.Injective h := by
   intro a b hab
@@ -739,6 +859,26 @@ theorem quadratic_wedge [Fintype G] (h : Fin m → G) (hs : SHC h) :
       rw [Finset.card_sdiff, Finset.inter_univ, Finset.card_univ, hCcard]
     omega
   omega
+
+/-- The quadratic wedge stated directly for a valid tuple. -/
+theorem quadratic_wedge_of_valid [Fintype G] (g : Fin (m + 1) → G)
+    (hg : ValidTuple g) (hinj2 : ∀ x y : G, x + x = y + y → x = y) :
+    m.choose 2 ≤ 3 * (m + (Fintype.card G - 2 ^ m) + 14) :=
+  quadratic_wedge (diff g) (shc_diff_of_valid g hg hinj2)
+
+/-- The linear wedge for a valid tuple modulo an odd natural number. -/
+theorem valid_odd_zmod_bottom_wedge {N : ℕ} (hN : Odd N)
+    (g : Fin (m + 1) → ZMod N) (hg : ValidTuple g) :
+    2 ^ (m + 1) + m ≤ 2 * N + 2 := by
+  haveI : NeZero N := ⟨by rcases hN with ⟨k, rfl⟩; omega⟩
+  simpa [ZMod.card] using bottom_wedge_of_valid g hg (add_self_injective_zmod hN)
+
+/-- The quadratic wedge for a valid tuple modulo an odd natural number. -/
+theorem valid_odd_zmod_quadratic_wedge {N : ℕ} (hN : Odd N)
+    (g : Fin (m + 1) → ZMod N) (hg : ValidTuple g) :
+    m.choose 2 ≤ 3 * (m + (N - 2 ^ m) + 14) := by
+  haveI : NeZero N := ⟨by rcases hN with ⟨k, rfl⟩; omega⟩
+  simpa [ZMod.card] using quadratic_wedge_of_valid g hg (add_self_injective_zmod hN)
 
 end QuadraticWedge
 
