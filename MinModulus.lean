@@ -6,4 +6,5 @@ import MinModulus.OddOrder
 import MinModulus.RelationCertificate
 import MinModulus.QuadraticWedge
 import MinModulus.SubtupleRigidity
+import MinModulus.SHCBaseCases
 import MinModulus.GlobalRoadmap

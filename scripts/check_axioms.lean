@@ -68,6 +68,12 @@ import MinModulus
 #print axioms MinModulus.SHC.subtype
 #print axioms MinModulus.addSubgroup_eq_top_of_mersenne_window
 #print axioms MinModulus.shc_deleted_span_eq_top
+#print axioms MinModulus.SHC.map_addEquiv
+#print axioms MinModulus.not_exists_shc_fin_three_zmod_nine
+#print axioms MinModulus.not_exists_shc_fin_three_zmod_eleven
+#print axioms MinModulus.not_exists_shc_fin_three_zmod_thirteen
+#print axioms MinModulus.cyclicSHCOddLowerBound_three
+#print axioms MinModulus.shc_four_deleted_span_eq_top
 #print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2
 #print axioms MinModulus.survival22        -- two (2,2)-reps of one value: |M1∩P2| + |M2∩P1| >= 2
 #print axioms MinModulus.cluster22         -- pairwise-surviving families have <= 13 members
