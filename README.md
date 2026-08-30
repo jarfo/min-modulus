@@ -199,6 +199,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `three_witnesses_sum_ne_zero` | excludes the exact minimal cyclic three-witness pattern in G1 |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
 | `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
+| `codim_one_chain_odd_card_bound` | a chain missing one coordinate already forces the full odd threshold |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |

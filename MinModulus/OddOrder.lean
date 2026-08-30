@@ -586,6 +586,27 @@ theorem chain_quotient_card_bound_of_joint_dissociated {k r : ℕ}
   apply chain_quotient_card_bound hk lam rho hchain hsink hdis
   simpa [H, τ] using hres
 
+/-- A closed SI chain missing only one coordinate already forces the full odd
+threshold.  The chain-times-residual estimate is `2^(k+2)-2`; odd cardinality
+rounds this up to `2^(k+2)-1`. -/
+theorem codim_one_chain_odd_card_bound {k : ℕ} (hk : 1 ≤ k)
+    (lam : ℕ → G) (rho : Fin 1 → G)
+    (hchain : ∀ i, i + 1 < k → lam (i + 1) = 2 • lam i + lam 0)
+    (hsink : 2 • lam (k - 1) + lam 0 = 0)
+    (hjoint : Function.Injective fun p : Finset (Fin k) × Finset (Fin 1) =>
+      (∑ j ∈ p.1, lam j.val) + ∑ j ∈ p.2, rho j)
+    (hodd : Odd (Fintype.card G)) :
+    2 ^ (k + 2) - 1 ≤ Fintype.card G := by
+  have hbound := chain_quotient_card_bound_of_joint_dissociated
+    hk lam rho hchain hsink hjoint
+  obtain ⟨u, hu⟩ := hodd
+  have hp₁ : 0 < 2 ^ (k + 1) := pow_pos (by omega) _
+  have hp₂ : 2 ^ (k + 2) = 2 * 2 ^ (k + 1) := by
+    rw [show k + 2 = (k + 1) + 1 by omega, pow_succ]
+    omega
+  norm_num at hbound
+  omega
+
 end Chain
 
 /-! ### The bottom-wedge theorem: `2^(m+1) + m ≤ 2|G| + 2` -/

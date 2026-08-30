@@ -54,6 +54,7 @@ import MinModulus
 #print axioms MinModulus.chain_quotient_card_bound
 #print axioms MinModulus.chain_mem_zmultiples
 #print axioms MinModulus.chain_quotient_card_bound_of_joint_dissociated
+#print axioms MinModulus.codim_one_chain_odd_card_bound
 #print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2
 #print axioms MinModulus.survival22        -- two (2,2)-reps of one value: |M1∩P2| + |M2∩P1| >= 2
 #print axioms MinModulus.cluster22         -- pairwise-surviving families have <= 13 members
