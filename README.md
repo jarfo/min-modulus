@@ -81,6 +81,7 @@ MinModulus/
   Generated/SHCFiveN*.lean      -- sharded normalized 5-coordinate kernel checks
   SHCFiveBaseCases.lean         -- 5-coordinate SHC bound 63 and odd `n=6` stratum
   SHCSixGeneratorReduction.lean -- structural 6-coordinate generator reduction
+  SHCSixGenerator.lean          -- tight 2-prime cases; only order 105 remains
   GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 scripts/generate-five-normalized-certificates.py -- deterministic Torch certificate generator
@@ -226,6 +227,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `SHCFiveGenerator.lean`: `shc_hasGeneratorCoordinate_zmod_forty_five`, `shc_hasGeneratorCoordinate_zmod_five_of_odd_window` | the tight order-45 `3+2` subgroup split is impossible by a quotient-pigeonhole contradiction to dissociation, completing generator-coordinate existence throughout the full five-coordinate strict window |
 | `SHCFiveCertificate.lean`, `Generated/SHCFiveN*.lean`, `SHCFiveBaseCases.lean` | complete normalized five-coordinate window (33 analytically, every odd order 35–61 by generated certificates), the unconditional cyclic SHC bound 63, `odd_min_six`, and six-coordinate deletion spanning through order 125 |
 | `SHCSixGeneratorReduction.lean`: `shc_hasGeneratorCoordinate_zmod_six_of_odd_window_ne_exceptions` | lower-dimensional SHC bounds force a generator coordinate at 27 of the 31 odd orders 65–125; the subgroup-cover method isolates exactly 75, 99, 105, and 117 as its tight exceptions |
+| `SHCSixGenerator.lean`: `shc_hasGeneratorCoordinate_zmod_six_of_odd_window_ne_one_hundred_five` | quotient-pigeonhole contradictions close the tight two-prime cases 75, 99, and 117, proving generator-coordinate existence at 30 of 31 window orders; only the three-prime order 105 remains |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
