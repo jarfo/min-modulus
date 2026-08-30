@@ -72,6 +72,15 @@ import MinModulus
 #print axioms MinModulus.SHC.reindex_equiv
 #print axioms MinModulus.SHC.normalize_generator
 #print axioms MinModulus.not_exists_shc_of_normalized
+#print axioms MinModulus.normalizedSHCFourExcluded_of_sorted
+#print axioms MinModulus.normalized_shc_four_excluded_seventeen
+#print axioms MinModulus.normalized_shc_four_excluded_nineteen
+#print axioms MinModulus.normalized_shc_four_excluded_twenty_one
+#print axioms MinModulus.normalized_shc_four_excluded_twenty_three
+#print axioms MinModulus.normalized_shc_four_excluded_twenty_five
+#print axioms MinModulus.normalized_shc_four_excluded_twenty_seven
+#print axioms MinModulus.normalized_shc_four_excluded_twenty_nine
+#print axioms MinModulus.normalized_shc_four_excluded_of_odd_window
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_nine
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_eleven
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_thirteen
