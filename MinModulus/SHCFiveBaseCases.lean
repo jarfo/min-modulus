@@ -19,6 +19,7 @@ import MinModulus.Generated.SHCFiveN53
 import MinModulus.Generated.SHCFiveN55
 import MinModulus.Generated.SHCFiveN57
 import MinModulus.Generated.SHCFiveN59
+import MinModulus.Generated.SHCFiveN61
 
 namespace MinModulus
 
@@ -89,6 +90,11 @@ theorem normalized_shc_five_excluded_fifty_nine : NormalizedSHCExcluded 4 59 :=
   normalizedSHCFiveExcluded_of_certificate (by norm_num)
     SHCFiveCertificate.Generated.certificate59
 
+/-- There is no normalized five-coordinate SHC family in `ZMod 61`. -/
+theorem normalized_shc_five_excluded_sixty_one : NormalizedSHCExcluded 4 61 :=
+  normalizedSHCFiveExcluded_of_certificate (by norm_num)
+    SHCFiveCertificate.Generated.certificate61
+
 /-- The normalized five-coordinate exclusion in the first five odd cases of
 the strict window. -/
 theorem normalized_shc_five_excluded_of_odd_window_le_forty_one {N : ℕ}
@@ -150,5 +156,75 @@ theorem normalized_shc_five_excluded_of_odd_window_le_fifty_nine {N : ℕ}
   · exact normalized_shc_five_excluded_fifty_five
   · exact normalized_shc_five_excluded_fifty_seven
   · exact normalized_shc_five_excluded_fifty_nine
+
+/-- Every odd modulus in the five-coordinate strict window satisfies the
+normalized SHC exclusion. -/
+theorem normalized_shc_five_excluded_of_odd_window {N : ℕ} (hodd : Odd N)
+    (hlower : 33 ≤ N) (hupper : N ≤ 61) : NormalizedSHCExcluded 4 N := by
+  by_cases hsmall : N ≤ 59
+  · exact normalized_shc_five_excluded_of_odd_window_le_fifty_nine
+      hodd hlower hsmall
+  have hN : N = 61 := by
+    obtain ⟨k, hk⟩ := hodd
+    omega
+  subst N
+  exact normalized_shc_five_excluded_sixty_one
+
+/-- There is no five-coordinate SHC family in an odd `ZMod` of order between
+33 and 61. -/
+theorem not_exists_shc_fin_five_zmod_of_odd_window {N : ℕ}
+    (hodd : Odd N) (hlower : 33 ≤ N) (hupper : N ≤ 61) :
+    ¬ ∃ h : Fin 5 → ZMod N, SHC h := by
+  letI : NeZero N := ⟨by omega⟩
+  apply not_exists_shc_of_normalized
+  · exact shc_hasGeneratorCoordinate_zmod_five_of_odd_window hodd hlower hupper
+  · simpa only [Nat.card_zmod] using
+      normalized_shc_five_excluded_of_odd_window hodd hlower hupper
+
+/-- **Five-coordinate cyclic SHC base case.** Every SHC family with five
+coordinates in a finite odd cyclic group forces the Mersenne lower bound 63. -/
+theorem cyclicSHCOddLowerBound_five : CyclicSHCOddLowerBound 5 := by
+  intro K _ _ _ hodd h hs
+  by_contra hnot
+  have hlt : Fintype.card K < 63 := Nat.lt_of_not_ge hnot
+  have h32 : 32 ≤ Fintype.card K := by
+    have hc := Fintype.card_le_of_injective
+      (fun S : Finset (Fin 5) ↦ ∑ j ∈ S, h j) hs.dis
+    simpa using hc
+  obtain ⟨q, hq⟩ := hodd
+  have hlower' : 33 ≤ Fintype.card K := by omega
+  have hupper' : Fintype.card K ≤ 61 := by omega
+  have hlower : 33 ≤ Nat.card K := by
+    simpa [Nat.card_eq_fintype_card] using hlower'
+  have hupper : Nat.card K ≤ 61 := by
+    simpa [Nat.card_eq_fintype_card] using hupper'
+  have hodd' : Odd (Nat.card K) := by
+    exact ⟨q, by simpa [Nat.card_eq_fintype_card] using hq⟩
+  obtain ⟨g, hg⟩ := IsAddCyclic.exists_generator (α := K)
+  let e : ZMod (Nat.card K) ≃+ K := zmodAddEquivOfGenerator hg rfl
+  apply not_exists_shc_fin_five_zmod_of_odd_window hodd' hlower hupper
+  exact ⟨e.symm ∘ h, hs.map_addEquiv h e.symm⟩
+
+/-- **The odd stratum for `n = 6`:** every valid six-tuple modulo an odd
+`N` forces `N ≥ 2^6 - 1 = 63`. -/
+theorem odd_min_six {N : ℕ} (hN : Odd N) (g : Fin 6 → ZMod N)
+    (hg : ValidTuple g) : 63 ≤ N := by
+  letI : NeZero N := ⟨by rcases hN with ⟨k, rfl⟩; omega⟩
+  have hs : SHC (diff g) := shc_diff_of_valid g hg (add_self_injective_zmod hN)
+  have hodd : Odd (Fintype.card (ZMod N)) := by
+    simpa [ZMod.card] using hN
+  have hbound := cyclicSHCOddLowerBound_five (ZMod N) hodd (diff g) hs
+  simpa [ZMod.card] using hbound
+
+/-- **Unconditional six-coordinate saturation through the strict window.**
+In an odd cyclic group of order at most 125, deleting any coordinate of a
+six-coordinate SHC family leaves a tuple that spans the whole group. -/
+theorem shc_six_deleted_span_eq_top {K : Type*} [AddCommGroup K]
+    [Fintype K] [IsAddCyclic K] (hodd : Odd (Fintype.card K))
+    (hupper : Fintype.card K ≤ 125) (h : Fin 6 → K) (hs : SHC h) (x : Fin 6) :
+    AddSubgroup.closure (Set.range fun i : Fin 5 ↦ h (x.succAbove i)) = ⊤ := by
+  apply shc_deleted_span_eq_top cyclicSHCOddLowerBound_five hodd ?_ h hs x
+  norm_num
+  exact hupper
 
 end MinModulus

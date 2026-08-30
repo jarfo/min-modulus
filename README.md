@@ -79,7 +79,7 @@ MinModulus/
   SHCFiveGenerator.lean         -- unconditional 5-coordinate window generator theorem
   SHCFiveCertificate.lean       -- trusted bridge for normalized 5-coordinate certificates
   Generated/SHCFiveN*.lean      -- sharded normalized 5-coordinate kernel checks
-  SHCFiveBaseCases.lean         -- public normalized 5-coordinate exclusions
+  SHCFiveBaseCases.lean         -- 5-coordinate SHC bound 63 and odd `n=6` stratum
   GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 scripts/generate-five-normalized-certificates.py -- deterministic Torch certificate generator
@@ -223,7 +223,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `SHCFourGenerator.lean`: `cyclicSHCOddLowerBound_four`, `odd_min_five`, `shc_five_deleted_span_eq_top` | generator-coordinate existence at every odd order 17–29 closes the normalized reduction, proving the unconditional four-coordinate bound 31, G2 for valid five-tuples, and five-coordinate deletion spanning through order 61 |
 | `SHCFiveGeneratorReduction.lean`: `shc_hasGeneratorCoordinate_zmod_five_of_odd_window_ne_forty_five` | subgroup-coordinate counts derived from the 15/31 cyclic SHC bounds force a generator at every odd order 33–61 except the unique tight partition at 45 |
 | `SHCFiveGenerator.lean`: `shc_hasGeneratorCoordinate_zmod_forty_five`, `shc_hasGeneratorCoordinate_zmod_five_of_odd_window` | the tight order-45 `3+2` subgroup split is impossible by a quotient-pigeonhole contradiction to dissociation, completing generator-coordinate existence throughout the full five-coordinate strict window |
-| `SHCFiveCertificate.lean`, `Generated/SHCFiveN*.lean`, `SHCFiveBaseCases.lean` | trusted relation-code bridge and sharded kernel checks prove the first fourteen normalized five-coordinate exclusions: order 33 analytically by the bottom wedge and every odd order 35–59 by generated certificates |
+| `SHCFiveCertificate.lean`, `Generated/SHCFiveN*.lean`, `SHCFiveBaseCases.lean` | complete normalized five-coordinate window (33 analytically, every odd order 35–61 by generated certificates), the unconditional cyclic SHC bound 63, `odd_min_six`, and six-coordinate deletion spanning through order 125 |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
