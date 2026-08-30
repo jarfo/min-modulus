@@ -40,3 +40,8 @@ import MinModulus
 #print axioms MinModulus.exists_validTuple_half_of_no_witness  -- halving, cyclic
 #print axioms MinModulus.exists_validTuple_half_of_delete      -- deletion, cyclic
 #print axioms MinModulus.exists_validTuple_half_of_pair        -- pair descent, cyclic
+#print axioms MinModulus.card_ge_of_odd     -- odd order: |G| >= 2^m + 2m (m >= 3)
+#print axioms MinModulus.card_ge_of_odd'    -- odd order: |G| >= 2^m + m
+#print axioms MinModulus.valid_odd_zmod_bound
+#print axioms MinModulus.odd_min_three      -- least odd valid modulus = 7 for n = 3
+#print axioms MinModulus.odd_min_four       -- least odd valid modulus = 15 for n = 4 (G2, n <= 4)
