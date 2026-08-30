@@ -71,6 +71,7 @@ MinModulus/
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
   QuadraticWedge.lean           -- SHC bridge and quadratic/multi-level lemmas
+  SubtupleRigidity.lean         -- conditional odd-window subtuple spanning
   GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 ```
@@ -204,6 +205,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `mersenne_certificate_order_eq`, `mersenne_certificate_card_bound_of_span` | chain-free Mersenne certificate: dissociation supplies the order lower bound, while coordinatewise annihilation and spanning force the exact Mersenne order |
 | `RelationCertificate.lean`: `det_zsmul_eq_zero_of_matrixRelations`, `mersenne_card_bound_of_relation_matrix` | adjugate bridge from an integer relation matrix of determinant `±(2^(m+1)-1)` to the full odd threshold; includes the determinant-15 torsion certificate |
 | companion `unique` census: `scripts/relation-certificate-census.py` | exact threshold validation: every SHC tuple mod 15 and 31 has a Mersenne determinant certificate; the mod-35 stress test shows the extraction statement must retain its strict-window hypothesis |
+| `SubtupleRigidity.lean`: `shc_deleted_span_eq_top` | assuming the lower-dimensional odd cyclic SHC bound, every coordinate deletion in the next strict window spans the ambient cyclic group |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |

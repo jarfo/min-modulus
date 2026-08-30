@@ -5,4 +5,5 @@ import MinModulus.Descent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate
 import MinModulus.QuadraticWedge
+import MinModulus.SubtupleRigidity
 import MinModulus.GlobalRoadmap
