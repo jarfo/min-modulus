@@ -75,6 +75,7 @@ MinModulus/
   SHCBaseCases.lean             -- kernel-checked 3-coordinate SHC bound
   SHCFourBaseCases.lean         -- normalized 4-coordinate window exclusions
   SHCFourGenerator.lean         -- generator coordinates and 4-coordinate SHC bound
+  SHCFiveGeneratorReduction.lean -- structural 5-coordinate generator reduction
   GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 ```
@@ -215,6 +216,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `SHC.normalize_generator`, `not_exists_shc_of_normalized` | a generator coordinate can be reindexed and identified with `1` in `ZMod (|G|)`; a normalized finite exclusion then rules out the original SHC family |
 | `SHCFourBaseCases.lean`: `normalized_shc_four_excluded_of_odd_window` | kernel-reduced sorted normalized exclusions for every odd modulus 17–29; dissociation plus the head-2 shell clause already contradict each other |
 | `SHCFourGenerator.lean`: `cyclicSHCOddLowerBound_four`, `odd_min_five`, `shc_five_deleted_span_eq_top` | generator-coordinate existence at every odd order 17–29 closes the normalized reduction, proving the unconditional four-coordinate bound 31, G2 for valid five-tuples, and five-coordinate deletion spanning through order 61 |
+| `SHCFiveGeneratorReduction.lean`: `shc_hasGeneratorCoordinate_zmod_five_of_odd_window_ne_forty_five` | subgroup-coordinate counts derived from the 15/31 cyclic SHC bounds force a generator at every odd order 33–61 except the unique tight partition at 45 |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
