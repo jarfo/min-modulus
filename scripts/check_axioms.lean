@@ -46,3 +46,4 @@ import MinModulus
 #print axioms MinModulus.odd_min_three      -- least odd valid modulus = 7 for n = 3
 #print axioms MinModulus.odd_min_four       -- least odd valid modulus = 15 for n = 4 (G2, n <= 4)
 #print axioms MinModulus.chain_card_bound   -- the SI-shape chain pins |G| >= 2^(m+1) - 1
+#print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2

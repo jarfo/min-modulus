@@ -411,4 +411,218 @@ theorem chain_card_bound {m : ℕ} (hm : 1 ≤ m) (lam : ℕ → G)
 
 end Chain
 
+/-! ### The bottom-wedge theorem: `2^(m+1) + m ≤ 2|G| + 2` -/
+
+section BottomWedge
+
+variable {G : Type*} [AddCommGroup G] [Fintype G] {m : ℕ}
+
+/-- **Bottom-wedge theorem.**  Let `h : Fin m → G` be dissociated (injective
+subset-sum map) in a finite abelian group with injective doubling, admitting
+no single-headed witness with head `2` (`hsh2`) or head `3` (`hsh3`).  Then
+`2^(m+1) + m ≤ 2|G| + 2`: writing `|G| = 2^m + r`, the family forces
+`m ≤ 2(r+1)`.  In particular no such family exists in a group of odd order
+`≤ 2^m + (m-3)/2` — the first general-`m` family of window orders excluded.
+
+Mechanism: the `2^m` subset sums miss exactly `|G| - 2^m` elements; for a
+fixed `x`, the translate `g ↦ g + 2•h x` sends the value set `H` into
+`H ∪ {0} ∪ (complement)` by the four-case target lemma, so at most
+`|G| - 2^m + 1` elements escape `H`; and since `hsh2` forbids three-term
+arithmetic progressions in `H`, every element escapes within two steps, so
+the non-escapees inject into the escapees. -/
+theorem bottom_wedge (h : Fin m → G)
+    (hinj2 : ∀ x y : G, x + x = y + y → x = y)
+    (hdis : Function.Injective fun S : Finset (Fin m) => ∑ j ∈ S, h j)
+    (hsh2 : ∀ (x : Fin m) (P M : Finset (Fin m)), x ∉ P → x ∉ M → Disjoint P M →
+      P.card + 1 ≤ M.card → 2 • h x + ∑ j ∈ P, h j ≠ ∑ j ∈ M, h j)
+    (hsh3 : ∀ (x : Fin m) (P M : Finset (Fin m)), x ∉ P → x ∉ M → Disjoint P M →
+      P.card + 2 ≤ M.card → 3 • h x + ∑ j ∈ P, h j ≠ ∑ j ∈ M, h j) :
+    2 ^ (m + 1) + m ≤ 2 * Fintype.card G + 2 := by
+  classical
+  set σ : Finset (Fin m) → G := fun S => ∑ j ∈ S, h j with hσ
+  have hcard2m : 2 ^ m ≤ Fintype.card G := by
+    have h1 := Fintype.card_le_of_injective σ hdis
+    rwa [Fintype.card_finset, Fintype.card_fin] at h1
+  have hp : 2 ^ (m + 1) = 2 ^ m * 2 := pow_succ 2 m
+  rcases Nat.eq_zero_or_pos m with rfl | hm
+  · have := Fintype.card_pos (α := G)
+    omega
+  -- basic consequences of dissociation
+  have hinj_h : Function.Injective h := by
+    intro a b hab
+    have h1 : σ {a} = σ {b} := by simp [hσ, hab]
+    exact Finset.singleton_injective (hdis h1)
+  have h_ne : ∀ a : Fin m, h a ≠ 0 := by
+    intro a ha
+    have h1 : σ {a} = σ ∅ := by simp [hσ, ha]
+    exact absurd (hdis h1) (Finset.singleton_ne_empty a)
+  -- no three-term arithmetic progressions among the h's
+  have no3AP : ∀ a b c : Fin m, a ≠ b → b ≠ c → a ≠ c → h a + h c ≠ 2 • h b := by
+    intro a b c hab hbc hac heq
+    refine hsh2 b ∅ {a, c} (Finset.notMem_empty b) (by simp [Ne.symm hab, hbc])
+      (Finset.disjoint_empty_left _) (by rw [Finset.card_empty, Finset.card_pair hac]; omega) ?_
+    rw [Finset.sum_empty, add_zero, Finset.sum_pair hac]
+    exact heq.symm
+  -- target lemma, head 2: `2•h x + h y` is never a subset sum over ≥ 2 indices
+  have hB2 : ∀ x y : Fin m, x ≠ y → ∀ T : Finset (Fin m), 2 ≤ T.card →
+      2 • h x + h y ≠ σ T := by
+    intro x y hxy T hT heq
+    by_cases hxT : x ∈ T
+    · have hs1 : σ T = h x + σ (T.erase x) := (Finset.add_sum_erase T h hxT).symm
+      by_cases hyT : y ∈ T
+      · have hyT' : y ∈ T.erase x := Finset.mem_erase.mpr ⟨Ne.symm hxy, hyT⟩
+        have hs2 : σ (T.erase x) = h y + σ ((T.erase x).erase y) :=
+          (Finset.add_sum_erase _ h hyT').symm
+        have h1 : h x + (h x + h y) = σ ((T.erase x).erase y) + (h x + h y) := by
+          calc h x + (h x + h y) = 2 • h x + h y := by rw [two_nsmul]; abel
+            _ = h x + (h y + σ ((T.erase x).erase y)) := by rw [heq, hs1, hs2]
+            _ = σ ((T.erase x).erase y) + (h x + h y) := by abel
+        have h2 : σ {x} = σ ((T.erase x).erase y) := by
+          rw [show σ {x} = h x from by simp [hσ]]
+          exact add_right_cancel h1
+        have h3 : x ∈ (T.erase x).erase y := (hdis h2) ▸ Finset.mem_singleton_self x
+        exact absurd (Finset.mem_of_mem_erase h3) (Finset.notMem_erase x T)
+      · have h1 : (h x + h y) + h x = σ (T.erase x) + h x := by
+          calc (h x + h y) + h x = 2 • h x + h y := by rw [two_nsmul]; abel
+            _ = h x + σ (T.erase x) := by rw [heq, hs1]
+            _ = σ (T.erase x) + h x := by abel
+        have h2 : σ {x, y} = σ (T.erase x) := by
+          rw [show σ {x, y} = h x + h y from by rw [hσ]; exact Finset.sum_pair hxy]
+          exact add_right_cancel h1
+        have h3 : x ∈ T.erase x := (hdis h2) ▸ Finset.mem_insert_self x {y}
+        exact absurd h3 (Finset.notMem_erase x T)
+    · by_cases hyT : y ∈ T
+      · have hs1 : σ T = h y + σ (T.erase y) := (Finset.add_sum_erase T h hyT).symm
+        have h1 : 2 • h x + h y = σ (T.erase y) + h y := by
+          calc 2 • h x + h y = σ T := heq
+            _ = h y + σ (T.erase y) := hs1
+            _ = σ (T.erase y) + h y := by abel
+        refine hsh2 x ∅ (T.erase y) (Finset.notMem_empty x)
+          (fun hx' => hxT (Finset.mem_of_mem_erase hx'))
+          (Finset.disjoint_empty_left _)
+          (by rw [Finset.card_empty, Finset.card_erase_of_mem hyT]; omega) ?_
+        rw [Finset.sum_empty, add_zero]
+        exact add_right_cancel h1
+      · refine hsh2 x {y} T (by simp [hxy]) hxT
+          (Finset.disjoint_singleton_left.mpr hyT) (by rw [Finset.card_singleton]; omega) ?_
+        rw [Finset.sum_singleton]
+        exact heq
+  -- target lemma, head 3: `3•h x` is never a subset sum over ≥ 2 indices
+  have hB3 : ∀ x : Fin m, ∀ T : Finset (Fin m), 2 ≤ T.card → 3 • h x ≠ σ T := by
+    intro x T hT heq
+    by_cases hxT : x ∈ T
+    · have hs1 : σ T = h x + σ (T.erase x) := (Finset.add_sum_erase T h hxT).symm
+      have h1 : 2 • h x + h x = σ (T.erase x) + h x := by
+        calc 2 • h x + h x = 3 • h x := (succ_nsmul (h x) 2).symm
+          _ = h x + σ (T.erase x) := by rw [heq, hs1]
+          _ = σ (T.erase x) + h x := by abel
+      refine hsh2 x ∅ (T.erase x) (Finset.notMem_empty x) (Finset.notMem_erase x T)
+        (Finset.disjoint_empty_left _)
+        (by rw [Finset.card_empty, Finset.card_erase_of_mem hxT]; omega) ?_
+      rw [Finset.sum_empty, add_zero]
+      exact add_right_cancel h1
+    · refine hsh3 x ∅ T (Finset.notMem_empty x) hxT (Finset.disjoint_empty_left _)
+        (by rw [Finset.card_empty]; omega) ?_
+      rw [Finset.sum_empty, add_zero]
+      exact heq
+  -- the value set, the cube image, and the translation
+  set Hs : Finset G := Finset.image h Finset.univ with hHs
+  have hHcard : Hs.card = m := by
+    rw [hHs, Finset.card_image_of_injective _ hinj_h, Finset.card_univ, Fintype.card_fin]
+  set Cimg : Finset G := Finset.image σ Finset.univ with hCimg
+  have hCcard : Cimg.card = 2 ^ m := by
+    rw [hCimg, Finset.card_image_of_injective _ hdis, Finset.card_univ,
+      Fintype.card_finset, Fintype.card_fin]
+  set x0 : Fin m := ⟨0, hm⟩ with hx0
+  set τ : G := 2 • h x0 with hτ
+  have hτ0 : τ ≠ 0 := by
+    intro h0
+    refine h_ne x0 (hinj2 (h x0) 0 ?_)
+    rw [← two_nsmul, ← hτ, h0, add_zero]
+  have h2τ0 : τ + τ ≠ 0 := fun h0 => hτ0 (hinj2 τ 0 (by rw [h0, add_zero]))
+  -- two-step escape: no element of Hs survives two τ-translations inside Hs
+  have hstep : ∀ g ∈ Hs, g + τ ∈ Hs → g + τ + τ ∉ Hs := by
+    intro g hg hg1 hg2
+    obtain ⟨a, _, ha⟩ := Finset.mem_image.mp hg
+    obtain ⟨b, _, hb⟩ := Finset.mem_image.mp hg1
+    obtain ⟨c, _, hc⟩ := Finset.mem_image.mp hg2
+    have hab : a ≠ b := by
+      rintro rfl
+      rw [ha] at hb
+      exact hτ0 (add_left_cancel (show g + 0 = g + τ by rw [add_zero]; exact hb)).symm
+    have hbc : b ≠ c := by
+      rintro rfl
+      rw [hb] at hc
+      exact hτ0
+        (add_left_cancel (show (g + τ) + 0 = (g + τ) + τ by rw [add_zero]; exact hc)).symm
+    have hac : a ≠ c := by
+      rintro rfl
+      rw [ha, add_assoc] at hc
+      exact h2τ0
+        (add_left_cancel (show g + 0 = g + (τ + τ) by rw [add_zero]; exact hc)).symm
+    refine no3AP a b c hab hbc hac ?_
+    rw [ha, hc, hb, two_nsmul]
+    abel
+  -- split Hs into escapees and non-escapees; non-escapees inject into escapees
+  have hsplitc : (Hs.filter fun g => g + τ ∈ Hs).card
+      + (Hs.filter fun g => ¬(g + τ ∈ Hs)).card = Hs.card :=
+    Finset.card_filter_add_card_filter_not _
+  have hBE : (Hs.filter fun g => g + τ ∈ Hs).card
+      ≤ (Hs.filter fun g => ¬(g + τ ∈ Hs)).card := by
+    refine Finset.card_le_card_of_injOn (fun g => g + τ) ?_ ?_
+    · intro g hg
+      obtain ⟨hgH, hgin⟩ := Finset.mem_filter.mp hg
+      exact Finset.mem_filter.mpr ⟨hgin, hstep g hgH hgin⟩
+    · intro a _ b _ hab
+      exact add_right_cancel hab
+  -- escapees inject into {0} ∪ (cube complement)
+  have hEW : (Hs.filter fun g => ¬(g + τ ∈ Hs)).card
+      ≤ 1 + (Fintype.card G - 2 ^ m) := by
+    have hinj_tr : Function.Injective (fun g : G => g + τ) :=
+      fun a b hab => add_right_cancel hab
+    have himg : (Hs.filter fun g => ¬(g + τ ∈ Hs)).image (fun g => g + τ)
+        ⊆ insert (0 : G) (Finset.univ \ Cimg) := by
+      intro v hv
+      obtain ⟨g, hgE, hgv⟩ := Finset.mem_image.mp hv
+      obtain ⟨hgH, hgesc⟩ := Finset.mem_filter.mp hgE
+      by_cases hvC : v ∈ Cimg
+      · obtain ⟨T, _, hT⟩ := Finset.mem_image.mp hvC
+        rcases Nat.lt_or_ge T.card 2 with hTc | hTc
+        · have hTc' : T.card = 0 ∨ T.card = 1 := by omega
+          rcases hTc' with h0 | h1
+          · have hTe : T = ∅ := Finset.card_eq_zero.mp h0
+            have hv0 : v = 0 := by rw [← hT, hTe, hσ]; simp
+            exact Finset.mem_insert.mpr (Or.inl hv0)
+          · exfalso
+            obtain ⟨j, hj⟩ := Finset.card_eq_one.mp h1
+            apply hgesc
+            rw [hgv, ← hT, hj, show σ {j} = h j from by simp [hσ]]
+            exact Finset.mem_image_of_mem h (Finset.mem_univ j)
+        · exfalso
+          obtain ⟨y, _, hy⟩ := Finset.mem_image.mp hgH
+          by_cases hyx : y = x0
+          · rw [hyx] at hy
+            refine hB3 x0 T hTc ?_
+            calc (3 : ℕ) • h x0 = 2 • h x0 + h x0 := by
+                  rw [show (3 : ℕ) = 2 + 1 from rfl, succ_nsmul]
+              _ = g + τ := by rw [← hτ, hy]; abel
+              _ = v := hgv
+              _ = σ T := hT.symm
+          · refine hB2 x0 y (Ne.symm hyx) T hTc ?_
+            calc 2 • h x0 + h y = g + τ := by rw [← hτ, hy]; abel
+              _ = v := hgv
+              _ = σ T := hT.symm
+      · exact Finset.mem_insert_of_mem (Finset.mem_sdiff.mpr ⟨Finset.mem_univ v, hvC⟩)
+    have h1 : (Hs.filter fun g => ¬(g + τ ∈ Hs)).card
+        = ((Hs.filter fun g => ¬(g + τ ∈ Hs)).image (fun g => g + τ)).card :=
+      (Finset.card_image_of_injective _ hinj_tr).symm
+    have h2 := Finset.card_le_card himg
+    have h3 := Finset.card_insert_le (0 : G) (Finset.univ \ Cimg)
+    have h4 : (Finset.univ \ Cimg).card = Fintype.card G - 2 ^ m := by
+      rw [Finset.card_sdiff, Finset.inter_univ, Finset.card_univ, hCcard]
+    omega
+  omega
+
+end BottomWedge
+
 end MinModulus
