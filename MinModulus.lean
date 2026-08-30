@@ -12,4 +12,5 @@ import MinModulus.SHCFourGenerator
 import MinModulus.SHCFiveGeneratorReduction
 import MinModulus.SHCFiveGenerator
 import MinModulus.SHCFiveBaseCases
+import MinModulus.SHCSixGeneratorReduction
 import MinModulus.GlobalRoadmap
