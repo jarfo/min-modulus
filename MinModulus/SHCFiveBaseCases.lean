@@ -13,6 +13,9 @@ import MinModulus.Generated.SHCFiveN41
 import MinModulus.Generated.SHCFiveN43
 import MinModulus.Generated.SHCFiveN45
 import MinModulus.Generated.SHCFiveN47
+import MinModulus.Generated.SHCFiveN49
+import MinModulus.Generated.SHCFiveN51
+import MinModulus.Generated.SHCFiveN53
 
 namespace MinModulus
 
@@ -53,6 +56,21 @@ theorem normalized_shc_five_excluded_forty_seven : NormalizedSHCExcluded 4 47 :=
   normalizedSHCFiveExcluded_of_certificate (by norm_num)
     SHCFiveCertificate.Generated.certificate47
 
+/-- There is no normalized five-coordinate SHC family in `ZMod 49`. -/
+theorem normalized_shc_five_excluded_forty_nine : NormalizedSHCExcluded 4 49 :=
+  normalizedSHCFiveExcluded_of_certificate (by norm_num)
+    SHCFiveCertificate.Generated.certificate49
+
+/-- There is no normalized five-coordinate SHC family in `ZMod 51`. -/
+theorem normalized_shc_five_excluded_fifty_one : NormalizedSHCExcluded 4 51 :=
+  normalizedSHCFiveExcluded_of_certificate (by norm_num)
+    SHCFiveCertificate.Generated.certificate51
+
+/-- There is no normalized five-coordinate SHC family in `ZMod 53`. -/
+theorem normalized_shc_five_excluded_fifty_three : NormalizedSHCExcluded 4 53 :=
+  normalizedSHCFiveExcluded_of_certificate (by norm_num)
+    SHCFiveCertificate.Generated.certificate53
+
 /-- The normalized five-coordinate exclusion in the first five odd cases of
 the strict window. -/
 theorem normalized_shc_five_excluded_of_odd_window_le_forty_one {N : ℕ}
@@ -84,5 +102,20 @@ theorem normalized_shc_five_excluded_of_odd_window_le_forty_seven {N : ℕ}
   · exact normalized_shc_five_excluded_forty_three
   · exact normalized_shc_five_excluded_forty_five
   · exact normalized_shc_five_excluded_forty_seven
+
+/-- The normalized five-coordinate exclusion in the first eleven odd cases of
+the strict window. -/
+theorem normalized_shc_five_excluded_of_odd_window_le_fifty_three {N : ℕ}
+    (hodd : Odd N) (hlower : 33 ≤ N) (hupper : N ≤ 53) :
+    NormalizedSHCExcluded 4 N := by
+  by_cases hsmall : N ≤ 47
+  · exact normalized_shc_five_excluded_of_odd_window_le_forty_seven
+      hodd hlower hsmall
+  obtain ⟨k, hk⟩ := hodd
+  have hcases : N = 49 ∨ N = 51 ∨ N = 53 := by omega
+  rcases hcases with rfl | rfl | rfl
+  · exact normalized_shc_five_excluded_forty_nine
+  · exact normalized_shc_five_excluded_fifty_one
+  · exact normalized_shc_five_excluded_fifty_three
 
 end MinModulus
