@@ -47,3 +47,6 @@ import MinModulus
 #print axioms MinModulus.odd_min_four       -- least odd valid modulus = 15 for n = 4 (G2, n <= 4)
 #print axioms MinModulus.chain_card_bound   -- the SI-shape chain pins |G| >= 2^(m+1) - 1
 #print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2
+#print axioms MinModulus.survival22        -- two (2,2)-reps of one value: |M1∩P2| + |M2∩P1| >= 2
+#print axioms MinModulus.cluster22         -- pairwise-surviving families have <= 13 members
+#print axioms MinModulus.quadratic_wedge   -- C(m,2) <= 3(m + (|G| - 2^m) + 14)

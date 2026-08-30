@@ -3,3 +3,4 @@ import MinModulus.ElemAbelian2
 import MinModulus.AbelianMin
 import MinModulus.Descent
 import MinModulus.OddOrder
+import MinModulus.QuadraticWedge
