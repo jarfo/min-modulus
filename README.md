@@ -209,6 +209,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | companion `unique` census: `scripts/strict-window-witness-census.py` | all 10,496 dissociated four-coordinate tuples at odd orders 17–29 have a forbidden head-2 relation; every deletion-saturated tuple has a unit coordinate, giving the next normalization target |
 | `SubtupleRigidity.lean`: `shc_deleted_span_eq_top` | assuming the lower-dimensional odd cyclic SHC bound, every coordinate deletion in the next strict window spans the ambient cyclic group |
 | `SHCBaseCases.lean`: `cyclicSHCOddLowerBound_three`, `shc_four_deleted_span_eq_top` | kernel-reduced exclusions at orders 9, 11, and 13 prove the three-coordinate bound 15 and make four-coordinate deletion spanning unconditional through order 29 |
+| `SHC.normalize_generator`, `not_exists_shc_of_normalized` | a generator coordinate can be reindexed and identified with `1` in `ZMod (|G|)`; a normalized finite exclusion then rules out the original SHC family |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |

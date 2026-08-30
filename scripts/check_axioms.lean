@@ -69,6 +69,9 @@ import MinModulus
 #print axioms MinModulus.addSubgroup_eq_top_of_mersenne_window
 #print axioms MinModulus.shc_deleted_span_eq_top
 #print axioms MinModulus.SHC.map_addEquiv
+#print axioms MinModulus.SHC.reindex_equiv
+#print axioms MinModulus.SHC.normalize_generator
+#print axioms MinModulus.not_exists_shc_of_normalized
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_nine
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_eleven
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_thirteen

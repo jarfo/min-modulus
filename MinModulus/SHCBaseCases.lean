@@ -38,6 +38,50 @@ theorem SHC.map_addEquiv (h : Fin m → G) (hs : SHC h) (e : G ≃+ H) :
     apply hs.sh3 x P M hxP hxM hPM hcard
     simpa [Function.comp_apply] using congrArg e.symm heq
 
+/-- SHC is preserved by a permutation of its coordinate set. -/
+theorem SHC.reindex_equiv (h : Fin m → G) (hs : SHC h) (e : Fin m ≃ Fin m) :
+    SHC (h ∘ e) := by
+  exact hs.comp_embedding h e.toEmbedding
+
+/-- A family has a generator coordinate when one coordinate generates the
+whole ambient additive group. -/
+def HasGeneratorCoordinate (h : Fin m → G) : Prop :=
+  ∃ x, ∀ y, y ∈ AddSubgroup.zmultiples (h x)
+
+/-- The normalized finite exclusion target: no SHC family with first
+coordinate equal to `1` exists in `ZMod N`. -/
+def NormalizedSHCExcluded (m N : ℕ) : Prop :=
+  ∀ h : Fin (m + 1) → ZMod N, h 0 = 1 → ¬ SHC h
+
+/-- The four-coordinate specialization used by the first open strict window. -/
+abbrev NormalizedSHCFourExcluded (N : ℕ) : Prop := NormalizedSHCExcluded 3 N
+
+/-- Any generator coordinate can be moved to coordinate zero and identified
+with `1` in the canonical cyclic model `ZMod (Nat.card G)`, preserving SHC. -/
+theorem SHC.normalize_generator [Fintype G] (h : Fin (m + 1) → G) (hs : SHC h)
+    (x : Fin (m + 1)) (hx : ∀ y, y ∈ AddSubgroup.zmultiples (h x)) :
+    ∃ h' : Fin (m + 1) → ZMod (Nat.card G), SHC h' ∧ h' 0 = 1 := by
+  let p : Fin (m + 1) ≃ Fin (m + 1) := Equiv.swap 0 x
+  let e : ZMod (Nat.card G) ≃+ G := zmodAddEquivOfGenerator hx rfl
+  let h' : Fin (m + 1) → ZMod (Nat.card G) := e.symm ∘ h ∘ p
+  have hsp : SHC (h ∘ p) := hs.reindex_equiv h p
+  have hsh' : SHC h' := hsp.map_addEquiv (h ∘ p) e.symm
+  refine ⟨h', hsh', ?_⟩
+  change e.symm (h (p 0)) = 1
+  rw [show p 0 = x by simp [p, Equiv.swap_apply_left]]
+  exact zmodAddEquivOfGenerator_symm_apply_generator hx rfl
+
+/-- If every SHC family has a generator coordinate, it suffices to exclude
+the normalized `h 0 = 1` families in the corresponding `ZMod`. -/
+theorem not_exists_shc_of_normalized [Fintype G]
+    (hgen : ∀ h : Fin (m + 1) → G, SHC h → HasGeneratorCoordinate h)
+    (hexcl : NormalizedSHCExcluded m (Nat.card G)) :
+    ¬ ∃ h : Fin (m + 1) → G, SHC h := by
+  rintro ⟨h, hs⟩
+  obtain ⟨x, hx⟩ := hgen h hs
+  obtain ⟨h', hsh', h'0⟩ := hs.normalize_generator h x hx
+  exact hexcl h' h'0 hsh'
+
 /-- Executable form of the three-coordinate dissociation and shell clauses.
 Injective doubling is omitted because it is supplied uniformly by odd order. -/
 private def checkSHC3 {N : ℕ} [NeZero N] (h : Fin 3 → ZMod N) : Bool :=
