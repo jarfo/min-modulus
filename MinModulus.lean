@@ -8,4 +8,5 @@ import MinModulus.QuadraticWedge
 import MinModulus.SubtupleRigidity
 import MinModulus.SHCBaseCases
 import MinModulus.SHCFourBaseCases
+import MinModulus.SHCFourGenerator
 import MinModulus.GlobalRoadmap

@@ -86,6 +86,17 @@ import MinModulus
 #print axioms MinModulus.not_exists_shc_fin_three_zmod_thirteen
 #print axioms MinModulus.cyclicSHCOddLowerBound_three
 #print axioms MinModulus.shc_four_deleted_span_eq_top
+#print axioms MinModulus.zmod_generator_of_isUnit
+#print axioms MinModulus.shc_hasGeneratorCoordinate_zmod_prime
+#print axioms MinModulus.exists_isUnit_of_span_eq_top
+#print axioms MinModulus.shc_hasGeneratorCoordinate_zmod_twenty_one
+#print axioms MinModulus.shc_hasGeneratorCoordinate_zmod_twenty_five
+#print axioms MinModulus.shc_hasGeneratorCoordinate_zmod_twenty_seven
+#print axioms MinModulus.shc_hasGeneratorCoordinate_zmod_of_odd_window
+#print axioms MinModulus.not_exists_shc_fin_four_zmod_of_odd_window
+#print axioms MinModulus.cyclicSHCOddLowerBound_four
+#print axioms MinModulus.odd_min_five
+#print axioms MinModulus.shc_five_deleted_span_eq_top
 #print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2
 #print axioms MinModulus.survival22        -- two (2,2)-reps of one value: |M1∩P2| + |M2∩P1| >= 2
 #print axioms MinModulus.cluster22         -- pairwise-surviving families have <= 13 members
