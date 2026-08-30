@@ -319,4 +319,96 @@ theorem odd_min_four {N : ℕ} (hN : Odd N) (g : Fin 4 → ZMod N)
   rcases hN with ⟨k, rfl⟩
   omega
 
+/-! ### The chain theorem: the super-increasing relation system pins the order -/
+
+section Chain
+
+variable {G : Type*} [AddCommGroup G] [Fintype G]
+
+/-- **Chain theorem.**  If `lam 0, …, lam (m-1)` satisfy the super-increasing
+chain relations `lam (i+1) = 2 • lam i + lam 0` with terminal sink
+`2 • lam (m-1) + lam 0 = 0`, and their `2^m` subset sums are pairwise
+distinct, then `2^(m+1) - 1 ≤ |G|`.
+
+The base element is squeezed from both sides: the telescoped sink relation
+gives `(2^(m+1) - 1) • lam 0 = 0`, so its additive order divides the odd
+number `2^(m+1) - 1`; the distinct subset sums give order at least `2^m`;
+and every proper divisor of an odd number `< 3 · 2^m` is `< 2^m`.  Hence the
+order is exactly `2^(m+1) - 1`, which divides `|G|`. -/
+theorem chain_card_bound {m : ℕ} (hm : 1 ≤ m) (lam : ℕ → G)
+    (hchain : ∀ i, i + 1 < m → lam (i + 1) = 2 • lam i + lam 0)
+    (hsink : 2 • lam (m - 1) + lam 0 = 0)
+    (hdis : Function.Injective fun S : Finset (Fin m) => ∑ j ∈ S, lam j.val) :
+    2 ^ (m + 1) - 1 ≤ Fintype.card G := by
+  have hA : 1 ≤ 2 ^ m := Nat.one_le_two_pow
+  -- closed form along the chain
+  have hclosed : ∀ i, i < m → lam i = (2 ^ (i + 1) - 1) • lam 0 := by
+    intro i
+    induction i with
+    | zero => intro _; simp
+    | succ i ih =>
+      intro hi
+      have h2 : 2 * (2 ^ (i + 1) - 1) + 1 = 2 ^ (i + 1 + 1) - 1 := by
+        have h3 : 1 ≤ 2 ^ (i + 1) := Nat.one_le_two_pow
+        rw [pow_succ]
+        omega
+      rw [hchain i hi, ih (by omega), smul_smul, ← h2, add_smul, one_smul]
+  -- the telescoped sink relation
+  have hD : (2 ^ (m + 1) - 1) • lam 0 = 0 := by
+    have h1 := hclosed (m - 1) (by omega)
+    have h2 : 2 * (2 ^ (m - 1 + 1) - 1) + 1 = 2 ^ (m + 1) - 1 := by
+      have h3 : m - 1 + 1 = m := by omega
+      rw [h3, pow_succ]
+      omega
+    rw [← h2, add_smul, one_smul, mul_smul, ← h1]
+    exact hsink
+  set d := addOrderOf (lam 0) with hd
+  have hd_pos : 0 < d := addOrderOf_pos (lam 0)
+  have hd_dvd : d ∣ 2 ^ (m + 1) - 1 := addOrderOf_dvd_of_nsmul_eq_zero hD
+  -- distinct subset sums force 2^m ≤ d
+  have hsum : ∀ S : Finset (Fin m),
+      (∑ j ∈ S, lam j.val) = (∑ j ∈ S, (2 ^ (j.val + 1) - 1)) • lam 0 := by
+    intro S
+    rw [Finset.sum_smul]
+    exact Finset.sum_congr rfl fun j _ => hclosed j.val j.isLt
+  have hcard : 2 ^ m ≤ d := by
+    have hinj : Function.Injective fun S : Finset (Fin m) =>
+        (⟨(∑ j ∈ S, (2 ^ (j.val + 1) - 1)) % d, Nat.mod_lt _ hd_pos⟩ : Fin d) := by
+      intro S T h
+      have h1 : (∑ j ∈ S, (2 ^ (j.val + 1) - 1)) % d
+          = (∑ j ∈ T, (2 ^ (j.val + 1) - 1)) % d := congrArg Fin.val h
+      apply hdis
+      show (∑ j ∈ S, lam j.val) = ∑ j ∈ T, lam j.val
+      rw [hsum S, hsum T]
+      calc (∑ j ∈ S, (2 ^ (j.val + 1) - 1)) • lam 0
+          = ((∑ j ∈ S, (2 ^ (j.val + 1) - 1)) % d) • lam 0 := by
+            rw [hd]; exact (mod_addOrderOf_nsmul _ _).symm
+        _ = ((∑ j ∈ T, (2 ^ (j.val + 1) - 1)) % d) • lam 0 := by rw [h1]
+        _ = (∑ j ∈ T, (2 ^ (j.val + 1) - 1)) • lam 0 := by
+            rw [hd]; exact mod_addOrderOf_nsmul _ _
+    have h2 := Fintype.card_le_of_injective _ hinj
+    rwa [Fintype.card_finset, Fintype.card_fin, Fintype.card_fin] at h2
+  -- divisor gap: d ∣ 2^(m+1) - 1 odd and d ≥ 2^m force equality
+  have hd_eq : d = 2 ^ (m + 1) - 1 := by
+    obtain ⟨k, hk⟩ := hd_dvd
+    have hp : 2 ^ (m + 1) = 2 ^ m * 2 := pow_succ 2 m
+    have hodd : Odd (2 ^ (m + 1) - 1) := ⟨2 ^ m - 1, by omega⟩
+    have hkodd : Odd k := by
+      rcases Nat.even_or_odd k with he | ho
+      · exact absurd (hk ▸ hodd)
+          (Nat.not_odd_iff_even.mpr (Nat.even_mul.mpr (Or.inr he)))
+      · exact ho
+    obtain ⟨t, rfl⟩ := hkodd
+    rcases Nat.eq_zero_or_pos t with rfl | ht
+    · omega
+    · exfalso
+      have h3 : d * 3 ≤ d * (2 * t + 1) := Nat.mul_le_mul_left d (by omega)
+      have h4 : 2 ^ m * 3 ≤ d * 3 := Nat.mul_le_mul_right 3 hcard
+      omega
+  have hdvd_card : d ∣ Fintype.card G := addOrderOf_dvd_card
+  calc 2 ^ (m + 1) - 1 = d := hd_eq.symm
+    _ ≤ Fintype.card G := Nat.le_of_dvd Fintype.card_pos hdvd_card
+
+end Chain
+
 end MinModulus
