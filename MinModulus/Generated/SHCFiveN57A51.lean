@@ -1,0 +1,30 @@
+import MinModulus.SHCFiveCertificate
+
+namespace MinModulus.SHCFiveCertificate.Generated
+
+set_option maxRecDepth 1000000
+set_option maxHeartbeats 1000000000
+set_option linter.unusedSimpArgs false
+
+private def codes57_51_00 : List ℕ := [772]
+
+private theorem valid57_51_00 : ∀ code ∈ codes57_51_00, validRelationCode code := by
+  decide
+
+private theorem cover57_51_00 : ∀ q : IncreasingTwo 2,
+    coveredNat 57 codes57_51_00 (blockValues 53 54 q) = true := by
+  decide
+
+theorem certificate57_a51
+    (q : IncreasingFourTail 55 (⟨51, by norm_num⟩ : Fin 52)) : ∃ code,
+      validRelationCode code ∧
+      relationZeroNat 57 (increasingFourValues (N := 57) ⟨⟨51, by norm_num⟩, q⟩) code = true := by
+  rcases q with ⟨b, c, d⟩
+  fin_cases b
+  · let c' : Fin (2 - 1) := ⟨c.val, by have hc := c.isLt; dsimp only at hc; omega⟩
+    let d' : Fin (2 - c'.val - 1) := ⟨d.val, by have hd := d.isLt; dsimp only at hd; dsimp [c']; omega⟩
+    let q' : IncreasingTwo 2 := ⟨c', d'⟩
+    simpa [increasingFourValues, blockValues, q', c', d', Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
+      coveredNat_exists_valid 57 codes57_51_00 _ valid57_51_00 (cover57_51_00 q')
+
+end MinModulus.SHCFiveCertificate.Generated

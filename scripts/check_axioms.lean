@@ -126,6 +126,10 @@ import MinModulus
 #print axioms MinModulus.normalized_shc_five_excluded_fifty_one
 #print axioms MinModulus.normalized_shc_five_excluded_fifty_three
 #print axioms MinModulus.normalized_shc_five_excluded_of_odd_window_le_fifty_three
+#print axioms MinModulus.normalized_shc_five_excluded_fifty_five
+#print axioms MinModulus.normalized_shc_five_excluded_fifty_seven
+#print axioms MinModulus.normalized_shc_five_excluded_fifty_nine
+#print axioms MinModulus.normalized_shc_five_excluded_of_odd_window_le_fifty_nine
 #print axioms MinModulus.bottom_wedge       -- the bottom wedge: 2^(m+1) + m <= 2|G| + 2
 #print axioms MinModulus.survival22        -- two (2,2)-reps of one value: |M1∩P2| + |M2∩P1| >= 2
 #print axioms MinModulus.cluster22         -- pairwise-surviving families have <= 13 members

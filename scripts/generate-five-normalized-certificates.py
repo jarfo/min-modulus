@@ -47,19 +47,14 @@ def relation_rows() -> list[tuple[tuple[int, ...], int]]:
     return rows
 
 
-def greedy_codes(
+def choose_codes(
     modulus: int,
-    first: int,
+    candidates_data: list[tuple[int, int, int, int, int]],
     rows: list[tuple[tuple[int, ...], int]],
     row_tensor: torch.Tensor,
+    label: str,
 ) -> list[int]:
-    candidates = torch.tensor(
-        [
-            (1, first, second, third, fourth)
-            for second, third, fourth in itertools.combinations(range(first + 1, modulus), 3)
-        ],
-        dtype=torch.int32,
-    )
+    candidates = torch.tensor(candidates_data, dtype=torch.int32)
     hits = torch.remainder(candidates @ row_tensor.T, modulus) == 0
     uncovered = torch.ones(len(candidates), dtype=torch.bool)
     chosen: list[int] = []
@@ -67,10 +62,39 @@ def greedy_codes(
         counts = torch.sum(hits[uncovered], dim=0)
         best = int(torch.argmax(counts))
         if int(counts[best]) == 0:
-            raise RuntimeError(f"uncovered shard at N={modulus}, a={first}")
+            raise RuntimeError(f"uncovered {label} at N={modulus}")
         chosen.append(rows[best][1])
         uncovered &= ~hits[:, best]
     return chosen
+
+
+def greedy_codes(
+    modulus: int,
+    first: int,
+    rows: list[tuple[tuple[int, ...], int]],
+    row_tensor: torch.Tensor,
+) -> list[int]:
+    candidates = [
+        (1, first, second, third, fourth)
+        for second, third, fourth in itertools.combinations(range(first + 1, modulus), 3)
+    ]
+    return choose_codes(modulus, candidates, rows, row_tensor, f"shard a={first}")
+
+
+def greedy_block_codes(
+    modulus: int,
+    first: int,
+    second: int,
+    rows: list[tuple[tuple[int, ...], int]],
+    row_tensor: torch.Tensor,
+) -> list[int]:
+    candidates = [
+        (1, first, second, third, fourth)
+        for third, fourth in itertools.combinations(range(second + 1, modulus), 2)
+    ]
+    return choose_codes(
+        modulus, candidates, rows, row_tensor, f"block a={first}, b={second}"
+    )
 
 
 def lean_list(values: list[int]) -> str:
@@ -136,7 +160,68 @@ def aggregate_source(modulus: int) -> str:
     return "".join(lines)
 
 
-def generate(modulus: int, output: Path) -> tuple[int, int]:
+def block_shard_source(
+    modulus: int,
+    a_offset: int,
+    blocks: list[tuple[int, int, list[int]]],
+) -> str:
+    n = modulus - 2
+    a_bound = modulus - 5
+    lines = [
+        "import MinModulus.SHCFiveCertificate\n\n",
+        "namespace MinModulus.SHCFiveCertificate.Generated\n\n",
+        "set_option maxRecDepth 1000000\n",
+        "set_option maxHeartbeats 1000000000\n",
+        "set_option linter.unusedSimpArgs false\n\n",
+    ]
+    for b_offset, second, codes in blocks:
+        suffix = f"{a_offset:02d}_{b_offset:02d}"
+        remaining = modulus - second - 1
+        lines.extend(
+            [
+                f"private def codes{modulus}_{suffix} : List ℕ := {lean_list(codes)}\n\n",
+                f"private theorem valid{modulus}_{suffix} : ∀ code ∈ codes{modulus}_{suffix}, "
+                "validRelationCode code := by\n  decide\n\n",
+                f"private theorem cover{modulus}_{suffix} : ∀ q : IncreasingTwo {remaining},\n",
+                f"    coveredNat {modulus} codes{modulus}_{suffix} "
+                f"(blockValues {a_offset + 2} {second} q) = true := by\n",
+                "  decide\n\n",
+            ]
+        )
+    lines.extend(
+        [
+            f"theorem certificate{modulus}_a{a_offset:02d}\n",
+            f"    (q : IncreasingFourTail {n} "
+            f"(⟨{a_offset}, by norm_num⟩ : Fin {a_bound})) : ∃ code,\n",
+            "      validRelationCode code ∧\n",
+            f"      relationZeroNat {modulus} (increasingFourValues "
+            f"(N := {modulus}) ⟨⟨{a_offset}, by norm_num⟩, q⟩) code = true := by\n",
+            "  rcases q with ⟨b, c, d⟩\n",
+            "  fin_cases b\n",
+        ]
+    )
+    for b_offset, second, _codes in blocks:
+        suffix = f"{a_offset:02d}_{b_offset:02d}"
+        remaining = modulus - second - 1
+        lines.extend(
+            [
+                f"  · let c' : Fin ({remaining} - 1) := "
+                "⟨c.val, by have hc := c.isLt; dsimp only at hc; omega⟩\n",
+                f"    let d' : Fin ({remaining} - c'.val - 1) := "
+                "⟨d.val, by have hd := d.isLt; dsimp only at hd; dsimp [c']; omega⟩\n",
+                f"    let q' : IncreasingTwo {remaining} := ⟨c', d'⟩\n",
+                "    simpa [increasingFourValues, blockValues, q', c', d', "
+                "Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using\n",
+                "      coveredNat_exists_valid "
+                f"{modulus} codes{modulus}_{suffix} _ valid{modulus}_{suffix} "
+                f"(cover{modulus}_{suffix} q')\n",
+            ]
+        )
+    lines.append("\nend MinModulus.SHCFiveCertificate.Generated\n")
+    return "".join(lines)
+
+
+def generate(modulus: int, output: Path, layout: str) -> tuple[int, int]:
     if modulus < 35 or modulus % 2 == 0:
         raise ValueError("modulus must be odd and at least 35")
     output.mkdir(parents=True, exist_ok=True)
@@ -145,10 +230,20 @@ def generate(modulus: int, output: Path) -> tuple[int, int]:
     total_codes = 0
     for a_offset in range(modulus - 5):
         first = a_offset + 2
-        codes = greedy_codes(modulus, first, rows, row_tensor)
-        total_codes += len(codes)
+        if layout == "shard":
+            codes = greedy_codes(modulus, first, rows, row_tensor)
+            source = shard_source(modulus, a_offset, codes)
+            total_codes += len(codes)
+        else:
+            blocks = []
+            for b_offset in range(modulus - 5 - a_offset):
+                second = a_offset + b_offset + 3
+                codes = greedy_block_codes(modulus, first, second, rows, row_tensor)
+                blocks.append((b_offset, second, codes))
+                total_codes += len(codes)
+            source = block_shard_source(modulus, a_offset, blocks)
         path = output / f"SHCFiveN{modulus}A{a_offset:02d}.lean"
-        path.write_text(shard_source(modulus, a_offset, codes), encoding="utf-8")
+        path.write_text(source, encoding="utf-8")
     (output / f"SHCFiveN{modulus}.lean").write_text(
         aggregate_source(modulus), encoding="utf-8"
     )
@@ -158,14 +253,19 @@ def generate(modulus: int, output: Path) -> tuple[int, int]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--modulus", type=int, required=True)
+    parser.add_argument("--layout", choices=("shard", "blocks"), default="shard")
     parser.add_argument(
         "--output",
         type=Path,
         default=Path(__file__).resolve().parents[1] / "MinModulus" / "Generated",
     )
     args = parser.parse_args()
-    shards, codes = generate(args.modulus, args.output)
-    print(f"N={args.modulus}: wrote {shards} shards containing {codes} relation codes")
+    shards, codes = generate(args.modulus, args.output, args.layout)
+    layout_label = "fixed-a" if args.layout == "shard" else "fixed-(a,b) block"
+    print(
+        f"N={args.modulus}: wrote {shards} {layout_label} shards "
+        f"containing {codes} relation codes"
+    )
 
 
 if __name__ == "__main__":
