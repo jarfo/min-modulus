@@ -37,6 +37,7 @@ import MinModulus
 #print axioms MinModulus.exists_pair_difference_witness
 #print axioms MinModulus.validTuple_injective
 #print axioms MinModulus.common_touched_of_pair_difference
+#print axioms MinModulus.omitted_other_of_zero_at_exact_pair
 #print axioms MinModulus.common_touched_of_two_smul_eq
 #print axioms MinModulus.witness_compl_sum_eq_card_exactOmissions
 #print axioms MinModulus.witness_coeff_bounds_of_exactOmissions
@@ -52,6 +53,10 @@ import MinModulus
 #print axioms MinModulus.not_triangle_all_opposites_two
 #print axioms MinModulus.witness_three_sum
 #print axioms MinModulus.witness_neg_of_le_one
+#print axioms MinModulus.exists_companion_with_neg_exact_pair_of_coeff_one
+#print axioms MinModulus.exists_light_companion_forcing_three_omissions
+#print axioms MinModulus.common_touched_or_exists_three_omissions_of_light_triangle
+#print axioms MinModulus.common_touched_or_exists_three_omission_witness_of_light_triangle
 #print axioms MinModulus.witness_neg_pair_sum_at_zero_of_le_one
 #print axioms MinModulus.witness_triangle_sum_of_positive_opposites
 #print axioms MinModulus.triangle_one_one_two_sum_witness_zero_opposite
@@ -87,6 +92,7 @@ import MinModulus
 #print axioms MinModulus.four_dvd_of_triangle_all_zero_zmod
 #print axioms MinModulus.four_dvd_of_triangle_zero_zero_two_zmod
 #print axioms MinModulus.common_touched_or_profile_zero_zero_one_of_not_four_dvd_zmod
+#print axioms MinModulus.common_touched_or_exists_three_omission_witness_of_not_four_dvd_zmod
 #print axioms MinModulus.twelve_dvd_of_triangle_zero_two_two_zmod
 #print axioms MinModulus.zsmul_eq_zero_or_self_or_neg_of_order_three
 #print axioms MinModulus.pair_descent_order_three
