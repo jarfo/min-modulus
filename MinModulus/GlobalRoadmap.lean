@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1MinimalSupportFibers
+import MinModulus.G1DominantStarCrossing
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -198,6 +198,9 @@ noncomputable def IsCriticalDominantEscapeCollision
     reducedCollisionWeight (m := n) u ≤ reducedCollisionWeight (m := n) r) ∧
   (∀ u ∈ criticalCanonicalReducedCollisions g,
     (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card) ∧
+  (criticalCanonicalReducedCollisions g).sum
+      (reducedCollisionWeight (m := n)) <
+    2 * reducedCollisionWeight (m := n) r ∧
   (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
       (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
     2 * (reducedCollisionWeight (m := n) r *
@@ -550,37 +553,56 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
         (half_add_half hN),
         (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card := by
       simpa [criticalCanonicalReducedCollisions] using hrmin
-    rcases commonTouched_or_heavy_or_minSupportEscapeIncidences_cover
-        g hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin' with
-      htouch | hheavy | hcover
-    · exact Or.inr (Or.inl htouch)
-    · exact Or.inr (Or.inr (Or.inl hheavy))
-    · exact Or.inr (Or.inr (Or.inr ⟨r, hr, by
-        refine ⟨hrmax, hrmin, hrrelative, hrambient, ?_, ?_, ?_, ?_⟩
-        · simpa [IsCriticalDominantEscapeCollision] using hcover.1
-        · simpa [IsCriticalDominantEscapeCollision] using hcover.2
-        · calc
-            r.val.2.card ≤
-                (canonicalSupportEscapeIncidences (half_add_half hN) r).card :=
-              hcover.2
-            _ = (criticalCanonicalReducedCollisions g).sum (fun u ↦
-                if ((u.val.1 ∪ u.val.2) \
-                    (r.val.1 ∪ r.val.2)).Nonempty then
-                  (r.val.2 \ (u.val.1 ∪ u.val.2)).card
-                else 0) := by
-              simpa [criticalCanonicalReducedCollisions] using
-                card_canonicalSupportEscapeIncidences_eq_sum_avoided
-                  (g := g) (half_add_half hN) r
-        · calc
-            r.val.2.card ≤
-                (canonicalSupportEscapeIncidences (half_add_half hN) r).card :=
-              hcover.2
-            _ ≤ (criticalCanonicalReducedCollisions g).sum (fun u ↦
-                ((u.val.1 ∪ u.val.2) \
-                  (r.val.1 ∪ r.val.2)).card) := by
-              simpa [criticalCanonicalReducedCollisions] using
-                card_canonicalSupportEscapeIncidences_le_sum_externalSupport
-                  (g := g) (half_add_half hN) r hrmin'⟩))
+    have hrrelative' :
+        (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+            (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+          2 * (reducedCollisionWeight (m := n) r *
+            (canonicalReducedCollisions (g := g) (half_add_half hN)).sum
+              (reducedCollisionWeight (m := n))) := by
+      simpa [criticalCanonicalReducedCollisions] using hrrelative
+    rcases square_le_four_crossMass_or_total_lt_two_weight
+        g hg (half_add_half hN) (half_ne_zero hN hM) r hr'
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1)
+          hrrelative' with hstarCross | hmajor
+    · exact Or.inl (by
+        simpa [criticalCanonicalPositiveNegativeCrossPairs] using hstarCross)
+    · have hmajor' :
+          (criticalCanonicalReducedCollisions g).sum
+              (reducedCollisionWeight (m := n)) <
+            2 * reducedCollisionWeight (m := n) r := by
+        simpa [criticalCanonicalReducedCollisions] using hmajor
+      rcases commonTouched_or_heavy_or_minSupportEscapeIncidences_cover
+          g hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin' with
+        htouch | hheavy | hcover
+      · exact Or.inr (Or.inl htouch)
+      · exact Or.inr (Or.inr (Or.inl hheavy))
+      · exact Or.inr (Or.inr (Or.inr ⟨r, hr, by
+          refine ⟨hrmax, hrmin, hmajor', hrrelative, hrambient,
+            ?_, ?_, ?_, ?_⟩
+          · simpa [IsCriticalDominantEscapeCollision] using hcover.1
+          · simpa [IsCriticalDominantEscapeCollision] using hcover.2
+          · calc
+              r.val.2.card ≤
+                  (canonicalSupportEscapeIncidences (half_add_half hN) r).card :=
+                hcover.2
+              _ = (criticalCanonicalReducedCollisions g).sum (fun u ↦
+                  if ((u.val.1 ∪ u.val.2) \
+                      (r.val.1 ∪ r.val.2)).Nonempty then
+                    (r.val.2 \ (u.val.1 ∪ u.val.2)).card
+                  else 0) := by
+                simpa [criticalCanonicalReducedCollisions] using
+                  card_canonicalSupportEscapeIncidences_eq_sum_avoided
+                    (g := g) (half_add_half hN) r
+          · calc
+              r.val.2.card ≤
+                  (canonicalSupportEscapeIncidences (half_add_half hN) r).card :=
+                hcover.2
+              _ ≤ (criticalCanonicalReducedCollisions g).sum (fun u ↦
+                  ((u.val.1 ∪ u.val.2) \
+                    (r.val.1 ∪ r.val.2)).card) := by
+                simpa [criticalCanonicalReducedCollisions] using
+                  card_canonicalSupportEscapeIncidences_le_sum_externalSupport
+                    (g := g) (half_add_half hN) r hrmin'⟩))
 
 /-- Critical-range G1 is reduced to two explicit quantitative escape
 branches: a genuinely heavy half-witness or a positive-tail crossing between

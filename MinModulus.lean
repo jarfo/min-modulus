@@ -22,6 +22,7 @@ import MinModulus.G1CrossingMass
 import MinModulus.G1DominantPadding
 import MinModulus.G1MinimalSupportTransitions
 import MinModulus.G1MinimalSupportFibers
+import MinModulus.G1DominantStarCrossing
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate
