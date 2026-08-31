@@ -240,6 +240,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `exists_six_distinct_pure_centers_of_triangle_all_zero` | reduces an all-zero exact omission triangle to three pairwise-distinct external pure centers, hence a canonical six-coordinate affine doubling configuration |
 | `nonzero_three_torsion_of_two_adjacent_heavy_opposites`, `three_dvd_of_two_adjacent_heavy_opposites_zmod` | shows that two adjacent heavy opposites produce a nonzero coordinate difference killed by `3`; cyclically this forces `3 ∣ N`, so `(0,2,2)` is impossible at every modulus prime to `3` |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | turns that surviving 3-torsion obstruction into a genuine descent: delete the two coordinates and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller |
+| `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies the cyclic quotient with `ZMod (N/3)`, so the adjacent-heavy branch gives an ordinary valid tuple two coordinates shorter modulo `N/3` |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
 | `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
 | `codim_one_chain_odd_card_bound` | a chain missing one coordinate already forces the full odd threshold |

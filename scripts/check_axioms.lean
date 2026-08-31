@@ -76,6 +76,10 @@ import MinModulus
 #print axioms MinModulus.pair_descent_order_three
 #print axioms MinModulus.exists_validTuple_quotient_of_two_adjacent_heavy_opposites
 #print axioms MinModulus.nat_card_quotient_three_smul
+#print axioms MinModulus.zmod_eq_third_or_two_thirds_of_order_three
+#print axioms MinModulus.zmultiples_order_three_eq_third
+#print axioms MinModulus.quotOrderThreeEquivZMod
+#print axioms MinModulus.exists_validTuple_third_of_two_adjacent_heavy_opposites
 #print axioms MinModulus.common_touched_of_triangle_positive
 #print axioms MinModulus.common_touched_of_triangle_positive_zmod
 #print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch
