@@ -76,6 +76,7 @@ MinModulus/
   G1OverlapPadding.lean         -- reduced witness shapes and exact padding multiplicities
   G1ReducedIntersections.lean   -- weighted shapes intersect except for exact opposites
   G1CanonicalIntersections.lean -- canonical intersecting representatives and exact half-weight
+  G1CanonicalAttachments.lean  -- internal support-to-omission incidence and weighted mass
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -269,6 +270,9 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `reducedCollision_negative_tails_inter_of_card_lt`, `reducedCollision_swapped_weight` | removes the exception whenever one oriented shape is strictly unbalanced and proves that every remaining balanced opposite pair carries equal padding weight |
 | `G1CanonicalIntersections.lean`: `canonicalReducedCollision_negative_tails_inter`, `sum_reducedCollisionWeight_eq_two_mul_canonical` | selects exactly one member of every reduced swap pair (using cardinality and a balanced tie-breaker), proves the selected negative tails are pairwise intersecting, and identifies their exact weight as one half of the full overlap weight |
 | `critical_canonicalReducedCollision_weight_half_lower_bound`, `criticalCanonicalReducedCollisions_negative_tails_inter` | specializes the canonical family to the strict two-adic range: it is pairwise intersecting and carries weight at least `2^(min(s+1, log₂(n+1))-1)+1`; the next G1 step is to combine this large weighted family with the support-avoidance attachments |
+| `G1CanonicalAttachments.lean`: `reducedSubsetSumCollision_eq_of_right_eq`, `canonicalReducedNegativeTails_pairwise_inter` | validity makes the negative-tail projection injective, so the canonical collisions give an honest pairwise-intersecting finite set family with no hidden multiplicity |
+| `commonTouched_or_canonicalReducedCollisions_internal_attachments`, `commonTouched_or_canonicalReducedCollisions_right_card_two_le` | under common-touch failure, every vertex of every canonical tail has an attached half-witness which vanishes there and omits a different vertex of the same tail; in particular every tail has size at least two |
+| `commonTouched_or_critical_internalAttachmentPairs_weight_lower_bound` | packages the new quantitative frontier: either critical G1 already closes, or ordered internal support-to-omission incidences carry weighted mass at least the endpoint gap plus two; the remaining task is to bound witness multiplicity across these incidences or turn them into a disjoint layer |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |

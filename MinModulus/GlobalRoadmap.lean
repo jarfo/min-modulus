@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1CanonicalIntersections
+import MinModulus.G1CanonicalAttachments
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -254,6 +254,67 @@ theorem criticalCanonicalReducedCollisions_negative_tails_inter
     g hg (half_add_half hN) (half_ne_zero hN hM) r₁ r₂
   · simpa [criticalCanonicalReducedCollisions] using hr₁
   · simpa [criticalCanonicalReducedCollisions] using hr₂
+
+/-- If critical G1 common touch fails, the endpoint-gap mass transfers to
+explicit ordered attachment incidences internal to the canonical negative
+tails.  Any completion may therefore focus on bounding how many incidences
+one attached witness can realize, or on turning them into a disjoint layer. -/
+theorem critical_internalAttachmentPairs_weight_lower_bound_of_no_common_touched
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (hno : ¬∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c →
+        c e ≠ 0) :
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+      (criticalCanonicalReducedCollisions g).sum (fun r ↦
+        reducedCollisionWeight (m := n) r *
+          (reducedCollisionInternalAttachmentPairs g
+            ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r).card) := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  calc
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+        2 * (criticalCanonicalReducedCollisions g).sum
+          (fun r ↦ reducedCollisionWeight (m := n) r) :=
+      critical_canonicalReducedCollision_weight_lower_bound
+        hn hq g hg hcritical
+    _ ≤ (criticalCanonicalReducedCollisions g).sum (fun r ↦
+          reducedCollisionWeight (m := n) r *
+            (reducedCollisionInternalAttachmentPairs g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r).card) := by
+      simpa [criticalCanonicalReducedCollisions] using
+        two_mul_sum_canonical_weight_le_sum_internalAttachmentPairs_weight
+          g hg (half_add_half hN) (half_ne_zero hN hM) hno
+
+/-- Operational critical G1 frontier: either common touch already gives the
+deletion coordinate, or the canonical tails carry endpoint-gap-many weighted
+internal attachment incidences. -/
+theorem commonTouched_or_critical_internalAttachmentPairs_weight_lower_bound
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c →
+        c e ≠ 0) ∨
+      2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+        (criticalCanonicalReducedCollisions g).sum (fun r ↦
+          reducedCollisionWeight (m := n) r *
+            (reducedCollisionInternalAttachmentPairs g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r).card) := by
+  by_cases htouch : ∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c →
+        c e ≠ 0
+  · exact Or.inl htouch
+  · exact Or.inr
+      (critical_internalAttachmentPairs_weight_lower_bound_of_no_common_touched
+        hn hq g hg hcritical htouch)
 
 /-- Consequently every critical-range valid tuple has a half-witness already
 in the translated subset-sum layer.  All non-anchor coefficients can be

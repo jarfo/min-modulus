@@ -9,6 +9,7 @@ import MinModulus.G1OverlapSupports
 import MinModulus.G1OverlapPadding
 import MinModulus.G1ReducedIntersections
 import MinModulus.G1CanonicalIntersections
+import MinModulus.G1CanonicalAttachments
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate
