@@ -58,6 +58,12 @@ import MinModulus
 #print axioms MinModulus.exact_triple_heavy_affine_shape_against_light_pair
 #print axioms MinModulus.exists_touched_in_or_avoidances_meet_exactOmissions
 #print axioms MinModulus.avoidances_meet_exactOmissions_of_no_common_touched
+#print axioms MinModulus.card_subsetSumRange
+#print axioms MinModulus.two_pow_le_card_add_subsetSumShift_overlap
+#print axioms MinModulus.subsetSumShift_overlap_card_gt_of_add_lt
+#print axioms MinModulus.witness_of_subsetSum_eq_add
+#print axioms MinModulus.exists_subsetCollision_witness_of_overlap
+#print axioms MinModulus.exists_light_half_witness_of_lt_two_pow
 #print axioms MinModulus.exists_coeff_two_of_same_exact_pair_zero_two
 #print axioms MinModulus.two_smul_eq_of_same_exact_pair_coeff_two
 #print axioms MinModulus.two_smul_eq_of_adjacent_triangle_same_companion
@@ -259,6 +265,9 @@ import MinModulus
 #print axioms MinModulus.shc_shift_target_card_gt
 #print axioms MinModulus.card_le_of_two_smul_add_sum_eq
 #print axioms MinModulus.admits_half_or_delete_of_g1
+#print axioms MinModulus.critical_subsetSum_half_overlap
+#print axioms MinModulus.exists_light_half_witness_of_critical_range
+#print axioms MinModulus.admits_delete_of_critical_g1
 #print axioms MinModulus.admits_half_or_delete_of_critical_g1
 #print axioms MinModulus.validTuple_fixed_of_valid
 #print axioms MinModulus.admitsValidTuple_gap

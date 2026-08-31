@@ -7,6 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
+import MinModulus.G1CriticalRange
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -92,6 +93,56 @@ def CriticalRangeCommonTouchedHalfWitnesses : Prop :=
       ∀ c : Fin (n + 1) → ℤ,
         Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c → c j ≠ 0
 
+/-- In the critical range, the subset-sum cube overlaps its half translate in
+more than the exact power of two omitted from the claimed stratum endpoint.
+This is the quantitative input absent from unrestricted G1. -/
+theorem critical_subsetSum_half_overlap
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) <
+      ((subsetSumRange g) ∩ (subsetSumShiftRange g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))).card := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hlog : Nat.log 2 (n + 1) ≤ n := by
+    have := Nat.log_lt_self 2 (by omega : n + 1 ≠ 0)
+    omega
+  have hmin : min (s + 1) (Nat.log 2 (n + 1)) ≤ n :=
+    (min_le_right _ _).trans hlog
+  have hp : 2 ^ min (s + 1) (Nat.log 2 (n + 1)) ≤ 2 ^ (n + 1) :=
+    (Nat.pow_le_pow_right (by omega) hmin).trans
+      (Nat.pow_le_pow_right (by omega) (by omega))
+  have hendpoint : stratumBound (n + 1) (s + 1) +
+      2 ^ min (s + 1) (Nat.log 2 (n + 1)) = 2 ^ (n + 1) := by
+    unfold stratumBound
+    exact Nat.sub_add_cancel hp
+  apply subsetSumShift_overlap_card_gt_of_add_lt g hg
+  omega
+
+/-- Consequently every critical-range valid tuple has a half-witness already
+in the translated subset-sum layer.  All non-anchor coefficients can be
+chosen in `{-1,0,1}`. -/
+theorem exists_light_half_witness_of_critical_range
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    ∃ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c ∧
+      ∀ j : Fin n, -1 ≤ c j.succ ∧ c j.succ ≤ 1 := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hsmall : 2 ^ (s + 1) * q < 2 ^ (n + 1) :=
+    hcritical.trans_le (Nat.sub_le _ _)
+  exact exists_light_half_witness_of_lt_two_pow hN hM g hg hsmall
+
 /-- **G2, odd-base form.**  A valid `n`-tuple modulo an odd number forces the
 odd modulus to be at least `2^n - 1`. -/
 def OddStratumLowerBound : Prop :=
@@ -120,33 +171,38 @@ theorem admits_half_or_delete_of_g1 (hG1 : CommonTouchedHalfWitnesses)
     intro c hc
     exact hw ⟨c, hc⟩
 
-/-- The load-bearing halving/deletion dichotomy using only critical-range G1.
-The modulus is kept in its exact two-adic form so the range hypothesis is
-visible at the call site of the stratified induction. -/
+/-- Critical-range G1 always takes the deletion branch.  The subset-sum
+overlap theorem supplies a light half-witness automatically, so the
+no-witness/length-preserving halving branch cannot occur below the claimed
+stratum endpoint. -/
+theorem admits_delete_of_critical_g1
+    (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
+    {n s q : ℕ} (hq : Odd q)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (hvalid : AdmitsValidTuple (n + 1) (2 ^ (s + 1) * q)) :
+    AdmitsValidTuple n (2 ^ s * q) := by
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  obtain ⟨g, hg⟩ := hvalid
+  obtain ⟨c, hc, _⟩ :=
+    exists_light_half_witness_of_critical_range hq g hg hcritical
+  obtain ⟨j, hj⟩ := hG1 hq hcritical g hg ⟨c, hc⟩
+  exact exists_validTuple_half_of_delete
+    (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q) hN hM hg j hj
+
+/-- Compatibility form of `admits_delete_of_critical_g1`: the old dichotomy
+still holds, but its critical-range proof always inhabits the deletion side. -/
 theorem admits_half_or_delete_of_critical_g1
     (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
     {n s q : ℕ} (hq : Odd q)
     (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
     (hvalid : AdmitsValidTuple (n + 1) (2 ^ (s + 1) * q)) :
     AdmitsValidTuple (n + 1) (2 ^ s * q) ∨
-      AdmitsValidTuple n (2 ^ s * q) := by
-  have hM : 0 < 2 ^ s * q :=
-    mul_pos (pow_pos (by omega) _) (Odd.pos hq)
-  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
-    rw [pow_succ]
-    ring
-  obtain ⟨g, hg⟩ := hvalid
-  by_cases hw : ∃ c : Fin (n + 1) → ℤ,
-      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c
-  · right
-    obtain ⟨j, hj⟩ := hG1 hq hcritical g hg hw
-    exact exists_validTuple_half_of_delete
-      (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q) hN hM hg j hj
-  · left
-    apply exists_validTuple_half_of_no_witness
-      (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q) hN hM hg
-    intro c hc
-    exact hw ⟨c, hc⟩
+      AdmitsValidTuple n (2 ^ s * q) :=
+  Or.inr (admits_delete_of_critical_g1 hG1 hq hcritical hvalid)
 
 /-- The corrected three roadmap gaps imply the complete stratified lower bound.  This
 packages the induction that was previously only described in the handoff.
@@ -177,33 +233,12 @@ theorem stratum_lower_bound_of_gaps
       have hv2 : AdmitsValidTuple n (2 * M) := by
         simpa [M, pow_succ, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hv
       have hnform : n - 1 + 1 = n := by omega
-      rcases admits_half_or_delete_of_critical_g1 hG1
+      have hdelete := admits_delete_of_critical_g1 hG1
         (n := n - 1) (s := s) (q := q) hq
         (by simpa [hnform] using hcritical)
-        (by simpa [hnform] using hv) with hkeep | hdelete
-      · have hih := ih hn hq (by simpa [hnform, M] using hkeep)
-        have hlog : Nat.log 2 n ≤ n - 1 := by
-          have := Nat.log_lt_self 2 (by omega : n ≠ 0)
-          omega
-        have hmin : min s (Nat.log 2 n) ≤ n - 1 :=
-          (min_le_right _ _).trans hlog
-        have hp_le : 2 ^ min s (Nat.log 2 n) ≤ 2 ^ (n - 1) :=
-          Nat.pow_le_pow_right (by omega) hmin
-        have hpow : 2 ^ n = 2 * 2 ^ (n - 1) := by
-          calc
-            2 ^ n = 2 ^ (n - 1 + 1) := by congr 1; omega
-            _ = 2 ^ (n - 1) * 2 := pow_succ 2 (n - 1)
-            _ = 2 * 2 ^ (n - 1) := by omega
-        have hhalf : 2 ^ (n - 1) ≤ stratumBound n s := by
-          unfold stratumBound
-          omega
-        calc
-          stratumBound n (s + 1) ≤ 2 ^ n := Nat.sub_le _ _
-          _ ≤ 2 * stratumBound n s := by omega
-          _ ≤ 2 * M := Nat.mul_le_mul_left 2 hih
-          _ = 2 ^ (s + 1) * q := by
-            simp [M, pow_succ, Nat.mul_left_comm, Nat.mul_comm]
-      · by_cases hn2 : n = 2
+        (by simpa [hnform] using hv)
+      exact (by
+        by_cases hn2 : n = 2
         · subst hn2
           have hlog22 : Nat.log 2 2 = 1 :=
             Nat.log_eq_of_pow_le_of_lt_pow (by norm_num) (by norm_num)
@@ -347,6 +382,7 @@ theorem stratum_lower_bound_of_gaps
                 _ ≤ 2 * M := by rw [← hCsum]; exact Nat.mul_le_mul_left 2 hgap
                 _ = 2 ^ (s + 1) * q := by
                   simp [M, pow_succ, Nat.mul_left_comm, Nat.mul_comm]
+      )
 
 /-- Conditional form of Conjecture 1: once critical-range G1, G2, and G3 are
 proved, every positive modulus admitting a valid `n`-tuple is at least

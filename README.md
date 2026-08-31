@@ -70,6 +70,7 @@ MinModulus/
   AbelianMin.lean               -- Open problem 4 (all finite abelian groups)
   Descent.lean                  -- two-adic halving/deletion lemmas toward Conjecture 1
   G1Triangle.lean               -- three-witness closure and triangle common-touch family
+  G1CriticalRange.lean          -- subset-sum overlap and automatic light half-witnesses
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -250,6 +251,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `witness_sub_at_zero_of_floor`, `exists_six_distinct_centers_of_triangle_zero_zero_one`, `escape_zero_at_pure_centers_of_triangle_zero_zero_one` | rules out support collisions in the residual profile: its two pure centers and light companion are pairwise distinct, and every exact-three escape has coefficient zero at both pure centers; hence the canonical `3` or `2+1` positive support lies on genuinely new coordinates |
 | `three_smul_eq_target_add_triple_of_exact_triple_coeff_three`, `two_smul_add_eq_target_add_triple_of_exact_triple_coeff_two_one`, `add_eq_target_add_pair_of_exact_pair_coeff_one_one`, `exact_triple_heavy_affine_shape_against_light_pair` | evaluates both exact-three shapes and the light edge, then normalizes the escape to a common right-hand side: either `3g_e = g_b + 2g_z`, or `2g_e + g_f = g_b + 2g_z`; this is the clean affine relation system that must be excluded next |
 | `exists_shared_omission_of_zero_at_nonzero_coeff`, `exists_touched_in_or_avoidances_share_omission`, `exists_touched_in_or_avoidances_meet_exactOmissions`, `avoidances_meet_exactOmissions_of_no_common_touched` | extracts the global pattern missing from an isolated affine shape: every selected nonzero support coordinate either already closes G1, or has an avoiding witness whose omission set meets the old omission set; under global common-touch failure this sprouts such an attached witness at every selected support coordinate, uniformly for canonical and higher-omission branches |
+| `G1CriticalRange.lean`: `two_pow_le_card_add_subsetSumShift_overlap`, `subsetSumShift_overlap_card_gt_of_add_lt` | makes the strict modulus range quantitative: the valid anchored subset-sum cube has `2^m` distinct points, so its overlap with any translate has size at least `2^(m+1)-|G|`; in a critical stratum the half-translate overlap is larger than the exact power of two omitted from the endpoint |
+| `subsetCollisionCoeffs`, `witness_of_subsetSum_eq_add`, `exists_light_half_witness_of_lt_two_pow` | converts every half-shifted cube overlap into an explicit half-witness; below `2^(m+1)` one exists automatically and all non-anchor coefficients lie in `{-1,0,1}` |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
@@ -275,7 +278,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
-| `GlobalRoadmap.lean` | defines `CriticalRangeCommonTouchedHalfWitnesses`, requiring common touch only below the endpoint of the current two-adic stratum; proves the corresponding halving/deletion dichotomy and that critical-range G1 + G2 + G3 imply all stratum bounds and Conjecture 1 |
+| `GlobalRoadmap.lean` | defines `CriticalRangeCommonTouchedHalfWitnesses`; `critical_subsetSum_half_overlap` and `exists_light_half_witness_of_critical_range` show that its half-witness hypothesis is automatic, while `admits_delete_of_critical_g1` removes the length-preserving halving branch; critical-range G1 + G2 + G3 still imply all stratum bounds and Conjecture 1 |
 | `G1Counterexample.lean` | kernel-checks validity of `(172,41,658,861,601,286,875)` modulo `1006`, four half-witnesses with empty support intersection, and hence `¬ CommonTouchedHalfWitnesses`; also certifies that `1006` lies outside the seven-coordinate critical range |
 
 The outstanding mathematical statements are the critical-range common-touch
