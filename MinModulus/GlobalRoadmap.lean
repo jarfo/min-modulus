@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1DominantPadding
+import MinModulus.G1MinimalSupportTransitions
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -186,6 +186,33 @@ noncomputable def criticalCanonicalPositiveNegativeCrossPairs
     {n s q : ℕ} (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) :=
   canonicalPositiveNegativeCrossPairs (g := g)
     (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring))
+
+/-- The fully localized residual of the critical diagonal branch: one
+maximum-weight/minimum-support collision, its quantitative concentration
+bounds, and a finite escape-incidence relation covering its negative tail. -/
+noncomputable def IsCriticalDominantEscapeCollision
+    {n s q : ℕ} (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q))
+    (r : ReducedSubsetSumCollision g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) : Prop :=
+  (∀ u ∈ criticalCanonicalReducedCollisions g,
+    reducedCollisionWeight (m := n) u ≤ reducedCollisionWeight (m := n) r) ∧
+  (∀ u ∈ criticalCanonicalReducedCollisions g,
+    (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card) ∧
+  (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+    2 * (reducedCollisionWeight (m := n) r *
+      (criticalCanonicalReducedCollisions g).sum
+        (reducedCollisionWeight (m := n))) ∧
+  (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+    (2 ^ (s + 1) * q) * 2 ^ (n - (r.val.1 ∪ r.val.2).card) ∧
+  Finset.image Prod.fst
+      (canonicalSupportEscapeIncidences
+        (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r) =
+    r.val.2 ∧
+  r.val.2.card ≤
+    (canonicalSupportEscapeIncidences
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card
 
 /-- Every unordered pair of distinct critical canonical shapes crosses in at
 least one orientation.  Both the unweighted count and the exact product-
@@ -473,6 +500,57 @@ theorem critical_crossingMass_or_exists_dominantCollision
   · exact Or.inr
       (critical_diagonalConcentration_exists_dominantCollision
         hn hq g hg hcritical hdiagonal)
+
+/-- Complete quantitative localization of the current critical G1 frontier.
+Either crossing product mass is large, common touch or a genuinely heavy
+witness already occurs, or a maximum-weight/minimum-support canonical shape
+has a finite escaping transition incidence covering its entire negative tail.
+-/
+theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+        (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+      4 * (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+        reducedCollisionWeight (m := n) p.1 *
+          reducedCollisionWeight (m := n) p.2) ∨
+    (∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c → c e ≠ 0) ∨
+    (∃ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c ∧
+        ∃ k : Fin n, 2 ≤ c k.succ) ∨
+    ∃ r ∈ criticalCanonicalReducedCollisions g,
+      IsCriticalDominantEscapeCollision g r := by
+  rcases critical_crossingMass_or_exists_dominantCollision
+      hn hq g hg hcritical with hcross | hdominant
+  · exact Or.inl hcross
+  · rcases hdominant with
+      ⟨r, hr, hrmax, hrmin, hrrelative, hrambient⟩
+    letI : NeZero (2 ^ (s + 1) * q) :=
+      ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+        (Odd.pos hq)).ne'⟩
+    have hM : 0 < 2 ^ s * q :=
+      mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+    have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+      rw [pow_succ]
+      ring
+    have hr' : r ∈ canonicalReducedCollisions (g := g)
+        (half_add_half hN) := by
+      simpa [criticalCanonicalReducedCollisions] using hr
+    have hrmin' : ∀ u ∈ canonicalReducedCollisions (g := g)
+        (half_add_half hN),
+        (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card := by
+      simpa [criticalCanonicalReducedCollisions] using hrmin
+    rcases commonTouched_or_heavy_or_minSupportEscapeIncidences_cover
+        g hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin' with
+      htouch | hheavy | hcover
+    · exact Or.inr (Or.inl htouch)
+    · exact Or.inr (Or.inr (Or.inl hheavy))
+    · exact Or.inr (Or.inr (Or.inr ⟨r, hr, by
+        refine ⟨hrmax, hrmin, hrrelative, hrambient, ?_, ?_⟩
+        · simpa [IsCriticalDominantEscapeCollision] using hcover.1
+        · simpa [IsCriticalDominantEscapeCollision] using hcover.2⟩))
 
 /-- Critical-range G1 is reduced to two explicit quantitative escape
 branches: a genuinely heavy half-witness or a positive-tail crossing between
