@@ -7,6 +7,7 @@ collision or a forbidden head-2 relation, with every coverage check reduced
 by Lean's kernel.
 -/
 import MinModulus.Generated.SHCSixNormalizedN67
+import MinModulus.Generated.SHCSixNormalizedN69
 
 namespace MinModulus
 
@@ -16,6 +17,11 @@ open SHCSixCertificate
 theorem normalized_shc_six_excluded_sixty_seven : NormalizedSHCExcluded 5 67 :=
   normalizedSHCSixExcluded_of_certificate (by norm_num)
     SHCSixCertificate.Generated.certificate67
+
+/-- There is no normalized six-coordinate SHC family in `ZMod 69`. -/
+theorem normalized_shc_six_excluded_sixty_nine : NormalizedSHCExcluded 5 69 :=
+  normalizedSHCSixExcluded_of_certificate (by norm_num)
+    SHCSixCertificate.Generated.certificate69
 
 /-- The normalized six-coordinate exclusion in the first two odd cases of
 the strict window. -/
@@ -27,5 +33,19 @@ theorem normalized_shc_six_excluded_of_odd_window_le_sixty_seven {N : ℕ}
   rcases hcases with rfl | rfl
   · exact normalized_shc_six_excluded_sixty_five
   · exact normalized_shc_six_excluded_sixty_seven
+
+/-- The normalized six-coordinate exclusion in the first three odd cases of
+the strict window. -/
+theorem normalized_shc_six_excluded_of_odd_window_le_sixty_nine {N : ℕ}
+    (hodd : Odd N) (hlower : 65 ≤ N) (hupper : N ≤ 69) :
+    NormalizedSHCExcluded 5 N := by
+  by_cases hsmall : N ≤ 67
+  · exact normalized_shc_six_excluded_of_odd_window_le_sixty_seven
+      hodd hlower hsmall
+  have hN : N = 69 := by
+    obtain ⟨k, hk⟩ := hodd
+    omega
+  subst N
+  exact normalized_shc_six_excluded_sixty_nine
 
 end MinModulus

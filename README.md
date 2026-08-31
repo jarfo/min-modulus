@@ -87,8 +87,8 @@ MinModulus/
   Generated/SHCSixN105*.lean   -- sharded order-105 kernel checks
   SHCSixGeneratorComplete.lean  -- full 6-coordinate window generator theorem
   SHCSixCertificate.lean        -- trusted bridge for normalized 6-coordinate certificates
-  Generated/SHCSixNormalizedN67*.lean -- first sharded normalized 6-coordinate check
-  SHCSixBaseCases.lean          -- normalized 6-coordinate exclusions at 65 and 67
+  Generated/SHCSixNormalizedN*.lean -- sharded normalized 6-coordinate checks
+  SHCSixBaseCases.lean          -- normalized 6-coordinate exclusions at 65, 67, 69
   GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 scripts/generate-five-normalized-certificates.py -- deterministic Torch certificate generator
@@ -238,7 +238,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `SHCSixGeneratorReduction.lean`: `shc_hasGeneratorCoordinate_zmod_six_of_odd_window_ne_exceptions` | lower-dimensional SHC bounds force a generator coordinate at 27 of the 31 odd orders 65–125; the subgroup-cover method isolates exactly 75, 99, 105, and 117 as its tight exceptions |
 | `SHCSixGenerator.lean`: `shc_hasGeneratorCoordinate_zmod_six_of_odd_window_ne_one_hundred_five` | quotient-pigeonhole contradictions close the tight two-prime cases 75, 99, and 117, proving generator-coordinate existence at 30 of 31 window orders; only the three-prime order 105 remains |
 | `SHCSixExceptionalCertificate.lean`, `Generated/SHCSixN105*.lean`, `SHCSixGeneratorComplete.lean` | the exact-three subgroup argument reduces order 105 to 3,478,761 sorted normalized nonunit tails; 1,326 generated blocks use 208,601 kernel-checked decision-tree branches to exclude them, completing generator-coordinate existence at every odd order 65–125 |
-| `SHCSixCertificate.lean`, `Generated/SHCSixNormalizedN67*.lean`, `SHCSixBaseCases.lean` | begins the normalized six-coordinate window: order 65 is excluded analytically and all 8,259,888 sorted normalized tails at order 67 are covered by 1,891 generated blocks with 193,654 kernel-checked decision-tree branches; 2 of 31 odd cases are complete, while orders 69–125 and hence the full six-coordinate SHC bound remain open |
+| `SHCSixCertificate.lean`, `Generated/SHCSixNormalizedN*.lean`, `SHCSixBaseCases.lean` | begins the normalized six-coordinate window: order 65 is excluded analytically; generated certificates cover all 8,259,888 sorted normalized tails at 67 and all 9,657,648 at 69, using respectively 1,891/2,016 blocks and 193,654/232,100 kernel-checked branches; 3 of 31 odd cases are complete, while orders 71–125 and hence the full six-coordinate SHC bound remain open; the next task is extracting uniform relation families from these certificates rather than serial enumeration |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
