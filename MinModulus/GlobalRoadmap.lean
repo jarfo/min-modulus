@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1CrossingMass
+import MinModulus.G1DominantPadding
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -343,6 +343,136 @@ theorem criticalCanonicalReducedCollisions_nonempty
   by_contra hne
   rw [Finset.not_nonempty_iff_eq_empty.mp hne] at hweight
   simp at hweight
+
+/-- Diagonal concentration produces one explicit maximum-weight canonical
+collision.  Its padding weight controls the diagonal relative to the actual
+total canonical weight; the ambient-order estimate is retained as a weaker
+corollary rather than used as the main structural information. -/
+theorem critical_diagonalConcentration_exists_dominantCollision
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (hdiagonal :
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        2 * (criticalCanonicalReducedCollisions g).sum (fun r ↦
+          reducedCollisionWeight (m := n) r *
+            reducedCollisionWeight (m := n) r)) :
+    ∃ r ∈ criticalCanonicalReducedCollisions g,
+      (∀ u ∈ criticalCanonicalReducedCollisions g,
+        reducedCollisionWeight (m := n) u ≤
+          reducedCollisionWeight (m := n) r) ∧
+      (∀ u ∈ criticalCanonicalReducedCollisions g,
+        (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card) ∧
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        2 * (reducedCollisionWeight (m := n) r *
+          (criticalCanonicalReducedCollisions g).sum
+            (reducedCollisionWeight (m := n))) ∧
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        (2 ^ (s + 1) * q) *
+          2 ^ (n - (r.val.1 ∪ r.val.2).card) := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hne : (canonicalReducedCollisions (g := g)
+      (half_add_half hN)).Nonempty := by
+    simpa [criticalCanonicalReducedCollisions] using
+      criticalCanonicalReducedCollisions_nonempty hn hq g hg hcritical
+  obtain ⟨r, hr, hrIsMax, hrMinSupport, hrdiag⟩ :=
+    exists_canonical_weight_mul_sum_ge_diagonal
+      (g := g) (half_add_half hN) hne
+  have hupper := two_mul_sum_canonicalWeights_le_card
+    g hg (half_add_half hN) (half_ne_zero hN hM)
+  have hrIsMax' : ∀ u ∈ criticalCanonicalReducedCollisions g,
+      reducedCollisionWeight (m := n) u ≤
+        reducedCollisionWeight (m := n) r := by
+    simpa [criticalCanonicalReducedCollisions] using hrIsMax
+  have hrMinSupport' : ∀ u ∈ criticalCanonicalReducedCollisions g,
+      (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card := by
+    simpa [criticalCanonicalReducedCollisions] using hrMinSupport
+  have hrdiag' :
+      (criticalCanonicalReducedCollisions g).sum (fun u ↦
+          reducedCollisionWeight (m := n) u *
+            reducedCollisionWeight (m := n) u) ≤
+        reducedCollisionWeight (m := n) r *
+          (criticalCanonicalReducedCollisions g).sum
+            (reducedCollisionWeight (m := n)) := by
+    simpa [criticalCanonicalReducedCollisions] using hrdiag
+  have hupper' :
+      2 * (criticalCanonicalReducedCollisions g).sum
+          (reducedCollisionWeight (m := n)) ≤ 2 ^ (s + 1) * q := by
+    simpa [criticalCanonicalReducedCollisions, ZMod.card] using hupper
+  refine ⟨r, by simpa [criticalCanonicalReducedCollisions] using hr,
+    hrIsMax', hrMinSupport', ?_, ?_⟩
+  · calc
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        2 * (criticalCanonicalReducedCollisions g).sum (fun u ↦
+          reducedCollisionWeight (m := n) u *
+            reducedCollisionWeight (m := n) u) := hdiagonal
+    _ ≤ 2 * (reducedCollisionWeight (m := n) r *
+          (criticalCanonicalReducedCollisions g).sum
+            (reducedCollisionWeight (m := n))) :=
+      Nat.mul_le_mul_left 2 hrdiag'
+  · calc
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        2 * (criticalCanonicalReducedCollisions g).sum (fun u ↦
+          reducedCollisionWeight (m := n) u *
+            reducedCollisionWeight (m := n) u) := hdiagonal
+    _ ≤ 2 * (reducedCollisionWeight (m := n) r *
+          (criticalCanonicalReducedCollisions g).sum
+            (reducedCollisionWeight (m := n))) :=
+      Nat.mul_le_mul_left 2 hrdiag'
+    _ = reducedCollisionWeight (m := n) r *
+          (2 * (criticalCanonicalReducedCollisions g).sum
+            (reducedCollisionWeight (m := n))) := by ring
+    _ ≤ reducedCollisionWeight (m := n) r * (2 ^ (s + 1) * q) :=
+      Nat.mul_le_mul_left _ hupper'
+    _ = (2 ^ (s + 1) * q) *
+          2 ^ (n - (r.val.1 ∪ r.val.2).card) := by
+      simp [reducedCollisionWeight, Nat.mul_comm]
+
+/-- The diagonal sum has now been eliminated from the critical interface:
+either crossing product mass is large, or one explicit maximum-weight
+canonical collision controls the concentration relative to total weight. -/
+theorem critical_crossingMass_or_exists_dominantCollision
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+        (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+      4 * (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+        reducedCollisionWeight (m := n) p.1 *
+          reducedCollisionWeight (m := n) p.2) ∨
+    ∃ r ∈ criticalCanonicalReducedCollisions g,
+      (∀ u ∈ criticalCanonicalReducedCollisions g,
+        reducedCollisionWeight (m := n) u ≤
+          reducedCollisionWeight (m := n) r) ∧
+      (∀ u ∈ criticalCanonicalReducedCollisions g,
+        (r.val.1 ∪ r.val.2).card ≤ (u.val.1 ∪ u.val.2).card) ∧
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        2 * (reducedCollisionWeight (m := n) r *
+          (criticalCanonicalReducedCollisions g).sum
+            (reducedCollisionWeight (m := n))) ∧
+      (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+          (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+        (2 ^ (s + 1) * q) *
+          2 ^ (n - (r.val.1 ∪ r.val.2).card) := by
+  rcases critical_crossingMass_or_diagonalConcentration
+      hn hq g hg hcritical with hcross | hdiagonal
+  · exact Or.inl hcross
+  · exact Or.inr
+      (critical_diagonalConcentration_exists_dominantCollision
+        hn hq g hg hcritical hdiagonal)
 
 /-- Critical-range G1 is reduced to two explicit quantitative escape
 branches: a genuinely heavy half-witness or a positive-tail crossing between

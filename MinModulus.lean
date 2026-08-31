@@ -19,6 +19,7 @@ import MinModulus.G1UnitCoreReduction
 import MinModulus.G1HeavyOrCross
 import MinModulus.G1CanonicalCrossing
 import MinModulus.G1CrossingMass
+import MinModulus.G1DominantPadding
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate
