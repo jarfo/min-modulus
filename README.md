@@ -54,7 +54,8 @@ bound): the main theorem `nmin_eq` states
 the paper's Theorem A (validity / upper bound) and Theorem B (lower bound).
 That this $`N`$ is minimal over *all* residue sets (not just the
 super-increasing one) remains a conjecture (Conjecture 1 in the paper,
-CP-certified for $`n \le 7`$) and is not formalized.
+CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
+results and remaining G1/G2/G3 interfaces are summarized below.
 
 ## Layout
 
@@ -81,10 +82,14 @@ MinModulus/
   Generated/SHCFiveN*.lean      -- sharded normalized 5-coordinate kernel checks
   SHCFiveBaseCases.lean         -- 5-coordinate SHC bound 63 and odd `n=6` stratum
   SHCSixGeneratorReduction.lean -- structural 6-coordinate generator reduction
-  SHCSixGenerator.lean          -- tight 2-prime cases; only order 105 remains
+  SHCSixGenerator.lean          -- tight 2-prime generator cases
+  SHCSixExceptionalCertificate.lean -- trusted order-105 certificate bridge
+  Generated/SHCSixN105*.lean   -- sharded order-105 kernel checks
+  SHCSixGeneratorComplete.lean  -- full 6-coordinate window generator theorem
   GlobalRoadmap.lean            -- precise G1/G2/G3 interfaces and G1 dichotomy
 scripts/check_axioms.lean       -- axiom audit, run in CI
 scripts/generate-five-normalized-certificates.py -- deterministic Torch certificate generator
+scripts/generate-six-exceptional-certificate.py -- deterministic order-105 generator
 ```
 
 ## Build
@@ -228,6 +233,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `SHCFiveCertificate.lean`, `Generated/SHCFiveN*.lean`, `SHCFiveBaseCases.lean` | complete normalized five-coordinate window (33 analytically, every odd order 35–61 by generated certificates), the unconditional cyclic SHC bound 63, `odd_min_six`, and six-coordinate deletion spanning through order 125 |
 | `SHCSixGeneratorReduction.lean`: `shc_hasGeneratorCoordinate_zmod_six_of_odd_window_ne_exceptions` | lower-dimensional SHC bounds force a generator coordinate at 27 of the 31 odd orders 65–125; the subgroup-cover method isolates exactly 75, 99, 105, and 117 as its tight exceptions |
 | `SHCSixGenerator.lean`: `shc_hasGeneratorCoordinate_zmod_six_of_odd_window_ne_one_hundred_five` | quotient-pigeonhole contradictions close the tight two-prime cases 75, 99, and 117, proving generator-coordinate existence at 30 of 31 window orders; only the three-prime order 105 remains |
+| `SHCSixExceptionalCertificate.lean`, `Generated/SHCSixN105*.lean`, `SHCSixGeneratorComplete.lean` | the exact-three subgroup argument reduces order 105 to 3,478,761 sorted normalized nonunit tails; 1,326 generated blocks use 208,601 kernel-checked decision-tree branches to exclude them, completing generator-coordinate existence at every odd order 65–125 |
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |

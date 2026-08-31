@@ -95,7 +95,7 @@ private theorem sum_blockSetSix {N r s : ℕ} [NeZero N]
       Fin.val_castLE, Fin.val_natAdd] at hv
     omega
 
-private theorem exists_collision_choices {α β k : ℕ} [NeZero β]
+theorem exists_collision_choices {α β k : ℕ} [NeZero β]
     (f : Finset (Fin α) → ZMod β) (hcard : β * k < 2 ^ α) :
     ∃ pick : Fin (k + 1) ↪ Finset (Fin α), ∀ i j, f (pick i) = f (pick j) := by
   let s : Finset (Finset (Fin α)) := Finset.univ
@@ -119,7 +119,7 @@ private theorem exists_collision_choices {α β k : ℕ} [NeZero β]
   have hjF : pick j ∈ F := hpick ⟨j, rfl⟩
   exact (Finset.mem_filter.mp hiF).2.trans (Finset.mem_filter.mp hjF).2.symm
 
-private theorem no_shc_of_block_collision
+theorem no_shc_of_block_collision
     {N r s u v D : ℕ} [NeZero N] [NeZero D] [NeZero u] [NeZero v]
     (hDN : D ∣ N)
     (a : Fin r → ZMod N) (b : Fin s → ZMod N)
