@@ -648,6 +648,40 @@ theorem witness_neg_of_le_one (g : Fin n → G) {h : G}
     rw [Finset.sum_congr rfl fun i _ => hterm i,
       Finset.sum_neg_distrib, hc.2.2.2, hneg]
 
+/-- If a witness omits `p` but has coefficient zero at `q`, relative to an
+exact `{p,q}` edge witness, then it must leave the symmetric window: some
+coefficient is at least `2`.  Otherwise its negative is a half-witness whose
+omissions are disjoint from the edge, and combination gives a contradiction
+at `q`. -/
+theorem exists_coeff_ge_two_of_omit_other_and_zero_at_exact_pair
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cEdge c : Fin n → ℤ} (hcEdge : Witness g h cEdge)
+    (hc : Witness g h c) (p q : Fin n)
+    (hEdge : ∀ i, cEdge i = -1 ↔ i = p ∨ i = q)
+    (hcp : c p = -1) (hcq : c q = 0) : ∃ e : Fin n, 2 ≤ c e := by
+  by_contra hnone
+  have hle : ∀ i, c i ≤ 1 := by
+    intro i
+    have hnot : ¬2 ≤ c i := by
+      intro hi
+      exact hnone ⟨i, hi⟩
+    omega
+  have hcNeg : Witness g h (-c) := witness_neg_of_le_one g hh hc hle
+  have hshare : ∀ i, ¬(cEdge i = -1 ∧ (-c) i = -1) := by
+    intro i hi
+    rcases (hEdge i).1 hi.1 with hip | hiq
+    · subst i
+      simp only [Pi.neg_apply, hcp] at hi
+      omega
+    · subst i
+      simp only [Pi.neg_apply, hcq] at hi
+      omega
+  have hneg := witness_combination g hg hh hcEdge hcNeg hshare
+  have hq := congrFun hneg q
+  have hEdgeq : cEdge q = -1 := (hEdge q).2 (Or.inr rfl)
+  simp only [Pi.neg_apply, hcq, hEdgeq] at hq
+  omega
+
 /-- Negating a light exact-pair witness exchanges its omission pair with its
 two coefficient-`1` coordinates: the specified opposite coordinate and the
 unique companion supplied by positive-mass conservation. -/
@@ -790,6 +824,31 @@ theorem common_touched_or_exists_three_omission_witness_of_light_triangle
     htouch | ⟨z, c, hzd, hza, _hzb, _hDAz, hc, _hcb, hca, hcd, hcz⟩
   · exact Or.inl ⟨b, htouch⟩
   · exact Or.inr ⟨c, a, d, z, hc, hda.symm, hzd.symm, hza, hca, hcd, hcz⟩
+
+/-- Strengthened light-triangle escape: the forced three-omission witness
+also contains a coefficient at least `2`. -/
+theorem common_touched_or_exists_three_omission_heavy_witness_of_light_triangle
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hDAb : cDA b = 1) :
+    (∃ j : Fin n, ∀ c : Fin n → ℤ, Witness g h c → c j ≠ 0) ∨
+      ∃ c : Fin n → ℤ, ∃ i j k e : Fin n,
+        Witness g h c ∧ i ≠ j ∧ j ≠ k ∧ k ≠ i ∧
+          c i = -1 ∧ c j = -1 ∧ c k = -1 ∧ 2 ≤ c e := by
+  rcases common_touched_or_exists_three_omissions_of_light_triangle
+      g hg hh hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA hDAb with
+    htouch | ⟨z, c, hzd, hza, _hzb, _hDAz, hc, hcb, hca, hcd, hcz⟩
+  · exact Or.inl ⟨b, htouch⟩
+  · obtain ⟨e, hce⟩ :=
+      exists_coeff_ge_two_of_omit_other_and_zero_at_exact_pair
+        g hg hh hcAB hc a b hAB hca hcb
+    exact Or.inr
+      ⟨c, a, d, z, e, hc, hda.symm, hzd.symm, hza, hca, hcd, hcz, hce⟩
 
 /-- If two witnesses at an involution have a coefficientwise sum bounded
 above by `1`, the negative of that sum is a witness at zero.  This is the
@@ -2110,6 +2169,38 @@ theorem common_touched_or_exists_three_omission_witness_of_not_four_dvd_zmod
       g hg (half_add_half hN) hcDA hcAB hcBD d a b hda hab hbd
         hDA hAB hBD hBDlight.2.1
   · exact common_touched_or_exists_three_omission_witness_of_light_triangle
+      g hg (half_add_half hN) hcAB hcBD hcDA a b d hab hbd hda
+        hAB hBD hDA hDAlight.2.2
+
+/-- Strengthened first-even-stratum frontier: failure of common touch yields
+a three-omission witness with a coefficient at least `2`. -/
+theorem common_touched_or_exists_three_omission_heavy_witness_of_not_four_dvd_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M) (hnot4 : ¬4 ∣ N)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a) :
+    (∃ j : Fin n, ∀ c : Fin n → ℤ,
+        Witness g (M : ZMod N) c → c j ≠ 0) ∨
+      ∃ c : Fin n → ℤ, ∃ i j k e : Fin n,
+        Witness g (M : ZMod N) c ∧ i ≠ j ∧ j ≠ k ∧ k ≠ i ∧
+          c i = -1 ∧ c j = -1 ∧ c k = -1 ∧ 2 ≤ c e := by
+  rcases common_touched_or_profile_zero_zero_one_of_not_four_dvd_zmod
+      hN hnot4 g hg hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA with
+    htouch | hABlight | hBDlight | hDAlight
+  · exact Or.inl htouch
+  · exact common_touched_or_exists_three_omission_heavy_witness_of_light_triangle
+      g hg (half_add_half hN) hcBD hcDA hcAB b d a hbd hda hab
+        hBD hDA hAB hABlight.1
+  · exact common_touched_or_exists_three_omission_heavy_witness_of_light_triangle
+      g hg (half_add_half hN) hcDA hcAB hcBD d a b hda hab hbd
+        hDA hAB hBD hBDlight.2.1
+  · exact common_touched_or_exists_three_omission_heavy_witness_of_light_triangle
       g hg (half_add_half hN) hcAB hcBD hcDA a b d hab hbd hda
         hAB hBD hDA hDAlight.2.2
 
