@@ -66,6 +66,9 @@ import MinModulus
 #print axioms MinModulus.two_smul_eq_target_add_pair_of_exact_pair_coeff_two
 #print axioms MinModulus.pure_companions_ne_of_adjacent_zero_opposites
 #print axioms MinModulus.exists_six_distinct_pure_centers_of_triangle_all_zero
+#print axioms MinModulus.double_balanced_center_sum_eq_target_of_pure_triangle
+#print axioms MinModulus.exists_double_eq_target_of_triangle_all_zero
+#print axioms MinModulus.exists_double_eq_target_of_triangle_zero_zero_two
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
 #print axioms MinModulus.exists_double_difference_eq_target_of_triangle_zero_two_two
@@ -81,6 +84,9 @@ import MinModulus
 #print axioms MinModulus.not_two_adjacent_heavy_opposites_zmod
 #print axioms MinModulus.three_dvd_of_two_adjacent_heavy_opposites_zmod
 #print axioms MinModulus.four_dvd_of_double_eq_half
+#print axioms MinModulus.four_dvd_of_triangle_all_zero_zmod
+#print axioms MinModulus.four_dvd_of_triangle_zero_zero_two_zmod
+#print axioms MinModulus.common_touched_or_profile_zero_zero_one_of_not_four_dvd_zmod
 #print axioms MinModulus.twelve_dvd_of_triangle_zero_two_two_zmod
 #print axioms MinModulus.zsmul_eq_zero_or_self_or_neg_of_order_three
 #print axioms MinModulus.pair_descent_order_three

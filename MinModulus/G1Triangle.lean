@@ -1302,6 +1302,89 @@ theorem exists_six_distinct_pure_centers_of_triangle_all_zero
   exact ⟨x, y, z, ⟨hxa, hxb, hxd⟩, ⟨hyb, hyd, hya⟩,
     ⟨hzd, hza, hzb⟩, hxy, hyz, hzx, hABx, hBDy, hDAz⟩
 
+/-- Three pure exact-pair witnesses on a triangle have a common balanced
+quarter relation.  If `x,y,z` are their coefficient-`2` centers, then the
+difference between the center sum and the vertex sum doubles to the target
+involution. -/
+theorem double_balanced_center_sum_eq_target_of_pure_triangle
+    (g : Fin n → G) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d x y z : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hxa : x ≠ a) (hxb : x ≠ b) (hyb : y ≠ b) (hyd : y ≠ d)
+    (hzd : z ≠ d) (hza : z ≠ a)
+    (hABx : cAB x = 2) (hBDy : cBD y = 2) (hDAz : cDA z = 2) :
+    (g x + g y + g z - g a - g b - g d) +
+        (g x + g y + g z - g a - g b - g d) = h := by
+  have hxval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcAB a b x hab hAB hxa hxb hABx
+  have hyval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcBD b d y hbd hBD hyb hyd hBDy
+  have hzval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcDA d a z hda hDA hzd hza hDAz
+  calc
+    (g x + g y + g z - g a - g b - g d) +
+        (g x + g y + g z - g a - g b - g d) =
+        (2 : ℤ) • g x + (2 : ℤ) • g y + (2 : ℤ) • g z -
+          (2 : ℤ) • g a - (2 : ℤ) • g b - (2 : ℤ) • g d := by
+            simp only [two_zsmul]
+            abel
+    _ = (h + g a + g b) + (h + g b + g d) + (h + g d + g a) -
+          (2 : ℤ) • g a - (2 : ℤ) • g b - (2 : ℤ) • g d := by
+            rw [hxval, hyval, hzval]
+    _ = (h + h) + h := by
+          simp only [two_zsmul]
+          abel
+    _ = h := by rw [hh, zero_add]
+
+/-- An all-zero exact omission triangle exhibits an element doubling to the
+target involution. -/
+theorem exists_double_eq_target_of_triangle_all_zero
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 0) (hDAb : cDA b = 0) :
+    ∃ t : G, t + t = h := by
+  obtain ⟨x, y, z, hx, hy, hz, _hxy, _hyz, _hzx, hABx, hBDy, hDAz⟩ :=
+    exists_six_distinct_pure_centers_of_triangle_all_zero
+      g hg hh hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA
+        hABd hBDa hDAb
+  refine ⟨g x + g y + g z - g a - g b - g d, ?_⟩
+  exact double_balanced_center_sum_eq_target_of_pure_triangle
+    g hh hcAB hcBD hcDA a b d x y z hab hbd hda hAB hBD hDA
+      hx.1 hx.2.1 hy.1 hy.2.1 hz.1 hz.2.1 hABx hBDy hDAz
+
+/-- An exact `(0,0,2)` omission triangle also exhibits an element doubling
+to the target involution: its two external pure centers together with the
+heavy triangle vertex form the three centers in the balanced relation. -/
+theorem exists_double_eq_target_of_triangle_zero_zero_two
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 0) (hDAb : cDA b = 2) :
+    ∃ t : G, t + t = h := by
+  obtain ⟨x, hxa, hxb, _hxd, hABx, _⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite
+      g hg hh hcAB hcBD a b d hab hda hAB hBD hABd
+  obtain ⟨y, hyb, hyd, _hya, hBDy, _⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite
+      g hg hh hcBD hcDA b d a hbd hab hBD hDA hBDa
+  refine ⟨g x + g y + g b - g a - g b - g d, ?_⟩
+  exact double_balanced_center_sum_eq_target_of_pure_triangle
+    g hh hcAB hcBD hcDA a b d x y b hab hbd hda hAB hBD hDA
+      hxa hxb hyb hyd hbd hab.symm hABx hBDy hDAb
+
 /-- If the admissible sum of three witnesses has a unique omission, that
 omitted coordinate is touched by every witness.  This packages the
 three-witness closure directly in the common-touch form needed by G1. -/
@@ -1705,6 +1788,130 @@ theorem four_dvd_of_double_eq_half
   obtain ⟨k, hk⟩ := hMzero
   refine ⟨k, ?_⟩
   omega
+
+/-- Cyclic all-zero obstruction: the balanced center sum doubles to the half,
+so the modulus is divisible by `4`. -/
+theorem four_dvd_of_triangle_all_zero_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 0) (hDAb : cDA b = 0) :
+    4 ∣ N := by
+  obtain ⟨t, ht⟩ := exists_double_eq_target_of_triangle_all_zero
+    g hg (half_add_half hN) hcAB hcBD hcDA a b d hab hbd hda
+      hAB hBD hDA hABd hBDa hDAb
+  exact four_dvd_of_double_eq_half hN t ht
+
+/-- Cyclic `(0,0,2)` obstruction: its three pure centers likewise force the
+modulus to be divisible by `4`. -/
+theorem four_dvd_of_triangle_zero_zero_two_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 0) (hDAb : cDA b = 2) :
+    4 ∣ N := by
+  obtain ⟨t, ht⟩ := exists_double_eq_target_of_triangle_zero_zero_two
+    g hg (half_add_half hN) hcAB hcBD hcDA a b d hab hbd hda
+      hAB hBD hDA hABd hBDa hDAb
+  exact four_dvd_of_double_eq_half hN t ht
+
+/-- At an even cyclic modulus not divisible by `4`, an exact omission
+triangle either closes G1 or has opposite profile `(0,0,1)` up to rotation.
+This is the current exact-triangle frontier in the first even stratum. -/
+theorem common_touched_or_profile_zero_zero_one_of_not_four_dvd_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M) (hnot4 : ¬4 ∣ N)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a) :
+    (∃ j : Fin n, ∀ c : Fin n → ℤ,
+        Witness g (M : ZMod N) c → c j ≠ 0) ∨
+      (cAB d = 1 ∧ cBD a = 0 ∧ cDA b = 0) ∨
+      (cAB d = 0 ∧ cBD a = 1 ∧ cDA b = 0) ∨
+      (cAB d = 0 ∧ cBD a = 0 ∧ cDA b = 1) := by
+  have hNpos : 0 < N := Nat.pos_of_ne_zero (NeZero.ne N)
+  have hM : 0 < M := by omega
+  obtain ⟨hABclass, hBDclass, hDAclass⟩ :=
+    triangle_opposite_coefficients_zero_one_or_two g hcAB hcBD hcDA
+      a b d hab hbd hda hAB hBD hDA
+  have hAB01 : cAB d = 0 ∨ cAB d = 1 := by
+    rcases hABclass with h0 | h1 | h2
+    · exact Or.inl h0
+    · exact Or.inr h1
+    · exfalso
+      have hzero := triangle_other_opposites_zero_of_opposite_eq_two
+        g hg (half_add_half hN) hcAB hcBD hcDA a b d hab hbd hda
+          hAB hBD hDA h2
+      apply hnot4
+      exact four_dvd_of_triangle_zero_zero_two_zmod hN g hg
+        hcBD hcDA hcAB b d a hbd hda hab hBD hDA hAB
+          hzero.1 hzero.2 h2
+  have hBD01 : cBD a = 0 ∨ cBD a = 1 := by
+    rcases hBDclass with h0 | h1 | h2
+    · exact Or.inl h0
+    · exact Or.inr h1
+    · exfalso
+      have hzero := triangle_other_opposites_zero_of_opposite_eq_two
+        g hg (half_add_half hN) hcBD hcDA hcAB b d a hbd hda hab
+          hBD hDA hAB h2
+      apply hnot4
+      exact four_dvd_of_triangle_zero_zero_two_zmod hN g hg
+        hcDA hcAB hcBD d a b hda hab hbd hDA hAB hBD
+          hzero.1 hzero.2 h2
+  have hDA01 : cDA b = 0 ∨ cDA b = 1 := by
+    rcases hDAclass with h0 | h1 | h2
+    · exact Or.inl h0
+    · exact Or.inr h1
+    · exfalso
+      have hzero := triangle_other_opposites_zero_of_opposite_eq_two
+        g hg (half_add_half hN) hcDA hcAB hcBD d a b hda hab hbd
+          hDA hAB hBD h2
+      apply hnot4
+      exact four_dvd_of_triangle_zero_zero_two_zmod hN g hg
+        hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA
+          hzero.1 hzero.2 h2
+  rcases hAB01 with hAB0 | hAB1
+  · rcases hBD01 with hBD0 | hBD1
+    · rcases hDA01 with hDA0 | hDA1
+      · exfalso
+        apply hnot4
+        exact four_dvd_of_triangle_all_zero_zmod hN g hg
+          hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA
+            hAB0 hBD0 hDA0
+      · exact Or.inr (Or.inr (Or.inr ⟨hAB0, hBD0, hDA1⟩))
+    · rcases hDA01 with hDA0 | hDA1
+      · exact Or.inr (Or.inr (Or.inl ⟨hAB0, hBD1, hDA0⟩))
+      · exact Or.inl
+          (common_touched_of_two_adjacent_light_opposites_zmod
+            hN hM g hg hcBD hcDA b d a hbd hda hab hBD hDA hBD1 hDA1)
+  · rcases hBD01 with hBD0 | hBD1
+    · rcases hDA01 with hDA0 | hDA1
+      · exact Or.inr (Or.inl ⟨hAB1, hBD0, hDA0⟩)
+      · exact Or.inl
+          (common_touched_of_two_adjacent_light_opposites_zmod
+            hN hM g hg hcDA hcAB d a b hda hab hbd hDA hAB hDA1 hAB1)
+    · exact Or.inl
+        (common_touched_of_two_adjacent_light_opposites_zmod
+          hN hM g hg hcAB hcBD a b d hab hbd hda hAB hBD hAB1 hBD1)
 
 /-- The full cyclic obstruction for an exact `(0,2,2)` omission triangle.
 The adjacent heavy edges force `3 ∣ N`, while the pure companion of the zero
