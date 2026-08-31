@@ -78,6 +78,13 @@ import MinModulus
 #print axioms MinModulus.subsetCollision_avoidances_of_no_common_touched
 #print axioms MinModulus.subsetSumCollision_supports_sprout_avoidances
 #print axioms MinModulus.commonTouched_or_all_subsetSumCollision_supports_sprout_avoidances
+#print axioms MinModulus.subsetSumCollision_reduced_value
+#print axioms MinModulus.subsetCollisionCoeffs_reduce
+#print axioms MinModulus.reducedPaddingToSubsetSumCollision_left_inverse
+#print axioms MinModulus.reducedPaddingToSubsetSumCollision_right_inverse
+#print axioms MinModulus.card_collisionPadding
+#print axioms MinModulus.card_subsetSumCollision_eq_sum_reduced_weights
+#print axioms MinModulus.card_subsetSumOverlap_eq_sum_reduced_weights
 #print axioms MinModulus.exists_coeff_two_of_same_exact_pair_zero_two
 #print axioms MinModulus.two_smul_eq_of_same_exact_pair_coeff_two
 #print axioms MinModulus.two_smul_eq_of_adjacent_triangle_same_companion
@@ -281,6 +288,7 @@ import MinModulus
 #print axioms MinModulus.admits_half_or_delete_of_g1
 #print axioms MinModulus.critical_subsetSum_half_overlap
 #print axioms MinModulus.critical_subsetSum_half_overlap_add_two_le
+#print axioms MinModulus.critical_reduced_collision_weight_lower_bound
 #print axioms MinModulus.exists_light_half_witness_of_critical_range
 #print axioms MinModulus.admits_delete_of_critical_g1
 #print axioms MinModulus.admits_half_or_delete_of_critical_g1

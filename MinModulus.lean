@@ -6,6 +6,7 @@ import MinModulus.G1Triangle
 import MinModulus.G1CriticalRange
 import MinModulus.G1OverlapOrbits
 import MinModulus.G1OverlapSupports
+import MinModulus.G1OverlapPadding
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

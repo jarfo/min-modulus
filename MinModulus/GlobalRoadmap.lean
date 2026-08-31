@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1OverlapOrbits
+import MinModulus.G1OverlapPadding
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -149,6 +149,21 @@ theorem critical_subsetSum_half_overlap_add_two_le
   apply add_two_le_card_subsetSumOverlap_of_even_lt g hg
     (half_add_half hN) (half_ne_zero hN hM) hK
   exact critical_subsetSum_half_overlap hq g hg hcritical
+
+/-- Critical G1 in reduced-shape form: the exact padding weights of all
+disjoint half-collision shapes exceed the endpoint gap by at least two.  This
+is the quantitative interface for the next support-incidence argument. -/
+theorem critical_reduced_collision_weight_lower_bound
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+      ∑ r : ReducedSubsetSumCollision g
+          ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)),
+        2 ^ (n - (r.val.1 ∪ r.val.2).card) := by
+  rw [← card_subsetSumOverlap_eq_sum_reduced_weights g hg
+    ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))]
+  exact critical_subsetSum_half_overlap_add_two_le hn hq g hg hcritical
 
 /-- Consequently every critical-range valid tuple has a half-witness already
 in the translated subset-sum layer.  All non-anchor coefficients can be
