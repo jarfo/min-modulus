@@ -226,6 +226,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `common_touched_of_triangle_one_light_opposite` | closes every exact omission triangle whose opposite coefficients, up to permutation, are `1, ≥2, ≥2`; the summed witness has one omission |
 | `witness_compl_sum_eq_card_exactOmissions`, `witness_coeff_eq_zero_or_one_or_two_of_exact_pair` | exact omission set `S` leaves precisely `|S|` positive coefficient mass outside `S`; in particular every non-omitted coefficient of a two-omission witness is `0`, `1`, or `2` |
 | `triangle_opposite_coefficients_zero_one_or_two`, `not_triangle_all_opposites_two` | reduces exact triangle opposite profiles to `{0,1,2}³` and excludes `(2,2,2)` because each `2` exhausts its witness's positive mass, forcing the three vectors to sum to zero |
+| `triangle_one_one_two_sum_witness_zero_opposite` | reduces the residual positive profile `(1,1,2)` to a new witness on the heavy omission edge with opposite coefficient `0` |
+| `triangle_all_one_sum_witness_exact_triple` | reduces the residual profile `(1,1,1)` to a witness whose exact omission set is the three triangle vertices |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
 | `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
 | `codim_one_chain_odd_card_bound` | a chain missing one coordinate already forces the full odd threshold |

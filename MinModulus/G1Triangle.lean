@@ -191,6 +191,166 @@ theorem witness_three_sum (g : Fin n → G) {h : G}
     rw [Finset.sum_congr rfl fun i _ => hterm i, Finset.sum_add_distrib,
       Finset.sum_add_distrib, hc₁.2.2.2, hc₂.2.2.2, hc₃.2.2.2, hh, zero_add]
 
+/-- Three exact two-omission witnesses on a triangle have an admissible sum
+whenever all three opposite coefficients are positive. -/
+theorem witness_triangle_sum_of_positive_opposites
+    (g : Fin n → G) {h : G} (hh : h + h = 0) (hne : h ≠ 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : 1 ≤ cAB d) (hBDa : 1 ≤ cBD a) (hDAb : 1 ≤ cDA b) :
+    Witness g h (cAB + cBD + cDA) := by
+  apply witness_three_sum g hh hne hcAB hcBD hcDA
+  intro i
+  by_cases hid : i = d
+  · subst i
+    have hBDd : cBD d = -1 := (hBD d).2 (Or.inr rfl)
+    have hDAd : cDA d = -1 := (hDA d).2 (Or.inl rfl)
+    simp only [Pi.add_apply]
+    omega
+  by_cases hia : i = a
+  · subst i
+    have hABa : cAB a = -1 := (hAB a).2 (Or.inl rfl)
+    have hDAa : cDA a = -1 := (hDA a).2 (Or.inr rfl)
+    simp only [Pi.add_apply]
+    omega
+  by_cases hib : i = b
+  · subst i
+    have hABb : cAB b = -1 := (hAB b).2 (Or.inr rfl)
+    have hBDb : cBD b = -1 := (hBD b).2 (Or.inl rfl)
+    simp only [Pi.add_apply]
+    omega
+  have hABi : cAB i ≠ -1 := by
+    intro hi
+    rcases (hAB i).1 hi with rfl | rfl <;> contradiction
+  have hBDi : cBD i ≠ -1 := by
+    intro hi
+    rcases (hBD i).1 hi with rfl | rfl <;> contradiction
+  have hDAi : cDA i ≠ -1 := by
+    intro hi
+    rcases (hDA i).1 hi with rfl | rfl <;> contradiction
+  have hABnonneg : 0 ≤ cAB i := by have := hcAB.2.1 i; omega
+  have hBDnonneg : 0 ≤ cBD i := by have := hcBD.2.1 i; omega
+  have hDAnonneg : 0 ≤ cDA i := by have := hcDA.2.1 i; omega
+  simp only [Pi.add_apply]
+  omega
+
+/-- A residual positive triangle with opposite profile `(1,1,2)` sums to a
+new witness on the heavy omission edge whose opposite coefficient is zero.
+Thus this profile reduces canonically to the zero-opposite obstruction class. -/
+theorem triangle_one_one_two_sum_witness_zero_opposite
+    (g : Fin n → G) {h : G} (hh : h + h = 0) (hne : h ≠ 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 1) (hBDa : cBD a = 1) (hDAb : cDA b = 2) :
+    ∃ cZero : Fin n → ℤ, Witness g h cZero ∧
+      ExactOmissions cZero {d, a} ∧ cZero b = 0 := by
+  let cZero := cAB + cBD + cDA
+  have hcZero : Witness g h cZero := by
+    exact witness_triangle_sum_of_positive_opposites g hh hne hcAB hcBD hcDA
+      a b d hAB hBD hDA (by omega) (by omega) (by omega)
+  have hABa : cAB a = -1 := (hAB a).2 (Or.inl rfl)
+  have hABb : cAB b = -1 := (hAB b).2 (Or.inr rfl)
+  have hBDb : cBD b = -1 := (hBD b).2 (Or.inl rfl)
+  have hBDd : cBD d = -1 := (hBD d).2 (Or.inr rfl)
+  have hDAd : cDA d = -1 := (hDA d).2 (Or.inl rfl)
+  have hDAa : cDA a = -1 := (hDA a).2 (Or.inr rfl)
+  refine ⟨cZero, hcZero, ?_, ?_⟩
+  · intro i
+    constructor
+    · intro hi
+      by_cases hid : i = d
+      · subst i
+        simp
+      by_cases hia : i = a
+      · subst i
+        simp
+      by_cases hib : i = b
+      · subst i
+        simp only [cZero, Pi.add_apply] at hi
+        omega
+      have hABi : cAB i ≠ -1 := by
+        intro hci
+        rcases (hAB i).1 hci with rfl | rfl <;> contradiction
+      have hBDi : cBD i ≠ -1 := by
+        intro hci
+        rcases (hBD i).1 hci with rfl | rfl <;> contradiction
+      have hDAi : cDA i ≠ -1 := by
+        intro hci
+        rcases (hDA i).1 hci with rfl | rfl <;> contradiction
+      have hABnonneg : 0 ≤ cAB i := by have := hcAB.2.1 i; omega
+      have hBDnonneg : 0 ≤ cBD i := by have := hcBD.2.1 i; omega
+      have hDAnonneg : 0 ≤ cDA i := by have := hcDA.2.1 i; omega
+      simp only [cZero, Pi.add_apply] at hi
+      omega
+    · intro hi
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+      rcases hi with rfl | rfl <;> simp only [cZero, Pi.add_apply] <;> omega
+  · simp only [cZero, Pi.add_apply]
+    omega
+
+/-- A residual positive triangle with opposite profile `(1,1,1)` sums to a
+witness whose exact omission set is the three triangle vertices. -/
+theorem triangle_all_one_sum_witness_exact_triple
+    (g : Fin n → G) {h : G} (hh : h + h = 0) (hne : h ≠ 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 1) (hBDa : cBD a = 1) (hDAb : cDA b = 1) :
+    ∃ cTriple : Fin n → ℤ, Witness g h cTriple ∧
+      ExactOmissions cTriple {a, b, d} := by
+  let cTriple := cAB + cBD + cDA
+  have hcTriple : Witness g h cTriple := by
+    exact witness_triangle_sum_of_positive_opposites g hh hne hcAB hcBD hcDA
+      a b d hAB hBD hDA (by omega) (by omega) (by omega)
+  have hABa : cAB a = -1 := (hAB a).2 (Or.inl rfl)
+  have hABb : cAB b = -1 := (hAB b).2 (Or.inr rfl)
+  have hBDb : cBD b = -1 := (hBD b).2 (Or.inl rfl)
+  have hBDd : cBD d = -1 := (hBD d).2 (Or.inr rfl)
+  have hDAd : cDA d = -1 := (hDA d).2 (Or.inl rfl)
+  have hDAa : cDA a = -1 := (hDA a).2 (Or.inr rfl)
+  refine ⟨cTriple, hcTriple, ?_⟩
+  intro i
+  constructor
+  · intro hi
+    by_cases hia : i = a
+    · subst i
+      simp
+    by_cases hib : i = b
+    · subst i
+      simp
+    by_cases hid : i = d
+    · subst i
+      simp
+    have hABi : cAB i ≠ -1 := by
+      intro hci
+      rcases (hAB i).1 hci with rfl | rfl <;> contradiction
+    have hBDi : cBD i ≠ -1 := by
+      intro hci
+      rcases (hBD i).1 hci with rfl | rfl <;> contradiction
+    have hDAi : cDA i ≠ -1 := by
+      intro hci
+      rcases (hDA i).1 hci with rfl | rfl <;> contradiction
+    have hABnonneg : 0 ≤ cAB i := by have := hcAB.2.1 i; omega
+    have hBDnonneg : 0 ≤ cBD i := by have := hcBD.2.1 i; omega
+    have hDAnonneg : 0 ≤ cDA i := by have := hcDA.2.1 i; omega
+    simp only [cTriple, Pi.add_apply] at hi
+    omega
+  · intro hi
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+    rcases hi with rfl | rfl | rfl <;>
+      simp only [cTriple, Pi.add_apply] <;> omega
+
 /-- If the admissible sum of three witnesses has a unique omission, that
 omitted coordinate is touched by every witness.  This packages the
 three-witness closure directly in the common-touch form needed by G1. -/

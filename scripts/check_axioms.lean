@@ -40,6 +40,9 @@ import MinModulus
 #print axioms MinModulus.triangle_opposite_coefficients_zero_one_or_two
 #print axioms MinModulus.not_triangle_all_opposites_two
 #print axioms MinModulus.witness_three_sum
+#print axioms MinModulus.witness_triangle_sum_of_positive_opposites
+#print axioms MinModulus.triangle_one_one_two_sum_witness_zero_opposite
+#print axioms MinModulus.triangle_all_one_sum_witness_exact_triple
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
 #print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch
