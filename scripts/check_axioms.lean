@@ -32,6 +32,8 @@ import MinModulus
 -- combination and deletion for witnesses at an order-two element.
 #print axioms MinModulus.validTuple_iff_no_zero_witness
 #print axioms MinModulus.witness_combination        -- Lemma A
+#print axioms MinModulus.exists_shared_omission_of_zero_at_nonzero_coeff
+#print axioms MinModulus.exists_touched_in_or_avoidances_share_omission
 #print axioms MinModulus.common_touched_of_unique_omission
 #print axioms MinModulus.three_witnesses_sum_ne_zero
 #print axioms MinModulus.exists_pair_difference_witness
@@ -54,6 +56,8 @@ import MinModulus
 #print axioms MinModulus.two_smul_add_eq_target_add_triple_of_exact_triple_coeff_two_one
 #print axioms MinModulus.add_eq_target_add_pair_of_exact_pair_coeff_one_one
 #print axioms MinModulus.exact_triple_heavy_affine_shape_against_light_pair
+#print axioms MinModulus.exists_touched_in_or_avoidances_meet_exactOmissions
+#print axioms MinModulus.avoidances_meet_exactOmissions_of_no_common_touched
 #print axioms MinModulus.exists_coeff_two_of_same_exact_pair_zero_two
 #print axioms MinModulus.two_smul_eq_of_same_exact_pair_coeff_two
 #print axioms MinModulus.two_smul_eq_of_adjacent_triangle_same_companion
@@ -255,7 +259,16 @@ import MinModulus
 #print axioms MinModulus.shc_shift_target_card_gt
 #print axioms MinModulus.card_le_of_two_smul_add_sum_eq
 #print axioms MinModulus.admits_half_or_delete_of_g1
+#print axioms MinModulus.admits_half_or_delete_of_critical_g1
 #print axioms MinModulus.validTuple_fixed_of_valid
 #print axioms MinModulus.admitsValidTuple_gap
 #print axioms MinModulus.stratum_lower_bound_of_gaps
 #print axioms MinModulus.global_lower_bound_of_gaps
+#print axioms MinModulus.g1CounterexampleTuple_valid
+#print axioms MinModulus.g1CounterexampleWitnessAB_isWitness
+#print axioms MinModulus.g1CounterexampleWitnessBD_isWitness
+#print axioms MinModulus.g1CounterexampleWitnessDA_isWitness
+#print axioms MinModulus.g1CounterexampleWitnessE_isWitness
+#print axioms MinModulus.g1Counterexample_no_common_touched
+#print axioms MinModulus.not_commonTouchedHalfWitnesses
+#print axioms MinModulus.g1Counterexample_outside_critical_range

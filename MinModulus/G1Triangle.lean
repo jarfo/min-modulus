@@ -14,10 +14,92 @@ open Finset
 
 variable {n : ℕ} {G : Type*} [AddCommGroup G]
 
+/-- A witness avoiding a coordinate on which another witness is nonzero must
+share an omission with the latter.  Otherwise witness combination would make
+the avoiding witness its negative, contradicting the value at that
+coordinate. -/
+theorem exists_shared_omission_of_zero_at_nonzero_coeff
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {c c' : Fin n → ℤ} (hc : Witness g h c) (hc' : Witness g h c')
+    (e : Fin n) (hce : c e ≠ 0) (hc'e : c' e = 0) :
+    ∃ i : Fin n, c i = -1 ∧ c' i = -1 := by
+  by_contra hnone
+  have hshare : ∀ i, ¬(c i = -1 ∧ c' i = -1) := by
+    intro i hi
+    exact hnone ⟨i, hi⟩
+  have hneg := witness_combination g hg hh hc hc' hshare
+  have he := congrFun hneg e
+  simp only [Pi.neg_apply, hc'e] at he
+  apply hce
+  omega
+
+/-- Hypergraph expansion form of witness combination.  On any finite set of
+nonzero coefficients of a witness, either one coordinate is touched by every
+witness (the G1 conclusion), or every coordinate has an avoiding witness
+whose omission set intersects the original omission set. -/
+theorem exists_touched_in_or_avoidances_share_omission
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {c : Fin n → ℤ} (hc : Witness g h c) (T : Finset (Fin n))
+    (hnonzero : ∀ e ∈ T, c e ≠ 0) :
+    (∃ e ∈ T, ∀ c' : Fin n → ℤ, Witness g h c' → c' e ≠ 0) ∨
+      ∀ e ∈ T, ∃ c' : Fin n → ℤ, ∃ i : Fin n,
+        Witness g h c' ∧ c' e = 0 ∧ c i = -1 ∧ c' i = -1 := by
+  by_cases htouch :
+      ∃ e ∈ T, ∀ c' : Fin n → ℤ, Witness g h c' → c' e ≠ 0
+  · exact Or.inl htouch
+  · right
+    intro e he
+    have hnot : ¬∀ c' : Fin n → ℤ, Witness g h c' → c' e ≠ 0 := by
+      intro hall
+      exact htouch ⟨e, he, hall⟩
+    push Not at hnot
+    obtain ⟨c', hc', hc'e⟩ := hnot
+    obtain ⟨i, hci, hc'i⟩ :=
+      exists_shared_omission_of_zero_at_nonzero_coeff
+        g hg hh hc hc' e (hnonzero e he) hc'e
+    exact ⟨c', i, hc', hc'e, hci, hc'i⟩
+
 /-- A coefficient vector has exactly the omission set `S` when its `-1`
 coordinates are precisely the members of `S`. -/
 def ExactOmissions (c : Fin n → ℤ) (S : Finset (Fin n)) : Prop :=
   ∀ i, c i = -1 ↔ i ∈ S
+
+/-- Exact-omission specialization of the general hypergraph expansion rule.
+Every chosen positive-support coordinate either closes G1, or has an avoiding
+witness attached by an omission to the original exact omission set. -/
+theorem exists_touched_in_or_avoidances_meet_exactOmissions
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {c : Fin n → ℤ} (hc : Witness g h c) (S T : Finset (Fin n))
+    (hS : ExactOmissions c S) (hnonzero : ∀ e ∈ T, c e ≠ 0) :
+    (∃ e ∈ T, ∀ c' : Fin n → ℤ, Witness g h c' → c' e ≠ 0) ∨
+      ∀ e ∈ T, ∃ c' : Fin n → ℤ, ∃ i ∈ S,
+        Witness g h c' ∧ c' e = 0 ∧ c' i = -1 := by
+  rcases exists_touched_in_or_avoidances_share_omission
+      g hg hh hc T hnonzero with htouch | havoid
+  · exact Or.inl htouch
+  · right
+    intro e he
+    obtain ⟨c', i, hc', hc'e, hci, hc'i⟩ := havoid e he
+    exact ⟨c', i, (hS i).1 hci, hc', hc'e, hc'i⟩
+
+/-- Under the negation of the G1 conclusion, the second branch of
+`exists_touched_in_or_avoidances_meet_exactOmissions` holds uniformly.  Thus
+every selected support coordinate sprouts an avoiding witness attached to
+the old exact omission set. -/
+theorem avoidances_meet_exactOmissions_of_no_common_touched
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {c : Fin n → ℤ} (hc : Witness g h c) (S T : Finset (Fin n))
+    (hS : ExactOmissions c S) (hnonzero : ∀ e ∈ T, c e ≠ 0)
+    (havoid : ∀ e : Fin n, ∃ c' : Fin n → ℤ,
+      Witness g h c' ∧ c' e = 0) :
+    ∀ e ∈ T, ∃ c' : Fin n → ℤ, ∃ i ∈ S,
+      Witness g h c' ∧ c' e = 0 ∧ c' i = -1 := by
+  intro e he
+  obtain ⟨c', hc', hc'e⟩ := havoid e
+  obtain ⟨i, hci, hc'i⟩ :=
+    exists_shared_omission_of_zero_at_nonzero_coeff
+      g hg hh hc hc' e (hnonzero e he) hc'e
+  exact ⟨c', i, (hS i).1 hci, hc', hc'e, hc'i⟩
 
 /-- A difference `g a - g b = h` is represented by a witness with the unique
 omission `b`.  This is the common algebraic core of pair descent. -/

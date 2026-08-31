@@ -20,3 +20,4 @@ import MinModulus.SHCSixGeneratorComplete
 import MinModulus.SHCSixCertificate
 import MinModulus.SHCSixBaseCases
 import MinModulus.GlobalRoadmap
+import MinModulus.G1Counterexample

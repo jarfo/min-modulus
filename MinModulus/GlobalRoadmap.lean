@@ -2,8 +2,9 @@
 # Interfaces for the global min-modulus roadmap
 
 This file packages the three remaining conjectural inputs separately from the
-proved descent machinery.  In particular, `admits_half_or_delete_of_g1` is the
-exact operational consequence of G1 used by a stratified induction.
+proved descent machinery.  The stratified induction uses
+`CriticalRangeCommonTouchedHalfWitnesses`, after the unrestricted common-touch
+statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
 import MinModulus.UniqueSums
@@ -64,15 +65,32 @@ theorem admitsValidTuple_gap {n t : ℕ} (hn : 2 ≤ n) (htn : 2 ^ t ≤ n) :
     AdmitsValidTuple n (2 ^ n - 2 ^ t) :=
   ⟨_, validTuple_fixed_of_valid (valid_gap hn htn)⟩
 
-/-- **G1, common-touch form.**  Whenever the half-witness family of a valid
-tuple modulo `2M` is nonempty, one coordinate is nonzero in every such
-witness. -/
+/-- **Unrestricted common touch (false).**  This was the original G1 form and
+is retained to state its counterexample and the generic descent consequence.
+The global induction below assumes only
+`CriticalRangeCommonTouchedHalfWitnesses`. -/
 def CommonTouchedHalfWitnesses : Prop :=
   ∀ {n M : ℕ} (_hM : 0 < M) (g : Fin (n + 1) → ZMod (2 * M)),
     ValidTuple g →
     (∃ c : Fin (n + 1) → ℤ, Witness g (M : ZMod (2 * M)) c) →
     ∃ j : Fin (n + 1),
       ∀ c : Fin (n + 1) → ℤ, Witness g (M : ZMod (2 * M)) c → c j ≠ 0
+
+/-- **G1 in the exact range needed by the stratified induction.**  At the
+`(s+1)`-st two-adic step, common touch is required only while the modulus is
+strictly below that stratum's claimed endpoint.  Unlike the unrestricted
+`CommonTouchedHalfWitnesses`, this statement is not refuted by the valid
+seven-tuple modulo `1006` in `G1Counterexample.lean`. -/
+def CriticalRangeCommonTouchedHalfWitnesses : Prop :=
+  ∀ {n s q : ℕ} (_hq : Odd q)
+    (_hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)),
+    ValidTuple g →
+    (∃ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c) →
+    ∃ j : Fin (n + 1),
+      ∀ c : Fin (n + 1) → ℤ,
+        Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c → c j ≠ 0
 
 /-- **G2, odd-base form.**  A valid `n`-tuple modulo an odd number forces the
 odd modulus to be at least `2^n - 1`. -/
@@ -102,7 +120,35 @@ theorem admits_half_or_delete_of_g1 (hG1 : CommonTouchedHalfWitnesses)
     intro c hc
     exact hw ⟨c, hc⟩
 
-/-- The three roadmap gaps imply the complete stratified lower bound.  This
+/-- The load-bearing halving/deletion dichotomy using only critical-range G1.
+The modulus is kept in its exact two-adic form so the range hypothesis is
+visible at the call site of the stratified induction. -/
+theorem admits_half_or_delete_of_critical_g1
+    (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
+    {n s q : ℕ} (hq : Odd q)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (hvalid : AdmitsValidTuple (n + 1) (2 ^ (s + 1) * q)) :
+    AdmitsValidTuple (n + 1) (2 ^ s * q) ∨
+      AdmitsValidTuple n (2 ^ s * q) := by
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by omega) _) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  obtain ⟨g, hg⟩ := hvalid
+  by_cases hw : ∃ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c
+  · right
+    obtain ⟨j, hj⟩ := hG1 hq hcritical g hg hw
+    exact exists_validTuple_half_of_delete
+      (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q) hN hM hg j hj
+  · left
+    apply exists_validTuple_half_of_no_witness
+      (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q) hN hM hg
+    intro c hc
+    exact hw ⟨c, hc⟩
+
+/-- The corrected three roadmap gaps imply the complete stratified lower bound.  This
 packages the induction that was previously only described in the handoff.
 
 The exceptional use of G3 is forced precisely when deletion occurs after the
@@ -111,7 +157,7 @@ then gives `M ≥ globalBound (n-1)`.  Both sides are multiples of `2^log₂ n`,
 so either equality holds (excluded by G3) or the next multiple already lies
 above the required stratum endpoint. -/
 theorem stratum_lower_bound_of_gaps
-    (hG1 : CommonTouchedHalfWitnesses)
+    (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
     (hG2 : OddStratumLowerBound)
     (hG3 : ExceptionalLiftObstruction) :
     ∀ {n s q : ℕ}, 2 ≤ n → Odd q → AdmitsValidTuple n (2 ^ s * q) →
@@ -124,14 +170,17 @@ theorem stratum_lower_bound_of_gaps
       simpa [stratumBound] using h
   | succ s ih =>
       intro q hn hq hv
+      by_cases hcritical : 2 ^ (s + 1) * q < stratumBound n (s + 1)
+      swap
+      · omega
       let M := 2 ^ s * q
-      have hM : 0 < M := mul_pos (pow_pos (by omega) _) (Odd.pos hq)
       have hv2 : AdmitsValidTuple n (2 * M) := by
         simpa [M, pow_succ, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hv
       have hnform : n - 1 + 1 = n := by omega
-      have hvform : AdmitsValidTuple (n - 1 + 1) (2 * M) := by
-        simpa [hnform] using hv2
-      rcases admits_half_or_delete_of_g1 hG1 hM hvform with hkeep | hdelete
+      rcases admits_half_or_delete_of_critical_g1 hG1
+        (n := n - 1) (s := s) (q := q) hq
+        (by simpa [hnform] using hcritical)
+        (by simpa [hnform] using hv) with hkeep | hdelete
       · have hih := ih hn hq (by simpa [hnform, M] using hkeep)
         have hlog : Nat.log 2 n ≤ n - 1 := by
           have := Nat.log_lt_self 2 (by omega : n ≠ 0)
@@ -299,10 +348,11 @@ theorem stratum_lower_bound_of_gaps
                 _ = 2 ^ (s + 1) * q := by
                   simp [M, pow_succ, Nat.mul_left_comm, Nat.mul_comm]
 
-/-- Conditional form of Conjecture 1: once G1, G2, and G3 are proved, every
-positive modulus admitting a valid `n`-tuple is at least `globalBound n`. -/
+/-- Conditional form of Conjecture 1: once critical-range G1, G2, and G3 are
+proved, every positive modulus admitting a valid `n`-tuple is at least
+`globalBound n`. -/
 theorem global_lower_bound_of_gaps
-    (hG1 : CommonTouchedHalfWitnesses)
+    (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
     (hG2 : OddStratumLowerBound)
     (hG3 : ExceptionalLiftObstruction)
     {n N : ℕ} (hn : 2 ≤ n) (hN : 0 < N) (hv : AdmitsValidTuple n N) :
