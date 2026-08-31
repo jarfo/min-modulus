@@ -81,6 +81,7 @@ MinModulus/
   G1LightWitnessReduction.lean -- light attachments fold back into canonical collisions
   G1LightTransitionDescent.lean -- cross-tail, imbalance-drop, or near-balanced dynamics
   G1NearBalancedTransitions.lean -- rigidity and support growth in imbalance zero/one
+  G1TransitionIncidenceFibers.lean -- exact residual incidence fibers and coverage inequality
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -285,6 +286,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `reducedCollisionImbalanceDrop_wellFounded`, `reducedCollisionImbalanceDrop_chain_bound`, `commonTouched_or_canonicalReducedCollisions_structured_light_transition` | proves that the non-crossing strict-drop branch has no cycles and that a chain of length `k` consumes at least `2k` initial imbalance; globally, every attachment is now heavy, cross-tail, strictly descending, or near-balanced |
 | `G1NearBalancedTransitions.lean`: `positive_nearBalanced_lightTransition_cross`, `negative_nearBalanced_lightTransition_cross_or_unit_imbalances` | resolves the anchor arithmetic at imbalance zero/one: positive-sign transitions must cross the source positive tail, and a non-crossing negative-sign transition can only go from imbalance one to imbalance one |
 | `three_le_source_negative_tail_card_of_negative_lightTransition`, `five_le_reducedCollision_support_card_of_unit_imbalance`, `commonTouched_or_balancedCanonicalReducedCollisions_heavy_or_cross` | uses pairwise negative-tail intersection to split the source tail across the target; the residual unit-to-unit branch has at least three negative-tail vertices and five support coordinates, while balanced sources have only heavy or cross-tail attachments |
+| `G1TransitionIncidenceFibers.lean`: `mem_negativeTransitionIncidencePairs_iff`, `card_negativeTransitionIncidencePairs` | identifies the exact incidence fiber from source `r` to a negative-sign target `q` as `(B_r \ (A_q∪B_q)) × (B_r∩A_q)`, including the exact product cardinality |
+| `unitNegativeTransitionAvoidedCoordinates_eq_right`, `right_card_le_sum_unitNegativeTransition_fibers` | in the all-light, non-crossing unit-source branch, proves that the sigma of exact target fibers covers every source negative-tail coordinate and derives the explicit sum-of-products realization-multiplicity inequality |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |

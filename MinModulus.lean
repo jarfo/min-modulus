@@ -14,6 +14,7 @@ import MinModulus.G1AttachmentDeficit
 import MinModulus.G1LightWitnessReduction
 import MinModulus.G1LightTransitionDescent
 import MinModulus.G1NearBalancedTransitions
+import MinModulus.G1TransitionIncidenceFibers
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate
