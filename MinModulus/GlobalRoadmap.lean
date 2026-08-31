@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1MajoritySupportBound
+import MinModulus.G1EscapeDepth
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -205,6 +205,13 @@ noncomputable def IsCriticalDominantEscapeCollision
     (r.val.1 ∪ r.val.2).card < (u.val.1 ∪ u.val.2).card ∧
       2 * reducedCollisionWeight (m := n) u ≤
         reducedCollisionWeight (m := n) r) ∧
+  (∀ u ∈ criticalCanonicalReducedCollisions g, u ≠ r →
+    reducedCollisionWeight (m := n) r =
+        2 ^ reducedCollisionSupportDepth r u *
+          reducedCollisionWeight (m := n) u ∧
+      (reducedCollisionExternalSupport r u).card =
+        (reducedCollisionDroppedSupport r u).card +
+          reducedCollisionSupportDepth r u) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -231,7 +238,12 @@ noncomputable def IsCriticalDominantEscapeCollision
       else 0) ∧
   r.val.2.card ≤
     (criticalCanonicalReducedCollisions g).sum (fun u ↦
-      ((u.val.1 ∪ u.val.2) \ (r.val.1 ∪ r.val.2)).card)
+      ((u.val.1 ∪ u.val.2) \ (r.val.1 ∪ r.val.2)).card) ∧
+  r.val.2.card +
+      (criticalCanonicalReducedCollisions g).sum
+        (reducedCollisionSupportDepth r) ≤
+    (criticalCanonicalReducedCollisions g).sum (fun u ↦
+      (reducedCollisionExternalSupport r u).card)
 
 /-- Every unordered pair of distinct critical canonical shapes crosses in at
 least one orientation.  Both the unweighted count and the exact product-
@@ -636,9 +648,25 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
                 2 * reducedCollisionWeight (m := n) u ≤
                   reducedCollisionWeight (m := n) r := by
             simpa [criticalCanonicalReducedCollisions] using hgrowth
-          refine ⟨hrmax, hrmin, hmajor', hgrowth', hsupport.1, hsupport.2,
+          have hexact := canonical_other_exact_depth_of_strictMajority
+            (half_add_half hN) r hr' hmajor
+          have hexact' : ∀ u ∈ criticalCanonicalReducedCollisions g,
+              u ≠ r →
+              reducedCollisionWeight (m := n) r =
+                  2 ^ reducedCollisionSupportDepth r u *
+                    reducedCollisionWeight (m := n) u ∧
+                (reducedCollisionExternalSupport r u).card =
+                  (reducedCollisionDroppedSupport r u).card +
+                    reducedCollisionSupportDepth r u := by
+            intro u hu hur
+            have hu' : u ∈ canonicalReducedCollisions (g := g)
+                (half_add_half hN) := by
+              simpa [criticalCanonicalReducedCollisions] using hu
+            exact (hexact u hu' hur).2
+          refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact',
+            hsupport.1, hsupport.2,
             hrrelative, hrambient,
-            ?_, ?_, ?_, ?_⟩
+            ?_, ?_, ?_, ?_, ?_⟩
           · simpa [IsCriticalDominantEscapeCollision] using hcover.1
           · simpa [IsCriticalDominantEscapeCollision] using hcover.2
           · calc
@@ -662,7 +690,11 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
                     (r.val.1 ∪ r.val.2)).card) := by
                 simpa [criticalCanonicalReducedCollisions] using
                   card_canonicalSupportEscapeIncidences_le_sum_externalSupport
-                    (g := g) (half_add_half hN) r hrmin'⟩))
+                    (g := g) (half_add_half hN) r hrmin'
+          · simpa [criticalCanonicalReducedCollisions,
+              reducedCollisionExternalSupport, reducedCollisionSupport] using
+              card_add_sum_supportDepth_le_sum_externalSupport_of_strictMajority
+                (g := g) (half_add_half hN) r hr' hmajor hcover.2⟩))
 
 /-- Critical-range G1 is reduced to two explicit quantitative escape
 branches: a genuinely heavy half-witness or a positive-tail crossing between
