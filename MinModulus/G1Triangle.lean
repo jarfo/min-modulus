@@ -501,6 +501,218 @@ theorem exact_triple_heavy_shape
       witness_other_eq_zero_of_exact_triple_and_coeff_three
         g hc a b d e hab hbd hda homit hea heb hed h3⟩
 
+/-- Affine evaluation of the pure coefficient-`3` exact-triple shape. -/
+theorem three_smul_eq_target_add_triple_of_exact_triple_coeff_three
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d e : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = b ∨ i = d)
+    (hea : e ≠ a) (heb : e ≠ b) (hed : e ≠ d) (hce : c e = 3) :
+    (3 : ℤ) • g e = h + g a + g b + g d := by
+  have hzero := witness_other_eq_zero_of_exact_triple_and_coeff_three
+    g hc a b d e hab hbd hda homit hea heb hed hce
+  have hterm : ∀ i, c i • g i =
+      (if i = e then (3 : ℤ) • g i else 0) -
+        (if i = a then g i else 0) - (if i = b then g i else 0) -
+          (if i = d then g i else 0) := by
+    intro i
+    by_cases hia : i = a
+    · subst i
+      have hca : c a = -1 := (homit a).2 (Or.inl rfl)
+      simp [hca, hab, hda.symm, Ne.symm hea]
+    by_cases hib : i = b
+    · subst i
+      have hcb : c b = -1 := (homit b).2 (Or.inr (Or.inl rfl))
+      simp [hcb, hab.symm, hbd, Ne.symm heb]
+    by_cases hid : i = d
+    · subst i
+      have hcd : c d = -1 := (homit d).2 (Or.inr (Or.inr rfl))
+      simp [hcd, hda, hbd.symm, Ne.symm hed]
+    by_cases hie : i = e
+    · subst i
+      simp [hce, hea, heb, hed]
+    rw [hzero i hia hib hid hie]
+    simp [hia, hib, hid, hie]
+  have hformula : (∑ i, c i • g i) =
+      (3 : ℤ) • g e - g a - g b - g d := by
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_sub_distrib, Finset.sum_sub_distrib,
+      Finset.sum_sub_distrib,
+      Finset.sum_ite_eq' univ e fun i => (3 : ℤ) • g i,
+      Finset.sum_ite_eq' univ a g, Finset.sum_ite_eq' univ b g,
+      Finset.sum_ite_eq' univ d g]
+    simp
+  have hval : (3 : ℤ) • g e - g a - g b - g d = h := by
+    rw [← hformula]
+    exact hc.2.2.2
+  calc
+    (3 : ℤ) • g e =
+        ((3 : ℤ) • g e - g a - g b - g d) + g a + g b + g d := by abel
+    _ = h + g a + g b + g d := by rw [hval]
+
+/-- Affine evaluation of the coefficient-`2` plus coefficient-`1`
+exact-triple shape. -/
+theorem two_smul_add_eq_target_add_triple_of_exact_triple_coeff_two_one
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d e f : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = b ∨ i = d)
+    (hea : e ≠ a) (heb : e ≠ b) (hed : e ≠ d)
+    (hfa : f ≠ a) (hfb : f ≠ b) (hfd : f ≠ d) (hfe : f ≠ e)
+    (hce : c e = 2) (hcf : c f = 1) :
+    (2 : ℤ) • g e + g f = h + g a + g b + g d := by
+  obtain ⟨f', hf'a, hf'b, hf'd, hf'e, hcf', hzero⟩ :=
+    exists_companion_one_of_exact_triple_coeff_two
+      g hc a b d e hab hbd hda homit hea heb hed hce
+  have hff' : f' = f := by
+    by_contra hne
+    have hcfzero := hzero f hfa hfb hfd hfe (Ne.symm hne)
+    omega
+  subst f'
+  have hterm : ∀ i, c i • g i =
+      ((if i = e then (2 : ℤ) • g i else 0) +
+        (if i = f then g i else 0)) -
+        (if i = a then g i else 0) - (if i = b then g i else 0) -
+          (if i = d then g i else 0) := by
+    intro i
+    by_cases hia : i = a
+    · subst i
+      have hca : c a = -1 := (homit a).2 (Or.inl rfl)
+      simp [hca, hab, hda.symm, Ne.symm hea, Ne.symm hfa]
+    by_cases hib : i = b
+    · subst i
+      have hcb : c b = -1 := (homit b).2 (Or.inr (Or.inl rfl))
+      simp [hcb, hab.symm, hbd, Ne.symm heb, Ne.symm hfb]
+    by_cases hid : i = d
+    · subst i
+      have hcd : c d = -1 := (homit d).2 (Or.inr (Or.inr rfl))
+      simp [hcd, hda, hbd.symm, Ne.symm hed, Ne.symm hfd]
+    by_cases hie : i = e
+    · subst i
+      simp [hce, hea, heb, hed, Ne.symm hfe]
+    by_cases hif : i = f
+    · subst i
+      simp [hcf, hfa, hfb, hfd, hfe]
+    rw [hzero i hia hib hid hie hif]
+    simp [hia, hib, hid, hie, hif]
+  have hformula : (∑ i, c i • g i) =
+      (2 : ℤ) • g e + g f - g a - g b - g d := by
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_sub_distrib, Finset.sum_sub_distrib,
+      Finset.sum_sub_distrib, Finset.sum_add_distrib,
+      Finset.sum_ite_eq' univ e fun i => (2 : ℤ) • g i,
+      Finset.sum_ite_eq' univ f g, Finset.sum_ite_eq' univ a g,
+      Finset.sum_ite_eq' univ b g, Finset.sum_ite_eq' univ d g]
+    simp
+  have hval : (2 : ℤ) • g e + g f - g a - g b - g d = h := by
+    rw [← hformula]
+    exact hc.2.2.2
+  calc
+    (2 : ℤ) • g e + g f =
+        ((2 : ℤ) • g e + g f - g a - g b - g d) +
+          g a + g b + g d := by abel
+    _ = h + g a + g b + g d := by rw [hval]
+
+/-- Affine evaluation of a light exact-pair witness with its two
+coefficient-`1` coordinates made explicit. -/
+theorem add_eq_target_add_pair_of_exact_pair_coeff_one_one
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (p q r z : Fin n) (hpq : p ≠ q)
+    (homit : ∀ i, c i = -1 ↔ i = p ∨ i = q)
+    (hrp : r ≠ p) (hrq : r ≠ q) (hzp : z ≠ p) (hzq : z ≠ q)
+    (hzr : z ≠ r) (hcr : c r = 1) (hcz : c z = 1) :
+    g r + g z = h + g p + g q := by
+  obtain ⟨z', hz'p, hz'q, hz'r, hcz', hzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one
+      g hc p q r hpq homit hrp hrq hcr
+  have hzz' : z' = z := by
+    by_contra hne
+    have hczero := hzero z hzp hzq hzr (Ne.symm hne)
+    omega
+  subst z'
+  have hterm : ∀ i, c i • g i =
+      ((if i = r then g i else 0) + (if i = z then g i else 0)) -
+        (if i = p then g i else 0) - (if i = q then g i else 0) := by
+    intro i
+    by_cases hip : i = p
+    · subst i
+      have hcp : c p = -1 := (homit p).2 (Or.inl rfl)
+      simp [hcp, hpq, Ne.symm hrp, Ne.symm hzp]
+    by_cases hiq : i = q
+    · subst i
+      have hcq : c q = -1 := (homit q).2 (Or.inr rfl)
+      simp [hcq, hpq.symm, Ne.symm hrq, Ne.symm hzq]
+    by_cases hir : i = r
+    · subst i
+      simp [hcr, hrp, hrq, hzr.symm]
+    by_cases hiz : i = z
+    · subst i
+      simp [hcz, hzp, hzq, hzr]
+    rw [hzero i hip hiq hir hiz]
+    simp [hip, hiq, hir, hiz]
+  have hformula : (∑ i, c i • g i) = g r + g z - g p - g q := by
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_sub_distrib, Finset.sum_sub_distrib,
+      Finset.sum_add_distrib, Finset.sum_ite_eq' univ r g,
+      Finset.sum_ite_eq' univ z g, Finset.sum_ite_eq' univ p g,
+      Finset.sum_ite_eq' univ q g]
+    simp
+  have hval : g r + g z - g p - g q = h := by
+    rw [← hformula]
+    exact hc.2.2.2
+  calc
+    g r + g z = (g r + g z - g p - g q) + g p + g q := by abel
+    _ = h + g p + g q := by rw [hval]
+
+/-- A heavy exact-triple witness aligned with a light exact-pair witness has
+one of two canonical affine shapes.  The common right-hand side
+`g_b + 2g_z` is independent of how the three positive units split. -/
+theorem exact_triple_heavy_affine_shape_against_light_pair
+    (g : Fin n → G) {h : G} {cLight c : Fin n → ℤ}
+    (hcLight : Witness g h cLight) (hc : Witness g h c)
+    (a b d z e : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hLight : ∀ i, cLight i = -1 ↔ i = d ∨ i = a)
+    (hzd : z ≠ d) (hza : z ≠ a) (hzb : z ≠ b)
+    (hLightb : cLight b = 1) (hLightz : cLight z = 1)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = d ∨ i = z)
+    (hea : e ≠ a) (hed : e ≠ d) (hez : e ≠ z) (hce : 2 ≤ c e) :
+    (c e = 3 ∧ (3 : ℤ) • g e = g b + (2 : ℤ) • g z ∧
+      ∀ j : Fin n, j ≠ a → j ≠ d → j ≠ z → j ≠ e → c j = 0) ∨
+    (c e = 2 ∧ ∃ f : Fin n,
+      f ≠ a ∧ f ≠ d ∧ f ≠ z ∧ f ≠ e ∧ c f = 1 ∧
+        (2 : ℤ) • g e + g f = g b + (2 : ℤ) • g z ∧
+        ∀ j : Fin n, j ≠ a → j ≠ d → j ≠ z → j ≠ e → j ≠ f →
+          c j = 0) := by
+  have hLightVal := add_eq_target_add_pair_of_exact_pair_coeff_one_one
+    g hcLight d a b z hda hLight hbd hab.symm hzd hza hzb
+      hLightb hLightz
+  rcases exact_triple_heavy_shape g hc a d z e hda.symm hzd.symm hza
+      homit hea hed hez hce with
+    ⟨hce3, hzero⟩ | ⟨hce2, f, hfa, hfd, hfz, hfe, hcf, hzero⟩
+  · have hEscapeVal :=
+      three_smul_eq_target_add_triple_of_exact_triple_coeff_three
+        g hc a d z e hda.symm hzd.symm hza homit hea hed hez hce3
+    have hrelation : (3 : ℤ) • g e = g b + (2 : ℤ) • g z := by
+      calc
+        (3 : ℤ) • g e = h + g a + g d + g z := hEscapeVal
+        _ = (g b + g z) + g z := by rw [hLightVal]; abel
+        _ = g b + (2 : ℤ) • g z := by
+          simp only [two_zsmul]
+          abel
+    exact Or.inl ⟨hce3, hrelation, hzero⟩
+  · have hEscapeVal :=
+      two_smul_add_eq_target_add_triple_of_exact_triple_coeff_two_one
+        g hc a d z e f hda.symm hzd.symm hza homit hea hed hez
+          hfa hfd hfz hfe hce2 hcf
+    have hrelation : (2 : ℤ) • g e + g f =
+        g b + (2 : ℤ) • g z := by
+      calc
+        (2 : ℤ) • g e + g f = h + g a + g d + g z := hEscapeVal
+        _ = (g b + g z) + g z := by rw [hLightVal]; abel
+        _ = g b + (2 : ℤ) • g z := by
+          simp only [two_zsmul]
+          abel
+    exact Or.inr
+      ⟨hce2, f, hfa, hfd, hfz, hfe, hcf, hrelation, hzero⟩
+
 /-- For two witnesses with the same exact omission pair, suppose one has
 opposite coefficient `2` at `b` while the other has coefficient `0` there.
 Validity forces the latter witness to concentrate its two units of positive
