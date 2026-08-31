@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1CanonicalCrossing
+import MinModulus.G1CrossingMass
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -276,6 +276,60 @@ theorem critical_canonicalReducedCollision_weight_half_lower_bound
         (fun r ↦ reducedCollisionWeight (m := n) r) at hdouble
   rw [hpow] at hdouble
   exact Nat.le_of_mul_le_mul_left hdouble (by norm_num)
+
+/-- Squaring the critical half-gap lower bound and using dense canonical
+crossings leaves exactly one loss term: the sum of squared padding weights on
+the diagonal. -/
+theorem critical_square_gap_le_two_crossMass_add_diagonal
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+        (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+      2 * (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+        reducedCollisionWeight (m := n) p.1 *
+          reducedCollisionWeight (m := n) p.2) +
+        (criticalCanonicalReducedCollisions g).sum (fun r ↦
+          reducedCollisionWeight (m := n) r *
+            reducedCollisionWeight (m := n) r) := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hweight := critical_canonicalReducedCollision_weight_half_lower_bound
+    hn hq g hg hcritical
+  have hsquare := Nat.mul_le_mul hweight hweight
+  have hmass := square_sum_canonicalWeights_le_two_crossMass_add_diagonal
+    g hg (half_add_half hN) (half_ne_zero hN hM)
+  exact hsquare.trans (by
+    simpa [criticalCanonicalReducedCollisions,
+      criticalCanonicalPositiveNegativeCrossPairs] using hmass)
+
+/-- Critical quantitative split: either oriented crossings already carry one
+quarter of the squared half-gap, or the diagonal padding weights carry one
+half.  Controlling the second concentration branch is now the exact remaining
+loss before a crossing-based critical G1 count. -/
+theorem critical_crossingMass_or_diagonalConcentration
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+        (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+      4 * (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+        reducedCollisionWeight (m := n) p.1 *
+          reducedCollisionWeight (m := n) p.2) ∨
+    (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
+        (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
+      2 * (criticalCanonicalReducedCollisions g).sum (fun r ↦
+        reducedCollisionWeight (m := n) r *
+          reducedCollisionWeight (m := n) r) := by
+  have htotal := critical_square_gap_le_two_crossMass_add_diagonal
+    hn hq g hg hcritical
+  omega
 
 /-- The critical canonical collision family is nonempty; quantitatively it
 already carries at least the half-gap weight plus one. -/
