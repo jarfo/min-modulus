@@ -311,6 +311,142 @@ theorem exists_companion_one_of_exact_pair_coeff_one
     exact hnonneg i (Finset.mem_of_mem_erase hi)
   exact (Finset.sum_eq_zero_iff_of_nonneg hnonneg').1 htail j hjRest
 
+/-- A non-omitted coefficient of a witness with exactly three distinct
+omissions lies in `{0,1,2,3}`. -/
+theorem witness_coeff_zero_one_two_or_three_of_exact_triple
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d i : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (homit : ∀ j, c j = -1 ↔ j = a ∨ j = b ∨ j = d)
+    (hia : i ≠ a) (hib : i ≠ b) (hid : i ≠ d) :
+    c i = 0 ∨ c i = 1 ∨ c i = 2 ∨ c i = 3 := by
+  let S : Finset (Fin n) := {a, b, d}
+  have hS : ExactOmissions c S := by
+    intro j
+    simpa [S, eq_comm, or_assoc] using homit j
+  have hiS : i ∉ S := by simp [S, hia, hib, hid]
+  have hbounds := witness_coeff_bounds_of_exactOmissions g hc S hS hiS
+  have ha : a ∉ ({b, d} : Finset (Fin n)) := by simp [hab, hda.symm]
+  have hb : b ∉ ({d} : Finset (Fin n)) := by simp [hbd]
+  have hcard : S.card = 3 := by
+    simp only [S, Finset.card_insert_of_notMem ha,
+      Finset.card_insert_of_notMem hb, Finset.card_singleton]
+  rw [hcard] at hbounds
+  omega
+
+/-- A coefficient `3` exhausts all positive mass outside an exact triple
+omission set. -/
+theorem witness_other_eq_zero_of_exact_triple_and_coeff_three
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d e : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = b ∨ i = d)
+    (hea : e ≠ a) (heb : e ≠ b) (hed : e ≠ d) (hce : c e = 3) :
+    ∀ j : Fin n, j ≠ a → j ≠ b → j ≠ d → j ≠ e → c j = 0 := by
+  let S : Finset (Fin n) := {a, b, d}
+  have hS : ExactOmissions c S := by
+    intro i
+    simpa [S, eq_comm, or_assoc] using homit i
+  have heS : e ∈ Sᶜ := by simp [S, hea, heb, hed]
+  have hmass := witness_compl_sum_eq_card_exactOmissions g hc S hS
+  have ha : a ∉ ({b, d} : Finset (Fin n)) := by simp [hab, hda.symm]
+  have hb : b ∉ ({d} : Finset (Fin n)) := by simp [hbd]
+  have hcard : S.card = 3 := by
+    simp only [S, Finset.card_insert_of_notMem ha,
+      Finset.card_insert_of_notMem hb, Finset.card_singleton]
+  rw [hcard] at hmass
+  have hsplit := Finset.sum_erase_add Sᶜ c heS
+  rw [hmass, hce] at hsplit
+  have hrest : (∑ i ∈ Sᶜ.erase e, c i) = 0 := by omega
+  have hnonneg : ∀ i ∈ Sᶜ.erase e, 0 ≤ c i := by
+    intro i hi
+    have hiS : i ∈ Sᶜ := Finset.mem_of_mem_erase hi
+    exact nonneg_of_not_mem_exactOmissions hc.2.1 hS (by simpa using hiS)
+  intro j hja hjb hjd hje
+  have hjS : j ∈ Sᶜ := by simp [S, hja, hjb, hjd]
+  have hjErase : j ∈ Sᶜ.erase e := by simp [hjS, hje]
+  exact (Finset.sum_eq_zero_iff_of_nonneg hnonneg).1 hrest j hjErase
+
+/-- A coefficient `2` in an exact-three-omission witness leaves exactly one
+unit of positive mass: a unique companion coefficient `1`. -/
+theorem exists_companion_one_of_exact_triple_coeff_two
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d e : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = b ∨ i = d)
+    (hea : e ≠ a) (heb : e ≠ b) (hed : e ≠ d) (hce : c e = 2) :
+    ∃ f : Fin n, f ≠ a ∧ f ≠ b ∧ f ≠ d ∧ f ≠ e ∧ c f = 1 ∧
+      ∀ j : Fin n, j ≠ a → j ≠ b → j ≠ d → j ≠ e → j ≠ f → c j = 0 := by
+  let S : Finset (Fin n) := {a, b, d}
+  have hS : ExactOmissions c S := by
+    intro i
+    simpa [S, eq_comm, or_assoc] using homit i
+  have heS : e ∈ Sᶜ := by simp [S, hea, heb, hed]
+  have hmass := witness_compl_sum_eq_card_exactOmissions g hc S hS
+  have ha : a ∉ ({b, d} : Finset (Fin n)) := by simp [hab, hda.symm]
+  have hb : b ∉ ({d} : Finset (Fin n)) := by simp [hbd]
+  have hcard : S.card = 3 := by
+    simp only [S, Finset.card_insert_of_notMem ha,
+      Finset.card_insert_of_notMem hb, Finset.card_singleton]
+  rw [hcard] at hmass
+  have hsplit := Finset.sum_erase_add Sᶜ c heS
+  rw [hmass, hce] at hsplit
+  have hrest : (∑ i ∈ Sᶜ.erase e, c i) = 1 := by omega
+  have hnonneg : ∀ i ∈ Sᶜ.erase e, 0 ≤ c i := by
+    intro i hi
+    have hiS : i ∈ Sᶜ := Finset.mem_of_mem_erase hi
+    exact nonneg_of_not_mem_exactOmissions hc.2.1 hS (by simpa using hiS)
+  have hexists : ∃ f ∈ Sᶜ.erase e, c f ≠ 0 := by
+    by_contra hnone
+    push Not at hnone
+    have hzero : (∑ i ∈ Sᶜ.erase e, c i) = 0 := by
+      apply Finset.sum_eq_zero
+      intro i hi
+      exact hnone i hi
+    omega
+  obtain ⟨f, hfRest, hfne⟩ := hexists
+  have hfS : f ∈ Sᶜ := Finset.mem_of_mem_erase hfRest
+  have hfe : f ≠ e := Finset.ne_of_mem_erase hfRest
+  have hfabd : f ≠ a ∧ f ≠ b ∧ f ≠ d := by simpa [S] using hfS
+  have hcfle : c f ≤ ∑ i ∈ Sᶜ.erase e, c i :=
+    Finset.single_le_sum hnonneg hfRest
+  rw [hrest] at hcfle
+  have hcf : c f = 1 := by
+    have := hnonneg f hfRest
+    omega
+  refine ⟨f, hfabd.1, hfabd.2.1, hfabd.2.2, hfe, hcf, ?_⟩
+  intro j hja hjb hjd hje hjf
+  have hjS : j ∈ Sᶜ := by simp [S, hja, hjb, hjd]
+  have hjRest : j ∈ (Sᶜ.erase e).erase f := by simp [hjS, hje, hjf]
+  have hsplit' := Finset.sum_erase_add (Sᶜ.erase e) c hfRest
+  rw [hrest, hcf] at hsplit'
+  have htail : (∑ i ∈ (Sᶜ.erase e).erase f, c i) = 0 := by omega
+  have hnonneg' : ∀ i ∈ (Sᶜ.erase e).erase f, 0 ≤ c i := by
+    intro i hi
+    exact hnonneg i (Finset.mem_of_mem_erase hi)
+  exact (Finset.sum_eq_zero_iff_of_nonneg hnonneg').1 htail j hjRest
+
+/-- Canonical shape of an exact-three-omission witness once a coefficient at
+least `2` is known: that coefficient is either `3` and consumes all positive
+mass, or it is `2` with one unique coefficient-`1` companion. -/
+theorem exact_triple_heavy_shape
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d e : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = b ∨ i = d)
+    (hea : e ≠ a) (heb : e ≠ b) (hed : e ≠ d) (hce : 2 ≤ c e) :
+    (c e = 3 ∧
+      ∀ j : Fin n, j ≠ a → j ≠ b → j ≠ d → j ≠ e → c j = 0) ∨
+    (c e = 2 ∧ ∃ f : Fin n,
+      f ≠ a ∧ f ≠ b ∧ f ≠ d ∧ f ≠ e ∧ c f = 1 ∧
+        ∀ j : Fin n, j ≠ a → j ≠ b → j ≠ d → j ≠ e → j ≠ f → c j = 0) := by
+  rcases witness_coeff_zero_one_two_or_three_of_exact_triple
+      g hc a b d e hab hbd hda homit hea heb hed with h0 | h1 | h2 | h3
+  · omega
+  · omega
+  · exact Or.inr ⟨h2,
+      exists_companion_one_of_exact_triple_coeff_two
+        g hc a b d e hab hbd hda homit hea heb hed h2⟩
+  · exact Or.inl ⟨h3,
+      witness_other_eq_zero_of_exact_triple_and_coeff_three
+        g hc a b d e hab hbd hda homit hea heb hed h3⟩
+
 /-- For two witnesses with the same exact omission pair, suppose one has
 opposite coefficient `2` at `b` while the other has coefficient `0` there.
 Validity forces the latter witness to concentrate its two units of positive
