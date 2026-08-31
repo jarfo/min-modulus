@@ -16,6 +16,7 @@ import MinModulus.G1LightTransitionDescent
 import MinModulus.G1NearBalancedTransitions
 import MinModulus.G1TransitionIncidenceFibers
 import MinModulus.G1UnitCoreReduction
+import MinModulus.G1HeavyOrCross
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

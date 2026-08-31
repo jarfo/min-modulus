@@ -26,15 +26,15 @@ def AllHalfWitnessesTailLight (g : Fin (m + 1) → G) (h : G) : Prop :=
   ∀ c : Fin (m + 1) → ℤ, Witness g h c →
     ∀ k : Fin m, c k.succ ≤ 1
 
-/-- The global branch in which no canonical transition target crosses the
-positive tail of its source. -/
+/-- The global branch in which no distinct canonical transition target
+crosses the positive tail of its source. -/
 def NoCanonicalPositiveTailCross
     {g : Fin (m + 1) → G} {h : G} (hh : h + h = 0) : Prop :=
   ∀ r : ReducedSubsetSumCollision g h,
     r ∈ canonicalReducedCollisions (g := g) hh →
       ∀ q : ReducedSubsetSumCollision g h,
         q ∈ canonicalReducedCollisions (g := g) hh →
-          ¬LightTransitionCrossesPositiveTail r q
+          q ≠ r → ¬LightTransitionCrossesPositiveTail r q
 
 /-- Strict decrease of the natural cardinality imbalance. -/
 def ReducedCollisionImbalanceDecrease
@@ -72,7 +72,9 @@ theorem no_balanced_canonicalReducedCollision_of_allLight_noCross
       have := hallLight c hc k
       omega
     · rcases hcross with ⟨q, hq, hjq, hsign, hcross⟩
-      exact hnoCross r hr q hq hcross
+      apply hnoCross r hr q hq
+      · exact reducedCollision_ne_of_right_mem_of_avoids r q hj hjq
+      · exact hcross
 
 /-- Every non-unit canonical collision has a canonical successor of strictly
 smaller imbalance in the all-light, non-crossing branch. -/
@@ -104,6 +106,7 @@ theorem exists_canonical_imbalanceDecrease_of_ne_unit
     · rcases hlight with ⟨q, hq, hjq, hsign, hcross | hdrop | hnear⟩
       · apply False.elim
         apply hnoCross r hr q hq
+        · exact reducedCollision_ne_of_right_mem_of_avoids r q hj hjq
         obtain ⟨a, ha⟩ := hcross
         have ⟨har, haq⟩ := Finset.mem_inter.mp ha
         exact ⟨a, Finset.mem_inter.mpr

@@ -70,6 +70,18 @@ theorem card_negativeTransitionIncidencePairs
         (r.val.2 ∩ q.val.1).card := by
   simp [negativeTransitionIncidencePairs]
 
+omit [DecidableEq G] in
+/-- Any transition target avoiding a negative-tail coordinate of its source
+is genuinely distinct from that source. -/
+theorem reducedCollision_ne_of_right_mem_of_avoids
+    {g : Fin (m + 1) → G} {h : G}
+    (r q : ReducedSubsetSumCollision g h) {j : Fin m}
+    (hj : j ∈ r.val.2) (hjq : j ∉ q.val.1 ∪ q.val.2) :
+    q ≠ r := by
+  intro hqr
+  subst q
+  exact hjq (Finset.mem_union_right _ hj)
+
 /-- All negative-transition incidence fibers from `r` to canonical
 unit-imbalance targets, kept disjoint by retaining the target in a sigma type. -/
 noncomputable def unitNegativeTransitionIncidences
@@ -114,7 +126,7 @@ theorem unitNegativeTransitionAvoidedCoordinates_eq_right
       Witness g h c → ∀ k : Fin m, c k.succ ≤ 1)
     (hnoCross : ∀ q : ReducedSubsetSumCollision g h,
       q ∈ canonicalReducedCollisions (g := g) hh →
-        ¬LightTransitionCrossesPositiveTail r q) :
+        q ≠ r → ¬LightTransitionCrossesPositiveTail r q) :
     unitNegativeTransitionAvoidedCoordinates hh r = r.val.2 := by
   classical
   apply Finset.Subset.antisymm
@@ -134,7 +146,8 @@ theorem unitNegativeTransitionAvoidedCoordinates_eq_right
         have := hallLight c hc k
         omega
       · rcases hlight with ⟨q, hq, hjq, hsign, hcross | hunit⟩
-        · exact False.elim (hnoCross q hq hcross)
+        · have hqr := reducedCollision_ne_of_right_mem_of_avoids r q hj hjq
+          exact False.elim (hnoCross q hq hqr hcross)
         · apply Finset.mem_image.mpr
           refine ⟨⟨q, (j, b)⟩, ?_, rfl⟩
           apply (mem_unitNegativeTransitionIncidences_iff).mpr
@@ -173,7 +186,7 @@ theorem right_card_le_sum_unitNegativeTransition_fibers
       Witness g h c → ∀ k : Fin m, c k.succ ≤ 1)
     (hnoCross : ∀ q : ReducedSubsetSumCollision g h,
       q ∈ canonicalReducedCollisions (g := g) hh →
-        ¬LightTransitionCrossesPositiveTail r q) :
+        q ≠ r → ¬LightTransitionCrossesPositiveTail r q) :
     r.val.2.card ≤
       ((canonicalReducedCollisions (g := g) hh).filter
         (fun q ↦ reducedCollisionImbalance q = 1)).sum (fun q ↦

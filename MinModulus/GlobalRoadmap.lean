@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1UnitCoreReduction
+import MinModulus.G1HeavyOrCross
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -231,6 +231,55 @@ theorem critical_canonicalReducedCollision_weight_half_lower_bound
         (fun r ↦ reducedCollisionWeight (m := n) r) at hdouble
   rw [hpow] at hdouble
   exact Nat.le_of_mul_le_mul_left hdouble (by norm_num)
+
+/-- The critical canonical collision family is nonempty; quantitatively it
+already carries at least the half-gap weight plus one. -/
+theorem criticalCanonicalReducedCollisions_nonempty
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (criticalCanonicalReducedCollisions g).Nonempty := by
+  have hweight := critical_canonicalReducedCollision_weight_half_lower_bound
+    hn hq g hg hcritical
+  by_contra hne
+  rw [Finset.not_nonempty_iff_eq_empty.mp hne] at hweight
+  simp at hweight
+
+/-- Critical-range G1 is reduced to two explicit quantitative escape
+branches: a genuinely heavy half-witness or a positive-tail crossing between
+distinct canonical reduced collisions.  The residual all-light/non-crossing
+unit matrix has been eliminated. -/
+theorem critical_commonTouched_or_heavy_halfWitness_or_distinctCanonicalCross
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    (∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c → c e ≠ 0) ∨
+      (∃ c : Fin (n + 1) → ℤ,
+        Witness g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c ∧
+          ∃ k : Fin n, 2 ≤ c k.succ) ∨
+      ∃ r : ReducedSubsetSumCollision g
+          ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)),
+        r ∈ criticalCanonicalReducedCollisions g ∧
+          ∃ q' : ReducedSubsetSumCollision g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)),
+            q' ∈ criticalCanonicalReducedCollisions g ∧ q' ≠ r ∧
+              LightTransitionCrossesPositiveTail r q' := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hne : (canonicalReducedCollisions (g := g)
+      (half_add_half hN)).Nonempty := by
+    simpa [criticalCanonicalReducedCollisions] using
+      criticalCanonicalReducedCollisions_nonempty hn hq g hg hcritical
+  simpa [criticalCanonicalReducedCollisions] using
+    (commonTouched_or_heavy_halfWitness_or_distinctCanonicalCross
+      g hg (half_add_half hN) (half_ne_zero hN hM) hne)
 
 /-- The critical canonical representatives have pairwise-intersecting
 negative tails. -/
