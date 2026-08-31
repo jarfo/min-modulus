@@ -1345,6 +1345,58 @@ theorem common_touched_of_triangle_one_light_opposite
   exact common_touched_of_three_sum_unique_omission g hg hh hne
     hcAB hcBD hcDA hfloor d hd huniq
 
+/-- In an exact omission triangle with opposite profile `(0,2,2)`, the zero
+edge has a pure companion whose displacement from the opposite vertex is a
+"quarter" of the target: doubling that displacement gives `h`.  This is the
+group-level algebraic content behind the extra factor `4` in the cyclic
+obstruction. -/
+theorem exists_double_difference_eq_target_of_triangle_zero_two_two
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 2) (hDAb : cDA b = 2) :
+    ∃ x : Fin n, x ≠ a ∧ x ≠ b ∧ x ≠ d ∧ cAB x = 2 ∧
+      (g x - g d) + (g x - g d) = h := by
+  obtain ⟨x, hxa, hxb, hxd, hABx, _⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite g hg hh hcAB hcBD
+      a b d hab hda hAB hBD hABd
+  have hABval : (2 : ℤ) • g x = h + g a + g b :=
+    two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+      g hcAB a b x hab hAB hxa hxb hABx
+  have hBDval : (2 : ℤ) • g a = h + g b + g d :=
+    two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+      g hcBD b d a hbd hBD hab hda.symm hBDa
+  have hDAval : (2 : ℤ) • g b = h + g d + g a :=
+    two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+      g hcDA d a b hda hDA hbd hab.symm hDAb
+  have hsum : (2 : ℤ) • g a + (2 : ℤ) • g b =
+      g a + g b + (2 : ℤ) • g d := by
+    rw [hBDval, hDAval]
+    simp only [two_zsmul]
+    rw [show h + g b + g d + (h + g d + g a) =
+        (h + h) + (g a + g b + (g d + g d)) by abel, hh, zero_add]
+  have habd : g a + g b = (2 : ℤ) • g d := by
+    calc
+      g a + g b =
+          ((2 : ℤ) • g a + (2 : ℤ) • g b) - (g a + g b) := by
+            simp only [two_zsmul]
+            abel
+      _ = (g a + g b + (2 : ℤ) • g d) - (g a + g b) := by rw [hsum]
+      _ = (2 : ℤ) • g d := by abel
+  refine ⟨x, hxa, hxb, hxd, hABx, ?_⟩
+  calc
+    (g x - g d) + (g x - g d) =
+        (2 : ℤ) • g x - (2 : ℤ) • g d := by
+          simp only [two_zsmul]
+          abel
+    _ = (h + g a + g b) - (2 : ℤ) • g d := by rw [hABval]
+    _ = h + (g a + g b) - (2 : ℤ) • g d := by abel
+    _ = h := by rw [habd]; abel
+
 /-- Two adjacent heavy opposite coefficients force equality after tripling
 the two nonshared triangle coordinates. -/
 theorem three_smul_eq_of_two_adjacent_heavy_opposites
@@ -1446,6 +1498,57 @@ theorem three_dvd_of_two_adjacent_heavy_opposites_zmod
   by_contra h3
   exact not_two_adjacent_heavy_opposites_zmod h3 g hg hcPQ hcQR
     p q r hpq hqr hrp hPQ hQR hPQr hQRp
+
+/-- If an element modulo `2M` doubles to the distinguished half `M`, then
+`M` is even and hence the modulus is divisible by `4`.  Reduction modulo `2`
+makes the parity obstruction explicit. -/
+theorem four_dvd_of_double_eq_half
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M) (x : ZMod N)
+    (hx : x + x = (M : ZMod N)) : 4 ∣ N := by
+  have h2N : 2 ∣ N := ⟨M, hN⟩
+  let f : ZMod N →+* ZMod 2 := ZMod.castHom h2N (ZMod 2)
+  have hMzero : (M : ZMod 2) = 0 := by
+    calc
+      (M : ZMod 2) = f (M : ZMod N) := by
+        symm
+        exact map_natCast f M
+      _ = f (x + x) := by rw [hx]
+      _ = f x + f x := map_add f x x
+      _ = (2 : ℕ) • f x := (two_nsmul (f x)).symm
+      _ = ((2 : ℕ) : ZMod 2) * f x := by rw [nsmul_eq_mul]
+      _ = 0 := by rw [ZMod.natCast_self, zero_mul]
+  rw [ZMod.natCast_eq_zero_iff] at hMzero
+  obtain ⟨k, hk⟩ := hMzero
+  refine ⟨k, ?_⟩
+  omega
+
+/-- The full cyclic obstruction for an exact `(0,2,2)` omission triangle.
+The adjacent heavy edges force `3 ∣ N`, while the pure companion of the zero
+edge gives an element doubling to the half and forces `4 ∣ N`; coprimality
+therefore yields `12 ∣ N`. -/
+theorem twelve_dvd_of_triangle_zero_two_two_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 2) (hDAb : cDA b = 2) :
+    12 ∣ N := by
+  obtain ⟨x, _hxa, _hxb, _hxd, _hABx, hx⟩ :=
+    exists_double_difference_eq_target_of_triangle_zero_two_two
+      g hg (half_add_half hN) hcAB hcBD hcDA a b d hab hbd hda
+        hAB hBD hDA hABd hBDa hDAb
+  have h4 : 4 ∣ N := four_dvd_of_double_eq_half hN (g x - g d) hx
+  have h3 : 3 ∣ N :=
+    three_dvd_of_two_adjacent_heavy_opposites_zmod g hg hcBD hcDA
+      b d a hbd hda hab hBD hDA hBDa hDAb
+  have hcop : Nat.Coprime 3 4 := by norm_num
+  simpa using hcop.mul_dvd_of_dvd_of_dvd h3 h4
 
 /-- Every strictly positive exact omission triangle closes G1 in a group with
 a unique nonzero involution.  The positive-mass identity reduces the profile
