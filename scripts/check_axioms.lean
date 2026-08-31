@@ -66,6 +66,12 @@ import MinModulus
 #print axioms MinModulus.exists_six_distinct_pure_centers_of_triangle_all_zero
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
+#print axioms MinModulus.three_smul_eq_of_two_adjacent_heavy_opposites
+#print axioms MinModulus.not_two_adjacent_heavy_opposites_of_three_smul_injective
+#print axioms MinModulus.nonzero_three_torsion_of_two_adjacent_heavy_opposites
+#print axioms MinModulus.zmod_three_zsmul_injective
+#print axioms MinModulus.not_two_adjacent_heavy_opposites_zmod
+#print axioms MinModulus.three_dvd_of_two_adjacent_heavy_opposites_zmod
 #print axioms MinModulus.common_touched_of_triangle_positive
 #print axioms MinModulus.common_touched_of_triangle_positive_zmod
 #print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch

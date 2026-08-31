@@ -1345,6 +1345,108 @@ theorem common_touched_of_triangle_one_light_opposite
   exact common_touched_of_three_sum_unique_omission g hg hh hne
     hcAB hcBD hcDA hfloor d hd huniq
 
+/-- Two adjacent heavy opposite coefficients force equality after tripling
+the two nonshared triangle coordinates. -/
+theorem three_smul_eq_of_two_adjacent_heavy_opposites
+    (g : Fin n → G) {h : G}
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) :
+    (3 : ℤ) • g p = (3 : ℤ) • g r := by
+  have hPQval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcPQ p q r hpq hPQ hrp hqr.symm hPQr
+  have hQRval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcQR q r p hqr hQR hpq hrp.symm hQRp
+  calc
+    (3 : ℤ) • g p = (2 : ℤ) • g p + g p := by
+      rw [show (3 : ℤ) = 2 + 1 by norm_num, add_zsmul, one_zsmul]
+    _ = (h + g q + g r) + g p := by rw [hQRval]
+    _ = (h + g p + g q) + g r := by abel
+    _ = (2 : ℤ) • g r + g r := by rw [← hPQval]
+    _ = (3 : ℤ) • g r := by
+      rw [show (3 : ℤ) = 2 + 1 by norm_num, add_zsmul, one_zsmul]
+
+/-- If tripling is injective on the ambient group, two adjacent heavy
+opposites are impossible in a valid tuple. -/
+theorem not_two_adjacent_heavy_opposites_of_three_smul_injective
+    (g : Fin n → G) (hg : ValidTuple g)
+    (hinj3 : Function.Injective (fun x : G => (3 : ℤ) • x)) {h : G}
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : False := by
+  have htrip := three_smul_eq_of_two_adjacent_heavy_opposites g hcPQ hcQR
+    p q r hpq hqr hrp hPQ hQR hPQr hQRp
+  have hgpr : g p = g r := hinj3 htrip
+  exact hrp (validTuple_injective g hg hgpr).symm
+
+/-- Without assuming tripling injective, adjacent heavy opposites exhibit the
+precise obstruction: the difference of the two nonshared coordinates is a
+nonzero element killed by `3`. -/
+theorem nonzero_three_torsion_of_two_adjacent_heavy_opposites
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) :
+    g p - g r ≠ 0 ∧ (3 : ℤ) • (g p - g r) = 0 := by
+  have htrip := three_smul_eq_of_two_adjacent_heavy_opposites g hcPQ hcQR
+    p q r hpq hqr hrp hPQ hQR hPQr hQRp
+  constructor
+  · intro hzero
+    have hgpr : g p = g r := sub_eq_zero.mp hzero
+    exact hrp (validTuple_injective g hg hgpr).symm
+  · rw [smul_sub, htrip, sub_self]
+
+/-- If `3` does not divide `N`, tripling is injective on `ZMod N`. -/
+theorem zmod_three_zsmul_injective {N : ℕ} [NeZero N] (h3 : ¬3 ∣ N) :
+    Function.Injective (fun x : ZMod N => (3 : ℤ) • x) := by
+  intro x y hxy
+  have hu : IsUnit ((3 : ℕ) : ZMod N) :=
+    ZMod.isUnit_prime_of_not_dvd (by norm_num) h3
+  have hxy' : (3 : ℕ) • x = (3 : ℕ) • y := by
+    change ((3 : ℕ) : ℤ) • x = ((3 : ℕ) : ℤ) • y at hxy
+    simpa only [natCast_zsmul] using hxy
+  apply hu.mul_left_cancel
+  simpa only [nsmul_eq_mul] using hxy'
+
+/-- Cyclic torsion obstruction: at a modulus not divisible by `3`, two
+adjacent heavy opposite coefficients are impossible.  In particular this
+eliminates the residual profile `(0,2,2)` up to rotation. -/
+theorem not_two_adjacent_heavy_opposites_zmod
+    {N : ℕ} [NeZero N] (h3 : ¬3 ∣ N)
+    (g : Fin n → ZMod N) (hg : ValidTuple g) {h : ZMod N}
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : False := by
+  exact not_two_adjacent_heavy_opposites_of_three_smul_injective g hg
+    (zmod_three_zsmul_injective h3) hcPQ hcQR p q r hpq hqr hrp
+      hPQ hQR hPQr hQRp
+
+/-- Equivalently, the existence of two adjacent heavy opposites in a valid
+tuple modulo `N` forces `3 ∣ N`. -/
+theorem three_dvd_of_two_adjacent_heavy_opposites_zmod
+    {N : ℕ} [NeZero N] (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {h : ZMod N} {cPQ cQR : Fin n → ℤ}
+    (hcPQ : Witness g h cPQ) (hcQR : Witness g h cQR)
+    (p q r : Fin n) (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : 3 ∣ N := by
+  by_contra h3
+  exact not_two_adjacent_heavy_opposites_zmod h3 g hg hcPQ hcQR
+    p q r hpq hqr hrp hPQ hQR hPQr hQRp
+
 /-- Every strictly positive exact omission triangle closes G1 in a group with
 a unique nonzero involution.  The positive-mass identity reduces the profile
 to `{1,2}³`; the cases are the all-one theorem, the zero/`2` reduction for
