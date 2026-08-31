@@ -37,23 +37,31 @@ import MinModulus
 #print axioms MinModulus.exists_pair_difference_witness
 #print axioms MinModulus.validTuple_injective
 #print axioms MinModulus.common_touched_of_pair_difference
+#print axioms MinModulus.common_touched_of_two_smul_eq
 #print axioms MinModulus.witness_compl_sum_eq_card_exactOmissions
 #print axioms MinModulus.witness_coeff_bounds_of_exactOmissions
 #print axioms MinModulus.witness_coeff_eq_zero_or_one_or_two_of_exact_pair
+#print axioms MinModulus.exists_companion_one_of_exact_pair_coeff_one
 #print axioms MinModulus.exists_coeff_two_of_same_exact_pair_zero_two
 #print axioms MinModulus.two_smul_eq_of_same_exact_pair_coeff_two
+#print axioms MinModulus.two_smul_eq_of_adjacent_triangle_same_companion
 #print axioms MinModulus.common_touched_of_same_exact_pair_zero_two
 #print axioms MinModulus.zmod_eq_zero_or_half_of_add_self_eq_zero
 #print axioms MinModulus.triangle_opposite_coefficients_zero_one_or_two
 #print axioms MinModulus.not_triangle_all_opposites_two
 #print axioms MinModulus.witness_three_sum
+#print axioms MinModulus.witness_neg_of_le_one
 #print axioms MinModulus.witness_triangle_sum_of_positive_opposites
 #print axioms MinModulus.triangle_one_one_two_sum_witness_zero_opposite
 #print axioms MinModulus.triangle_all_one_sum_witness_exact_triple
 #print axioms MinModulus.common_touched_of_triangle_one_one_two
 #print axioms MinModulus.common_touched_of_triangle_one_one_two_zmod
+#print axioms MinModulus.common_touched_of_triangle_all_one
+#print axioms MinModulus.common_touched_of_triangle_all_one_zmod
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
+#print axioms MinModulus.common_touched_of_triangle_positive
+#print axioms MinModulus.common_touched_of_triangle_positive_zmod
 #print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch
 #print axioms MinModulus.deletion_descent           -- Lemma B
 #print axioms MinModulus.pair_descent               -- the clean descent rung

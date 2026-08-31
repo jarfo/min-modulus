@@ -231,6 +231,9 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `common_touched_of_same_exact_pair_zero_two` | closes a same-edge zero/`2` pair in every group with a unique nonzero involution: validity forces the zero witness to concentrate at another coordinate, equality after doubling yields the involution difference, and the pair bridge closes G1 |
 | `zmod_eq_zero_or_half_of_add_self_eq_zero`, `common_touched_of_triangle_one_one_two_zmod` | specializes unique involution to `ZMod (2*M)` and closes the exact cyclic triangle profile `(1,1,2)` outright |
 | `triangle_all_one_sum_witness_exact_triple` | reduces the residual profile `(1,1,1)` to a witness whose exact omission set is the three triangle vertices |
+| `exists_companion_one_of_exact_pair_coeff_one`, `witness_neg_of_le_one` | exposes the hidden companion coordinate of every light two-omission witness and proves that any witness in the symmetric coefficient window `[-1,1]` remains a half-witness after negation |
+| `common_touched_of_triangle_all_one_zmod` | closes the cyclic `(1,1,1)` profile: repeated companion coordinates yield equal doubles and a half-modulus difference, while three distinct companions make the exact-triple witness negatable and contradict validity |
+| `common_touched_of_triangle_positive_zmod` | combines the `{0,1,2}` classification with the profile theorems to close every strictly positive exact omission triangle in an even cyclic group |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
 | `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
 | `codim_one_chain_odd_card_bound` | a chain missing one coordinate already forces the full odd threshold |

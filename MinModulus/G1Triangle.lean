@@ -93,6 +93,28 @@ theorem common_touched_of_pair_difference (g : Fin n → G) (hg : ValidTuple g)
   exact common_touched_of_unique_omission g hg hh hc b
     ((homit b).2 (by simp)) (fun i hi => by simpa using (homit i).1 hi)
 
+/-- In a group with unique nonzero involution `h`, equality of two doubled
+tuple coordinates forces their difference to be `h` (equality itself is
+excluded by validity), and hence gives the G1 common-touch conclusion. -/
+theorem common_touched_of_two_smul_eq
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ x : G, x + x = 0 → x = 0 ∨ x = h)
+    {b e : Fin n} (hbe : b ≠ e)
+    (hdoubles : (2 : ℤ) • g b = (2 : ℤ) • g e) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ, Witness g h c → c j ≠ 0 := by
+  let x : G := g b - g e
+  have hx : x + x = 0 := by
+    calc
+      x + x = (2 : ℤ) • g b - (2 : ℤ) • g e := by
+        simp only [x, two_zsmul]
+        abel
+      _ = 0 := by rw [hdoubles, sub_self]
+  rcases hunique x hx with hx0 | hxh
+  · have hgbe : g b = g e := sub_eq_zero.mp hx0
+    exact absurd (validTuple_injective g hg hgbe) hbe
+  · exact ⟨e, common_touched_of_pair_difference g hg hh hne hxh⟩
+
 /-- Outside an exact omission set, the witness floor upgrades from `-1` to
 nonnegativity. -/
 theorem nonneg_of_not_mem_exactOmissions {c : Fin n → ℤ} {S : Finset (Fin n)}
@@ -180,6 +202,63 @@ theorem witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
     have hkS : k ∈ Sᶜ := Finset.mem_of_mem_erase hk
     exact nonneg_of_not_mem_exactOmissions hc.2.1 hS (by simpa using hkS)
   exact (Finset.sum_eq_zero_iff_of_nonneg hnonneg).1 hrest j hjErase
+
+/-- If a two-omission witness has coefficient `1` at one non-omitted
+coordinate `d`, its remaining unit of positive mass occurs as coefficient
+`1` at a second coordinate `e`; all other non-omitted coordinates vanish. -/
+theorem exists_companion_one_of_exact_pair_coeff_one
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b d : Fin n) (hab : a ≠ b)
+    (homit : ∀ j, c j = -1 ↔ j = a ∨ j = b)
+    (hda : d ≠ a) (hdb : d ≠ b) (hcd : c d = 1) :
+    ∃ e : Fin n, e ≠ a ∧ e ≠ b ∧ e ≠ d ∧ c e = 1 ∧
+      ∀ j : Fin n, j ≠ a → j ≠ b → j ≠ d → j ≠ e → c j = 0 := by
+  let S : Finset (Fin n) := {a, b}
+  have hS : ExactOmissions c S := by
+    intro j
+    simpa [S, eq_comm] using homit j
+  have hdS : d ∈ Sᶜ := by simp [S, hda, hdb]
+  have hmass := witness_compl_sum_eq_card_exactOmissions g hc S hS
+  have hcard : S.card = 2 := by simp [S, hab]
+  rw [hcard] at hmass
+  have hsplit := Finset.sum_erase_add Sᶜ c hdS
+  rw [hmass, hcd] at hsplit
+  have hrest : (∑ i ∈ Sᶜ.erase d, c i) = 1 := by omega
+  have hexists : ∃ e ∈ Sᶜ.erase d, c e ≠ 0 := by
+    by_contra hnone
+    push Not at hnone
+    have : (∑ i ∈ Sᶜ.erase d, c i) = 0 := by
+      apply Finset.sum_eq_zero
+      intro i hi
+      exact hnone i hi
+    omega
+  obtain ⟨e, heRest, heNonzero⟩ := hexists
+  have heS : e ∈ Sᶜ := Finset.mem_of_mem_erase heRest
+  have hed : e ≠ d := Finset.ne_of_mem_erase heRest
+  have heab : e ≠ a ∧ e ≠ b := by simpa [S] using heS
+  have hea : e ≠ a := heab.1
+  have heb : e ≠ b := heab.2
+  have hnonneg : ∀ i ∈ Sᶜ.erase d, 0 ≤ c i := by
+    intro i hi
+    have hiS : i ∈ Sᶜ := Finset.mem_of_mem_erase hi
+    exact nonneg_of_not_mem_exactOmissions hc.2.1 hS (by simpa using hiS)
+  have hceLe : c e ≤ ∑ i ∈ Sᶜ.erase d, c i :=
+    Finset.single_le_sum hnonneg heRest
+  rw [hrest] at hceLe
+  have hceNonneg := hnonneg e heRest
+  have hce : c e = 1 := by omega
+  refine ⟨e, hea, heb, hed, hce, ?_⟩
+  intro j hja hjb hjd hje
+  have hjS : j ∈ Sᶜ := by simp [S, hja, hjb]
+  have hjRest : j ∈ (Sᶜ.erase d).erase e := by simp [hjS, hjd, hje]
+  have heRest' : e ∈ Sᶜ.erase d := heRest
+  have hsplit' := Finset.sum_erase_add (Sᶜ.erase d) c heRest'
+  rw [hrest, hce] at hsplit'
+  have htail : (∑ i ∈ (Sᶜ.erase d).erase e, c i) = 0 := by omega
+  have hnonneg' : ∀ i ∈ (Sᶜ.erase d).erase e, 0 ≤ c i := by
+    intro i hi
+    exact hnonneg i (Finset.mem_of_mem_erase hi)
+  exact (Finset.sum_eq_zero_iff_of_nonneg hnonneg').1 htail j hjRest
 
 /-- For two witnesses with the same exact omission pair, suppose one has
 opposite coefficient `2` at `b` while the other has coefficient `0` there.
@@ -302,6 +381,61 @@ theorem two_smul_eq_of_same_exact_pair_coeff_two
     simp
   rw [hformula] at hweighted
   exact sub_eq_zero.mp hweighted
+
+/-- Two adjacent all-one triangle witnesses with the same companion
+coordinate force equality between the doubles of their common omitted vertex
+and that companion. -/
+theorem two_smul_eq_of_adjacent_triangle_same_companion
+    (g : Fin n → G) {h : G} (hh : h + h = 0)
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r e : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 1) (hQRp : cQR p = 1)
+    (hep : e ≠ p) (heq : e ≠ q) (her : e ≠ r)
+    (hPQe : cPQ e = 1) (hQRe : cQR e = 1)
+    (hPQzero : ∀ i, i ≠ p → i ≠ q → i ≠ r → i ≠ e → cPQ i = 0)
+    (hQRzero : ∀ i, i ≠ q → i ≠ r → i ≠ p → i ≠ e → cQR i = 0) :
+    (2 : ℤ) • g q = (2 : ℤ) • g e := by
+  have hweighted : (∑ i, (cPQ + cQR) i • g i) = 0 := by
+    have hterm : ∀ i, (cPQ + cQR) i • g i =
+        cPQ i • g i + cQR i • g i := by
+      intro i
+      simp only [Pi.add_apply, add_smul]
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_add_distrib, hcPQ.2.2.2, hcQR.2.2.2, hh]
+  have hterm : ∀ i, (cPQ + cQR) i • g i =
+      (if i = e then (2 : ℤ) • g i else 0) -
+        (if i = q then (2 : ℤ) • g i else 0) := by
+    intro i
+    by_cases hip : i = p
+    · subst i
+      have hPQp : cPQ p = -1 := (hPQ p).2 (Or.inl rfl)
+      simp [hPQp, hQRp, hpq, Ne.symm hep]
+    by_cases hiq : i = q
+    · subst i
+      have hPQq : cPQ q = -1 := (hPQ q).2 (Or.inr rfl)
+      have hQRq : cQR q = -1 := (hQR q).2 (Or.inl rfl)
+      simp [hPQq, hQRq, Ne.symm heq]
+    by_cases hir : i = r
+    · subst i
+      have hQRr : cQR r = -1 := (hQR r).2 (Or.inr rfl)
+      simp [hPQr, hQRr, hqr.symm, Ne.symm her]
+    by_cases hie : i = e
+    · subst i
+      simp [hPQe, hQRe, heq]
+    have hPQ0 := hPQzero i hip hiq hir hie
+    have hQR0 := hQRzero i hiq hir hip hie
+    simp [hPQ0, hQR0, hiq, hie]
+  have hformula : (∑ i, (cPQ + cQR) i • g i) =
+      (2 : ℤ) • g e - (2 : ℤ) • g q := by
+    rw [Finset.sum_congr rfl fun i _ => hterm i, Finset.sum_sub_distrib,
+      Finset.sum_ite_eq' univ e fun i => (2 : ℤ) • g i,
+      Finset.sum_ite_eq' univ q fun i => (2 : ℤ) • g i]
+    simp
+  rw [hformula] at hweighted
+  exact (sub_eq_zero.mp hweighted).symm
 
 /-- If `h` is the unique nonzero element killed by doubling, a zero-opposite
 witness and a coefficient-`2` witness with the same exact omission pair force
@@ -440,6 +574,28 @@ theorem witness_three_sum (g : Fin n → G) {h : G}
       simp only [Pi.add_apply, add_smul]
     rw [Finset.sum_congr rfl fun i _ => hterm i, Finset.sum_add_distrib,
       Finset.sum_add_distrib, hc₁.2.2.2, hc₂.2.2.2, hc₃.2.2.2, hh, zero_add]
+
+/-- A witness at an involution remains a witness after negation provided all
+its coefficients are at most `1`.  Together with the witness floor, this is
+the symmetric coefficient window `[-1,1]`. -/
+theorem witness_neg_of_le_one (g : Fin n → G) {h : G}
+    (hh : h + h = 0) {c : Fin n → ℤ} (hc : Witness g h c)
+    (hle : ∀ i, c i ≤ 1) : Witness g h (-c) := by
+  have hneg : -h = h := by
+    rw [neg_eq_iff_add_eq_zero]
+    exact hh
+  refine ⟨neg_ne_zero.mpr hc.1, ?_, ?_, ?_⟩
+  · intro i
+    simp only [Pi.neg_apply]
+    have := hle i
+    omega
+  · simp only [Pi.neg_apply]
+    rw [Finset.sum_neg_distrib, hc.2.2.1, neg_zero]
+  · have hterm : ∀ i, (-c) i • g i = -(c i • g i) := by
+      intro i
+      simp only [Pi.neg_apply, neg_smul]
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_neg_distrib, hc.2.2.2, hneg]
 
 /-- Three exact two-omission witnesses on a triangle have an admissible sum
 whenever all three opposite coefficients are positive. -/
@@ -647,6 +803,141 @@ theorem triangle_all_one_sum_witness_exact_triple
     rcases hi with rfl | rfl | rfl <;>
       simp only [cTriple, Pi.add_apply] <;> omega
 
+/-- In a group with unique nonzero involution, the all-one exact omission
+triangle closes G1.  Each edge witness has one companion `+1` coordinate.  A
+repeated companion gives equal doubles and hence an involution difference.  If
+the three companions are distinct, the summed exact-triple witness lies in
+the symmetric window `[-1,1]`; its negative is another witness, and combining
+it with an edge witness contradicts validity. -/
+theorem common_touched_of_triangle_all_one
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ x : G, x + x = 0 → x = 0 ∨ x = h)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 1) (hBDa : cBD a = 1) (hDAb : cDA b = 1) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ, Witness g h c → c j ≠ 0 := by
+  obtain ⟨x, hxa, hxb, hxd, hABx, hABzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one g hcAB a b d hab hAB
+      hda hbd.symm hABd
+  obtain ⟨y, hyb, hyd, hya, hBDy, hBDzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one g hcBD b d a hbd hBD
+      hab hda.symm hBDa
+  obtain ⟨z, hzd, hza, hzb, hDAz, hDAzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one g hcDA d a b hda hDA
+      hbd hab.symm hDAb
+  by_cases hxy : x = y
+  · have hBDx : cBD x = 1 := by simpa [hxy] using hBDy
+    have hBDzeroX : ∀ i, i ≠ b → i ≠ d → i ≠ a → i ≠ x → cBD i = 0 := by
+      simpa [hxy] using hBDzero
+    have hdoubles : (2 : ℤ) • g b = (2 : ℤ) • g x :=
+      two_smul_eq_of_adjacent_triangle_same_companion g hh hcAB hcBD
+        a b d x hab hbd hAB hBD hABd hBDa hxa hxb hxd hABx hBDx
+        hABzero hBDzeroX
+    exact common_touched_of_two_smul_eq g hg hh hne hunique hxb.symm hdoubles
+  by_cases hyz : y = z
+  · have hDAy : cDA y = 1 := by simpa [hyz] using hDAz
+    have hDAzeroY : ∀ i, i ≠ d → i ≠ a → i ≠ b → i ≠ y → cDA i = 0 := by
+      simpa [hyz] using hDAzero
+    have hdoubles : (2 : ℤ) • g d = (2 : ℤ) • g y :=
+      two_smul_eq_of_adjacent_triangle_same_companion g hh hcBD hcDA
+        b d a y hbd hda hBD hDA hBDa hDAb hyb hyd hya hBDy hDAy
+        hBDzero hDAzeroY
+    exact common_touched_of_two_smul_eq g hg hh hne hunique hyd.symm hdoubles
+  by_cases hzx : z = x
+  · have hABz : cAB z = 1 := by simpa [hzx] using hABx
+    have hABzeroZ : ∀ i, i ≠ a → i ≠ b → i ≠ d → i ≠ z → cAB i = 0 := by
+      simpa [hzx] using hABzero
+    have hdoubles : (2 : ℤ) • g a = (2 : ℤ) • g z :=
+      two_smul_eq_of_adjacent_triangle_same_companion g hh hcDA hcAB
+        d a b z hda hab hDA hAB hDAb hABd hzd hza hzb hDAz hABz
+        hDAzero hABzeroZ
+    exact common_touched_of_two_smul_eq g hg hh hne hunique hza.symm hdoubles
+  let cTriple := cAB + cBD + cDA
+  have hcTriple : Witness g h cTriple :=
+    witness_triangle_sum_of_positive_opposites g hh hne hcAB hcBD hcDA
+      a b d hAB hBD hDA (by omega) (by omega) (by omega)
+  have hABa : cAB a = -1 := (hAB a).2 (Or.inl rfl)
+  have hABb : cAB b = -1 := (hAB b).2 (Or.inr rfl)
+  have hBDb : cBD b = -1 := (hBD b).2 (Or.inl rfl)
+  have hBDd : cBD d = -1 := (hBD d).2 (Or.inr rfl)
+  have hDAd : cDA d = -1 := (hDA d).2 (Or.inl rfl)
+  have hDAa : cDA a = -1 := (hDA a).2 (Or.inr rfl)
+  have hle : ∀ i, cTriple i ≤ 1 := by
+    intro i
+    by_cases hia : i = a
+    · subst i
+      simp only [cTriple, Pi.add_apply]
+      omega
+    by_cases hib : i = b
+    · subst i
+      simp only [cTriple, Pi.add_apply]
+      omega
+    by_cases hid : i = d
+    · subst i
+      simp only [cTriple, Pi.add_apply]
+      omega
+    by_cases hix : i = x
+    · subst i
+      have hBDx0 : cBD x = 0 := hBDzero x hxb hxd hxa hxy
+      have hDAx0 : cDA x = 0 := hDAzero x hxd hxa hxb (Ne.symm hzx)
+      simp only [cTriple, Pi.add_apply]
+      omega
+    by_cases hiy : i = y
+    · subst i
+      have hABy0 : cAB y = 0 := hABzero y hya hyb hyd (Ne.symm hxy)
+      have hDAy0 : cDA y = 0 := hDAzero y hyd hya hyb hyz
+      simp only [cTriple, Pi.add_apply]
+      omega
+    by_cases hiz : i = z
+    · subst i
+      have hABz0 : cAB z = 0 := hABzero z hza hzb hzd hzx
+      have hBDz0 : cBD z = 0 := hBDzero z hzb hzd hza (Ne.symm hyz)
+      simp only [cTriple, Pi.add_apply]
+      omega
+    have hABi0 : cAB i = 0 := hABzero i hia hib hid hix
+    have hBDi0 : cBD i = 0 := hBDzero i hib hid hia hiy
+    have hDAi0 : cDA i = 0 := hDAzero i hid hia hib hiz
+    simp [cTriple, hABi0, hBDi0, hDAi0]
+  have hcNeg : Witness g h (-cTriple) :=
+    witness_neg_of_le_one g hh hcTriple hle
+  have hshare : ∀ i, ¬(cAB i = -1 ∧ (-cTriple) i = -1) := by
+    intro i hi
+    rcases (hAB i).1 hi.1 with rfl | rfl
+    · simp only [cTriple, Pi.add_apply, Pi.neg_apply] at hi
+      omega
+    · simp only [cTriple, Pi.add_apply, Pi.neg_apply] at hi
+      omega
+  have hneg := witness_combination g hg hh hcAB hcNeg hshare
+  have hd := congrFun hneg d
+  simp only [cTriple, Pi.add_apply, Pi.neg_apply] at hd
+  omega
+
+/-- Cyclic specialization: the exact omission-triangle profile `(1,1,1)`
+has a G1 common-touch coordinate in `ZMod (2*M)`. -/
+theorem common_touched_of_triangle_all_one_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M) (hM : 0 < M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 1) (hBDa : cBD a = 1) (hDAb : cDA b = 1) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g (M : ZMod N) c → c j ≠ 0 := by
+  exact common_touched_of_triangle_all_one g hg
+    (half_add_half hN) (half_ne_zero hN hM)
+    (fun x hx => zmod_eq_zero_or_half_of_add_self_eq_zero hN x hx)
+    hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA hABd hBDa hDAb
+
 /-- If the admissible sum of three witnesses has a unique omission, that
 omitted coordinate is touched by every witness.  This packages the
 three-witness closure directly in the common-touch form needed by G1. -/
@@ -744,5 +1035,81 @@ theorem common_touched_of_triangle_one_light_opposite
     omega
   exact common_touched_of_three_sum_unique_omission g hg hh hne
     hcAB hcBD hcDA hfloor d hd huniq
+
+/-- Every strictly positive exact omission triangle closes G1 in a group with
+a unique nonzero involution.  The positive-mass identity reduces the profile
+to `{1,2}³`; the cases are the all-one theorem, the zero/`2` reduction for
+one heavy opposite, the unique-omission sum for two heavy opposites, and the
+impossibility of the all-heavy profile. -/
+theorem common_touched_of_triangle_positive
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ x : G, x + x = 0 → x = 0 ∨ x = h)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABpos : 1 ≤ cAB d) (hBDpos : 1 ≤ cBD a) (hDApos : 1 ≤ cDA b) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ, Witness g h c → c j ≠ 0 := by
+  obtain ⟨hABclass, hBDclass, hDAclass⟩ :=
+    triangle_opposite_coefficients_zero_one_or_two g hcAB hcBD hcDA
+      a b d hab hbd hda hAB hBD hDA
+  have hAB12 : cAB d = 1 ∨ cAB d = 2 := by
+    rcases hABclass with h0 | h1 | h2
+    · omega
+    · exact Or.inl h1
+    · exact Or.inr h2
+  have hBD12 : cBD a = 1 ∨ cBD a = 2 := by
+    rcases hBDclass with h0 | h1 | h2
+    · omega
+    · exact Or.inl h1
+    · exact Or.inr h2
+  have hDA12 : cDA b = 1 ∨ cDA b = 2 := by
+    rcases hDAclass with h0 | h1 | h2
+    · omega
+    · exact Or.inl h1
+    · exact Or.inr h2
+  rcases hAB12 with hAB1 | hAB2 <;>
+    rcases hBD12 with hBD1 | hBD2 <;>
+    rcases hDA12 with hDA1 | hDA2
+  · exact common_touched_of_triangle_all_one g hg hh hne hunique
+      hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA hAB1 hBD1 hDA1
+  · exact common_touched_of_triangle_one_one_two g hg hh hne hunique
+      hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA hAB1 hBD1 hDA2
+  · exact common_touched_of_triangle_one_one_two g hg hh hne hunique
+      hcDA hcAB hcBD d a b hda hab hbd hDA hAB hBD hDA1 hAB1 hBD2
+  · exact ⟨d, common_touched_of_triangle_one_light_opposite g hg hh hne
+      hcAB hcBD hcDA a b d hAB hBD hDA hAB1 (by omega) (by omega)⟩
+  · exact common_touched_of_triangle_one_one_two g hg hh hne hunique
+      hcBD hcDA hcAB b d a hbd hda hab hBD hDA hAB hBD1 hDA1 hAB2
+  · exact ⟨a, common_touched_of_triangle_one_light_opposite g hg hh hne
+      hcBD hcDA hcAB b d a hBD hDA hAB hBD1 (by omega) (by omega)⟩
+  · exact ⟨b, common_touched_of_triangle_one_light_opposite g hg hh hne
+      hcDA hcAB hcBD d a b hDA hAB hBD hDA1 (by omega) (by omega)⟩
+  · exact (not_triangle_all_opposites_two g hh hne hcAB hcBD hcDA
+      a b d hab hbd hda hAB hBD hDA hAB2 hBD2 hDA2).elim
+
+/-- Cyclic specialization: every exact omission triangle with all three
+opposite coefficients positive has a G1 common-touch coordinate. -/
+theorem common_touched_of_triangle_positive_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M) (hM : 0 < M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cAB cBD cDA : Fin n → ℤ}
+    (hcAB : Witness g (M : ZMod N) cAB)
+    (hcBD : Witness g (M : ZMod N) cBD)
+    (hcDA : Witness g (M : ZMod N) cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABpos : 1 ≤ cAB d) (hBDpos : 1 ≤ cBD a) (hDApos : 1 ≤ cDA b) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g (M : ZMod N) c → c j ≠ 0 := by
+  exact common_touched_of_triangle_positive g hg
+    (half_add_half hN) (half_ne_zero hN hM)
+    (fun x hx => zmod_eq_zero_or_half_of_add_self_eq_zero hN x hx)
+    hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA hABpos hBDpos hDApos
 
 end MinModulus
