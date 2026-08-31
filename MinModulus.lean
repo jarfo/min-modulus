@@ -12,6 +12,7 @@ import MinModulus.G1CanonicalIntersections
 import MinModulus.G1CanonicalAttachments
 import MinModulus.G1AttachmentDeficit
 import MinModulus.G1LightWitnessReduction
+import MinModulus.G1LightTransitionDescent
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

@@ -79,6 +79,7 @@ MinModulus/
   G1CanonicalAttachments.lean  -- internal support-to-omission incidence and weighted mass
   G1AttachmentDeficit.lean     -- positive-tail growth or quantified anchor deficit
   G1LightWitnessReduction.lean -- light attachments fold back into canonical collisions
+  G1LightTransitionDescent.lean -- cross-tail, imbalance-drop, or near-balanced dynamics
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -279,6 +280,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `balanced_attachedWitness_omits_left`, `commonTouched_or_balancedCanonicalReducedCollisions_cross_attachments` | eliminates the anchor-deficit branch for balanced shapes; every negative-tail vertex then sprouts a witness omitting coordinates on both the positive and negative tails, giving the next cross-tail incidence layer |
 | `G1LightWitnessReduction.lean`: `subsetCollisionCoeffs_witnessTails`, `exists_canonicalReducedCollision_coeff_eq_or_neg_of_tail_light` | proves the converse to the overlap construction: every half-witness whose tail coefficients are at most one is, up to sign, exactly another canonical reduced collision; the anchor coefficient is recovered from the zero-sum identity |
 | `commonTouched_or_canonicalReducedCollisions_heavy_or_light_transition` | sharpens every canonical attachment: either it has a genuinely heavy tail coefficient `≥2`, or it transitions to another canonical shape which avoids the zero coordinate `j`, with the shared omitted coordinate lying on the sign-determined side |
+| `G1LightTransitionDescent.lean`: `positive_lightTransition_cross_or_imbalance_drop`, `negative_lightTransition_imbalance_le_one` | supplies a monotone invariant for the light dynamics: a positive-sign transition either creates an old-positive/new-negative crossing or lowers `|B|-|A|` by at least two, while a negative-sign transition lands at imbalance at most one |
+| `reducedCollisionImbalanceDrop_wellFounded`, `reducedCollisionImbalanceDrop_chain_bound`, `commonTouched_or_canonicalReducedCollisions_structured_light_transition` | proves that the non-crossing strict-drop branch has no cycles and that a chain of length `k` consumes at least `2k` initial imbalance; globally, every attachment is now heavy, cross-tail, strictly descending, or near-balanced |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
