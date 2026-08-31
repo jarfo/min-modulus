@@ -78,6 +78,23 @@ theorem validTuple_injective (g : Fin n → G) (hg : ValidTuple g) :
     g hab (by simp [hgab])
   exact (validTuple_iff_no_zero_witness g).mp hg c hc
 
+/-- The difference of two witnesses at the same target is a witness at zero
+whenever its coefficient floor is admissible and the difference is nonzero. -/
+theorem witness_sub_at_zero_of_floor
+    (g : Fin n → G) {h : G} {c₁ c₂ : Fin n → ℤ}
+    (hc₁ : Witness g h c₁) (hc₂ : Witness g h c₂)
+    (hne : c₁ - c₂ ≠ 0) (hfloor : ∀ i, -1 ≤ (c₁ - c₂) i) :
+    Witness g 0 (c₁ - c₂) := by
+  refine ⟨hne, hfloor, ?_, ?_⟩
+  · simp only [Pi.sub_apply]
+    rw [Finset.sum_sub_distrib, hc₁.2.2.1, hc₂.2.2.1, sub_self]
+  · have hterm : ∀ i, (c₁ - c₂) i • g i =
+        c₁ i • g i - c₂ i • g i := by
+      intro i
+      simp only [Pi.sub_apply, sub_smul]
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_sub_distrib, hc₁.2.2.2, hc₂.2.2.2, sub_self]
+
 /-- A pair difference equal to the distinguished involution gives the G1
 common-touch conclusion at the omitted endpoint. -/
 theorem common_touched_of_pair_difference (g : Fin n → G) (hg : ValidTuple g)
@@ -253,6 +270,43 @@ theorem witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
     have hkS : k ∈ Sᶜ := Finset.mem_of_mem_erase hk
     exact nonneg_of_not_mem_exactOmissions hc.2.1 hS (by simpa using hkS)
   exact (Finset.sum_eq_zero_iff_of_nonneg hnonneg).1 hrest j hjErase
+
+/-- A witness that omits one endpoint and has coefficient zero at the other
+cannot put positive mass on the pure center of that exact edge.  Otherwise
+subtracting the pure edge witness is an admissible nonzero witness at zero. -/
+theorem coeff_zero_at_pure_center_of_omit_other_and_zero_at_exact_pair
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    {cEdge c : Fin n → ℤ} (hcEdge : Witness g h cEdge)
+    (hc : Witness g h c) (p q x : Fin n) (hpq : p ≠ q)
+    (hEdge : ∀ i, cEdge i = -1 ↔ i = p ∨ i = q)
+    (hxp : x ≠ p) (hxq : x ≠ q) (hEdgeX : cEdge x = 2)
+    (hcp : c p = -1) (hcq : c q = 0) (hcx : 0 ≤ c x) : c x = 0 := by
+  by_contra hcxne
+  have hcxone : 1 ≤ c x := by omega
+  apply (validTuple_iff_no_zero_witness g).mp hg (c - cEdge)
+  apply witness_sub_at_zero_of_floor g hc hcEdge
+  · intro hzero
+    have hq := congrFun hzero q
+    have hEdgeq : cEdge q = -1 := (hEdge q).2 (Or.inr rfl)
+    simp only [Pi.sub_apply, Pi.zero_apply, hcq, hEdgeq] at hq
+    omega
+  · intro i
+    simp only [Pi.sub_apply]
+    by_cases hip : i = p
+    · subst i
+      have hEdgep : cEdge p = -1 := (hEdge p).2 (Or.inl rfl)
+      omega
+    by_cases hiq : i = q
+    · subst i
+      have hEdgeq : cEdge q = -1 := (hEdge q).2 (Or.inr rfl)
+      omega
+    by_cases hix : i = x
+    · subst i
+      omega
+    have hEdgezero := witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
+      g hcEdge p q x hpq hEdge hxp hxq hEdgeX i hip hiq hix
+    have := hc.2.1 i
+    omega
 
 /-- If a two-omission witness has coefficient `1` at one non-omitted
 coordinate `d`, its remaining unit of positive mass occurs as coefficient
@@ -1663,6 +1717,145 @@ theorem exists_six_distinct_pure_centers_of_triangle_all_zero
       hzd hza hxa hxb hDAz hABx
   exact ⟨x, y, z, ⟨hxa, hxb, hxd⟩, ⟨hyb, hyd, hya⟩,
     ⟨hzd, hza, hzb⟩, hxy, hyz, hzx, hABx, hBDy, hDAz⟩
+
+/-- The `(0,0,1)` profile also expands to six distinct coordinates: two pure
+centers and the light companion are external and pairwise distinct.  A light
+companion coinciding with a pure center would make the difference of the two
+edge witnesses an admissible nonzero witness at zero. -/
+theorem exists_six_distinct_centers_of_triangle_zero_zero_one
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 0) (hDAb : cDA b = 1) :
+    ∃ x y z : Fin n,
+      (x ≠ a ∧ x ≠ b ∧ x ≠ d) ∧
+      (y ≠ b ∧ y ≠ d ∧ y ≠ a) ∧
+      (z ≠ d ∧ z ≠ a ∧ z ≠ b) ∧
+      x ≠ y ∧ y ≠ z ∧ z ≠ x ∧
+      cAB x = 2 ∧ cBD y = 2 ∧ cDA z = 1 := by
+  obtain ⟨x, hxa, hxb, hxd, hABx, hABzero⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite
+      g hg hh hcAB hcBD a b d hab hda hAB hBD hABd
+  obtain ⟨y, hyb, hyd, hya, hBDy, hBDzero⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite
+      g hg hh hcBD hcDA b d a hbd hab hBD hDA hBDa
+  obtain ⟨z, hzd, hza, hzb, hDAz, hDAzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one
+      g hcDA d a b hda hDA hbd hab.symm hDAb
+  have hxy : x ≠ y := pure_companions_ne_of_adjacent_zero_opposites
+    g hg hcAB hcBD a b d x y hab hbd hda hAB hBD
+      hxa hxb hyb hyd hABx hBDy
+  have hyz : y ≠ z := by
+    intro hyz
+    subst z
+    apply (validTuple_iff_no_zero_witness g).mp hg (cDA - cBD)
+    apply witness_sub_at_zero_of_floor g hcDA hcBD
+    · intro hzero
+      have hb := congrFun hzero b
+      have hBDb : cBD b = -1 := (hBD b).2 (Or.inl rfl)
+      simp only [Pi.sub_apply, Pi.zero_apply, hDAb, hBDb] at hb
+      omega
+    · intro i
+      simp only [Pi.sub_apply]
+      by_cases hib : i = b
+      · subst i
+        have hBDb : cBD b = -1 := (hBD b).2 (Or.inl rfl)
+        omega
+      by_cases hid : i = d
+      · subst i
+        have hDAd : cDA d = -1 := (hDA d).2 (Or.inl rfl)
+        have hBDd : cBD d = -1 := (hBD d).2 (Or.inr rfl)
+        omega
+      by_cases hia : i = a
+      · subst i
+        have hDAa : cDA a = -1 := (hDA a).2 (Or.inr rfl)
+        omega
+      by_cases hiy : i = y
+      · subst i
+        omega
+      rw [hDAzero i hid hia hib hiy, hBDzero i hib hid hia hiy]
+      omega
+  have hzx : z ≠ x := by
+    intro hzx
+    subst z
+    apply (validTuple_iff_no_zero_witness g).mp hg (cDA - cAB)
+    apply witness_sub_at_zero_of_floor g hcDA hcAB
+    · intro hzero
+      have hb := congrFun hzero b
+      have hABb : cAB b = -1 := (hAB b).2 (Or.inr rfl)
+      simp only [Pi.sub_apply, Pi.zero_apply, hDAb, hABb] at hb
+      omega
+    · intro i
+      simp only [Pi.sub_apply]
+      by_cases hib : i = b
+      · subst i
+        have hABb : cAB b = -1 := (hAB b).2 (Or.inr rfl)
+        omega
+      by_cases hia : i = a
+      · subst i
+        have hDAa : cDA a = -1 := (hDA a).2 (Or.inr rfl)
+        have hABa : cAB a = -1 := (hAB a).2 (Or.inl rfl)
+        omega
+      by_cases hid : i = d
+      · subst i
+        have hDAd : cDA d = -1 := (hDA d).2 (Or.inl rfl)
+        omega
+      by_cases hix : i = x
+      · subst i
+        omega
+      rw [hDAzero i hid hia hib hix, hABzero i hia hib hid hix]
+      omega
+  exact ⟨x, y, z, ⟨hxa, hxb, hxd⟩, ⟨hyb, hyd, hya⟩,
+    ⟨hzd, hza, hzb⟩, hxy, hyz, hzx, hABx, hBDy, hDAz⟩
+
+/-- An exact-three escape from a `(0,0,1)` triangle has coefficient zero at
+both pure centers.  Hence the canonical positive support from
+`exact_triple_heavy_shape` lies on genuinely new coordinates. -/
+theorem escape_zero_at_pure_centers_of_triangle_zero_zero_one
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    {cAB cBD c : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hc : Witness g h c)
+    (a b d x y z : Fin n) (hab : a ≠ b) (hbd : b ≠ d)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hxa : x ≠ a) (hxb : x ≠ b) (hxd : x ≠ d)
+    (hyb : y ≠ b) (hyd : y ≠ d) (hya : y ≠ a)
+    (hzx : z ≠ x) (hzy : z ≠ y)
+    (hABx : cAB x = 2) (hBDy : cBD y = 2)
+    (homit : ∀ i, c i = -1 ↔ i = a ∨ i = d ∨ i = z)
+    (hcb : c b = 0) : c x = 0 ∧ c y = 0 := by
+  have hca : c a = -1 := (homit a).2 (Or.inl rfl)
+  have hcd : c d = -1 := (homit d).2 (Or.inr (Or.inl rfl))
+  have hcxnonneg : 0 ≤ c x := by
+    have hne : c x ≠ -1 := by
+      intro hcx
+      rcases (homit x).1 hcx with hxa' | hxd' | hxz
+      · exact hxa hxa'
+      · exact hxd hxd'
+      · exact hzx hxz.symm
+    have := hc.2.1 x
+    omega
+  have hcynonneg : 0 ≤ c y := by
+    have hne : c y ≠ -1 := by
+      intro hcy
+      rcases (homit y).1 hcy with hya' | hyd' | hyz
+      · exact hya hya'
+      · exact hyd hyd'
+      · exact hzy hyz.symm
+    have := hc.2.1 y
+    omega
+  constructor
+  · exact coeff_zero_at_pure_center_of_omit_other_and_zero_at_exact_pair
+      g hg hcAB hc a b x hab hAB hxa hxb hABx hca hcb hcxnonneg
+  · have hBD' : ∀ i, cBD i = -1 ↔ i = d ∨ i = b := by
+      intro i
+      simpa [or_comm] using hBD i
+    exact coeff_zero_at_pure_center_of_omit_other_and_zero_at_exact_pair
+      g hg hcBD hc d b y hbd.symm hBD' hyd hyb hBDy hcd hcb hcynonneg
 
 /-- Three pure exact-pair witnesses on a triangle have a common balanced
 quarter relation.  If `x,y,z` are their coefficient-`2` centers, then the

@@ -36,6 +36,7 @@ import MinModulus
 #print axioms MinModulus.three_witnesses_sum_ne_zero
 #print axioms MinModulus.exists_pair_difference_witness
 #print axioms MinModulus.validTuple_injective
+#print axioms MinModulus.witness_sub_at_zero_of_floor
 #print axioms MinModulus.common_touched_of_pair_difference
 #print axioms MinModulus.omitted_other_of_zero_at_exact_pair
 #print axioms MinModulus.common_touched_of_two_smul_eq
@@ -43,6 +44,7 @@ import MinModulus
 #print axioms MinModulus.witness_coeff_bounds_of_exactOmissions
 #print axioms MinModulus.witness_two_coeff_sum_le_two_of_exact_pair
 #print axioms MinModulus.witness_coeff_eq_zero_or_one_or_two_of_exact_pair
+#print axioms MinModulus.coeff_zero_at_pure_center_of_omit_other_and_zero_at_exact_pair
 #print axioms MinModulus.exists_companion_one_of_exact_pair_coeff_one
 #print axioms MinModulus.witness_coeff_zero_one_two_or_three_of_exact_triple
 #print axioms MinModulus.witness_other_eq_zero_of_exact_triple_and_coeff_three
@@ -77,6 +79,8 @@ import MinModulus
 #print axioms MinModulus.two_smul_eq_target_add_pair_of_exact_pair_coeff_two
 #print axioms MinModulus.pure_companions_ne_of_adjacent_zero_opposites
 #print axioms MinModulus.exists_six_distinct_pure_centers_of_triangle_all_zero
+#print axioms MinModulus.exists_six_distinct_centers_of_triangle_zero_zero_one
+#print axioms MinModulus.escape_zero_at_pure_centers_of_triangle_zero_zero_one
 #print axioms MinModulus.double_balanced_center_sum_eq_target_of_pure_triangle
 #print axioms MinModulus.exists_double_eq_target_of_triangle_all_zero
 #print axioms MinModulus.exists_double_eq_target_of_triangle_zero_zero_two
