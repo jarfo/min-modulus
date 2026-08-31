@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1HeavyOrCross
+import MinModulus.G1CanonicalCrossing
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -173,6 +173,51 @@ noncomputable def criticalCanonicalReducedCollisions
       ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) :=
   canonicalReducedCollisions (g := g)
     (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring))
+
+/-- Ordered distinct pairs in the critical canonical collision family. -/
+noncomputable def criticalCanonicalDistinctCollisionPairs
+    {n s q : ℕ} (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) :=
+  canonicalDistinctReducedCollisionPairs (g := g)
+    (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring))
+
+/-- Oriented positive-to-negative crossings in the critical canonical
+collision family. -/
+noncomputable def criticalCanonicalPositiveNegativeCrossPairs
+    {n s q : ℕ} (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) :=
+  canonicalPositiveNegativeCrossPairs (g := g)
+    (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring))
+
+/-- Every unordered pair of distinct critical canonical shapes crosses in at
+least one orientation.  Both the unweighted count and the exact product-
+padding weight therefore have density at least one half. -/
+theorem critical_canonicalCrossPairs_dense
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g) :
+    (criticalCanonicalDistinctCollisionPairs g).card ≤
+        2 * (criticalCanonicalPositiveNegativeCrossPairs g).card ∧
+      (criticalCanonicalDistinctCollisionPairs g).sum (fun p ↦
+          reducedCollisionWeight (m := n) p.1 *
+            reducedCollisionWeight (m := n) p.2) ≤
+        2 * (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+          reducedCollisionWeight (m := n) p.1 *
+            reducedCollisionWeight (m := n) p.2) := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  constructor
+  · simpa [criticalCanonicalDistinctCollisionPairs,
+      criticalCanonicalPositiveNegativeCrossPairs] using
+      card_canonicalDistinctPairs_le_two_mul_crossPairs
+        g hg (half_add_half hN) (half_ne_zero hN hM)
+  · simpa [criticalCanonicalDistinctCollisionPairs,
+      criticalCanonicalPositiveNegativeCrossPairs] using
+      sum_canonicalDistinctPairWeights_le_two_mul_crossPairWeights
+        g hg (half_add_half hN) (half_ne_zero hN hM)
 
 /-- The critical endpoint gap plus two is bounded by twice the exact padding
 weight of the canonical intersecting representatives. -/
