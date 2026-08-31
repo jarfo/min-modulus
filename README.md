@@ -74,6 +74,7 @@ MinModulus/
   G1OverlapOrbits.lean          -- exact collision model and free half-shift orbit pairing
   G1OverlapSupports.lean        -- explicit collision supports and family-wide attachments
   G1OverlapPadding.lean         -- reduced witness shapes and exact padding multiplicities
+  G1ReducedIntersections.lean   -- weighted shapes intersect except for exact opposites
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -263,6 +264,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `G1OverlapPadding.lean`: `subsetSumCollisionEquivReducedPadding`, `card_collisionPadding` | uniquely decomposes every collision into a disjoint reduced relation `(A,B)` and common padding outside `A∪B`; each reduced witness shape has exact multiplicity `2^(m-|A∪B|)` |
 | `card_subsetSumOverlap_eq_sum_reduced_weights` | rewrites the full translated-cube overlap exactly as the sum of those padding weights over all reduced collision shapes, exposing rather than hiding the multiplicity that the next no-common-touch count must control |
 | `critical_reduced_collision_weight_lower_bound` | restates the strict critical modulus inequality on genuine witness shapes: their exact padding weights sum to at least the endpoint gap plus two |
+| `G1ReducedIntersections.lean`: `reducedCollision_negative_tails_inter_or_eq_swap` | applies witness combination to the weighted shapes: two cardinality-oriented reduced negative tails intersect unless the shapes are the exact fixed-point-free swaps of one another |
+| `reducedCollision_negative_tails_inter_of_card_lt`, `reducedCollision_swapped_weight` | removes the exception whenever one oriented shape is strictly unbalanced and proves that every remaining balanced opposite pair carries equal padding weight |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
