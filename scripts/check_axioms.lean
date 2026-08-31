@@ -51,6 +51,7 @@ import MinModulus
 #print axioms MinModulus.not_triangle_all_opposites_two
 #print axioms MinModulus.witness_three_sum
 #print axioms MinModulus.witness_neg_of_le_one
+#print axioms MinModulus.witness_neg_pair_sum_at_zero_of_le_one
 #print axioms MinModulus.witness_triangle_sum_of_positive_opposites
 #print axioms MinModulus.triangle_one_one_two_sum_witness_zero_opposite
 #print axioms MinModulus.triangle_all_one_sum_witness_exact_triple
@@ -67,6 +68,8 @@ import MinModulus
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
 #print axioms MinModulus.exists_double_difference_eq_target_of_triangle_zero_two_two
+#print axioms MinModulus.not_two_adjacent_heavy_opposites_of_involution
+#print axioms MinModulus.not_two_adjacent_heavy_opposites_at_half_zmod
 #print axioms MinModulus.three_smul_eq_of_two_adjacent_heavy_opposites
 #print axioms MinModulus.not_two_adjacent_heavy_opposites_of_three_smul_injective
 #print axioms MinModulus.nonzero_three_torsion_of_two_adjacent_heavy_opposites

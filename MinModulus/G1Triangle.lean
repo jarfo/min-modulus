@@ -597,6 +597,34 @@ theorem witness_neg_of_le_one (g : Fin n → G) {h : G}
     rw [Finset.sum_congr rfl fun i _ => hterm i,
       Finset.sum_neg_distrib, hc.2.2.2, hneg]
 
+/-- If two witnesses at an involution have a coefficientwise sum bounded
+above by `1`, the negative of that sum is a witness at zero.  This is the
+two-witness sign-flip counterpart of `witness_neg_of_le_one`; validity can
+therefore rule out such a nonzero sum directly. -/
+theorem witness_neg_pair_sum_at_zero_of_le_one
+    (g : Fin n → G) {h : G} (hh : h + h = 0)
+    {c₁ c₂ : Fin n → ℤ} (hc₁ : Witness g h c₁) (hc₂ : Witness g h c₂)
+    (hne : c₁ + c₂ ≠ 0) (hle : ∀ i, (c₁ + c₂) i ≤ 1) :
+    Witness g 0 (-(c₁ + c₂)) := by
+  refine ⟨neg_ne_zero.mpr hne, ?_, ?_, ?_⟩
+  · intro i
+    simp only [Pi.neg_apply]
+    have := hle i
+    omega
+  · simp only [Pi.neg_apply]
+    rw [Finset.sum_neg_distrib]
+    have hsum : (∑ i, (c₁ + c₂) i) = 0 := by
+      simp only [Pi.add_apply]
+      rw [Finset.sum_add_distrib, hc₁.2.2.1, hc₂.2.2.1, zero_add]
+    rw [hsum, neg_zero]
+  · have hterm : ∀ i, (-(c₁ + c₂)) i • g i =
+        -(c₁ i • g i + c₂ i • g i) := by
+      intro i
+      simp only [Pi.neg_apply, Pi.add_apply, neg_smul, add_smul]
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_neg_distrib, Finset.sum_add_distrib,
+      hc₁.2.2.2, hc₂.2.2.2, hh, neg_zero]
+
 /-- Three exact two-omission witnesses on a triangle have an admissible sum
 whenever all three opposite coefficients are positive. -/
 theorem witness_triangle_sum_of_positive_opposites
@@ -1396,6 +1424,66 @@ theorem exists_double_difference_eq_target_of_triangle_zero_two_two
     _ = (h + g a + g b) - (2 : ℤ) • g d := by rw [hABval]
     _ = h + (g a + g b) - (2 : ℤ) • g d := by abel
     _ = h := by rw [habd]; abel
+
+/-- Two adjacent heavy opposite coefficients are already incompatible with
+validity when the target is an involution.  Each coefficient `2` exhausts
+the positive mass of its exact-pair witness, so the two coefficient vectors
+sum to `(1,-2,1)` on the triangle.  Its negative `(-1,2,-1)` is an admissible
+nonzero witness at zero. -/
+theorem not_two_adjacent_heavy_opposites_of_involution
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : False := by
+  have hPQp : cPQ p = -1 := (hPQ p).2 (Or.inl rfl)
+  have hPQq : cPQ q = -1 := (hPQ q).2 (Or.inr rfl)
+  have hQRq : cQR q = -1 := (hQR q).2 (Or.inl rfl)
+  have hQRr : cQR r = -1 := (hQR r).2 (Or.inr rfl)
+  have hsum_ne : cPQ + cQR ≠ 0 := by
+    intro hzero
+    have hq := congrFun hzero q
+    simp only [Pi.add_apply, Pi.zero_apply, hPQq, hQRq] at hq
+    omega
+  have hsum_le : ∀ i, (cPQ + cQR) i ≤ 1 := by
+    intro i
+    simp only [Pi.add_apply]
+    by_cases hip : i = p
+    · subst i
+      omega
+    by_cases hiq : i = q
+    · subst i
+      omega
+    by_cases hir : i = r
+    · subst i
+      omega
+    have hPQzero : cPQ i = 0 :=
+      witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
+        g hcPQ p q r hpq hPQ hrp hqr.symm hPQr i hip hiq hir
+    have hQRzero : cQR i = 0 :=
+      witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
+        g hcQR q r p hqr hQR hpq hrp.symm hQRp i hiq hir hip
+    omega
+  exact (validTuple_iff_no_zero_witness g).mp hg (-(cPQ + cQR))
+    (witness_neg_pair_sum_at_zero_of_le_one
+      g hh hcPQ hcQR hsum_ne hsum_le)
+
+/-- Cyclic half-modulus specialization: adjacent heavy opposites are
+impossible at every even modulus, with no coprimality hypothesis. -/
+theorem not_two_adjacent_heavy_opposites_at_half_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cPQ cQR : Fin n → ℤ}
+    (hcPQ : Witness g (M : ZMod N) cPQ)
+    (hcQR : Witness g (M : ZMod N) cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : False := by
+  exact not_two_adjacent_heavy_opposites_of_involution g hg
+    (half_add_half hN) hcPQ hcQR p q r hpq hqr hrp hPQ hQR hPQr hQRp
 
 /-- Two adjacent heavy opposite coefficients force equality after tripling
 the two nonshared triangle coordinates. -/
