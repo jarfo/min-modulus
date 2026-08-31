@@ -69,6 +69,7 @@ MinModulus/
   ElemAbelian2.lean             -- Proposition 2 (elementary abelian 2-groups)
   AbelianMin.lean               -- Open problem 4 (all finite abelian groups)
   Descent.lean                  -- two-adic halving/deletion lemmas toward Conjecture 1
+  G1Triangle.lean               -- three-witness closure and triangle common-touch family
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
   QuadraticWedge.lean           -- SHC bridge and quadratic/multi-level lemmas
@@ -221,6 +222,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `Descent.lean`: `witness_combination`, `deletion_descent`, `pair_descent` | halving and deletion at the order-two element |
 | `common_touched_of_unique_omission` | G1 holds when one half-witness has a unique omitted coordinate |
 | `three_witnesses_sum_ne_zero` | excludes the exact minimal cyclic three-witness pattern in G1 |
+| `G1Triangle.lean`: `witness_three_sum`, `common_touched_of_three_sum_unique_omission` | the sum of three half-witnesses is another half-witness whenever its coefficients remain at least `-1`; a unique omission in that sum forces a G1 common-touch coordinate |
+| `common_touched_of_triangle_one_light_opposite` | closes every exact omission triangle whose opposite coefficients, up to permutation, are `1, ≥2, ≥2`; the summed witness has one omission |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
 | `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
 | `codim_one_chain_odd_card_bound` | a chain missing one coordinate already forces the full odd threshold |

@@ -34,6 +34,9 @@ import MinModulus
 #print axioms MinModulus.witness_combination        -- Lemma A
 #print axioms MinModulus.common_touched_of_unique_omission
 #print axioms MinModulus.three_witnesses_sum_ne_zero
+#print axioms MinModulus.witness_three_sum
+#print axioms MinModulus.common_touched_of_three_sum_unique_omission
+#print axioms MinModulus.common_touched_of_triangle_one_light_opposite
 #print axioms MinModulus.quotient_valid_of_no_witness  -- halving branch
 #print axioms MinModulus.deletion_descent           -- Lemma B
 #print axioms MinModulus.pair_descent               -- the clean descent rung
