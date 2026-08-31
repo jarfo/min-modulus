@@ -34,6 +34,11 @@ import MinModulus
 #print axioms MinModulus.witness_combination        -- Lemma A
 #print axioms MinModulus.common_touched_of_unique_omission
 #print axioms MinModulus.three_witnesses_sum_ne_zero
+#print axioms MinModulus.witness_compl_sum_eq_card_exactOmissions
+#print axioms MinModulus.witness_coeff_bounds_of_exactOmissions
+#print axioms MinModulus.witness_coeff_eq_zero_or_one_or_two_of_exact_pair
+#print axioms MinModulus.triangle_opposite_coefficients_zero_one_or_two
+#print axioms MinModulus.not_triangle_all_opposites_two
 #print axioms MinModulus.witness_three_sum
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
