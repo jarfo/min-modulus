@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1OverlapPadding
+import MinModulus.G1CanonicalIntersections
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -164,6 +164,96 @@ theorem critical_reduced_collision_weight_lower_bound
   rw [← card_subsetSumOverlap_eq_sum_reduced_weights g hg
     ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))]
   exact critical_subsetSum_half_overlap_add_two_le hn hq g hg hcritical
+
+/-- Canonical representatives of the reduced half-collision swap pairs at a
+critical two-adic step.  Their negative tails form an intersecting family. -/
+noncomputable def criticalCanonicalReducedCollisions
+    {n s q : ℕ} (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) :
+    Finset (ReducedSubsetSumCollision g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) :=
+  canonicalReducedCollisions (g := g)
+    (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring))
+
+/-- The critical endpoint gap plus two is bounded by twice the exact padding
+weight of the canonical intersecting representatives. -/
+theorem critical_canonicalReducedCollision_weight_lower_bound
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+      2 * (criticalCanonicalReducedCollisions g).sum
+        (fun r ↦ reducedCollisionWeight (m := n) r) := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  calc
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+        ∑ r : ReducedSubsetSumCollision g
+            ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)),
+          2 ^ (n - (r.val.1 ∪ r.val.2).card) :=
+      critical_reduced_collision_weight_lower_bound hn hq g hg hcritical
+    _ = 2 * (canonicalReducedCollisions (g := g)
+          (half_add_half hN)).sum
+            (fun r ↦ reducedCollisionWeight (m := n) r) := by
+      simpa [criticalCanonicalReducedCollisions,
+        reducedCollisionWeight] using
+        sum_reducedCollisionWeight_eq_two_mul_canonical
+          (g := g) (half_add_half hN) (half_ne_zero hN hM)
+
+/-- After cancelling the factor two, the canonical intersecting family alone
+carries at least half the endpoint-gap weight plus one. -/
+theorem critical_canonicalReducedCollision_weight_half_lower_bound
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1 ≤
+      (criticalCanonicalReducedCollisions g).sum
+        (fun r ↦ reducedCollisionWeight (m := n) r) := by
+  let a := min (s + 1) (Nat.log 2 (n + 1))
+  have hlog : 0 < Nat.log 2 (n + 1) :=
+    Nat.log_pos (by norm_num) (by omega)
+  have ha : 0 < a := by
+    dsimp [a]
+    omega
+  have hpow : 2 ^ a + 2 = 2 * (2 ^ (a - 1) + 1) := by
+    have ha' : a = (a - 1) + 1 := by omega
+    conv_lhs => lhs; rw [ha', pow_succ]
+    ring
+  have hdouble := critical_canonicalReducedCollision_weight_lower_bound
+    hn hq g hg hcritical
+  change 2 ^ a + 2 ≤
+      2 * (criticalCanonicalReducedCollisions g).sum
+        (fun r ↦ reducedCollisionWeight (m := n) r) at hdouble
+  rw [hpow] at hdouble
+  exact Nat.le_of_mul_le_mul_left hdouble (by norm_num)
+
+/-- The critical canonical representatives have pairwise-intersecting
+negative tails. -/
+theorem criticalCanonicalReducedCollisions_negative_tails_inter
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    {r₁ r₂ : ReducedSubsetSumCollision g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))}
+    (hr₁ : r₁ ∈ criticalCanonicalReducedCollisions g)
+    (hr₂ : r₂ ∈ criticalCanonicalReducedCollisions g) :
+    (r₁.val.2 ∩ r₂.val.2).Nonempty := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  apply canonicalReducedCollision_negative_tails_inter
+    g hg (half_add_half hN) (half_ne_zero hN hM) r₁ r₂
+  · simpa [criticalCanonicalReducedCollisions] using hr₁
+  · simpa [criticalCanonicalReducedCollisions] using hr₂
 
 /-- Consequently every critical-range valid tuple has a half-witness already
 in the translated subset-sum layer.  All non-anchor coefficients can be
