@@ -156,6 +156,33 @@ theorem witness_coeff_bounds_of_exactOmissions
   rw [witness_compl_sum_eq_card_exactOmissions g hc S homit] at hle
   exact ⟨nonneg_of_not_mem_exactOmissions hc.2.1 homit hi, hle⟩
 
+/-- Any two distinct coefficients outside an exact two-element omission set
+have total at most `2`, since that is all the available positive mass. -/
+theorem witness_two_coeff_sum_le_two_of_exact_pair
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (a b i j : Fin n) (hab : a ≠ b)
+    (homit : ∀ k, c k = -1 ↔ k = a ∨ k = b)
+    (hia : i ≠ a) (hib : i ≠ b) (hja : j ≠ a) (hjb : j ≠ b)
+    (hij : i ≠ j) : c i + c j ≤ 2 := by
+  let S : Finset (Fin n) := {a, b}
+  have hS : ExactOmissions c S := by
+    intro k
+    simpa [S, eq_comm] using homit k
+  have hiS : i ∈ Sᶜ := by simp [S, hia, hib]
+  have hjS : j ∈ Sᶜ := by simp [S, hja, hjb]
+  have hiErase : i ∈ Sᶜ.erase j := by simp [hiS, hij]
+  have hnonneg : ∀ k ∈ Sᶜ.erase j, 0 ≤ c k := by
+    intro k hk
+    have hkS : k ∈ Sᶜ := Finset.mem_of_mem_erase hk
+    exact nonneg_of_not_mem_exactOmissions hc.2.1 hS (by simpa using hkS)
+  have hle : c i ≤ ∑ k ∈ Sᶜ.erase j, c k :=
+    Finset.single_le_sum hnonneg hiErase
+  have hmass := witness_compl_sum_eq_card_exactOmissions g hc S hS
+  have hcard : S.card = 2 := by simp [S, hab]
+  have hsplit := Finset.sum_erase_add Sᶜ c hjS
+  rw [hcard] at hmass
+  omega
+
 /-- A non-omitted coefficient of a witness with exactly two distinct
 omissions is `0`, `1`, or `2`. -/
 theorem witness_coeff_eq_zero_or_one_or_two_of_exact_pair
@@ -1425,23 +1452,28 @@ theorem exists_double_difference_eq_target_of_triangle_zero_two_two
     _ = h + (g a + g b) - (2 : ℤ) • g d := by abel
     _ = h := by rw [habd]; abel
 
-/-- Two adjacent heavy opposite coefficients are already incompatible with
-validity when the target is an involution.  Each coefficient `2` exhausts
-the positive mass of its exact-pair witness, so the two coefficient vectors
-sum to `(1,-2,1)` on the triangle.  Its negative `(-1,2,-1)` is an admissible
-nonzero witness at zero. -/
-theorem not_two_adjacent_heavy_opposites_of_involution
+/-- Two adjacent exact-pair witnesses are incompatible with validity whenever
+their opposite coefficients have total at least `3`.  Their combined positive
+mass away from the triangle is then at most one, so their coefficientwise sum
+is bounded above by `1`; its negative is a forbidden witness at zero. -/
+theorem not_two_adjacent_opposites_of_sum_ge_three
     (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
     {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
     (hcQR : Witness g h cQR) (p q r : Fin n)
     (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
     (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
     (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
-    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : False := by
+    (hlarge : 3 ≤ cPQ r + cQR p) : False := by
   have hPQp : cPQ p = -1 := (hPQ p).2 (Or.inl rfl)
   have hPQq : cPQ q = -1 := (hPQ q).2 (Or.inr rfl)
   have hQRq : cQR q = -1 := (hQR q).2 (Or.inl rfl)
   have hQRr : cQR r = -1 := (hQR r).2 (Or.inr rfl)
+  have hPQrClass := witness_coeff_eq_zero_or_one_or_two_of_exact_pair
+    g hcPQ p q r hpq hPQ hrp hqr.symm
+  have hQRpClass := witness_coeff_eq_zero_or_one_or_two_of_exact_pair
+    g hcQR q r p hqr hQR hpq hrp.symm
+  have hPQr_le : cPQ r ≤ 2 := by rcases hPQrClass with h0 | h1 | h2 <;> omega
+  have hQRp_le : cQR p ≤ 2 := by rcases hQRpClass with h0 | h1 | h2 <;> omega
   have hsum_ne : cPQ + cQR ≠ 0 := by
     intro hzero
     have hq := congrFun hzero q
@@ -1459,16 +1491,80 @@ theorem not_two_adjacent_heavy_opposites_of_involution
     by_cases hir : i = r
     · subst i
       omega
-    have hPQzero : cPQ i = 0 :=
-      witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
-        g hcPQ p q r hpq hPQ hrp hqr.symm hPQr i hip hiq hir
-    have hQRzero : cQR i = 0 :=
-      witness_other_eq_zero_of_exact_pair_and_coeff_eq_two
-        g hcQR q r p hqr hQR hpq hrp.symm hQRp i hiq hir hip
+    have hPQbound := witness_two_coeff_sum_le_two_of_exact_pair
+      g hcPQ p q i r hpq hPQ hip hiq hrp hqr.symm hir
+    have hQRbound := witness_two_coeff_sum_le_two_of_exact_pair
+      g hcQR q r i p hqr hQR hiq hir hpq hrp.symm hip
     omega
   exact (validTuple_iff_no_zero_witness g).mp hg (-(cPQ + cQR))
     (witness_neg_pair_sum_at_zero_of_le_one
       g hh hcPQ hcQR hsum_ne hsum_le)
+
+/-- Two adjacent heavy opposite coefficients are already incompatible with
+validity when the target is an involution.  This is the `(2,2)` specialization
+of the sign-flip obstruction above. -/
+theorem not_two_adjacent_heavy_opposites_of_involution
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 2) (hQRp : cQR p = 2) : False := by
+  apply not_two_adjacent_opposites_of_sum_ge_three
+    g hg hh hcPQ hcQR p q r hpq hqr hrp hPQ hQR
+  omega
+
+/-- Cyclic half-modulus specialization of the adjacent-sum obstruction. -/
+theorem not_two_adjacent_opposites_of_sum_ge_three_at_half_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cPQ cQR : Fin n → ℤ}
+    (hcPQ : Witness g (M : ZMod N) cPQ)
+    (hcQR : Witness g (M : ZMod N) cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hlarge : 3 ≤ cPQ r + cQR p) : False := by
+  exact not_two_adjacent_opposites_of_sum_ge_three g hg
+    (half_add_half hN) hcPQ hcQR p q r hpq hqr hrp hPQ hQR hlarge
+
+/-- In a valid exact omission triangle at an involution, a heavy opposite
+forces both neighboring opposite coefficients to be zero.  Thus `(0,0,2)`
+is the only potentially surviving triangle profile containing a `2`. -/
+theorem triangle_other_opposites_zero_of_opposite_eq_two
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 2) : cBD a = 0 ∧ cDA b = 0 := by
+  obtain ⟨_hABclass, hBDclass, hDAclass⟩ :=
+    triangle_opposite_coefficients_zero_one_or_two g hcAB hcBD hcDA
+      a b d hab hbd hda hAB hBD hDA
+  constructor
+  · rcases hBDclass with h0 | h1 | h2
+    · exact h0
+    · exfalso
+      apply not_two_adjacent_opposites_of_sum_ge_three
+        g hg hh hcAB hcBD a b d hab hbd hda hAB hBD
+      omega
+    · exfalso
+      apply not_two_adjacent_opposites_of_sum_ge_three
+        g hg hh hcAB hcBD a b d hab hbd hda hAB hBD
+      omega
+  · rcases hDAclass with h0 | h1 | h2
+    · exact h0
+    · exfalso
+      apply not_two_adjacent_opposites_of_sum_ge_three
+        g hg hh hcDA hcAB d a b hda hab hbd hDA hAB
+      omega
+    · exfalso
+      apply not_two_adjacent_opposites_of_sum_ge_three
+        g hg hh hcDA hcAB d a b hda hab hbd hDA hAB
+      omega
 
 /-- Cyclic half-modulus specialization: adjacent heavy opposites are
 impossible at every even modulus, with no coprimality hypothesis. -/

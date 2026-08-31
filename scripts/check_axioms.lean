@@ -40,6 +40,7 @@ import MinModulus
 #print axioms MinModulus.common_touched_of_two_smul_eq
 #print axioms MinModulus.witness_compl_sum_eq_card_exactOmissions
 #print axioms MinModulus.witness_coeff_bounds_of_exactOmissions
+#print axioms MinModulus.witness_two_coeff_sum_le_two_of_exact_pair
 #print axioms MinModulus.witness_coeff_eq_zero_or_one_or_two_of_exact_pair
 #print axioms MinModulus.exists_companion_one_of_exact_pair_coeff_one
 #print axioms MinModulus.exists_coeff_two_of_same_exact_pair_zero_two
@@ -68,6 +69,9 @@ import MinModulus
 #print axioms MinModulus.common_touched_of_three_sum_unique_omission
 #print axioms MinModulus.common_touched_of_triangle_one_light_opposite
 #print axioms MinModulus.exists_double_difference_eq_target_of_triangle_zero_two_two
+#print axioms MinModulus.not_two_adjacent_opposites_of_sum_ge_three
+#print axioms MinModulus.not_two_adjacent_opposites_of_sum_ge_three_at_half_zmod
+#print axioms MinModulus.triangle_other_opposites_zero_of_opposite_eq_two
 #print axioms MinModulus.not_two_adjacent_heavy_opposites_of_involution
 #print axioms MinModulus.not_two_adjacent_heavy_opposites_at_half_zmod
 #print axioms MinModulus.three_smul_eq_of_two_adjacent_heavy_opposites
