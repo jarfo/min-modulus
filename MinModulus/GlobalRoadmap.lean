@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1CriticalRange
+import MinModulus.G1OverlapOrbits
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -120,6 +120,35 @@ theorem critical_subsetSum_half_overlap
     exact Nat.sub_add_cancel hp
   apply subsetSumShift_overlap_card_gt_of_add_lt g hg
   omega
+
+/-- The half-translate overlap is a union of free two-element orbits.  For a
+nontrivial tuple the omitted power of two is even, so the strict critical
+overlap bound improves from one extra point to two. -/
+theorem critical_subsetSum_half_overlap_add_two_le
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)) :
+    2 ^ min (s + 1) (Nat.log 2 (n + 1)) + 2 ≤
+      ((subsetSumRange g) ∩ (subsetSumShiftRange g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))).card := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hlog : 0 < Nat.log 2 (n + 1) :=
+    Nat.log_pos (by norm_num) (by omega)
+  have hmin : min (s + 1) (Nat.log 2 (n + 1)) ≠ 0 := by
+    omega
+  have hK : Even (2 ^ min (s + 1) (Nat.log 2 (n + 1))) := by
+    rw [Nat.even_pow]
+    exact ⟨by norm_num, hmin⟩
+  apply add_two_le_card_subsetSumOverlap_of_even_lt g hg
+    (half_add_half hN) (half_ne_zero hN hM) hK
+  exact critical_subsetSum_half_overlap hq g hg hcritical
 
 /-- Consequently every critical-range valid tuple has a half-witness already
 in the translated subset-sum layer.  All non-anchor coefficients can be

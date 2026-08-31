@@ -4,6 +4,7 @@ import MinModulus.AbelianMin
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1CriticalRange
+import MinModulus.G1OverlapOrbits
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

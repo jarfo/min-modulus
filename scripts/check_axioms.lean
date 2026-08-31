@@ -64,6 +64,13 @@ import MinModulus
 #print axioms MinModulus.witness_of_subsetSum_eq_add
 #print axioms MinModulus.exists_subsetCollision_witness_of_overlap
 #print axioms MinModulus.exists_light_half_witness_of_lt_two_pow
+#print axioms MinModulus.even_fintype_card_of_fixedPointFree_involution
+#print axioms MinModulus.subsetSumCollisionToOverlap_bijective
+#print axioms MinModulus.subsetSumCollisionSwapEquiv_ne
+#print axioms MinModulus.even_card_subsetSumCollision
+#print axioms MinModulus.card_subsetSumCollision_eq_card_overlap
+#print axioms MinModulus.even_card_subsetSumOverlap
+#print axioms MinModulus.add_two_le_card_subsetSumOverlap_of_even_lt
 #print axioms MinModulus.exists_coeff_two_of_same_exact_pair_zero_two
 #print axioms MinModulus.two_smul_eq_of_same_exact_pair_coeff_two
 #print axioms MinModulus.two_smul_eq_of_adjacent_triangle_same_companion
@@ -266,6 +273,7 @@ import MinModulus
 #print axioms MinModulus.card_le_of_two_smul_add_sum_eq
 #print axioms MinModulus.admits_half_or_delete_of_g1
 #print axioms MinModulus.critical_subsetSum_half_overlap
+#print axioms MinModulus.critical_subsetSum_half_overlap_add_two_le
 #print axioms MinModulus.exists_light_half_witness_of_critical_range
 #print axioms MinModulus.admits_delete_of_critical_g1
 #print axioms MinModulus.admits_half_or_delete_of_critical_g1

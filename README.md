@@ -71,6 +71,7 @@ MinModulus/
   Descent.lean                  -- two-adic halving/deletion lemmas toward Conjecture 1
   G1Triangle.lean               -- three-witness closure and triangle common-touch family
   G1CriticalRange.lean          -- subset-sum overlap and automatic light half-witnesses
+  G1OverlapOrbits.lean          -- exact collision model and free half-shift orbit pairing
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -253,6 +254,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `exists_shared_omission_of_zero_at_nonzero_coeff`, `exists_touched_in_or_avoidances_share_omission`, `exists_touched_in_or_avoidances_meet_exactOmissions`, `avoidances_meet_exactOmissions_of_no_common_touched` | extracts the global pattern missing from an isolated affine shape: every selected nonzero support coordinate either already closes G1, or has an avoiding witness whose omission set meets the old omission set; under global common-touch failure this sprouts such an attached witness at every selected support coordinate, uniformly for canonical and higher-omission branches |
 | `G1CriticalRange.lean`: `two_pow_le_card_add_subsetSumShift_overlap`, `subsetSumShift_overlap_card_gt_of_add_lt` | makes the strict modulus range quantitative: the valid anchored subset-sum cube has `2^m` distinct points, so its overlap with any translate has size at least `2^(m+1)-|G|`; in a critical stratum the half-translate overlap is larger than the exact power of two omitted from the endpoint |
 | `subsetCollisionCoeffs`, `witness_of_subsetSum_eq_add`, `exists_light_half_witness_of_lt_two_pow` | converts every half-shifted cube overlap into an explicit half-witness; below `2^(m+1)` one exists automatically and all non-anchor coefficients lie in `{-1,0,1}` |
+| `G1OverlapOrbits.lean`: `subsetSumCollisionEquivOverlap`, `subsetSumCollisionSwapEquiv_ne`, `even_card_subsetSumOverlap` | identifies every overlap point uniquely with an ordered collision `(S,T)`; at a nonzero order-two shift, `(S,T) ↔ (T,S)` is fixed-point-free, so the whole overlap decomposes into two-element orbits and has even cardinality |
+| `critical_subsetSum_half_overlap_add_two_le` | strengthens the critical overlap count for nontrivial tuples: the even endpoint gap is exceeded by at least two points, not merely one; the remaining task is to exploit the supports of these paired collisions to force common touch or a disjoint layer |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
@@ -278,7 +281,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `QuadraticWedge.lean`: `shc_diff_of_valid` | every valid anchored tuple satisfies SHC |
 | `bottom_wedge_of_valid`, `quadratic_wedge_of_valid` | linear and quadratic wedges stated directly for valid tuples |
 | `shc_shift_target_card_gt` | a $`2h_x`$ shift cannot increase subset-sum level |
-| `GlobalRoadmap.lean` | defines `CriticalRangeCommonTouchedHalfWitnesses`; `critical_subsetSum_half_overlap` and `exists_light_half_witness_of_critical_range` show that its half-witness hypothesis is automatic, while `admits_delete_of_critical_g1` removes the length-preserving halving branch; critical-range G1 + G2 + G3 still imply all stratum bounds and Conjecture 1 |
+| `GlobalRoadmap.lean` | defines `CriticalRangeCommonTouchedHalfWitnesses`; `critical_subsetSum_half_overlap_add_two_le` and `exists_light_half_witness_of_critical_range` quantify and populate the paired overlap family, while `admits_delete_of_critical_g1` removes the length-preserving halving branch; critical-range G1 + G2 + G3 still imply all stratum bounds and Conjecture 1 |
 | `G1Counterexample.lean` | kernel-checks validity of `(172,41,658,861,601,286,875)` modulo `1006`, four half-witnesses with empty support intersection, and hence `¬ CommonTouchedHalfWitnesses`; also certifies that `1006` lies outside the seven-coordinate critical range |
 
 The outstanding mathematical statements are the critical-range common-touch
