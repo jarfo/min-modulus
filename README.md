@@ -70,6 +70,7 @@ MinModulus/
   AbelianMin.lean               -- Open problem 4 (all finite abelian groups)
   Descent.lean                  -- two-adic halving/deletion lemmas toward Conjecture 1
   G1Triangle.lean               -- three-witness closure and triangle common-touch family
+  G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
   QuadraticWedge.lean           -- SHC bridge and quadratic/multi-level lemmas
@@ -238,6 +239,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `exists_pure_companion_two_of_triangle_zero_opposite`, `two_smul_eq_target_add_pair_of_exact_pair_coeff_two` | proves that a zero-opposite edge must be the pure vector `-p-q+2e`, with `e` outside the triangle and affine doubling relation `2g_e=h+g_p+g_q` |
 | `exists_six_distinct_pure_centers_of_triangle_all_zero` | reduces an all-zero exact omission triangle to three pairwise-distinct external pure centers, hence a canonical six-coordinate affine doubling configuration |
 | `nonzero_three_torsion_of_two_adjacent_heavy_opposites`, `three_dvd_of_two_adjacent_heavy_opposites_zmod` | shows that two adjacent heavy opposites produce a nonzero coordinate difference killed by `3`; cyclically this forces `3 ∣ N`, so `(0,2,2)` is impossible at every modulus prime to `3` |
+| `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | turns that surviving 3-torsion obstruction into a genuine descent: delete the two coordinates and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
 | `OddOrder.lean`: `chain_order_eq`, `chain_quotient_card_bound_of_joint_dissociated` | exact SI-chain order and automatic residual separation for a chain embedded in a dissociated family |
 | `codim_one_chain_odd_card_bound` | a chain missing one coordinate already forces the full odd threshold |
