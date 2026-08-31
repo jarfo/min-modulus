@@ -15,4 +15,6 @@ import MinModulus.SHCFiveBaseCases
 import MinModulus.SHCSixGeneratorReduction
 import MinModulus.SHCSixGenerator
 import MinModulus.SHCSixGeneratorComplete
+import MinModulus.SHCSixCertificate
+import MinModulus.SHCSixBaseCases
 import MinModulus.GlobalRoadmap
