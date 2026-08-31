@@ -8,6 +8,7 @@ by Lean's kernel.
 -/
 import MinModulus.Generated.SHCSixNormalizedN67
 import MinModulus.Generated.SHCSixNormalizedN69
+import MinModulus.SHCSixCardinality
 
 namespace MinModulus
 
@@ -15,13 +16,11 @@ open SHCSixCertificate
 
 /-- There is no normalized six-coordinate SHC family in `ZMod 67`. -/
 theorem normalized_shc_six_excluded_sixty_seven : NormalizedSHCExcluded 5 67 :=
-  normalizedSHCSixExcluded_of_certificate (by norm_num)
-    SHCSixCertificate.Generated.certificate67
+  normalized_shc_six_excluded_of_lt_seventy_six (by norm_num)
 
 /-- There is no normalized six-coordinate SHC family in `ZMod 69`. -/
 theorem normalized_shc_six_excluded_sixty_nine : NormalizedSHCExcluded 5 69 :=
-  normalizedSHCSixExcluded_of_certificate (by norm_num)
-    SHCSixCertificate.Generated.certificate69
+  normalized_shc_six_excluded_of_lt_seventy_six (by norm_num)
 
 /-- The normalized six-coordinate exclusion in the first two odd cases of
 the strict window. -/
@@ -47,5 +46,13 @@ theorem normalized_shc_six_excluded_of_odd_window_le_sixty_nine {N : ℕ}
     omega
   subst N
   exact normalized_shc_six_excluded_sixty_nine
+
+/-- The uniform cube-plus-two-doubles bound closes the first six odd cases of
+the strict window without further finite certificates. -/
+theorem normalized_shc_six_excluded_of_odd_window_le_seventy_five {N : ℕ}
+    (_hodd : Odd N) (hlower : 65 ≤ N) (hupper : N ≤ 75) :
+    NormalizedSHCExcluded 5 N := by
+  letI : NeZero N := ⟨by omega⟩
+  exact normalized_shc_six_excluded_of_lt_seventy_six (by omega)
 
 end MinModulus
