@@ -938,6 +938,315 @@ theorem common_touched_of_triangle_all_one_zmod
     (fun x hx => zmod_eq_zero_or_half_of_add_self_eq_zero hN x hx)
     hcAB hcBD hcDA a b d hab hbd hda hAB hBD hDA hABd hBDa hDAb
 
+/-- Two adjacent exact two-omission witnesses with light opposite
+coefficients already close G1 in a group with unique nonzero involution.  If
+their companion `+1` coordinates agree, the adjacent relations give equal
+doubles.  If they differ, negating both light witnesses produces witnesses
+with disjoint omission pairs, contradicting witness combination. -/
+theorem common_touched_of_two_adjacent_light_opposites
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ x : G, x + x = 0 → x = 0 ∨ x = h)
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 1) (hQRp : cQR p = 1) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ, Witness g h c → c j ≠ 0 := by
+  obtain ⟨e, hep, heq, her, hPQe, hPQzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one g hcPQ p q r hpq hPQ
+      hrp hqr.symm hPQr
+  obtain ⟨f, hfq, hfr, hfp, hQRf, hQRzero⟩ :=
+    exists_companion_one_of_exact_pair_coeff_one g hcQR q r p hqr hQR
+      hpq hrp.symm hQRp
+  by_cases hef : e = f
+  · have hQRe : cQR e = 1 := by simpa [hef] using hQRf
+    have hQRzeroE : ∀ i, i ≠ q → i ≠ r → i ≠ p → i ≠ e → cQR i = 0 := by
+      simpa [hef] using hQRzero
+    have hdoubles : (2 : ℤ) • g q = (2 : ℤ) • g e :=
+      two_smul_eq_of_adjacent_triangle_same_companion g hh hcPQ hcQR
+        p q r e hpq hqr hPQ hQR hPQr hQRp hep heq her hPQe hQRe
+        hPQzero hQRzeroE
+    exact common_touched_of_two_smul_eq g hg hh hne hunique heq.symm hdoubles
+  have hlePQ : ∀ i, cPQ i ≤ 1 := by
+    intro i
+    by_cases hip : i = p
+    · subst i
+      have := (hPQ p).2 (Or.inl rfl)
+      omega
+    by_cases hiq : i = q
+    · subst i
+      have := (hPQ q).2 (Or.inr rfl)
+      omega
+    by_cases hir : i = r
+    · subst i
+      omega
+    by_cases hie : i = e
+    · subst i
+      omega
+    rw [hPQzero i hip hiq hir hie]
+    norm_num
+  have hleQR : ∀ i, cQR i ≤ 1 := by
+    intro i
+    by_cases hiq : i = q
+    · subst i
+      have := (hQR q).2 (Or.inl rfl)
+      omega
+    by_cases hir : i = r
+    · subst i
+      have := (hQR r).2 (Or.inr rfl)
+      omega
+    by_cases hip : i = p
+    · subst i
+      omega
+    by_cases hif : i = f
+    · subst i
+      omega
+    rw [hQRzero i hiq hir hip hif]
+    norm_num
+  have hcNegPQ : Witness g h (-cPQ) := witness_neg_of_le_one g hh hcPQ hlePQ
+  have hcNegQR : Witness g h (-cQR) := witness_neg_of_le_one g hh hcQR hleQR
+  have hPQone : ∀ i, cPQ i = 1 → i = r ∨ i = e := by
+    intro i hi
+    by_cases hip : i = p
+    · subst i
+      have := (hPQ p).2 (Or.inl rfl)
+      omega
+    by_cases hiq : i = q
+    · subst i
+      have := (hPQ q).2 (Or.inr rfl)
+      omega
+    by_cases hir : i = r
+    · exact Or.inl hir
+    by_cases hie : i = e
+    · exact Or.inr hie
+    rw [hPQzero i hip hiq hir hie] at hi
+    omega
+  have hQRone : ∀ i, cQR i = 1 → i = p ∨ i = f := by
+    intro i hi
+    by_cases hiq : i = q
+    · subst i
+      have := (hQR q).2 (Or.inl rfl)
+      omega
+    by_cases hir : i = r
+    · subst i
+      have := (hQR r).2 (Or.inr rfl)
+      omega
+    by_cases hip : i = p
+    · exact Or.inl hip
+    by_cases hif : i = f
+    · exact Or.inr hif
+    rw [hQRzero i hiq hir hip hif] at hi
+    omega
+  have hshare : ∀ i, ¬((-cPQ) i = -1 ∧ (-cQR) i = -1) := by
+    intro i hi
+    have hPQoneI : cPQ i = 1 := by
+      have hPQneg := hi.1
+      simp only [Pi.neg_apply] at hPQneg
+      omega
+    have hQRoneI : cQR i = 1 := by
+      have hQRneg := hi.2
+      simp only [Pi.neg_apply] at hQRneg
+      omega
+    rcases hPQone i hPQoneI with hir | hie <;>
+      rcases hQRone i hQRoneI with hip | hif
+    · exact hrp (hir.symm.trans hip)
+    · exact hfr (hif.symm.trans hir)
+    · exact hep (hie.symm.trans hip)
+    · exact hef (hie.symm.trans hif)
+  have hneg := witness_combination g hg hh hcNegPQ hcNegQR hshare
+  have hq := congrFun hneg q
+  have hPQq : cPQ q = -1 := (hPQ q).2 (Or.inr rfl)
+  have hQRq : cQR q = -1 := (hQR q).2 (Or.inl rfl)
+  simp only [Pi.neg_apply, hPQq, hQRq] at hq
+  omega
+
+/-- Cyclic specialization of the adjacent-light closure. -/
+theorem common_touched_of_two_adjacent_light_opposites_zmod
+    {N M : ℕ} [NeZero N] (hN : N = 2 * M) (hM : 0 < M)
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {cPQ cQR : Fin n → ℤ}
+    (hcPQ : Witness g (M : ZMod N) cPQ)
+    (hcQR : Witness g (M : ZMod N) cQR)
+    (p q r : Fin n) (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 1) (hQRp : cQR p = 1) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g (M : ZMod N) c → c j ≠ 0 := by
+  exact common_touched_of_two_adjacent_light_opposites g hg
+    (half_add_half hN) (half_ne_zero hN hM)
+    (fun x hx => zmod_eq_zero_or_half_of_add_self_eq_zero hN x hx)
+    hcPQ hcQR p q r hpq hqr hrp hPQ hQR hPQr hQRp
+
+/-- A zero opposite in an exact omission triangle is necessarily pure: the
+two units of positive mass of that edge witness concentrate as coefficient
+`2` at one coordinate outside the triangle.  Otherwise all coefficients
+would lie in `[-1,1]`; negating the witness would give a half-witness whose
+omissions are disjoint from the adjacent edge, contradicting combination. -/
+theorem exists_pure_companion_two_of_triangle_zero_opposite
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r : Fin n)
+    (hpq : p ≠ q) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hPQr : cPQ r = 0) :
+    ∃ e : Fin n, e ≠ p ∧ e ≠ q ∧ e ≠ r ∧ cPQ e = 2 ∧
+      ∀ j : Fin n, j ≠ p → j ≠ q → j ≠ r → j ≠ e → cPQ j = 0 := by
+  by_contra hnone
+  have hnotwo : ∀ e : Fin n, e ≠ p → e ≠ q → e ≠ r → cPQ e ≠ 2 := by
+    intro e hep heq her hce
+    apply hnone
+    refine ⟨e, hep, heq, her, hce, ?_⟩
+    intro j hjp hjq _hjr hje
+    exact witness_other_eq_zero_of_exact_pair_and_coeff_eq_two g hcPQ
+      p q e hpq hPQ hep heq hce j hjp hjq hje
+  have hlePQ : ∀ i, cPQ i ≤ 1 := by
+    intro i
+    by_cases hip : i = p
+    · subst i
+      have := (hPQ p).2 (Or.inl rfl)
+      omega
+    by_cases hiq : i = q
+    · subst i
+      have := (hPQ q).2 (Or.inr rfl)
+      omega
+    by_cases hir : i = r
+    · subst i
+      omega
+    have hclass := witness_coeff_eq_zero_or_one_or_two_of_exact_pair
+      g hcPQ p q i hpq hPQ hip hiq
+    have hneTwo := hnotwo i hip hiq hir
+    rcases hclass with h0 | h1 | h2 <;> omega
+  have hcNegPQ : Witness g h (-cPQ) := witness_neg_of_le_one g hh hcPQ hlePQ
+  have hshare : ∀ i, ¬((-cPQ) i = -1 ∧ cQR i = -1) := by
+    intro i hi
+    rcases (hQR i).1 hi.2 with hiq | hir
+    · subst i
+      have hPQq : cPQ q = -1 := (hPQ q).2 (Or.inr rfl)
+      simp only [Pi.neg_apply, hPQq] at hi
+      omega
+    · subst i
+      simp only [Pi.neg_apply, hPQr] at hi
+      omega
+  have hneg := witness_combination g hg hh hcNegPQ hcQR hshare
+  have hp := congrFun hneg p
+  have hPQp : cPQ p = -1 := (hPQ p).2 (Or.inl rfl)
+  have hQRp : cQR p ≠ -1 := by
+    intro hbad
+    rcases (hQR p).1 hbad with hpq' | hpr
+    · exact hpq hpq'
+    · exact hrp hpr.symm
+  simp only [Pi.neg_apply, hPQp] at hp
+  exact hQRp (by omega)
+
+/-- A pure two-omission witness is the affine doubling relation
+`2g_e = h + g_p + g_q`. -/
+theorem two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ} (hc : Witness g h c)
+    (p q e : Fin n) (hpq : p ≠ q)
+    (homit : ∀ i, c i = -1 ↔ i = p ∨ i = q)
+    (hep : e ≠ p) (heq : e ≠ q) (hce : c e = 2) :
+    (2 : ℤ) • g e = h + g p + g q := by
+  have hterm : ∀ i, c i • g i =
+      (if i = e then (2 : ℤ) • g i else 0) -
+        (if i = p then g i else 0) - (if i = q then g i else 0) := by
+    intro i
+    by_cases hip : i = p
+    · subst i
+      have hcp : c p = -1 := (homit p).2 (Or.inl rfl)
+      simp [hcp, hpq, Ne.symm hep]
+    by_cases hiq : i = q
+    · subst i
+      have hcq : c q = -1 := (homit q).2 (Or.inr rfl)
+      simp [hcq, hpq.symm, Ne.symm heq]
+    by_cases hie : i = e
+    · subst i
+      simp [hce, hep, heq]
+    have hci : c i = 0 :=
+      witness_other_eq_zero_of_exact_pair_and_coeff_eq_two g hc p q e hpq
+        homit hep heq hce i hip hiq hie
+    simp [hci, hip, hiq, hie]
+  have hformula : (∑ i, c i • g i) =
+      (2 : ℤ) • g e - g p - g q := by
+    rw [Finset.sum_congr rfl fun i _ => hterm i,
+      Finset.sum_sub_distrib, Finset.sum_sub_distrib,
+      Finset.sum_ite_eq' univ e fun i => (2 : ℤ) • g i,
+      Finset.sum_ite_eq' univ p g, Finset.sum_ite_eq' univ q g]
+    simp
+  have hval : (2 : ℤ) • g e - g p - g q = h := by
+    rw [← hformula]
+    exact hc.2.2.2
+  calc
+    (2 : ℤ) • g e = ((2 : ℤ) • g e - g p - g q) + g p + g q := by abel
+    _ = h + g p + g q := by rw [hval]
+
+/-- Pure companions of adjacent zero-opposite edges are distinct.  Equality
+would make the two affine doubling relations identify the nonshared triangle
+vertices, contradicting injectivity of a valid tuple. -/
+theorem pure_companions_ne_of_adjacent_zero_opposites
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    {cPQ cQR : Fin n → ℤ} (hcPQ : Witness g h cPQ)
+    (hcQR : Witness g h cQR) (p q r e f : Fin n)
+    (hpq : p ≠ q) (hqr : q ≠ r) (hrp : r ≠ p)
+    (hPQ : ∀ i, cPQ i = -1 ↔ i = p ∨ i = q)
+    (hQR : ∀ i, cQR i = -1 ↔ i = q ∨ i = r)
+    (hep : e ≠ p) (heq : e ≠ q) (hfe : f ≠ q) (hfr : f ≠ r)
+    (hPQe : cPQ e = 2) (hQRf : cQR f = 2) : e ≠ f := by
+  intro hef
+  subst f
+  have hPQval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcPQ p q e hpq hPQ hep heq hPQe
+  have hQRval := two_smul_eq_target_add_pair_of_exact_pair_coeff_two
+    g hcQR q r e hqr hQR hfe hfr hQRf
+  have hsums : h + g p + g q = h + g q + g r := hPQval.symm.trans hQRval
+  have hdiff : g p - g r = (h + g p + g q) - (h + g q + g r) := by abel
+  have hzero : g p - g r = 0 := by rw [hdiff, hsums, sub_self]
+  have hpr : p = r := validTuple_injective g hg (sub_eq_zero.mp hzero)
+  exact hrp hpr.symm
+
+/-- An all-zero exact omission triangle expands to three pairwise-distinct
+pure companion coordinates outside its three vertices.  Thus the residual is
+a six-coordinate affine doubling configuration, not an arbitrary coefficient
+pattern. -/
+theorem exists_six_distinct_pure_centers_of_triangle_all_zero
+    (g : Fin n → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    {cAB cBD cDA : Fin n → ℤ} (hcAB : Witness g h cAB)
+    (hcBD : Witness g h cBD) (hcDA : Witness g h cDA)
+    (a b d : Fin n) (hab : a ≠ b) (hbd : b ≠ d) (hda : d ≠ a)
+    (hAB : ∀ i, cAB i = -1 ↔ i = a ∨ i = b)
+    (hBD : ∀ i, cBD i = -1 ↔ i = b ∨ i = d)
+    (hDA : ∀ i, cDA i = -1 ↔ i = d ∨ i = a)
+    (hABd : cAB d = 0) (hBDa : cBD a = 0) (hDAb : cDA b = 0) :
+    ∃ x y z : Fin n,
+      (x ≠ a ∧ x ≠ b ∧ x ≠ d) ∧
+      (y ≠ b ∧ y ≠ d ∧ y ≠ a) ∧
+      (z ≠ d ∧ z ≠ a ∧ z ≠ b) ∧
+      x ≠ y ∧ y ≠ z ∧ z ≠ x ∧
+      cAB x = 2 ∧ cBD y = 2 ∧ cDA z = 2 := by
+  obtain ⟨x, hxa, hxb, hxd, hABx, _hABzero⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite g hg hh hcAB hcBD
+      a b d hab hda hAB hBD hABd
+  obtain ⟨y, hyb, hyd, hya, hBDy, _hBDzero⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite g hg hh hcBD hcDA
+      b d a hbd hab hBD hDA hBDa
+  obtain ⟨z, hzd, hza, hzb, hDAz, _hDAzero⟩ :=
+    exists_pure_companion_two_of_triangle_zero_opposite g hg hh hcDA hcAB
+      d a b hda hbd hDA hAB hDAb
+  have hxy : x ≠ y := pure_companions_ne_of_adjacent_zero_opposites
+    g hg hcAB hcBD a b d x y hab hbd hda hAB hBD
+      hxa hxb hyb hyd hABx hBDy
+  have hyz : y ≠ z := pure_companions_ne_of_adjacent_zero_opposites
+    g hg hcBD hcDA b d a y z hbd hda hab hBD hDA
+      hyb hyd hzd hza hBDy hDAz
+  have hzx : z ≠ x := pure_companions_ne_of_adjacent_zero_opposites
+    g hg hcDA hcAB d a b z x hda hab hbd hDA hAB
+      hzd hza hxa hxb hDAz hABx
+  exact ⟨x, y, z, ⟨hxa, hxb, hxd⟩, ⟨hyb, hyd, hya⟩,
+    ⟨hzd, hza, hzb⟩, hxy, hyz, hzx, hABx, hBDy, hDAz⟩
+
 /-- If the admissible sum of three witnesses has a unique omission, that
 omitted coordinate is touched by every witness.  This packages the
 three-witness closure directly in the common-touch form needed by G1. -/
