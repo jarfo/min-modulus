@@ -90,6 +90,7 @@ MinModulus/
   G1MinimalSupportTransitions.lean -- escaping transitions cover a minimal support tail
   G1MinimalSupportFibers.lean -- exact avoided-source fiber sum by escape target
   G1DominantStarCrossing.lean -- crossing star forces mass or strict majority
+  G1StrictMajorityGrowth.lean -- all escape targets grow support and halve weight
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -310,6 +311,7 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `G1MinimalSupportFibers.lean`: `card_canonicalSupportEscapeIncidences_eq_sum_avoided`, `commonTouched_or_heavy_or_minSupportEscapeFiber_sum` | reorganizes escape incidences by target: an externally escaping target `q` has exact fiber `B_r\(A_q∪B_q)`, giving the concrete multiplicity inequality `|B_r| ≤ ∑_q |B_r\(A_q∪B_q)|` over external targets |
 | `card_sourceTail_sdiff_le_card_externalSupport_of_support_card_le`, `commonTouched_or_heavy_or_minSupport_externalSupport_sum` | uses support minimality to charge every avoided source-tail coordinate to a newly introduced target-support coordinate, yielding `|B_r| ≤ ∑_q |(A_q∪B_q)\(A_r∪B_r)|` |
 | `G1DominantStarCrossing.lean`: `weight_mul_sum_erase_le_canonicalCrossMass`, `square_le_four_crossMass_or_total_lt_two_weight` | orients every pair incident to a fixed collision toward an actual crossing and injects the weight-preserving star into crossing pairs; a diagonal-controlling shape therefore either forces the fourfold crossing bound or has strict majority of total canonical padding weight |
+| `G1StrictMajorityGrowth.lean`: `canonical_other_support_growth_of_strictMajority`, `canonicalSupportEscapeTarget_growth_of_strictMajority` | strict majority makes the dominant shape the unique support minimum: every other canonical target has strictly larger support and at most half its padding weight; every actual escape target also introduces strictly more external coordinates than the source-tail fiber it absorbs |
 | `critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape` | packages the current critical frontier: large crossing product mass, common touch, a heavy witness, or one maximum-weight/minimum-support shape whose counted escaping incidences cover its negative tail |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |

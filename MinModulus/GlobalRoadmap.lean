@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1DominantStarCrossing
+import MinModulus.G1StrictMajorityGrowth
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -201,6 +201,10 @@ noncomputable def IsCriticalDominantEscapeCollision
   (criticalCanonicalReducedCollisions g).sum
       (reducedCollisionWeight (m := n)) <
     2 * reducedCollisionWeight (m := n) r ∧
+  (∀ u ∈ criticalCanonicalReducedCollisions g, u ≠ r →
+    (r.val.1 ∪ r.val.2).card < (u.val.1 ∪ u.val.2).card ∧
+      2 * reducedCollisionWeight (m := n) u ≤
+        reducedCollisionWeight (m := n) r) ∧
   (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
       (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
     2 * (reducedCollisionWeight (m := n) r *
@@ -577,7 +581,15 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
       · exact Or.inr (Or.inl htouch)
       · exact Or.inr (Or.inr (Or.inl hheavy))
       · exact Or.inr (Or.inr (Or.inr ⟨r, hr, by
-          refine ⟨hrmax, hrmin, hmajor', hrrelative, hrambient,
+          have hgrowth := canonical_other_support_growth_of_strictMajority
+            (half_add_half hN) r hr' hmajor
+          have hgrowth' : ∀ u ∈ criticalCanonicalReducedCollisions g,
+              u ≠ r →
+              (r.val.1 ∪ r.val.2).card < (u.val.1 ∪ u.val.2).card ∧
+                2 * reducedCollisionWeight (m := n) u ≤
+                  reducedCollisionWeight (m := n) r := by
+            simpa [criticalCanonicalReducedCollisions] using hgrowth
+          refine ⟨hrmax, hrmin, hmajor', hgrowth', hrrelative, hrambient,
             ?_, ?_, ?_, ?_⟩
           · simpa [IsCriticalDominantEscapeCollision] using hcover.1
           · simpa [IsCriticalDominantEscapeCollision] using hcover.2
