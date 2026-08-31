@@ -77,6 +77,7 @@ MinModulus/
   G1ReducedIntersections.lean   -- weighted shapes intersect except for exact opposites
   G1CanonicalIntersections.lean -- canonical intersecting representatives and exact half-weight
   G1CanonicalAttachments.lean  -- internal support-to-omission incidence and weighted mass
+  G1AttachmentDeficit.lean     -- positive-tail growth or quantified anchor deficit
   G1ThreeDescent.lean           -- delete two coordinates at an order-three difference
   OddOrder.lean                 -- odd-order bound, chain rigidity, linear wedge
   RelationCertificate.lean      -- adjugate/determinant bridge for relation systems
@@ -273,6 +274,8 @@ its remaining inputs explicit and kernel-check the reusable parts:
 | `G1CanonicalAttachments.lean`: `reducedSubsetSumCollision_eq_of_right_eq`, `canonicalReducedNegativeTails_pairwise_inter` | validity makes the negative-tail projection injective, so the canonical collisions give an honest pairwise-intersecting finite set family with no hidden multiplicity |
 | `commonTouched_or_canonicalReducedCollisions_internal_attachments`, `commonTouched_or_canonicalReducedCollisions_right_card_two_le` | under common-touch failure, every vertex of every canonical tail has an attached half-witness which vanishes there and omits a different vertex of the same tail; in particular every tail has size at least two |
 | `commonTouched_or_critical_internalAttachmentPairs_weight_lower_bound` | packages the new quantitative frontier: either critical G1 already closes, or ordered internal support-to-omission incidences carry weighted mass at least the endpoint gap plus two; the remaining task is to bound witness multiplicity across these incidences or turn them into a disjoint layer |
+| `G1AttachmentDeficit.lean`: `attachedWitness_omits_left_or_anchor_deficit` | subtracts an attached witness from its canonical collision witness and invokes validity: either the attachment creates an omission on the positive tail or its anchor coefficient falls below the collision anchor by more than one |
+| `balanced_attachedWitness_omits_left`, `commonTouched_or_balancedCanonicalReducedCollisions_cross_attachments` | eliminates the anchor-deficit branch for balanced shapes; every negative-tail vertex then sprouts a witness omitting coordinates on both the positive and negative tails, giving the next cross-tail incidence layer |
 | `G1ThreeDescent.lean`: `pair_descent_order_three`, `exists_validTuple_quotient_of_two_adjacent_heavy_opposites` | gives a generic order-three descent: delete two coordinates differing by nonzero 3-torsion and quotient by their difference, producing a valid tuple two coordinates shorter in a group three times smaller; the adjacent-heavy specialization is retained algebraically but is no longer needed for half-target G1 |
 | `quotOrderThreeEquivZMod`, `exists_validTuple_third_of_two_adjacent_heavy_opposites` | identifies a cyclic order-three quotient with `ZMod (N/3)`; this remains reusable when a genuine order-three coordinate pair arises outside the now-closed adjacent-heavy half-target profile |
 | `UniqueSums.lean`: `valid_gap` | the SI set is valid at every endpoint $`2^n-2^t`$ with $`2^t\le n`$ |
