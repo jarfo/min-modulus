@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1StrictMajorityGrowth
+import MinModulus.G1MajoritySupportBound
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -205,6 +205,10 @@ noncomputable def IsCriticalDominantEscapeCollision
     (r.val.1 ∪ r.val.2).card < (u.val.1 ∪ u.val.2).card ∧
       2 * reducedCollisionWeight (m := n) u ≤
         reducedCollisionWeight (m := n) r) ∧
+  (r.val.1 ∪ r.val.2).card +
+      min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
+  min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
+      n - (r.val.1 ∪ r.val.2).card ∧
   (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) *
       (2 ^ (min (s + 1) (Nat.log 2 (n + 1)) - 1) + 1) ≤
     2 * (reducedCollisionWeight (m := n) r *
@@ -385,6 +389,47 @@ theorem criticalCanonicalReducedCollisions_nonempty
   by_contra hne
   rw [Finset.not_nonempty_iff_eq_empty.mp hne] at hweight
   simp at hweight
+
+/-- Strict majority plus the certified critical weight floor bounds the
+dominant reduced support and its padding complement. -/
+theorem critical_strictMajority_support_bounds
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (r : ReducedSubsetSumCollision g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    (hmajor : (criticalCanonicalReducedCollisions g).sum
+        (reducedCollisionWeight (m := n)) <
+      2 * reducedCollisionWeight (m := n) r) :
+    (r.val.1 ∪ r.val.2).card +
+        min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
+      min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
+        n - (r.val.1 ∪ r.val.2).card := by
+  let a := min (s + 1) (Nat.log 2 (n + 1))
+  have hlog : 0 < Nat.log 2 (n + 1) :=
+    Nat.log_pos (by norm_num) (by omega)
+  have ha : 0 < a := by
+    dsimp [a]
+    omega
+  have hfloor := critical_canonicalReducedCollision_weight_half_lower_bound
+    hn hq g hg hcritical
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hfloor' : 2 ^ (a - 1) + 1 ≤
+      (canonicalReducedCollisions (g := g) (half_add_half hN)).sum
+        (reducedCollisionWeight (m := n)) := by
+    simpa [a, criticalCanonicalReducedCollisions] using hfloor
+  have hmajor' :
+      (canonicalReducedCollisions (g := g) (half_add_half hN)).sum
+          (reducedCollisionWeight (m := n)) <
+        2 * reducedCollisionWeight (m := n) r := by
+    simpa [criticalCanonicalReducedCollisions] using hmajor
+  constructor
+  · simpa [a] using support_card_add_le_of_weightFloor_and_strictMajority
+      (half_add_half hN) r a ha hfloor' hmajor'
+  · simpa [a] using pred_le_compl_support_card_of_weightFloor_and_strictMajority
+      (half_add_half hN) r a ha hfloor' hmajor'
 
 /-- Diagonal concentration produces one explicit maximum-weight canonical
 collision.  Its padding weight controls the diagonal relative to the actual
@@ -575,6 +620,8 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
               (reducedCollisionWeight (m := n)) <
             2 * reducedCollisionWeight (m := n) r := by
         simpa [criticalCanonicalReducedCollisions] using hmajor
+      have hsupport := critical_strictMajority_support_bounds
+        hn hq g hg hcritical r hmajor'
       rcases commonTouched_or_heavy_or_minSupportEscapeIncidences_cover
           g hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin' with
         htouch | hheavy | hcover
@@ -589,7 +636,8 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
                 2 * reducedCollisionWeight (m := n) u ≤
                   reducedCollisionWeight (m := n) r := by
             simpa [criticalCanonicalReducedCollisions] using hgrowth
-          refine ⟨hrmax, hrmin, hmajor', hgrowth', hrrelative, hrambient,
+          refine ⟨hrmax, hrmin, hmajor', hgrowth', hsupport.1, hsupport.2,
+            hrrelative, hrambient,
             ?_, ?_, ?_, ?_⟩
           · simpa [IsCriticalDominantEscapeCollision] using hcover.1
           · simpa [IsCriticalDominantEscapeCollision] using hcover.2
