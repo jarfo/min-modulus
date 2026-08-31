@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1AttachmentDeficit
+import MinModulus.G1LightWitnessReduction
 import MinModulus.UniqueSums
 
 namespace MinModulus
