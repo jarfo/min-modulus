@@ -72,4 +72,5 @@ import MinModulus.G1MinimumFiberBudget
 import MinModulus.G1TwoSingletonCoupling
 import MinModulus.G1TwoSingletonTriangle
 import MinModulus.G1QuarterCenterTransport
+import MinModulus.G1QuarterWitnessQuartet
 import MinModulus.G1Counterexample
