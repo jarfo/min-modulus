@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1LayerSecondMoment
+import MinModulus.G1SignatureSubcubeCoverage
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -259,6 +259,11 @@ noncomputable def IsCriticalDominantEscapeCollision
         (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card + 2) *
       (rootAndEscapeBlockedSignatureValueUnion
         (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card ∧
+  2 ^ r.val.2.card * (2 * reducedCollisionWeight (m := n) r) ≤
+    2 ^ r.val.2.card *
+        (rootAndEscapeBlockedSignatureValueUnion
+          (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card +
+      reducedCollisionWeight (m := n) r ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -802,9 +807,15 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
           have hsecondMoment :=
             two_mul_signatureCount_succ_mul_weight_le
               hg (half_add_half hN) r hr' hrmin' hmajor
+          have htailNonempty :=
+            canonicalReducedCollision_negative_tail_nonempty
+              g hg (half_add_half hN) (half_ne_zero hN hM) hr'
+          have hsharpCoverage :=
+            pow_sourceTailCard_mul_two_mul_weight_le_signatureValueUnion_add_weight
+              hg (half_add_half hN) r hrmin' htailNonempty hsignatureCoverage
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
-            hsignatureLayers, hsignaturePairwise, hsecondMoment,
+            hsignatureLayers, hsignaturePairwise, hsecondMoment, hsharpCoverage,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
