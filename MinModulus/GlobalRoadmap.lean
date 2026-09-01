@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1SignatureCoverage
+import MinModulus.G1SignatureLayers
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -237,6 +237,21 @@ noncomputable def IsCriticalDominantEscapeCollision
       (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
     C.card = (reducedCollisionSupport r).card ∧
       (blockedSignatureEscapeFiber r C).Nonempty) ∧
+  (∀ C ∈ canonicalSupportEscapeBlockedSignatures
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
+    (blockedSignatureValueLayer g C).card =
+        reducedCollisionWeight (m := n) r ∧
+      2 * (blockedSignatureValueLayer g C ∩
+          collisionPaddingValueLayer r).card ≤
+        reducedCollisionWeight (m := n) r) ∧
+  (∀ C ∈ canonicalSupportEscapeBlockedSignatures
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
+    ∀ D ∈ canonicalSupportEscapeBlockedSignatures
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
+      C ≠ D →
+        2 * (blockedSignatureValueLayer g C ∩
+            blockedSignatureValueLayer g D).card ≤
+          reducedCollisionWeight (m := n) r) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -755,8 +770,31 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
                 (half_add_half hN) r hrmin' hC,
               escapeBlockedSignature_fiber_nonempty
                 (half_add_half hN) r hrmin' hC⟩
+          have hsignatureLayers : ∀ C ∈
+              canonicalSupportEscapeBlockedSignatures (half_add_half hN) r,
+              (blockedSignatureValueLayer g C).card =
+                  reducedCollisionWeight (m := n) r ∧
+                2 * (blockedSignatureValueLayer g C ∩
+                    collisionPaddingValueLayer r).card ≤
+                  reducedCollisionWeight (m := n) r := by
+            intro C hC
+            exact ⟨card_escapeBlockedSignatureValueLayer_eq_rootWeight
+                hg (half_add_half hN) r hrmin' hC,
+              two_mul_card_escapeBlockedSignatureValueLayer_inter_root_le
+                hg (half_add_half hN) r hr' hmajor hC⟩
+          have hsignaturePairwise : ∀ C ∈
+              canonicalSupportEscapeBlockedSignatures (half_add_half hN) r,
+              ∀ D ∈ canonicalSupportEscapeBlockedSignatures
+                (half_add_half hN) r, C ≠ D →
+                2 * (blockedSignatureValueLayer g C ∩
+                    blockedSignatureValueLayer g D).card ≤
+                  reducedCollisionWeight (m := n) r := by
+            intro C hC D hD hCD
+            exact two_mul_card_escapeBlockedSignatureValueLayers_inter_le
+              hg (half_add_half hN) r hrmin' hC hD hCD
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
+            hsignatureLayers, hsignaturePairwise,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
