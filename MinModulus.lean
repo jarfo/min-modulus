@@ -99,4 +99,5 @@ import MinModulus.G1TransportLastWrite
 import MinModulus.G1TransportSameRootObstruction
 import MinModulus.G1TransportLiveProfileObstruction
 import MinModulus.G1LargeSupportUpperFacePacking
+import MinModulus.G1PositiveUpperNesting
 import MinModulus.G1Counterexample
