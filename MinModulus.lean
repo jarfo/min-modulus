@@ -75,4 +75,5 @@ import MinModulus.G1QuarterCenterTransport
 import MinModulus.G1QuarterWitnessQuartet
 import MinModulus.G1QuarterLayerCount
 import MinModulus.G1TwoSingletonAllZero
+import MinModulus.G1AnchorHeavyGrowth
 import MinModulus.G1Counterexample
