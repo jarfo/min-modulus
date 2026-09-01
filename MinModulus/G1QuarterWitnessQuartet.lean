@@ -80,6 +80,22 @@ theorem balancedPairCoeffs_witness
   · simpa [balancedPairCoeffs, add_smul, sub_smul,
       Finset.sum_add_distrib, Finset.sum_sub_distrib] using hval
 
+/-- Distinct positive coordinates make a balanced pair vector light. -/
+theorem balancedPairCoeffs_le_one
+    {n : ℕ} (p q a b : Fin n) (hpq : p ≠ q) :
+    ∀ i, balancedPairCoeffs p q a b i ≤ 1 := by
+  intro i
+  by_cases hip : i = p
+  · subst i
+    simp [balancedPairCoeffs, hpq]
+    omega
+  by_cases hiq : i = q
+  · subst i
+    simp [balancedPairCoeffs, hpq.symm]
+    omega
+  simp [balancedPairCoeffs, hip, hiq]
+  omega
+
 /-- The two negative coordinates are exactly the omissions of a balanced
 pair vector. -/
 theorem balancedPairCoeffs_exactOmissions
