@@ -59,4 +59,5 @@ import MinModulus.GlobalRoadmap
 import MinModulus.G1CriticalHybridSandwich
 import MinModulus.G1GenuineDominantResidual
 import MinModulus.G1EmptyTailDepthCharge
+import MinModulus.G1DominantFiberWeight
 import MinModulus.G1Counterexample
