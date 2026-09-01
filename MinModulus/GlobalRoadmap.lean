@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1SignatureIntersectingCoverage
+import MinModulus.G1SignaturePositiveFace
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -280,6 +280,13 @@ noncomputable def IsCriticalDominantEscapeCollision
       (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card ∧
   2 * reducedCollisionWeight (m := n) r + 2 ^ (n - r.val.2.card) ≤
     2 ^ n ∧
+  ((∃ u ∈ canonicalSupportEscapeTargets
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
+      (u, r) ∈ canonicalPositiveNegativeCrossPairs (g := g)
+        (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring))) ∨
+    2 * reducedCollisionWeight (m := n) r + 2 ^ (n - r.val.1.card) +
+        2 ^ (n - r.val.2.card) ≤
+      2 ^ n + reducedCollisionWeight (m := n) r) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -849,11 +856,16 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             two_mul_weight_add_tailFace_le_fullCube
               hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
                 hsignatureCoverage
+          have hpositiveFaceSplit :=
+            exists_escapeTarget_reverseCross_or_twoTailUpperFaces_fullCube
+              hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
+                hsignatureCoverage
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
             hsignatureLayers, hsignaturePairwise, hsecondMoment, hsharpCoverage,
             hupperFace, hupperFaceFull,
             hfactorTwo, henrichedUnscaled, hfullCubeUnscaled,
+            hpositiveFaceSplit,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
