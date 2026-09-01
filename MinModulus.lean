@@ -142,4 +142,5 @@ import MinModulus.G1AvoidancePeriodThreeTriangle
 import MinModulus.G1AvoidanceExactTriangleZero
 import MinModulus.G1AvoidanceExactTriangleProfiles
 import MinModulus.G1AvoidanceTriangleQuarterLayers
+import MinModulus.G1AvoidanceQuarterTransport
 import MinModulus.G1Counterexample
