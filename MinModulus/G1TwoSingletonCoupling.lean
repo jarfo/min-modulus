@@ -36,7 +36,9 @@ theorem two_singleton_escapeTargets_common_negative_outside
     (hu : u ∈ canonicalSupportEscapeTargets hh r)
     (hqfiber : r.val.2 \ restoredCollisionBlockedSupport r q = {j})
     (hufiber : r.val.2 \ restoredCollisionBlockedSupport r u = {k}) :
-    q ≠ u ∧ k ∈ q.val.2 ∧ j ∈ u.val.2 ∧ ∃ z : Fin m,
+    q ≠ u ∧ j ∉ reducedCollisionSupport q ∧
+      k ∉ reducedCollisionSupport u ∧
+      k ∈ q.val.2 ∧ j ∈ u.val.2 ∧ ∃ z : Fin m,
       z ∈ q.val.2 ∧ z ∈ u.val.2 ∧ z ∉ r.val.2 := by
   classical
   rcases mem_canonicalSupportEscapeTargets_iff.mp hq with ⟨jq, hjq⟩
@@ -52,6 +54,28 @@ theorem two_singleton_escapeTargets_common_negative_outside
         _ = r.val.2 \ restoredCollisionBlockedSupport r u := by rw [heq]
         _ = {k} := hufiber
     exact hjk (Finset.singleton_inj.mp hsingle)
+  have hjqAvoid : j ∉ reducedCollisionSupport q := by
+    have hjdiff : j ∈ r.val.2 \
+        restoredCollisionBlockedSupport r q := by
+      rw [hqfiber]
+      simp
+    have hjroot : j ∈ reducedCollisionSupport r :=
+      Finset.mem_union_right _ (Finset.mem_sdiff.mp hjdiff).1
+    intro hjqSupport
+    exact (Finset.mem_sdiff.mp hjdiff).2
+      ((mem_restoredCollisionBlockedSupport_iff_of_mem_rootSupport
+        r q (hrmin q hjq'.2.1) hjroot).2 hjqSupport)
+  have hkuAvoid : k ∉ reducedCollisionSupport u := by
+    have hkdiff : k ∈ r.val.2 \
+        restoredCollisionBlockedSupport r u := by
+      rw [hufiber]
+      simp
+    have hkroot : k ∈ reducedCollisionSupport r :=
+      Finset.mem_union_right _ (Finset.mem_sdiff.mp hkdiff).1
+    intro hkuSupport
+    exact (Finset.mem_sdiff.mp hkdiff).2
+      ((mem_restoredCollisionBlockedSupport_iff_of_mem_rootSupport
+        r u (hrmin u hju'.2.1) hkroot).2 hkuSupport)
   have hkq : k ∈ q.val.2 := by
     have hinter := canonicalReducedCollision_negative_tails_inter
       g hg hh hh0 r q
@@ -109,7 +133,7 @@ theorem two_singleton_escapeTargets_common_negative_outside
   obtain ⟨z, hz⟩ := hinter
   have hzq := (Finset.mem_inter.mp hz).1
   have hzu := (Finset.mem_inter.mp hz).2
-  refine ⟨hqu, hkq, hjuTail, z, hzq, hzu, ?_⟩
+  refine ⟨hqu, hjqAvoid, hkuAvoid, hkq, hjuTail, z, hzq, hzu, ?_⟩
   intro hzB
   have hzroot : z ∈ reducedCollisionSupport r :=
     Finset.mem_union_right _ hzB
@@ -199,6 +223,8 @@ theorem exists_two_selectedEscapeTargets_common_negative_outside_of_tail_card_tw
       j ≠ k ∧ r.val.2 = {j, k} ∧
       q ∈ canonicalSupportEscapeTargets hh r ∧
       u ∈ canonicalSupportEscapeTargets hh r ∧ q ≠ u ∧
+      j ∉ reducedCollisionSupport q ∧
+      k ∉ reducedCollisionSupport u ∧
       k ∈ q.val.2 ∧ j ∈ u.val.2 ∧
       z ∈ q.val.2 ∧ z ∈ u.val.2 ∧ z ∉ r.val.2 ∧
       ((q.val.2 = {k, z} ∧ u.val.2 = {j, z}) ∨
@@ -275,13 +301,13 @@ theorem exists_two_selectedEscapeTargets_common_negative_outside_of_tail_card_tw
   have hufiber : r.val.2 \ restoredCollisionBlockedSupport r u = {k} := by
     rw [huspec.2]
     exact hCkfiber
-  obtain ⟨hqu, hkq, hju, z, hzq, hzu, hzB⟩ :=
+  obtain ⟨hqu, hjqAvoid, hkuAvoid, hkq, hju, z, hzq, hzu, hzB⟩ :=
     two_singleton_escapeTargets_common_negative_outside
       hg hh hh0 r q u hr hrmin hjk hB hqspec.1 huspec.1 hqfiber hufiber
   have hsplit := two_singleton_omissionFan_exact_triangle_or_tail_growth
     q.val.2 u.val.2 r.val.2 hjB hkB hzB hkq hzq hju hzu
   exact ⟨j, k, q, u, z, hjk, hB, hqspec.1, huspec.1,
-    hqu, hkq, hju, hzq, hzu, hzB, hsplit⟩
+    hqu, hjqAvoid, hkuAvoid, hkq, hju, hzq, hzu, hzB, hsplit⟩
 
 section CriticalTwoSingletonCoupling
 
@@ -307,6 +333,8 @@ theorem genuineDominant_two_selectedEscapeTargets_common_negative_outside_of_tai
         j ≠ k ∧ r.val.2 = {j, k} ∧
         v ∈ canonicalSupportEscapeTargets hh r ∧
         u ∈ canonicalSupportEscapeTargets hh r ∧ v ≠ u ∧
+        j ∉ reducedCollisionSupport v ∧
+        k ∉ reducedCollisionSupport u ∧
         k ∈ v.val.2 ∧ j ∈ u.val.2 ∧
         z ∈ v.val.2 ∧ z ∈ u.val.2 ∧ z ∉ r.val.2 ∧
         ((v.val.2 = {k, z} ∧ u.val.2 = {j, z}) ∨
