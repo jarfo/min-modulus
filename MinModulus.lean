@@ -105,4 +105,5 @@ import MinModulus.G1PositiveUpperCrossingNormalization
 import MinModulus.G1PositiveUpperNestedCrowding
 import MinModulus.G1PositiveUpperAdjacentNesting
 import MinModulus.G1PositiveUpperAdjacentCrowding
+import MinModulus.G1PositiveUpperAdjacentSupportSplit
 import MinModulus.G1Counterexample
