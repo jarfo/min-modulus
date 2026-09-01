@@ -81,4 +81,5 @@ import MinModulus.G1AnchorExchangeSignature
 import MinModulus.G1AnchorExchangePrivateSlices
 import MinModulus.G1AnchorExchangePositiveFace
 import MinModulus.G1SupportGrowthAmortization
+import MinModulus.G1SupportStarConcentration
 import MinModulus.G1Counterexample
