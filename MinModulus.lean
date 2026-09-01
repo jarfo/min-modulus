@@ -68,4 +68,5 @@ import MinModulus.G1SignatureThirdSlice
 import MinModulus.G1SignatureOrderedSlices
 import MinModulus.G1MeetingOrderedSlices
 import MinModulus.G1FiberAdaptiveSlices
+import MinModulus.G1MinimumFiberBudget
 import MinModulus.G1Counterexample

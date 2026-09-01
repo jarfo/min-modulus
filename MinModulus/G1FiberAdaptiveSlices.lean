@@ -21,13 +21,17 @@ open Finset
 
 variable {m : ℕ}
 
-/-- A canonical selected signature covering `j`, with the empty set as an
-irrelevant fallback when no such signature exists. -/
+/-- A canonical minimum-fiber signature covering `j`, with the empty set as
+an irrelevant fallback when no such signature exists.  The finite minimum
+is taken with respect to `|(B \ C)|`; ties are resolved by classical choice. -/
 noncomputable def selectedCoveringSignature
     (S : Finset (Finset (Fin m))) (B : Finset (Fin m)) (j : Fin m) :
     Finset (Fin m) := by
   classical
-  exact if h : ∃ C ∈ S, j ∈ B \ C then Classical.choose h else ∅
+  let T := S.filter (fun C ↦ j ∈ B \ C)
+  exact if hT : T.Nonempty then
+    Classical.choose (T.exists_min_image (fun C ↦ (B \ C).card) hT)
+  else ∅
 
 theorem selectedCoveringSignature_mem_and_covers
     (S : Finset (Finset (Fin m))) (B : Finset (Fin m)) (j : Fin m)
@@ -35,8 +39,31 @@ theorem selectedCoveringSignature_mem_and_covers
     selectedCoveringSignature S B j ∈ S ∧
       j ∈ B \ selectedCoveringSignature S B j := by
   classical
-  rw [selectedCoveringSignature, dif_pos h]
-  exact Classical.choose_spec h
+  let T := S.filter (fun C ↦ j ∈ B \ C)
+  have hT : T.Nonempty := by
+    rcases h with ⟨C, hCS, hjC⟩
+    exact ⟨C, Finset.mem_filter.mpr ⟨hCS, hjC⟩⟩
+  rw [selectedCoveringSignature, dif_pos hT]
+  exact (Finset.mem_filter.mp
+    (Classical.choose_spec
+      (T.exists_min_image (fun C ↦ (B \ C).card) hT)).1)
+
+/-- The selected covering signature has the smallest escape fiber among all
+signatures covering the same coordinate. -/
+theorem selectedCoveringSignature_fiberCard_le
+    (S : Finset (Finset (Fin m))) (B : Finset (Fin m)) (j : Fin m)
+    (h : ∃ C ∈ S, j ∈ B \ C)
+    {C : Finset (Fin m)} (hCS : C ∈ S) (hjC : j ∈ B \ C) :
+    (B \ selectedCoveringSignature S B j).card ≤ (B \ C).card := by
+  classical
+  let T := S.filter (fun D ↦ j ∈ B \ D)
+  have hT : T.Nonempty := by
+    rcases h with ⟨D, hDS, hjD⟩
+    exact ⟨D, Finset.mem_filter.mpr ⟨hDS, hjD⟩⟩
+  have hCT : C ∈ T := Finset.mem_filter.mpr ⟨hCS, hjC⟩
+  rw [selectedCoveringSignature, dif_pos hT]
+  exact (Classical.choose_spec
+    (T.exists_min_image (fun D ↦ (B \ D).card) hT)).2 C hCT
 
 /-- Full coverage supplies the selected signature at every coordinate. -/
 theorem selectedCoveringSignature_mem_and_covers_of_biUnion_eq
