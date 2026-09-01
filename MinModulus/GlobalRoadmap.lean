@@ -1142,16 +1142,35 @@ theorem admits_half_or_delete_of_critical_g1
       AdmitsValidTuple n (2 ^ s * q) :=
   Or.inr (admits_delete_of_critical_g1 hG1 hq hcritical hvalid)
 
-/-- The corrected three roadmap gaps imply the complete stratified lower bound.  This
-packages the induction that was previously only described in the handoff.
+/-- The exact G1 consequence consumed by the stratified induction: every
+valid tuple strictly below a two-adic stratum endpoint admits the
+one-coordinate deletion step at half the modulus.  This interface permits a
+branch to construct the deleted tuple directly, without first proving common
+touch. -/
+def CriticalRangeDeleteStep : Prop :=
+  ∀ {n s q : ℕ} (_hq : Odd q)
+    (_hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)),
+    AdmitsValidTuple (n + 1) (2 ^ (s + 1) * q) →
+      AdmitsValidTuple n (2 ^ s * q)
+
+/-- Critical-range common touch supplies the exact deletion-step interface. -/
+theorem criticalRangeDeleteStep_of_g1
+    (hG1 : CriticalRangeCommonTouchedHalfWitnesses) :
+    CriticalRangeDeleteStep := by
+  intro n s q hq hcritical hvalid
+  exact admits_delete_of_critical_g1 hG1 hq hcritical hvalid
+
+/-- A critical-range deletion step together with G2 and G3 implies the
+complete stratified lower bound.  This packages the induction that was
+previously only described in the handoff.
 
 The exceptional use of G3 is forced precisely when deletion occurs after the
 valuation has reached `log₂ n` and `n` is not a power of two.  The induction
 then gives `M ≥ globalBound (n-1)`.  Both sides are multiples of `2^log₂ n`,
 so either equality holds (excluded by G3) or the next multiple already lies
 above the required stratum endpoint. -/
-theorem stratum_lower_bound_of_gaps
-    (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
+theorem stratum_lower_bound_of_deleteStep
+    (hDelete : CriticalRangeDeleteStep)
     (hG2 : OddStratumLowerBound)
     (hG3 : ExceptionalLiftObstruction) :
     ∀ {n s q : ℕ}, 2 ≤ n → Odd q → AdmitsValidTuple n (2 ^ s * q) →
@@ -1171,7 +1190,7 @@ theorem stratum_lower_bound_of_gaps
       have hv2 : AdmitsValidTuple n (2 * M) := by
         simpa [M, pow_succ, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hv
       have hnform : n - 1 + 1 = n := by omega
-      have hdelete := admits_delete_of_critical_g1 hG1
+      have hdelete := hDelete
         (n := n - 1) (s := s) (q := q) hq
         (by simpa [hnform] using hcritical)
         (by simpa [hnform] using hv)
@@ -1322,20 +1341,40 @@ theorem stratum_lower_bound_of_gaps
                   simp [M, pow_succ, Nat.mul_left_comm, Nat.mul_comm]
       )
 
-/-- Conditional form of Conjecture 1: once critical-range G1, G2, and G3 are
-proved, every positive modulus admitting a valid `n`-tuple is at least
-`globalBound n`. -/
-theorem global_lower_bound_of_gaps
+/-- Backward-compatible G1 form of the stratified lower bound. -/
+theorem stratum_lower_bound_of_gaps
     (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
+    (hG2 : OddStratumLowerBound)
+    (hG3 : ExceptionalLiftObstruction) :
+    ∀ {n s q : ℕ}, 2 ≤ n → Odd q → AdmitsValidTuple n (2 ^ s * q) →
+      stratumBound n s ≤ 2 ^ s * q :=
+  stratum_lower_bound_of_deleteStep
+    (criticalRangeDeleteStep_of_g1 hG1) hG2 hG3
+
+/-- Direct deletion-step form of Conjecture 1: once the critical deletion
+step, G2, and G3 are proved, every positive modulus admitting a valid
+`n`-tuple is at least `globalBound n`. -/
+theorem global_lower_bound_of_deleteStep
+    (hDelete : CriticalRangeDeleteStep)
     (hG2 : OddStratumLowerBound)
     (hG3 : ExceptionalLiftObstruction)
     {n N : ℕ} (hn : 2 ≤ n) (hN : 0 < N) (hv : AdmitsValidTuple n N) :
     globalBound n ≤ N := by
   obtain ⟨s, q, hq, rfl⟩ := Nat.exists_eq_two_pow_mul_odd hN.ne'
-  have hs := stratum_lower_bound_of_gaps hG1 hG2 hG3 hn hq hv
+  have hs := stratum_lower_bound_of_deleteStep hDelete hG2 hG3 hn hq hv
   have hmin : min s (Nat.log 2 n) ≤ Nat.log 2 n := min_le_right _ _
   have hp : 2 ^ min s (Nat.log 2 n) ≤ 2 ^ Nat.log 2 n :=
     Nat.pow_le_pow_right (by omega) hmin
   exact (Nat.sub_le_sub_left hp (2 ^ n)).trans hs
+
+/-- Backward-compatible G1 form of the conditional global theorem. -/
+theorem global_lower_bound_of_gaps
+    (hG1 : CriticalRangeCommonTouchedHalfWitnesses)
+    (hG2 : OddStratumLowerBound)
+    (hG3 : ExceptionalLiftObstruction)
+    {n N : ℕ} (hn : 2 ≤ n) (hN : 0 < N) (hv : AdmitsValidTuple n N) :
+    globalBound n ≤ N :=
+  global_lower_bound_of_deleteStep
+    (criticalRangeDeleteStep_of_g1 hG1) hG2 hG3 hn hN hv
 
 end MinModulus
