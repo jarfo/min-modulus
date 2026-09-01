@@ -131,4 +131,5 @@ import MinModulus.G1AvoidanceGraphCycle
 import MinModulus.G1AvoidanceCycleAlgebra
 import MinModulus.G1MinimalAvoidanceCycle
 import MinModulus.G1AvoidanceCycleBranching
+import MinModulus.G1AvoidanceBranchingCanonical
 import MinModulus.G1Counterexample
