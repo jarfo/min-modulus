@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1RestoredPadding
+import MinModulus.G1RestoredIntersections
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -214,6 +214,9 @@ noncomputable def IsCriticalDominantEscapeCollision
           reducedCollisionSupportDepth r u) ∧
   (∀ u ∈ criticalCanonicalReducedCollisions g, u ≠ r →
     IsFullRestoredCollisionLayer r u) ∧
+  (∀ p ∈ canonicalSupportEscapeIncidences
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
+    IsRootSeparatedRestoredLayer r p.2) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -674,7 +677,14 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             apply hlayers u
             · simpa [criticalCanonicalReducedCollisions] using hu
             · exact hur
+          have hseparated : ∀ p ∈
+              canonicalSupportEscapeIncidences (half_add_half hN) r,
+              IsRootSeparatedRestoredLayer r p.2 := by
+            intro p hp
+            exact canonicalSupportEscapeTarget_isRootSeparatedRestoredLayer
+              hg (half_add_half hN) r hr' hmajor hp
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
+            hseparated,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
