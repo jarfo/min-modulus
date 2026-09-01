@@ -30,6 +30,7 @@ import MinModulus.G1RestoredPadding
 import MinModulus.G1RestoredIntersections
 import MinModulus.G1RestoredPairwise
 import MinModulus.G1BlockedSignatureFibers
+import MinModulus.G1SignatureCoverage
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

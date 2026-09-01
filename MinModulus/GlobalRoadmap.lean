@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1BlockedSignatureFibers
+import MinModulus.G1SignatureCoverage
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -230,6 +230,13 @@ noncomputable def IsCriticalDominantEscapeCollision
           restoredCollisionBlockedSupport r v →
         canonicalSupportEscapeTargetFiber r u =
           canonicalSupportEscapeTargetFiber r v) ∧
+  canonicalSupportEscapeBlockedSignatureCoverage
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r =
+    r.val.2 ∧
+  (∀ C ∈ canonicalSupportEscapeBlockedSignatures
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
+    C.card = (reducedCollisionSupport r).card ∧
+      (blockedSignatureEscapeFiber r C).Nonempty) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -734,8 +741,22 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             exact
               canonical_other_escapeTargetFiber_eq_of_blockedSupport_eq_of_strictMajority
                 (half_add_half hN) r hr' hmajor u hu' hur v hv' hvr hblocked
+          have hsignatureCoverage :
+              canonicalSupportEscapeBlockedSignatureCoverage
+                  (half_add_half hN) r = r.val.2 :=
+            canonicalSupportEscapeBlockedSignatureCoverage_eq_sourceTail
+              (half_add_half hN) r hrmin' hcover.1
+          have hsignatures : ∀ C ∈
+              canonicalSupportEscapeBlockedSignatures (half_add_half hN) r,
+              C.card = (reducedCollisionSupport r).card ∧
+                (blockedSignatureEscapeFiber r C).Nonempty := by
+            intro C hC
+            exact ⟨card_escapeBlockedSignature_eq_rootSupport
+                (half_add_half hN) r hrmin' hC,
+              escapeBlockedSignature_fiber_nonempty
+                (half_add_half hN) r hrmin' hC⟩
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
-            hseparated, hpairwise, hclusters,
+            hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
