@@ -101,4 +101,5 @@ import MinModulus.G1TransportLiveProfileObstruction
 import MinModulus.G1LargeSupportUpperFacePacking
 import MinModulus.G1PositiveUpperNesting
 import MinModulus.G1PositiveUpperNestingCharge
+import MinModulus.G1PositiveUpperCrossingNormalization
 import MinModulus.G1Counterexample
