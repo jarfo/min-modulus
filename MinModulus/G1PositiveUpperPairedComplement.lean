@@ -175,7 +175,7 @@ theorem genuineDominant_two_tail_exists_positiveUpper_pairedComplement
     ∃ j k : Fin n,
     ∃ v u : ReducedSubsetSumCollision g
         ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)),
-      v ∈ F ∧ u ∈ F ∧ j ≠ k ∧
+      v ∈ F ∧ u ∈ F ∧ j ≠ k ∧ r.val.2 = {j, k} ∧
       reducedCollisionPositiveUpperValueUnionAll F \
           pairedRestorationFanValueUnionWithTailUpperFaces r v u j k =
         subsetSumRange g \
@@ -229,7 +229,7 @@ theorem genuineDominant_two_tail_exists_positiveUpper_pairedComplement
       hg r v u F hcardv hcardu hdropv hdropu j k hjk hAcard hB
         hjv hku hkv hju hAv hAu hvF huF
   have hcomplementCard := (hsingleton hAcard).2
-  refine ⟨j, k, v, u, hvF, huF, hjk, hEq, ?_⟩
+  refine ⟨j, k, v, u, hvF, huF, hjk, hB, hEq, ?_⟩
   rw [hEq]
   exact hcomplementCard
 
