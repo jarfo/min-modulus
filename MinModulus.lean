@@ -114,4 +114,5 @@ import MinModulus.G1PositiveUpperParityIncidence
 import MinModulus.G1PositiveUpperPairedComplement
 import MinModulus.G1PositiveUpperPairedOccupancy
 import MinModulus.G1PositiveUpperRootTrace
+import MinModulus.G1PositiveUpperRootCells
 import MinModulus.G1Counterexample
