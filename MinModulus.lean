@@ -103,4 +103,5 @@ import MinModulus.G1PositiveUpperNesting
 import MinModulus.G1PositiveUpperNestingCharge
 import MinModulus.G1PositiveUpperCrossingNormalization
 import MinModulus.G1PositiveUpperNestedCrowding
+import MinModulus.G1PositiveUpperAdjacentNesting
 import MinModulus.G1Counterexample
