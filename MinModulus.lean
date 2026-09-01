@@ -32,6 +32,7 @@ import MinModulus.G1RestoredPairwise
 import MinModulus.G1BlockedSignatureFibers
 import MinModulus.G1SignatureCoverage
 import MinModulus.G1SignatureLayers
+import MinModulus.G1LayerSecondMoment
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

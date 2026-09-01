@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1SignatureLayers
+import MinModulus.G1LayerSecondMoment
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -252,6 +252,13 @@ noncomputable def IsCriticalDominantEscapeCollision
         2 * (blockedSignatureValueLayer g C ∩
             blockedSignatureValueLayer g D).card ≤
           reducedCollisionWeight (m := n) r) ∧
+  2 * ((canonicalSupportEscapeBlockedSignatures
+        (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card + 1) *
+      reducedCollisionWeight (m := n) r ≤
+    ((canonicalSupportEscapeBlockedSignatures
+        (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card + 2) *
+      (rootAndEscapeBlockedSignatureValueUnion
+        (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -792,9 +799,12 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             intro C hC D hD hCD
             exact two_mul_card_escapeBlockedSignatureValueLayers_inter_le
               hg (half_add_half hN) r hrmin' hC hD hCD
+          have hsecondMoment :=
+            two_mul_signatureCount_succ_mul_weight_le
+              hg (half_add_half hN) r hr' hrmin' hmajor
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
-            hsignatureLayers, hsignaturePairwise,
+            hsignatureLayers, hsignaturePairwise, hsecondMoment,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
