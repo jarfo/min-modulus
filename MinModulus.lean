@@ -37,6 +37,7 @@ import MinModulus.G1SignatureSubcubeCoverage
 import MinModulus.G1SignatureUpperFace
 import MinModulus.G1SignatureIntersectingCoverage
 import MinModulus.G1SignaturePositiveFace
+import MinModulus.G1SignatureCrossingCharge
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

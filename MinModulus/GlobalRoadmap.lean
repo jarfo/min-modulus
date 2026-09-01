@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1SignaturePositiveFace
+import MinModulus.G1SignatureCrossingCharge
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -287,6 +287,12 @@ noncomputable def IsCriticalDominantEscapeCollision
     2 * reducedCollisionWeight (m := n) r + 2 ^ (n - r.val.1.card) +
         2 ^ (n - r.val.2.card) ≤
       2 ^ n + reducedCollisionWeight (m := n) r) ∧
+  (positiveTailAvoidingEscapeBlockedSignatures
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card *
+      reducedCollisionWeight (m := n) r ≤
+    (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+      reducedCollisionWeight (m := n) p.1 *
+        reducedCollisionWeight (m := n) p.2) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -860,12 +866,23 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             exists_escapeTarget_reverseCross_or_twoTailUpperFaces_fullCube
               hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
                 hsignatureCoverage
+          have havoidingSignatureCharge :
+              (positiveTailAvoidingEscapeBlockedSignatures
+                  (half_add_half hN) r).card *
+                  reducedCollisionWeight (m := n) r ≤
+                (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+                  reducedCollisionWeight (m := n) p.1 *
+                    reducedCollisionWeight (m := n) p.2) := by
+            simpa [criticalCanonicalPositiveNegativeCrossPairs] using
+              avoidingSignatureCard_mul_weight_le_crossMass
+                hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
             hsignatureLayers, hsignaturePairwise, hsecondMoment, hsharpCoverage,
             hupperFace, hupperFaceFull,
             hfactorTwo, henrichedUnscaled, hfullCubeUnscaled,
             hpositiveFaceSplit,
+            havoidingSignatureCharge,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
