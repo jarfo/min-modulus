@@ -138,4 +138,5 @@ import MinModulus.G1AvoidanceSourceSimpleCounting
 import MinModulus.G1AvoidanceVertexCycleCounting
 import MinModulus.G1AvoidanceVertexCycleAlgebra
 import MinModulus.G1AvoidanceVertexCyclePeriod
+import MinModulus.G1AvoidancePeriodThreeTriangle
 import MinModulus.G1Counterexample
