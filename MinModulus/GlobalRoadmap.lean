@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1SignatureUpperFace
+import MinModulus.G1SignatureIntersectingCoverage
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -272,6 +272,14 @@ noncomputable def IsCriticalDominantEscapeCollision
   2 ^ r.val.2.card * (2 * reducedCollisionWeight (m := n) r) + 2 ^ n ≤
     2 ^ r.val.2.card * 2 ^ n +
       reducedCollisionWeight (m := n) r ∧
+  2 * reducedCollisionWeight (m := n) r ≤
+    (rootAndEscapeBlockedSignatureValueUnion
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card ∧
+  2 * reducedCollisionWeight (m := n) r + 2 ^ (n - r.val.2.card) ≤
+    (rootAndEscapeBlockedSignatureValueUnionWithUpper
+      (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r).card ∧
+  2 * reducedCollisionWeight (m := n) r + 2 ^ (n - r.val.2.card) ≤
+    2 ^ n ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -829,10 +837,23 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             pow_sourceTailCard_mul_two_weight_add_tailFace_le_fullCube_add_weight
               hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
                 hsignatureCoverage
+          have hfactorTwo :=
+            two_mul_weight_le_escapeBlockedSignatureValueUnion
+              hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
+                hsignatureCoverage
+          have henrichedUnscaled :=
+            two_mul_weight_add_tailFace_le_escapeValueUnionWithUpper
+              hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
+                hsignatureCoverage
+          have hfullCubeUnscaled :=
+            two_mul_weight_add_tailFace_le_fullCube
+              hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
+                hsignatureCoverage
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
             hsignatureLayers, hsignaturePairwise, hsecondMoment, hsharpCoverage,
             hupperFace, hupperFaceFull,
+            hfactorTwo, henrichedUnscaled, hfullCubeUnscaled,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
