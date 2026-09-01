@@ -91,4 +91,5 @@ import MinModulus.G1PairedRestorationTransport
 import MinModulus.G1TransportCycles
 import MinModulus.G1TransportOddProjection
 import MinModulus.G1TransportFaceMatching
+import MinModulus.G1TransportFaceCoverage
 import MinModulus.G1Counterexample
