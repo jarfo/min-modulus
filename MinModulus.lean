@@ -61,4 +61,5 @@ import MinModulus.G1GenuineDominantResidual
 import MinModulus.G1EmptyTailDepthCharge
 import MinModulus.G1DominantFiberWeight
 import MinModulus.G1AvoidingFiberCharge
+import MinModulus.G1TailCoveragePartition
 import MinModulus.G1Counterexample
