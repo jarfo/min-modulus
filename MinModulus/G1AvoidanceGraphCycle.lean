@@ -107,17 +107,17 @@ theorem witnessAvoidanceEdgeState_fst_ne_snd
   rw [hxy] at hx
   omega
 
-/-- Every avoidance-edge orbit repeats with period at least three.  This is a
-finite directed-cycle certificate, stated at the edge-state level. -/
-theorem exists_witnessAvoidanceEdge_cycle
-    (g : Fin m → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
-    (hno : ¬ ∃ e : Fin m, ∀ c : Fin m → ℤ,
-      Witness g h c → c e ≠ 0)
+/-- Any successor map on avoidance edges which shifts the target to the source
+and never immediately backtracks has a repeated orbit segment of length at
+least three. -/
+theorem exists_nonbacktracking_edgeState_cycle
+    (g : Fin m → G) {h : G}
+    (T : WitnessAvoidanceEdgeState g h → WitnessAvoidanceEdgeState g h)
+    (hfst : ∀ p, (T p).val.1 = p.val.2)
+    (hback : ∀ p, (T p).val.2 ≠ p.val.1)
     (p₀ : WitnessAvoidanceEdgeState g h) :
     ∃ i j : ℕ, i < j ∧ 3 ≤ j - i ∧
-      (witnessAvoidanceEdgeNext g hg hh hno)^[i] p₀ =
-        (witnessAvoidanceEdgeNext g hg hh hno)^[j] p₀ := by
-  let T := witnessAvoidanceEdgeNext g hg hh hno
+      T^[i] p₀ = T^[j] p₀ := by
   have hninj : ¬ Function.Injective (fun t : ℕ ↦ T^[t] p₀) :=
     not_injective_infinite_finite _
   obtain ⟨i, j, hijEq, hijNe⟩ := Function.not_injective_iff.mp hninj
@@ -139,27 +139,40 @@ theorem exists_witnessAvoidanceEdge_cycle
       intro hd
       have hfix : T p = p := by
         simpa [hd, Function.iterate_succ_apply] using hcycle
-      have hfst := congrArg (fun q ↦ q.val.1) hfix
-      have hnext := witnessAvoidanceEdgeNext_fst g hg hh hno p
+      have hfstEq := congrArg (fun q ↦ q.val.1) hfix
+      have hnext := hfst p
       have hne := witnessAvoidanceEdgeState_fst_ne_snd p
-      dsimp [T] at hfst hnext
-      rw [hnext] at hfst
-      exact hne hfst.symm
+      rw [hnext] at hfstEq
+      exact hne hfstEq.symm
     have hd2 : d ≠ 2 := by
       intro hd
       have hfix : T (T p) = p := by
         simpa [hd, Function.iterate_succ_apply] using hcycle
-      have hfst := congrArg (fun q ↦ q.val.1) hfix
-      have hnext := witnessAvoidanceEdgeNext_fst g hg hh hno (T p)
-      have hne := witnessAvoidanceEdgeNext_snd_ne_fst g hg hh hno p
-      dsimp [T] at hfst hnext hne
-      rw [hnext] at hfst
-      exact hne hfst
+      have hfstEq := congrArg (fun q ↦ q.val.1) hfix
+      have hnext := hfst (T p)
+      have hne := hback p
+      rw [hnext] at hfstEq
+      exact hne hfstEq
     dsimp [d] at hdpos hd1 hd2 ⊢
     omega
   rcases Nat.lt_or_gt_of_ne hijNe with hij | hji
   · exact ⟨i, j, hij, hcycle_of_lt hij hijEq, hijEq⟩
   · exact ⟨j, i, hji, hcycle_of_lt hji hijEq.symm, hijEq.symm⟩
+
+/-- Every avoidance-edge orbit repeats with period at least three.  This is a
+finite directed-cycle certificate, stated at the edge-state level. -/
+theorem exists_witnessAvoidanceEdge_cycle
+    (g : Fin m → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    (hno : ¬ ∃ e : Fin m, ∀ c : Fin m → ℤ,
+      Witness g h c → c e ≠ 0)
+    (p₀ : WitnessAvoidanceEdgeState g h) :
+    ∃ i j : ℕ, i < j ∧ 3 ≤ j - i ∧
+      (witnessAvoidanceEdgeNext g hg hh hno)^[i] p₀ =
+        (witnessAvoidanceEdgeNext g hg hh hno)^[j] p₀ :=
+  exists_nonbacktracking_edgeState_cycle g
+    (witnessAvoidanceEdgeNext g hg hh hno)
+    (witnessAvoidanceEdgeNext_fst g hg hh hno)
+    (witnessAvoidanceEdgeNext_snd_ne_fst g hg hh hno) p₀
 
 /-- The genuine critical heavy branch contains an avoidance cycle of length
 at least three. -/

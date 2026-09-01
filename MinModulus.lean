@@ -128,4 +128,5 @@ import MinModulus.G1WitnessTransversalDescent
 import MinModulus.G1MinimalTransversalEscape
 import MinModulus.G1GenuineHeavyEscapeIteration
 import MinModulus.G1AvoidanceGraphCycle
+import MinModulus.G1AvoidanceCycleAlgebra
 import MinModulus.G1Counterexample
