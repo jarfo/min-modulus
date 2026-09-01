@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1RestoredIntersections
+import MinModulus.G1RestoredPairwise
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -217,6 +217,13 @@ noncomputable def IsCriticalDominantEscapeCollision
   (∀ p ∈ canonicalSupportEscapeIncidences
       (half_add_half (M := 2 ^ s * q) (by rw [pow_succ]; ring)) r,
     IsRootSeparatedRestoredLayer r p.2) ∧
+  (∀ u ∈ criticalCanonicalReducedCollisions g, u ≠ r →
+    ∀ v ∈ criticalCanonicalReducedCollisions g, v ≠ r →
+      restoredCollisionBlockedSupport r u =
+          restoredCollisionBlockedSupport r v ∨
+        2 * (restoredCollisionValueLayer r u ∩
+            restoredCollisionValueLayer r v).card ≤
+          reducedCollisionWeight (m := n) r) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -683,8 +690,29 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             intro p hp
             exact canonicalSupportEscapeTarget_isRootSeparatedRestoredLayer
               hg (half_add_half hN) r hr' hmajor hp
+          have hpairwise : ∀ u ∈ criticalCanonicalReducedCollisions g,
+              u ≠ r → ∀ v ∈ criticalCanonicalReducedCollisions g,
+              v ≠ r →
+                restoredCollisionBlockedSupport r u =
+                    restoredCollisionBlockedSupport r v ∨
+                  2 * (restoredCollisionValueLayer r u ∩
+                      restoredCollisionValueLayer r v).card ≤
+                    reducedCollisionWeight (m := n) r := by
+            intro u hu hur v hv hvr
+            have hu' : u ∈ canonicalReducedCollisions (g := g)
+                (half_add_half hN) := by
+              simpa [criticalCanonicalReducedCollisions] using hu
+            have hv' : v ∈ canonicalReducedCollisions (g := g)
+                (half_add_half hN) := by
+              simpa [criticalCanonicalReducedCollisions] using hv
+            have hugrowth := hgrowth u hu' hur
+            have hvgrowth := hgrowth v hv' hvr
+            apply blockedSupport_eq_or_two_mul_restored_inter_le
+              hg r u v
+            · simpa [reducedCollisionSupport] using hugrowth.1.le
+            · simpa [reducedCollisionSupport] using hvgrowth.1.le
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
-            hseparated,
+            hseparated, hpairwise,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩

@@ -28,6 +28,7 @@ import MinModulus.G1MajoritySupportBound
 import MinModulus.G1EscapeDepth
 import MinModulus.G1RestoredPadding
 import MinModulus.G1RestoredIntersections
+import MinModulus.G1RestoredPairwise
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate
