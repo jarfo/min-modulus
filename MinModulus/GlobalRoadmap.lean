@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1RestoredPairwise
+import MinModulus.G1BlockedSignatureFibers
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -224,6 +224,12 @@ noncomputable def IsCriticalDominantEscapeCollision
         2 * (restoredCollisionValueLayer r u ∩
             restoredCollisionValueLayer r v).card ≤
           reducedCollisionWeight (m := n) r) ∧
+  (∀ u ∈ criticalCanonicalReducedCollisions g, u ≠ r →
+    ∀ v ∈ criticalCanonicalReducedCollisions g, v ≠ r →
+      restoredCollisionBlockedSupport r u =
+          restoredCollisionBlockedSupport r v →
+        canonicalSupportEscapeTargetFiber r u =
+          canonicalSupportEscapeTargetFiber r v) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -711,8 +717,25 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
               hg r u v
             · simpa [reducedCollisionSupport] using hugrowth.1.le
             · simpa [reducedCollisionSupport] using hvgrowth.1.le
+          have hclusters : ∀ u ∈ criticalCanonicalReducedCollisions g,
+              u ≠ r → ∀ v ∈ criticalCanonicalReducedCollisions g,
+              v ≠ r →
+                restoredCollisionBlockedSupport r u =
+                    restoredCollisionBlockedSupport r v →
+                  canonicalSupportEscapeTargetFiber r u =
+                    canonicalSupportEscapeTargetFiber r v := by
+            intro u hu hur v hv hvr hblocked
+            have hu' : u ∈ canonicalReducedCollisions (g := g)
+                (half_add_half hN) := by
+              simpa [criticalCanonicalReducedCollisions] using hu
+            have hv' : v ∈ canonicalReducedCollisions (g := g)
+                (half_add_half hN) := by
+              simpa [criticalCanonicalReducedCollisions] using hv
+            exact
+              canonical_other_escapeTargetFiber_eq_of_blockedSupport_eq_of_strictMajority
+                (half_add_half hN) r hr' hmajor u hu' hur v hv' hvr hblocked
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
-            hseparated, hpairwise,
+            hseparated, hpairwise, hclusters,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
