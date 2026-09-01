@@ -117,4 +117,5 @@ import MinModulus.G1PositiveUpperRootTrace
 import MinModulus.G1PositiveUpperRootCells
 import MinModulus.G1SingletonRootClosure
 import MinModulus.G1BalancedCore
+import MinModulus.G1BalancedCoreCrossing
 import MinModulus.G1Counterexample
