@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1SignatureCrossingCharge
+import MinModulus.G1SignatureHybridBound
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -293,6 +293,14 @@ noncomputable def IsCriticalDominantEscapeCollision
     (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
       reducedCollisionWeight (m := n) p.1 *
         reducedCollisionWeight (m := n) p.2) ∧
+  (r.val.1.Nonempty →
+    2 ^ r.val.1.card *
+        (reducedCollisionWeight (m := n) r +
+          2 ^ (n - r.val.1.card) + 2 ^ (n - r.val.2.card)) ≤
+      2 ^ r.val.1.card * 2 ^ n +
+        (criticalCanonicalPositiveNegativeCrossPairs g).sum (fun p ↦
+          reducedCollisionWeight (m := n) p.1 *
+            reducedCollisionWeight (m := n) p.2)) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -876,6 +884,21 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             simpa [criticalCanonicalPositiveNegativeCrossPairs] using
               avoidingSignatureCard_mul_weight_le_crossMass
                 hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
+          have hhybrid : r.val.1.Nonempty →
+              2 ^ r.val.1.card *
+                  (reducedCollisionWeight (m := n) r +
+                    2 ^ (n - r.val.1.card) +
+                      2 ^ (n - r.val.2.card)) ≤
+                2 ^ r.val.1.card * 2 ^ n +
+                  (criticalCanonicalPositiveNegativeCrossPairs g).sum
+                    (fun p ↦
+                      reducedCollisionWeight (m := n) p.1 *
+                        reducedCollisionWeight (m := n) p.2) := by
+            intro hA
+            simpa [criticalCanonicalPositiveNegativeCrossPairs] using
+              pow_positiveCard_mul_rootWeight_add_tailUpperCards_le_fullCube_add_crossMass
+                hg (half_add_half hN) (half_ne_zero hN hM) r hr' hrmin'
+                  hsignatureCoverage hA
           refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hseparated, hpairwise, hclusters, hsignatureCoverage, hsignatures,
             hsignatureLayers, hsignaturePairwise, hsecondMoment, hsharpCoverage,
@@ -883,6 +906,7 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
             hfactorTwo, henrichedUnscaled, hfullCubeUnscaled,
             hpositiveFaceSplit,
             havoidingSignatureCharge,
+            hhybrid,
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
