@@ -108,4 +108,5 @@ import MinModulus.G1PositiveUpperAdjacentCrowding
 import MinModulus.G1PositiveUpperAdjacentSupportSplit
 import MinModulus.G1PositiveUpperContainedFlipFan
 import MinModulus.G1PositiveUpperAdjacentFanWithUpper
+import MinModulus.G1PositiveUpperAdjacentMultiplicity
 import MinModulus.G1Counterexample
