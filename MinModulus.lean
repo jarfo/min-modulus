@@ -86,4 +86,6 @@ import MinModulus.G1RestorationFanPacking
 import MinModulus.G1RestorationFanExactUnion
 import MinModulus.G1PairedRestorationFans
 import MinModulus.G1PairedRestorationPositiveFace
+import MinModulus.G1PairedRestorationComplement
+import MinModulus.G1PairedRestorationTransport
 import MinModulus.G1Counterexample
