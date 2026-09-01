@@ -133,4 +133,5 @@ import MinModulus.G1MinimalAvoidanceCycle
 import MinModulus.G1AvoidanceCycleBranching
 import MinModulus.G1AvoidanceBranchingCanonical
 import MinModulus.G1AvoidanceRectangleExpansion
+import MinModulus.G1AvoidanceNearBalancedTransition
 import MinModulus.G1Counterexample
