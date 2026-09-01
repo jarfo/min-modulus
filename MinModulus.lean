@@ -64,4 +64,5 @@ import MinModulus.G1AvoidingFiberCharge
 import MinModulus.G1TailCoveragePartition
 import MinModulus.G1SignatureTailSurplus
 import MinModulus.G1SignatureTailSlices
+import MinModulus.G1SignatureThirdSlice
 import MinModulus.G1Counterexample
