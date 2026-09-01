@@ -121,4 +121,5 @@ import MinModulus.G1BalancedCoreCrossing
 import MinModulus.G1GlobalSupportStarConcentration
 import MinModulus.G1TwoTwoRootClosure
 import MinModulus.G1GlobalDepthDeficit
+import MinModulus.G1LargeNegativeRootClosure
 import MinModulus.G1Counterexample
