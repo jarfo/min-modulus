@@ -26,6 +26,7 @@ import MinModulus.G1DominantStarCrossing
 import MinModulus.G1StrictMajorityGrowth
 import MinModulus.G1MajoritySupportBound
 import MinModulus.G1EscapeDepth
+import MinModulus.G1RestoredPadding
 import MinModulus.G1ThreeDescent
 import MinModulus.OddOrder
 import MinModulus.RelationCertificate

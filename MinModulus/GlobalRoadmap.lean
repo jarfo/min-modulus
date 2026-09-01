@@ -7,7 +7,7 @@ proved descent machinery.  The stratified induction uses
 statement was refuted by `G1Counterexample.lean`.
 -/
 import MinModulus.QuadraticWedge
-import MinModulus.G1EscapeDepth
+import MinModulus.G1RestoredPadding
 import MinModulus.UniqueSums
 
 namespace MinModulus
@@ -212,6 +212,8 @@ noncomputable def IsCriticalDominantEscapeCollision
       (reducedCollisionExternalSupport r u).card =
         (reducedCollisionDroppedSupport r u).card +
           reducedCollisionSupportDepth r u) ∧
+  (∀ u ∈ criticalCanonicalReducedCollisions g, u ≠ r →
+    IsFullRestoredCollisionLayer r u) ∧
   (r.val.1 ∪ r.val.2).card +
       min (s + 1) (Nat.log 2 (n + 1)) ≤ n + 1 ∧
   min (s + 1) (Nat.log 2 (n + 1)) - 1 ≤
@@ -663,7 +665,16 @@ theorem critical_crossingMass_or_commonTouched_or_heavy_or_dominantEscape
                 (half_add_half hN) := by
               simpa [criticalCanonicalReducedCollisions] using hu
             exact (hexact u hu' hur).2
-          refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact',
+          have hlayers :=
+            canonical_other_isFullRestoredCollisionLayer_of_strictMajority
+              hg (half_add_half hN) r hr' hmajor
+          have hlayers' : ∀ u ∈ criticalCanonicalReducedCollisions g,
+              u ≠ r → IsFullRestoredCollisionLayer r u := by
+            intro u hu hur
+            apply hlayers u
+            · simpa [criticalCanonicalReducedCollisions] using hu
+            · exact hur
+          refine ⟨hrmax, hrmin, hmajor', hgrowth', hexact', hlayers',
             hsupport.1, hsupport.2,
             hrrelative, hrambient,
             ?_, ?_, ?_, ?_, ?_⟩
