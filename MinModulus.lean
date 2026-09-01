@@ -78,4 +78,5 @@ import MinModulus.G1TwoSingletonAllZero
 import MinModulus.G1AnchorHeavyGrowth
 import MinModulus.G1AnchorHeavyExchange
 import MinModulus.G1AnchorExchangeSignature
+import MinModulus.G1AnchorExchangePrivateSlices
 import MinModulus.G1Counterexample
