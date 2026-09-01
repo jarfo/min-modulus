@@ -85,4 +85,5 @@ import MinModulus.G1SupportStarConcentration
 import MinModulus.G1RestorationFanPacking
 import MinModulus.G1RestorationFanExactUnion
 import MinModulus.G1PairedRestorationFans
+import MinModulus.G1PairedRestorationPositiveFace
 import MinModulus.G1Counterexample
