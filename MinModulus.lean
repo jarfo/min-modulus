@@ -124,4 +124,5 @@ import MinModulus.G1GlobalDepthDeficit
 import MinModulus.G1LargeNegativeRootClosure
 import MinModulus.G1HeavyWitnessEscape
 import MinModulus.G1FinalDescent
+import MinModulus.G1WitnessTransversalDescent
 import MinModulus.G1Counterexample
