@@ -96,4 +96,5 @@ import MinModulus.G1TransportBalancedCover
 import MinModulus.G1TransportPiecewisePermutation
 import MinModulus.G1TransportSubsetOrbit
 import MinModulus.G1TransportLastWrite
+import MinModulus.G1TransportSameRootObstruction
 import MinModulus.G1Counterexample
