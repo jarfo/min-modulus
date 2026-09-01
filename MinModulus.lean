@@ -126,4 +126,5 @@ import MinModulus.G1HeavyWitnessEscape
 import MinModulus.G1FinalDescent
 import MinModulus.G1WitnessTransversalDescent
 import MinModulus.G1MinimalTransversalEscape
+import MinModulus.G1GenuineHeavyEscapeIteration
 import MinModulus.G1Counterexample
