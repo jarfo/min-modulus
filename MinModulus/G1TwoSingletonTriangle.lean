@@ -150,7 +150,8 @@ theorem canonical_exactTriangle_two_zero_allZero_or_commonTouched_or_heavyThree_
     (huB : u.val.2 = {z, j})
     (hqzero : subsetCollisionCoeffs q.val.1 q.val.2 j.succ = 0)
     (huzero : subsetCollisionCoeffs u.val.1 u.val.2 k.succ = 0) :
-    (subsetCollisionCoeffs r.val.1 r.val.2 z.succ = 0 ∧ 4 ∣ N) ∨
+    (subsetCollisionCoeffs r.val.1 r.val.2 z.succ = 0 ∧ 4 ∣ N ∧
+      ∃ t : ZMod N, t + t = (M : ZMod N)) ∨
     (∃ e : Fin (m + 1), ∀ c : Fin (m + 1) → ℤ,
       Witness g (M : ZMod N) c → c e ≠ 0) ∨
     ∃ c : Fin (m + 1) → ℤ, ∃ a b d e : Fin (m + 1),
@@ -184,9 +185,8 @@ theorem canonical_exactTriangle_two_zero_allZero_or_commonTouched_or_heavyThree_
     (half_add_half hN) u hu huB
   by_cases hrzero : cr z.succ = 0
   · apply Or.inl
-    refine ⟨by simpa [cr] using hrzero, ?_⟩
-    exact four_dvd_of_triangle_all_zero_zmod
-      hN g hg hcr hcq hcu j.succ k.succ z.succ
+    have hcenter := exists_double_eq_target_of_triangle_all_zero
+      g hg (half_add_half hN) hcr hcq hcu j.succ k.succ z.succ
         ((Fin.succ_injective _).ne hjk)
         ((Fin.succ_injective _).ne (Ne.symm hzk))
         ((Fin.succ_injective _).ne hzj)
@@ -195,6 +195,9 @@ theorem canonical_exactTriangle_two_zero_allZero_or_commonTouched_or_heavyThree_
         (by simpa [cu] using hU)
         hrzero (by simpa [cq] using hqzero)
         (by simpa [cu] using huzero)
+    obtain ⟨t, ht⟩ := hcenter
+    exact ⟨by simpa [cr] using hrzero,
+      four_dvd_of_double_eq_half hN t ht, t, ht⟩
   · have hclass := triangle_opposite_coefficients_zero_one_or_two
       g hcr hcq hcu j.succ k.succ z.succ
         ((Fin.succ_injective _).ne hjk)
@@ -241,6 +244,21 @@ theorem one_le_criticalIndex_of_four_dvd
   norm_num at hd
   omega
 
+/-- In a genuine residual, any coefficient at least two in a half-witness
+must be the anchor: a heavy successor coefficient is exactly the excluded
+`CriticalHeavyHalfWitness` alternative. -/
+theorem heavy_coordinate_eq_anchor_of_not_criticalHeavy
+    {n s q : ℕ}
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q))
+    (hnoheavy : ¬ CriticalHeavyHalfWitness g)
+    (c : Fin (n + 1) → ℤ)
+    (hc : Witness g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c)
+    (e : Fin (n + 1)) (hce : 2 ≤ c e) : e = 0 := by
+  cases e using Fin.cases with
+  | zero => rfl
+  | succ k => exact False.elim (hnoheavy ⟨c, hc, k, hce⟩)
+
 /-- The two-coordinate genuine critical residual is no longer an abstract
 one-root profile.  Its selected targets produce strict negative-tail growth,
 or an exact two-zero triangle which is either all-zero (and forces `4 ∣ N`)
@@ -270,13 +288,16 @@ theorem genuineDominant_two_tail_zeroOppositeTriangle_or_growth
         z ∈ v.val.2 ∧ z ∈ u.val.2 ∧ z ∉ r.val.2 ∧
         (((v.val.2 = {k, z} ∧ u.val.2 = {j, z}) ∧
             ((subsetCollisionCoeffs r.val.1 r.val.2 z.succ = 0 ∧
-                4 ∣ 2 ^ (s + 1) * q ∧ 1 ≤ s) ∨
+                4 ∣ 2 ^ (s + 1) * q ∧ 1 ≤ s ∧
+                ∃ t : ZMod (2 ^ (s + 1) * q),
+                  t + t = ((2 ^ s * q : ℕ) :
+                    ZMod (2 ^ (s + 1) * q))) ∨
               ∃ c : Fin (n + 1) → ℤ,
-                ∃ a b d e : Fin (n + 1),
+                ∃ a b d : Fin (n + 1),
                 Witness g ((2 ^ s * q : ℕ) :
                   ZMod (2 ^ (s + 1) * q)) c ∧
                 a ≠ b ∧ b ≠ d ∧ d ≠ a ∧
-                c a = -1 ∧ c b = -1 ∧ c d = -1 ∧ 2 ≤ c e)) ∨
+                c a = -1 ∧ c b = -1 ∧ c d = -1 ∧ 2 ≤ c 0)) ∨
           3 ≤ v.val.2.card ∨ 3 ≤ u.val.2.card) := by
   classical
   letI : NeZero (2 ^ (s + 1) * q) :=
@@ -334,11 +355,18 @@ theorem genuineDominant_two_tail_zeroOppositeTriangle_or_growth
           (by simpa [pair_comm] using hexact.2) hvjzero hukzero
     rcases htri with hallzero | htouch | hheavy
     · exact Or.inl ⟨hexact, Or.inl
-        ⟨hallzero.1, hallzero.2,
-          one_le_criticalIndex_of_four_dvd hqodd hallzero.2⟩⟩
+        ⟨hallzero.1, hallzero.2.1,
+          one_le_criticalIndex_of_four_dvd hqodd hallzero.2.1,
+          hallzero.2.2⟩⟩
     · exact False.elim (hres.2.1 (by
         simpa [CriticalCommonTouched] using htouch))
-    · exact Or.inl ⟨hexact, Or.inr hheavy⟩
+    · rcases hheavy with
+        ⟨c, a, b, d, e, hc, hab, hbd, hda, hca, hcb, hcd, hce⟩
+      have he0 := heavy_coordinate_eq_anchor_of_not_criticalHeavy
+        g hres.2.2 c hc e hce
+      subst e
+      exact Or.inl ⟨hexact, Or.inr
+        ⟨c, a, b, d, hc, hab, hbd, hda, hca, hcb, hcd, hce⟩⟩
   · exact Or.inr (Or.inl hvgrow)
   · exact Or.inr (Or.inr hugrow)
 
