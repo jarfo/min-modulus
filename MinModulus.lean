@@ -135,4 +135,5 @@ import MinModulus.G1AvoidanceBranchingCanonical
 import MinModulus.G1AvoidanceRectangleExpansion
 import MinModulus.G1AvoidanceNearBalancedTransition
 import MinModulus.G1AvoidanceSourceSimpleCounting
+import MinModulus.G1AvoidanceVertexCycleCounting
 import MinModulus.G1Counterexample
