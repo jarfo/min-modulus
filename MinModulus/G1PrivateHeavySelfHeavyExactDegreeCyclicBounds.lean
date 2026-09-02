@@ -445,6 +445,34 @@ theorem card_minimalSupportPrivateSelfHeavyExactDegreeProfiles_le_choose
     B R hRB, hRcard] at hbound
   exact hbound
 
+/-- Uniform cyclic/stars-and-bars bound retaining the intrinsic number of
+free coordinates.  This is the form consumed by the higher-degree
+recursion. -/
+theorem card_minimalSupportPrivateSelfHeavyExactDegreeWithin_le_free
+    {N : ℕ} [NeZero N]
+    (g : Fin (m + 1) → ZMod N) (hg : ValidTuple g)
+    {h : ZMod N} {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (S : Finset ↥(minimalSupportPrivateTailHeavyVertices g h hmin))
+    (R : Finset (Fin (m + 1))) (q : ℕ)
+    (hself : ∀ b ∈ S,
+      b ∈ minimalSupportPrivateSelfHeavyVertices g h hmin)
+    (hRcard : R.card = q)
+    (hfixed : ∀ b ∈ S, R ⊆ witnessOmissionCoordinates
+      (minimalSupportPrivateWitness g h hmin b.val)) :
+    (minimalSupportPrivateSelfHeavyExactDegreeWithin
+        g h hmin S q).card ≤
+      q *
+        ((minimalSupportPrivateSelfHeavyExactDegreeFreeCoordinates B R).card +
+          (q - 2)).choose (q - 2) := by
+  have hfibers :=
+    card_minimalSupportPrivateSelfHeavyExactDegreeWithin_le_degree_mul_profiles
+      g hg hmin S R q hself hRcard hfixed
+  have hprofiles :=
+    card_minimalSupportPrivateSelfHeavyExactDegreeProfiles_le_choose_free
+      g h hmin S R q hself hRcard hfixed
+  exact hfibers.trans (Nat.mul_le_mul_left q hprofiles)
+
 /-- Uniform cyclic/stars-and-bars bound for the entire exact-degree owner
 layer. -/
 theorem card_minimalSupportPrivateSelfHeavyExactDegreeWithin_le
@@ -463,13 +491,11 @@ theorem card_minimalSupportPrivateSelfHeavyExactDegreeWithin_le
     (minimalSupportPrivateSelfHeavyExactDegreeWithin
         g h hmin S q).card ≤
       q * (m + 1 - (B.card + q) + (q - 2)).choose (q - 2) := by
-  have hfibers :=
-    card_minimalSupportPrivateSelfHeavyExactDegreeWithin_le_degree_mul_profiles
-      g hg hmin S R q hself hRcard hfixed
-  have hprofiles :=
-    card_minimalSupportPrivateSelfHeavyExactDegreeProfiles_le_choose
-      g h hmin S R q hself hRcard hfixed hRB
-  exact hfibers.trans (Nat.mul_le_mul_left q hprofiles)
+  have hbound := card_minimalSupportPrivateSelfHeavyExactDegreeWithin_le_free
+    g hg hmin S R q hself hRcard hfixed
+  rw [card_minimalSupportPrivateSelfHeavyExactDegreeFreeCoordinates
+    B R hRB, hRcard] at hbound
+  exact hbound
 
 /-- The first concrete application of the uniform bound: every four-fixed
 exact-four layer has a quadratic stars-and-bars bound, uniformly in the
