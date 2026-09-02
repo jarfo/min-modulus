@@ -182,6 +182,7 @@ import MinModulus.G1PrivateHeavySelectedLightCharge
 import MinModulus.G1PrivateHeavyCoordinateFibers
 import MinModulus.G1PrivateHeavyJointEscapeFibers
 import MinModulus.G1PrivateHeavyJointFiberAlgebra
+import MinModulus.G1PrivateHeavyCoefficientGapFibers
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
