@@ -28,7 +28,9 @@ def WitnessAvoidanceNonProfileResidual
 
 /-- Corrected upstream profile frontier in dimension at least seven.  Exact
 profiles now end in crossing, half descent, or explicitly local heavy data;
-there is no incompatible all-tail-light premise. -/
+there is no incompatible all-tail-light premise.  Shared endpoint geometry
+eliminates the pure-edge double-hit arm for `(0,0,2)`, so that residual can
+now arise only from the all-zero profile. -/
 theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
     {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
     (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
@@ -60,14 +62,11 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
         · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate')))
         · exact Or.inr (Or.inr (Or.inl hdouble))
       · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
-    · rcases critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_localHeavy
-          hq hnseven g hg hzeroTwo with hcross | hrec | hpure | hprivate
+    · rcases
+          critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_privateHeavy
+            hq hnseven g hg hzeroTwo with hcross | hrec | hprivate
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
-      · rcases privateTailHeavy_or_pureEdgeDoubleHit_of_pureEdgeTailHeavy
-          hpure with hprivate' | hdouble
-        · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate')))
-        · exact Or.inr (Or.inr (Or.inl hdouble))
       · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
     · exact Or.inr (Or.inr (Or.inr (Or.inr
         ⟨hno, p, d, hmin, Or.inl ⟨hcycle.1, hthree⟩⟩)))

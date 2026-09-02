@@ -169,6 +169,123 @@ theorem critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_localHeavy
   exact critical_largeCross_or_singletonHalfDescent_or_localHeavy_of_rootSplit
     hq hnseven g hg hexWitness hroot t qv B ht hqv hBsub hmin hrec
 
+/-- Sharpened `(0,0,2)` endpoint using the shared endpoints of its heavy pure
+edge and protected quarter pair.  If the displayed edge is tail-heavy, the
+external transversal can meet it only at its center, so it is already a
+private heavy witness.  No pure-edge double-hit branch survives. -/
+theorem critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_privateHeavy
+    {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hprofile : WitnessExactTriangleZeroZeroTwo g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      AdmitsValidTupleWithWitness n (2 ^ s * q)
+        ((2 ^ (s - 1) * q : ℕ) : ZMod (2 ^ s * q)) ∨
+      ProfilePrivateTailHeavyDescentResidual
+        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
+        (K := 2 ^ (s - 1) * q) g := by
+  classical
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  have hMpos : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num) s) (Odd.pos hq)
+  let hh := half_add_half hN
+  have hs : 1 ≤ s :=
+    one_le_criticalIndex_of_zeroZeroTwo_profile hq g hg hprofile
+  have hM : 2 ^ s * q = 2 * (2 ^ (s - 1) * q) := by
+    obtain ⟨r, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : s ≠ 0)
+    simp only [Nat.succ_sub_one, pow_succ]
+    ring
+  have hK : 0 < 2 ^ (s - 1) * q :=
+    mul_pos (pow_pos (by norm_num) _) (Odd.pos hq)
+  obtain ⟨t, x, y, a, b, d, c, B,
+    hxy, hab, hxa, hxb, hya, hyb, hda, hdb,
+    hc, homit, hcd, hpure, ht, hqv, hBsub, hmin, hrec, _hprivate⟩ :=
+    exactTriangleZeroZeroTwo_linkedMinimalSupportDescent
+      hN hM hK g hg hprofile
+  have hBpos : 0 < B.card := Finset.card_pos.mpr
+    (MinimalWitnessSupportTransversal.nonempty_of_witness hmin hc)
+  by_cases hBcard : 2 ≤ B.card
+  · by_cases hlight : ∀ k : Fin n, c k.succ ≤ 1
+    · obtain ⟨r, hr, hrweight⟩ :=
+        exists_exactPairTwo_pureEdgeCanonical_weight
+          g hh (half_ne_zero hN hMpos) hc a b d hab homit
+            hda hdb hcd hlight
+      have hrCritical : r ∈ criticalCanonicalReducedCollisions g := by
+        simpa [hh, criticalCanonicalReducedCollisions] using hr
+      by_cases hlocal : MinimalSupportPrivateWitnessesTailLight g
+          ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin
+      · exact Or.inl
+          (critical_largeCross_of_highWeightCanonical_and_minimalSupportPrivate_localLight
+            hq hnseven g hg r hrCritical hrweight hmin hlocal hBcard)
+      · obtain ⟨owner, k, hk⟩ :=
+          exists_minimalSupportPrivateWitness_tailHeavy_of_not_localLight
+            g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin hlocal
+        exact Or.inr (Or.inr
+          ⟨t, balancedPairCoeffs x y a b, B, hmin, ht, hqv, hBsub,
+            hrec, hBcard, owner,
+            minimalSupportPrivateWitness g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin owner,
+            k, minimalSupportPrivateWitness_isWitness g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin owner,
+            minimalSupportPrivateWitness_ne_zero g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin owner,
+            (fun u hu hne ↦ minimalSupportPrivateWitness_eq_zero_of_ne g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+                hmin owner hu hne),
+            hk⟩)
+    · push Not at hlight
+      obtain ⟨k, hk⟩ := hlight
+      have haNotB : a ∉ B := by
+        intro haB
+        have haOutside := hBsub haB
+        have haNotSupport := (Finset.mem_sdiff.mp haOutside).2
+        apply haNotSupport
+        rw [coefficientSupport_balancedPairCoeffs
+          x y a b hxy hab hxa hxb hya hyb]
+        simp
+      have hbNotB : b ∉ B := by
+        intro hbB
+        have hbOutside := hBsub hbB
+        have hbNotSupport := (Finset.mem_sdiff.mp hbOutside).2
+        apply hbNotSupport
+        rw [coefficientSupport_balancedPairCoeffs
+          x y a b hxy hab hxa hxb hya hyb]
+        simp
+      obtain ⟨z, hzB, hcz⟩ := hmin.1 c hc
+      have hzSupport : z ∈ ({d, a, b} : Finset (Fin (n + 1))) := by
+        apply pureEdgeCoeffs_ne_zero_mem d a b z
+        rwa [← hpure]
+      have hdB : d ∈ B := by
+        simp only [Finset.mem_insert, Finset.mem_singleton] at hzSupport
+        rcases hzSupport with hzd | hza | hzb
+        · simpa [hzd] using hzB
+        · exact False.elim (haNotB (hza ▸ hzB))
+        · exact False.elim (hbNotB (hzb ▸ hzB))
+      have hprivateZero : ∀ u ∈ B, u ≠ d → c u = 0 := by
+        intro u huB hud
+        by_contra hcu
+        have huSupport : u ∈ ({d, a, b} : Finset (Fin (n + 1))) := by
+          apply pureEdgeCoeffs_ne_zero_mem d a b u
+          rwa [← hpure]
+        simp only [Finset.mem_insert, Finset.mem_singleton] at huSupport
+        rcases huSupport with hud' | hua | hub
+        · exact hud hud'
+        · exact haNotB (hua ▸ huB)
+        · exact hbNotB (hub ▸ huB)
+      exact Or.inr (Or.inr
+        ⟨t, balancedPairCoeffs x y a b, B, hmin, ht, hqv, hBsub,
+          hrec, hBcard, ⟨d, hdB⟩, c, k, hc,
+          by simpa using (show c d ≠ 0 by omega),
+          hprivateZero, by omega⟩)
+  · have hBone : B.card = 1 := by omega
+    exact Or.inr (Or.inl (by simpa [hBone] using hrec))
+
 /-- Nonvacuous local-light endpoint for the all-zero exact profile. -/
 theorem critical_largeCross_or_allZero_singletonHalfDescent_or_localHeavy
     {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)

@@ -59,14 +59,19 @@ theorem coefficientSupport_balancedPairCoeffs
     · subst i
       simp [Ne.symm hxb, Ne.symm hyb, Ne.symm hab]
 
-/-- A half witness cannot be supported entirely inside the balanced quarter
-pair extracted from a `(0,0,2)` triangle. -/
-theorem exactTriangleZeroZeroTwo_no_halfWitness_supportedOn_quarterPair
+/-- A `(0,0,2)` triangle exposes its heavy pure edge and a protected balanced
+quarter pair on the same two endpoints.  Retaining this shared geometry is
+essential when a later support transversal is compared with the pure edge. -/
+theorem exactTriangleZeroZeroTwo_protectedPureEdge_quarterPair
     (g : Fin m → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
     (hprofile : WitnessExactTriangleZeroZeroTwo g h) :
-    ∃ t : G, ∃ x y a b : Fin m,
+    ∃ t : G, ∃ x y a b d : Fin m, ∃ c : Fin m → ℤ,
       x ≠ y ∧ a ≠ b ∧
       x ≠ a ∧ x ≠ b ∧ y ≠ a ∧ y ≠ b ∧
+      d ≠ a ∧ d ≠ b ∧
+      Witness g h c ∧
+      (∀ i, c i = -1 ↔ i = a ∨ i = b) ∧ c d = 2 ∧
+      c = pureEdgeCoeffs d a b ∧
       t + t = h ∧
       Witness g t (balancedPairCoeffs x y a b) ∧
       ∀ c : Fin m → ℤ, Witness g h c →
@@ -98,7 +103,12 @@ theorem exactTriangleZeroZeroTwo_no_halfWitness_supportedOn_quarterPair
       _ = h := hraw
   have hq : Witness g t q :=
     balancedPairCoeffs_witness g x y a b hxy hab hxa hxb hya hyb rfl
-  refine ⟨t, x, y, a, b, hxy, hab, hxa, hxb, hya, hyb, ht, hq, ?_⟩
+  have hcABpure : cAB = pureEdgeCoeffs d a b :=
+    exactPair_coeff_two_eq_pureEdgeCoeffs
+      g hcAB a b d hab hAB hda (Ne.symm hbd) hABd
+  refine ⟨t, x, y, a, b, d, cAB,
+    hxy, hab, hxa, hxb, hya, hyb, hda, Ne.symm hbd,
+    hcAB, hAB, hABd, hcABpure, ht, hq, ?_⟩
   intro c hc hsupp
   have hqd : q d = 0 := by
     simp [q, balancedPairCoeffs, Ne.symm hxd, Ne.symm hyd, hda,
@@ -192,6 +202,27 @@ theorem exactTriangleZeroZeroTwo_no_halfWitness_supportedOn_quarterPair
     rwa [ht]
   exact (validTuple_iff_no_zero_witness g).mp hg (q + q - c)
     (witness_twice_sub_at_zero g hq hc' hne hfloor)
+
+/-- Compatibility projection of the richer shared-geometry theorem: a half
+witness cannot be supported entirely inside the protected quarter pair. -/
+theorem exactTriangleZeroZeroTwo_no_halfWitness_supportedOn_quarterPair
+    (g : Fin m → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    (hprofile : WitnessExactTriangleZeroZeroTwo g h) :
+    ∃ t : G, ∃ x y a b : Fin m,
+      x ≠ y ∧ a ≠ b ∧
+      x ≠ a ∧ x ≠ b ∧ y ≠ a ∧ y ≠ b ∧
+      t + t = h ∧
+      Witness g t (balancedPairCoeffs x y a b) ∧
+      ∀ c : Fin m → ℤ, Witness g h c →
+        (∀ i : Fin m, balancedPairCoeffs x y a b i = 0 → c i = 0) →
+        False := by
+  obtain ⟨t, x, y, a, b, _d, _c,
+    hxy, hab, hxa, hxb, hya, hyb, _hda, _hdb,
+    _hc, _homit, _hcd, _hpure, ht, hq, hkernel⟩ :=
+    exactTriangleZeroZeroTwo_protectedPureEdge_quarterPair
+      g hg hh hprofile
+  exact ⟨t, x, y, a, b, hxy, hab, hxa, hxb, hya, hyb,
+    ht, hq, hkernel⟩
 
 /-- Cyclic consequence: the `(0,0,2)` profile always yields a valid recursive
 four-coordinate tuple carrying the transported quarter pair as a half

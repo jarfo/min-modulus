@@ -184,9 +184,45 @@ theorem quarterWitness_minimalExternalSupportDescent
     exact exists_private_witness_of_minimalSupportTransversal
       g (M : ZMod N) hmin hb
 
-/-- The `(0,0,2)` residual triangle admits the dimension-sensitive minimal
-support-transversal descent, rather than only the fixed four-coordinate
-specialization. -/
+/-- The `(0,0,2)` minimal descent with its shared geometry retained.  The
+protected quarter pair and heavy pure edge have the same endpoints `a,b`, so
+an external transversal cannot hit the edge at either endpoint. -/
+theorem exactTriangleZeroZeroTwo_linkedMinimalSupportDescent
+    {N M K : ℕ} [NeZero N]
+    (hN : N = 2 * M) (hM : M = 2 * K) (hK : 0 < K)
+    (g : Fin m → ZMod N) (hg : ValidTuple g)
+    (hprofile : WitnessExactTriangleZeroZeroTwo g (M : ZMod N)) :
+    ∃ t : ZMod N, ∃ x y a b d : Fin m, ∃ c : Fin m → ℤ,
+      ∃ B : Finset (Fin m),
+        x ≠ y ∧ a ≠ b ∧
+        x ≠ a ∧ x ≠ b ∧ y ≠ a ∧ y ≠ b ∧
+        d ≠ a ∧ d ≠ b ∧
+        Witness g (M : ZMod N) c ∧
+        (∀ i, c i = -1 ↔ i = a ∨ i = b) ∧ c d = 2 ∧
+        c = pureEdgeCoeffs d a b ∧
+        t + t = (M : ZMod N) ∧
+        Witness g t (balancedPairCoeffs x y a b) ∧
+        B ⊆ Finset.univ \ coefficientSupport
+          (balancedPairCoeffs x y a b) ∧
+        MinimalWitnessSupportTransversal g (M : ZMod N) B ∧
+        AdmitsValidTupleWithWitness (m - B.card) M (K : ZMod M) ∧
+        ∀ b ∈ B, ∃ c : Fin m → ℤ,
+          Witness g (M : ZMod N) c ∧ c b ≠ 0 ∧
+            ∀ a ∈ B, a ≠ b → c a = 0 := by
+  obtain ⟨t, x, y, a, b, d, c,
+    hxy, hab, hxa, hxb, hya, hyb, hda, hdb,
+    hc, homit, hcd, hpure, ht, hq, hkernel⟩ :=
+    exactTriangleZeroZeroTwo_protectedPureEdge_quarterPair
+      g hg (half_add_half hN) hprofile
+  obtain ⟨B, hBsub, hmin, hrec, hprivate⟩ :=
+    quarterWitness_minimalExternalSupportDescent
+      hN hM hK g hg ht hq hkernel
+  exact ⟨t, x, y, a, b, d, c, B,
+    hxy, hab, hxa, hxb, hya, hyb, hda, hdb,
+    hc, homit, hcd, hpure, ht, hq, hBsub, hmin, hrec, hprivate⟩
+
+/-- Compatibility projection: the `(0,0,2)` residual triangle admits the
+dimension-sensitive minimal support-transversal descent. -/
 theorem exactTriangleZeroZeroTwo_minimalSupportDescent
     {N M K : ℕ} [NeZero N]
     (hN : N = 2 * M) (hM : M = 2 * K) (hK : 0 < K)
@@ -195,13 +231,13 @@ theorem exactTriangleZeroZeroTwo_minimalSupportDescent
     ∃ t : ZMod N, ∃ q : Fin m → ℤ,
       t + t = (M : ZMod N) ∧ Witness g t q ∧
         ProtectedQuarterMinimalSupportDescent (M := M) (K := K) g q := by
-  obtain ⟨t, x, y, a, b, _hxy, _hab, _hxa, _hxb, _hya, _hyb,
-    ht, hq, hkernel⟩ :=
-    exactTriangleZeroZeroTwo_no_halfWitness_supportedOn_quarterPair
-      g hg (half_add_half hN) hprofile
-  refine ⟨t, balancedPairCoeffs x y a b, ht, hq, ?_⟩
-  exact quarterWitness_minimalExternalSupportDescent
-    hN hM hK g hg ht hq hkernel
+  obtain ⟨t, x, y, a, b, _d, _c, B,
+    _hxy, _hab, _hxa, _hxb, _hya, _hyb, _hda, _hdb,
+    _hc, _homit, _hcd, _hpure, ht, hq, hBsub, hmin, hrec, hprivate⟩ :=
+    exactTriangleZeroZeroTwo_linkedMinimalSupportDescent
+      hN hM hK g hg hprofile
+  exact ⟨t, balancedPairCoeffs x y a b, ht, hq,
+    B, hBsub, hmin, hrec, hprivate⟩
 
 /-- The all-zero residual triangle admits the same dimension-sensitive
 minimal support-transversal descent. -/
