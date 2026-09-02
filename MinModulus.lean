@@ -154,4 +154,5 @@ import MinModulus.G1QuarterPairTrappedKernel
 import MinModulus.G1QuarterQuartetTrappedKernel
 import MinModulus.G1MinimalSupportTransversal
 import MinModulus.G1MinimalSupportEscapeIncidence
+import MinModulus.G1MinimalSupportCollisionCharge
 import MinModulus.G1Counterexample
