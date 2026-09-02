@@ -189,6 +189,7 @@ import MinModulus.G1PrivateHeavyGapOmissionVertices
 import MinModulus.G1PrivateHeavyGapSourceTargetSplit
 import MinModulus.G1PrivateHeavyJointGapCapacity
 import MinModulus.G1PrivateHeavyJointGapLevels
+import MinModulus.G1PrivateHeavyJointGapFreshFibers
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
