@@ -155,6 +155,16 @@ def MinimalSupportPrivateShiftCyclePairedIncomingEdgesShareRepeatedOmission
     j ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
       g hg hh hno hmin a d z ∧
     finRotate d j ≠ i ∧
+    minimalSupportPrivateShiftCycleVertex g hno hmin a (finRotate d j) ∈
+      minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+        g h hno hmin a k l ∧
+    minimalSupportPrivateShiftCycleVertex g hno hmin a i ∈
+      minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+        g h hno hmin a k l ∧
+    minimalSupportPrivateShiftCycleEdgePairEndpointOwners
+        g hno hmin a k l ⊆
+      minimalSupportPrivateOmissionVertices g hmin z ∧
+    3 ≤ (minimalSupportPrivateOmissionVertices g hmin z).card ∧
     MinimalSupportPrivateShiftCycleIncomingEdgeThreeSharedAt
       g hno hmin a (finRotate d j) z ∧
     MinimalSupportPrivateShiftCycleIncomingEdgeThreeSharedAt
@@ -204,7 +214,8 @@ theorem minimalSupportPrivateShiftCycle_pairedHeavyIncomingEdgeAlgebra_profiles
   · rcases minimalSupportPrivateShiftCycleIncomingHeavyEdgeAlgebra_at_omission
         g hno hmin a i z hiAlgebra hiz with
       hiShared | htriangle | hthree | hiPure
-    · exact Or.inl ⟨j, i, hjPair, hjFiber, hji, hjShared, hiShared⟩
+    · exact Or.inl ⟨j, i, hjPair, hjFiber, hji, hjHeavyEndpoint,
+        hiHeavyEndpoint, hsubset, _hthree, hjShared, hiShared⟩
     · exact Or.inr (Or.inl htriangle)
     · exact Or.inr (Or.inr (Or.inl hthree))
     · exact Or.inr (Or.inr (Or.inr
