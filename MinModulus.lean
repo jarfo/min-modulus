@@ -191,6 +191,7 @@ import MinModulus.G1PrivateHeavyJointGapCapacity
 import MinModulus.G1PrivateHeavyJointGapLevels
 import MinModulus.G1PrivateHeavyJointGapFreshFibers
 import MinModulus.G1PrivateHeavyJointGapClosure
+import MinModulus.G1PrivateHeavyJointGapBackprop
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
