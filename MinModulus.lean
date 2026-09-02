@@ -184,6 +184,7 @@ import MinModulus.G1PrivateHeavyJointEscapeFibers
 import MinModulus.G1PrivateHeavyJointFiberAlgebra
 import MinModulus.G1PrivateHeavyCoefficientGapFibers
 import MinModulus.G1PrivateHeavyOwnerNormalization
+import MinModulus.G1PrivateHeavyGapOmissionFibers
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
