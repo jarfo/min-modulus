@@ -6,11 +6,12 @@ common-omission label.  This module keeps two distinct members of that fiber
 simultaneously.  Their sources and targets are distinct along a least-period
 cycle, and all four endpoint private witnesses omit the repeated label.
 
-At critical depth, the two target owners either already give the selected
-tail-light crossing charge, or one of those exact targets is tail-heavy.  In
-the latter case the fixed-edge algebra retains its canonical private and
-avoiding witnesses.  This is the first lossless two-edge interface for the
-next coefficient/profile comparison.
+For cycles of length at least three, two repeated-label edges touch at least
+three owners.  At critical depth they either give the selected tail-light
+crossing charge or contain two heavy owners.  One is retained as the target
+of a displayed repeated edge, and the other is attached to its unique incoming
+edge by inverse rotation; both carry the fixed-edge algebra.  The global-facing
+endpoint isolates the length-two cycle as the remaining exceptional overlap.
 -/
 import MinModulus.G1PrivateHeavyCycleEdgeAlgebra
 
@@ -464,6 +465,117 @@ theorem critical_repeatedPrivateShiftCycleLabel_cross_or_twoHeavyEndpoints
         g hg (half_add_half (by rw [pow_succ]; ring)) hno hmin a
           hcycle hd hk hl hkl⟩
 
+/-- Every endpoint owner of two displayed cycle edges has a cycle index. -/
+theorem exists_minimalSupportPrivateShiftCycleIndex_of_mem_edgePairEndpointOwners
+    (g : Fin (m + 1) → G) {h : G}
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
+      Witness g h r → r e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    {k l : Fin d} {b : ↥B}
+    (hb : b ∈ minimalSupportPrivateShiftCycleEdgePairEndpointOwners
+      g hno hmin a k l) :
+    ∃ i : Fin d,
+      b = minimalSupportPrivateShiftCycleVertex g hno hmin a i := by
+  simp only [minimalSupportPrivateShiftCycleEdgePairEndpointOwners,
+    Finset.mem_insert, Finset.mem_singleton] at hb
+  rcases hb with rfl | rfl | rfl | rfl
+  · exact ⟨k, rfl⟩
+  · exact ⟨finRotate d k,
+      minimalSupportPrivateShiftCycleTarget_eq_vertex_rotate
+        g hno hmin a hcycle k⟩
+  · exact ⟨l, rfl⟩
+  · exact ⟨finRotate d l,
+      minimalSupportPrivateShiftCycleTarget_eq_vertex_rotate
+        g hno hmin a hcycle l⟩
+
+/-- The canonical algebra attached to the incoming edge of a tail-heavy
+cycle vertex.  The predecessor index is retained explicitly through
+`(finRotate d).symm i`. -/
+def MinimalSupportPrivateShiftCycleIncomingHeavyEdgeAlgebra
+    (g : Fin (m + 1) → G) (h : G)
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
+      Witness g h r → r e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (a : ↥B) {d : ℕ} (i : Fin d) : Prop :=
+  let p := (finRotate d).symm i
+  let b := minimalSupportPrivateShiftCycleVertex g hno hmin a p
+  let u := minimalSupportPrivateShiftCycleVertex g hno hmin a i
+  u ∈ minimalSupportPrivateTailHeavyVertices g h hmin ∧
+    minimalSupportTransversalShiftTarget g hno hmin b = u ∧
+    (MinimalSupportPrivateShiftEdgeThreeSharedOmission g hno hmin b ∨
+      WitnessExactOmissionTriangle g h ∨
+      WitnessThreeDistinctOmissions g h)
+
+/-- Every tail-heavy vertex on the displayed cycle carries the fixed-edge
+algebra on its unique incoming canonical edge. -/
+theorem minimalSupportPrivateShiftCycle_incomingHeavyEdgeAlgebra
+    (g : Fin (m + 1) → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0)
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
+      Witness g h r → r e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (i : Fin d)
+    (hiHeavy : minimalSupportPrivateShiftCycleVertex g hno hmin a i ∈
+      minimalSupportPrivateTailHeavyVertices g h hmin) :
+    MinimalSupportPrivateShiftCycleIncomingHeavyEdgeAlgebra
+      g h hno hmin a i := by
+  let p := (finRotate d).symm i
+  have hp : finRotate d p = i := (finRotate d).apply_symm_apply i
+  have htarget : minimalSupportTransversalShiftTarget g hno hmin
+        (minimalSupportPrivateShiftCycleVertex g hno hmin a p) =
+      minimalSupportPrivateShiftCycleVertex g hno hmin a i := by
+    simpa only [hp] using
+      minimalSupportPrivateShiftCycleTarget_eq_vertex_rotate
+        g hno hmin a hcycle p
+  refine ⟨hiHeavy, htarget, ?_⟩
+  apply tailHeavyTargetShiftEdge_threeSharedPackage_or_exactTriangle_or_threeDistinct
+    g hg hh hno hmin
+      (minimalSupportPrivateShiftCycleVertex g hno hmin a p)
+  rw [htarget]
+  exact hiHeavy
+
+/-- The lossless paired package attached to two equal-labelled cycle edges:
+one heavy owner is the target of a displayed repeated edge, while a second
+distinct heavy endpoint retains its canonical incoming edge algebra. -/
+def MinimalSupportPrivateShiftCycleRepeatedLabelPairedHeavyIncomingEdgeAlgebra
+    (g : Fin (m + 1) → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0)
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
+      Witness g h r → r e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (a : ↥B) {d : ℕ} (z : Fin (m + 1)) (k l : Fin d) : Prop :=
+  ∃ j i : Fin d,
+    (j = k ∨ j = l) ∧
+    j ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+      g hg hh hno hmin a d z ∧
+    finRotate d j ≠ i ∧
+    minimalSupportPrivateShiftCycleVertex g hno hmin a (finRotate d j) ∈
+      minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+        g h hno hmin a k l ∧
+    minimalSupportPrivateShiftCycleVertex g hno hmin a i ∈
+      minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+        g h hno hmin a k l ∧
+    minimalSupportPrivateShiftCycleEdgePairEndpointOwners
+        g hno hmin a k l ⊆
+      minimalSupportPrivateOmissionVertices g hmin z ∧
+    3 ≤ (minimalSupportPrivateOmissionVertices g hmin z).card ∧
+    (MinimalSupportPrivateShiftEdgeThreeSharedOmission g hno hmin
+        (minimalSupportPrivateShiftCycleVertex g hno hmin a j) ∨
+      WitnessExactOmissionTriangle g h ∨
+      WitnessThreeDistinctOmissions g h) ∧
+    MinimalSupportPrivateShiftCycleIncomingHeavyEdgeAlgebra
+      g h hno hmin a i
+
 /-- The two target owners associated with distinct cycle edges. -/
 noncomputable def minimalSupportPrivateShiftCycleTargetPair
     (g : Fin (m + 1) → G) {h : G}
@@ -635,6 +747,239 @@ theorem critical_repeatedPrivateShiftCycleLabel_cross_or_tailHeavyEdgeAlgebra
             hno hmin
               (minimalSupportPrivateShiftCycleVertex g hno hmin a l)
                 huHeavy
+
+/-- For cycles of length at least three, the repeated-edge frontier retains
+two distinct heavy endpoint vertices and the incoming fixed-edge algebra at
+both.  The first incoming edge is one of the displayed equal-labelled edges;
+the second is recovered canonically by inverse rotation. -/
+theorem critical_repeatedPrivateShiftCycleLabel_cross_or_pairedHeavyIncomingEdgeAlgebra
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hno : ¬ ∃ e : Fin (n + 1), ∀ r : Fin (n + 1) → ℤ,
+      Witness g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r → r e ≠ 0)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (hd : 3 ≤ d) {z : Fin (n + 1)} {k l : Fin d}
+    (hk : k ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+      g hg (half_add_half (by rw [pow_succ]; ring)) hno hmin a d z)
+    (hl : l ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+      g hg (half_add_half (by rw [pow_succ]; ring)) hno hmin a d z)
+    (hkl : k ≠ l)
+    (hB : min (s + 1) (Nat.log 2 (n + 1)) - 1 + 2 ≤ B.card) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      MinimalSupportPrivateShiftCycleRepeatedLabelPairedHeavyIncomingEdgeAlgebra
+        g hg (half_add_half (by rw [pow_succ]; ring))
+          hno hmin a z k l := by
+  rcases critical_repeatedPrivateShiftCycleLabel_cross_or_twoHeavyEndpoints
+      hq g hg hno hmin a hcycle hd hk hl hkl hB with
+    hcross | ⟨htwo, hsubset, hthree⟩
+  · exact Or.inl hcross
+  rcases critical_repeatedPrivateShiftCycleLabel_cross_or_tailHeavyEdgeAlgebra
+      hq g hg hno hmin a hcycle hk hl hkl hB with
+    hcross | ⟨j, hjPair, hjFiber, hjHeavy, hjAlgebra⟩
+  · exact Or.inl hcross
+  have hjEndpoint :
+      minimalSupportTransversalShiftTarget g hno hmin
+          (minimalSupportPrivateShiftCycleVertex g hno hmin a j) ∈
+        minimalSupportPrivateShiftCycleEdgePairEndpointOwners
+          g hno hmin a k l := by
+    rcases hjPair with rfl | rfl <;>
+      simp [minimalSupportPrivateShiftCycleEdgePairEndpointOwners]
+  have hjHeavyEndpoint :
+      minimalSupportTransversalShiftTarget g hno hmin
+          (minimalSupportPrivateShiftCycleVertex g hno hmin a j) ∈
+        minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+          g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+            hno hmin a k l :=
+    Finset.mem_inter.mpr ⟨hjEndpoint, hjHeavy⟩
+  have htwo' : 1 <
+      (minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+        g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+          hno hmin a k l).card := by
+    omega
+  obtain ⟨u, huHeavyEndpoint, hune⟩ := Finset.exists_mem_ne htwo'
+    (minimalSupportTransversalShiftTarget g hno hmin
+      (minimalSupportPrivateShiftCycleVertex g hno hmin a j))
+  have huEndpoint : u ∈
+      minimalSupportPrivateShiftCycleEdgePairEndpointOwners
+        g hno hmin a k l := (Finset.mem_inter.mp huHeavyEndpoint).1
+  have huHeavy : u ∈ minimalSupportPrivateTailHeavyVertices g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin :=
+    (Finset.mem_inter.mp huHeavyEndpoint).2
+  obtain ⟨i, hui⟩ :=
+    exists_minimalSupportPrivateShiftCycleIndex_of_mem_edgePairEndpointOwners
+      g hno hmin a hcycle huEndpoint
+  have hiHeavyEndpoint :
+      minimalSupportPrivateShiftCycleVertex g hno hmin a i ∈
+        minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+          g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+            hno hmin a k l := by
+    rw [← hui]
+    exact huHeavyEndpoint
+  have hiHeavy : minimalSupportPrivateShiftCycleVertex g hno hmin a i ∈
+      minimalSupportPrivateTailHeavyVertices g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin := by
+    rw [← hui]
+    exact huHeavy
+  have hjTarget := minimalSupportPrivateShiftCycleTarget_eq_vertex_rotate
+    g hno hmin a hcycle j
+  have hji : finRotate d j ≠ i := by
+    intro heq
+    apply hune
+    calc
+      u = minimalSupportPrivateShiftCycleVertex g hno hmin a i := hui
+      _ = minimalSupportPrivateShiftCycleVertex g hno hmin a
+          (finRotate d j) := by rw [heq]
+      _ = minimalSupportTransversalShiftTarget g hno hmin
+          (minimalSupportPrivateShiftCycleVertex g hno hmin a j) :=
+        hjTarget.symm
+  have hjRotHeavyEndpoint :
+      minimalSupportPrivateShiftCycleVertex g hno hmin a (finRotate d j) ∈
+        minimalSupportPrivateShiftCycleEdgePairHeavyEndpointOwners
+          g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+            hno hmin a k l := by
+    rw [← hjTarget]
+    exact hjHeavyEndpoint
+  right
+  exact ⟨j, i, hjPair, hjFiber, hji, hjRotHeavyEndpoint,
+    hiHeavyEndpoint, hsubset, hthree, hjAlgebra,
+    minimalSupportPrivateShiftCycle_incomingHeavyEdgeAlgebra
+      g hg (half_add_half (by rw [pow_succ]; ring)) hno hmin a
+        hcycle i hiHeavy⟩
+
+/-- Cardinal repeated-label form of the paired incoming-edge package. -/
+theorem critical_largeRepeatedPrivateShiftCycleLabel_cross_or_pairedHeavyIncomingEdgeAlgebra
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hno : ¬ ∃ e : Fin (n + 1), ∀ r : Fin (n + 1) → ℤ,
+      Witness g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r → r e ≠ 0)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (hd : 3 ≤ d) (z : Fin (n + 1))
+    (hz : 2 ≤ (minimalSupportPrivateShiftCycleEdgeLabelFiber
+      g hg (half_add_half (by rw [pow_succ]; ring))
+        hno hmin a d z).card)
+    (hB : min (s + 1) (Nat.log 2 (n + 1)) - 1 + 2 ≤ B.card) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      ∃ k l : Fin d,
+        k ≠ l ∧
+        k ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a d z ∧
+        l ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a d z ∧
+        MinimalSupportPrivateShiftCycleRepeatedLabelPairedHeavyIncomingEdgeAlgebra
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a z k l := by
+  have htwo : 1 < (minimalSupportPrivateShiftCycleEdgeLabelFiber
+      g hg (half_add_half (by rw [pow_succ]; ring))
+        hno hmin a d z).card := by
+    omega
+  obtain ⟨k, hk, l, hl, hkl⟩ := Finset.one_lt_card.mp htwo
+  rcases
+      critical_repeatedPrivateShiftCycleLabel_cross_or_pairedHeavyIncomingEdgeAlgebra
+        hq g hg hno hmin a hcycle hd hk hl hkl hB with hcross | hpair
+  · exact Or.inl hcross
+  · exact Or.inr ⟨k, l, hkl, hk, hl, hpair⟩
+
+/-- For a cycle of length at least three, the edge-label count now terminates
+in complement capacity, critical crossing, or a repeated-label pair carrying
+two distinct heavy incoming-edge algebra packages. -/
+theorem critical_privateShiftCycle_capacity_or_cross_or_pairedHeavyIncomingEdgeAlgebra
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hno : ¬ ∃ e : Fin (n + 1), ∀ r : Fin (n + 1) → ℤ,
+      Witness g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r → r e ≠ 0)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (hd : 3 ≤ d) (L : ℕ) (hcount : L < d)
+    (hB : min (s + 1) (Nat.log 2 (n + 1)) - 1 + 2 ≤ B.card) :
+    B.card + L ≤ n + 1 ∨
+      criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      ∃ z : Fin (n + 1), ∃ k l : Fin d,
+        z ∉ B ∧ k ≠ l ∧
+        k ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a d z ∧
+        l ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a d z ∧
+        MinimalSupportPrivateShiftCycleRepeatedLabelPairedHeavyIncomingEdgeAlgebra
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a z k l := by
+  have hh := half_add_half
+    (show 2 ^ (s + 1) * q = 2 * (2 ^ s * q) by
+      rw [pow_succ]
+      ring)
+  rcases minimalSupportPrivateShiftCycle_capacity_or_repeatedEdgeLabel
+      g hg hh hno hmin a L hcount with hcapacity | hrepeated
+  · exact Or.inl hcapacity
+  · obtain ⟨z, hzB, hzcard⟩ := hrepeated
+    rcases
+        critical_largeRepeatedPrivateShiftCycleLabel_cross_or_pairedHeavyIncomingEdgeAlgebra
+          hq g hg hno hmin a hcycle hd z hzcard hB with hcross | hpair
+    · exact Or.inr (Or.inl hcross)
+    · obtain ⟨k, l, hkl, hk, hl, halgebra⟩ := hpair
+      exact Or.inr (Or.inr
+        ⟨z, k, l, hzB, hkl, hk, hl, halgebra⟩)
+
+/-- Global-facing cycle split: every least-period cycle is either the explicit
+two-cycle exception or falls under the paired-heavy repeated-edge endpoint. -/
+theorem critical_privateShiftCycle_twoCycle_or_capacity_or_cross_or_pairedHeavyIncomingEdgeAlgebra
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hno : ¬ ∃ e : Fin (n + 1), ∀ r : Fin (n + 1) → ℤ,
+      Witness g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) r → r e ≠ 0)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (L : ℕ) (hcount : L < d)
+    (hB : min (s + 1) (Nat.log 2 (n + 1)) - 1 + 2 ≤ B.card) :
+    d = 2 ∨ B.card + L ≤ n + 1 ∨
+      criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      ∃ z : Fin (n + 1), ∃ k l : Fin d,
+        z ∉ B ∧ k ≠ l ∧
+        k ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a d z ∧
+        l ∈ minimalSupportPrivateShiftCycleEdgeLabelFiber
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a d z ∧
+        MinimalSupportPrivateShiftCycleRepeatedLabelPairedHeavyIncomingEdgeAlgebra
+          g hg (half_add_half (by rw [pow_succ]; ring))
+            hno hmin a z k l := by
+  by_cases hd2 : d = 2
+  · exact Or.inl hd2
+  · right
+    have hdLower : 2 ≤ d := hcycle.1
+    have hd : 3 ≤ d := by omega
+    exact
+      critical_privateShiftCycle_capacity_or_cross_or_pairedHeavyIncomingEdgeAlgebra
+        hq g hg hno hmin a hcycle hd L hcount hB
 
 /-- Cardinal form consumed directly after the cycle pigeonhole theorem. -/
 theorem critical_largeRepeatedPrivateShiftCycleLabel_cross_or_tailHeavyEdgeAlgebra
