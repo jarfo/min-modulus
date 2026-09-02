@@ -317,6 +317,59 @@ theorem large_externalSupportFiber_mul_rootWeight_lt_four_mul_crossMass
     _ ≤ 2 * (2 * X) := Nat.mul_le_mul_left 2 hcharge
     _ = 4 * X := by ring
 
+/-- The sharp reusable threshold is one above the quotient of four crossing
+mass by the root weight.  At that threshold the high-fiber charge contradicts
+Euclidean division, so only the low-reuse padding bound survives. -/
+theorem cycleLength_le_crossMassDivRoot_add_two_mul_padding
+    (g : Fin (m + 1) → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hh0 : h ≠ 0)
+    (hthree : ¬ WitnessThreeDistinctOmissions g h)
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ c : Fin (m + 1) → ℤ,
+      Witness g h c → c e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (r : ReducedSubsetSumCollision g h)
+    (hr : r ∈ canonicalReducedCollisions (g := g) hh)
+    (hmajor : (canonicalReducedCollisions (g := g) hh).sum
+        (reducedCollisionWeight (m := m)) <
+      2 * reducedCollisionWeight (m := m) r)
+    (hd : d ≤
+      (minimalSupportPrivateShiftCycleLabelledLightProfileIndices
+        g hg hh hno hmin a d).card + 1) :
+    d ≤
+      (4 * (canonicalPositiveNegativeCrossPairs (g := g) hh).sum (fun p ↦
+          reducedCollisionWeight (m := m) p.1 *
+            reducedCollisionWeight (m := m) p.2) /
+          reducedCollisionWeight (m := m) r + 2) *
+        (m - (reducedCollisionSupport r).card) + 2 := by
+  let W := reducedCollisionWeight (m := m) r
+  let X := (canonicalPositiveNegativeCrossPairs (g := g) hh).sum (fun p ↦
+    reducedCollisionWeight (m := m) p.1 *
+      reducedCollisionWeight (m := m) p.2)
+  let K := 4 * X / W + 1
+  have hWpos : 0 < W := by simp [W, reducedCollisionWeight]
+  rcases cycleLength_le_reuse_mul_padding_add_two_or_largeExternalFiber
+      g hg hh hh0 hno hmin a hcycle r hr hmajor hd K with
+    hcapacity | hlarge
+  · simpa [W, X, K] using hcapacity
+  · obtain ⟨x, _hx, hxlarge⟩ := hlarge
+    have hcharge :=
+      large_externalSupportFiber_mul_rootWeight_lt_four_mul_crossMass
+        g hg hh hh0 hthree hno hmin a hcycle r hr x K hxlarge
+    have hdivision : 4 * X < W * (4 * X / W + 1) :=
+      Nat.lt_mul_div_succ (4 * X) hWpos
+    change K * W < 4 * X at hcharge
+    change d ≤ (4 * X / W + 2) *
+      (m - (reducedCollisionSupport r).card) + 2
+    have hreverse : 4 * X < K * W := by
+      calc
+        4 * X < W * (4 * X / W + 1) := hdivision
+        _ = K * W := by simp [K]; ring
+    exact False.elim ((Nat.not_lt_of_ge (Nat.le_of_lt hcharge)) hreverse)
+
 /-- Final critical residual after eliminating high fixed-coordinate reuse at
 threshold twice the critical half-gap. -/
 noncomputable def IsCriticalPrivateHeavyDominantExternalFiberCapacity
@@ -459,5 +512,117 @@ theorem critical_privateShiftCycle_cross_or_profiles_or_dominantExternalCapacity
             Nat.mul_lt_mul_of_pos_left hLlt hLpos
           _ = 2 * L * W := by ring
       omega
+
+/-- The high-reuse-free critical residual together with the sharper adaptive
+crossing-mass/root-weight quotient bound. -/
+noncomputable def IsCriticalPrivateHeavyDominantAdaptiveExternalCapacity
+    {n s q : ℕ}
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q))
+    (hg : ValidTuple g)
+    (hno : ¬ ∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c → c e ≠ 0)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (a : ↥B) (d : ℕ)
+    (r : ReducedSubsetSumCollision g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) : Prop :=
+  IsCriticalPrivateHeavyDominantExternalFiberCapacity
+      g hg hno hmin a d r ∧
+    d ≤
+      (4 * criticalCanonicalCrossMass g /
+          reducedCollisionWeight (m := n) r + 2) *
+        (n - (reducedCollisionSupport r).card) + 2 ∧
+    1 ≤ n - (reducedCollisionSupport r).card
+
+/-- Critical operational endpoint retaining the exact quotient of crossing
+mass by dominant-root weight before the coarser half-gap estimate. -/
+theorem critical_privateShiftCycle_cross_or_profiles_or_dominantAdaptiveExternalCapacity
+    {n s q : ℕ} (hn : 1 ≤ n) (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1))
+    (hno : ¬ ∃ e : Fin (n + 1), ∀ c : Fin (n + 1) → ℤ,
+      Witness g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) c → c e ≠ 0)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (a : ↥B) {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle
+      (minimalSupportTransversalShiftTarget g hno hmin) a d)
+    (hB : min (s + 1) (Nat.log 2 (n + 1)) - 1 + 2 ≤ B.card) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      WitnessExactOmissionTriangle g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      WitnessThreeDistinctOmissions g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      WitnessTailHeavyPureEdge g
+        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      ∃ r ∈ criticalCanonicalReducedCollisions g,
+        IsCriticalPrivateHeavyDominantAdaptiveExternalCapacity
+          g hg hno hmin a d r := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  let h := ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  let hh := half_add_half hN
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hh0 : h ≠ 0 := by
+    simpa [h] using half_ne_zero hN hM
+  by_cases hthree0 : WitnessThreeDistinctOmissions g h
+  · exact Or.inr (Or.inr (Or.inl hthree0))
+  rcases
+      critical_privateShiftCycle_cross_or_profiles_or_dominantExternalCapacity
+        hn hq g hg hcritical hno hmin a hcycle hB with
+    hcross | htriangle | hthree | hpure | hdominant
+  · exact Or.inl hcross
+  · exact Or.inr (Or.inl htriangle)
+  · exact False.elim (hthree0 hthree)
+  · exact Or.inr (Or.inr (Or.inr (Or.inl hpure)))
+  · obtain ⟨r, hr, hcapacity⟩ := hdominant
+    rcases
+        critical_privateShiftCycle_cross_or_profiles_or_labelledLightProfileIndices_add_one
+          hq g hg hno hmin a hcycle hB with
+      hcross' | htriangle' | hthree' | hpure' | hlabelled
+    · exact Or.inl hcross'
+    · exact Or.inr (Or.inl htriangle')
+    · exact False.elim (hthree0 hthree')
+    · exact Or.inr (Or.inr (Or.inr (Or.inl hpure')))
+    · by_cases hpadding : n - (reducedCollisionSupport r).card = 0
+      · have hdle : d ≤ 2 := by
+          have hcoarse := hcapacity.2
+          rw [hpadding] at hcoarse
+          simpa using hcoarse
+        have hd2 : d = 2 := by
+          have hdlower : 2 ≤ d := hcycle.1
+          omega
+        subst d
+        rcases
+            critical_minimalSupportPrivateShift_twoCycle_cross_or_threeDistinctOmissions_or_tailHeavyPureEdge
+              hq g hg hno hmin a hcycle hB with
+          hcross2 | hthree2 | hpure2
+        · exact Or.inl hcross2
+        · exact False.elim (hthree0 hthree2)
+        · exact Or.inr (Or.inr (Or.inr (Or.inl hpure2)))
+      · right; right; right; right
+        refine ⟨r, hr, hcapacity, ?_, by omega⟩
+        have hr' : r ∈ canonicalReducedCollisions (g := g) hh := by
+          simpa [h, criticalCanonicalReducedCollisions] using hr
+        have hcoupling := hcapacity.1.1.1.1.1
+        have hmajor := hcoupling.2.2.2.2.1
+        have hmajor' : (canonicalReducedCollisions (g := g) hh).sum
+            (reducedCollisionWeight (m := n)) <
+          2 * reducedCollisionWeight (m := n) r := by
+          simpa [h, criticalCanonicalReducedCollisions] using hmajor
+        have hadaptive := cycleLength_le_crossMassDivRoot_add_two_mul_padding
+          g hg hh hh0 hthree0 hno hmin a hcycle r hr' hmajor' hlabelled
+        simpa [h, hh, criticalCanonicalCrossMass,
+          criticalCanonicalPositiveNegativeCrossPairs] using hadaptive
 
 end MinModulus
