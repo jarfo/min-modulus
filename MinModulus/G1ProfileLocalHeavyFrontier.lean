@@ -7,7 +7,7 @@ Both exact profiles now disappear only into crossing, recursion, or the
 private-heavy residual; the independent three-omission, triple, fork, and
 near-balanced branches are retained unchanged.
 -/
-import MinModulus.G1PrivateHeavyExternalHeavyBound
+import MinModulus.G1PrivateHeavyTailHeavyBound
 
 namespace MinModulus
 
