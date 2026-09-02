@@ -25,14 +25,16 @@ def CriticalRangeDeleteStepBelowSeven : Prop :=
     AdmitsValidTuple (n + 1) (2 ^ (s + 1) * q) →
       AdmitsValidTuple n (2 ^ s * q)
 
-/-- Deletion obligation for the displayed tail-heavy pure-edge residual. -/
-def CriticalTailHeavyPureEdgeDeleteStepFromSeven : Prop :=
+/-- Deletion obligation for the displayed tail-heavy pure edge together with
+its retained protected minimal descent. -/
+def CriticalPureEdgeTailHeavyDescentDeleteStepFromSeven : Prop :=
   ∀ {n s q : ℕ} (_hn : 7 ≤ n) (_hq : Odd q)
     (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)),
     ValidTuple g →
     2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1) →
-    WitnessTailHeavyPureEdge g
-      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) →
+    ProfilePureEdgeTailHeavyDescentResidual
+      (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
+      (K := 2 ^ (s - 1) * q) g →
     AdmitsValidTuple n (2 ^ s * q)
 
 /-- Deletion obligation for a protected minimal transversal carrying a
@@ -65,7 +67,7 @@ def CriticalNonProfileResidualDeleteStepFromSeven : Prop :=
 classes proves the full critical delete step from dimension seven onward. -/
 theorem criticalRangeDeleteStepFromSeven_of_localHeavyResiduals
     (hcross : CriticalLargeCrossingDeleteStep)
-    (hpure : CriticalTailHeavyPureEdgeDeleteStepFromSeven)
+    (hpure : CriticalPureEdgeTailHeavyDescentDeleteStepFromSeven)
     (hprivate : CriticalPrivateTailHeavyDeleteStepFromSeven)
     (hother : CriticalNonProfileResidualDeleteStepFromSeven) :
     CriticalRangeDeleteStepFromSeven := by
@@ -96,7 +98,7 @@ imply the unconditional global lower bound. -/
 theorem global_lower_bound_of_localHeavyResidualDeleteSteps
     (hlow : CriticalRangeDeleteStepBelowSeven)
     (hcross : CriticalLargeCrossingDeleteStep)
-    (hpure : CriticalTailHeavyPureEdgeDeleteStepFromSeven)
+    (hpure : CriticalPureEdgeTailHeavyDescentDeleteStepFromSeven)
     (hprivate : CriticalPrivateTailHeavyDeleteStepFromSeven)
     (hother : CriticalNonProfileResidualDeleteStepFromSeven)
     (hG2 : OddStratumLowerBound)

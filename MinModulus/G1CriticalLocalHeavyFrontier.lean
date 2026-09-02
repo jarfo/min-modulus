@@ -21,8 +21,9 @@ theorem critical_localHeavyProfileFrontier
     criticalHalfGap n s * criticalHalfGap n s ≤
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTuple n (2 ^ s * q) ∨
-      WitnessTailHeavyPureEdge g
-        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      ProfilePureEdgeTailHeavyDescentResidual
+        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
+        (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g ∨

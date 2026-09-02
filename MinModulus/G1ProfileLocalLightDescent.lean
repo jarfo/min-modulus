@@ -13,6 +13,20 @@ namespace MinModulus
 
 open Finset
 
+/-- The pure-edge-heavy residual retains the same protected descent data as
+the private-heavy branch instead of discarding the already constructed
+minimal transversal and longer recursive tuple. -/
+def ProfilePureEdgeTailHeavyDescentResidual
+    {n N M K : ℕ}
+    (g : Fin (n + 1) → ZMod N) : Prop :=
+  ∃ t : ZMod N, ∃ qv : Fin (n + 1) → ℤ,
+    ∃ B : Finset (Fin (n + 1)),
+      MinimalWitnessSupportTransversal g (M : ZMod N) B ∧
+      t + t = (M : ZMod N) ∧ Witness g t qv ∧
+      B ⊆ Finset.univ \ coefficientSupport qv ∧
+      AdmitsValidTupleWithWitness (n + 1 - B.card) M (K : ZMod M) ∧
+      2 ≤ B.card ∧ WitnessTailHeavyPureEdge g (M : ZMod N)
+
 /-- The selected private-heavy residual retains the protected quarter layer,
 its actual minimal transversal, the longer recursive tuple already obtained
 by deleting that transversal, and the concrete private tail-heavy witness. -/
@@ -59,8 +73,9 @@ theorem critical_largeCross_or_singletonHalfDescent_or_localHeavy_of_rootSplit
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTupleWithWitness n (2 ^ s * q)
         ((2 ^ (s - 1) * q : ℕ) : ZMod (2 ^ s * q)) ∨
-      WitnessTailHeavyPureEdge g
-        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      ProfilePureEdgeTailHeavyDescentResidual
+        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
+        (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g := by
@@ -80,7 +95,8 @@ theorem critical_largeCross_or_singletonHalfDescent_or_localHeavy_of_rootSplit
             g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin hlocal
         exact Or.inr (Or.inr (Or.inr
           ⟨t, qv, B, hmin, ht, hqv, hBsub, hrec, hBcard, b, k, hk⟩))
-    · exact Or.inr (Or.inr (Or.inl hpureHeavy))
+    · exact Or.inr (Or.inr (Or.inl
+        ⟨t, qv, B, hmin, ht, hqv, hBsub, hrec, hBcard, hpureHeavy⟩))
   · have hBone : B.card = 1 := by omega
     exact Or.inr (Or.inl (by simpa [hBone] using hrec))
 
@@ -94,8 +110,9 @@ theorem critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_localHeavy
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTupleWithWitness n (2 ^ s * q)
         ((2 ^ (s - 1) * q : ℕ) : ZMod (2 ^ s * q)) ∨
-      WitnessTailHeavyPureEdge g
-        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      ProfilePureEdgeTailHeavyDescentResidual
+        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
+        (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g := by
@@ -151,8 +168,9 @@ theorem critical_largeCross_or_allZero_singletonHalfDescent_or_localHeavy
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTupleWithWitness n (2 ^ s * q)
         ((2 ^ (s - 1) * q : ℕ) : ZMod (2 ^ s * q)) ∨
-      WitnessTailHeavyPureEdge g
-        ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) ∨
+      ProfilePureEdgeTailHeavyDescentResidual
+        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
+        (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g := by
