@@ -7,7 +7,7 @@ two exact profiles disappear only into crossing, recursion, or one of the two
 structured local-heavy residuals; the independent three-omission, triple,
 fork, and near-balanced branches are retained unchanged.
 -/
-import MinModulus.G1ProfileLocalLightDescent
+import MinModulus.G1ProfilePureEdgePrivateTransfer
 
 namespace MinModulus
 
@@ -36,7 +36,7 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
     criticalHalfGap n s * criticalHalfGap n s ≤
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTuple n (2 ^ s * q) ∨
-      ProfilePureEdgeTailHeavyDescentResidual
+      ProfilePureEdgeDoubleHitDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
@@ -55,13 +55,19 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
           hq hnseven g hg hall with hcross | hrec | hpure | hprivate
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
-      · exact Or.inr (Or.inr (Or.inl hpure))
+      · rcases privateTailHeavy_or_pureEdgeDoubleHit_of_pureEdgeTailHeavy
+          hpure with hprivate' | hdouble
+        · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate')))
+        · exact Or.inr (Or.inr (Or.inl hdouble))
       · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
     · rcases critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_localHeavy
           hq hnseven g hg hzeroTwo with hcross | hrec | hpure | hprivate
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
-      · exact Or.inr (Or.inr (Or.inl hpure))
+      · rcases privateTailHeavy_or_pureEdgeDoubleHit_of_pureEdgeTailHeavy
+          hpure with hprivate' | hdouble
+        · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate')))
+        · exact Or.inr (Or.inr (Or.inl hdouble))
       · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
     · exact Or.inr (Or.inr (Or.inr (Or.inr
         ⟨hno, p, d, hmin, Or.inl ⟨hcycle.1, hthree⟩⟩)))

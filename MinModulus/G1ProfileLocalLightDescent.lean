@@ -35,14 +35,15 @@ def ProfilePrivateTailHeavyDescentResidual
     (g : Fin (n + 1) → ZMod N) : Prop :=
   ∃ t : ZMod N, ∃ qv : Fin (n + 1) → ℤ,
     ∃ B : Finset (Fin (n + 1)),
-    ∃ hmin : MinimalWitnessSupportTransversal g (M : ZMod N) B,
+      MinimalWitnessSupportTransversal g (M : ZMod N) B ∧
       t + t = (M : ZMod N) ∧ Witness g t qv ∧
       B ⊆ Finset.univ \ coefficientSupport qv ∧
       AdmitsValidTupleWithWitness (n + 1 - B.card) M (K : ZMod M) ∧
       2 ≤ B.card ∧
-      ∃ b : {b : Fin (n + 1) // b ∈ B}, ∃ k : Fin n,
-        2 ≤ minimalSupportPrivateWitness g (M : ZMod N)
-          hmin b k.succ
+      ∃ b : {b : Fin (n + 1) // b ∈ B},
+        ∃ c : Fin (n + 1) → ℤ, ∃ k : Fin n,
+          Witness g (M : ZMod N) c ∧ c b ≠ 0 ∧
+          (∀ a ∈ B, a ≠ b → c a = 0) ∧ 2 ≤ c k.succ
 
 /-- Generic assembly of the local pure-root/private-family splits around one
 already constructed protected minimal descent. -/
@@ -94,7 +95,17 @@ theorem critical_largeCross_or_singletonHalfDescent_or_localHeavy_of_rootSplit
           exists_minimalSupportPrivateWitness_tailHeavy_of_not_localLight
             g ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin hlocal
         exact Or.inr (Or.inr (Or.inr
-          ⟨t, qv, B, hmin, ht, hqv, hBsub, hrec, hBcard, b, k, hk⟩))
+          ⟨t, qv, B, hmin, ht, hqv, hBsub, hrec, hBcard,
+            b, minimalSupportPrivateWitness g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin b,
+            k, minimalSupportPrivateWitness_isWitness g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin b,
+            minimalSupportPrivateWitness_ne_zero g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) hmin b,
+            (fun a ha hne ↦ minimalSupportPrivateWitness_eq_zero_of_ne g
+              ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))
+                hmin b ha hne),
+            hk⟩))
     · exact Or.inr (Or.inr (Or.inl
         ⟨t, qv, B, hmin, ht, hqv, hBsub, hrec, hBcard, hpureHeavy⟩))
   · have hBone : B.card = 1 := by omega
