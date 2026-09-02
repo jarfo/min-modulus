@@ -171,6 +171,7 @@ import MinModulus.G1ProfileLocalLightDescent
 import MinModulus.G1ProfilePureEdgePrivateTransfer
 import MinModulus.G1PrivateHeavyEscape
 import MinModulus.G1PrivateHeavyTransversalShift
+import MinModulus.G1PrivateHeavyTransversalCycle
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
