@@ -196,6 +196,7 @@ import MinModulus.G1PrivateHeavyExternalHeavyBound
 import MinModulus.G1PrivateHeavyTailHeavyBound
 import MinModulus.G1PrivateHeavySelfHeavyCapacity
 import MinModulus.G1PrivateHeavySelfHeavyOmissionPairs
+import MinModulus.G1PrivateHeavySelfHeavyOmissionStar
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
