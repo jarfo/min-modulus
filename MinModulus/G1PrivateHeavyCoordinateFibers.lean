@@ -21,15 +21,21 @@ open Finset
 variable {m : ℕ} {G : Type*} [AddCommGroup G]
 
 /-- Choose a tail coordinate of coefficient at least two for each heavy
-private owner. -/
+private owner.  When the owner is non-anchor and already has coefficient at
+least two, prioritize the owner itself. -/
 noncomputable def minimalSupportPrivateHeavyTailIndex
     (g : Fin (m + 1) → G) (h : G)
     {B : Finset (Fin (m + 1))}
     (hmin : MinimalWitnessSupportTransversal g h B)
-    (b : ↥(minimalSupportPrivateTailHeavyVertices g h hmin)) : Fin m :=
-  Classical.choose
-    ((mem_minimalSupportPrivateTailHeavyVertices_iff
-      g h hmin b.val).mp b.property)
+    (b : ↥(minimalSupportPrivateTailHeavyVertices g h hmin)) : Fin m := by
+  classical
+  if howner : b.val.val ≠ 0 ∧
+      2 ≤ minimalSupportPrivateWitness g h hmin b.val b.val then
+    exact Classical.choose (Fin.exists_succ_eq_of_ne_zero howner.1)
+  else
+    exact Classical.choose
+      ((mem_minimalSupportPrivateTailHeavyVertices_iff
+        g h hmin b.val).mp b.property)
 
 theorem minimalSupportPrivateHeavyTailIndex_spec
     (g : Fin (m + 1) → G) (h : G)
@@ -37,10 +43,17 @@ theorem minimalSupportPrivateHeavyTailIndex_spec
     (hmin : MinimalWitnessSupportTransversal g h B)
     (b : ↥(minimalSupportPrivateTailHeavyVertices g h hmin)) :
     2 ≤ minimalSupportPrivateWitness g h hmin b.val
-      (minimalSupportPrivateHeavyTailIndex g h hmin b).succ :=
-  Classical.choose_spec
-    ((mem_minimalSupportPrivateTailHeavyVertices_iff
-      g h hmin b.val).mp b.property)
+      (minimalSupportPrivateHeavyTailIndex g h hmin b).succ := by
+  classical
+  unfold minimalSupportPrivateHeavyTailIndex
+  split
+  next howner =>
+    rw [Classical.choose_spec (Fin.exists_succ_eq_of_ne_zero howner.1)]
+    exact howner.2
+  next =>
+    exact Classical.choose_spec
+      ((mem_minimalSupportPrivateTailHeavyVertices_iff
+        g h hmin b.val).mp b.property)
 
 /-- The selected full heavy coordinate. -/
 noncomputable def minimalSupportPrivateHeavyCoordinate
@@ -59,6 +72,24 @@ theorem minimalSupportPrivateHeavyCoordinate_spec
     2 ≤ minimalSupportPrivateWitness g h hmin b.val
       (minimalSupportPrivateHeavyCoordinate g h hmin b) :=
   minimalSupportPrivateHeavyTailIndex_spec g h hmin b
+
+/-- A non-anchor owner-heavy private witness is normalized so that its
+selected heavy coordinate is exactly its owner. -/
+theorem minimalSupportPrivateHeavyCoordinate_eq_owner_of_nonzero_ownerHeavy
+    (g : Fin (m + 1) → G) (h : G)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (b : ↥(minimalSupportPrivateTailHeavyVertices g h hmin))
+    (hb0 : b.val.val ≠ 0)
+    (hb : 2 ≤ minimalSupportPrivateWitness g h hmin b.val b.val) :
+    minimalSupportPrivateHeavyCoordinate g h hmin b = b.val := by
+  classical
+  unfold minimalSupportPrivateHeavyCoordinate
+  unfold minimalSupportPrivateHeavyTailIndex
+  have howner : b.val.val ≠ 0 ∧
+      2 ≤ minimalSupportPrivateWitness g h hmin b.val b.val := ⟨hb0, hb⟩
+  simp only [dif_pos howner]
+  exact Classical.choose_spec (Fin.exists_succ_eq_of_ne_zero hb0)
 
 /-- Privacy localizes the selected heavy coordinate to its owner or outside
 the deletion set. -/
