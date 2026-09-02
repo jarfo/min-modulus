@@ -157,4 +157,5 @@ import MinModulus.G1MinimalSupportEscapeIncidence
 import MinModulus.G1MinimalSupportCollisionCharge
 import MinModulus.G1MinimalSupportCrossingCharge
 import MinModulus.G1MinimalSupportCriticalCrossing
+import MinModulus.G1MinimalSupportEscapeFiber
 import MinModulus.G1Counterexample
