@@ -186,6 +186,7 @@ import MinModulus.G1PrivateHeavyCoefficientGapFibers
 import MinModulus.G1PrivateHeavyOwnerNormalization
 import MinModulus.G1PrivateHeavyGapOmissionFibers
 import MinModulus.G1PrivateHeavyGapOmissionVertices
+import MinModulus.G1PrivateHeavyGapSourceTargetSplit
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
