@@ -13,14 +13,19 @@ namespace MinModulus
 
 variable {m : ℕ} {G : Type*} [AddCommGroup G]
 
-/-- An all-zero triangle contains a balanced quarter-pair layer whose
-four-coordinate support contains no half witness. -/
-theorem exactTriangleAllZero_no_halfWitness_supportedOn_quarterPair
+/-- An all-zero triangle exposes a protected quarter pair together with the
+aligned pure `cBD` edge.  The pair contains the edge center `y` and endpoint
+`d`, leaving only endpoint `b` available to an external transversal. -/
+theorem exactTriangleAllZero_protectedPureEdge_quarterPair
     (g : Fin m → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
     (hall : WitnessExactTriangleAllZero g h) :
-    ∃ t : G, ∃ x d y z : Fin m,
+    ∃ t : G, ∃ x d y z b : Fin m, ∃ c : Fin m → ℤ,
       x ≠ d ∧ y ≠ z ∧
       x ≠ y ∧ x ≠ z ∧ d ≠ y ∧ d ≠ z ∧
+      y ≠ b ∧ y ≠ d ∧ b ≠ d ∧
+      Witness g h c ∧
+      (∀ i, c i = -1 ↔ i = b ∨ i = d) ∧ c y = 2 ∧
+      c = pureEdgeCoeffs y b d ∧
       t + t = h ∧
       Witness g t (balancedPairCoeffs x d y z) ∧
       ∀ c : Fin m → ℤ, Witness g h c →
@@ -29,14 +34,20 @@ theorem exactTriangleAllZero_no_halfWitness_supportedOn_quarterPair
   obtain ⟨cAB, cBD, cDA, a, b, d, hcAB, hcBD, hcDA,
     hab, hbd, hda, hAB, hBD, hDA, hAB0, hBD0, hDA0⟩ := hall
   obtain ⟨x, y, z, t, hx, hy, hz, hxy, hyz, hzx,
-    _hABx, _hBDy, _hDAz, ht,
+    _hABx, hBDy, _hDAz, ht,
     _hc0, _h0, hc1, _h1, _hc2, _h2, _hc3, _h3,
     _hsumAB, _hsumBD, _hsumDA⟩ :=
     exists_light_quarterWitness_quartet_of_triangle_all_zero
       g hg hh hcAB hcBD hcDA a b d hab hbd hda
         hAB hBD hDA hAB0 hBD0 hDA0
-  refine ⟨t, x, d, y, z, hx.2.2, hyz, hxy, Ne.symm hzx,
-    Ne.symm hy.2.1, Ne.symm hz.1, ht, hc1, ?_⟩
+  have hcBDpure : cBD = pureEdgeCoeffs y b d :=
+    exactPair_coeff_two_eq_pureEdgeCoeffs
+      g hcBD b d y hbd hBD hy.1 hy.2.1 hBDy
+  refine ⟨t, x, d, y, z, b, cBD,
+    hx.2.2, hyz, hxy, Ne.symm hzx,
+    Ne.symm hy.2.1, Ne.symm hz.1,
+    hy.1, hy.2.1, hbd, hcBD, hBD, hBDy, hcBDpure,
+    ht, hc1, ?_⟩
   intro c hc hsupp
   have hqa : balancedPairCoeffs x d y z a = 0 := by
     simp [balancedPairCoeffs, Ne.symm hx.1, Ne.symm hda,
@@ -58,6 +69,28 @@ theorem exactTriangleAllZero_no_halfWitness_supportedOn_quarterPair
   have hcABa : cAB a = -1 := (hAB a).2 (Or.inl rfl)
   simp only [Pi.neg_apply, hcABa, hca] at ha
   omega
+
+/-- Compatibility projection: an all-zero triangle contains a balanced
+quarter-pair layer whose four-coordinate support contains no half witness. -/
+theorem exactTriangleAllZero_no_halfWitness_supportedOn_quarterPair
+    (g : Fin m → G) (hg : ValidTuple g) {h : G} (hh : h + h = 0)
+    (hall : WitnessExactTriangleAllZero g h) :
+    ∃ t : G, ∃ x d y z : Fin m,
+      x ≠ d ∧ y ≠ z ∧
+      x ≠ y ∧ x ≠ z ∧ d ≠ y ∧ d ≠ z ∧
+      t + t = h ∧
+      Witness g t (balancedPairCoeffs x d y z) ∧
+      ∀ c : Fin m → ℤ, Witness g h c →
+        (∀ i : Fin m, balancedPairCoeffs x d y z i = 0 → c i = 0) →
+        False := by
+  obtain ⟨t, x, d, y, z, _b, _c,
+    hxd, hyz, hxy, hxz, hdy, hdz,
+    _hyb, _hyd, _hbd, _hc, _homit, _hcy, _hpure,
+    ht, hq, hkernel⟩ :=
+    exactTriangleAllZero_protectedPureEdge_quarterPair
+      g hg hh hall
+  exact ⟨t, x, d, y, z, hxd, hyz, hxy, hxz, hdy, hdz,
+    ht, hq, hkernel⟩
 
 /-- Cyclic consequence: the all-zero profile also always yields a valid
 recursive four-coordinate tuple carrying a transported quarter-pair witness. -/

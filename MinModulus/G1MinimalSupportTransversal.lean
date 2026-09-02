@@ -239,8 +239,44 @@ theorem exactTriangleZeroZeroTwo_minimalSupportDescent
   exact ⟨t, balancedPairCoeffs x y a b, ht, hq,
     B, hBsub, hmin, hrec, hprivate⟩
 
-/-- The all-zero residual triangle admits the same dimension-sensitive
-minimal support-transversal descent. -/
+/-- The all-zero minimal descent retaining the aligned pure `cBD` edge.  Its
+center `y` and endpoint `d` belong to the protected quarter support. -/
+theorem exactTriangleAllZero_linkedMinimalSupportDescent
+    {N M K : ℕ} [NeZero N]
+    (hN : N = 2 * M) (hM : M = 2 * K) (hK : 0 < K)
+    (g : Fin m → ZMod N) (hg : ValidTuple g)
+    (hall : WitnessExactTriangleAllZero g (M : ZMod N)) :
+    ∃ t : ZMod N, ∃ x d y z b : Fin m, ∃ c : Fin m → ℤ,
+      ∃ B : Finset (Fin m),
+        x ≠ d ∧ y ≠ z ∧
+        x ≠ y ∧ x ≠ z ∧ d ≠ y ∧ d ≠ z ∧
+        y ≠ b ∧ y ≠ d ∧ b ≠ d ∧
+        Witness g (M : ZMod N) c ∧
+        (∀ i, c i = -1 ↔ i = b ∨ i = d) ∧ c y = 2 ∧
+        c = pureEdgeCoeffs y b d ∧
+        t + t = (M : ZMod N) ∧
+        Witness g t (balancedPairCoeffs x d y z) ∧
+        B ⊆ Finset.univ \ coefficientSupport
+          (balancedPairCoeffs x d y z) ∧
+        MinimalWitnessSupportTransversal g (M : ZMod N) B ∧
+        AdmitsValidTupleWithWitness (m - B.card) M (K : ZMod M) ∧
+        ∀ b ∈ B, ∃ c : Fin m → ℤ,
+          Witness g (M : ZMod N) c ∧ c b ≠ 0 ∧
+            ∀ a ∈ B, a ≠ b → c a = 0 := by
+  obtain ⟨t, x, d, y, z, b, c,
+    hxd, hyz, hxy, hxz, hdy, hdz, hyb, hyd, hbd,
+    hc, homit, hcy, hpure, ht, hq, hkernel⟩ :=
+    exactTriangleAllZero_protectedPureEdge_quarterPair
+      g hg (half_add_half hN) hall
+  obtain ⟨B, hBsub, hmin, hrec, hprivate⟩ :=
+    quarterWitness_minimalExternalSupportDescent
+      hN hM hK g hg ht hq hkernel
+  exact ⟨t, x, d, y, z, b, c, B,
+    hxd, hyz, hxy, hxz, hdy, hdz, hyb, hyd, hbd,
+    hc, homit, hcy, hpure, ht, hq, hBsub, hmin, hrec, hprivate⟩
+
+/-- Compatibility projection: the all-zero residual triangle admits the same
+dimension-sensitive minimal support-transversal descent. -/
 theorem exactTriangleAllZero_minimalSupportDescent
     {N M K : ℕ} [NeZero N]
     (hN : N = 2 * M) (hM : M = 2 * K) (hK : 0 < K)
@@ -249,12 +285,12 @@ theorem exactTriangleAllZero_minimalSupportDescent
     ∃ t : ZMod N, ∃ q : Fin m → ℤ,
       t + t = (M : ZMod N) ∧ Witness g t q ∧
         ProtectedQuarterMinimalSupportDescent (M := M) (K := K) g q := by
-  obtain ⟨t, x, d, y, z, _hxd, _hyz, _hxy, _hxz, _hdy, _hdz,
-    ht, hq, hkernel⟩ :=
-    exactTriangleAllZero_no_halfWitness_supportedOn_quarterPair
-      g hg (half_add_half hN) hall
-  refine ⟨t, balancedPairCoeffs x d y z, ht, hq, ?_⟩
-  exact quarterWitness_minimalExternalSupportDescent
-    hN hM hK g hg ht hq hkernel
+  obtain ⟨t, x, d, y, z, _b, _c, B,
+    _hxd, _hyz, _hxy, _hxz, _hdy, _hdz, _hyb, _hyd, _hbd,
+    _hc, _homit, _hcy, _hpure, ht, hq, hBsub, hmin, hrec, hprivate⟩ :=
+    exactTriangleAllZero_linkedMinimalSupportDescent
+      hN hM hK g hg hall
+  exact ⟨t, balancedPairCoeffs x d y z, ht, hq,
+    B, hBsub, hmin, hrec, hprivate⟩
 
 end MinModulus

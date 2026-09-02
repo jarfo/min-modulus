@@ -4,7 +4,7 @@
 Lift the corrected genuine-heavy profile theorem through the enclosing
 critical trichotomy.  Common touch is immediately converted to the standard
 one-coordinate half deletion.  The remaining outputs are exactly critical
-crossing, recursive descent, the two local-heavy profile residuals, or the
+crossing, recursive descent, the private-heavy profile residual, or the
 independent non-profile avoidance residual.
 -/
 import MinModulus.G1ProfileLocalHeavyFrontier
@@ -21,9 +21,6 @@ theorem critical_localHeavyProfileFrontier
     criticalHalfGap n s * criticalHalfGap n s ≤
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTuple n (2 ^ s * q) ∨
-      ProfilePureEdgeDoubleHitDescentResidual
-        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
-        (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g ∨
@@ -45,11 +42,10 @@ theorem critical_localHeavyProfileFrontier
       (exists_validTuple_half_of_delete hN hM hg j hj))
   · rcases criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
         hq hnseven g hg hescape with
-      hcross | hrec | hpure | hprivate | hother
+      hcross | hrec | hprivate | hother
     · exact Or.inl hcross
     · exact Or.inr (Or.inl hrec)
-    · exact Or.inr (Or.inr (Or.inl hpure))
-    · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
-    · exact Or.inr (Or.inr (Or.inr (Or.inr hother)))
+    · exact Or.inr (Or.inr (Or.inl hprivate))
+    · exact Or.inr (Or.inr (Or.inr hother))
 
 end MinModulus

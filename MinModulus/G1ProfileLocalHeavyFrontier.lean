@@ -1,13 +1,13 @@
 /-
-# Corrected genuine-heavy frontier after local profile splitting
+# Corrected genuine-heavy frontier after linked profile splitting
 
-Compose the nonvacuous four-way exact-profile endpoints with the genuine-heavy
-source-simple triangle classifier.  No global lightness premise is used.  The
-two exact profiles disappear only into crossing, recursion, or one of the two
-structured local-heavy residuals; the independent three-omission, triple,
-fork, and near-balanced branches are retained unchanged.
+Compose the linked exact-profile endpoints with the genuine-heavy
+source-simple triangle classifier.  No global lightness premise is used.
+Both exact profiles now disappear only into crossing, recursion, or the
+private-heavy residual; the independent three-omission, triple, fork, and
+near-balanced branches are retained unchanged.
 -/
-import MinModulus.G1ProfilePureEdgePrivateTransfer
+import MinModulus.G1ProfileLocalLightDescent
 
 namespace MinModulus
 
@@ -27,10 +27,9 @@ def WitnessAvoidanceNonProfileResidual
           WitnessNearBalancedCanonicalTransitionPackage g h hh)
 
 /-- Corrected upstream profile frontier in dimension at least seven.  Exact
-profiles now end in crossing, half descent, or explicitly local heavy data;
-there is no incompatible all-tail-light premise.  Shared endpoint geometry
-eliminates the pure-edge double-hit arm for `(0,0,2)`, so that residual can
-now arise only from the all-zero profile. -/
+profiles now end in crossing, half descent, or explicitly private heavy data;
+there is no incompatible all-tail-light premise.  Linked protected-edge
+geometry eliminates the pure-edge residual in both exact profiles. -/
 theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
     {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
     (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
@@ -38,9 +37,6 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
     criticalHalfGap n s * criticalHalfGap n s ≤
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTuple n (2 ^ s * q) ∨
-      ProfilePureEdgeDoubleHitDescentResidual
-        (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
-        (K := 2 ^ (s - 1) * q) g ∨
       ProfilePrivateTailHeavyDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g ∨
@@ -53,28 +49,25 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
     criticalGenuineHeavyTwoStepEscape_triangleProfileFrontier
       hq g hg hescape
   · rcases hcycle.2 with hall | hzeroTwo | hthree
-    · rcases critical_largeCross_or_allZero_singletonHalfDescent_or_localHeavy
-          hq hnseven g hg hall with hcross | hrec | hpure | hprivate
+    · rcases
+          critical_largeCross_or_allZero_singletonHalfDescent_or_privateHeavy
+            hq hnseven g hg hall with hcross | hrec | hprivate
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
-      · rcases privateTailHeavy_or_pureEdgeDoubleHit_of_pureEdgeTailHeavy
-          hpure with hprivate' | hdouble
-        · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate')))
-        · exact Or.inr (Or.inr (Or.inl hdouble))
-      · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
+      · exact Or.inr (Or.inr (Or.inl hprivate))
     · rcases
           critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_privateHeavy
             hq hnseven g hg hzeroTwo with hcross | hrec | hprivate
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
-      · exact Or.inr (Or.inr (Or.inr (Or.inl hprivate)))
-    · exact Or.inr (Or.inr (Or.inr (Or.inr
-        ⟨hno, p, d, hmin, Or.inl ⟨hcycle.1, hthree⟩⟩)))
-  · exact Or.inr (Or.inr (Or.inr (Or.inr
-      ⟨hno, p, d, hmin, Or.inr (Or.inl htriple)⟩)))
-  · exact Or.inr (Or.inr (Or.inr (Or.inr
-      ⟨hno, p, d, hmin, Or.inr (Or.inr (Or.inl hfork))⟩)))
-  · exact Or.inr (Or.inr (Or.inr (Or.inr
-      ⟨hno, p, d, hmin, Or.inr (Or.inr (Or.inr hnear))⟩)))
+      · exact Or.inr (Or.inr (Or.inl hprivate))
+    · exact Or.inr (Or.inr (Or.inr
+        ⟨hno, p, d, hmin, Or.inl ⟨hcycle.1, hthree⟩⟩))
+  · exact Or.inr (Or.inr (Or.inr
+      ⟨hno, p, d, hmin, Or.inr (Or.inl htriple)⟩))
+  · exact Or.inr (Or.inr (Or.inr
+      ⟨hno, p, d, hmin, Or.inr (Or.inr (Or.inl hfork))⟩))
+  · exact Or.inr (Or.inr (Or.inr
+      ⟨hno, p, d, hmin, Or.inr (Or.inr (Or.inr hnear))⟩))
 
 end MinModulus

@@ -1,7 +1,7 @@
 /-
 # Deletion interfaces for the corrected critical G1 boundary
 
-The critical frontier above dimension six has three structural residuals in
+The critical frontier above dimension six has two structural residuals in
 addition to large crossing.  State their exact one-coordinate deletion
 obligations and prove that closing them yields the critical delete step in
 that range.  A separate finite-base interface then recovers the full delete
@@ -24,18 +24,6 @@ def CriticalRangeDeleteStepBelowSeven : Prop :=
     (_hcritical : 2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1)),
     AdmitsValidTuple (n + 1) (2 ^ (s + 1) * q) →
       AdmitsValidTuple n (2 ^ s * q)
-
-/-- Deletion obligation for the remaining double-hit pure edge together with
-its retained protected minimal descent. -/
-def CriticalPureEdgeDoubleHitDeleteStepFromSeven : Prop :=
-  ∀ {n s q : ℕ} (_hn : 7 ≤ n) (_hq : Odd q)
-    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)),
-    ValidTuple g →
-    2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1) →
-    ProfilePureEdgeDoubleHitDescentResidual
-      (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
-      (K := 2 ^ (s - 1) * q) g →
-    AdmitsValidTuple n (2 ^ s * q)
 
 /-- Deletion obligation for a protected minimal transversal carrying a
 selected private tail-heavy witness. -/
@@ -63,21 +51,19 @@ def CriticalNonProfileResidualDeleteStepFromSeven : Prop :=
           ring)) →
     AdmitsValidTuple n (2 ^ s * q)
 
-/-- Large-crossing deletion plus deletion for the three corrected residual
+/-- Large-crossing deletion plus deletion for the two corrected residual
 classes proves the full critical delete step from dimension seven onward. -/
 theorem criticalRangeDeleteStepFromSeven_of_localHeavyResiduals
     (hcross : CriticalLargeCrossingDeleteStep)
-    (hpure : CriticalPureEdgeDoubleHitDeleteStepFromSeven)
     (hprivate : CriticalPrivateTailHeavyDeleteStepFromSeven)
     (hother : CriticalNonProfileResidualDeleteStepFromSeven) :
     CriticalRangeDeleteStepFromSeven := by
   intro n s q hn hq hcritical hvalid
   obtain ⟨g, hg⟩ := hvalid
   rcases critical_localHeavyProfileFrontier hq hn g hg hcritical with
-    hlarge | hrec | hpureEdge | hprivateHeavy | hnonprofile
+    hlarge | hrec | hprivateHeavy | hnonprofile
   · exact hcross (by omega) hq g hg hcritical hlarge
   · exact hrec
-  · exact hpure hn hq g hg hcritical hpureEdge
   · exact hprivate hn hq g hg hcritical hprivateHeavy
   · exact hother hn hq g hg hcritical hnonprofile
 
@@ -93,12 +79,11 @@ theorem criticalRangeDeleteStep_of_belowSeven_and_fromSeven
   · exact hlow (by omega) hq hcritical hvalid
 
 /-- Exact corrected conditional route to Conjecture 1: the finite G1 base,
-large-crossing deletion, the three structural residual deletions, G2, and G3
+large-crossing deletion, the two structural residual deletions, G2, and G3
 imply the unconditional global lower bound. -/
 theorem global_lower_bound_of_localHeavyResidualDeleteSteps
     (hlow : CriticalRangeDeleteStepBelowSeven)
     (hcross : CriticalLargeCrossingDeleteStep)
-    (hpure : CriticalPureEdgeDoubleHitDeleteStepFromSeven)
     (hprivate : CriticalPrivateTailHeavyDeleteStepFromSeven)
     (hother : CriticalNonProfileResidualDeleteStepFromSeven)
     (hG2 : OddStratumLowerBound)
@@ -109,7 +94,7 @@ theorem global_lower_bound_of_localHeavyResidualDeleteSteps
   global_lower_bound_of_deleteStep
     (criticalRangeDeleteStep_of_belowSeven_and_fromSeven hlow
       (criticalRangeDeleteStepFromSeven_of_localHeavyResiduals
-        hcross hpure hprivate hother))
+        hcross hprivate hother))
     hG2 hG3 hn hN hv
 
 end MinModulus
