@@ -15,6 +15,15 @@ open Finset
 
 variable {m : ℕ} {G : Type*} [AddCommGroup G] [DecidableEq G]
 
+omit [DecidableEq G] in
+/-- A support transversal is nonempty as soon as one witness exists. -/
+theorem MinimalWitnessSupportTransversal.nonempty_of_witness
+    {g : Fin m → G} {h : G} {B : Finset (Fin m)}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    {c : Fin m → ℤ} (hc : Witness g h c) : B.Nonempty := by
+  obtain ⟨i, hiB, _hi⟩ := hmin.1 c hc
+  exact ⟨i, hiB⟩
+
 /-- A tail-light exact-pair witness with coefficient two at an external
 center gives a canonical collision of weight at least `2^(m-3)`. -/
 theorem exists_exactPairTwo_pureEdgeCanonical_weight
@@ -84,11 +93,11 @@ theorem exists_allZero_pureEdgeCanonical_weight
     g hh hh0 hcAB a b x hab hAB hx.1 hx.2.1 hABx
       (hallLight cAB hcAB)
 
-/-- Profile-independent critical star closure: a canonical root of weight at
-least `2^(n-3)` and a minimal private family of size at least eight force the
-critical large-crossing inequality. -/
-theorem critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_eight_le
-    {n s q : ℕ} (hq : Odd q)
+/-- Profile-independent critical star closure in dimension at least seven: a
+canonical root of weight at least `2^(n-3)` and just two private canonical
+shapes force the critical large-crossing inequality. -/
+theorem critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_two_le_of_seven_le
+    {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
     (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
     (r : ReducedSubsetSumCollision g
       ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
@@ -99,7 +108,7 @@ theorem critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_eight
       ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
     (hallLight : AllHalfWitnessesTailLight g
       ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
-    (hBcard : 8 ≤ B.card) :
+    (hBcard : 2 ≤ B.card) :
     criticalHalfGap n s * criticalHalfGap n s ≤
       4 * criticalCanonicalCrossMass g := by
   classical
@@ -158,10 +167,6 @@ theorem critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_eight
     have : 2 ^ (n - 3) ≤ reducedCollisionWeight (m := n) r *
         canonicalCrossStarWeight hh r := by simpa using hmul
     exact this.trans hstar'
-  have hBdim : B.card ≤ n + 1 := by
-    have hle := Finset.card_le_card (Finset.subset_univ B)
-    simpa using hle
-  have hnseven : 7 ≤ n := by omega
   have hgap := criticalHalfGap_square_le_two_pow_pred
     (s := s) hnseven
   have hfour : 2 ^ (n - 1) ≤ 4 * criticalCanonicalCrossMass g := by
@@ -169,6 +174,31 @@ theorem critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_eight
     norm_num
     simpa [Nat.mul_comm] using Nat.mul_le_mul_left 4 hcrossLower
   exact hgap.trans hfour
+
+/-- Compatibility form of the pure-star closure: eight private shapes imply
+dimension at least seven and hence satisfy the sharper two-shape theorem. -/
+theorem critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_eight_le
+    {n s q : ℕ} (hq : Odd q)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (r : ReducedSubsetSumCollision g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    (hr : r ∈ criticalCanonicalReducedCollisions g)
+    (hrweight : 2 ^ (n - 3) ≤ reducedCollisionWeight (m := n) r)
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (hallLight : AllHalfWitnessesTailLight g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    (hBcard : 8 ≤ B.card) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+      4 * criticalCanonicalCrossMass g := by
+  have hBdim : B.card ≤ n + 1 := by
+    have hle := Finset.card_le_card (Finset.subset_univ B)
+    simpa using hle
+  have hnseven : 7 ≤ n := by omega
+  exact
+    critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_two_le_of_seven_le
+      hq hnseven g hg r hr hrweight hmin hallLight (by omega)
 
 /-- Every all-tail-light all-zero residual with a minimal support transversal
 of size at least eight fires critical large crossing. -/
@@ -200,5 +230,124 @@ theorem critical_largeCross_of_allZero_minimalSupport_card_eight_le
     simpa [hh, criticalCanonicalReducedCollisions] using hr
   exact critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_eight_le
     hq g hg r hr' hrweight hmin hallLight hBcard
+
+/-- From dimension seven onward, two private shapes suffice to close the
+`(0,0,2)` profile by critical large crossing. -/
+theorem critical_largeCross_of_zeroZeroTwo_minimalSupport_card_two_le_of_seven_le
+    {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hprofile : WitnessExactTriangleZeroZeroTwo g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (hallLight : AllHalfWitnessesTailLight g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    (hBcard : 2 ≤ B.card) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+      4 * criticalCanonicalCrossMass g := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  let hh := half_add_half hN
+  obtain ⟨r, hr, hrweight⟩ :=
+    exists_zeroZeroTwo_pureEdgeCanonical_weight
+      g hh (half_ne_zero hN hM) hprofile hallLight
+  have hr' : r ∈ criticalCanonicalReducedCollisions g := by
+    simpa [hh, criticalCanonicalReducedCollisions] using hr
+  exact
+    critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_two_le_of_seven_le
+      hq hnseven g hg r hr' hrweight hmin hallLight hBcard
+
+/-- From dimension seven onward, two private shapes suffice to close the
+all-zero profile by critical large crossing. -/
+theorem critical_largeCross_of_allZero_minimalSupport_card_two_le_of_seven_le
+    {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hprofile : WitnessExactTriangleAllZero g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (hallLight : AllHalfWitnessesTailLight g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    (hBcard : 2 ≤ B.card) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+      4 * criticalCanonicalCrossMass g := by
+  letI : NeZero (2 ^ (s + 1) * q) :=
+    ⟨(mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) (s + 1))
+      (Odd.pos hq)).ne'⟩
+  have hM : 0 < 2 ^ s * q :=
+    mul_pos (pow_pos (by norm_num : 0 < (2 : ℕ)) s) (Odd.pos hq)
+  have hN : 2 ^ (s + 1) * q = 2 * (2 ^ s * q) := by
+    rw [pow_succ]
+    ring
+  let hh := half_add_half hN
+  obtain ⟨r, hr, hrweight⟩ := exists_allZero_pureEdgeCanonical_weight
+    g hg hh (half_ne_zero hN hM) hprofile hallLight
+  have hr' : r ∈ criticalCanonicalReducedCollisions g := by
+    simpa [hh, criticalCanonicalReducedCollisions] using hr
+  exact
+    critical_largeCross_of_highWeightCanonical_and_minimalSupport_card_two_le_of_seven_le
+      hq hnseven g hg r hr' hrweight hmin hallLight hBcard
+
+/-- In dimension at least seven, the `(0,0,2)` protected kernel either fires
+critical large crossing or deletes exactly one coordinate. -/
+theorem critical_largeCross_or_zeroZeroTwo_minimalSupport_card_eq_one_of_seven_le
+    {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hprofile : WitnessExactTriangleZeroZeroTwo g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (hallLight : AllHalfWitnessesTailLight g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      B.card = 1 := by
+  have hBpos : 0 < B.card := by
+    obtain ⟨cAB, _cBD, _cDA, _a, _b, _d, hcAB, _hcBD, _hcDA,
+      _hab, _hbd, _hda, _hAB, _hBD, _hDA, _hABd, _hBDa, _hDAb⟩ :=
+        hprofile
+    exact Finset.card_pos.mpr
+      (MinimalWitnessSupportTransversal.nonempty_of_witness hmin hcAB)
+  by_cases hBcard : 2 ≤ B.card
+  · exact Or.inl
+      (critical_largeCross_of_zeroZeroTwo_minimalSupport_card_two_le_of_seven_le
+        hq hnseven g hg hprofile hmin hallLight hBcard)
+  · exact Or.inr (by omega)
+
+/-- In dimension at least seven, the all-zero protected kernel either fires
+critical large crossing or deletes exactly one coordinate. -/
+theorem critical_largeCross_or_allZero_minimalSupport_card_eq_one_of_seven_le
+    {n s q : ℕ} (hq : Odd q) (hnseven : 7 ≤ n)
+    (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)) (hg : ValidTuple g)
+    (hprofile : WitnessExactTriangleAllZero g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)))
+    {B : Finset (Fin (n + 1))}
+    (hmin : MinimalWitnessSupportTransversal g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q)) B)
+    (hallLight : AllHalfWitnessesTailLight g
+      ((2 ^ s * q : ℕ) : ZMod (2 ^ (s + 1) * q))) :
+    criticalHalfGap n s * criticalHalfGap n s ≤
+        4 * criticalCanonicalCrossMass g ∨
+      B.card = 1 := by
+  have hBpos : 0 < B.card := by
+    obtain ⟨cAB, _cBD, _cDA, _a, _b, _d, hcAB, _hcBD, _hcDA,
+      _hab, _hbd, _hda, _hAB, _hBD, _hDA, _hABd, _hBDa, _hDAb⟩ :=
+        hprofile
+    exact Finset.card_pos.mpr
+      (MinimalWitnessSupportTransversal.nonempty_of_witness hmin hcAB)
+  by_cases hBcard : 2 ≤ B.card
+  · exact Or.inl
+      (critical_largeCross_of_allZero_minimalSupport_card_two_le_of_seven_le
+        hq hnseven g hg hprofile hmin hallLight hBcard)
+  · exact Or.inr (by omega)
 
 end MinModulus
