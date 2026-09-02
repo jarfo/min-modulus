@@ -27,13 +27,13 @@ def CriticalRangeDeleteStepBelowSeven : Prop :=
 
 /-- Deletion obligation for a protected minimal transversal carrying a
 private tail-heavy witness together with localized heavy and escape
-coordinates. -/
-def CriticalPrivateHeavyEscapeDeleteStepFromSeven : Prop :=
+coordinates and an internal transversal shift forced by no common touch. -/
+def CriticalPrivateHeavyAvoidanceEscapeDeleteStepFromSeven : Prop :=
   ∀ {n s q : ℕ} (_hn : 7 ≤ n) (_hq : Odd q)
     (g : Fin (n + 1) → ZMod (2 ^ (s + 1) * q)),
     ValidTuple g →
     2 ^ (s + 1) * q < stratumBound (n + 1) (s + 1) →
-    ProfilePrivateHeavyEscapeDescentResidual
+    ProfilePrivateHeavyAvoidanceEscapeDescentResidual
       (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
       (K := 2 ^ (s - 1) * q) g →
     AdmitsValidTuple n (2 ^ s * q)
@@ -56,7 +56,7 @@ def CriticalNonProfileResidualDeleteStepFromSeven : Prop :=
 classes proves the full critical delete step from dimension seven onward. -/
 theorem criticalRangeDeleteStepFromSeven_of_localHeavyResiduals
     (hcross : CriticalLargeCrossingDeleteStep)
-    (hprivate : CriticalPrivateHeavyEscapeDeleteStepFromSeven)
+    (hprivate : CriticalPrivateHeavyAvoidanceEscapeDeleteStepFromSeven)
     (hother : CriticalNonProfileResidualDeleteStepFromSeven) :
     CriticalRangeDeleteStepFromSeven := by
   intro n s q hn hq hcritical hvalid
@@ -85,7 +85,7 @@ imply the unconditional global lower bound. -/
 theorem global_lower_bound_of_localHeavyResidualDeleteSteps
     (hlow : CriticalRangeDeleteStepBelowSeven)
     (hcross : CriticalLargeCrossingDeleteStep)
-    (hprivate : CriticalPrivateHeavyEscapeDeleteStepFromSeven)
+    (hprivate : CriticalPrivateHeavyAvoidanceEscapeDeleteStepFromSeven)
     (hother : CriticalNonProfileResidualDeleteStepFromSeven)
     (hG2 : OddStratumLowerBound)
     (hG3 : ExceptionalLiftObstruction)

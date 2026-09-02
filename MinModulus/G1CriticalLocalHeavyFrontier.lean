@@ -4,7 +4,7 @@
 Lift the corrected genuine-heavy profile theorem through the enclosing
 critical trichotomy.  Common touch is immediately converted to the standard
 one-coordinate half deletion.  The remaining outputs are exactly critical
-crossing, recursive descent, the escape-enriched private-heavy profile
+crossing, recursive descent, the avoidance/escape-enriched private-heavy profile
 residual, or the
 independent non-profile avoidance residual.
 -/
@@ -22,7 +22,7 @@ theorem critical_localHeavyProfileFrontier
     criticalHalfGap n s * criticalHalfGap n s ≤
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTuple n (2 ^ s * q) ∨
-      ProfilePrivateHeavyEscapeDescentResidual
+      ProfilePrivateHeavyAvoidanceEscapeDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g ∨
       WitnessAvoidanceNonProfileResidual g hg

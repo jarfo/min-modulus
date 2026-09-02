@@ -7,7 +7,7 @@ Both exact profiles now disappear only into crossing, recursion, or the
 private-heavy residual; the independent three-omission, triple, fork, and
 near-balanced branches are retained unchanged.
 -/
-import MinModulus.G1PrivateHeavyEscape
+import MinModulus.G1PrivateHeavyTransversalShift
 
 namespace MinModulus
 
@@ -28,7 +28,7 @@ def WitnessAvoidanceNonProfileResidual
 
 /-- Corrected upstream profile frontier in dimension at least seven.  Exact
 profiles now end in crossing, half descent, or private heavy data enriched by
-an explicit coefficient-floor escape;
+an explicit coefficient-floor escape and internal transversal shift;
 there is no incompatible all-tail-light premise.  Linked protected-edge
 geometry eliminates the pure-edge residual in both exact profiles. -/
 theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
@@ -38,7 +38,7 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
     criticalHalfGap n s * criticalHalfGap n s ≤
         4 * criticalCanonicalCrossMass g ∨
       AdmitsValidTuple n (2 ^ s * q) ∨
-      ProfilePrivateHeavyEscapeDescentResidual
+      ProfilePrivateHeavyAvoidanceEscapeDescentResidual
         (N := 2 ^ (s + 1) * q) (M := 2 ^ s * q)
         (K := 2 ^ (s - 1) * q) g ∨
       WitnessAvoidanceNonProfileResidual g hg
@@ -56,14 +56,14 @@ theorem criticalGenuineHeavyTwoStepEscape_localHeavyProfileFrontier
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
       · exact Or.inr (Or.inr (Or.inl
-          (privateHeavyEscape_of_privateTailHeavy hg hprivate)))
+          ⟨hno, privateHeavyEscape_of_privateTailHeavy hg hprivate⟩))
     · rcases
           critical_largeCross_or_zeroZeroTwo_singletonHalfDescent_or_privateHeavy
             hq hnseven g hg hzeroTwo with hcross | hrec | hprivate
       · exact Or.inl hcross
       · exact Or.inr (Or.inl hrec.admitsValidTuple)
       · exact Or.inr (Or.inr (Or.inl
-          (privateHeavyEscape_of_privateTailHeavy hg hprivate)))
+          ⟨hno, privateHeavyEscape_of_privateTailHeavy hg hprivate⟩))
     · exact Or.inr (Or.inr (Or.inr
         ⟨hno, p, d, hmin, Or.inl ⟨hcycle.1, hthree⟩⟩))
   · exact Or.inr (Or.inr (Or.inr
