@@ -169,4 +169,5 @@ import MinModulus.G1MinimalSupportLocalLight
 import MinModulus.G1ProfilePureEdgeLightSplit
 import MinModulus.G1ProfileLocalLightDescent
 import MinModulus.G1ProfileLocalHeavyFrontier
+import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1Counterexample
