@@ -160,4 +160,5 @@ import MinModulus.G1MinimalSupportCriticalCrossing
 import MinModulus.G1MinimalSupportEscapeFiber
 import MinModulus.G1MinimalSupportEscapeSignature
 import MinModulus.G1MinimalSupportSignaturePadding
+import MinModulus.G1MinimalSupportSignatureCritical
 import MinModulus.G1Counterexample
