@@ -163,4 +163,5 @@ import MinModulus.G1MinimalSupportSignaturePadding
 import MinModulus.G1MinimalSupportSignatureCritical
 import MinModulus.G1ZeroZeroTwoPureStar
 import MinModulus.G1AllZeroPureStar
+import MinModulus.G1ProfileSingletonDescent
 import MinModulus.G1Counterexample
