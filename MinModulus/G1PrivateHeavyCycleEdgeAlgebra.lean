@@ -28,6 +28,22 @@ def WitnessThreeSharedOmission
     Witness g h c₀ ∧ Witness g h c₁ ∧ Witness g h c₂ ∧
       c₀ z = -1 ∧ c₁ z = -1 ∧ c₂ z = -1
 
+/-- The three canonical witnesses attached to one private shift edge share
+one omitted coordinate.  Unlike `WitnessThreeSharedOmission`, this retains
+the source, target, and avoiding witnesses needed for edge-to-edge algebra. -/
+def MinimalSupportPrivateShiftEdgeThreeSharedOmission
+    (g : Fin (m + 1) → G) {h : G}
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
+      Witness g h r → r e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (b : ↥B) : Prop :=
+  let u := minimalSupportTransversalShiftTarget g hno hmin b
+  let cb := minimalSupportPrivateWitness g h hmin b
+  let cu := minimalSupportPrivateWitness g h hmin u
+  let rb := minimalSupportAvoidingWitness g hno b
+  ∃ z : Fin (m + 1), cb z = -1 ∧ cu z = -1 ∧ rb z = -1
+
 /-- The source-private and source-avoiding witnesses of every canonical
 shift edge share an omission outside the transversal. -/
 theorem exists_external_common_omission_private_avoiding_shiftEdge
@@ -143,7 +159,7 @@ theorem targetPrivate_avoiding_commonOmission_eq_target_or_external
 half-witnesses with pairwise common omissions.  Those labels either have a
 coincidence shared by all three witnesses, or reduce to the established
 exact-triangle/three-distinct-omission frontier. -/
-theorem tailHeavyTargetShiftEdge_threeShared_or_exactTriangle_or_threeDistinct
+theorem tailHeavyTargetShiftEdge_threeSharedPackage_or_exactTriangle_or_threeDistinct
     (g : Fin (m + 1) → G) (hg : ValidTuple g) {h : G}
     (hh : h + h = 0)
     (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
@@ -153,7 +169,7 @@ theorem tailHeavyTargetShiftEdge_threeShared_or_exactTriangle_or_threeDistinct
     (b : ↥B)
     (huHeavy : minimalSupportTransversalShiftTarget g hno hmin b ∈
       minimalSupportPrivateTailHeavyVertices g h hmin) :
-    WitnessThreeSharedOmission g h ∨
+    MinimalSupportPrivateShiftEdgeThreeSharedOmission g hno hmin b ∨
       WitnessExactOmissionTriangle g h ∨
       WitnessThreeDistinctOmissions g h := by
   let u := minimalSupportTransversalShiftTarget g hno hmin b
@@ -186,27 +202,15 @@ theorem tailHeavyTargetShiftEdge_threeShared_or_exactTriangle_or_threeDistinct
     have hcux : cu x = -1 := by
       rw [hxy]
       exact hycu
-    exact ⟨x, cb, cu, rb,
-      minimalSupportPrivateWitness_isWitness g h hmin b,
-      minimalSupportPrivateWitness_isWitness g h hmin u,
-      minimalSupportAvoidingWitness_isWitness g hno b,
-      hcbx, hcux, hrbx⟩
+    exact ⟨x, hcbx, hcux, hrbx⟩
   by_cases hyz : y = z
   · left
     subst z
-    exact ⟨y, cb, cu, rb,
-      minimalSupportPrivateWitness_isWitness g h hmin b,
-      minimalSupportPrivateWitness_isWitness g h hmin u,
-      minimalSupportAvoidingWitness_isWitness g hno b,
-      hycb, hycu, hrbz⟩
+    exact ⟨y, hycb, hycu, hrbz⟩
   by_cases hzx : z = x
   · left
     subst z
-    exact ⟨x, cb, cu, rb,
-      minimalSupportPrivateWitness_isWitness g h hmin b,
-      minimalSupportPrivateWitness_isWitness g h hmin u,
-      minimalSupportAvoidingWitness_isWitness g hno b,
-      hcbx, hcuz, hrbx⟩
+    exact ⟨x, hcbx, hcuz, hrbx⟩
   rcases exactPairOmissions_or_threeDistinctOmissions
       g (minimalSupportPrivateWitness_isWitness g h hmin b)
         hxy hcbx hycb with hcbExact | hthree
@@ -226,6 +230,39 @@ theorem tailHeavyTargetShiftEdge_threeShared_or_exactTriangle_or_threeDistinct
               simpa [or_comm] using hrExact i⟩)
       · exact Or.inr (Or.inr hthree)
     · exact Or.inr (Or.inr hthree)
+  · exact Or.inr (Or.inr hthree)
+
+/-- The fixed-edge package implies the ambient three-witness statement used
+by the existing triangle frontier. -/
+theorem tailHeavyTargetShiftEdge_threeShared_or_exactTriangle_or_threeDistinct
+    (g : Fin (m + 1) → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0)
+    (hno : ¬ ∃ e : Fin (m + 1), ∀ r : Fin (m + 1) → ℤ,
+      Witness g h r → r e ≠ 0)
+    {B : Finset (Fin (m + 1))}
+    (hmin : MinimalWitnessSupportTransversal g h B)
+    (b : ↥B)
+    (huHeavy : minimalSupportTransversalShiftTarget g hno hmin b ∈
+      minimalSupportPrivateTailHeavyVertices g h hmin) :
+    WitnessThreeSharedOmission g h ∨
+      WitnessExactOmissionTriangle g h ∨
+      WitnessThreeDistinctOmissions g h := by
+  rcases
+      tailHeavyTargetShiftEdge_threeSharedPackage_or_exactTriangle_or_threeDistinct
+        g hg hh hno hmin b huHeavy with hshared | htriangle | hthree
+  · left
+    obtain ⟨z, hcbz, hcuz, hrbz⟩ := hshared
+    exact ⟨z,
+      minimalSupportPrivateWitness g h hmin b,
+      minimalSupportPrivateWitness g h hmin
+        (minimalSupportTransversalShiftTarget g hno hmin b),
+      minimalSupportAvoidingWitness g hno b,
+      minimalSupportPrivateWitness_isWitness g h hmin b,
+      minimalSupportPrivateWitness_isWitness g h hmin
+        (minimalSupportTransversalShiftTarget g hno hmin b),
+      minimalSupportAvoidingWitness_isWitness g hno b,
+      hcbz, hcuz, hrbz⟩
+  · exact Or.inr (Or.inl htriangle)
   · exact Or.inr (Or.inr hthree)
 
 end MinModulus
