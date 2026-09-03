@@ -267,6 +267,7 @@ import MinModulus.G1PrivateHeavyTargetPureStarLeafOddPrimary
 import MinModulus.G1OddPrimaryWitnessTransversal
 import MinModulus.G1OddPrimaryMinimalTransversal
 import MinModulus.G1OddPrimaryCriticalCharge
+import MinModulus.G1OddPrimaryDyadicCharge
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
