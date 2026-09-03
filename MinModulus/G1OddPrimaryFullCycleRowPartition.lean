@@ -5072,6 +5072,76 @@ def TwoRetainedMinimalCyclicKernelPrivateProfileGeometry
           mu • g (b : Fin n) + label.2 • g label.1 +
             (-(mu + label.2)) • g z
 
+/-- Under the global no-common-touch assumptions, the exact full-transversal
+profile has injective kernel targets.  Equal targets cancel the common
+retained offset; unit owner coefficients contradict validity, while owner
+coefficient two forces common touch through the unique involution. -/
+theorem TwoRetainedMinimalCyclicKernelPrivateProfileGeometry.target_injective
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : G) (B : Finset (Fin n))
+    (scalar : ↥B → ℤ) (coeff : ↥B → Fin n → ℤ)
+    (label : Fin n × ℤ) (F : Finset ↥B)
+    (mu : ℤ) (S : Finset ↥F)
+    (hmu : mu ∈ twoRetainedExternalCoefficientLevels)
+    (hgeometry : TwoRetainedMinimalCyclicKernelPrivateProfileGeometry
+      g y B scalar coeff label F mu S) :
+    Function.Injective (fun f : ↥S ↦
+      scalar ((f : ↥F) : ↥B) • y) := by
+  rcases hgeometry with ⟨z, _hzB, _hzx, _hcomplement, hrow⟩
+  intro f k htarget
+  by_contra hfk
+  let bf : ↥B := (f : ↥F)
+  let bk : ↥B := (k : ↥F)
+  have hownerNe : (bf : Fin n) ≠ (bk : Fin n) := by
+    intro howner
+    apply hfk
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Subtype.ext
+    exact howner
+  have hfRow := hrow f
+  have hkRow := hrow k
+  dsimp only at hfRow hkRow
+  rcases hfRow with
+    ⟨_hfOwner, _hfLabel, _hfCompanion, _hfZero, hfTarget⟩
+  rcases hkRow with
+    ⟨_hkOwner, _hkLabel, _hkCompanion, _hkZero, hkTarget⟩
+  let common : G :=
+    label.2 • g label.1 + (-(mu + label.2)) • g z
+  have htarget' : scalar bf • y = scalar bk • y := by
+    simpa only [bf, bk] using htarget
+  have hscaled : mu • g (bf : Fin n) = mu • g (bk : Fin n) := by
+    calc
+      mu • g (bf : Fin n) = scalar bf • y - common := by
+        rw [hfTarget]
+        dsimp only [common]
+        abel
+      _ = scalar bk • y - common := by
+        rw [htarget']
+      _ = mu • g (bk : Fin n) := by
+        rw [hkTarget]
+        dsimp only [common]
+        abel
+  simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hmu
+  rcases hmu with hminus | hone | htwo
+  · have hneg : -g (bf : Fin n) = -g (bk : Fin n) := by
+      simpa [hminus] using hscaled
+    apply hownerNe
+    exact (validTuple_injective g hg) (neg_injective hneg)
+  · have heq : g (bf : Fin n) = g (bk : Fin n) := by
+      simpa [hone] using hscaled
+    exact hownerNe ((validTuple_injective g hg) heq)
+  · have hdouble : (2 : ℤ) • g (bf : Fin n) =
+        (2 : ℤ) • g (bk : Fin n) := by
+      simpa [htwo] using hscaled
+    exact hno (common_touched_of_two_smul_eq
+      g hg hh hne hunique hownerNe hdouble)
+
 /-- Canonical private witnesses indexed by every point of a minimal cyclic-
 kernel transversal when exactly two coordinates survive.  Each row uses its
 own deleted coordinate and a chosen retained coordinate; the retained
@@ -5105,12 +5175,22 @@ def TwoRetainedMinimalCyclicKernelPrivateRows
                 S.Nonempty ∧ F.card ≤ 3 * S.card ∧
                   B.card ≤ 18 * S.card ∧
                   TwoRetainedMinimalCyclicKernelPrivateProfileGeometry
-                    g y B scalar coeff label F mu S)
+                    g y B scalar coeff label F mu S ∧
+                  Function.Injective (fun f : ↥S ↦
+                    scalar ((f : ↥F) : ↥B) • y) ∧
+                  S.card ≤ addOrderOf y - 1 ∧
+                  B.card ≤ 18 * (addOrderOf y - 1))
 
 /-- Minimality supplies the full exact-two private-row family canonically;
 unlike the cycle-owned subfamily, this retains every deleted coordinate. -/
 theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
-    (g : Fin n → G) (y : G) {B : Finset (Fin n)}
+    [Fintype G] [DecidableEq G]
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : G) {B : Finset (Fin n)}
     (hmin : MinimalCyclicKernelSupportTransversal g y B)
     (hretained : n - B.card = 2) :
     TwoRetainedMinimalCyclicKernelPrivateRows g y B := by
@@ -5266,13 +5346,33 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
       · change (data b).scalar • y =
           mu • g (b : Fin n) + z.2 • g z.1 + (-(mu + z.2)) • g w
         simpa only [hownerValue, hlambdaValue, hshape.1] using hshape.2.2
+    have htargetInjective : Function.Injective (fun f : ↥S ↦
+        (data ((f : ↥F) : ↥B)).scalar • y) :=
+      hgeometry.target_injective g hg hh hne hunique hno y B
+        (fun b ↦ (data b).scalar) (fun b ↦ (data b).coeff)
+          z F mu S hmu
+    have htargetNonzero : ∀ f : ↥S,
+        (data ((f : ↥F) : ↥B)).scalar • y ≠ 0 := by
+      intro f
+      exact (hrowData ((f : ↥F) : ↥B)).1
+    have hSorder : S.card ≤ addOrderOf y - 1 := by
+      have hcard :=
+        card_le_addOrderOf_sub_one_of_injective_nonzero_zsmul y
+          (fun f : ↥S ↦ (data ((f : ↥F) : ↥B)).scalar)
+          htargetNonzero htargetInjective
+      simpa only [Fintype.card_coe] using hcard
+    have hBorder : B.card ≤ 18 * (addOrderOf y - 1) :=
+      hBprofile.trans (Nat.mul_le_mul_left 18 hSorder)
     refine ⟨z, hz, ?_⟩
     dsimp only
-    refine ⟨hFnonempty', hBdominant, mu, hmu, ?_, ?_, ?_, ?_⟩
+    refine ⟨hFnonempty', hBdominant, mu, hmu, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
     · simpa only [S, ownerLevel]
     · simpa only [S, ownerLevel] using hFprofile
     · simpa only [S, ownerLevel] using hBprofile
     · simpa only [F, label, S, ownerLevel] using hgeometry
+    · simpa only [F, label, S, ownerLevel] using htargetInjective
+    · simpa only [F, label, S, ownerLevel] using hSorder
+    · simpa only [F, label, S, ownerLevel] using hBorder
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
@@ -6476,7 +6576,7 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
       · right
         refine ⟨
           twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
-            g y hretainedCharge.1.1.1 hexact, ?_⟩
+            g hg hh hne hunique hno y hretainedCharge.1.1.1 hexact, ?_⟩
         have hcenter : ∀ j : Fin d, center j = leaf (P j) :=
           fun j ↦ (hlocal j).2.2.1
         have hdoubleCenter : ∀ j,
