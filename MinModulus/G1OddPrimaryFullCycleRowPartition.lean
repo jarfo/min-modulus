@@ -662,6 +662,53 @@ theorem card_nestedSelectedBoundaryRows_le_outer_add_internal_add_seventeen
     (by simpa [Fintype.card_coe] using hFdominant) hSdominant
   omega
 
+/-- A row set occupying at least `d-1` positions in `Fin d` misses at most
+one ambient position. -/
+theorem card_fin_compl_le_one_of_sub_one_le_card
+    {d : ℕ} (J : Finset (Fin d)) (hJ : d - 1 ≤ J.card) :
+    (Finset.univ \ J).card ≤ 1 := by
+  rw [Finset.card_sdiff_of_subset (Finset.subset_univ J)]
+  simp only [Finset.card_univ, Fintype.card_fin]
+  omega
+
+/-- In the non-dense-internal arm, the two dominant finite-label selections
+pay for both the internal rows and the original total-row lower bound. -/
+theorem twoStageDominance_internalSparse_bounds
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (d : ℕ) (E I : Finset α) (F : Finset ↥E) (S : Finset ↥F)
+    (hlarge : d - 1 ≤ E.card + I.card)
+    (hFdominant : E.card ≤ 6 * F.card)
+    (hSdominant : F.card ≤ 3 * S.card)
+    (hIsparse : 2 * I.card < d - 1) :
+    I.card < 18 * S.card ∧ d - 1 < 36 * S.card := by
+  have hE : E.card ≤ 18 * S.card := by
+    omega
+  omega
+
+/-- Once the outer defect and the non-dense internal arm are routed, every
+selected boundary row is paid for by thirty-five copies of the same dominant
+affine family.  The decomposed constant-seventeen bound remains available
+separately for later geometric refinements. -/
+theorem card_nestedSelectedBoundaryRows_le_thirty_five_mul
+    {d : ℕ} (R : Equiv.Perm (Fin d))
+    (J : Finset (Fin d)) (E I : Finset ↥J)
+    (hJ : d - 1 ≤ J.card)
+    (hpartition : E ∪ I = Finset.univ)
+    (hlarge : d - 1 ≤ E.card + I.card)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (hFdominant : E.card ≤ 6 * F.card)
+    (hSdominant : F.card ≤ 3 * S.card)
+    (hIsparse : 2 * I.card < d - 1) :
+    (permutationFamilyBoundaryRows R (nestedSelectedOwner S)).card ≤
+      35 * S.card := by
+  have hboundary :=
+    card_nestedSelectedBoundaryRows_le_outer_add_internal_add_seventeen
+      R J E I hpartition F S hFdominant hSdominant
+  have houter := card_fin_compl_le_one_of_sub_one_le_card J hJ
+  have hI := (twoStageDominance_internalSparse_bounds
+    d E I F S hlarge hFdominant hSdominant hIsparse).1
+  omega
+
 /-- Telescoped ambient form of the quantitative mixed-transition charge. -/
 theorem card_nestedSelectedBoundaryRows_le_card_sub
     {α : Type*} [Fintype α] [DecidableEq α]
@@ -3249,6 +3296,8 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
             (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
             (permutationFamilyBoundaryRows R owner).card ≤
               (Finset.univ \ J).card + I.card + 17 * S.card ∧
+            (permutationFamilyBoundaryRows R owner).card ≤ 35 * S.card ∧
+            d - 1 < 36 * S.card ∧
             (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
                 (_hC : C ∈ permutationSubsetFullComponents R
                   (permutationFamilyOwnerSet owner))
@@ -3284,8 +3333,11 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
     (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
     {E : Finset ↥J} (I : Finset ↥J) (F : Finset ↥E) (x : Fin n)
+    (hJcard : d - 1 ≤ J.card)
     (hpartition : E ∪ I = Finset.univ)
+    (hlarge : d - 1 ≤ E.card + I.card)
     (hFdominant : E.card ≤ 6 * F.card)
+    (hIsparse : 2 * I.card < d - 1)
     (hprofile : FixedExternalTwoRetainedDominantRelativeAffineProfile
       g y base B center P scalar coeff F x)
     (R : Equiv.Perm (Fin d))
@@ -3327,6 +3379,17 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     rw [hownerEq]
     exact card_nestedSelectedBoundaryRows_le_outer_add_internal_add_seventeen
       R J E I hpartition F S hFdominant hSdominant'
+  have hboundaryRouted : (permutationFamilyBoundaryRows R owner).card ≤
+      35 * S.card := by
+    have hownerEq : owner = nestedSelectedOwner S := by
+      rfl
+    rw [hownerEq]
+    exact card_nestedSelectedBoundaryRows_le_thirty_five_mul
+      R J E I hJcard hpartition hlarge F S hFdominant hSdominant'
+        hIsparse
+  have hdense : d - 1 < 36 * S.card :=
+    (twoStageDominance_internalSparse_bounds
+      d E I F S hlarge hFdominant hSdominant' hIsparse).2
   have hfull : ∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
       (hC : C ∈ permutationSubsetFullComponents R
         (permutationFamilyOwnerSet owner))
@@ -3344,7 +3407,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       componentThreshold
   refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
     S, rfl, hSnonempty', hSdominant', howner, haffine', hboundary,
-    hfull, ?_⟩
+    hboundaryRouted, hdense, hfull, ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
@@ -4078,6 +4141,7 @@ def TwoRetainedExternalInternalDominantCycleComponentFrontier
                 ExactSignedPairWitness g (scalar (j : ↥J) • y)
                   (coeff (j : ↥J))
                   (center (P.symm (j : Fin d))) (center pivot))) ∨
+        (2 * I.card < d - 1 ∧
         ∃ label ∈ (((Finset.univ \ B) \
               (Finset.univ.image center : Finset (Fin n))).product
             twoRetainedExternalCoefficientLevels),
@@ -4089,7 +4153,7 @@ def TwoRetainedExternalInternalDominantCycleComponentFrontier
               B center P coeff F label.1 label.2 ∧
             FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
               g y base B center P R scalar coeff I F label.1
-                componentThreshold)
+                componentThreshold))
 
 /-- Construct the dominant exact-two cycle frontier directly from the
 retained row partition.  The internal alternative is unchanged; otherwise
@@ -4111,7 +4175,7 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
   classical
   unfold TwoRetainedExternalInternalDominantCycleComponentFrontier
   rcases hpart with
-    ⟨scalar, coeff, E, I, _hJcard, hcoeffInj, hrows, hprivate,
+    ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
       hcenterInj, hownerMem, howner, hunion, hdisjoint, hcard, hlarge,
       _hEiff, supportCoord, hsupport, _hcoordFrontier,
       _hgenericLevelFrontier, hinternal⟩
@@ -4120,6 +4184,7 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
   by_cases hIlarge : d - 1 ≤ 2 * I.card
   · exact Or.inl ⟨hIlarge, hinternal⟩
   · right
+    have hIsparse : 2 * I.card < d - 1 := Nat.lt_of_not_ge hIlarge
     have hE : E.Nonempty := by
       apply Finset.card_pos.mp
       omega
@@ -4136,9 +4201,10 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
           (by simpa [F] using hfiber) (fun j ↦ (hrows j).2)
           hretained (by simpa [F] using hFnonempty)
     have hcycle := hprofile.cycleComponentFrontier
-      g y base B center P scalar coeff I F label.1 hunion
-        (by simpa [F] using hFdominant) R hdouble componentThreshold
-    refine ⟨label, hlabel, ?_, ?_, ?_, ?_⟩
+      g y base B center P scalar coeff I F label.1 hJcard hunion hlarge
+        (by simpa [F] using hFdominant) hIsparse R hdouble
+          componentThreshold
+    refine ⟨hIsparse, label, hlabel, ?_, ?_, ?_, ?_⟩
     · simpa [F] using hFnonempty
     · simpa [F] using hFdominant
     · simpa [F] using hfiber
