@@ -1492,6 +1492,27 @@ theorem fixedExternalFiberPositiveRowsAt_large_eq_fixed_or_companion
   rw [hCeq] at hwC
   simpa using hwC
 
+/-- If one coordinate coefficient is constant on a selected family, its
+positive-row set is exactly the whole family or the empty set according to
+the sign of that constant. -/
+theorem fixedExternalFiberPositiveRowsAt_eq_self_or_empty_of_constant
+    {d : ℕ} {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (S : Finset ↥F)
+    (w : Fin n) (a : ℤ)
+    (hconstant : ∀ f : ↥F, f ∈ S → coeff ((f : ↥E) : ↥J) w = a) :
+    fixedExternalFiberPositiveRowsAt coeff S w =
+      if 1 ≤ a then S else ∅ := by
+  classical
+  ext f
+  by_cases hf : f ∈ S
+  · have hvalue := hconstant f hf
+    by_cases ha : 1 ≤ a
+    · simp [fixedExternalFiberPositiveRowsAt, hf, hvalue, ha]
+    · simp [fixedExternalFiberPositiveRowsAt, hf, hvalue, ha]
+  · by_cases ha : 1 ≤ a
+    · simp [fixedExternalFiberPositiveRowsAt, hf, ha]
+    · simp [fixedExternalFiberPositiveRowsAt, hf, ha]
+
 /-- Ordered light-row pairs carrying a directed coefficient gap at `w`. -/
 def fixedExternalFiberDirectedGapPairsAt
     {d : ℕ} {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
@@ -2313,6 +2334,59 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_rowProfile
     simpa [c, o] using hzeroOutside i hio hix hiz
   · simpa [c, o] using hprofiles
 
+/-- On a fixed owner-coefficient profile in the exact-two regime, the
+companion retained coefficient is the single integer `-(mu+lambda)` on every
+selected row.  This is the zero coefficient-sum identity after the owner and
+the two retained columns have been fixed. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_companionCoefficient
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2)
+    (z : Fin n) (hzB : z ∉ B) (hzx : z ≠ x)
+    (mu : ℤ) (S : Finset ↥F)
+    (hS : S = Finset.univ.filter (fun f : ↥F ↦
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)) :
+    ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) z = -(mu + lambda) := by
+  classical
+  intro f hfS
+  have hmu : coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu := by
+    rw [hS] at hfS
+    exact (Finset.mem_filter.mp hfS).2
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_rowProfile
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained with
+    ⟨zf, hzfB, hzfX, _hzero, hprofile⟩
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hfiber.2.1⟩
+  have hzC : z ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzB⟩
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem hCcard hxC hzC hzx.symm
+  have hzfC : zf ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzfB⟩
+  have hzfPair : zf = x ∨ zf = z := by
+    have : zf ∈ ({x, z} : Finset (Fin n)) := by
+      rw [← hCeq]
+      exact hzfC
+    simpa using this
+  have hzfEq : zf = z := hzfPair.resolve_left hzfX
+  subst zf
+  rcases hprofile with
+      ⟨hlambda, ⟨howner, hz⟩ | ⟨howner, hz⟩ | ⟨howner, hz⟩⟩ |
+      ⟨hlambda, howner, hz⟩ | ⟨hlambda, howner, hz⟩
+  all_goals omega
+
 /-- Geometric form of the complete two-retained profile classification.
 Every external row is either an exact signed pair between its private owner
 and the common retained coordinate, or one of three pure edges on the owner
@@ -2678,6 +2752,16 @@ def twoRetainedExternalCoefficientLevels : Finset ℤ := {-1, 1, 2}
 theorem card_twoRetainedExternalCoefficientLevels :
     twoRetainedExternalCoefficientLevels.card = 3 := by
   norm_num [twoRetainedExternalCoefficientLevels]
+
+/-- Exact sign conditions inside the three-level exact-two alphabet. -/
+theorem twoRetainedExternalCoefficientLevels_positive_cases
+    {lambda mu : ℤ}
+    (hlambda : lambda ∈ twoRetainedExternalCoefficientLevels)
+    (hmu : mu ∈ twoRetainedExternalCoefficientLevels) :
+    (1 ≤ lambda ↔ lambda = 1 ∨ lambda = 2) ∧
+      (1 ≤ -(mu + lambda) ↔ mu = -1 ∧ lambda = -1) := by
+  simp [twoRetainedExternalCoefficientLevels] at hlambda hmu
+  omega
 
 /-- Every nonempty fixed external coefficient fiber in the exact
 two-retained regime uses one of the three profile-compatible levels. -/
@@ -3346,8 +3430,9 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
     (P R : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
     (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
     {E : Finset ↥J} (I : Finset ↥J) (F : Finset ↥E) (x : Fin n)
-    (componentThreshold : ℕ) : Prop :=
+    (lambda : ℤ) (componentThreshold : ℕ) : Prop :=
   ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+    lambda ∈ twoRetainedExternalCoefficientLevels ∧
     ∃ mu ∈ twoRetainedExternalCoefficientLevels,
       ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
         ∃ S : Finset ↥F,
@@ -3370,6 +3455,13 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
             (∀ w : Fin n,
               1 < (fixedExternalFiberPositiveRowsAt coeff S w).card →
                 w = x ∨ w = z) ∧
+            (∀ f : ↥F, f ∈ S →
+              coeff ((f : ↥E) : ↥J) x = lambda ∧
+              coeff ((f : ↥E) : ↥J) z = -(mu + lambda)) ∧
+            fixedExternalFiberPositiveRowsAt coeff S x =
+              (if 1 ≤ lambda then S else ∅) ∧
+            fixedExternalFiberPositiveRowsAt coeff S z =
+              (if 1 ≤ -(mu + lambda) then S else ∅) ∧
             (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
                 (_hC : C ∈ permutationSubsetFullComponents R
                   (permutationFamilyOwnerSet owner))
@@ -3406,9 +3498,11 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
     {E : Finset ↥J} (I : Finset ↥J) (F : Finset ↥E) (x : Fin n)
     (lambda : ℤ)
+    (hlambdaLevel : lambda ∈ twoRetainedExternalCoefficientLevels)
     (hfiber : FixedExternalCoefficientPrivateFiber
       B center P coeff F x lambda)
     (hretained : n - B.card = 2)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
     (hJcard : d - 1 ≤ J.card)
     (hpartition : E ∪ I = Finset.univ)
     (hlarge : d - 1 ≤ E.card + I.card)
@@ -3422,7 +3516,8 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
         2 • (g (center (P.symm j)) - base))
     (componentThreshold : ℕ) :
     FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
-      g y base B center P R scalar coeff I F x componentThreshold := by
+      g y base B center P R scalar coeff I F x lambda
+        componentThreshold := by
   classical
   unfold FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
   rcases hprofile with
@@ -3472,6 +3567,28 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     intro w hw
     exact fixedExternalFiberPositiveRowsAt_large_eq_fixed_or_companion
       B center P coeff F x lambda hfiber hretained z hzB hzx S w hw
+  have hcompanion : ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) z = -(mu + lambda) :=
+    fixedExternalCoefficientPrivateFiber_twoRetained_companionCoefficient
+      g y B center P scalar coeff F x lambda hfiber hrows hretained
+        z hzB hzx mu S rfl
+  have hxconstant : ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) x = lambda := by
+    intro f _hf
+    exact (hfiber.2.2.2.2.2.1 f).2.1
+  have hcolumns : ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) x = lambda ∧
+      coeff ((f : ↥E) : ↥J) z = -(mu + lambda) := by
+    intro f hf
+    exact ⟨hxconstant f hf, hcompanion f hf⟩
+  have hxPositive : fixedExternalFiberPositiveRowsAt coeff S x =
+      if 1 ≤ lambda then S else ∅ :=
+    fixedExternalFiberPositiveRowsAt_eq_self_or_empty_of_constant
+      coeff S x lambda hxconstant
+  have hzPositive : fixedExternalFiberPositiveRowsAt coeff S z =
+      if 1 ≤ -(mu + lambda) then S else ∅ :=
+    fixedExternalFiberPositiveRowsAt_eq_self_or_empty_of_constant
+      coeff S z (-(mu + lambda)) hcompanion
   have hfull : ∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
       (hC : C ∈ permutationSubsetFullComponents R
         (permutationFamilyOwnerSet owner))
@@ -3487,9 +3604,11 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
   have hfrontier := permutationFamily_affineComponentFrontier
     R owner displacement target hdouble' epsilon offset haffine'
       componentThreshold
-  refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
+  refine ⟨z, hzB, hzx, hlambdaLevel, mu, hmuLevel, epsilon,
+    hepsilonLevel, offset,
     S, rfl, hSnonempty', hSdominant', howner, haffine', hboundary,
-    hboundaryRouted, hdense, hpositive, hfull, ?_⟩
+    hboundaryRouted, hdense, hpositive, hcolumns, hxPositive, hzPositive,
+    hfull, ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
@@ -4234,7 +4353,7 @@ def TwoRetainedExternalInternalDominantCycleComponentFrontier
             FixedExternalCoefficientPrivateFiber
               B center P coeff F label.1 label.2 ∧
             FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
-              g y base B center P R scalar coeff I F label.1
+              g y base B center P R scalar coeff I F label.1 label.2
                 componentThreshold))
 
 /-- Construct the dominant exact-two cycle frontier directly from the
@@ -4284,9 +4403,10 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
           hretained (by simpa [F] using hFnonempty)
     have hcycle := hprofile.cycleComponentFrontier
       g y base B center P scalar coeff I F label.1 label.2
-        (by simpa [F] using hfiber) hretained hJcard hunion hlarge
-          (by simpa [F] using hFdominant) hIsparse R hdouble
-            componentThreshold
+        (Finset.mem_product.mp hlabel).2 (by simpa [F] using hfiber)
+          hretained (fun j ↦ (hrows j).2) hJcard hunion hlarge
+            (by simpa [F] using hFdominant) hIsparse R hdouble
+              componentThreshold
     refine ⟨hIsparse, label, hlabel, ?_, ?_, ?_, ?_⟩
     · simpa [F] using hFnonempty
     · simpa [F] using hFdominant
