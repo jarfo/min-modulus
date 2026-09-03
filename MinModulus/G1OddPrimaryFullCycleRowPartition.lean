@@ -3519,6 +3519,52 @@ theorem card_twoRetainedExternalCoefficientLevels :
     twoRetainedExternalCoefficientLevels.card = 3 := by
   norm_num [twoRetainedExternalCoefficientLevels]
 
+/-- Rescale each possible exact-two owner coefficient to the common value
+`2`.  This is the normalization that lets all owner profiles participate in
+one balanced subset-sum argument. -/
+def twoRetainedOwnerNormalization (mu : ℤ) : ℤ :=
+  if mu = -1 then -2 else if mu = 1 then 2 else 1
+
+theorem twoRetainedOwnerNormalization_mul
+    {mu : ℤ} (hmu : mu ∈ twoRetainedExternalCoefficientLevels) :
+    twoRetainedOwnerNormalization mu * mu = 2 := by
+  simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hmu
+  rcases hmu with hminus | hone | htwo
+  · subst mu
+    norm_num [twoRetainedOwnerNormalization]
+  · subst mu
+    norm_num [twoRetainedOwnerNormalization]
+  · subst mu
+    norm_num [twoRetainedOwnerNormalization]
+
+/-- The complete label space for a private row records its retained support
+coordinate, retained coefficient, and owner coefficient. -/
+def twoRetainedPrivateProfileLabels (B : Finset (Fin n)) :
+    Finset ((Fin n × ℤ) × ℤ) :=
+  ((Finset.univ \ B).product twoRetainedExternalCoefficientLevels).product
+    twoRetainedExternalCoefficientLevels
+
+theorem card_twoRetainedPrivateProfileLabels
+    (B : Finset (Fin n)) (hretained : n - B.card = 2) :
+    (twoRetainedPrivateProfileLabels B).card = 18 := by
+  have hcomplementCard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  calc
+    (twoRetainedPrivateProfileLabels B).card =
+        (((Finset.univ \ B).product
+          twoRetainedExternalCoefficientLevels).card *
+            twoRetainedExternalCoefficientLevels.card) :=
+      Finset.card_product _ _
+    _ = (((Finset.univ \ B).card *
+          twoRetainedExternalCoefficientLevels.card) *
+            twoRetainedExternalCoefficientLevels.card) :=
+      congrArg (fun q ↦ q * twoRetainedExternalCoefficientLevels.card)
+        (Finset.card_product _ _)
+    _ = 18 := by
+      rw [hcomplementCard, card_twoRetainedExternalCoefficientLevels]
+
 /-- Exact sign conditions inside the three-level exact-two alphabet. -/
 theorem twoRetainedExternalCoefficientLevels_positive_cases
     {lambda mu : ℤ}
@@ -5052,6 +5098,29 @@ theorem privateWitness_twoRetained_exactShape
       _ = target := hc.2.2.2
   exact ⟨by omega, hzeroOutside, hvalue.symm⟩
 
+/-- After the three owner levels are normalized, every exact-two private row
+has the same owner slope `2`.  The two retained terms form an offset depending
+only on the row's finite profile label. -/
+theorem privateWitness_twoRetained_normalizedAffine
+    (g : Fin n → G) (y : G) (scalar : ℤ) {c : Fin n → ℤ}
+    (hc : Witness g (scalar • y) c) (B : Finset (Fin n))
+    (owner : Fin n) (hownerB : owner ∈ B)
+    (hprivate : ∀ i, i ∈ B → i ≠ owner → c i = 0)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (hownerLevel : c owner ∈ twoRetainedExternalCoefficientLevels) :
+    twoRetainedOwnerNormalization (c owner) • (scalar • y) =
+      (2 : ℤ) • g owner +
+        twoRetainedOwnerNormalization (c owner) •
+          (c x • g x + (-(c owner + c x)) • g z) := by
+  have hshape := privateWitness_twoRetained_exactShape
+    g hc B owner hownerB hprivate x z hxB hzB hxz hcomplement
+  rw [hshape.2.2, hshape.1, zsmul_add, zsmul_add]
+  rw [← mul_zsmul,
+    twoRetainedOwnerNormalization_mul hownerLevel]
+  rw [zsmul_add]
+  exact add_assoc _ _ _
+
 /-- Uniform exact geometry of one owner-profile inside the complete
 minimal-transversal private family. -/
 def TwoRetainedMinimalCyclicKernelPrivateProfileGeometry
@@ -5269,6 +5338,28 @@ theorem choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
       sub_right_inj.mp (hsubST.trans hsubSU.symm)
     exact (hTU (hownerSumInjective hsumTU)).elim
 
+/-- The all-row normalized certificate behind the 18-profile decomposition.
+Every private row carries its complete finite label and, after the canonical
+owner rescaling, has owner slope exactly `2`; no dominant subfamily has been
+selected. -/
+def TwoRetainedMinimalCyclicKernelNormalizedRows
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (scalar : ↥B → ℤ) (coeff : ↥B → Fin n → ℤ)
+    (supportCoord : ↥B → Fin n) : Prop :=
+  ∀ b : ↥B,
+    (((supportCoord b, coeff b (supportCoord b)),
+        coeff b (b : Fin n)) ∈ twoRetainedPrivateProfileLabels B) ∧
+      ∃ companion : Fin n,
+        companion ∉ B ∧ companion ≠ supportCoord b ∧
+        Finset.univ \ B = {supportCoord b, companion} ∧
+        twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+            (scalar b • y) =
+          (2 : ℤ) • g (b : Fin n) +
+            twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+              (coeff b (supportCoord b) • g (supportCoord b) +
+                (-(coeff b (b : Fin n) + coeff b (supportCoord b))) •
+                  g companion)
+
 /-- Canonical private witnesses indexed by every point of a minimal cyclic-
 kernel transversal when exactly two coordinates survive.  Each row uses its
 own deleted coordinate and a chosen retained coordinate; the retained
@@ -5290,6 +5381,8 @@ def TwoRetainedMinimalCyclicKernelPrivateRows
             coeff b (supportCoord b) ≠ 0 ∧
             coeff b (supportCoord b) ∈
               twoRetainedExternalCoefficientLevels) ∧
+        TwoRetainedMinimalCyclicKernelNormalizedRows
+          g y B scalar coeff supportCoord ∧
         (B = ∅ ∨
           ∃ label ∈ (Finset.univ \ B).product
               twoRetainedExternalCoefficientLevels,
@@ -5364,10 +5457,49 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
       g (data b).isWitness B (b : Fin n) (supportCoord b)
         b.property (data b).owner_ne_zero (data b).zero_other
         (hsupportCoord b).1 (hsupportCoord b).2 hretained
+  have hcomplementCardAll : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hnormalizedRows : TwoRetainedMinimalCyclicKernelNormalizedRows
+      g y B (fun b ↦ (data b).scalar) (fun b ↦ (data b).coeff)
+        supportCoord := by
+    intro b
+    rcases hrowData b with
+      ⟨_htarget, hwitness, _howner, hownerLevel, hprivate,
+        hsupportB, _hsupportNonzero, hsupportLevel⟩
+    refine ⟨?_, ?_⟩
+    · exact Finset.mem_product.mpr
+        ⟨Finset.mem_product.mpr
+          ⟨Finset.mem_sdiff.mpr
+            ⟨Finset.mem_univ _, hsupportB⟩, hsupportLevel⟩,
+          hownerLevel⟩
+    · have hxC : supportCoord b ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hsupportB⟩
+      have hCone : 1 < (Finset.univ \ B).card := by omega
+      obtain ⟨u, huC, v, hvC, huv⟩ := Finset.one_lt_card.mp hCone
+      obtain ⟨companion, hcompanionC, hcompanionNe⟩ :
+          ∃ companion ∈ Finset.univ \ B,
+            companion ≠ supportCoord b := by
+        by_cases hu : u = supportCoord b
+        · refine ⟨v, hvC, ?_⟩
+          intro hv
+          exact huv (hu.trans hv.symm)
+        · exact ⟨u, huC, hu⟩
+      have hcompanionB : companion ∉ B :=
+        (Finset.mem_sdiff.mp hcompanionC).2
+      have hcomplement : Finset.univ \ B =
+          {supportCoord b, companion} :=
+        finset_eq_pair_of_card_eq_two_of_mem
+          hcomplementCardAll hxC hcompanionC hcompanionNe.symm
+      refine ⟨companion, hcompanionB, hcompanionNe, hcomplement, ?_⟩
+      exact privateWitness_twoRetained_normalizedAffine
+        g y (data b).scalar hwitness B (b : Fin n) b.property hprivate
+          (supportCoord b) companion hsupportB hcompanionB
+            hcompanionNe.symm hcomplement hownerLevel
   refine ⟨hretained, (fun b ↦ (data b).scalar),
     (fun b ↦ (data b).coeff), supportCoord,
     minimalCyclicKernelPrivateWitness_coeff_injective g y hmin,
-    hrowData, ?_⟩
+    hrowData, hnormalizedRows, ?_⟩
   by_cases hB : B = ∅
   · exact Or.inl hB
   · right
