@@ -1780,6 +1780,59 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_capacity_or_largeAffine
     · exact Or.inr (Or.inr (Or.inr (Or.inr
         ⟨hlambda, by simpa [ownerCoeff] using hmu.symm.trans howner, htarget⟩)))
 
+/-- A fixed external fiber contains more than `K` rows governed by one
+affine law, with the common companion coordinate and owner coefficient made
+explicit. -/
+def FixedExternalTwoRetainedAffineProfileAbove
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (K : ℕ) : Prop :=
+  ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+    ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+      K < (Finset.univ.filter (fun f : ↥F ↦
+        coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)).card ∧
+      ∀ f : ↥(Finset.univ.filter (fun f : ↥F ↦
+          coeff ((f : ↥E) : ↥J)
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)),
+        let o := center (P.symm (((((f : ↥F) : ↥E) : ↥J)) : Fin d))
+        let target := scalar (((f : ↥F) : ↥E) : ↥J) • y
+        (lambda = -1 ∧ mu = -1 ∧
+            target = 2 • g z - g o - g x) ∨
+          (lambda = -1 ∧ mu = 1 ∧ target = g o - g x) ∨
+          (lambda = -1 ∧ mu = 2 ∧
+            target = 2 • g o - g x - g z) ∨
+          (lambda = 1 ∧ mu = -1 ∧ target = g x - g o) ∨
+          (lambda = 2 ∧ mu = -1 ∧
+            target = 2 • g x - g o - g z)
+
+/-- A fiber above the external `1/12` scale contains an affine-homogeneous
+subfamily above the `1/36` scale.  This composes the only remaining
+three-profile loss without introducing any dimension-dependent factor. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_affineProfileAbove_of_largeFiber
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2)
+    (hlarge : (d - 1) / 12 < F.card) :
+    FixedExternalTwoRetainedAffineProfileAbove
+      g y B center P scalar coeff F x lambda ((d - 1) / 36) := by
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_capacity_or_largeAffineProfile
+      g y B center P scalar coeff F x lambda hfiber hrows hretained
+        ((d - 1) / 36) with
+    ⟨z, hzB, hzx, hcap | hprofile⟩
+  · exfalso
+    omega
+  · exact ⟨z, hzB, hzx, hprofile⟩
+
 /-- A private witness evaluated at any nonzero retained coordinate uses the
 same constant three-level alphabet when exactly two coordinates survive.
 This rowwise form does not presuppose that a larger fixed fiber has already
@@ -2158,6 +2211,62 @@ theorem twoRetainedExternalInternalRowFrontier_largeInternal_or_largeExternal
     refine ⟨?_, hinternal⟩
     omega
   · exact Or.inr hfiber
+
+/-- Cycle-ready form of the exact two-retained row dichotomy.  Either the
+common-pivot signed-pair class has half-density, or an external subfamily of
+more than `(d-1)/36` rows has one fixed affine target law.  The original row
+partition, witnesses, and fixed-fiber structure are all retained. -/
+theorem twoRetainedExternalInternalRowFrontier_largeInternal_or_largeAffineExternal
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d))
+    (hfrontier : TwoRetainedExternalInternalRowFrontier
+      g y B center P J)
+    (hretained : n - B.card = 2) :
+    ∃ scalar : ↥J → ℤ, ∃ coeff : ↥J → Fin n → ℤ,
+      ∃ E I : Finset ↥J, ∃ supportCoord : ↥E → Fin n,
+        E ∪ I = Finset.univ ∧ Disjoint E I ∧
+        E.card + I.card = J.card ∧
+        (∀ j, scalar j • y ≠ 0 ∧
+          Witness g (scalar j • y) (coeff j)) ∧
+        (∀ e : ↥E,
+          supportCoord e ∉ Finset.univ.image center ∧
+          supportCoord e ∉ B ∧
+          coeff (e : ↥J) (supportCoord e) ≠ 0) ∧
+        ((d - 1 ≤ 2 * I.card ∧
+            (I = ∅ ∨
+              ∃ pivot : Fin d, center pivot ∉ B ∧
+                ∀ j : ↥I,
+                  ExactSignedPairWitness g (scalar (j : ↥J) • y)
+                    (coeff (j : ↥J))
+                    (center (P.symm (j : Fin d))) (center pivot))) ∨
+          ∃ label ∈ (((Finset.univ \ B) \
+                (Finset.univ.image center : Finset (Fin n))).product
+              twoRetainedExternalCoefficientLevels),
+            let F : Finset ↥E := Finset.univ.filter (fun e : ↥E ↦
+              (supportCoord e,
+                coeff (e : ↥J) (supportCoord e)) = label)
+            FixedExternalCoefficientPrivateFiber
+                B center P coeff F label.1 label.2 ∧
+              FixedExternalTwoRetainedAffineProfileAbove
+                g y B center P scalar coeff F label.1 label.2
+                  ((d - 1) / 36)) := by
+  classical
+  rcases twoRetainedExternalInternalRowFrontier_largeInternal_or_largeExternal
+      g y B center P J hfrontier with
+    ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+      hrows, hsupport, hinternal | hexternal⟩
+  · refine ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+      hrows, hsupport, Or.inl hinternal⟩
+  · refine ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+      hrows, hsupport, Or.inr ?_⟩
+    rcases hexternal with ⟨label, hlabel, hlarge, hfiber⟩
+    refine ⟨label, hlabel, hfiber, ?_⟩
+    exact fixedExternalCoefficientPrivateFiber_twoRetained_affineProfileAbove_of_largeFiber
+      g y B center P scalar coeff
+        (Finset.univ.filter (fun e : ↥E ↦
+          (supportCoord e, coeff (e : ↥J) (supportCoord e)) = label))
+        label.1 label.2 hfiber (fun j ↦ (hrows j).2) hretained hlarge
 
 /-- Extract the explicit finite partition and one retained support coordinate
 per external row from the retained mixed normal form. -/
