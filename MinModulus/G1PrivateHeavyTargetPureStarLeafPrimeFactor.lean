@@ -30,15 +30,13 @@ structure MersennePrimeOrderCertificate (q ell p : ℕ) : Prop where
   prime_le_oddFactor : p ≤ q
   prime_le_mersenne : p ≤ 2 ^ ell - 1
 
-/-- A nontrivial gcd between an odd Mersenne number and `q` supplies an odd
-prime divisor whose order of two is nontrivial and divides both the exponent
-and `p - 1`. -/
-theorem exists_mersennePrimeOrderCertificate_of_notCoprime
-    {q ell : ℕ} (hell : 2 ≤ ell) (hq : q ≠ 0)
+/-- Any odd prime common to `q` and a Mersenne number has the corresponding
+bounded multiplicative-order certificate. -/
+theorem mersennePrimeOrderCertificate_of_dvd
+    {q ell p : ℕ} (hell : 2 ≤ ell) (hq : q ≠ 0)
     (hodd : Odd (2 ^ ell - 1))
-    (hnot : ¬ Nat.Coprime (2 ^ ell - 1) q) :
-    ∃ p : ℕ, MersennePrimeOrderCertificate q ell p := by
-  obtain ⟨p, hp, hpM, hpq⟩ := Nat.Prime.not_coprime_iff_dvd.mp hnot
+    (hp : p.Prime) (hpq : p ∣ q) (hpM : p ∣ 2 ^ ell - 1) :
+    MersennePrimeOrderCertificate q ell p := by
   have hpOdd : Odd p := Odd.of_dvd_nat hodd hpM
   have hpowNat : 1 ≤ 2 ^ ell := Nat.one_le_pow ell 2 (by omega)
   have hcastM : ((2 ^ ell - 1 : ℕ) : ZMod p) = 0 := by
@@ -77,9 +75,21 @@ theorem exists_mersennePrimeOrderCertificate_of_notCoprime
   have hordTwo : 2 ≤ orderOf (2 : ZMod p) := by omega
   have hordLe : orderOf (2 : ZMod p) ≤ ell :=
     Nat.le_of_dvd (by omega) hordDvd
-  exact ⟨p, hp, hodd, hpOdd, hpq, hpM, hordTwo, hordDvd, hordLe,
+  exact ⟨hp, hodd, hpOdd, hpq, hpM, hordTwo, hordDvd, hordLe,
     hordPred, Nat.le_of_dvd (Nat.pos_of_ne_zero hq) hpq,
     Nat.le_of_dvd hodd.pos hpM⟩
+
+/-- A nontrivial gcd between an odd Mersenne number and `q` supplies an odd
+prime divisor whose order of two is nontrivial and divides both the exponent
+and `p - 1`. -/
+theorem exists_mersennePrimeOrderCertificate_of_notCoprime
+    {q ell : ℕ} (hell : 2 ≤ ell) (hq : q ≠ 0)
+    (hodd : Odd (2 ^ ell - 1))
+    (hnot : ¬ Nat.Coprime (2 ^ ell - 1) q) :
+    ∃ p : ℕ, MersennePrimeOrderCertificate q ell p := by
+  obtain ⟨p, hp, hpM, hpq⟩ := Nat.Prime.not_coprime_iff_dvd.mp hnot
+  exact ⟨p, mersennePrimeOrderCertificate_of_dvd
+    hell hq hodd hp hpq hpM⟩
 
 /-- Cyclic outcome after replacing the noncoprime statement by an explicit
 shared odd prime and its bounded order-of-two certificate. -/
