@@ -4896,6 +4896,62 @@ theorem privateWitness_externalCoefficient_mem_twoRetainedLevels
   · simp [twoRetainedExternalCoefficientLevels, hlevel]
   · simp [twoRetainedExternalCoefficientLevels, hlevel]
 
+/-- Canonical private witnesses indexed by every point of a minimal cyclic-
+kernel transversal when exactly two coordinates survive.  Each row uses its
+own deleted coordinate and a chosen retained coordinate; the retained
+coefficient belongs to the uniform three-level alphabet. -/
+def TwoRetainedMinimalCyclicKernelPrivateRows
+    (g : Fin n → G) (y : G) (B : Finset (Fin n)) : Prop :=
+  n - B.card = 2 ∧
+    ∃ scalar : ↥B → ℤ, ∃ coeff : ↥B → Fin n → ℤ,
+      ∃ supportCoord : ↥B → Fin n,
+        Function.Injective coeff ∧
+        ∀ b : ↥B,
+          scalar b • y ≠ 0 ∧
+          Witness g (scalar b • y) (coeff b) ∧
+          coeff b (b : Fin n) ≠ 0 ∧
+          (∀ a ∈ B, a ≠ (b : Fin n) → coeff b a = 0) ∧
+          supportCoord b ∉ B ∧
+          coeff b (supportCoord b) ≠ 0 ∧
+          coeff b (supportCoord b) ∈
+            twoRetainedExternalCoefficientLevels
+
+/-- Minimality supplies the full exact-two private-row family canonically;
+unlike the cycle-owned subfamily, this retains every deleted coordinate. -/
+theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
+    (g : Fin n → G) (y : G) {B : Finset (Fin n)}
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hretained : n - B.card = 2) :
+    TwoRetainedMinimalCyclicKernelPrivateRows g y B := by
+  classical
+  let data : ∀ b : ↥B, CyclicKernelPrivateWitnessData g y b :=
+    fun b ↦ minimalCyclicKernelPrivateWitnessData g y hmin b
+  have hsupport : ∀ b : ↥B, ∃ x : Fin n,
+      x ∉ B ∧ (data b).coeff x ≠ 0 := by
+    intro b
+    obtain ⟨x, hxOwner, hxNonzero⟩ :=
+      exists_other_nonzero_of_sum_eq_zero (data b).coeff
+        (data b).owner_ne_zero (data b).isWitness.2.2.1
+    refine ⟨x, ?_, hxNonzero⟩
+    intro hxB
+    exact hxNonzero ((data b).zero_other x hxB hxOwner)
+  let supportCoord : ↥B → Fin n := fun b ↦ Classical.choose (hsupport b)
+  have hsupportCoord : ∀ b : ↥B,
+      supportCoord b ∉ B ∧ (data b).coeff (supportCoord b) ≠ 0 := by
+    intro b
+    exact Classical.choose_spec (hsupport b)
+  refine ⟨hretained, (fun b ↦ (data b).scalar),
+    (fun b ↦ (data b).coeff), supportCoord,
+    minimalCyclicKernelPrivateWitness_coeff_injective g y hmin, ?_⟩
+  intro b
+  refine ⟨(data b).target_ne_zero, (data b).isWitness,
+    (data b).owner_ne_zero, (data b).zero_other,
+    (hsupportCoord b).1, (hsupportCoord b).2, ?_⟩
+  exact privateWitness_externalCoefficient_mem_twoRetainedLevels
+    g (data b).isWitness B (b : Fin n) (supportCoord b)
+      b.property (data b).owner_ne_zero (data b).zero_other
+      (hsupportCoord b).1 (hsupportCoord b).2 hretained
+
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
 the choice of threshold or dominant label. -/
@@ -6047,9 +6103,10 @@ def PureEdgeStarLeafOddPrimaryFullCycleComponentRowOutcome
             (∀ j : Fin d,
               disp ((P.symm.trans S) j) = 2 • disp j) ∧
             (2 < m + 1 - B.card ∨
-              TwoRetainedExternalInternalDominantCycleComponentFrontier
-                g y (h + g r) B center P J (P.symm.trans S)
-                  componentThreshold))
+              (TwoRetainedMinimalCyclicKernelPrivateRows g y B ∧
+                TwoRetainedExternalInternalDominantCycleComponentFrontier
+                  g y (h + g r) B center P J (P.symm.trans S)
+                    componentThreshold)))
 
 /-- Refine the aligned global endpoint.  At least two quotient coordinates
 are retained; equality invokes the exact-two row/component theorem, while a
@@ -6095,6 +6152,9 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
     · simpa [disp, leaf] using hdouble
     · by_cases hexact : m + 1 - B.card = 2
       · right
+        refine ⟨
+          twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
+            g y hretainedCharge.1.1.1 hexact, ?_⟩
         have hcenter : ∀ j : Fin d, center j = leaf (P j) :=
           fun j ↦ (hlocal j).2.2.1
         have hdoubleCenter : ∀ j,
