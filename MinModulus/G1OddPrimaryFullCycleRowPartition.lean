@@ -3538,6 +3538,14 @@ theorem twoRetainedOwnerNormalization_mul
   · subst mu
     norm_num [twoRetainedOwnerNormalization]
 
+/-- After naming the two retained coordinates, all normalized private-row
+offsets are controlled by one coefficient in this five-element alphabet. -/
+def twoRetainedNormalizedWeightLevels : Finset ℤ := {-4, -2, -1, 0, 2}
+
+theorem card_twoRetainedNormalizedWeightLevels :
+    twoRetainedNormalizedWeightLevels.card = 5 := by
+  norm_num [twoRetainedNormalizedWeightLevels]
+
 /-- The complete label space for a private row records its retained support
 coordinate, retained coefficient, and owner coefficient. -/
 def twoRetainedPrivateProfileLabels (B : Finset (Fin n)) :
@@ -5121,6 +5129,80 @@ theorem privateWitness_twoRetained_normalizedAffine
   rw [zsmul_add]
   exact add_assoc _ _ _
 
+/-- Naming the retained pair globally collapses the normalized affine
+offset to one weight times their difference, plus the uniform translate
+`-2 • g z`.  Witness positivity leaves only five possible weights. -/
+theorem privateWitness_twoRetained_fiveWeightAffine
+    (g : Fin n → G) (y : G) (scalar : ℤ) {c : Fin n → ℤ}
+    (hc : Witness g (scalar • y) c) (B : Finset (Fin n))
+    (owner : Fin n) (hownerB : owner ∈ B)
+    (hprivate : ∀ i, i ∈ B → i ≠ owner → c i = 0)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (hownerLevel : c owner ∈ twoRetainedExternalCoefficientLevels) :
+    let weight := twoRetainedOwnerNormalization (c owner) * c x
+    weight ∈ twoRetainedNormalizedWeightLevels ∧
+      (weight = -1 ↔ c owner = 2) ∧
+      twoRetainedOwnerNormalization (c owner) • (scalar • y) =
+        (2 : ℤ) • g owner + weight • (g x - g z) - (2 : ℤ) • g z := by
+  dsimp only
+  have hshape := privateWitness_twoRetained_exactShape
+    g hc B owner hownerB hprivate x z hxB hzB hxz hcomplement
+  have hxFloor := hc.2.1 x
+  have hzFloor := hc.2.1 z
+  have hweight :
+      twoRetainedOwnerNormalization (c owner) * c x ∈
+        twoRetainedNormalizedWeightLevels := by
+    simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+      Finset.mem_singleton] at hownerLevel
+    simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+      Finset.mem_singleton]
+    rcases hownerLevel with hminus | hone | htwo
+    · rw [hminus]
+      simp only [twoRetainedOwnerNormalization, if_pos, neg_mul]
+      omega
+    · rw [hone]
+      norm_num [twoRetainedOwnerNormalization]
+      omega
+    · rw [htwo]
+      norm_num [twoRetainedOwnerNormalization]
+      omega
+  have hheavy :
+      twoRetainedOwnerNormalization (c owner) * c x = -1 ↔
+        c owner = 2 := by
+    constructor
+    · intro hweightEq
+      have hlevels := hownerLevel
+      simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+        Finset.mem_singleton] at hlevels
+      rcases hlevels with hminus | hone | htwo
+      · rw [hminus] at hweightEq
+        norm_num [twoRetainedOwnerNormalization] at hweightEq
+        omega
+      · rw [hone] at hweightEq
+        norm_num [twoRetainedOwnerNormalization] at hweightEq
+        omega
+      · exact htwo
+    · intro htwo
+      have hxValue : c x = -1 := by
+        rw [hshape.1, htwo] at hzFloor
+        omega
+      rw [htwo, hxValue]
+      norm_num [twoRetainedOwnerNormalization]
+  refine ⟨hweight, hheavy, ?_⟩
+  have hnormalized := privateWitness_twoRetained_normalizedAffine
+    g y scalar hc B owner hownerB hprivate x z hxB hzB hxz hcomplement
+      hownerLevel
+  have hnormalization := twoRetainedOwnerNormalization_mul hownerLevel
+  have hcoeff :
+      twoRetainedOwnerNormalization (c owner) * (-(c owner + c x)) =
+        -(twoRetainedOwnerNormalization (c owner) * c x) - 2 := by
+    nlinarith
+  rw [hnormalized]
+  rw [zsmul_add, ← mul_zsmul, ← mul_zsmul, hcoeff,
+    sub_zsmul, neg_zsmul, zsmul_sub]
+  abel
+
 /-- Uniform exact geometry of one owner-profile inside the complete
 minimal-transversal private family. -/
 def TwoRetainedMinimalCyclicKernelPrivateProfileGeometry
@@ -5498,6 +5580,101 @@ theorem prod_profile_choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
     simpa only [cell, Nat.mul_comm] using hcap
   · let fiber : Finset ↥choices :=
       Finset.univ.filter (fun A : ↥choices ↦ encode A = value)
+    have hlarge' : 2 < fiber.card := by
+      simpa only [fiber] using hlarge
+    obtain ⟨A, C, D, hA, hC, hD, hAC, hAD, hCD⟩ :=
+      Finset.two_lt_card_iff.mp hlarge'
+    have hencodeAC : encode A = encode C :=
+      (Finset.mem_filter.mp hA).2.trans (Finset.mem_filter.mp hC).2.symm
+    have hencodeAD : encode A = encode D :=
+      (Finset.mem_filter.mp hA).2.trans (Finset.mem_filter.mp hD).2.symm
+    have hsubAC := hsub_eq_involution_of_ne hencodeAC hAC
+    have hsubAD := hsub_eq_involution_of_ne hencodeAD hAD
+    have hsumCD : ownerSum C = ownerSum D :=
+      sub_right_inj.mp (hsubAC.trans hsubAD.symm)
+    exact (hCD (hownerSumInjective hsumCD)).elim
+
+/-- Capacity after replacing a complete profile-count vector by its two
+actual affine invariants: total cardinality and total offset weight.  This
+allows the cell counts to vary freely inside one weighted layer. -/
+theorem card_fixedCard_weightSum_le_two_mul_addOrderOf_of_affine_targets
+    [Fintype G]
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (owner : ι ↪ Fin n) (weight : ι → ℤ)
+    (y delta base : G) (target : ι → G)
+    (haffine : ∀ i, target i =
+      (2 : ℤ) • g (owner i) + weight i • delta + base)
+    (hmem : ∀ i, target i ∈ AddSubgroup.zmultiples y)
+    (k : ℕ) (w : ℤ) :
+    ((Finset.univ.powersetCard k).filter (fun A : Finset ι ↦
+      ∑ i ∈ A, weight i = w)).card ≤ 2 * addOrderOf y := by
+  classical
+  let L : Finset (Finset ι) :=
+    (Finset.univ.powersetCard k).filter (fun A : Finset ι ↦
+      ∑ i ∈ A, weight i = w)
+  let ownerSum : ↥L → G := fun A ↦
+    ∑ i ∈ A.1, g (owner i)
+  have hchoiceCard : ∀ A : ↥L, A.1.card = k := by
+    intro A
+    exact (Finset.mem_powersetCard.mp
+      (Finset.mem_filter.mp A.property).1).2
+  have hchoiceWeight : ∀ A : ↥L,
+      ∑ i ∈ A.1, weight i = w := by
+    intro A
+    exact (Finset.mem_filter.mp A.property).2
+  have hownerSumInjective : Function.Injective ownerSum := by
+    intro A C hAC
+    apply Subtype.ext
+    apply validTuple_subsetSum_eq_of_card_eq g hg owner
+    · rw [hchoiceCard A, hchoiceCard C]
+    · simpa only [ownerSum] using hAC
+  let encode : ↥L → AddSubgroup.zmultiples y := fun A ↦
+    ⟨∑ i ∈ A.1, target i,
+      AddSubgroup.sum_mem _ fun i _ ↦ hmem i⟩
+  have hsumAffine : ∀ A : ↥L,
+      (∑ i ∈ A.1, target i) =
+        (2 : ℤ) • ownerSum A + w • delta + k • base := by
+    intro A
+    calc
+      (∑ i ∈ A.1, target i) =
+          ∑ i ∈ A.1,
+            ((2 : ℤ) • g (owner i) + weight i • delta + base) := by
+        exact Finset.sum_congr rfl fun i _ ↦ haffine i
+      _ = (2 : ℤ) • ownerSum A + w • delta + k • base := by
+        rw [Finset.sum_add_distrib, Finset.sum_add_distrib,
+          Finset.sum_zsmul, ← Finset.sum_smul, Finset.sum_const,
+          hchoiceWeight A, hchoiceCard A]
+  have hdouble_of_encode_eq : ∀ {A C : ↥L}, encode A = encode C →
+      (2 : ℤ) • ownerSum A = (2 : ℤ) • ownerSum C := by
+    intro A C hAC
+    have hval := congrArg Subtype.val hAC
+    dsimp only [encode] at hval
+    rw [hsumAffine A, hsumAffine C] at hval
+    exact add_right_cancel (add_right_cancel hval)
+  have hsub_eq_involution_of_ne : ∀ {A C : ↥L},
+      encode A = encode C → A ≠ C → ownerSum A - ownerSum C = h := by
+    intro A C hencode hne
+    have hdouble := hdouble_of_encode_eq hencode
+    have htwoTorsion :
+        (ownerSum A - ownerSum C) + (ownerSum A - ownerSum C) = 0 := by
+      have hzsmul : (2 : ℤ) • (ownerSum A - ownerSum C) = 0 := by
+        rw [zsmul_sub, hdouble, sub_self]
+      simpa only [two_zsmul] using hzsmul
+    rcases hunique (ownerSum A - ownerSum C) htwoTorsion with
+      hzero | hinvolution
+    · exact (hne (hownerSumInjective (sub_eq_zero.mp hzero))).elim
+    · exact hinvolution
+  rcases finiteMap_capacity_or_largeFiber
+      (Finset.univ : Finset (AddSubgroup.zmultiples y))
+        encode (fun _ ↦ Finset.mem_univ _) 2 with
+    hcap | ⟨value, _hvalue, hlarge⟩
+  · rw [Fintype.card_coe, Finset.card_univ,
+      Fintype.card_zmultiples] at hcap
+    simpa only [L, Nat.mul_comm] using hcap
+  · let fiber : Finset ↥L :=
+      Finset.univ.filter (fun A : ↥L ↦ encode A = value)
     have hlarge' : 2 < fiber.card := by
       simpa only [fiber] using hlarge
     obtain ⟨A, C, D, hA, hC, hD, hAC, hAD, hCD⟩ :=
@@ -5988,6 +6165,116 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
     · simpa only [F, label, S, ownerLevel] using hBorder
     · simpa only [F, label, S, ownerLevel] using hprofileLayers
     · simpa only [F, label, S, ownerLevel] using hprofileLayersUniform
+
+/-- Global five-weight form of the exact-two private family.  Once the two
+retained coordinates are named, every row has one of five normalized weights
+on their difference; the former 18 profile labels no longer appear in the
+affine equation. -/
+def TwoRetainedMinimalCyclicKernelFiveWeightRows
+    (g : Fin n → G) (y : G) (B : Finset (Fin n)) : Prop :=
+  n - B.card = 2 ∧
+    ∃ x z : Fin n, ∃ scalar : ↥B → ℤ,
+      ∃ coeff : ↥B → Fin n → ℤ, ∃ weight : ↥B → ℤ,
+        x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+        Function.Injective coeff ∧
+        (∀ b : ↥B,
+          scalar b • y ≠ 0 ∧
+          Witness g (scalar b • y) (coeff b) ∧
+          coeff b (b : Fin n) ≠ 0 ∧
+          coeff b (b : Fin n) ∈ twoRetainedExternalCoefficientLevels ∧
+          (∀ a ∈ B, a ≠ (b : Fin n) → coeff b a = 0)) ∧
+        ∀ b : ↥B,
+          weight b ∈ twoRetainedNormalizedWeightLevels ∧
+          (weight b = -1 ↔ coeff b (b : Fin n) = 2) ∧
+          twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+              (scalar b • y) =
+            (2 : ℤ) • g (b : Fin n) +
+              weight b • (g x - g z) - (2 : ℤ) • g z
+
+/-- Forget the artificial support-coordinate choice in the 18-profile
+package and retain only its canonical five-weight affine content. -/
+theorem TwoRetainedMinimalCyclicKernelPrivateRows.fiveWeightRows
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelPrivateRows g y B) :
+    TwoRetainedMinimalCyclicKernelFiveWeightRows g y B := by
+  classical
+  rcases hrows with
+    ⟨hretained, scalar, coeff, _supportCoord, hcoeffInjective,
+      hrowData, _hnormalized, _hdominant⟩
+  have hcomplementCard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  obtain ⟨x, z, hxz, hcomplement⟩ :=
+    Finset.card_eq_two.mp hcomplementCard
+  have hxC : x ∈ Finset.univ \ B := by
+    rw [hcomplement]
+    simp
+  have hzC : z ∈ Finset.univ \ B := by
+    rw [hcomplement]
+    simp
+  have hxB : x ∉ B := (Finset.mem_sdiff.mp hxC).2
+  have hzB : z ∉ B := (Finset.mem_sdiff.mp hzC).2
+  let weight : ↥B → ℤ := fun b ↦
+    twoRetainedOwnerNormalization (coeff b (b : Fin n)) * coeff b x
+  refine ⟨hretained, x, z, scalar, coeff, weight,
+    hxB, hzB, hxz, hcomplement, hcoeffInjective, ?_, ?_⟩
+  · intro b
+    rcases hrowData b with
+      ⟨htarget, hwitness, howner, hownerLevel, hprivate,
+        _hsupportB, _hsupport, _hsupportLevel⟩
+    exact ⟨htarget, hwitness, howner, hownerLevel, hprivate⟩
+  · intro b
+    rcases hrowData b with
+      ⟨_htarget, hwitness, _howner, hownerLevel, hprivate,
+        _hsupportB, _hsupport, _hsupportLevel⟩
+    simpa only [weight] using
+      privateWitness_twoRetained_fiveWeightAffine
+        g y (scalar b) hwitness B (b : Fin n) b.property hprivate
+          x z hxB hzB hxz hcomplement hownerLevel
+
+/-- Canonical exact-two specialization of the varying-profile weighted-layer
+bound.  All cell-count vectors with the same total size and the same one
+dimensional retained weight participate in a single factor-two fiber bound. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fixedCardWeightSum_le
+    [Fintype G] [DecidableEq G]
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (k : ℕ) (w : ℤ) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((Finset.univ.powersetCard k).filter (fun A : Finset ↥B ↦
+        ∑ b ∈ A, weight b = w)).card ≤ 2 * addOrderOf y := by
+  classical
+  rcases hrows with
+    ⟨_hretained, x, z, scalar, coeff, weight,
+      hxB, hzB, hxz, hcomplement, _hcoeffInjective,
+      hrowData, hweightData⟩
+  let owner : ↥B ↪ Fin n :=
+    { toFun := fun b ↦ b
+      inj' := Subtype.coe_injective }
+  let target : ↥B → G := fun b ↦
+    twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+      (scalar b • y)
+  let base : G := -(2 : ℤ) • g z
+  have haffine : ∀ b, target b =
+      (2 : ℤ) • g (owner b) + weight b • (g x - g z) + base := by
+    intro b
+    have hrow := (hweightData b).2.2
+    have howner : owner b = (b : Fin n) := rfl
+    rw [howner]
+    simpa only [target, base, sub_eq_add_neg, neg_zsmul] using hrow
+  have htargetMem : ∀ b, target b ∈ AddSubgroup.zmultiples y := by
+    intro b
+    exact AddSubgroup.zsmul_mem _
+      (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _) _
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+    fun b ↦ (hweightData b).1, ?_⟩
+  exact card_fixedCard_weightSum_le_two_mul_addOrderOf_of_affine_targets
+    g hg hunique owner weight y (g x - g z) base target
+      haffine htargetMem k w
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
