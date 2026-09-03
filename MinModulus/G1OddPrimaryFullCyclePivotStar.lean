@@ -26,6 +26,8 @@ def CycleCenterSparseExternalOrFullPivotStar
     d - 1 ≤ J.card ∧ Function.Injective coeff ∧
     (∀ j, scalar j • y ≠ 0 ∧
       Witness g (scalar j • y) (coeff j)) ∧
+    (∀ (j : ↥J) x, x ∈ B →
+      x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
     ((∃ j : ↥J, HasExternalCenterSupport center (coeff j)) ∨
       ∃ pivot : Fin d, center pivot ∉ B ∧
         ∀ j : ↥J,
@@ -46,7 +48,7 @@ theorem cycleCenterSparse_external_or_fullPivotStar
   classical
   rcases hsparse with
     ⟨scalar, coeff, hJcard, _hJiff, htarget, hwitness, _hownerLeaf,
-      _hzeroLeaf, hcoeffInj, hcenter, hEcard, hrows⟩
+      _hzeroLeaf, hprivateLeaf, hcoeffInj, hcenter, hEcard, hrows⟩
   have hcenterInj : Function.Injective center := by
     intro k l hkl
     apply P.injective
@@ -63,33 +65,39 @@ theorem cycleCenterSparse_external_or_fullPivotStar
       g (coeff j) (hwitness j) center hcenterInj (P.symm j)
         (hrows j).1 (hrows j).2.1 (hrows j).2.2
   refine ⟨scalar, coeff, hJcard, hcoeffInj,
-    (fun j ↦ ⟨htarget j, hwitness j⟩), ?_⟩
-  by_cases hexternal : ∃ j : ↥J,
-      HasExternalCenterSupport center (coeff j)
-  · exact Or.inl hexternal
-  · right
-    have hJnonempty : J.Nonempty := by
-      rw [← Finset.card_pos]
-      omega
-    obtain ⟨j₀, hj₀J⟩ := hJnonempty
-    let j₀' : ↥J := ⟨j₀, hj₀J⟩
-    rcases hrowDichotomy j₀' with hj₀External |
-        ⟨pivot, _hpivotOwner, hpivotOutside, hpivotPair⟩
-    · exact False.elim (hexternal ⟨j₀', hj₀External⟩)
-    · refine ⟨pivot, hpivotOutside, ?_⟩
-      intro j
-      rcases hrowDichotomy j with hjExternal |
-          ⟨k, _hkOwner, hkOutside, hkPair⟩
-      · exact False.elim (hexternal ⟨j, hjExternal⟩)
-      · have hkMem : k ∈ Finset.univ.filter
-            (fun l ↦ center l ∉ B) :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hkOutside⟩
-        have hpivotMem : pivot ∈ Finset.univ.filter
-            (fun l ↦ center l ∉ B) :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpivotOutside⟩
-        have hkp : k = pivot :=
-          (Finset.card_le_one.mp hEcard) k hkMem pivot hpivotMem
-        simpa [hkp] using hkPair
+    (fun j ↦ ⟨htarget j, hwitness j⟩), ?_, ?_⟩
+  · intro j x hxB hxOwner
+    apply hprivateLeaf j x hxB
+    intro hxLeaf
+    apply hxOwner
+    rw [hcenter (P.symm (j : Fin d)), P.apply_symm_apply]
+    exact hxLeaf
+  · by_cases hexternal : ∃ j : ↥J,
+        HasExternalCenterSupport center (coeff j)
+    · exact Or.inl hexternal
+    · right
+      have hJnonempty : J.Nonempty := by
+        rw [← Finset.card_pos]
+        omega
+      obtain ⟨j₀, hj₀J⟩ := hJnonempty
+      let j₀' : ↥J := ⟨j₀, hj₀J⟩
+      rcases hrowDichotomy j₀' with hj₀External |
+          ⟨pivot, _hpivotOwner, hpivotOutside, hpivotPair⟩
+      · exact False.elim (hexternal ⟨j₀', hj₀External⟩)
+      · refine ⟨pivot, hpivotOutside, ?_⟩
+        intro j
+        rcases hrowDichotomy j with hjExternal |
+            ⟨k, _hkOwner, hkOutside, hkPair⟩
+        · exact False.elim (hexternal ⟨j, hjExternal⟩)
+        · have hkMem : k ∈ Finset.univ.filter
+              (fun l ↦ center l ∉ B) :=
+            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hkOutside⟩
+          have hpivotMem : pivot ∈ Finset.univ.filter
+              (fun l ↦ center l ∉ B) :=
+            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpivotOutside⟩
+          have hkp : k = pivot :=
+            (Finset.card_le_one.mp hEcard) k hkMem pivot hpivotMem
+          simpa [hkp] using hkPair
 
 /-- Global endpoint with the sharp external-row/full-pivot-star family split
 attached to the full odd-primary descent. -/

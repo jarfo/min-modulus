@@ -34,6 +34,8 @@ def CycleCenterSparseKernelPrivateWitnessFamily
     (∀ j, Witness g (scalar j • y) (coeff j)) ∧
     (∀ j, coeff j (leaf j) ≠ 0) ∧
     (∀ j k, j ≠ k → coeff j (leaf k) = 0) ∧
+    (∀ (j : ↥J) x, x ∈ B →
+      x ≠ leaf (j : Fin d) → coeff j x = 0) ∧
     Function.Injective coeff ∧
     (∀ k : Fin d, center k = leaf (P k)) ∧
     (Finset.univ.filter (fun k ↦ center k ∉ B)).card ≤ 1 ∧
@@ -141,7 +143,7 @@ theorem exists_cycleCenterSparseKernelPrivateWitnessFamily
     omega
   refine ⟨J, (fun j ↦ (data j).scalar),
     (fun j ↦ (data j).coeff), hJcard, hJiff, ?_, ?_, ?_, ?_, ?_,
-    hcenter, by simpa [E] using hEcard, ?_⟩
+    ?_, hcenter, by simpa [E] using hEcard, ?_⟩
   · intro j
     exact (data j).target_ne_zero
   · intro j
@@ -152,6 +154,8 @@ theorem exists_cycleCenterSparseKernelPrivateWitnessFamily
     apply (data j).zero_other (leaf k) ((hJiff k).mp k.property)
     intro hleafEq
     exact hjk (Subtype.ext (hleaf hleafEq.symm))
+  · intro j x hxB hxOwner
+    exact (data j).zero_other x hxB hxOwner
   · exact (minimalCyclicKernelPrivateWitness_coeff_injective
       g y hmin).comp howner
   · intro j

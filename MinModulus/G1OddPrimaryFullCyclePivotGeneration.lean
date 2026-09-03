@@ -172,6 +172,8 @@ def CycleCenterSparseExternalOrGeneratingPivotStar
     d - 1 ≤ J.card ∧ Function.Injective coeff ∧
     (∀ j, scalar j • y ≠ 0 ∧
       Witness g (scalar j • y) (coeff j)) ∧
+    (∀ (j : ↥J) x, x ∈ B →
+      x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
     ((∃ j : ↥J, HasExternalCenterSupport center (coeff j)) ∨
       ∃ pivot : Fin d, center pivot ∉ B ∧
         (∀ j : ↥J,
@@ -203,13 +205,13 @@ theorem cycleCenterSparse_external_or_generatingPivotStar
   classical
   rcases hsparse with
     ⟨_scalar₀, _coeff₀, _hJcard₀, hJiff, _htarget₀, _hwitness₀,
-      _howner₀, _hzero₀, _hinjective₀, hcenter, hEcard, _hrows₀⟩
+      _howner₀, _hzero₀, _hprivate₀, _hinjective₀, hcenter, hEcard, _hrows₀⟩
   rcases hsharp with
-    ⟨scalar, coeff, hJcard, hcoeffInj, hrows,
+    ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
       hexternal | ⟨pivot, hpivotOutside, hpairs⟩⟩
-  · exact ⟨scalar, coeff, hJcard, hcoeffInj, hrows,
+  · exact ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
       Or.inl hexternal⟩
-  · refine ⟨scalar, coeff, hJcard, hcoeffInj, hrows, Or.inr ?_⟩
+  · refine ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate, Or.inr ?_⟩
     have hJall : ∀ j : Fin d, j ≠ P pivot → j ∈ J := by
       intro j hjp
       apply (hJiff j).mpr

@@ -85,6 +85,8 @@ def CycleCenterSparseExternalOrArithmeticPivotStar
     d - 1 ≤ J.card ∧ Function.Injective coeff ∧
     (∀ j, scalar j • y ≠ 0 ∧
       Witness g (scalar j • y) (coeff j)) ∧
+    (∀ (j : ↥J) x, x ∈ B →
+      x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
     ((∃ j : ↥J, HasExternalCenterSupport center (coeff j)) ∨
       ∃ pivot : Fin d, center pivot ∉ B ∧
         (∀ j : ↥J,
@@ -107,10 +109,11 @@ theorem cycleCenterSparse_external_or_arithmeticPivotStar
     CycleCenterSparseExternalOrArithmeticPivotStar
       g y B center P J := by
   rcases hout with
-    ⟨scalar, coeff, hJcard, hcoeffInj, hrows,
+    ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
       hexternal | ⟨pivot, hpivot, hpairs, hgenerate⟩⟩
-  · exact ⟨scalar, coeff, hJcard, hcoeffInj, hrows, Or.inl hexternal⟩
-  · exact ⟨scalar, coeff, hJcard, hcoeffInj, hrows, Or.inr
+  · exact ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
+      Or.inl hexternal⟩
+  · exact ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate, Or.inr
       ⟨pivot, hpivot, hpairs, hgenerate,
         generatingScalarArithmetic_of_closure_eq_zmultiples
           y scalar hgenerate⟩⟩

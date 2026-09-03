@@ -212,7 +212,7 @@ theorem cycleCenterSparse_external_or_commonPivot
   classical
   rcases hsparse with
     ⟨scalar, coeff, hJcard, _hJiff, htarget, hwitness, _hownerLeaf,
-      _hzeroLeaf, hcoeffInj, hcenter, hEcard, hrows⟩
+      _hzeroLeaf, _hprivate, hcoeffInj, hcenter, hEcard, hrows⟩
   have hcenterInj : Function.Injective center := by
     intro k l hkl
     apply P.injective
