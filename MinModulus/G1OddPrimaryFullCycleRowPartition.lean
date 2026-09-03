@@ -8,6 +8,7 @@ outside both the center range and the transversal; unless the internal set
 is empty, all internal rows are exact signed pairs to one common undeleted
 pivot.
 -/
+import Mathlib.Combinatorics.Pigeonhole
 import MinModulus.G1OddPrimaryFullCycleRetainedMixed
 
 namespace MinModulus
@@ -15,6 +16,25 @@ namespace MinModulus
 open Finset
 
 variable {n m : ℕ} {G : Type*} [AddCommGroup G]
+
+/-- Exact threshold form of the external-coordinate pigeonhole principle:
+either the ambient set pays `K` slots per coordinate, or one coordinate is
+used by more than `K` external rows. -/
+theorem finiteMap_capacity_or_largeFiber
+    {α β : Type*} [Fintype α] [DecidableEq β]
+    (R : Finset β) (f : α → β)
+    (hf : ∀ a : α, f a ∈ R) (K : ℕ) :
+    Fintype.card α ≤ R.card * K ∨
+      ∃ x ∈ R,
+        K < (Finset.univ.filter (fun a : α ↦ f a = x)).card := by
+  by_cases hcap : Fintype.card α ≤ R.card * K
+  · exact Or.inl hcap
+  · right
+    have hlarge : R.card * K < (Finset.univ : Finset α).card := by
+      simpa using Nat.lt_of_not_ge hcap
+    exact Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to
+      (s := Finset.univ) (t := R) (f := f)
+      (fun a _ha ↦ hf a) hlarge
 
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
@@ -32,12 +52,20 @@ def RetainedExternalInternalRowPartition
       E.card + I.card = J.card ∧ d - 1 ≤ E.card + I.card ∧
       (∀ j : ↥J, j ∈ E ↔
         HasRetainedExternalCenterSupport center B (coeff j)) ∧
-      (∃ supportCoord : ↥E → Fin n,
-        ∀ e : ↥E,
+      ∃ supportCoord : ↥E → Fin n,
+        (∀ e : ↥E,
           supportCoord e ∉ Finset.univ.image center ∧
           supportCoord e ∉ B ∧
           coeff (e : ↥J) (supportCoord e) ≠ 0) ∧
-      (I = ∅ ∨
+        (∀ K : ℕ,
+          E.card ≤
+              (((Finset.univ \ B) \
+                (Finset.univ.image center : Finset (Fin n))).card * K) ∨
+            ∃ x ∈ (Finset.univ \ B) \
+                (Finset.univ.image center : Finset (Fin n)),
+              K < (Finset.univ.filter
+                (fun e : ↥E ↦ supportCoord e = x)).card) ∧
+        (I = ∅ ∨
         ∃ pivot : Fin d, center pivot ∉ B ∧
           ∀ j : ↥I,
             ExactSignedPairWitness g (scalar (j : ↥J) • y)
@@ -87,15 +115,31 @@ theorem retainedExternalInternalRowPartition_of_mixed
       intro e
       exact (hEiff (e : ↥J)).mp e.property
     choose supportCoord hsupportCoord using hsupport
+    let R : Finset (Fin n) :=
+      (Finset.univ \ B) \ Finset.univ.image center
+    have hsupportMem : ∀ e : ↥E, supportCoord e ∈ R := by
+      intro e
+      exact Finset.mem_sdiff.mpr
+        ⟨Finset.mem_sdiff.mpr
+          ⟨Finset.mem_univ _, (hsupportCoord e).2.1⟩,
+          (hsupportCoord e).1⟩
+    have hfrontier : ∀ K : ℕ,
+        E.card ≤ R.card * K ∨
+          ∃ x ∈ R,
+            K < (Finset.univ.filter
+              (fun e : ↥E ↦ supportCoord e = x)).card := by
+      intro K
+      simpa [Fintype.card_coe] using
+        finiteMap_capacity_or_largeFiber R supportCoord hsupportMem K
   · refine ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
-      hunion, hdisjoint, hcard, ?_, hEiff,
-      ⟨supportCoord, hsupportCoord⟩, Or.inl ?_⟩
+      hunion, hdisjoint, hcard, ?_, hEiff, supportCoord, hsupportCoord,
+      by simpa [R] using hfrontier, Or.inl ?_⟩
     · omega
     · ext j
       simp [I, E, hall j]
   · refine ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
-      hunion, hdisjoint, hcard, ?_, hEiff,
-      ⟨supportCoord, hsupportCoord⟩, ?_⟩
+      hunion, hdisjoint, hcard, ?_, hEiff, supportCoord, hsupportCoord,
+      by simpa [R] using hfrontier, ?_⟩
     · omega
     · by_cases hI : I = ∅
       · exact Or.inl hI
