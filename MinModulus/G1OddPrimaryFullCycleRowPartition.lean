@@ -2597,6 +2597,182 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_signedPair_or_pureEdge
     refine ⟨z, hzNotB, hzNeX, Or.inr (Or.inr ⟨hlambda, ?_⟩)⟩
     simpa [c, o] using hshape
 
+/-- Selecting one owner coefficient turns the rowwise exact-two geometry into
+one of five fully labelled signed/pure-edge profiles.  The companion
+coordinate is supplied globally, so no row may choose a different retained
+column. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_selectedRowGeometry
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2)
+    (z : Fin n) (hzB : z ∉ B) (hzx : z ≠ x)
+    (mu : ℤ) (f : ↥F)
+    (hmu : coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) :
+    (lambda = -1 ∧ mu = -1 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs z
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+      (lambda = -1 ∧ mu = 1 ∧
+        ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+          (coeff ((f : ↥E) : ↥J))
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+      (lambda = -1 ∧ mu = 2 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x z) ∨
+      (lambda = 1 ∧ mu = -1 ∧
+        ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+          (coeff ((f : ↥E) : ↥J))
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+      (lambda = 2 ∧ mu = -1 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs x
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) z) := by
+  classical
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_signedPair_or_pureEdge
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained with
+    ⟨zf, hzfB, hzfX, hgeometry⟩
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hfiber.2.1⟩
+  have hzC : z ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzB⟩
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem hCcard hxC hzC hzx.symm
+  have hzfC : zf ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzfB⟩
+  have hzfPair : zf = x ∨ zf = z := by
+    have : zf ∈ ({x, z} : Finset (Fin n)) := by
+      rw [← hCeq]
+      exact hzfC
+    simpa using this
+  have hzfEq : zf = z := hzfPair.resolve_left hzfX
+  subst zf
+  let owner : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  have hownerB : owner ∈ B := by
+    simpa [owner] using (hfiber.2.2.2.2.2.1 f).1
+  have hownerX : owner ≠ x := by
+    intro h
+    subst x
+    exact hfiber.2.1 hownerB
+  have hownerZ : owner ≠ z := by
+    intro h
+    subst z
+    exact hzB hownerB
+  have hx : coeff ((f : ↥E) : ↥J) x = lambda :=
+    (hfiber.2.2.2.2.2.1 f).2.1
+  rcases hgeometry with
+      ⟨hlambda, hleft | hsigned | hright⟩ |
+      ⟨hlambda, hsigned⟩ | ⟨hlambda, hcenter⟩
+  · left
+    refine ⟨hlambda, ?_, hleft⟩
+    have hownerValue : coeff ((f : ↥E) : ↥J) owner = -1 := by
+      rw [hleft]
+      simp [owner, pureEdgeCoeffs, hownerZ, hownerX]
+    have hmu' : coeff ((f : ↥E) : ↥J) owner = mu := by
+      simpa [owner] using hmu
+    omega
+  · right
+    left
+    rcases hsigned.2.1 with hforward | hreverse
+    · exact ⟨hlambda, by omega, hsigned⟩
+    · exfalso
+      omega
+  · right
+    right
+    left
+    refine ⟨hlambda, ?_, hright⟩
+    have hownerValue : coeff ((f : ↥E) : ↥J) owner = 2 := by
+      rw [hright]
+      simp [owner, pureEdgeCoeffs, hownerX, hownerZ]
+    have hmu' : coeff ((f : ↥E) : ↥J) owner = mu := by
+      simpa [owner] using hmu
+    omega
+  · right
+    right
+    right
+    left
+    rcases hsigned.2.1 with hforward | hreverse
+    · exfalso
+      omega
+    · exact ⟨hlambda, by omega, hsigned⟩
+  · right
+    right
+    right
+    right
+    refine ⟨hlambda, ?_, hcenter⟩
+    have hownerValue : coeff ((f : ↥E) : ↥J) owner = -1 := by
+      rw [hcenter]
+      simp [owner, pureEdgeCoeffs, hownerX, hownerZ]
+    have hmu' : coeff ((f : ↥E) : ↥J) owner = mu := by
+      simpa [owner] using hmu
+    omega
+
+/-- Every row in one selected owner-coefficient fiber has one of the same
+five labelled exact geometries.  The labels `lambda` and `mu`, and the
+retained companion `z`, are fixed across the entire selected family. -/
+def FixedExternalTwoRetainedSelectedGeometry
+    (g : Fin n → G) (y : G)
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (S : Finset ↥F)
+    (x z : Fin n) (lambda mu : ℤ) : Prop :=
+  ∀ f : ↥F, f ∈ S →
+    (lambda = -1 ∧ mu = -1 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs z
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+      (lambda = -1 ∧ mu = 1 ∧
+        ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+          (coeff ((f : ↥E) : ↥J))
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+      (lambda = -1 ∧ mu = 2 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x z) ∨
+      (lambda = 1 ∧ mu = -1 ∧
+        ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+          (coeff ((f : ↥E) : ↥J))
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+      (lambda = 2 ∧ mu = -1 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs x
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) z)
+
+/-- Lift the rowwise exact geometry to an arbitrary selected subfamily on
+which the private-owner coefficient is constantly `mu`. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_selectedGeometry
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (S : Finset ↥F)
+    (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2)
+    (z : Fin n) (hzB : z ∉ B) (hzx : z ≠ x)
+    (mu : ℤ)
+    (hmu : ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) :
+    FixedExternalTwoRetainedSelectedGeometry
+      g y center P scalar coeff F S x z lambda mu := by
+  intro f hf
+  exact fixedExternalCoefficientPrivateFiber_twoRetained_selectedRowGeometry
+    g y B center P scalar coeff F x lambda hfiber hrows hretained
+      z hzB hzx mu f (hmu f hf)
+
 /-- The target represented by a pure-edge coefficient vector is its affine
 edge value.  This form is convenient when row normal forms are compared with
 the relative doubling recurrence. -/
@@ -3462,6 +3638,8 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
               (if 1 ≤ lambda then S else ∅) ∧
             fixedExternalFiberPositiveRowsAt coeff S z =
               (if 1 ≤ -(mu + lambda) then S else ∅) ∧
+            FixedExternalTwoRetainedSelectedGeometry
+              g y center P scalar coeff F S x z lambda mu ∧
             (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
                 (_hC : C ∈ permutationSubsetFullComponents R
                   (permutationFamilyOwnerSet owner))
@@ -3589,6 +3767,17 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       if 1 ≤ -(mu + lambda) then S else ∅ :=
     fixedExternalFiberPositiveRowsAt_eq_self_or_empty_of_constant
       coeff S z (-(mu + lambda)) hcompanion
+  have hgeometry : FixedExternalTwoRetainedSelectedGeometry
+      g y center P scalar coeff F S x z lambda mu :=
+    fixedExternalCoefficientPrivateFiber_twoRetained_selectedGeometry
+      g y B center P scalar coeff F S x lambda hfiber hrows hretained
+        z hzB hzx mu (by
+          intro f hf
+          have hf' : f ∈ Finset.univ.filter (fun f : ↥F ↦
+              coeff ((f : ↥E) : ↥J)
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) := by
+            simpa [S] using hf
+          exact (Finset.mem_filter.mp hf').2)
   have hfull : ∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
       (hC : C ∈ permutationSubsetFullComponents R
         (permutationFamilyOwnerSet owner))
@@ -3608,7 +3797,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     hepsilonLevel, offset,
     S, rfl, hSnonempty', hSdominant', howner, haffine', hboundary,
     hboundaryRouted, hdense, hpositive, hcolumns, hxPositive, hzPositive,
-    hfull, ?_⟩
+    hgeometry, hfull, ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
