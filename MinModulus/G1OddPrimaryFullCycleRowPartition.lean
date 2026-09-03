@@ -798,6 +798,36 @@ theorem nestedSelectedBoundaryRow_successor_firstFailure_of_boundary
   exact permutationFamilyBoundaryRow_owner_ne_successor
     R (nestedSelectedOwner S) s
 
+/-- Named row-level payload for the four possible successor exits from a
+nested selected family.  Keeping this proposition named prevents downstream
+frontiers from repeatedly elaborating the full dependent disjunction. -/
+def NestedBoundaryRowSuccessorTransition
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (owner : ↥S → α)
+    (s : ↥(permutationFamilyBoundaryRows R owner)) : Prop :=
+  R (owner (s : ↥S)) ∉ J ∨
+    (∃ i : ↥I, ((i : ↥J) : α) = R (owner (s : ↥S))) ∨
+    (∃ e : ↥E, ((e : ↥J) : α) = R (owner (s : ↥S)) ∧ e ∉ F) ∨
+    ∃ f : ↥F, (((f : ↥E) : ↥J) : α) =
+        R (owner (s : ↥S)) ∧ f ∉ S
+
+/-- Every genuine boundary source row of a nested selected family carries
+the named four-layer successor transition payload. -/
+theorem nestedSelectedBoundaryRow_successor_transition
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (s : ↥(permutationFamilyBoundaryRows R (nestedSelectedOwner S))) :
+    NestedBoundaryRowSuccessorTransition
+      R J E I F S (nestedSelectedOwner S) s := by
+  exact nestedSelectedBoundaryRow_successor_firstFailure_of_boundary
+    R J E I hpartition F S s
+
 /-- Ambient successor targets associated with the four nested boundary
 transition layers. -/
 def nestedBoundaryTransitionTargets
@@ -1172,6 +1202,39 @@ theorem permutationFamily_fullCapacity_or_largeBoundaryComponent
       hfull | ⟨x, hx, hxC⟩
     · exact (hnotFull hfull).elim
     · exact ⟨C, hC, hlarge, hnotFull, x, hx, hxC⟩
+
+/-- Injective owners lift the boundary vertex of an oversized nonfull
+component to a genuine selected boundary source row in the same component.
+This is the row-level form needed by successor first-failure arguments. -/
+theorem permutationFamily_fullCapacity_or_largeBoundaryRow
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (howner : Function.Injective owner) (K : ℕ)
+    (hfullBound : ∀ C,
+      C ∈ permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner) →
+      (permutationFamilyComponentFiber R owner C).card ≤ K) :
+    Fintype.card ι ≤
+        ((permutationSubsetFullComponents R
+            (permutationFamilyOwnerSet owner)).card +
+          (permutationSubsetBoundary R
+            (permutationFamilyOwnerSet owner)).card) * K ∨
+      ∃ C ∈ permutationFamilyComponents R owner,
+        K < (permutationFamilyComponentFiber R owner C).card ∧
+        C ∉ permutationSubsetFullComponents R
+          (permutationFamilyOwnerSet owner) ∧
+        ∃ s : ↥(permutationFamilyBoundaryRows R owner),
+          Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner (s : ι)) = C := by
+  classical
+  rcases permutationFamily_fullCapacity_or_largeBoundaryComponent
+      R owner K hfullBound with
+    hcap | ⟨C, hC, hlarge, hnotFull, a, haBoundary, haC⟩
+  · exact Or.inl hcap
+  · right
+    obtain ⟨s, ⟨hsBoundary, hsOwner⟩, _hsUnique⟩ :=
+      permutationFamilyBoundary_uniqueRow R owner howner haBoundary
+    refine ⟨C, hC, hlarge, hnotFull, ⟨s, hsBoundary⟩, ?_⟩
+    simpa [hsOwner] using haC
 
 /-- Two members of one component fiber have owners in the same cycle. -/
 theorem permutationFamilyComponentFiber_sameCycle
@@ -4257,9 +4320,11 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
                     (permutationFamilyComponentFiber R owner C).card ∧
                 C ∉ permutationSubsetFullComponents R
                   (permutationFamilyOwnerSet owner) ∧
-                ∃ a ∈ permutationSubsetBoundary R
-                    (permutationFamilyOwnerSet owner),
-                  Quotient.mk (Equiv.Perm.SameCycle.setoid R) a = C) ∧
+                ∃ s : ↥(permutationFamilyBoundaryRows R owner),
+                  Quotient.mk (Equiv.Perm.SameCycle.setoid R)
+                      (owner (s : ↥S)) = C ∧
+                    NestedBoundaryRowSuccessorTransition
+                      R J E I F S owner s) ∧
             ((S.card ≤
                   (permutationFamilyComponents R owner).card *
                     componentThreshold ∧
@@ -4277,6 +4342,7 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
                     mu • ((2 ^ k - 1) •
                       displacement (owner (u : ↥S))))
 
+set_option maxHeartbeats 500000 in
 /-- A dominant translated affine profile, together with the global outer
 label dominance, satisfies the quantitative boundary/full-component cycle
 frontier for the very same selected set. -/
@@ -4634,8 +4700,8 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       _hiCard, hiGlobalCard⟩ := hcharge
     exact hiGlobalCard
   have hcomponentAggregate :=
-    permutationFamily_fullCapacity_or_largeBoundaryComponent
-      R owner (addOrderOf y - 1) hfullOrderBound
+    permutationFamily_fullCapacity_or_largeBoundaryRow
+      R owner howner (addOrderOf y - 1) hfullOrderBound
   have hcomponentAggregate' :
       S.card ≤
           ((permutationSubsetFullComponents R
@@ -4648,10 +4714,19 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
               (permutationFamilyComponentFiber R owner C).card ∧
           C ∉ permutationSubsetFullComponents R
             (permutationFamilyOwnerSet owner) ∧
-          ∃ a ∈ permutationSubsetBoundary R
-              (permutationFamilyOwnerSet owner),
-            Quotient.mk (Equiv.Perm.SameCycle.setoid R) a = C := by
-    simpa only [Fintype.card_coe] using hcomponentAggregate
+          ∃ s : ↥(permutationFamilyBoundaryRows R owner),
+            Quotient.mk (Equiv.Perm.SameCycle.setoid R)
+                (owner (s : ↥S)) = C ∧
+              NestedBoundaryRowSuccessorTransition
+                R J E I F S owner s := by
+    rcases hcomponentAggregate with
+      hcap | ⟨C, hC, hlargeC, hnotFull, s, hsC⟩
+    · left
+      simpa only [Fintype.card_coe] using hcap
+    · right
+      refine ⟨C, hC, hlargeC, hnotFull, s, hsC, ?_⟩
+      exact nestedSelectedBoundaryRow_successor_transition
+        R J E I hpartition F S s
   have hfrontier := permutationFamily_affineComponentFrontier
     R owner displacement target hdouble' mu offset haffineMu
       componentThreshold
