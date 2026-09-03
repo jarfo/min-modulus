@@ -6560,8 +6560,11 @@ theorem fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_c
       ((∃ i : ι, i ≠ p ∧ R i ≠ p ∧
         e = (weight (R i) - 2 * weight i) -
           (weight (R i₀) - 2 * weight i₀)) ∨
-       e = (weight (R p) - 4 * weight (R.symm p)) -
-          3 * (weight (R i₀) - 2 * weight i₀))) ∨
+       (e = (weight (R p) - 4 * weight (R.symm p)) -
+          3 * (weight (R i₀) - 2 * weight i₀) ∧
+        ∀ i, i ≠ p → R i ≠ p →
+          weight (R i) - 2 * weight i =
+            weight (R i₀) - 2 * weight i₀))) ∨
       ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
   classical
   let q₀ : ℤ := weight (R i₀) - 2 * weight i₀
@@ -6632,7 +6635,9 @@ theorem fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_c
       have hij := hweightsConstant i j
       simpa only [extendedWeight, hi, hj, if_false] using hij
     · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem,
-        Or.inr (by simp only [e, q₀, u, v])⟩
+        Or.inr ⟨by simp only [e, q₀, u, v], by
+          intro i hi hRi
+          simpa only [q₀] using hall i hi hRi⟩⟩
   · push Not at hall
     obtain ⟨i, hi, hRi, hne⟩ := hall
     let e : ℤ := (weight (R i) - 2 * weight i) - q₀
@@ -6679,8 +6684,64 @@ theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
 
 /-- If every surviving bounded kernel coefficient has absolute value `32`,
 the internal-edge source is impossible and the punctured recurrence has only
-the four exact boundary configurations classified above, unless all available
-weights are constant. -/
+the four exact boundary configurations classified above.  In the boundary
+arm, every available edge retains the same transition coefficient. -/
+theorem fiveWeightPuncturedPermutation_thirtyTwo_boundaryPatternWithTransition_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 32) :
+    (((weight (R.symm p) = -4 ∧ weight (R p) = -2 ∧
+        weight i₀ = 2 ∧ weight (R i₀) = -2) ∨
+     (weight (R.symm p) = -2 ∧ weight (R p) = 0 ∧
+        weight i₀ = 2 ∧ weight (R i₀) = -4) ∨
+     (weight (R.symm p) = 0 ∧ weight (R p) = -2 ∧
+        weight i₀ = -4 ∧ weight (R i₀) = 2) ∨
+     (weight (R.symm p) = 2 ∧ weight (R p) = 0 ∧
+        weight i₀ = -4 ∧ weight (R i₀) = 0)) ∧
+      ∀ i, i ≠ p → R i ≠ p →
+        weight (R i) - 2 * weight i =
+          weight (R i₀) - 2 * weight i₀) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep with
+    ⟨e, he, helow, hehigh, heMem, hsource⟩ | hconstant
+  · have he32 := hkernel32 e he helow hehigh heMem
+    rcases hsource with ⟨i, hi, hRi, heq⟩ | ⟨heq, hall⟩
+    · have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
+      have hRiBounds :=
+        twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
+      have hi₀Bounds := twoRetainedNormalizedWeight_bounds (hweight i₀ hi₀)
+      have hRi₀Bounds :=
+        twoRetainedNormalizedWeight_bounds (hweight (R i₀) hRi₀)
+      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+    · left
+      rw [heq] at he32
+      exact ⟨fiveWeight_boundaryCoefficient_natAbs_eq_thirtyTwo
+          (weight (R.symm p)) (weight (R p)) (weight i₀) (weight (R i₀))
+            (hweight (R.symm p) (by
+              intro hsymm
+              apply hp
+              have := R.apply_symm_apply p
+              simpa only [hsymm] using this))
+            (hweight (R p) (by simpa only using hp))
+            (hweight i₀ hi₀) (hweight (R i₀) hRi₀) he32,
+        hall⟩
+  · exact Or.inr hconstant
+
+/-- Compatibility projection of the transition-retaining top-boundary
+classification. -/
 theorem fiveWeightPuncturedPermutation_thirtyTwo_boundaryPattern_or_weight_constant
     {ι : Type*} [Fintype ι]
     (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
@@ -6705,30 +6766,86 @@ theorem fiveWeightPuncturedPermutation_thirtyTwo_boundaryPattern_or_weight_const
      (weight (R.symm p) = 2 ∧ weight (R p) = 0 ∧
         weight i₀ = -4 ∧ weight (R i₀) = 0)) ∨
       ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
-  rcases fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_constant
-      R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep with
-    ⟨e, he, helow, hehigh, heMem, hsource⟩ | hconstant
-  · have he32 := hkernel32 e he helow hehigh heMem
-    rcases hsource with ⟨i, hi, hRi, heq⟩ | heq
-    · have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
-      have hRiBounds :=
-        twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
-      have hi₀Bounds := twoRetainedNormalizedWeight_bounds (hweight i₀ hi₀)
-      have hRi₀Bounds :=
-        twoRetainedNormalizedWeight_bounds (hweight (R i₀) hRi₀)
-      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
-      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
-    · left
-      rw [heq] at he32
-      exact fiveWeight_boundaryCoefficient_natAbs_eq_thirtyTwo
-        (weight (R.symm p)) (weight (R p)) (weight i₀) (weight (R i₀))
-          (hweight (R.symm p) (by
-            intro hsymm
-            apply hp
-            have := R.apply_symm_apply p
-            simpa only [hsymm] using this))
-          (hweight (R p) (by simpa only using hp))
-          (hweight i₀ hi₀) (hweight (R i₀) hRi₀) he32
+  rcases
+      fiveWeightPuncturedPermutation_thirtyTwo_boundaryPatternWithTransition_or_weight_constant
+        R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
+          hkernel32 with
+    ⟨hpattern, _hall⟩ | hconstant
+  · exact Or.inl hpattern
+  · exact Or.inr hconstant
+
+/-- The four top-boundary configurations cannot support two consecutive
+available edges.  Their common transition coefficients are respectively
+`-6`, `-8`, `10`, and `8`; iterating any of these affine recurrences twice
+leaves the five-weight interval. -/
+theorem fiveWeightPuncturedPermutation_thirtyTwo_noTwoConsecutiveAvailableEdges_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 32) :
+    (∀ i, i ≠ p → R i ≠ p → R (R i) ≠ p → False) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases
+      fiveWeightPuncturedPermutation_thirtyTwo_boundaryPatternWithTransition_or_weight_constant
+        R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
+          hkernel32 with
+    ⟨hpattern, hall⟩ | hconstant
+  · left
+    intro i hi hRi hRRi
+    have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
+    have hRiBounds :=
+      twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
+    have hRRiBounds :=
+      twoRetainedNormalizedWeight_bounds (hweight (R (R i)) hRRi)
+    have hfirst := hall i hi hRi
+    have hsecond := hall (R i) hRi hRRi
+    rcases hpattern with hpattern | hpattern | hpattern | hpattern <;>
+      rcases hpattern with ⟨_hu, _hv, hi₀Value, hRi₀Value⟩ <;>
+      rw [hi₀Value, hRi₀Value] at hfirst hsecond <;>
+      omega
+  · exact Or.inr hconstant
+
+/-- A top-boundary nonconstant punctured permutation returns from `p` after
+two or three steps.  This is the cycle-length form of the absence of two
+consecutive available edges. -/
+theorem fiveWeightPuncturedPermutation_thirtyTwo_shortReturn_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 32) :
+    (R (R p) = p ∨ R (R (R p)) = p) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases
+      fiveWeightPuncturedPermutation_thirtyTwo_noTwoConsecutiveAvailableEdges_or_weight_constant
+        R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
+          hkernel32 with
+    hnoTwo | hconstant
+  · left
+    by_cases htwo : R (R p) = p
+    · exact Or.inl htwo
+    · exact Or.inr (by
+        by_contra hthree
+        exact hnoTwo (R p) hp htwo hthree)
   · exact Or.inr hconstant
 
 /-- If every leaf of a saturated doubling cycle is deleted by the minimal
@@ -6823,30 +6940,35 @@ theorem constantFiveWeight_transition_terminal
       omega
     · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem⟩
 
-/-- Exact one-retained-leaf extension of `fullDeletedCycle_split`.  The two
-cycle edges incident to the retained leaf are replaced by their fourfold
-two-step relation, so the only new possible kernel coefficient is bounded by
-42 rather than 18. -/
-theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
+/-- Lossless recurrence data for a cycle with one retained leaf.  Besides the
+row weights and available-edge transitions, this endpoint exposes a total
+cycle weight and the exact fourfold relation across the unavailable leaf. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_recurrence
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
     (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
     {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d)) (a : G)
-    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
-    (hRi₀ : R i₀ ≠ p)
+    (p : Fin d) (hp : R p ≠ p)
     (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
     (hdouble : ∀ i,
       g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
-    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ, ∃ cycleWeight : Fin d → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
       (∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
         (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
             (g x - g z) + (2 : ℤ) • (g z - a) ∈
           AddSubgroup.zmultiples y) ∧
-      ((∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧
-          e • (g x - g z) ∈ AddSubgroup.zmultiples y) ∨
-        ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
-          weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
+      (∀ i (hi : leaf i ∈ B),
+        cycleWeight i = weight ⟨leaf i, hi⟩) ∧
+      (∀ i, i ≠ p →
+        cycleWeight i ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ i, i ≠ p → R i ≠ p →
+        (cycleWeight (R i) - 2 * cycleWeight i) • (g x - g z) +
+            (2 : ℤ) • (g z - a) ∈ AddSubgroup.zmultiples y) ∧
+      (cycleWeight (R p) - 4 * cycleWeight (R.symm p)) •
+            (g x - g z) +
+          (3 : ℤ) • ((2 : ℤ) • (g z - a)) ∈
+        AddSubgroup.zmultiples y := by
   classical
   rcases hrows with
     ⟨_hretained, x, z, scalar, coeff, weight,
@@ -6928,21 +7050,57 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
     rw [hvValue, huValue]
     convert htwoStep using 1
     module
+  refine ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
+    fun b ↦ (hweightData b).1, htransition, ?_, hcycleWeight,
+      hcycleTransition, hcycleTwoStep⟩
+  intro i hiB
+  simp only [cycleWeight, dif_pos hiB]
+
+/-- Exact one-retained-leaf extension of `fullDeletedCycle_split`.  The two
+cycle edges incident to the retained leaf are replaced by their fourfold
+two-step relation, so the only new possible kernel coefficient is bounded by
+42 rather than 18. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d)) (a : G)
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
+        (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
+            (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y) ∧
+      ((∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧
+          e • (g x - g z) ∈ AddSubgroup.zmultiples y) ∨
+        ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
+          weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
+  obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
+      hweight, htransition, hcycleValue, hcycleWeight,
+      hcycleTransition, hcycleTwoStep⟩ :=
+    hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
   have hsplit :=
     fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
       R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
         (g x - g z) ((2 : ℤ) • (g z - a))
           (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
-    fun b ↦ (hweightData b).1, htransition, ?_⟩
+    hweight, htransition, ?_⟩
   rcases hsplit with hsmall | hconstant
   · exact Or.inl hsmall
   · right
     intro i hiB j hjB
     have hi : i ≠ p := (hleafB i).1 hiB
     have hj : j ≠ p := (hleafB j).1 hjB
-    have hij := hconstant i hi j hj
-    simpa only [cycleWeight, dif_pos hiB, dif_pos hjB] using hij
+    calc
+      weight ⟨leaf i, hiB⟩ = cycleWeight i := (hcycleValue i hiB).symm
+      _ = cycleWeight j := hconstant i hi j hj
+      _ = weight ⟨leaf j, hjB⟩ := hcycleValue j hjB
 
 /-- Terminal form of the one-retained-leaf five-weight reduction when the
 retained leaf lies in the same cyclic-kernel coset of the cycle center as all
@@ -7660,6 +7818,230 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicMo
     norm_num [hquotOne] at hk
     have habsEq : e.natAbs = 32 := by omega
     exact ⟨rfl, hquotOne, habsEq⟩
+
+/-- In a modulus-minimal sixth-stratum survivor, every nonzero bounded
+five-weight coefficient has absolute value exactly `32`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    e.natAbs = 32 := by
+  rcases
+      hrows.exists_smallerValidCyclicModulus_or_sixthStratum_boundary_rigidity
+        (t := 6) (q := q) (by omega) g hg hunique hne y hyq B x z hxB hzB
+          hxz hcomplement e he helow hehigh heMem with
+    ⟨M, hMpos, hMlt, hMdiv, hvalid⟩ | hrigid
+  · exact (hminimal M hMpos hMlt hMdiv hvalid).elim
+  · exact hrigid.2.2
+
+/-- Integrated top-stratum one-retained endpoint.  In a modulus-minimal
+`2^6*q` survivor, the nonconstant five-weight arm returns to the unavailable
+leaf after two or three permutation steps. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortReturn_or_weight_constant_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (a : ZMod (2 ^ 6 * q))
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
+        (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
+            (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y) ∧
+      ((R (R p) = p ∨ R (R (R p)) = p) ∨
+        ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
+          weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
+  obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
+      hweight, htransition, hcycleValue, hcycleWeight,
+      hcycleTransition, hcycleTwoStep⟩ :=
+    hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
+  have hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • (g x - g z) ∈ AddSubgroup.zmultiples y → e.natAbs = 32 := by
+    intro e he helow hehigh heMem
+    exact hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+        e he helow hehigh heMem
+  have hout :=
+    fiveWeightPuncturedPermutation_thirtyTwo_shortReturn_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
+        (g x - g z) ((2 : ℤ) • (g z - a))
+          (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep hkernel32
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+    hweight, htransition, ?_⟩
+  rcases hout with hshort | hconstant
+  · exact Or.inl hshort
+  · right
+    intro i hiB j hjB
+    have hi : i ≠ p := (hleafB i).1 hiB
+    have hj : j ≠ p := (hleafB j).1 hjB
+    calc
+      weight ⟨leaf i, hiB⟩ = cycleWeight i := (hcycleValue i hiB).symm
+      _ = cycleWeight j := hconstant i hi j hj
+      _ = weight ⟨leaf j, hjB⟩ := hcycleValue j hjB
+
+/-- At the sixth stratum, the constant branch of the integrated endpoint is
+again exactly the orientation-equivalent pure pair.  Every alternative
+bounded coefficient has magnitude at most four and is therefore incompatible
+with the forced magnitude `32`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortReturn_or_purePair_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (a : ZMod (2 ^ 6 * q))
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hretainedMem : g (leaf p) - a ∈ AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((R (R p) = p ∨ R (R (R p)) = p) ∨
+        (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, htransition, hshort | hconstant⟩ :=
+    hrows.oneRetainedCycle_shortReturn_or_weight_constant_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
+        hleafB hdouble
+  · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      Or.inl hshort⟩
+  · refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+    have hiB : leaf i₀ ∈ B := (hleafB i₀).2 hi₀
+    have hRiB : leaf (R i₀) ∈ B := (hleafB (R i₀)).2 hRi₀
+    let w : ℤ := weight ⟨leaf i₀, hiB⟩
+    have hw : w ∈ twoRetainedNormalizedWeightLevels :=
+      hweight ⟨leaf i₀, hiB⟩
+    have hwEdge : weight ⟨leaf (R i₀), hRiB⟩ = w := by
+      simpa only [w] using hconstant (R i₀) hRiB i₀ hiB
+    have htransitionSimple :
+        (-w) • (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y := by
+      have ht := htransition i₀ hiB hRiB
+      rw [hwEdge] at ht
+      convert ht using 1
+      dsimp only [w]
+      module
+    have hterminal := constantFiveWeight_transition_terminal
+      (g x) (g z) a (AddSubgroup.zmultiples y) w hw htransitionSimple
+    have hpNotB : leaf p ∉ B := by
+      intro hpB
+      exact (hleafB p).1 hpB rfl
+    have hpPair : leaf p = x ∨ leaf p = z := by
+      have hpComplement : leaf p ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hpNotB⟩
+      rw [hcomplement] at hpComplement
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hpComplement
+    rcases hpPair with hpX | hpZ
+    · have hxMem : g x - a ∈ AddSubgroup.zmultiples y := by
+        simpa only [hpX] using hretainedMem
+      rcases hterminal.1 hxMem with hsmall | hwMinusTwo
+      · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+        have he32 :=
+          hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+            g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+              e he (by omega) (by omega) heMem
+        have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+        rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+      · exact Or.inr (Or.inl ⟨hpX, by
+          intro i hi
+          calc
+            weight ⟨leaf i, hi⟩ = w := hconstant i hi i₀ hiB
+            _ = -2 := hwMinusTwo⟩)
+    · have hzMem : g z - a ∈ AddSubgroup.zmultiples y := by
+        simpa only [hpZ] using hretainedMem
+      rcases hterminal.2 hzMem with hsmall | hwZero
+      · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+        have he32 :=
+          hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+            g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+              e he (by omega) (by omega) heMem
+        have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+        rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+      · exact Or.inr (Or.inr ⟨hpZ, by
+          intro i hi
+          calc
+            weight ⟨leaf i, hi⟩ = w := hconstant i hi i₀ hiB
+            _ = 0 := hwZero⟩)
+
+/-- A sixth-stratum modulus-minimal one-retained cycle whose unavailable leaf
+does not return in two or three steps is forced into the pure-pair arm. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_purePair_of_sixthStratum_longCycle
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (a : ZMod (2 ^ 6 * q))
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hreturnTwo : R (R p) ≠ p) (hreturnThree : R (R (R p)) ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hretainedMem : g (leaf p) - a ∈ AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      hshort | hpure⟩ :=
+    hrows.oneRetainedCycle_shortReturn_or_purePair_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
+        hleafB hdouble hretainedMem
+  · rcases hshort with htwo | hthree
+    · exact (hreturnTwo htwo).elim
+    · exact (hreturnThree hthree).elim
+  · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hpure⟩
 
 /-- Uniform numerical consequence for every coefficient produced by the
 five-weight cycle split. -/
