@@ -1846,6 +1846,115 @@ def FixedExternalTwoRetainedAffineProfileAbove
           (lambda = 2 ∧ mu = -1 ∧
             target = 2 • g x - g o - g z)
 
+/-- Translation-normalized form of a dense affine external profile.  The
+same selected rows have one global slope and offset as functions of the
+translated private-owner coordinates. -/
+def FixedExternalTwoRetainedRelativeAffineProfileAbove
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n)
+    (K : ℕ) : Prop :=
+  ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+    ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+      ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+        K < (Finset.univ.filter (fun f : ↥F ↦
+          coeff ((f : ↥E) : ↥J)
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)).card ∧
+        ∀ f : ↥(Finset.univ.filter (fun f : ↥F ↦
+            coeff ((f : ↥E) : ↥J)
+              (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)),
+          let o := center (P.symm (((((f : ↥F) : ↥E) : ↥J)) : Fin d))
+          scalar (((f : ↥F) : ↥E) : ↥J) • y =
+            epsilon • (g o - base) + offset
+
+/-- Each of the five exact affine profiles has one fixed slope and offset
+after translating owner values by an arbitrary base.  The slope still lies
+in `{-1,1,2}`, so it is invertible in every odd-primary projection. -/
+theorem FixedExternalTwoRetainedAffineProfileAbove.relative
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (K : ℕ)
+    (hprofile : FixedExternalTwoRetainedAffineProfileAbove
+      g y B center P scalar coeff F x lambda K) :
+    FixedExternalTwoRetainedRelativeAffineProfileAbove
+      g y base B center P scalar coeff F x K := by
+  classical
+  rcases hprofile with
+    ⟨z, hzB, hzx, mu, hmuLevel, hlarge, haffine⟩
+  let S : Finset ↥F := Finset.univ.filter (fun f : ↥F ↦
+    coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
+  have hSnonempty : S.Nonempty := by
+    apply Finset.card_pos.mp
+    simpa [S] using lt_of_le_of_lt (Nat.zero_le K) hlarge
+  obtain ⟨f₀, hf₀S⟩ := hSnonempty
+  let f₀' : ↥S := ⟨f₀, hf₀S⟩
+  have hf₀ := haffine f₀'
+  rcases hf₀ with hfirst | hsecond | hthird | hfourth | hfifth
+  · refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      2 • g z - g x - base, by simpa [S] using hlarge, ?_⟩
+    intro f
+    rcases haffine f with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · rw [hfirst'.2.2]
+      simp
+      abel
+    · omega
+    · omega
+    · omega
+    · omega
+  · refine ⟨z, hzB, hzx, mu, hmuLevel, 1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      base - g x, by simpa [S] using hlarge, ?_⟩
+    intro f
+    rcases haffine f with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · rw [hsecond'.2.2]
+      simp
+    · omega
+    · omega
+    · omega
+  · refine ⟨z, hzB, hzx, mu, hmuLevel, 2,
+      by simp [twoRetainedExternalCoefficientLevels],
+      2 • base - g x - g z, by simpa [S] using hlarge, ?_⟩
+    intro f
+    rcases haffine f with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · omega
+    · rw [hthird'.2.2]
+      simp [two_zsmul, two_nsmul]
+      abel
+    · omega
+    · omega
+  · refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      g x - base, by simpa [S] using hlarge, ?_⟩
+    intro f
+    rcases haffine f with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · omega
+    · omega
+    · rw [hfourth'.2.2]
+      simp
+    · omega
+  · refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      2 • g x - g z - base, by simpa [S] using hlarge, ?_⟩
+    intro f
+    rcases haffine f with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · omega
+    · omega
+    · omega
+    · rw [hfifth'.2.2]
+      simp
+      abel
+
 /-- A fiber above the external `1/12` scale contains an affine-homogeneous
 subfamily above the `1/36` scale.  This composes the only remaining
 three-profile loss without introducing any dimension-dependent factor. -/
