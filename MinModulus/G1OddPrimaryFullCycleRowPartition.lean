@@ -331,6 +331,18 @@ def nestedSelectedOwner
     {F : Finset ↥E} (S : Finset ↥F) : ↥S → α := fun f ↦
   (((f : ↥F) : ↥E) : ↥J)
 
+/-- Nested subtype inclusion never identifies two selected row owners. -/
+theorem nestedSelectedOwner_injective
+    {α : Type*} {J : Finset α} {E : Finset ↥J}
+    {F : Finset ↥E} (S : Finset ↥F) :
+    Function.Injective (nestedSelectedOwner S) := by
+  intro f k h
+  apply Subtype.ext
+  apply Subtype.ext
+  apply Subtype.ext
+  apply Subtype.ext
+  exact h
+
 /-- Lossless first-failure classification for a successor leaving a nested
 selected row family.  The successor leaves the outer index set, lands in the
 other side of its partition, leaves the fixed-label fiber, or leaves only the
@@ -400,6 +412,175 @@ theorem nestedSelectedBoundaryRow_successor_firstFailure_of_boundary
     R J E I hpartition F S (s : ↥S)
   exact permutationFamilyBoundaryRow_owner_ne_successor
     R (nestedSelectedOwner S) s
+
+/-- Ambient successor targets associated with the four nested boundary
+transition layers. -/
+def nestedBoundaryTransitionTargets
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (J : Finset α) (E I : Finset ↥J)
+    (F : Finset ↥E) (S : Finset ↥F) : Finset α :=
+  (((Finset.univ \ J) ∪
+    I.image (fun i ↦ ((i : ↥J) : α)) ∪
+    (Finset.univ \ F).image (fun e ↦ (((e : ↥E) : ↥J) : α))) ∪
+    (Finset.univ \ S).image (fun f ↦
+      ((((f : ↥F) : ↥E) : ↥J) : α)))
+
+/-- Every nested boundary-row successor belongs to one of the four explicit
+transition target layers. -/
+theorem nestedSelectedBoundaryRow_successor_mem_transitionTargets
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (s : ↥(permutationFamilyBoundaryRows R (nestedSelectedOwner S))) :
+    R (nestedSelectedOwner S (s : ↥S)) ∈
+      nestedBoundaryTransitionTargets J E I F S := by
+  unfold nestedBoundaryTransitionTargets
+  rcases nestedSelectedBoundaryRow_successor_firstFailure_of_boundary
+      R J E I hpartition F S s with
+    houtside | ⟨i, hi⟩ | ⟨e, he, heNotF⟩ | ⟨f, hf, hfNotS⟩
+  · apply Finset.mem_union_left
+    apply Finset.mem_union_left
+    apply Finset.mem_union_left
+    exact Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, houtside⟩
+  · apply Finset.mem_union_left
+    apply Finset.mem_union_left
+    apply Finset.mem_union_right
+    exact Finset.mem_image.mpr ⟨(i : ↥J), i.property, hi⟩
+  · apply Finset.mem_union_left
+    apply Finset.mem_union_right
+    exact Finset.mem_image.mpr
+      ⟨e, Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, heNotF⟩, he⟩
+  · apply Finset.mem_union_right
+    exact Finset.mem_image.mpr
+      ⟨f, Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hfNotS⟩, hf⟩
+
+/-- The four transition target layers cost no more than the sum of their
+source-layer cardinalities. -/
+theorem card_nestedBoundaryTransitionTargets_le
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (J : Finset α) (E I : Finset ↥J)
+    (F : Finset ↥E) (S : Finset ↥F) :
+    (nestedBoundaryTransitionTargets J E I F S).card ≤
+      (Finset.univ \ J).card + I.card +
+        (Finset.univ \ F).card + (Finset.univ \ S).card := by
+  let outside : Finset α := Finset.univ \ J
+  let internal : Finset α := I.image fun i ↦ ((i : ↥J) : α)
+  let relabel : Finset α := (Finset.univ \ F).image fun e ↦
+    (((e : ↥E) : ↥J) : α)
+  let reprofile : Finset α := (Finset.univ \ S).image fun f ↦
+    ((((f : ↥F) : ↥E) : ↥J) : α)
+  change (((outside ∪ internal) ∪ relabel) ∪ reprofile).card ≤
+    outside.card + I.card + (Finset.univ \ F).card +
+      (Finset.univ \ S).card
+  have hI : internal.card ≤ I.card := by
+    exact Finset.card_image_le
+  have hF : relabel.card ≤ (Finset.univ \ F).card := by
+    exact Finset.card_image_le
+  have hS : reprofile.card ≤ (Finset.univ \ S).card := by
+    exact Finset.card_image_le
+  calc
+    (((outside ∪ internal) ∪ relabel) ∪ reprofile).card ≤
+        ((outside ∪ internal) ∪ relabel).card + reprofile.card :=
+      Finset.card_union_le _ _
+    _ ≤ ((outside ∪ internal).card + relabel.card) + reprofile.card :=
+      Nat.add_le_add_right (Finset.card_union_le _ _) _
+    _ ≤ ((outside.card + internal.card) + relabel.card) + reprofile.card :=
+      Nat.add_le_add_right
+        (Nat.add_le_add_right (Finset.card_union_le _ _) _) _
+    _ ≤ ((outside.card + I.card) + (Finset.univ \ F).card) +
+        (Finset.univ \ S).card :=
+      Nat.add_le_add (Nat.add_le_add (Nat.add_le_add_left hI _) hF) hS
+    _ = outside.card + I.card + (Finset.univ \ F).card +
+        (Finset.univ \ S).card := by omega
+
+/-- For an actual `E`/`I` partition, the four complement-layer budgets
+ telescope to the ambient complement of the final selected family.  The
+unsimplified equality remains useful because each summand has a different
+geometric charge. -/
+theorem nestedBoundaryTransitionLayerBudget_eq_card_sub
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ) (hdisjoint : Disjoint E I)
+    (F : Finset ↥E) (S : Finset ↥F) :
+    (Finset.univ \ J).card + I.card +
+        (Finset.univ \ F).card + (Finset.univ \ S).card =
+      Fintype.card α - S.card := by
+  have hEI : E.card + I.card = J.card := by
+    calc
+      E.card + I.card = (E ∪ I).card :=
+        (Finset.card_union_of_disjoint hdisjoint).symm
+      _ = (Finset.univ : Finset ↥J).card := by rw [hpartition]
+      _ = J.card := by simp
+  have hJle : J.card ≤ Fintype.card α := by
+    simpa using Finset.card_le_card (Finset.subset_univ J)
+  have hFle : F.card ≤ E.card := by
+    simpa [Fintype.card_coe] using
+      Finset.card_le_card (Finset.subset_univ F)
+  have hSle : S.card ≤ F.card := by
+    simpa [Fintype.card_coe] using
+      Finset.card_le_card (Finset.subset_univ S)
+  rw [Finset.card_sdiff_of_subset (Finset.subset_univ J),
+    Finset.card_sdiff_of_subset (Finset.subset_univ F),
+    Finset.card_sdiff_of_subset (Finset.subset_univ S)]
+  simp only [Finset.card_univ, Fintype.card_coe]
+  omega
+
+/-- Quantitative mixed-transition charge.  Injectivity of nested ownership
+and of the permutation sends boundary source rows injectively into the four
+explicit complement layers. -/
+theorem card_nestedSelectedBoundaryRows_le_transitionLayers
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (F : Finset ↥E) (S : Finset ↥F) :
+    (permutationFamilyBoundaryRows R (nestedSelectedOwner S)).card ≤
+      (Finset.univ \ J).card + I.card +
+        (Finset.univ \ F).card + (Finset.univ \ S).card := by
+  let boundary := permutationFamilyBoundaryRows R (nestedSelectedOwner S)
+  let targets := nestedBoundaryTransitionTargets J E I F S
+  let successor : ↥boundary → ↥targets := fun s ↦
+    ⟨R (nestedSelectedOwner S (s : ↥S)),
+      nestedSelectedBoundaryRow_successor_mem_transitionTargets
+        R J E I hpartition F S s⟩
+  have hsuccessor : Function.Injective successor := by
+    intro s u hsu
+    apply Subtype.ext
+    apply nestedSelectedOwner_injective S
+    apply R.injective
+    exact congrArg Subtype.val hsu
+  have hcard : Fintype.card ↥boundary ≤ Fintype.card ↥targets :=
+    Fintype.card_le_of_injective successor hsuccessor
+  have htarget := card_nestedBoundaryTransitionTargets_le J E I F S
+  have hboundaryCard : boundary.card ≤ targets.card := by
+    simpa only [Fintype.card_coe] using hcard
+  have htarget' : targets.card ≤
+      (Finset.univ \ J).card + I.card +
+        (Finset.univ \ F).card + (Finset.univ \ S).card := by
+    dsimp only [targets]
+    exact htarget
+  exact hboundaryCard.trans htarget'
+
+/-- Telescoped ambient form of the quantitative mixed-transition charge. -/
+theorem card_nestedSelectedBoundaryRows_le_card_sub
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ) (hdisjoint : Disjoint E I)
+    (F : Finset ↥E) (S : Finset ↥F) :
+    (permutationFamilyBoundaryRows R (nestedSelectedOwner S)).card ≤
+      Fintype.card α - S.card := by
+  calc
+    (permutationFamilyBoundaryRows R (nestedSelectedOwner S)).card ≤
+        (Finset.univ \ J).card + I.card +
+          (Finset.univ \ F).card + (Finset.univ \ S).card :=
+      card_nestedSelectedBoundaryRows_le_transitionLayers
+        R J E I hpartition F S
+    _ = Fintype.card α - S.card :=
+      nestedBoundaryTransitionLayerBudget_eq_card_sub
+        J E I hpartition hdisjoint F S
 
 /-- Semantic form of the nested boundary split when the last two selection
 layers are fibers of explicit label maps.  Exiting those layers is exactly a
