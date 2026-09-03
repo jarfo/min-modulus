@@ -488,6 +488,142 @@ theorem card_selectedFixedExternalGapFiber_le_light_mul_positiveRows
     g y scalar coeff L w hrows
   exact hselected.trans hrelation
 
+/-- If at most two coordinates survive deletion, every owner-heavy row in a
+fixed private external coefficient fiber is forced to be a pure edge.  Its
+two omissions are the common external coordinate and the other retained
+coordinate; in particular the fixed external coefficient is `-1` and the
+private owner coefficient is exactly `2`. -/
+theorem fixedExternalCoefficientPrivateFiber_heavyDiagonal_twoRetained_shape
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f : ↥F)
+    (hheavy : 2 ≤ coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+    (hretained : n - B.card ≤ 2) :
+    lambda = -1 ∧
+      ∃ z : Fin n,
+        z ∉ B ∧ z ≠ x ∧
+        (∀ i, coeff ((f : ↥E) : ↥J) i = -1 ↔ i = x ∨ i = z) ∧
+        coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = 2 ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x z := by
+  classical
+  rcases hfiber with
+    ⟨_hxOutside, hxNotB, hlambdaNonzero, _hownerInj, _hcoeffInj,
+      hrowData, hprivacy, _hoffdiag⟩
+  let c : Fin n → ℤ := coeff ((f : ↥E) : ↥J)
+  let o : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  let O : Finset (Fin n) := witnessOmissionCoordinates c
+  have hc : Witness g (scalar ((f : ↥E) : ↥J) • y) c := by
+    simpa [c] using hrows ((f : ↥E) : ↥J)
+  have hoB : o ∈ B := by
+    simpa [o] using (hrowData f).1
+  have hcx : c x = lambda := by
+    simpa [c] using (hrowData f).2.1
+  have hheavy' : 2 ≤ c o := by
+    simpa [c, o] using hheavy
+  have hOexact : ExactOmissions c O := by
+    simpa [O] using witnessOmissionCoordinates_exact c
+  have hOsub : O ⊆ Finset.univ \ B := by
+    intro i hiO
+    have hiMinus : c i = -1 := (hOexact i).2 hiO
+    apply Finset.mem_sdiff.mpr
+    refine ⟨Finset.mem_univ _, ?_⟩
+    intro hiB
+    by_cases hio : i = o
+    · subst i
+      omega
+    · have hiZero : c i = 0 := by
+        simpa [c, o] using hprivacy f i hiB hio
+      omega
+  have hcompCard : (Finset.univ \ B).card = n - B.card := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simp
+  have hOcardUpper : O.card ≤ 2 := by
+    have hle := Finset.card_le_card hOsub
+    rw [hcompCard] at hle
+    omega
+  have hoNotMinus : c o ≠ -1 := by omega
+  have hdiagUpper := witness_coeff_le_card_witnessOmissionCoordinates
+    g hc hoNotMinus
+  have hOcardLower : 2 ≤ O.card := by
+    have hle : (2 : ℤ) ≤ (O.card : ℤ) := hheavy'.trans hdiagUpper
+    exact_mod_cast hle
+  have hOcard : O.card = 2 := by omega
+  have hdiag : c o = 2 := by
+    rw [hOcard] at hdiagUpper
+    omega
+  obtain ⟨a, b, hab, hOeq⟩ := Finset.card_eq_two.mp hOcard
+  have homit : ∀ i, c i = -1 ↔ i = a ∨ i = b := by
+    intro i
+    simpa [hOeq] using hOexact i
+  have hlambda : lambda = -1 := by
+    by_contra hlambdaMinus
+    have hlambdaPositive : 1 ≤ lambda := by
+      have hfloor := hc.2.1 x
+      omega
+    have hxNotMinus : c x ≠ -1 := by
+      rw [hcx]
+      exact hlambdaMinus
+    have hoa : o ≠ a := by
+      intro hoa
+      exact hoNotMinus ((homit o).2 (Or.inl hoa))
+    have hob : o ≠ b := by
+      intro hob
+      exact hoNotMinus ((homit o).2 (Or.inr hob))
+    have hxa : x ≠ a := by
+      intro hxa
+      exact hxNotMinus ((homit x).2 (Or.inl hxa))
+    have hxb : x ≠ b := by
+      intro hxb
+      exact hxNotMinus ((homit x).2 (Or.inr hxb))
+    have hox : o ≠ x := by
+      intro hox
+      subst x
+      exact hxNotB hoB
+    have hsum := witness_two_coeff_sum_le_two_of_exact_pair
+      g hc a b o x hab homit hoa hob hxa hxb hox
+    rw [hdiag, hcx] at hsum
+    omega
+  have hxO : x ∈ O := (hOexact x).1 (by rw [hcx, hlambda])
+  have hOone : 1 < O.card := by omega
+  obtain ⟨u, huO, z, hzO, huz⟩ := Finset.one_lt_card.mp hOone
+  obtain ⟨z, hzO, hzx⟩ : ∃ z ∈ O, z ≠ x := by
+    by_cases hux : u = x
+    · refine ⟨z, hzO, ?_⟩
+      intro hzx
+      exact huz (hux.trans hzx.symm)
+    · exact ⟨u, huO, hux⟩
+  have hzNotB : z ∉ B := (Finset.mem_sdiff.mp (hOsub hzO)).2
+  have hOeqXZ : O = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem hOcard hxO hzO hzx.symm
+  have homitXZ : ∀ i, c i = -1 ↔ i = x ∨ i = z := by
+    intro i
+    simpa [hOeqXZ] using hOexact i
+  have hox : o ≠ x := by
+    intro hox
+    subst x
+    exact hxNotB hoB
+  have hoz : o ≠ z := by
+    intro hoz
+    subst z
+    exact hzNotB hoB
+  have hshape : c = pureEdgeCoeffs o x z :=
+    exactPair_coeff_two_eq_pureEdgeCoeffs
+      g hc x z o hzx.symm homitXZ hox hoz hdiag
+  refine ⟨hlambda, z, hzNotB, hzx, ?_, ?_, ?_⟩
+  · simpa [c] using homitXZ
+  · simpa [c, o] using hdiag
+  · simpa [c, o] using hshape
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
