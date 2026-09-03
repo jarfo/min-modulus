@@ -1423,6 +1423,75 @@ def fixedExternalFiberPositiveRowsAt
     Finset ↥F :=
   L.filter (fun f ↦ 1 ≤ coeff ((f : ↥E) : ↥J) w)
 
+/-- At a deleted coordinate, positivity can occur in at most one row of a
+private external fiber: privacy forces that coordinate to be the row's owner,
+and the owner map is injective. -/
+theorem fixedExternalFiberPositiveRowsAt_card_le_one_of_mem_deleted
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (coeff : ↥J → Fin n → ℤ) {E : Finset ↥J}
+    (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (S : Finset ↥F) (w : Fin n) (hwB : w ∈ B) :
+    (fixedExternalFiberPositiveRowsAt coeff S w).card ≤ 1 := by
+  classical
+  rcases hfiber with
+    ⟨_hxRange, _hxB, _hlambda, hownerInj, _hcoeffInj,
+      _hrowData, hprivacy, _hoffdiag⟩
+  rw [Finset.card_le_one]
+  intro f hf k hk
+  have hfPositive := (Finset.mem_filter.mp hf).2
+  have hkPositive := (Finset.mem_filter.mp hk).2
+  have hfOwner : w =
+      center (P.symm (((f : ↥E) : ↥J) : Fin d)) := by
+    by_contra hwOwner
+    have hzero := hprivacy f w hwB hwOwner
+    omega
+  have hkOwner : w =
+      center (P.symm (((k : ↥E) : ↥J) : Fin d)) := by
+    by_contra hwOwner
+    have hzero := hprivacy k w hwB hwOwner
+    omega
+  apply hownerInj
+  exact hfOwner.symm.trans hkOwner
+
+/-- With exactly two retained coordinates, a coordinate positive in two
+selected private rows must be one of the fixed external column and the unique
+companion retained column.  Thus high positive-row incidence cannot wander
+over the ambient coordinate set. -/
+theorem fixedExternalFiberPositiveRowsAt_large_eq_fixed_or_companion
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (coeff : ↥J → Fin n → ℤ) {E : Finset ↥J}
+    (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hretained : n - B.card = 2)
+    (z : Fin n) (hzB : z ∉ B) (hzx : z ≠ x)
+    (S : Finset ↥F) (w : Fin n)
+    (hpositive : 1 < (fixedExternalFiberPositiveRowsAt coeff S w).card) :
+    w = x ∨ w = z := by
+  classical
+  have hwB : w ∉ B := by
+    intro hwB
+    have hle := fixedExternalFiberPositiveRowsAt_card_le_one_of_mem_deleted
+      B center P coeff F x lambda hfiber S w hwB
+    omega
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hfiber.2.1⟩
+  have hzC : z ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzB⟩
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem hCcard hxC hzC hzx.symm
+  have hwC : w ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hwB⟩
+  rw [hCeq] at hwC
+  simpa using hwC
+
 /-- Ordered light-row pairs carrying a directed coefficient gap at `w`. -/
 def fixedExternalFiberDirectedGapPairsAt
     {d : ℕ} {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
@@ -3298,6 +3367,9 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
               (Finset.univ \ J).card + I.card + 17 * S.card ∧
             (permutationFamilyBoundaryRows R owner).card ≤ 35 * S.card ∧
             d - 1 < 36 * S.card ∧
+            (∀ w : Fin n,
+              1 < (fixedExternalFiberPositiveRowsAt coeff S w).card →
+                w = x ∨ w = z) ∧
             (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
                 (_hC : C ∈ permutationSubsetFullComponents R
                   (permutationFamilyOwnerSet owner))
@@ -3333,6 +3405,10 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
     (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
     {E : Finset ↥J} (I : Finset ↥J) (F : Finset ↥E) (x : Fin n)
+    (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hretained : n - B.card = 2)
     (hJcard : d - 1 ≤ J.card)
     (hpartition : E ∪ I = Finset.univ)
     (hlarge : d - 1 ≤ E.card + I.card)
@@ -3390,6 +3466,12 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
   have hdense : d - 1 < 36 * S.card :=
     (twoStageDominance_internalSparse_bounds
       d E I F S hlarge hFdominant hSdominant' hIsparse).2
+  have hpositive : ∀ w : Fin n,
+      1 < (fixedExternalFiberPositiveRowsAt coeff S w).card →
+        w = x ∨ w = z := by
+    intro w hw
+    exact fixedExternalFiberPositiveRowsAt_large_eq_fixed_or_companion
+      B center P coeff F x lambda hfiber hretained z hzB hzx S w hw
   have hfull : ∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
       (hC : C ∈ permutationSubsetFullComponents R
         (permutationFamilyOwnerSet owner))
@@ -3407,7 +3489,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       componentThreshold
   refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
     S, rfl, hSnonempty', hSdominant', howner, haffine', hboundary,
-    hboundaryRouted, hdense, hfull, ?_⟩
+    hboundaryRouted, hdense, hpositive, hfull, ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
@@ -4201,9 +4283,10 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
           (by simpa [F] using hfiber) (fun j ↦ (hrows j).2)
           hretained (by simpa [F] using hFnonempty)
     have hcycle := hprofile.cycleComponentFrontier
-      g y base B center P scalar coeff I F label.1 hJcard hunion hlarge
-        (by simpa [F] using hFdominant) hIsparse R hdouble
-          componentThreshold
+      g y base B center P scalar coeff I F label.1 label.2
+        (by simpa [F] using hfiber) hretained hJcard hunion hlarge
+          (by simpa [F] using hFdominant) hIsparse R hdouble
+            componentThreshold
     refine ⟨hIsparse, label, hlabel, ?_, ?_, ?_, ?_⟩
     · simpa [F] using hFnonempty
     · simpa [F] using hFdominant
