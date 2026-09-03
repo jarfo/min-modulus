@@ -37,6 +37,66 @@ theorem finiteMap_capacity_or_largeFiber
       (s := Finset.univ) (t := R) (f := f)
       (fun a _ha ↦ hf a) hlarge
 
+/-- The components of a permutation occupied by a finite indexed family.
+The family may carry additional row data; only its owner map is used. -/
+noncomputable def permutationFamilyComponents
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) :
+    Finset (Quotient (Equiv.Perm.SameCycle.setoid R)) := by
+  classical
+  exact Finset.univ.image fun i ↦
+    Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i)
+
+/-- The members of a finite family whose owners lie in one fixed permutation
+component. -/
+noncomputable def permutationFamilyComponentFiber
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R)) : Finset ι := by
+  classical
+  exact Finset.univ.filter fun i ↦
+    Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C
+
+/-- Exact occupied-component frontier for a finite family: either `K` slots
+per occupied component suffice, or one component contains more than `K`
+members. -/
+theorem permutationFamily_capacity_or_largeComponent
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) (K : ℕ) :
+    Fintype.card ι ≤ (permutationFamilyComponents R owner).card * K ∨
+      ∃ C ∈ permutationFamilyComponents R owner,
+        K < (permutationFamilyComponentFiber R owner C).card := by
+  classical
+  let component : ι → Quotient (Equiv.Perm.SameCycle.setoid R) := fun i ↦
+    Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i)
+  have hcomponent : ∀ i : ι,
+      component i ∈ permutationFamilyComponents R owner := by
+    intro i
+    exact Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩
+  rcases finiteMap_capacity_or_largeFiber
+      (permutationFamilyComponents R owner) component hcomponent K with
+    hcap | ⟨C, hC, hlarge⟩
+  · exact Or.inl hcap
+  · exact Or.inr ⟨C, hC, by
+      simpa [component, permutationFamilyComponentFiber] using hlarge⟩
+
+/-- Two members of one component fiber have owners in the same cycle. -/
+theorem permutationFamilyComponentFiber_sameCycle
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (u v : ↥(permutationFamilyComponentFiber R owner C)) :
+    R.SameCycle (owner (u : ι)) (owner (v : ι)) := by
+  classical
+  change (Equiv.Perm.SameCycle.setoid R).r
+    (owner (u : ι)) (owner (v : ι))
+  apply Quotient.exact
+  have hu : Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner (u : ι)) = C :=
+    (Finset.mem_filter.mp u.property).2
+  have hv : Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner (v : ι)) = C :=
+    (Finset.mem_filter.mp v.property).2
+  exact hu.trans hv.symm
+
 /-- Two indices in one component of a doubling permutation differ by a
 power-of-two iterate. -/
 theorem sameCycle_doubling_eq_pow_two_nsmul
@@ -73,6 +133,81 @@ theorem sameCycle_affineTargets_sub_eq_mersenne_nsmul
     simpa [add_nsmul, one_nsmul] using hcoeff
   rw [hsplit, smul_add]
   abel
+
+/-- Pairwise Mersenne comparison inside one occupied component of an affine
+family.  Unlike `sameCycle_affineTargets_sub_eq_mersenne_nsmul`, the target
+is indexed by the family rather than by every point of the permutation. -/
+theorem permutationFamilyComponent_affineTargets_sub_eq_mersenne_nsmul
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (x : α → G) (target : ι → G)
+    (hdouble : ∀ a, x (R a) = 2 • x a)
+    (epsilon : ℤ) (offset : G)
+    (haffine : ∀ i, target i = epsilon • x (owner i) + offset)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (u v : ↥(permutationFamilyComponentFiber R owner C)) :
+    ∃ k : ℕ, target (v : ι) - target (u : ι) =
+      epsilon • ((2 ^ k - 1) • x (owner (u : ι))) := by
+  have hsame := permutationFamilyComponentFiber_sameCycle R owner C u v
+  obtain ⟨k, hk⟩ :=
+    sameCycle_doubling_eq_pow_two_nsmul R x hdouble hsame
+  refine ⟨k, ?_⟩
+  rw [haffine (v : ι), haffine (u : ι), hk]
+  have hone : 1 ≤ 2 ^ k := Nat.one_le_two_pow
+  have hsplit : (2 ^ k) • x (owner (u : ι)) =
+      (2 ^ k - 1) • x (owner (u : ι)) + x (owner (u : ι)) := by
+    have hcoeff := congrArg (fun a : ℕ ↦ a • x (owner (u : ι)))
+      (Nat.sub_add_cancel hone).symm
+    simpa [add_nsmul, one_nsmul] using hcoeff
+  rw [hsplit, smul_add]
+  abel
+
+/-- Occupied-component frontier with the affine recurrence retained in the
+large-component arm.  This is the direct finite-family interface used by the
+row partition: the capacity arm counts only occupied components. -/
+theorem permutationFamily_affineComponentFrontier
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (x : α → G) (target : ι → G)
+    (hdouble : ∀ a, x (R a) = 2 • x a)
+    (epsilon : ℤ) (offset : G)
+    (haffine : ∀ i, target i = epsilon • x (owner i) + offset)
+    (K : ℕ) :
+    Fintype.card ι ≤ (permutationFamilyComponents R owner).card * K ∨
+      ∃ C ∈ permutationFamilyComponents R owner,
+        K < (permutationFamilyComponentFiber R owner C).card ∧
+        ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
+          ∃ k : ℕ, target (v : ι) - target (u : ι) =
+            epsilon • ((2 ^ k - 1) • x (owner (u : ι))) := by
+  rcases permutationFamily_capacity_or_largeComponent R owner K with
+    hcap | ⟨C, hC, hlarge⟩
+  · exact Or.inl hcap
+  · exact Or.inr ⟨C, hC, hlarge, fun u v ↦
+      permutationFamilyComponent_affineTargets_sub_eq_mersenne_nsmul
+        R owner x target hdouble epsilon offset haffine C u v⟩
+
+/-- Threshold form of the affine component frontier.  A family larger than
+`L` either forces its occupied-component budget above `L`, or has more than
+`K` members in one component with all pairwise Mersenne comparisons. -/
+theorem permutationFamily_large_affineComponentFrontier
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (x : α → G) (target : ι → G)
+    (hdouble : ∀ a, x (R a) = 2 • x a)
+    (epsilon : ℤ) (offset : G)
+    (haffine : ∀ i, target i = epsilon • x (owner i) + offset)
+    (L K : ℕ) (hlarge : L < Fintype.card ι) :
+    L < (permutationFamilyComponents R owner).card * K ∨
+      ∃ C ∈ permutationFamilyComponents R owner,
+        K < (permutationFamilyComponentFiber R owner C).card ∧
+        ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
+          ∃ k : ℕ, target (v : ι) - target (u : ι) =
+            epsilon • ((2 ^ k - 1) • x (owner (u : ι))) := by
+  rcases permutationFamily_affineComponentFrontier
+      R owner x target hdouble epsilon offset haffine K with
+    hcap | hcomponent
+  · exact Or.inl (hlarge.trans_le hcap)
+  · exact Or.inr hcomponent
 
 /-- The finite set of possible nonzero coefficient values at one coordinate
 of an `n`-coordinate witness. -/
@@ -1954,6 +2089,76 @@ theorem FixedExternalTwoRetainedAffineProfileAbove.relative
     · rw [hfifth'.2.2]
       simp
       abel
+
+/-- A translation-normalized external profile satisfies the exact occupied
+relative-cycle frontier.  In the large-component arm every two retained rows
+carry the componentwise Mersenne target comparison, while all profile data
+and the original dense selected set are preserved. -/
+theorem FixedExternalTwoRetainedRelativeAffineProfileAbove.cycleComponentFrontier
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n)
+    (profileThreshold componentThreshold : ℕ)
+    (hprofile : FixedExternalTwoRetainedRelativeAffineProfileAbove
+      g y base B center P scalar coeff F x profileThreshold)
+    (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ j,
+      g (center (P.symm (R j))) - base =
+        2 • (g (center (P.symm j)) - base)) :
+    ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+      ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+        ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+          ∃ S : Finset ↥F,
+            S = Finset.univ.filter (fun f : ↥F ↦
+              coeff ((f : ↥E) : ↥J)
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) ∧
+            profileThreshold < S.card ∧
+            let owner : ↥S → Fin d := fun f ↦
+              (((f : ↥F) : ↥E) : ↥J)
+            let displacement : Fin d → G := fun j ↦
+              g (center (P.symm j)) - base
+            let target : ↥S → G := fun f ↦
+              scalar (((f : ↥F) : ↥E) : ↥J) • y
+            (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
+              (profileThreshold <
+                  (permutationFamilyComponents R owner).card * componentThreshold ∨
+                ∃ C ∈ permutationFamilyComponents R owner,
+                  componentThreshold <
+                      (permutationFamilyComponentFiber R owner C).card ∧
+                  ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
+                    ∃ k : ℕ, target (v : ↥S) - target (u : ↥S) =
+                      epsilon • ((2 ^ k - 1) •
+                        displacement (owner (u : ↥S)))) := by
+  classical
+  rcases hprofile with
+    ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
+      hlarge, haffine⟩
+  let S : Finset ↥F := Finset.univ.filter (fun f : ↥F ↦
+    coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
+  let owner : ↥S → Fin d := fun f ↦ (((f : ↥F) : ↥E) : ↥J)
+  let displacement : Fin d → G := fun j ↦
+    g (center (P.symm j)) - base
+  let target : ↥S → G := fun f ↦
+    scalar (((f : ↥F) : ↥E) : ↥J) • y
+  have hlarge' : profileThreshold < S.card := by
+    simpa [S] using hlarge
+  have hdouble' : ∀ j, displacement (R j) = 2 • displacement j := by
+    simpa [displacement] using hdouble
+  have haffine' : ∀ f, target f =
+      epsilon • displacement (owner f) + offset := by
+    intro f
+    simpa [S, owner, displacement, target] using haffine f
+  have hfrontier := permutationFamily_large_affineComponentFrontier
+    R owner displacement target hdouble' epsilon offset haffine'
+      profileThreshold componentThreshold (by
+        simpa [Fintype.card_coe] using hlarge')
+  refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
+    S, rfl, hlarge', ?_⟩
+  refine ⟨haffine', ?_⟩
+  simpa [owner, displacement, target] using hfrontier
 
 /-- A fiber above the external `1/12` scale contains an affine-homogeneous
 subfamily above the `1/36` scale.  This composes the only remaining
