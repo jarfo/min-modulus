@@ -6362,6 +6362,34 @@ theorem fiveWeightAffine_pairTransition_mem_zmultiples
   rw [← hidentity]
   exact AddSubgroup.sub_mem _ htc (AddSubgroup.zsmul_mem _ htb 2)
 
+/-- Two successive doubling transitions across one unavailable intermediate
+row.  The endpoint target difference has multiplier four and uniform
+translate `6 • (g z - a)`. -/
+theorem fiveWeightAffine_pairFourTransition_mem_zmultiples
+    (g : Fin n → G) (y a : G) (x z b c : Fin n)
+    (wb wc : ℤ) (tb tc : G)
+    (hb : tb = (2 : ℤ) • g b + wb • (g x - g z) - (2 : ℤ) • g z)
+    (hc : tc = (2 : ℤ) • g c + wc • (g x - g z) - (2 : ℤ) • g z)
+    (htb : tb ∈ AddSubgroup.zmultiples y)
+    (htc : tc ∈ AddSubgroup.zmultiples y)
+    (hfour : g c - a = (4 : ℤ) • (g b - a)) :
+    (wc - 4 * wb) • (g x - g z) + (6 : ℤ) • (g z - a) ∈
+      AddSubgroup.zmultiples y := by
+  have hcValue : g c = (4 : ℤ) • g b - (3 : ℤ) • a := by
+    calc
+      g c = (g c - a) + a := by abel
+      _ = (4 : ℤ) • (g b - a) + a := by rw [hfour]
+      _ = (4 : ℤ) • g b - (3 : ℤ) • a := by
+        rw [zsmul_sub]
+        module
+  have hidentity :
+      tc - (4 : ℤ) • tb =
+        (wc - 4 * wb) • (g x - g z) + (6 : ℤ) • (g z - a) := by
+    rw [hb, hc, hcValue]
+    module
+  rw [← hidentity]
+  exact AddSubgroup.sub_mem _ htc (AddSubgroup.zsmul_mem _ htb 4)
+
 /-- Every deleted-to-deleted transition of the saturated cycle inherits the
 five-weight kernel invariant from the full minimal-transversal family. -/
 theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.cycleTransition_mem
@@ -6489,6 +6517,116 @@ theorem fiveWeightTransition_smallKernelMultiple_or_weight_constant
       exact sub_ne_zero.mpr hij
     · simpa only [e] using hpair i j
 
+/-- Closing a five-weight recurrence across one missing permutation vertex.
+All available edge coefficients are first compared with one internal edge.
+If they agree, the two-step transition across the missing vertex either
+produces a nonzero kernel multiple of size at most 42 or supplies the unique
+missing recurrence value, after which the finite min/max argument forces all
+available weights to be constant. -/
+theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H) :
+    (∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧ e • delta ∈ H) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  classical
+  let q₀ : ℤ := weight (R i₀) - 2 * weight i₀
+  have hi₀Bounds := twoRetainedNormalizedWeight_bounds (hweight i₀ hi₀)
+  have hRi₀Bounds :=
+    twoRetainedNormalizedWeight_bounds (hweight (R i₀) hRi₀)
+  have hq₀Bounds : -8 ≤ q₀ ∧ q₀ ≤ 10 := by
+    dsimp only [q₀]
+    omega
+  by_cases hall : ∀ i, i ≠ p → R i ≠ p →
+      weight (R i) - 2 * weight i = q₀
+  · let u : ι := R.symm p
+    let v : ι := R p
+    have hu : u ≠ p := by
+      intro hup
+      apply hp
+      have happly : R (R.symm p) = p := R.apply_symm_apply p
+      simpa only [u, hup] using happly
+    have hv : v ≠ p := by simpa only [v] using hp
+    let e : ℤ := weight v - 4 * weight u - 3 * q₀
+    have huBounds := twoRetainedNormalizedWeight_bounds (hweight u hu)
+    have hvBounds := twoRetainedNormalizedWeight_bounds (hweight v hv)
+    have heBounds : -42 ≤ e ∧ e ≤ 42 := by
+      dsimp only [e]
+      omega
+    have heMem : e • delta ∈ H := by
+      have hthree := H.zsmul_mem (htransition i₀ hi₀ hRi₀) 3
+      have hsub := H.sub_mem htwoStep hthree
+      convert hsub using 1
+      dsimp only [e, q₀, u, v]
+      module
+    by_cases heZero : e = 0
+    · have hboundary : weight v = 4 * weight u + 3 * q₀ := by
+        dsimp only [e] at heZero
+        omega
+      let extendedWeight : ι → ℤ := fun i ↦
+        if i = p then 2 * weight u + q₀ else weight i
+      have hcoefficient : ∀ i,
+          extendedWeight (R i) - 2 * extendedWeight i = q₀ := by
+        intro i
+        by_cases hip : i = p
+        · subst i
+          simp only [extendedWeight, if_pos]
+          rw [if_neg hv]
+          simpa only [v] using (show
+            weight v - 2 * (2 * weight u + q₀) = q₀ by omega)
+        · by_cases hRip : R i = p
+          · have hiu : i = u := by
+              apply R.injective
+              rw [hRip]
+              simp only [u, R.apply_symm_apply]
+            subst i
+            simp only [extendedWeight, hu, if_false, u,
+              R.apply_symm_apply, if_pos]
+            omega
+          · simp only [extendedWeight, hip, hRip, if_false]
+            exact hall i hip hRip
+      have hconstant : ∀ i j,
+          extendedWeight (R i) - 2 * extendedWeight i =
+            extendedWeight (R j) - 2 * extendedWeight j := by
+        intro i j
+        rw [hcoefficient i, hcoefficient j]
+      have hweightsConstant :=
+        weight_constant_of_transitionCoefficient_constant
+          i₀ R extendedWeight hconstant
+      right
+      intro i hi j hj
+      have hij := hweightsConstant i j
+      simpa only [extendedWeight, hi, hj, if_false] using hij
+    · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem⟩
+  · push Not at hall
+    obtain ⟨i, hi, hRi, hne⟩ := hall
+    let e : ℤ := (weight (R i) - 2 * weight i) - q₀
+    have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
+    have hRiBounds :=
+      twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
+    have heBounds : -18 ≤ e ∧ e ≤ 18 := by
+      dsimp only [e, q₀]
+      omega
+    have heMem : e • delta ∈ H := by
+      have hiMem := htransition i hi hRi
+      have hi₀Mem := htransition i₀ hi₀ hRi₀
+      have hsub := H.sub_mem hiMem hi₀Mem
+      convert hsub using 1
+      dsimp only [e, q₀]
+      module
+    exact Or.inl ⟨e, by
+      dsimp only [e]
+      exact sub_ne_zero.mpr hne, by omega, by omega, heMem⟩
+
 /-- If every leaf of a saturated doubling cycle is deleted by the minimal
 transversal, the five-weight transition invariant becomes global on that
 cycle.  Either the retained difference has a nonzero kernel multiple with
@@ -6531,6 +6669,123 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fullDeletedCycle_split
       i₀ R cycleWeight hcycleWeight (g x - g z) y hcyclePair
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
   simpa only [cycleWeight] using hsplit
+
+/-- Exact one-retained-leaf extension of `fullDeletedCycle_split`.  The two
+cycle edges incident to the retained leaf are replaced by their fourfold
+two-step relation, so the only new possible kernel coefficient is bounded by
+42 rather than 18. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d)) (a : G)
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧
+          e • (g x - g z) ∈ AddSubgroup.zmultiples y) ∨
+        ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
+          weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
+  classical
+  rcases hrows with
+    ⟨_hretained, x, z, scalar, coeff, weight,
+      hxB, hzB, hxz, hcomplement, _hcoeffInjective,
+      _hrowData, hweightData⟩
+  let target : ↥B → G := fun b ↦
+    twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+      (scalar b • y)
+  have htargetMem : ∀ b, target b ∈ AddSubgroup.zmultiples y := by
+    intro b
+    exact AddSubgroup.zsmul_mem _
+      (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _) _
+  have htransition : ∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
+      (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
+          (g x - g z) + (2 : ℤ) • (g z - a) ∈
+        AddSubgroup.zmultiples y := by
+    intro i hi hRi
+    let b : ↥B := ⟨leaf i, hi⟩
+    let c : ↥B := ⟨leaf (R i), hRi⟩
+    exact fiveWeightAffine_pairTransition_mem_zmultiples
+      g y a x z (b : Fin n) (c : Fin n) (weight b) (weight c)
+        (target b) (target c) (hweightData b).2.2 (hweightData c).2.2
+          (htargetMem b) (htargetMem c) (hdouble i)
+  let u : Fin d := R.symm p
+  let v : Fin d := R p
+  have hu : u ≠ p := by
+    intro hup
+    apply hp
+    have happly : R (R.symm p) = p := R.apply_symm_apply p
+    simpa only [u, hup] using happly
+  have hv : v ≠ p := by simpa only [v] using hp
+  have huB : leaf u ∈ B := (hleafB u).2 hu
+  have hvB : leaf v ∈ B := (hleafB v).2 hv
+  have hfour : g (leaf v) - a = (4 : ℤ) • (g (leaf u) - a) := by
+    have huStep : g (leaf p) - a =
+        (2 : ℤ) • (g (leaf u) - a) := by
+      have hstep := hdouble u
+      simpa only [u, R.apply_symm_apply] using hstep
+    calc
+      g (leaf v) - a = (2 : ℤ) • (g (leaf p) - a) := by
+        simpa only [v] using hdouble p
+      _ = (2 : ℤ) • ((2 : ℤ) • (g (leaf u) - a)) := by rw [huStep]
+      _ = (4 : ℤ) • (g (leaf u) - a) := by module
+  have htwoStep :
+      (weight ⟨leaf v, hvB⟩ - 4 * weight ⟨leaf u, huB⟩) •
+          (g x - g z) + (6 : ℤ) • (g z - a) ∈
+        AddSubgroup.zmultiples y := by
+    let bu : ↥B := ⟨leaf u, huB⟩
+    let bv : ↥B := ⟨leaf v, hvB⟩
+    exact fiveWeightAffine_pairFourTransition_mem_zmultiples
+      g y a x z (bu : Fin n) (bv : Fin n) (weight bu) (weight bv)
+        (target bu) (target bv) (hweightData bu).2.2
+          (hweightData bv).2.2 (htargetMem bu) (htargetMem bv) hfour
+  let cycleWeight : Fin d → ℤ := fun i ↦
+    if hi : leaf i ∈ B then weight ⟨leaf i, hi⟩ else 0
+  have hcycleWeight : ∀ i, i ≠ p →
+      cycleWeight i ∈ twoRetainedNormalizedWeightLevels := by
+    intro i hi
+    have hiB : leaf i ∈ B := (hleafB i).2 hi
+    simp only [cycleWeight, dif_pos hiB]
+    exact hweightData ⟨leaf i, hiB⟩ |>.1
+  have hcycleTransition : ∀ i, i ≠ p → R i ≠ p →
+      (cycleWeight (R i) - 2 * cycleWeight i) • (g x - g z) +
+          (2 : ℤ) • (g z - a) ∈ AddSubgroup.zmultiples y := by
+    intro i hi hRi
+    have hiB : leaf i ∈ B := (hleafB i).2 hi
+    have hRiB : leaf (R i) ∈ B := (hleafB (R i)).2 hRi
+    simpa only [cycleWeight, dif_pos hiB, dif_pos hRiB] using
+      htransition i hiB hRiB
+  have hcycleTwoStep :
+      (cycleWeight (R p) - 4 * cycleWeight (R.symm p)) •
+          (g x - g z) +
+        (3 : ℤ) • ((2 : ℤ) • (g z - a)) ∈
+          AddSubgroup.zmultiples y := by
+    have hvValue : cycleWeight (R p) = weight ⟨leaf v, hvB⟩ := by
+      simp only [cycleWeight, v, dif_pos hvB]
+    have huValue : cycleWeight (R.symm p) = weight ⟨leaf u, huB⟩ := by
+      simp only [cycleWeight, u, dif_pos huB]
+    rw [hvValue, huValue]
+    convert htwoStep using 1
+    module
+  have hsplit :=
+    fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
+        (g x - g z) ((2 : ℤ) • (g z - a))
+          (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+    fun b ↦ (hweightData b).1, ?_⟩
+  rcases hsplit with hsmall | hconstant
+  · exact Or.inl hsmall
+  · right
+    intro i hiB j hjB
+    have hi : i ≠ p := (hleafB i).1 hiB
+    have hj : j ≠ p := (hleafB j).1 hjB
+    have hij := hconstant i hi j hj
+    simpa only [cycleWeight, dif_pos hiB, dif_pos hjB] using hij
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
