@@ -37,6 +37,87 @@ theorem finiteMap_capacity_or_largeFiber
       (s := Finset.univ) (t := R) (f := f)
       (fun a _ha ↦ hf a) hlarge
 
+/-- A nonempty finite family mapped into a finite label set has a genuinely
+dominant fiber: the full family is at most the number of labels times that
+fiber.  Unlike a threshold pigeonhole statement, this simultaneously controls
+the complement of the selected fiber. -/
+theorem finiteMap_exists_dominantFiber
+    {α β : Type*} [Fintype α] [DecidableEq β]
+    (R : Finset β) (f : α → β)
+    (hf : ∀ a : α, f a ∈ R)
+    (hsource : (Finset.univ : Finset α).Nonempty) :
+    ∃ y ∈ R,
+      let F := Finset.univ.filter (fun a : α ↦ f a = y)
+      F.Nonempty ∧ Fintype.card α ≤ R.card * F.card := by
+  classical
+  let fiber : β → Finset α := fun y ↦
+    Finset.univ.filter (fun a : α ↦ f a = y)
+  obtain ⟨a, _ha⟩ := hsource
+  have hR : R.Nonempty := ⟨f a, hf a⟩
+  obtain ⟨y, hyR, hyMax⟩ :=
+    R.exists_max_image (fun z ↦ (fiber z).card) hR
+  have haFiber : 0 < (fiber (f a)).card := by
+    apply Finset.card_pos.mpr
+    exact ⟨a, by simp [fiber]⟩
+  have hyFiber : (fiber y).Nonempty := by
+    apply Finset.card_pos.mp
+    exact haFiber.trans_le (hyMax (f a) (hf a))
+  refine ⟨y, hyR, by simpa [fiber] using hyFiber, ?_⟩
+  rcases finiteMap_capacity_or_largeFiber R f hf (fiber y).card with
+    hcap | ⟨z, hzR, hzLarge⟩
+  · simpa [fiber] using hcap
+  · exact ((Nat.not_lt_of_ge (hyMax z hzR)) hzLarge).elim
+
+/-- Dominant selection through two finite label layers.  It returns the
+actual nested fibers together with both multiplicative dominance bounds. -/
+theorem finiteMap_exists_twoStageDominantFibers
+    {α β γ : Type*} [Fintype α] [DecidableEq β] [DecidableEq γ]
+    (R : Finset β) (Q : Finset γ)
+    (label : α → β) (profile : α → γ)
+    (hlabel : ∀ a, label a ∈ R) (hprofile : ∀ a, profile a ∈ Q)
+    (hsource : (Finset.univ : Finset α).Nonempty) :
+    ∃ y ∈ R,
+      let F := Finset.univ.filter (fun a : α ↦ label a = y)
+      F.Nonempty ∧ Fintype.card α ≤ R.card * F.card ∧
+        ∃ z ∈ Q,
+          let S := Finset.univ.filter (fun f : ↥F ↦ profile (f : α) = z)
+          S.Nonempty ∧ F.card ≤ Q.card * S.card := by
+  classical
+  obtain ⟨y, hyR, hFnonempty, hFdominant⟩ :=
+    finiteMap_exists_dominantFiber R label hlabel hsource
+  let F := Finset.univ.filter (fun a : α ↦ label a = y)
+  have hFuniv : (Finset.univ : Finset ↥F).Nonempty := by
+    obtain ⟨a, haF⟩ := hFnonempty
+    exact ⟨(⟨a, haF⟩ : ↥F), Finset.mem_univ _⟩
+  obtain ⟨z, hzQ, hSnonempty, hSdominant⟩ :=
+    finiteMap_exists_dominantFiber Q (fun f : ↥F ↦ profile (f : α))
+      (fun f ↦ hprofile (f : α)) hFuniv
+  refine ⟨y, hyR, by simpa [F] using hFnonempty,
+    by simpa [F] using hFdominant, z, hzQ, ?_, ?_⟩
+  · simpa [F] using hSnonempty
+  · change F.card ≤ Q.card *
+      (Finset.univ.filter (fun f : ↥F ↦ profile (f : α) = z)).card
+    simpa only [Fintype.card_coe] using hSdominant
+
+/-- With at most six outer labels and three inner profiles, dominance bounds
+charge both discarded inner layers by at most seventeen copies of the final
+selected family. -/
+theorem card_twoStageFiberComplements_le_seventeen_mul
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (F : Finset α) (S : Finset ↥F)
+    (hFdominant : Fintype.card α ≤ 6 * F.card)
+    (hSdominant : F.card ≤ 3 * S.card) :
+    (Finset.univ \ F).card + (Finset.univ \ S).card ≤ 17 * S.card := by
+  have hFle : F.card ≤ Fintype.card α := by
+    simpa using Finset.card_le_card (Finset.subset_univ F)
+  have hSle : S.card ≤ F.card := by
+    simpa [Fintype.card_coe] using
+      Finset.card_le_card (Finset.subset_univ S)
+  rw [Finset.card_sdiff_of_subset (Finset.subset_univ F),
+    Finset.card_sdiff_of_subset (Finset.subset_univ S)]
+  simp only [Finset.card_univ, Fintype.card_coe]
+  omega
+
 /-- The components of a permutation occupied by a finite indexed family.
 The family may carry additional row data; only its owner map is used. -/
 noncomputable def permutationFamilyComponents
@@ -562,6 +643,24 @@ theorem card_nestedSelectedBoundaryRows_le_transitionLayers
     dsimp only [targets]
     exact htarget
   exact hboundaryCard.trans htarget'
+
+/-- After dominant selection from the six external labels and three owner
+profiles, the two inner transition layers cost at most `17 * S.card`. -/
+theorem card_nestedSelectedBoundaryRows_le_outer_add_internal_add_seventeen
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (hFdominant : E.card ≤ 6 * F.card)
+    (hSdominant : F.card ≤ 3 * S.card) :
+    (permutationFamilyBoundaryRows R (nestedSelectedOwner S)).card ≤
+      (Finset.univ \ J).card + I.card + 17 * S.card := by
+  have hboundary := card_nestedSelectedBoundaryRows_le_transitionLayers
+    R J E I hpartition F S
+  have hinner := card_twoStageFiberComplements_le_seventeen_mul F S
+    (by simpa [Fintype.card_coe] using hFdominant) hSdominant
+  omega
 
 /-- Telescoped ambient form of the quantitative mixed-transition charge. -/
 theorem card_nestedSelectedBoundaryRows_le_card_sub
@@ -2553,6 +2652,43 @@ theorem fixedExternalCoefficientPrivateFiber_ownerCoefficient_mem_twoRetainedLev
       ⟨_hlambda, howner, _htarget⟩
   all_goals simp [twoRetainedExternalCoefficientLevels, howner]
 
+/-- A nonempty fixed external fiber has a dominant private-owner coefficient
+profile.  The three-level alphabet gives `F.card ≤ 3 * S.card`, not merely a
+profile above a preset threshold. -/
+theorem fixedExternalCoefficientPrivateFiber_exists_dominantOwnerProfile
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2) (hF : F.Nonempty) :
+    ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+      let S := Finset.univ.filter (fun f : ↥F ↦
+        coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
+      S.Nonempty ∧ F.card ≤ 3 * S.card := by
+  classical
+  let ownerCoeff : ↥F → ℤ := fun f ↦
+    coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d)))
+  have hownerMem : ∀ f : ↥F,
+      ownerCoeff f ∈ twoRetainedExternalCoefficientLevels := by
+    intro f
+    exact fixedExternalCoefficientPrivateFiber_ownerCoefficient_mem_twoRetainedLevels
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained
+  have hsource : (Finset.univ : Finset ↥F).Nonempty := by
+    obtain ⟨f, hfF⟩ := hF
+    exact ⟨(⟨f, hfF⟩ : ↥F), Finset.mem_univ _⟩
+  obtain ⟨mu, hmu, hSnonempty, hSdominant⟩ :=
+    finiteMap_exists_dominantFiber twoRetainedExternalCoefficientLevels
+      ownerCoeff hownerMem hsource
+  refine ⟨mu, hmu, by simpa [ownerCoeff] using hSnonempty, ?_⟩
+  rw [card_twoRetainedExternalCoefficientLevels] at hSdominant
+  simpa [ownerCoeff, Fintype.card_coe] using hSdominant
+
 /-- Adaptive extraction of a uniform affine external-row profile.  At most
 three owner coefficients occur, so either `3*K` rows pay for all profiles or
 one subfamily of more than `K` rows obeys one fixed affine law in its owner.
@@ -2683,6 +2819,28 @@ def FixedExternalTwoRetainedRelativeAffineProfileAbove
           scalar (((f : ↥F) : ↥E) : ↥J) • y =
             epsilon • (g o - base) + offset
 
+/-- Dominant translation-normalized affine profile.  It retains the same
+homogeneous owner law as `FixedExternalTwoRetainedRelativeAffineProfileAbove`
+and additionally controls the whole fixed external fiber by three copies of
+the selected owner-coefficient profile. -/
+def FixedExternalTwoRetainedDominantRelativeAffineProfile
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) : Prop :=
+  ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+    ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+      ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+        let S := Finset.univ.filter (fun f : ↥F ↦
+          coeff ((f : ↥E) : ↥J)
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
+        S.Nonempty ∧ F.card ≤ 3 * S.card ∧
+          ∀ f : ↥S,
+            let o := center (P.symm (((((f : ↥F) : ↥E) : ↥J)) : Fin d))
+            scalar (((f : ↥F) : ↥E) : ↥J) • y =
+              epsilon • (g o - base) + offset
+
 /-- Each of the five exact affine profiles has one fixed slope and offset
 after translating owner values by an arbitrary base.  The slope still lies
 in `{-1,1,2}`, so it is invertible in every odd-primary projection. -/
@@ -2768,6 +2926,146 @@ theorem FixedExternalTwoRetainedAffineProfileAbove.relative
     · rw [hfifth'.2.2]
       simp
       abel
+
+/-- Dominant owner-profile extraction preserves the exact translated affine
+law.  The selected profile pays for the whole fixed external fiber with the
+constant-three bound. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2) (hF : F.Nonempty) :
+    FixedExternalTwoRetainedDominantRelativeAffineProfile
+      g y base B center P scalar coeff F x := by
+  classical
+  unfold FixedExternalTwoRetainedDominantRelativeAffineProfile
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
+      g y B center P scalar coeff F x lambda hfiber hrows hretained with
+    ⟨z, hzB, hzx, haffine⟩
+  rcases fixedExternalCoefficientPrivateFiber_exists_dominantOwnerProfile
+      g y B center P scalar coeff F x lambda hfiber hrows hretained hF with
+    ⟨mu, hmuLevel, hSnonempty, hSdominant⟩
+  let ownerCoeff : ↥F → ℤ := fun f ↦
+    coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d)))
+  let S : Finset ↥F := Finset.univ.filter fun f ↦ ownerCoeff f = mu
+  have hSnonempty' : S.Nonempty := by
+    simpa [S, ownerCoeff] using hSnonempty
+  have hSdominant' : F.card ≤ 3 * S.card := by
+    simpa [S, ownerCoeff] using hSdominant
+  have hSnonemptyOut : S.Nonempty := hSnonempty'
+  obtain ⟨f₀, hf₀S⟩ := hSnonempty'
+  let f₀' : ↥S := ⟨f₀, hf₀S⟩
+  have hmu₀ : ownerCoeff (f₀' : ↥F) = mu :=
+    (Finset.mem_filter.mp f₀'.property).2
+  rcases haffine (f₀' : ↥F) with
+      ⟨hlambda, ⟨howner, htarget⟩ |
+        ⟨howner, htarget⟩ | ⟨howner, htarget⟩⟩ |
+      ⟨hlambda, howner, htarget⟩ |
+      ⟨hlambda, howner, htarget⟩
+  · have hmuValue : mu = -1 := by
+      simpa [ownerCoeff] using hmu₀.symm.trans howner
+    refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      2 • g z - g x - base, by simpa [S, ownerCoeff] using hSnonemptyOut,
+      by simpa [S, ownerCoeff] using hSdominant', ?_⟩
+    intro f
+    have hmu : ownerCoeff (f : ↥F) = mu :=
+      (Finset.mem_filter.mp f.property).2
+    dsimp only [ownerCoeff] at hmu
+    rcases haffine (f : ↥F) with
+        ⟨hlambda', ⟨howner', htarget'⟩ |
+          ⟨howner', htarget'⟩ | ⟨howner', htarget'⟩⟩ |
+        ⟨hlambda', howner', htarget'⟩ |
+        ⟨hlambda', howner', htarget'⟩
+    · rw [htarget']
+      simp
+      abel
+    all_goals omega
+  · have hmuValue : mu = 1 := by
+      simpa [ownerCoeff] using hmu₀.symm.trans howner
+    refine ⟨z, hzB, hzx, mu, hmuLevel, 1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      base - g x, by simpa [S, ownerCoeff] using hSnonemptyOut,
+      by simpa [S, ownerCoeff] using hSdominant', ?_⟩
+    intro f
+    have hmu : ownerCoeff (f : ↥F) = mu :=
+      (Finset.mem_filter.mp f.property).2
+    dsimp only [ownerCoeff] at hmu
+    rcases haffine (f : ↥F) with
+        ⟨hlambda', ⟨howner', htarget'⟩ |
+          ⟨howner', htarget'⟩ | ⟨howner', htarget'⟩⟩ |
+        ⟨hlambda', howner', htarget'⟩ |
+        ⟨hlambda', howner', htarget'⟩
+    · omega
+    · rw [htarget']
+      simp
+    all_goals omega
+  · have hmuValue : mu = 2 := by
+      simpa [ownerCoeff] using hmu₀.symm.trans howner
+    refine ⟨z, hzB, hzx, mu, hmuLevel, 2,
+      by simp [twoRetainedExternalCoefficientLevels],
+      2 • base - g x - g z,
+      by simpa [S, ownerCoeff] using hSnonemptyOut,
+      by simpa [S, ownerCoeff] using hSdominant', ?_⟩
+    intro f
+    have hmu : ownerCoeff (f : ↥F) = mu :=
+      (Finset.mem_filter.mp f.property).2
+    dsimp only [ownerCoeff] at hmu
+    rcases haffine (f : ↥F) with
+        ⟨hlambda', ⟨howner', htarget'⟩ |
+          ⟨howner', htarget'⟩ | ⟨howner', htarget'⟩⟩ |
+        ⟨hlambda', howner', htarget'⟩ |
+        ⟨hlambda', howner', htarget'⟩
+    · omega
+    · omega
+    · rw [htarget']
+      simp [two_zsmul, two_nsmul]
+      abel
+    all_goals omega
+  · have hmuValue : mu = -1 := by
+      simpa [ownerCoeff] using hmu₀.symm.trans howner
+    refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      g x - base, by simpa [S, ownerCoeff] using hSnonemptyOut,
+      by simpa [S, ownerCoeff] using hSdominant', ?_⟩
+    intro f
+    have hmu : ownerCoeff (f : ↥F) = mu :=
+      (Finset.mem_filter.mp f.property).2
+    dsimp only [ownerCoeff] at hmu
+    rcases haffine (f : ↥F) with
+        ⟨hlambda', ⟨howner', htarget'⟩ |
+          ⟨howner', htarget'⟩ | ⟨howner', htarget'⟩⟩ |
+        ⟨hlambda', howner', htarget'⟩ |
+        ⟨hlambda', howner', htarget'⟩
+    all_goals try omega
+    rw [htarget']
+    simp
+  · have hmuValue : mu = -1 := by
+      simpa [ownerCoeff] using hmu₀.symm.trans howner
+    refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
+      by simp [twoRetainedExternalCoefficientLevels],
+      2 • g x - g z - base,
+      by simpa [S, ownerCoeff] using hSnonemptyOut,
+      by simpa [S, ownerCoeff] using hSdominant', ?_⟩
+    intro f
+    have hmu : ownerCoeff (f : ↥F) = mu :=
+      (Finset.mem_filter.mp f.property).2
+    dsimp only [ownerCoeff] at hmu
+    rcases haffine (f : ↥F) with
+        ⟨hlambda', ⟨howner', htarget'⟩ |
+          ⟨howner', htarget'⟩ | ⟨howner', htarget'⟩⟩ |
+        ⟨hlambda', howner', htarget'⟩ |
+        ⟨hlambda', howner', htarget'⟩
+    all_goals try omega
+    rw [htarget']
+    simp
+    abel
 
 /-- The owner map of every selected fixed-external row family is injective.
 This is structural: all successive row types are subtypes of the original
@@ -3031,6 +3329,78 @@ theorem privateWitness_externalCoefficient_mem_twoRetainedLevels
   · simp [twoRetainedExternalCoefficientLevels, hlevel]
   · simp [twoRetainedExternalCoefficientLevels, hlevel]
 
+/-- Any realized exact-two external label fiber has the full private
+diagonal-plus-common-column structure.  This factors the geometric part from
+the choice of threshold or dominant label. -/
+theorem fixedExternalCoefficientPrivateFiber_of_twoRetainedExternalLabel
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (coeff : ↥J → Fin n → ℤ) (E : Finset ↥J)
+    (supportCoord : ↥E → Fin n)
+    (hprivate : ∀ (j : ↥J) i, i ∈ B →
+      i ≠ center (P.symm (j : Fin d)) → coeff j i = 0)
+    (hcenterInj : Function.Injective center)
+    (hownerMem : ∀ j : ↥J, center (P.symm (j : Fin d)) ∈ B)
+    (howner : ∀ j : ↥J,
+      coeff j (center (P.symm (j : Fin d))) ≠ 0)
+    (hcoeffInj : Function.Injective coeff)
+    (z : Fin n × ℤ)
+    (hz : z ∈ (((Finset.univ \ B) \
+          (Finset.univ.image center : Finset (Fin n))).product
+        twoRetainedExternalCoefficientLevels)) :
+    FixedExternalCoefficientPrivateFiber B center P coeff
+      (Finset.univ.filter (fun e : ↥E ↦
+        (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z))
+      z.1 z.2 := by
+  classical
+  let level : ↥E → (Fin n × ℤ) := fun e ↦
+    (supportCoord e, coeff (e : ↥J) (supportCoord e))
+  rcases Finset.mem_product.mp hz with ⟨hzR, hzLevel⟩
+  have hzParts := Finset.mem_sdiff.mp hzR
+  have hzNotB := (Finset.mem_sdiff.mp hzParts.1).2
+  have hzOutside := hzParts.2
+  have hzNonzero : z.2 ≠ 0 := by
+    intro hzZero
+    rw [hzZero] at hzLevel
+    simp [twoRetainedExternalCoefficientLevels] at hzLevel
+  have hfiberLevel : ∀ f : ↥(Finset.univ.filter
+      (fun e : ↥E ↦ level e = z)), level (f : ↥E) = z := by
+    intro f
+    exact (Finset.mem_filter.mp f.property).2
+  refine ⟨hzOutside, hzNotB, hzNonzero, ?_, ?_, ?_, ?_, ?_⟩
+  · intro f k hownerEq
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Subtype.ext
+    exact P.symm.injective (hcenterInj hownerEq)
+  · intro f k hcoeffEq
+    apply Subtype.ext
+    apply Subtype.ext
+    exact hcoeffInj hcoeffEq
+  · intro f
+    have hf := hfiberLevel f
+    have hcoord : supportCoord (f : ↥E) = z.1 :=
+      congrArg Prod.fst hf
+    have hvalue :
+        coeff ((f : ↥E) : ↥J) (supportCoord (f : ↥E)) = z.2 :=
+      congrArg Prod.snd hf
+    refine ⟨hownerMem ((f : ↥E) : ↥J), ?_,
+      howner ((f : ↥E) : ↥J)⟩
+    rw [← hcoord]
+    exact hvalue
+  · intro f i hiB hiOwner
+    exact hprivate ((f : ↥E) : ↥J) i hiB hiOwner
+  · intro f k hfk
+    apply hprivate ((f : ↥E) : ↥J)
+      (center (P.symm (((k : ↥E) : ↥J) : Fin d)))
+      (hownerMem ((k : ↥E) : ↥J))
+    intro hownerEq
+    apply hfk
+    apply Subtype.ext
+    apply Subtype.ext
+    apply Subtype.ext
+    exact P.symm.injective (hcenterInj hownerEq.symm)
+
 /-- Constant-capacity adaptive external-row frontier in the exact
 two-retained regime.  There are at most two eligible retained coordinates
 and exactly three possible nonzero coefficient levels, so either `6*K` rows
@@ -3158,6 +3528,95 @@ theorem twoRetainedExternalRows_capacity_or_largePrivateFiber
       apply Subtype.ext
       apply Subtype.ext
       exact P.symm.injective (hcenterInj hownerEq.symm)
+
+/-- Dominant-label version of the exact-two external-row frontier.  For a
+nonempty external family it selects one realized coordinate/coefficient label
+whose fiber pays for all external rows with the sharp constant-six budget,
+while retaining the full private-fiber geometry. -/
+theorem twoRetainedExternalRows_exists_dominantPrivateFiber
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (scalar : ↥J → ℤ)
+    (coeff : ↥J → Fin n → ℤ) (E : Finset ↥J)
+    (supportCoord : ↥E → Fin n)
+    (hsupport : ∀ e : ↥E,
+      supportCoord e ∉ Finset.univ.image center ∧
+      supportCoord e ∉ B ∧
+      coeff (e : ↥J) (supportCoord e) ≠ 0)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hprivate : ∀ (j : ↥J) i, i ∈ B →
+      i ≠ center (P.symm (j : Fin d)) → coeff j i = 0)
+    (hcenterInj : Function.Injective center)
+    (hownerMem : ∀ j : ↥J, center (P.symm (j : Fin d)) ∈ B)
+    (howner : ∀ j : ↥J,
+      coeff j (center (P.symm (j : Fin d))) ≠ 0)
+    (hcoeffInj : Function.Injective coeff)
+    (hretained : n - B.card = 2) (hE : E.Nonempty) :
+    ∃ z ∈ (((Finset.univ \ B) \
+          (Finset.univ.image center : Finset (Fin n))).product
+        twoRetainedExternalCoefficientLevels),
+      let F := Finset.univ.filter (fun e : ↥E ↦
+        (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z)
+      F.Nonempty ∧ E.card ≤ 6 * F.card ∧
+        FixedExternalCoefficientPrivateFiber B center P coeff F z.1 z.2 := by
+  classical
+  let R : Finset (Fin n) :=
+    (Finset.univ \ B) \ Finset.univ.image center
+  let level : ↥E → (Fin n × ℤ) := fun e ↦
+    (supportCoord e, coeff (e : ↥J) (supportCoord e))
+  have hsupportMem : ∀ e : ↥E, supportCoord e ∈ R := by
+    intro e
+    exact Finset.mem_sdiff.mpr
+      ⟨Finset.mem_sdiff.mpr
+        ⟨Finset.mem_univ _, (hsupport e).2.1⟩,
+        (hsupport e).1⟩
+  have hlevelMem : ∀ e : ↥E,
+      level e ∈ R.product twoRetainedExternalCoefficientLevels := by
+    intro e
+    exact Finset.mem_product.mpr
+      ⟨hsupportMem e,
+        privateWitness_externalCoefficient_mem_twoRetainedLevels
+          g (hrows (e : ↥J)) B
+          (center (P.symm ((e : ↥J) : Fin d))) (supportCoord e)
+          (hownerMem (e : ↥J)) (howner (e : ↥J))
+          (hprivate (e : ↥J)) (hsupport e).2.1
+          (hsupport e).2.2 hretained⟩
+  have hsource : (Finset.univ : Finset ↥E).Nonempty := by
+    obtain ⟨e, heE⟩ := hE
+    exact ⟨(⟨e, heE⟩ : ↥E), Finset.mem_univ _⟩
+  obtain ⟨z, hz, hFnonempty, hFdominant⟩ :=
+    finiteMap_exists_dominantFiber
+      (R.product twoRetainedExternalCoefficientLevels)
+      level hlevelMem hsource
+  have hRsub : R ⊆ Finset.univ \ B := by
+    intro i hi
+    exact (Finset.mem_sdiff.mp hi).1
+  have hRcard : R.card ≤ 2 := by
+    have hle := Finset.card_le_card hRsub
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)] at hle
+    simpa [hretained] using hle
+  have hproductCard :
+      (R.product twoRetainedExternalCoefficientLevels).card ≤ 6 := by
+    calc
+      (R.product twoRetainedExternalCoefficientLevels).card =
+          R.card * twoRetainedExternalCoefficientLevels.card :=
+        Finset.card_product R twoRetainedExternalCoefficientLevels
+      _ = R.card * 3 := by rw [card_twoRetainedExternalCoefficientLevels]
+      _ ≤ 6 := by omega
+  refine ⟨z, by simpa [R] using hz, by simpa [level] using hFnonempty,
+    ?_, ?_⟩
+  · have hdominant : E.card ≤
+        (R.product twoRetainedExternalCoefficientLevels).card *
+          (Finset.univ.filter (fun e : ↥E ↦ level e = z)).card := by
+      simpa [Fintype.card_coe] using hFdominant
+    have hdominant' := hdominant.trans
+      (Nat.mul_le_mul_right
+        (Finset.univ.filter (fun e : ↥E ↦ level e = z)).card
+        hproductCard)
+    simpa [level] using hdominant'
+  · exact fixedExternalCoefficientPrivateFiber_of_twoRetainedExternalLabel
+      B center P coeff E supportCoord hprivate hcenterInj hownerMem howner
+        hcoeffInj z (by simpa [R] using hz)
 
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
