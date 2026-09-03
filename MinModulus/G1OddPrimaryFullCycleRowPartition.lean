@@ -7170,6 +7170,82 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_eightyFour_mul
       Nat.mul_le_mul_right _ (Nat.mul_le_mul_left 2 habs)
     _ = 84 * addOrderOf y := by omega
 
+/-- Exact coefficient-sensitive exclusion for the bounded-multiple arm.  A
+critical cyclic stratum cannot contain such a relation once the ambient
+two-primary factor satisfies `4*|e| <= 2^t`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.not_boundedMultiple_of_four_mul_natAbs_le
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ t * q < stratumBound n t)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y)
+    (hthreshold : 4 * e.natAbs ≤ 2 ^ t) : False := by
+  have hqpos : 0 < q := by
+    apply Nat.pos_of_ne_zero
+    intro hq
+    apply NeZero.ne (2 ^ t * q)
+    simp only [hq, mul_zero]
+  have hry : addOrderOf y ≤ q := Nat.le_of_dvd hqpos hyq
+  have hcard := hrows.card_le_two_mul_natAbs_mul
+    g hg hunique hne y B e he
+      ⟨x, z, hxB, hzB, hxz, hcomplement, heMem⟩
+  have hbound : 2 ^ (n - 1) ≤ 2 * e.natAbs * q :=
+    hcard.trans (Nat.mul_le_mul_left (2 * e.natAbs) hry)
+  have hambient : 2 ^ t * q < 2 ^ n :=
+    hcritical.trans_le (Nat.sub_le _ _)
+  have hnpos : 0 < n := by
+    by_contra hn
+    have hnzero : n = 0 := by omega
+    subst n
+    simp only [pow_zero] at hambient
+    have hNpos : 0 < 2 ^ t * q := Nat.mul_pos (pow_pos (by omega) _) hqpos
+    omega
+  have hpowN : 2 ^ n = 2 * 2 ^ (n - 1) := by
+    have hnDecomp : n = (n - 1) + 1 := by omega
+    calc
+      2 ^ n = 2 ^ ((n - 1) + 1) := by rw [← hnDecomp]
+      _ = 2 * 2 ^ (n - 1) := by rw [pow_succ]; omega
+  have hthresholdQ : 4 * e.natAbs * q ≤ 2 ^ t * q :=
+    Nat.mul_le_mul_right q hthreshold
+  have hdoubleBound : 2 * 2 ^ (n - 1) ≤ 4 * e.natAbs * q := by
+    calc
+      2 * 2 ^ (n - 1) ≤ 2 * (2 * e.natAbs * q) :=
+        Nat.mul_le_mul_left 2 hbound
+      _ = 4 * e.natAbs * q := by ring
+  rw [hpowN] at hambient
+  omega
+
+/-- Contrapositive numerical form: every surviving bounded relation in a
+critical stratum has coefficient larger than one quarter of `2^t`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.two_pow_lt_four_mul_natAbs_of_boundedMultiple
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ t * q < stratumBound n t)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    2 ^ t < 4 * e.natAbs := by
+  by_contra hnot
+  have hthreshold : 4 * e.natAbs ≤ 2 ^ t := by omega
+  exact hrows.not_boundedMultiple_of_four_mul_natAbs_le
+    g hg hcritical hunique hne y hyq B x z hxB hzB hxz hcomplement
+      e he heMem hthreshold
+
 /-- The bounded-multiple arm is impossible in every critical cyclic stratum
 with `t>=8`.  The factor-84 confinement contradicts the factor `2^t` already
 present in the ambient modulus. -/
