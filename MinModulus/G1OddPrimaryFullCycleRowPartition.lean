@@ -1111,6 +1111,172 @@ theorem fixedExternalCoefficientPrivateFiber_card_le_two_mul_order_sub_one_of_tw
       simpa [S, Fintype.card_coe] using hlarge
     omega
 
+/-- Complete coefficient classification of an arbitrary private external row
+when exactly two coordinates survive deletion.  Besides its private owner,
+the row is supported only on the common external coordinate `x` and the
+other retained coordinate `z`.  The common coefficient has only the three
+possible values `-1`, `1`, and `2`, and the remaining two coefficients are
+then one of the displayed finite profiles. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_rowProfile
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f : ↥F) (hretained : n - B.card = 2) :
+    ∃ z : Fin n,
+      z ∉ B ∧ z ≠ x ∧
+      (∀ i : Fin n,
+        i ≠ center (P.symm (((f : ↥E) : ↥J) : Fin d)) →
+        i ≠ x → i ≠ z → coeff ((f : ↥E) : ↥J) i = 0) ∧
+      ((lambda = -1 ∧
+          ((coeff ((f : ↥E) : ↥J)
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = -1 ∧
+              coeff ((f : ↥E) : ↥J) z = 2) ∨
+            (coeff ((f : ↥E) : ↥J)
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = 1 ∧
+              coeff ((f : ↥E) : ↥J) z = 0) ∨
+            (coeff ((f : ↥E) : ↥J)
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = 2 ∧
+              coeff ((f : ↥E) : ↥J) z = -1))) ∨
+        (lambda = 1 ∧
+          coeff ((f : ↥E) : ↥J)
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = -1 ∧
+          coeff ((f : ↥E) : ↥J) z = 0) ∨
+        (lambda = 2 ∧
+          coeff ((f : ↥E) : ↥J)
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = -1 ∧
+          coeff ((f : ↥E) : ↥J) z = -1)) := by
+  classical
+  rcases hfiber with
+    ⟨_hxOutside, hxNotB, hlambdaNonzero, _hownerInj, _hcoeffInj,
+      hrowData, hprivacy, _hoffdiag⟩
+  let o : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  let c : Fin n → ℤ := coeff ((f : ↥E) : ↥J)
+  have hc : Witness g (scalar ((f : ↥E) : ↥J) • y) c := by
+    simpa [c] using hrows ((f : ↥E) : ↥J)
+  have hoB : o ∈ B := by
+    simpa [o] using (hrowData f).1
+  have hcx : c x = lambda := by
+    simpa [c] using (hrowData f).2.1
+  have hoNonzero : c o ≠ 0 := by
+    simpa [c, o] using (hrowData f).2.2
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxNotB⟩
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hCone : 1 < (Finset.univ \ B).card := by omega
+  obtain ⟨u, huC, z, hzC, huz⟩ := Finset.one_lt_card.mp hCone
+  obtain ⟨z, hzC, hzNeX⟩ :
+      ∃ z ∈ Finset.univ \ B, z ≠ x := by
+    by_cases hux : u = x
+    · refine ⟨z, hzC, ?_⟩
+      intro hzx
+      exact huz (hux.trans hzx.symm)
+    · exact ⟨u, huC, hux⟩
+  have hzNotB : z ∉ B := (Finset.mem_sdiff.mp hzC).2
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem
+      hCcard hxC hzC hzNeX.symm
+  have hox : o ≠ x := by
+    intro hox
+    subst x
+    exact hxNotB hoB
+  have hoz : o ≠ z := by
+    intro hoz
+    subst z
+    exact hzNotB hoB
+  have hzeroOutside : ∀ i : Fin n,
+      i ≠ o → i ≠ x → i ≠ z → c i = 0 := by
+    intro i hio hix hiz
+    have hiB : i ∈ B := by
+      by_contra hiNotB
+      have hiC : i ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiNotB⟩
+      have hiPair : i = x ∨ i = z := by
+        have : i ∈ ({x, z} : Finset (Fin n)) := by
+          rw [← hCeq]
+          exact hiC
+        simpa using this
+      exact hiPair.elim hix hiz
+    simpa [c, o] using hprivacy f i hiB hio
+  have hrestrict :
+      ∑ i ∈ ({o, x, z} : Finset (Fin n)), c i = ∑ i, c i := by
+    exact Finset.sum_subset (by simp) (by
+      intro i _ hi
+      apply hzeroOutside i
+      · intro hio
+        exact hi (by simp [hio])
+      · intro hix
+        exact hi (by simp [hix])
+      · intro hiz
+        exact hi (by simp [hiz]))
+  have hoNotPair : o ∉ ({x, z} : Finset (Fin n)) := by
+    simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+    exact ⟨hox, hoz⟩
+  have hxNotZ : x ∉ ({z} : Finset (Fin n)) := by
+    simpa only [Finset.mem_singleton] using hzNeX.symm
+  have hsum : c o + c x + c z = 0 := by
+    calc
+      c o + c x + c z =
+          ∑ i ∈ ({o, x, z} : Finset (Fin n)), c i := by
+        rw [Finset.sum_insert hoNotPair, Finset.sum_insert hxNotZ]
+        simp [add_assoc]
+      _ = ∑ i, c i := hrestrict
+      _ = 0 := hc.2.2.1
+  have hbalance : c o + lambda + c z = 0 := by
+    rw [← hcx]
+    exact hsum
+  have hlambdaFloor := hc.2.1 x
+  have hoFloor := hc.2.1 o
+  have hzFloor := hc.2.1 z
+  have hprofiles :
+      (lambda = -1 ∧
+          ((c o = -1 ∧ c z = 2) ∨
+            (c o = 1 ∧ c z = 0) ∨
+            (c o = 2 ∧ c z = -1))) ∨
+        (lambda = 1 ∧ c o = -1 ∧ c z = 0) ∨
+        (lambda = 2 ∧ c o = -1 ∧ c z = -1) := by
+    omega
+  refine ⟨z, hzNotB, hzNeX, ?_, ?_⟩
+  · intro i hio hix hiz
+    simpa [c, o] using hzeroOutside i hio hix hiz
+  · simpa [c, o] using hprofiles
+
+/-- The constant-size alphabet for a common retained external coefficient
+when exactly two coordinates survive deletion. -/
+def twoRetainedExternalCoefficientLevels : Finset ℤ := {-1, 1, 2}
+
+theorem card_twoRetainedExternalCoefficientLevels :
+    twoRetainedExternalCoefficientLevels.card = 3 := by
+  norm_num [twoRetainedExternalCoefficientLevels]
+
+/-- Every nonempty fixed external coefficient fiber in the exact
+two-retained regime uses one of the three profile-compatible levels. -/
+theorem fixedExternalCoefficientPrivateFiber_lambda_mem_twoRetainedLevels
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f : ↥F) (hretained : n - B.card = 2) :
+    lambda ∈ twoRetainedExternalCoefficientLevels := by
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_rowProfile
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained with
+    ⟨_z, _hzB, _hzx, _hzero, hprofiles⟩
+  rcases hprofiles with ⟨hlambda, _hprofile⟩ |
+      ⟨hlambda, _howner, _hz⟩ | ⟨hlambda, _howner, _hz⟩
+  · simp [twoRetainedExternalCoefficientLevels, hlambda]
+  · simp [twoRetainedExternalCoefficientLevels, hlambda]
+  · simp [twoRetainedExternalCoefficientLevels, hlambda]
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
