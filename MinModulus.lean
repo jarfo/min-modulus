@@ -270,6 +270,7 @@ import MinModulus.G1OddPrimaryCriticalCharge
 import MinModulus.G1OddPrimaryDyadicCharge
 import MinModulus.G1OddPrimarySingletonComplement
 import MinModulus.G1OddPrimaryCycleLayer
+import MinModulus.G1OddPrimaryCycleLayerCharge
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
