@@ -272,6 +272,7 @@ import MinModulus.G1OddPrimarySingletonComplement
 import MinModulus.G1OddPrimaryCycleLayer
 import MinModulus.G1OddPrimaryCycleLayerCharge
 import MinModulus.G1OddPrimaryFullCycleSubgroup
+import MinModulus.G1OddPrimaryFullCycleCharge
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
