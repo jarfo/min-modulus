@@ -3220,6 +3220,144 @@ theorem FixedExternalTwoRetainedRelativeAffineProfileAbove.cycleComponentFrontie
   · right
     simpa [owner, displacement, target] using hcomponent
 
+/-- Dominant-profile version of the relative cycle frontier.  Besides the
+exact affine and Mersenne laws, it retains the two global dominance bounds as
+one quantitative boundary charge and records the exact successor recurrence
+on every full selected component. -/
+def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P R : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (I : Finset ↥J) (F : Finset ↥E) (x : Fin n)
+    (componentThreshold : ℕ) : Prop :=
+  ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+    ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+      ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+        ∃ S : Finset ↥F,
+          S = Finset.univ.filter (fun f : ↥F ↦
+            coeff ((f : ↥E) : ↥J)
+              (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) ∧
+          S.Nonempty ∧ F.card ≤ 3 * S.card ∧
+          let owner : ↥S → Fin d := fun f ↦
+            (((f : ↥F) : ↥E) : ↥J)
+          let displacement : Fin d → G := fun j ↦
+            g (center (P.symm j)) - base
+          let target : ↥S → G := fun f ↦
+            scalar (((f : ↥F) : ↥E) : ↥J) • y
+          Function.Injective owner ∧
+            (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
+            (permutationFamilyBoundaryRows R owner).card ≤
+              (Finset.univ \ J).card + I.card + 17 * S.card ∧
+            (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+                (_hC : C ∈ permutationSubsetFullComponents R
+                  (permutationFamilyOwnerSet owner))
+                (i : ↥S)
+                (_hiC : Quotient.mk (Equiv.Perm.SameCycle.setoid R)
+                  (owner i) = C),
+              ∃! j : ↥S, owner j = R (owner i) ∧
+                Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner j) = C ∧
+                target j - offset = 2 • (target i - offset)) ∧
+            ((S.card ≤
+                  (permutationFamilyComponents R owner).card *
+                    componentThreshold ∧
+                S.card ≤
+                  ((permutationSubsetFullComponents R
+                      (permutationFamilyOwnerSet owner)).card +
+                    (permutationSubsetBoundary R
+                      (permutationFamilyOwnerSet owner)).card) *
+                    componentThreshold) ∨
+              ∃ C ∈ permutationFamilyComponents R owner,
+                componentThreshold <
+                    (permutationFamilyComponentFiber R owner C).card ∧
+                ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
+                  ∃ k : ℕ, target (v : ↥S) - target (u : ↥S) =
+                    epsilon • ((2 ^ k - 1) •
+                      displacement (owner (u : ↥S))))
+
+/-- A dominant translated affine profile, together with the global outer
+label dominance, satisfies the quantitative boundary/full-component cycle
+frontier for the very same selected set. -/
+theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFrontier
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (I : Finset ↥J) (F : Finset ↥E) (x : Fin n)
+    (hpartition : E ∪ I = Finset.univ)
+    (hFdominant : E.card ≤ 6 * F.card)
+    (hprofile : FixedExternalTwoRetainedDominantRelativeAffineProfile
+      g y base B center P scalar coeff F x)
+    (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ j,
+      g (center (P.symm (R j))) - base =
+        2 • (g (center (P.symm j)) - base))
+    (componentThreshold : ℕ) :
+    FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
+      g y base B center P R scalar coeff I F x componentThreshold := by
+  classical
+  unfold FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
+  rcases hprofile with
+    ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
+      hSnonempty, hSdominant, haffine⟩
+  let S : Finset ↥F := Finset.univ.filter (fun f : ↥F ↦
+    coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
+  let owner : ↥S → Fin d := fun f ↦ (((f : ↥F) : ↥E) : ↥J)
+  let displacement : Fin d → G := fun j ↦
+    g (center (P.symm j)) - base
+  let target : ↥S → G := fun f ↦
+    scalar (((f : ↥F) : ↥E) : ↥J) • y
+  have hSnonempty' : S.Nonempty := by
+    simpa [S] using hSnonempty
+  have hSdominant' : F.card ≤ 3 * S.card := by
+    simpa [S] using hSdominant
+  have howner : Function.Injective owner := by
+    simpa [owner] using fixedExternalSelectedOwner_injective S
+  have hdouble' : ∀ j, displacement (R j) = 2 • displacement j := by
+    simpa [displacement] using hdouble
+  have haffine' : ∀ f, target f =
+      epsilon • displacement (owner f) + offset := by
+    intro f
+    simpa [S, owner, displacement, target] using haffine f
+  have hboundary : (permutationFamilyBoundaryRows R owner).card ≤
+      (Finset.univ \ J).card + I.card + 17 * S.card := by
+    have hownerEq : owner = nestedSelectedOwner S := by
+      rfl
+    rw [hownerEq]
+    exact card_nestedSelectedBoundaryRows_le_outer_add_internal_add_seventeen
+      R J E I hpartition F S hFdominant hSdominant'
+  have hfull : ∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+      (hC : C ∈ permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner))
+      (i : ↥S)
+      (hiC : Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C),
+      ∃! j : ↥S, owner j = R (owner i) ∧
+        Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner j) = C ∧
+        target j - offset = 2 • (target i - offset) := by
+    intro C hC i hiC
+    exact permutationFamilyFullComponent_uniqueSuccessorRow_affine
+      R owner displacement target howner hdouble' epsilon offset haffine'
+        C hC i hiC
+  have hfrontier := permutationFamily_affineComponentFrontier
+    R owner displacement target hdouble' epsilon offset haffine'
+      componentThreshold
+  refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
+    S, rfl, hSnonempty', hSdominant', howner, haffine', hboundary,
+    hfull, ?_⟩
+  rcases hfrontier with hcomponents | hcomponent
+  · left
+    have hcomponents' : S.card ≤
+        (permutationFamilyComponents R owner).card * componentThreshold := by
+      simpa [Fintype.card_coe] using hcomponents
+    refine ⟨hcomponents', ?_⟩
+    have hcard := card_permutationFamilyComponents_le_full_add_boundary
+      R owner
+    exact hcomponents'.trans
+      (Nat.mul_le_mul_right componentThreshold hcard)
+  · right
+    exact hcomponent
+
 /-- A fiber above the external `1/12` scale contains an affine-homogeneous
 subfamily above the `1/36` scale.  This composes the only remaining
 three-profile loss without introducing any dimension-dependent factor. -/
@@ -3915,6 +4053,97 @@ theorem twoRetainedExternalInternalRowFrontier_largeInternal_or_cycleComponentEx
           (supportCoord e, coeff (e : ↥J) (supportCoord e)) = label))
         label.1 ((d - 1) / 36) componentThreshold R hdouble
 
+/-- Dominant exact-two row dichotomy.  The external branch selects its label
+and affine profile once across the entire external family, then carries the
+resulting quantitative boundary/full-component frontier on that same set. -/
+def TwoRetainedExternalInternalDominantCycleComponentFrontier
+    (g : Fin n → G) (y base : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d)) (R : Equiv.Perm (Fin d))
+    (componentThreshold : ℕ) : Prop :=
+  ∃ scalar : ↥J → ℤ, ∃ coeff : ↥J → Fin n → ℤ,
+    ∃ E I : Finset ↥J, ∃ supportCoord : ↥E → Fin n,
+      E ∪ I = Finset.univ ∧ Disjoint E I ∧
+      E.card + I.card = J.card ∧ d - 1 ≤ E.card + I.card ∧
+      (∀ j, scalar j • y ≠ 0 ∧
+        Witness g (scalar j • y) (coeff j)) ∧
+      (∀ e : ↥E,
+        supportCoord e ∉ Finset.univ.image center ∧
+        supportCoord e ∉ B ∧
+        coeff (e : ↥J) (supportCoord e) ≠ 0) ∧
+      ((d - 1 ≤ 2 * I.card ∧
+          (I = ∅ ∨
+            ∃ pivot : Fin d, center pivot ∉ B ∧
+              ∀ j : ↥I,
+                ExactSignedPairWitness g (scalar (j : ↥J) • y)
+                  (coeff (j : ↥J))
+                  (center (P.symm (j : Fin d))) (center pivot))) ∨
+        ∃ label ∈ (((Finset.univ \ B) \
+              (Finset.univ.image center : Finset (Fin n))).product
+            twoRetainedExternalCoefficientLevels),
+          let F : Finset ↥E := Finset.univ.filter (fun e : ↥E ↦
+            (supportCoord e,
+              coeff (e : ↥J) (supportCoord e)) = label)
+          F.Nonempty ∧ E.card ≤ 6 * F.card ∧
+            FixedExternalCoefficientPrivateFiber
+              B center P coeff F label.1 label.2 ∧
+            FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
+              g y base B center P R scalar coeff I F label.1
+                componentThreshold)
+
+/-- Construct the dominant exact-two cycle frontier directly from the
+retained row partition.  The internal alternative is unchanged; otherwise
+the external set is nonempty and the global maximum fibers supply both
+constant dominance estimates before cycle decomposition. -/
+theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleComponentExternal
+    (g : Fin n → G) (y base : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d))
+    (hpart : RetainedExternalInternalRowPartition g y B center P J)
+    (hretained : n - B.card = 2)
+    (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ j,
+      g (center (P.symm (R j))) - base =
+        2 • (g (center (P.symm j)) - base))
+    (componentThreshold : ℕ) :
+    TwoRetainedExternalInternalDominantCycleComponentFrontier
+      g y base B center P J R componentThreshold := by
+  classical
+  unfold TwoRetainedExternalInternalDominantCycleComponentFrontier
+  rcases hpart with
+    ⟨scalar, coeff, E, I, _hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner, hunion, hdisjoint, hcard, hlarge,
+      _hEiff, supportCoord, hsupport, _hcoordFrontier,
+      _hgenericLevelFrontier, hinternal⟩
+  refine ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+    hlarge, hrows, hsupport, ?_⟩
+  by_cases hIlarge : d - 1 ≤ 2 * I.card
+  · exact Or.inl ⟨hIlarge, hinternal⟩
+  · right
+    have hE : E.Nonempty := by
+      apply Finset.card_pos.mp
+      omega
+    obtain ⟨label, hlabel, hFnonempty, hFdominant, hfiber⟩ :=
+      twoRetainedExternalRows_exists_dominantPrivateFiber
+        g y B center P scalar coeff E supportCoord hsupport
+          (fun j ↦ (hrows j).2) hprivate hcenterInj hownerMem howner
+          hcoeffInj hretained hE
+    let F : Finset ↥E := Finset.univ.filter (fun e : ↥E ↦
+      (supportCoord e, coeff (e : ↥J) (supportCoord e)) = label)
+    have hprofile :=
+      fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
+        g y base B center P scalar coeff F label.1 label.2
+          (by simpa [F] using hfiber) (fun j ↦ (hrows j).2)
+          hretained (by simpa [F] using hFnonempty)
+    have hcycle := hprofile.cycleComponentFrontier
+      g y base B center P scalar coeff I F label.1 hunion
+        (by simpa [F] using hFdominant) R hdouble componentThreshold
+    refine ⟨label, hlabel, ?_, ?_, ?_, ?_⟩
+    · simpa [F] using hFnonempty
+    · simpa [F] using hFdominant
+    · simpa [F] using hfiber
+    · simpa [F] using hcycle
+
 /-- Extract the explicit finite partition and one retained support coordinate
 per external row from the retained mixed normal form. -/
 theorem retainedExternalInternalRowPartition_of_mixed
@@ -4374,7 +4603,7 @@ def PureEdgeStarLeafOddPrimaryFullCycleComponentRowOutcome
             (∀ j : Fin d,
               disp ((P.symm.trans S) j) = 2 • disp j) ∧
             (2 < m + 1 - B.card ∨
-              TwoRetainedExternalInternalCycleComponentFrontier
+              TwoRetainedExternalInternalDominantCycleComponentFrontier
                 g y (h + g r) B center P J (P.symm.trans S)
                   componentThreshold))
 
@@ -4422,12 +4651,9 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
             g (center (P.symm ((P.symm.trans S) j))) - (h + g r) =
               2 • (g (center (P.symm j)) - (h + g r)) := by
           simpa [disp, leaf, hcenter] using hdouble
-        have htwoFrontier :=
-          twoRetainedExternalInternalRowFrontier_of_rowPartition
-            g y B center P J hrowPartition hexact
         exact
-          twoRetainedExternalInternalRowFrontier_largeInternal_or_cycleComponentExternal
-            g y (h + g r) B center P J htwoFrontier hexact
+          retainedExternalInternalRowPartition_largeInternal_or_dominantCycleComponentExternal
+            g y (h + g r) B center P J hrowPartition hexact
               (P.symm.trans S) hdoubleCenter componentThreshold
       · left
         omega
