@@ -36,6 +36,37 @@ theorem finiteMap_capacity_or_largeFiber
       (s := Finset.univ) (t := R) (f := f)
       (fun a _ha ↦ hf a) hlarge
 
+/-- The finite set of possible nonzero coefficient values at one coordinate
+of an `n`-coordinate witness. -/
+noncomputable def witnessNonzeroCoefficientLevels (n : ℕ) : Finset ℤ :=
+  insert (-1) (Finset.Icc 1 (n : ℤ))
+
+/-- There are exactly `n + 1` possible nonzero coefficient levels. -/
+theorem card_witnessNonzeroCoefficientLevels (n : ℕ) :
+    (witnessNonzeroCoefficientLevels n).card = n + 1 := by
+  rw [witnessNonzeroCoefficientLevels, Finset.card_insert_of_notMem]
+  · simp
+  · simp
+
+/-- A nonzero coefficient of a witness is either `-1` or lies between `1`
+and `n`. -/
+theorem witness_nonzeroCoefficient_mem_levels
+    (g : Fin n → G) {h : G} {c : Fin n → ℤ}
+    (hc : Witness g h c) {i : Fin n} (hi : c i ≠ 0) :
+    c i ∈ witnessNonzeroCoefficientLevels n := by
+  by_cases hminus : c i = -1
+  · simp [witnessNonzeroCoefficientLevels, hminus]
+  · have hlower : 1 ≤ c i := by
+      have := hc.2.1 i
+      omega
+    have hupper := witness_coeff_le_card_witnessOmissionCoordinates
+      g hc hminus
+    have hcard := card_witnessOmissionCoordinates_le c
+    have hcardInt :
+        ((witnessOmissionCoordinates c).card : ℤ) ≤ (n : ℤ) := by
+      exact_mod_cast hcard
+    simp [witnessNonzeroCoefficientLevels, hlower, hupper.trans hcardInt]
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
@@ -65,6 +96,16 @@ def RetainedExternalInternalRowPartition
                 (Finset.univ.image center : Finset (Fin n)),
               K < (Finset.univ.filter
                 (fun e : ↥E ↦ supportCoord e = x)).card) ∧
+        (∀ K : ℕ,
+          E.card ≤
+              ((((Finset.univ \ B) \
+                  (Finset.univ.image center : Finset (Fin n))).product
+                (witnessNonzeroCoefficientLevels n)).card * K) ∨
+            ∃ z ∈ ((Finset.univ \ B) \
+                  (Finset.univ.image center : Finset (Fin n))).product
+                (witnessNonzeroCoefficientLevels n),
+              K < (Finset.univ.filter (fun e : ↥E ↦
+                (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z)).card) ∧
         (I = ∅ ∨
         ∃ pivot : Fin d, center pivot ∉ B ∧
           ∀ j : ↥I,
@@ -131,15 +172,37 @@ theorem retainedExternalInternalRowPartition_of_mixed
       intro K
       simpa [Fintype.card_coe] using
         finiteMap_capacity_or_largeFiber R supportCoord hsupportMem K
+    let level : ↥E → (Fin n × ℤ) :=
+      fun e ↦ (supportCoord e, coeff (e : ↥J) (supportCoord e))
+    have hlevelMem : ∀ e : ↥E,
+        level e ∈ R.product (witnessNonzeroCoefficientLevels n) := by
+      intro e
+      exact Finset.mem_product.mpr
+        ⟨hsupportMem e,
+          witness_nonzeroCoefficient_mem_levels g
+            (hrows (e : ↥J)).2 (hsupportCoord e).2.2⟩
+    have hlevelFrontier : ∀ K : ℕ,
+        E.card ≤
+            (R.product (witnessNonzeroCoefficientLevels n)).card * K ∨
+          ∃ z ∈ R.product (witnessNonzeroCoefficientLevels n),
+            K < (Finset.univ.filter
+              (fun e : ↥E ↦ level e = z)).card := by
+      intro K
+      simpa [Fintype.card_coe] using
+        finiteMap_capacity_or_largeFiber
+          (R.product (witnessNonzeroCoefficientLevels n))
+          level hlevelMem K
   · refine ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
       hunion, hdisjoint, hcard, ?_, hEiff, supportCoord, hsupportCoord,
-      by simpa [R] using hfrontier, Or.inl ?_⟩
+      by simpa [R] using hfrontier,
+      by simpa [R, level] using hlevelFrontier, Or.inl ?_⟩
     · omega
     · ext j
       simp [I, E, hall j]
   · refine ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
       hunion, hdisjoint, hcard, ?_, hEiff, supportCoord, hsupportCoord,
-      by simpa [R] using hfrontier, ?_⟩
+      by simpa [R] using hfrontier,
+      by simpa [R, level] using hlevelFrontier, ?_⟩
     · omega
     · by_cases hI : I = ∅
       · exact Or.inl hI
