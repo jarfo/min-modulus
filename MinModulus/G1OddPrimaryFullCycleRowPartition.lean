@@ -2115,6 +2115,40 @@ theorem FixedExternalTwoRetainedAffineProfileAbove.relative
       simp
       abel
 
+/-- Named payload for the occupied relative-cycle frontier of a dense
+external affine profile. -/
+def FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
+    (g : Fin n → G) (y base : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P R : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n)
+    (profileThreshold componentThreshold : ℕ) : Prop :=
+  ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+    ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+      ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+        ∃ S : Finset ↥F,
+          S = Finset.univ.filter (fun f : ↥F ↦
+            coeff ((f : ↥E) : ↥J)
+              (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) ∧
+          profileThreshold < S.card ∧
+          let owner : ↥S → Fin d := fun f ↦
+            (((f : ↥F) : ↥E) : ↥J)
+          let displacement : Fin d → G := fun j ↦
+            g (center (P.symm j)) - base
+          let target : ↥S → G := fun f ↦
+            scalar (((f : ↥F) : ↥E) : ↥J) • y
+          (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
+            (profileThreshold <
+                (permutationFamilyComponents R owner).card * componentThreshold ∨
+              ∃ C ∈ permutationFamilyComponents R owner,
+                componentThreshold <
+                    (permutationFamilyComponentFiber R owner C).card ∧
+                ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
+                  ∃ k : ℕ, target (v : ↥S) - target (u : ↥S) =
+                    epsilon • ((2 ^ k - 1) •
+                      displacement (owner (u : ↥S))))
+
 /-- A translation-normalized external profile satisfies the exact occupied
 relative-cycle frontier.  In the large-component arm every two retained rows
 carry the componentwise Mersenne target comparison, while all profile data
@@ -2132,31 +2166,11 @@ theorem FixedExternalTwoRetainedRelativeAffineProfileAbove.cycleComponentFrontie
     (hdouble : ∀ j,
       g (center (P.symm (R j))) - base =
         2 • (g (center (P.symm j)) - base)) :
-    ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
-      ∃ mu ∈ twoRetainedExternalCoefficientLevels,
-        ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
-          ∃ S : Finset ↥F,
-            S = Finset.univ.filter (fun f : ↥F ↦
-              coeff ((f : ↥E) : ↥J)
-                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) ∧
-            profileThreshold < S.card ∧
-            let owner : ↥S → Fin d := fun f ↦
-              (((f : ↥F) : ↥E) : ↥J)
-            let displacement : Fin d → G := fun j ↦
-              g (center (P.symm j)) - base
-            let target : ↥S → G := fun f ↦
-              scalar (((f : ↥F) : ↥E) : ↥J) • y
-            (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
-              (profileThreshold <
-                  (permutationFamilyComponents R owner).card * componentThreshold ∨
-                ∃ C ∈ permutationFamilyComponents R owner,
-                  componentThreshold <
-                      (permutationFamilyComponentFiber R owner C).card ∧
-                  ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
-                    ∃ k : ℕ, target (v : ↥S) - target (u : ↥S) =
-                      epsilon • ((2 ^ k - 1) •
-                        displacement (owner (u : ↥S)))) := by
+    FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
+      g y base B center P R scalar coeff F x
+        profileThreshold componentThreshold := by
   classical
+  unfold FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
   rcases hprofile with
     ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
       hlarge, haffine⟩
@@ -2644,6 +2658,81 @@ theorem twoRetainedExternalInternalRowFrontier_largeInternal_or_largeAffineExter
           (supportCoord e, coeff (e : ↥J) (supportCoord e)) = label))
         label.1 label.2 hfiber (fun j ↦ (hrows j).2) hretained hlarge
 
+/-- Named exact-two row dichotomy whose external branch already carries its
+occupied relative-cycle decomposition. -/
+def TwoRetainedExternalInternalCycleComponentFrontier
+    (g : Fin n → G) (y base : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d)) (R : Equiv.Perm (Fin d))
+    (componentThreshold : ℕ) : Prop :=
+  ∃ scalar : ↥J → ℤ, ∃ coeff : ↥J → Fin n → ℤ,
+    ∃ E I : Finset ↥J, ∃ supportCoord : ↥E → Fin n,
+      E ∪ I = Finset.univ ∧ Disjoint E I ∧
+      E.card + I.card = J.card ∧
+      (∀ j, scalar j • y ≠ 0 ∧
+        Witness g (scalar j • y) (coeff j)) ∧
+      (∀ e : ↥E,
+        supportCoord e ∉ Finset.univ.image center ∧
+        supportCoord e ∉ B ∧
+        coeff (e : ↥J) (supportCoord e) ≠ 0) ∧
+      ((d - 1 ≤ 2 * I.card ∧
+          (I = ∅ ∨
+            ∃ pivot : Fin d, center pivot ∉ B ∧
+              ∀ j : ↥I,
+                ExactSignedPairWitness g (scalar (j : ↥J) • y)
+                  (coeff (j : ↥J))
+                  (center (P.symm (j : Fin d))) (center pivot))) ∨
+        ∃ label ∈ (((Finset.univ \ B) \
+              (Finset.univ.image center : Finset (Fin n))).product
+            twoRetainedExternalCoefficientLevels),
+          let F : Finset ↥E := Finset.univ.filter (fun e : ↥E ↦
+            (supportCoord e,
+              coeff (e : ↥J) (supportCoord e)) = label)
+          FixedExternalCoefficientPrivateFiber
+              B center P coeff F label.1 label.2 ∧
+            FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
+              g y base B center P R scalar coeff F label.1
+                ((d - 1) / 36) componentThreshold)
+
+/-- The exact-two dense dichotomy with its external arm carried all the way
+through translation and occupied relative-cycle decomposition. -/
+theorem twoRetainedExternalInternalRowFrontier_largeInternal_or_cycleComponentExternal
+    (g : Fin n → G) (y base : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d))
+    (hfrontier : TwoRetainedExternalInternalRowFrontier
+      g y B center P J)
+    (hretained : n - B.card = 2)
+    (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ j,
+      g (center (P.symm (R j))) - base =
+        2 • (g (center (P.symm j)) - base))
+    (componentThreshold : ℕ) :
+    TwoRetainedExternalInternalCycleComponentFrontier
+      g y base B center P J R componentThreshold := by
+  classical
+  unfold TwoRetainedExternalInternalCycleComponentFrontier
+  rcases twoRetainedExternalInternalRowFrontier_largeInternal_or_largeAffineExternal
+      g y B center P J hfrontier hretained with
+    ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+      hrows, hsupport, hinternal | hexternal⟩
+  · exact ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+      hrows, hsupport, Or.inl hinternal⟩
+  · refine ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+      hrows, hsupport, Or.inr ?_⟩
+    rcases hexternal with ⟨label, hlabel, hfiber, hprofile⟩
+    refine ⟨label, hlabel, hfiber, ?_⟩
+    have hrelative := FixedExternalTwoRetainedAffineProfileAbove.relative
+      g y base B center P scalar coeff
+        (Finset.univ.filter (fun e : ↥E ↦
+          (supportCoord e, coeff (e : ↥J) (supportCoord e)) = label))
+        label.1 label.2 ((d - 1) / 36) hprofile
+    exact hrelative.cycleComponentFrontier
+      g y base B center P scalar coeff
+        (Finset.univ.filter (fun e : ↥E ↦
+          (supportCoord e, coeff (e : ↥J) (supportCoord e)) = label))
+        label.1 ((d - 1) / 36) componentThreshold R hdouble
+
 /-- Extract the explicit finite partition and one retained support coordinate
 per external row from the retained mixed normal form. -/
 theorem retainedExternalInternalRowPartition_of_mixed
@@ -3056,6 +3145,155 @@ theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleAlignedRowPartit
   have hout' :=
     pureEdgeStarLeafCycle_alignedRowPartitionOutcome_of_rowPartitionOutcome
       g r T hcycle center hout
+  exact ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout'⟩
+
+/-- Global row endpoint split by the retained quotient dimension.  The
+exact-two arm is fully decomposed into the dense internal pivot alternative
+or the occupied-component/Mersenne external frontier. -/
+def PureEdgeStarLeafOddPrimaryFullCycleComponentRowOutcome
+    {t q : ℕ} (g : Fin (m + 1) → ZMod (2 ^ t * q))
+    (h : ZMod (2 ^ t * q)) (r : Fin (m + 1))
+    (T : ↥(witnessPureEdgeStarLeaves g h r) →
+      ↥(witnessPureEdgeStarLeaves g h r))
+    (a : ↥(witnessPureEdgeStarLeaves g h r)) (d : ℕ)
+    (center : Fin d → Fin (m + 1)) (componentThreshold : ℕ) : Prop :=
+  let leaf : Fin d → Fin (m + 1) :=
+    fun j ↦ (T^[j.val] a : Fin (m + 1))
+  let disp : Fin d → ZMod (2 ^ t * q) :=
+    fun j ↦ g (leaf j) - (h + g r)
+  2 * d + 1 ≤ m + 1 ∨
+    (d + 2 ≤ m + 1 ∧
+      ∃ j k ell : Fin d,
+        center j = leaf k ∧ center ell ∉ Set.range leaf) ∨
+    (PureEdgeStarLeafOddPrimaryCycleLayerChargeOutcome
+        g h r T a d center ∧
+      ∃ y : ZMod (2 ^ t * q), ∃ B : Finset (Fin (m + 1)),
+        ∃ P : Equiv.Perm (Fin d), ∃ J : Finset (Fin d),
+          AddSubgroup.closure (Set.range disp) =
+            AddSubgroup.zmultiples y ∧
+          (∀ j : Fin d, disp j ∈ AddSubgroup.zmultiples y) ∧
+          OddPrimaryFullCycleRetainedExternalChargeDescent
+            g y B d leaf ∧
+          CycleCenterSparseKernelPrivateWitnessFamily
+            g y B leaf center P J ∧
+          CycleCenterSparseRetainedExternalOrArithmeticPivotStar
+            g y B center P J ∧
+          CycleCenterSparseRetainedExternalOrCommonPivot
+            g y B center P J ∧
+          RetainedExternalInternalRowPartition
+            g y B center P J ∧
+          ∃ S : Equiv.Perm (Fin d),
+            (∀ j : Fin d,
+              P j ≠ j ∧ P j ≠ S j ∧
+              center j = leaf (P j) ∧
+              (T (T^[j.val] a) : Fin (m + 1)) = leaf (S j) ∧
+              (2 : ℤ) • g (leaf (P j)) =
+                h + g r + g (leaf (S j))) ∧
+            (∀ j : Fin d,
+              disp ((P.symm.trans S) j) = 2 • disp j) ∧
+            (2 < m + 1 - B.card ∨
+              TwoRetainedExternalInternalCycleComponentFrontier
+                g y (h + g r) B center P J (P.symm.trans S)
+                  componentThreshold))
+
+/-- Refine the aligned global endpoint.  At least two quotient coordinates
+are retained; equality invokes the exact-two row/component theorem, while a
+strictly larger quotient is kept as its own explicit branch. -/
+theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
+    {t q : ℕ}
+    (g : Fin (m + 1) → ZMod (2 ^ t * q))
+    {h : ZMod (2 ^ t * q)} (r : Fin (m + 1))
+    (T : ↥(witnessPureEdgeStarLeaves g h r) →
+      ↥(witnessPureEdgeStarLeaves g h r))
+    {a : ↥(witnessPureEdgeStarLeaves g h r)} {d : ℕ}
+    (center : Fin d → Fin (m + 1))
+    (hout : PureEdgeStarLeafOddPrimaryFullCycleAlignedRowPartitionOutcome
+      g h r T a d center) (componentThreshold : ℕ) :
+    PureEdgeStarLeafOddPrimaryFullCycleComponentRowOutcome
+      g h r T a d center componentThreshold := by
+  rcases hout with hcap | hmixed |
+      ⟨hcharge, y, B, P, J, hspan, hmem, hretainedCharge, hsparse,
+        hsharp, hnormal, hrowPartition, S, hlocal, hdouble⟩
+  · exact Or.inl hcap
+  · exact Or.inr (Or.inl hmixed)
+  · right
+    right
+    let leaf : Fin d → Fin (m + 1) :=
+      fun j ↦ (T^[j.val] a : Fin (m + 1))
+    let disp : Fin d → ZMod (2 ^ t * q) :=
+      fun j ↦ g (leaf j) - (h + g r)
+    have htwo : 2 ≤ m + 1 - B.card :=
+      hretainedCharge.1.1.two_le_retained
+    refine ⟨hcharge, y, B, P, J, ?_, ?_, ?_, ?_, hsharp,
+      hnormal, hrowPartition, S, ?_, ?_, ?_⟩
+    · simpa [disp, leaf] using hspan
+    · simpa [disp, leaf] using hmem
+    · simpa [leaf] using hretainedCharge
+    · simpa [leaf] using hsparse
+    · simpa [leaf] using hlocal
+    · simpa [disp, leaf] using hdouble
+    · by_cases hexact : m + 1 - B.card = 2
+      · right
+        have hcenter : ∀ j : Fin d, center j = leaf (P j) :=
+          fun j ↦ (hlocal j).2.2.1
+        have hdoubleCenter : ∀ j,
+            g (center (P.symm ((P.symm.trans S) j))) - (h + g r) =
+              2 • (g (center (P.symm j)) - (h + g r)) := by
+          simpa [disp, leaf, hcenter] using hdouble
+        have htwoFrontier :=
+          twoRetainedExternalInternalRowFrontier_of_rowPartition
+            g y B center P J hrowPartition hexact
+        exact
+          twoRetainedExternalInternalRowFrontier_largeInternal_or_cycleComponentExternal
+            g y (h + g r) B center P J htwoFrontier hexact
+              (P.symm.trans S) hdoubleCenter componentThreshold
+      · left
+        omega
+
+/-- Global critical endpoint with the exact-two quotient branch already
+reduced to internal density or affine cycle-component occupancy. -/
+theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleComponentRowOutcome
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (ht : 1 ≤ t)
+    (g : Fin (m + 1) → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ t * q < stratumBound (m + 1) t)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hno : ¬ ∃ z : Fin (m + 1), ∀ c : Fin (m + 1) → ℤ,
+      Witness g h c → c z ≠ 0)
+    (r : Fin (m + 1))
+    (qroot : ReducedSubsetSumCollision g h)
+    (hqCanonical : qroot ∈ canonicalReducedCollisions (g := g) hh)
+    (hcoeff : subsetCollisionCoeffs qroot.val.1 qroot.val.2 =
+        supportAvoidingWitnessAt g hno r ∨
+      subsetCollisionCoeffs qroot.val.1 qroot.val.2 =
+        -supportAvoidingWitnessAt g hno r)
+    (hthree : ¬ WitnessThreeDistinctOmissions g h)
+    (hcross : ∀ q' : ReducedSubsetSumCollision g h,
+      ¬ ((qroot, q') ∈ canonicalPositiveNegativeCrossPairs (g := g) hh ∨
+        (q', qroot) ∈ canonicalPositiveNegativeCrossPairs (g := g) hh))
+    (hL : (witnessPureEdgeStarLeaves g h r).Nonempty)
+    (componentThreshold : ℕ) :
+    ∃ T : ↥(witnessPureEdgeStarLeaves g h r) →
+        ↥(witnessPureEdgeStarLeaves g h r),
+      ∃ a : ↥(witnessPureEdgeStarLeaves g h r), ∃ d : ℕ,
+        ∃ center : Fin d → Fin (m + 1),
+          d ≤ (witnessPureEdgeStarLeaves g h r).card ∧
+          IsMinimalFixedPointFreeCycle T a d ∧
+          Function.Injective center ∧
+          (∀ j : Fin d,
+            center j ≠ r ∧
+            center j ≠ (T^[j.val] a : Fin (m + 1)) ∧
+            center j ≠ (T (T^[j.val] a) : Fin (m + 1)) ∧
+            (2 : ℤ) • g (center j) =
+              h + g r + g (T (T^[j.val] a) : Fin (m + 1))) ∧
+          PureEdgeStarLeafOddPrimaryFullCycleComponentRowOutcome
+            g h r T a d center componentThreshold := by
+  obtain ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout⟩ :=
+    exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleAlignedRowPartitionOutcome
+      ht g hg hcritical hh hne hno r qroot hqCanonical hcoeff hthree hcross hL
+  have hout' :=
+    pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
+      g r T center hout componentThreshold
   exact ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout'⟩
 
 end MinModulus
