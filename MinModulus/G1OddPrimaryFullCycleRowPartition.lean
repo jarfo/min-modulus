@@ -1129,6 +1129,50 @@ theorem permutationFamily_capacity_or_largeComponent
   · exact Or.inr ⟨C, hC, by
       simpa [component, permutationFamilyComponentFiber] using hlarge⟩
 
+/-- If every full selected component has capacity `K`, then either all rows
+fit in `K` slots per full-or-boundary component, or an oversized occupied
+component is provably nonfull and comes with an explicit selected boundary
+vertex in that same ambient cycle. -/
+theorem permutationFamily_fullCapacity_or_largeBoundaryComponent
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) (K : ℕ)
+    (hfullBound : ∀ C,
+      C ∈ permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner) →
+      (permutationFamilyComponentFiber R owner C).card ≤ K) :
+    Fintype.card ι ≤
+        ((permutationSubsetFullComponents R
+            (permutationFamilyOwnerSet owner)).card +
+          (permutationSubsetBoundary R
+            (permutationFamilyOwnerSet owner)).card) * K ∨
+      ∃ C ∈ permutationFamilyComponents R owner,
+        K < (permutationFamilyComponentFiber R owner C).card ∧
+        C ∉ permutationSubsetFullComponents R
+          (permutationFamilyOwnerSet owner) ∧
+        ∃ x ∈ permutationSubsetBoundary R
+            (permutationFamilyOwnerSet owner),
+          Quotient.mk (Equiv.Perm.SameCycle.setoid R) x = C := by
+  classical
+  rcases permutationFamily_capacity_or_largeComponent R owner K with
+    hcap | ⟨C, hC, hlarge⟩
+  · left
+    exact hcap.trans (Nat.mul_le_mul_right K
+      (card_permutationFamilyComponents_le_full_add_boundary R owner))
+  · right
+    have hnotFull : C ∉ permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner) := by
+      intro hfull
+      exact (Nat.not_lt_of_ge (hfullBound C hfull)) hlarge
+    have hC' : C ∈ permutationSubsetComponents R
+        (permutationFamilyOwnerSet owner) := by
+      rw [← permutationFamilyComponents_eq_subsetComponents]
+      exact hC
+    rcases mem_fullComponents_or_exists_mem_boundary
+        R (permutationFamilyOwnerSet owner) C hC' with
+      hfull | ⟨x, hx, hxC⟩
+    · exact (hnotFull hfull).elim
+    · exact ⟨C, hC, hlarge, hnotFull, x, hx, hxC⟩
+
 /-- Two members of one component fiber have owners in the same cycle. -/
 theorem permutationFamilyComponentFiber_sameCycle
     {ι α : Type*} [Fintype ι] [Fintype α]
@@ -4189,14 +4233,33 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
                   addOrderOf
                       ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
                     2 ^ (permutationFamilyComponentFiber R owner C).card - 1 ∧
+                  addOrderOf
+                      ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
+                    addOrderOf y ∧
                   (permutationFamilyComponentFiber R owner C).card ≤
                     addOrderOf
-                      ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1) ∧
+                      ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1 ∧
+                  (permutationFamilyComponentFiber R owner C).card ≤
+                    addOrderOf y - 1) ∧
                 ∃ i, ∃ ell : ℕ,
                   2 ≤ ell ∧ ell ≤ d ∧ Q^[ell] i = i ∧
                     Odd (2 ^ ell - 1) ∧
                     (2 ^ ell - 1) •
                       ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) = 0) ∧
+            (S.card ≤
+                  ((permutationSubsetFullComponents R
+                      (permutationFamilyOwnerSet owner)).card +
+                    (permutationSubsetBoundary R
+                      (permutationFamilyOwnerSet owner)).card) *
+                    (addOrderOf y - 1) ∨
+              ∃ C ∈ permutationFamilyComponents R owner,
+                addOrderOf y - 1 <
+                    (permutationFamilyComponentFiber R owner C).card ∧
+                C ∉ permutationSubsetFullComponents R
+                  (permutationFamilyOwnerSet owner) ∧
+                ∃ a ∈ permutationSubsetBoundary R
+                    (permutationFamilyOwnerSet owner),
+                  Quotient.mk (Equiv.Perm.SameCycle.setoid R) a = C) ∧
             ((S.card ≤
                   (permutationFamilyComponents R owner).card *
                     componentThreshold ∧
@@ -4441,9 +4504,14 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
           addOrderOf
               ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
             2 ^ (permutationFamilyComponentFiber R owner C).card - 1 ∧
+          addOrderOf
+              ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
+            addOrderOf y ∧
           (permutationFamilyComponentFiber R owner C).card ≤
             addOrderOf
-              ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1) ∧
+              ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1 ∧
+          (permutationFamilyComponentFiber R owner C).card ≤
+            addOrderOf y - 1) ∧
         ∃ i, ∃ ell : ℕ,
           2 ≤ ell ∧ ell ≤ d ∧ Q^[ell] i = i ∧
             Odd (2 ^ ell - 1) ∧
@@ -4513,6 +4581,29 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
         apply hvalueInjective
         exact (hzero (Q i₀)).trans (hzero i₀).symm
       · simpa using hcharge
+    have horderChargeGlobal : ∃ i :
+        ↥(permutationFamilyComponentFiber R owner C),
+        value (i : ↥S) ≠ 0 ∧
+        addOrderOf (value (i : ↥S)) ∣
+          2 ^ Fintype.card
+            ↥(permutationFamilyComponentFiber R owner C) - 1 ∧
+        addOrderOf (value (i : ↥S)) ∣ addOrderOf y ∧
+        Fintype.card ↥(permutationFamilyComponentFiber R owner C) ≤
+          addOrderOf (value (i : ↥S)) - 1 ∧
+        Fintype.card ↥(permutationFamilyComponentFiber R owner C) ≤
+          addOrderOf y - 1 := by
+      obtain ⟨i, hiNonzero, hiMersenne, hiCard⟩ := horderCharge'
+      have hiMem : value (i : ↥S) ∈ AddSubgroup.zmultiples y := by
+        dsimp only [value]
+        exact (AddSubgroup.zmultiples y).zsmul_mem
+          (AddSubgroup.mem_zmultiples y)
+            (scalar (((i : ↥S) : ↥F) : ↥E) - rho)
+      have hiOrder : addOrderOf (value (i : ↥S)) ∣ addOrderOf y :=
+        addOrderOf_dvd_of_mem_zmultiples hiMem
+      have hiOrderLe : addOrderOf (value (i : ↥S)) ≤ addOrderOf y :=
+        Nat.le_of_dvd (addOrderOf_pos y) hiOrder
+      exact ⟨i, hiNonzero, hiMersenne, hiOrder, hiCard,
+        hiCard.trans (Nat.sub_le_sub_right hiOrderLe 1)⟩
     obtain ⟨i, ell, hellTwo, hellFiber, hperiod⟩ :=
       exists_bounded_cycle_of_fixedPointFree Q i₀ hQne
     have hfiberCard :
@@ -4530,7 +4621,37 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     refine ⟨Q, hQOwner, hQValue, hQCycle, ?_, i, ell, hellTwo,
       hellFiber.trans hfiberCard, hperiod, odd_two_pow_sub_one (by omega),
       htorsion⟩
-    simpa only [value, Fintype.card_coe] using horderCharge'
+    simpa only [value, Fintype.card_coe] using horderChargeGlobal
+  have hfullOrderBound : ∀ C,
+      C ∈ permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner) →
+      (permutationFamilyComponentFiber R owner C).card ≤
+        addOrderOf y - 1 := by
+    intro C hC
+    obtain ⟨_Q, _hQOwner, _hQValue, _hQCycle, hcharge, _hbounded⟩ :=
+      hfullCycle C hC
+    obtain ⟨_i, _hiNonzero, _hiMersenne, _hiOrder,
+      _hiCard, hiGlobalCard⟩ := hcharge
+    exact hiGlobalCard
+  have hcomponentAggregate :=
+    permutationFamily_fullCapacity_or_largeBoundaryComponent
+      R owner (addOrderOf y - 1) hfullOrderBound
+  have hcomponentAggregate' :
+      S.card ≤
+          ((permutationSubsetFullComponents R
+              (permutationFamilyOwnerSet owner)).card +
+            (permutationSubsetBoundary R
+              (permutationFamilyOwnerSet owner)).card) *
+            (addOrderOf y - 1) ∨
+        ∃ C ∈ permutationFamilyComponents R owner,
+          addOrderOf y - 1 <
+              (permutationFamilyComponentFiber R owner C).card ∧
+          C ∉ permutationSubsetFullComponents R
+            (permutationFamilyOwnerSet owner) ∧
+          ∃ a ∈ permutationSubsetBoundary R
+              (permutationFamilyOwnerSet owner),
+            Quotient.mk (Equiv.Perm.SameCycle.setoid R) a = C := by
+    simpa only [Fintype.card_coe] using hcomponentAggregate
   have hfrontier := permutationFamily_affineComponentFrontier
     R owner displacement target hdouble' mu offset haffineMu
       componentThreshold
@@ -4538,7 +4659,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     hepsilonLevel, offset, hparameters, rho, hrho,
     S, rfl, hSnonemptyOut, hSdominant', howner, haffineMu, hboundary,
     hboundaryRouted, hdense, hpositive, hcolumns, hxPositive, hzPositive,
-    huniform, hfull, hfullCycle, ?_⟩
+    huniform, hfull, hfullCycle, hcomponentAggregate', ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
