@@ -209,6 +209,31 @@ theorem permutationFamily_large_affineComponentFrontier
   · exact Or.inl (hlarge.trans_le hcap)
   · exact Or.inr hcomponent
 
+/-- The two-permutation affine relation gives the doubling recurrence on
+leaf displacements when the center permutation is the same `P`. -/
+theorem alignedCenterSuccessor_relativeDoubling
+    (g : Fin n → G) (base : G) {d : ℕ}
+    (leaf center : Fin d → Fin n) (P S : Equiv.Perm (Fin d))
+    (hcenter : ∀ j, center j = leaf (P j))
+    (hrel : ∀ j, (2 : ℤ) • g (leaf (P j)) =
+      base + g (leaf (S j))) :
+    ∀ j,
+      g (center (P.symm ((P.symm.trans S) j))) - base =
+        2 • (g (center (P.symm j)) - base) := by
+  intro j
+  rw [hcenter (P.symm ((P.symm.trans S) j)), P.apply_symm_apply,
+    hcenter (P.symm j), P.apply_symm_apply]
+  change g (leaf (S (P.symm j))) - base =
+    2 • (g (leaf j) - base)
+  have hj := hrel (P.symm j)
+  rw [P.apply_symm_apply, two_zsmul] at hj
+  rw [two_nsmul]
+  calc
+    g (leaf (S (P.symm j))) - base =
+        (base + g (leaf (S (P.symm j)))) - (base + base) := by abel
+    _ = (g (leaf j) + g (leaf j)) - (base + base) := by rw [← hj]
+    _ = (g (leaf j) - base) + (g (leaf j) - base) := by abel
+
 /-- The finite set of possible nonzero coefficient values at one coordinate
 of an `n`-coordinate witness. -/
 noncomputable def witnessNonzeroCoefficientLevels (n : ℕ) : Finset ℤ :=
@@ -2874,6 +2899,163 @@ theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleRowPartitionOutc
   have hout' :=
     pureEdgeStarLeafCycle_rowPartitionOutcome_of_retainedMixedOutcome
       g r T center hout
+  exact ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout'⟩
+
+/-- The row-partition endpoint with the successor permutation aligned to the
+same explicit center permutation `P`.  Its relative permutation therefore
+acts by doubling on the translated leaf coordinates used by the rows. -/
+def PureEdgeStarLeafOddPrimaryFullCycleAlignedRowPartitionOutcome
+    {t q : ℕ} (g : Fin (m + 1) → ZMod (2 ^ t * q))
+    (h : ZMod (2 ^ t * q)) (r : Fin (m + 1))
+    (T : ↥(witnessPureEdgeStarLeaves g h r) →
+      ↥(witnessPureEdgeStarLeaves g h r))
+    (a : ↥(witnessPureEdgeStarLeaves g h r)) (d : ℕ)
+    (center : Fin d → Fin (m + 1)) : Prop :=
+  let leaf : Fin d → Fin (m + 1) :=
+    fun j ↦ (T^[j.val] a : Fin (m + 1))
+  let disp : Fin d → ZMod (2 ^ t * q) :=
+    fun j ↦ g (leaf j) - (h + g r)
+  2 * d + 1 ≤ m + 1 ∨
+    (d + 2 ≤ m + 1 ∧
+      ∃ j k ell : Fin d,
+        center j = leaf k ∧ center ell ∉ Set.range leaf) ∨
+    (PureEdgeStarLeafOddPrimaryCycleLayerChargeOutcome
+        g h r T a d center ∧
+      ∃ y : ZMod (2 ^ t * q), ∃ B : Finset (Fin (m + 1)),
+        ∃ P : Equiv.Perm (Fin d), ∃ J : Finset (Fin d),
+          AddSubgroup.closure (Set.range disp) =
+            AddSubgroup.zmultiples y ∧
+          (∀ j : Fin d, disp j ∈ AddSubgroup.zmultiples y) ∧
+          OddPrimaryFullCycleRetainedExternalChargeDescent
+            g y B d leaf ∧
+          CycleCenterSparseKernelPrivateWitnessFamily
+            g y B leaf center P J ∧
+          CycleCenterSparseRetainedExternalOrArithmeticPivotStar
+            g y B center P J ∧
+          CycleCenterSparseRetainedExternalOrCommonPivot
+            g y B center P J ∧
+          RetainedExternalInternalRowPartition
+            g y B center P J ∧
+          ∃ S : Equiv.Perm (Fin d),
+            (∀ j : Fin d,
+              P j ≠ j ∧ P j ≠ S j ∧
+              center j = leaf (P j) ∧
+              (T (T^[j.val] a) : Fin (m + 1)) = leaf (S j) ∧
+              (2 : ℤ) • g (leaf (P j)) =
+                h + g r + g (leaf (S j))) ∧
+            ∀ j : Fin d,
+              disp ((P.symm.trans S) j) = 2 • disp j)
+
+/-- Reopen the retained cycle-layer algebra and use injectivity of the
+minimal leaf cycle to identify its center permutation with the explicit row
+permutation.  Earlier nested capacity branches are propagated outward. -/
+theorem pureEdgeStarLeafCycle_alignedRowPartitionOutcome_of_rowPartitionOutcome
+    {t q : ℕ}
+    (g : Fin (m + 1) → ZMod (2 ^ t * q))
+    {h : ZMod (2 ^ t * q)} (r : Fin (m + 1))
+    (T : ↥(witnessPureEdgeStarLeaves g h r) →
+      ↥(witnessPureEdgeStarLeaves g h r))
+    {a : ↥(witnessPureEdgeStarLeaves g h r)} {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle T a d)
+    (center : Fin d → Fin (m + 1))
+    (hout : PureEdgeStarLeafOddPrimaryFullCycleRowPartitionOutcome
+      g h r T a d center) :
+    PureEdgeStarLeafOddPrimaryFullCycleAlignedRowPartitionOutcome
+      g h r T a d center := by
+  rcases hout with hcap | hmixed |
+      ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+        hsharp, hnormal, hrows⟩
+  · exact Or.inl hcap
+  · exact Or.inr (Or.inl hmixed)
+  · have hcharge' := hcharge
+    rcases hcharge' with hcap | hmixed |
+        ⟨hrelative, _hlayer, _i, _ell, _p, _B, _hellTwo, _hellD,
+          _hodd, _htorsion, _hlayers, _hcert, _hordD, _hlog⟩
+    · exact Or.inl hcap
+    · exact Or.inr (Or.inl hmixed)
+    · right
+      right
+      let leaf : Fin d → Fin (m + 1) :=
+        fun j ↦ (T^[j.val] a : Fin (m + 1))
+      let disp : Fin d → ZMod (2 ^ t * q) :=
+        fun j ↦ g (leaf j) - (h + g r)
+      have hleaf : Function.Injective leaf := by
+        intro j k hjk
+        apply minimalFixedPointFreeCycle_iterates_injective T hcycle
+        exact Subtype.ext hjk
+      have hrelative' := hrelative
+      rcases hrelative' with
+        ⟨P', S, hlocal, _hsum, _htorsionRelative⟩
+      have hsparse' := hsparse
+      rcases hsparse' with
+        ⟨_scalar, _coeff, _hJcard, _hJiff, _htarget, _hwitness,
+          _howner, _hzero, _hprivate, _hcoeffInj, hcenter,
+          _hcenterOutside, _hrowSupport⟩
+      have hP' : P' = P := by
+        apply Equiv.ext
+        intro j
+        apply hleaf
+        calc
+          leaf (P' j) = center j := (hlocal j).2.2.1.symm
+          _ = leaf (P j) := hcenter j
+      subst P'
+      have hdouble : ∀ j : Fin d,
+          disp ((P.symm.trans S) j) = 2 • disp j := by
+        simpa [disp, leaf, hcenter] using
+          alignedCenterSuccessor_relativeDoubling
+            g (h + g r) leaf center P S hcenter
+              (fun j ↦ (hlocal j).2.2.2.2)
+      refine ⟨hcharge, y, B, P, J, ?_, ?_, ?_, ?_, hsharp,
+        hnormal, hrows, S, ?_, hdouble⟩
+      · simpa [disp, leaf] using hspan
+      · simpa [disp, leaf] using hmem
+      · simpa [leaf] using hretained
+      · simpa [leaf] using hsparse
+      · simpa [leaf] using hlocal
+
+/-- Global critical endpoint with the row family and its actual relative
+doubling permutation retained in one aligned package. -/
+theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleAlignedRowPartitionOutcome
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (ht : 1 ≤ t)
+    (g : Fin (m + 1) → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ t * q < stratumBound (m + 1) t)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hno : ¬ ∃ z : Fin (m + 1), ∀ c : Fin (m + 1) → ℤ,
+      Witness g h c → c z ≠ 0)
+    (r : Fin (m + 1))
+    (qroot : ReducedSubsetSumCollision g h)
+    (hqCanonical : qroot ∈ canonicalReducedCollisions (g := g) hh)
+    (hcoeff : subsetCollisionCoeffs qroot.val.1 qroot.val.2 =
+        supportAvoidingWitnessAt g hno r ∨
+      subsetCollisionCoeffs qroot.val.1 qroot.val.2 =
+        -supportAvoidingWitnessAt g hno r)
+    (hthree : ¬ WitnessThreeDistinctOmissions g h)
+    (hcross : ∀ q' : ReducedSubsetSumCollision g h,
+      ¬ ((qroot, q') ∈ canonicalPositiveNegativeCrossPairs (g := g) hh ∨
+        (q', qroot) ∈ canonicalPositiveNegativeCrossPairs (g := g) hh))
+    (hL : (witnessPureEdgeStarLeaves g h r).Nonempty) :
+    ∃ T : ↥(witnessPureEdgeStarLeaves g h r) →
+        ↥(witnessPureEdgeStarLeaves g h r),
+      ∃ a : ↥(witnessPureEdgeStarLeaves g h r), ∃ d : ℕ,
+        ∃ center : Fin d → Fin (m + 1),
+          d ≤ (witnessPureEdgeStarLeaves g h r).card ∧
+          IsMinimalFixedPointFreeCycle T a d ∧
+          Function.Injective center ∧
+          (∀ j : Fin d,
+            center j ≠ r ∧
+            center j ≠ (T^[j.val] a : Fin (m + 1)) ∧
+            center j ≠ (T (T^[j.val] a) : Fin (m + 1)) ∧
+            (2 : ℤ) • g (center j) =
+              h + g r + g (T (T^[j.val] a) : Fin (m + 1))) ∧
+          PureEdgeStarLeafOddPrimaryFullCycleAlignedRowPartitionOutcome
+            g h r T a d center := by
+  obtain ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout⟩ :=
+    exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleRowPartitionOutcome
+      ht g hg hcritical hh hne hno r qroot hqCanonical hcoeff hthree hcross hL
+  have hout' :=
+    pureEdgeStarLeafCycle_alignedRowPartitionOutcome_of_rowPartitionOutcome
+      g r T hcycle center hout
   exact ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout'⟩
 
 end MinModulus
