@@ -7980,6 +7980,51 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_na
     g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
       e he helow hehigh heMem).2
 
+/-- In a modulus-minimal sixth-stratum survivor, a fully deleted doubling
+cycle cannot take the nonconstant bounded-multiple arm: that arm has
+coefficient magnitude at most `18`, whereas sixth-stratum rigidity forces
+magnitude `32`.  Hence the five-weight label is constant on all displayed
+cycle leaves, without assuming that the doubling permutation is one cycle. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fullDeletedCycle_weight_constant_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (a : ZMod (2 ^ 6 * q))
+    (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ∀ i j,
+        weight ⟨leaf i, hleafB i⟩ = weight ⟨leaf j, hleafB j⟩ := by
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      hsmall | hconstant⟩ :=
+    hrows.fullDeletedCycle_split g y B hd leaf R a hleafB hdouble
+  · obtain ⟨e, he, helow, hehigh, heMem⟩ := hsmall
+    have he32 :=
+      hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+        g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+          e he (by omega) (by omega) heMem
+    have habsLe : e.natAbs ≤ 18 := by
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · have : (e.natAbs : ℤ) ≤ 18 := by omega
+        exact_mod_cast this
+      · have : (e.natAbs : ℤ) ≤ 18 := by omega
+        exact_mod_cast this
+    omega
+  · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, hconstant⟩
+
 /-- Integrated top-stratum one-retained endpoint.  In a modulus-minimal
 `2^6*q` survivor, the nonconstant five-weight arm returns to the unavailable
 leaf after two or three permutation steps. -/
@@ -8356,6 +8401,135 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalSi
       exact Or.inr (Or.inr ⟨hnNine, rfl⟩)
   · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
       Or.inr hpure⟩
+
+/-- Lossless sixth-stratum terminal for the all-but-one global leaf
+incidence.  A fully deleted family has constant five-weight label.  With one
+retained leaf, every cycle of length at least three is either genuinely
+multi-component under the relative doubling permutation, one of the three
+remaining finite parameter pairs, or the orientation-independent pure-pair
+matrix.  The length-two branch is retained explicitly for the existing
+two-cycle closure. -/
+def TwoRetainedSixthStratumLeafTerminal
+    {q : ℕ} (B : Finset (Fin n)) {d : ℕ}
+    (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d)) : Prop :=
+  (∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ∃ hleafB : ∀ i, leaf i ∈ B,
+        ∀ i j,
+          weight ⟨leaf i, hleafB i⟩ =
+            weight ⟨leaf j, hleafB j⟩) ∨
+    ∃ p : Fin d,
+      (∀ i, leaf i ∈ B ↔ i ≠ p) ∧
+      (d = 2 ∨ ¬ R.IsCycle ∨
+        ((n = 8 ∧ q = 3) ∨ (n = 9 ∧ q = 3) ∨
+          (n = 9 ∧ q = 7)) ∨
+        ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+          x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+          (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+          ((leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+              weight ⟨leaf i, hi⟩ = -2) ∨
+            (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+              weight ⟨leaf i, hi⟩ = 0)))
+
+/-- Combine the global all-but-one incidence with the exact sixth-stratum
+cycle arithmetic.  This theorem requires no unrecorded component or
+single-cycle assumption: failure of `R.IsCycle` is an explicit terminal arm. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.sixthStratum_leafTerminal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 6 * q < stratumBound n 6)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 ≤ d) (leaf : Fin d → Fin n)
+    (hleaf : Function.Injective leaf) (R : Equiv.Perm (Fin d))
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ 6 * q))
+    (hleafIncidence : (∀ i, leaf i ∈ B) ∨
+      ∃ p : Fin d, ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - a)) =
+      AddSubgroup.zmultiples y) :
+    TwoRetainedSixthStratumLeafTerminal (q := q) B leaf R := by
+  rcases hleafIncidence with hfull | ⟨p, hpunctured⟩
+  · left
+    obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+        hweight, hconstant⟩ :=
+      hrows.fullDeletedCycle_weight_constant_of_sixthStratum_minimal
+        g hg hunique hne y hyq B hminimal (by omega) leaf R a hfull hdouble
+    exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, hfull, hconstant⟩
+  · right
+    refine ⟨p, hpunctured, ?_⟩
+    by_cases hdTwo : d = 2
+    · exact Or.inl hdTwo
+    have hdThree : 2 < d := by omega
+    by_cases hRcycle : R.IsCycle
+    · obtain ⟨i₀, hi₀p, hi₀prev⟩ :=
+        Fin.exists_ne_and_ne_of_two_lt p (R.symm p) hdThree
+      have hRi₀ : R i₀ ≠ p := by
+        intro hRi₀
+        apply hi₀prev
+        calc
+          i₀ = R.symm (R i₀) := (R.symm_apply_apply i₀).symm
+          _ = R.symm p := congrArg R.symm hRi₀
+      obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+          hfinite | hpure⟩ :=
+        hrows.oneRetainedCycle_criticalSixthStratum_finitePairs_or_purePair
+          g hg hcritical hunique hne y hyq B hminimal leaf hleaf R hRcycle
+            hRne a p i₀ hi₀p hRi₀ hpunctured hdouble hspan
+      · exact Or.inr (Or.inr (Or.inl hfinite))
+      · exact Or.inr (Or.inr (Or.inr
+          ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hpure⟩))
+    · exact Or.inr (Or.inl hRcycle)
+
+/-- Global exact-two specialization of `sixthStratum_leafTerminal`.  Its
+hypotheses are precisely the fields retained by the aligned full-cycle
+outcome: the common full-span generator, the incidence/charge descent, the
+relative fixed-point-free doubling permutation, and the five-weight private
+rows.  In particular, the odd-order divisibility and all-but-one incidence
+are projected from the global charge package rather than re-assumed. -/
+theorem sixthStratum_leafTerminal_of_fullCycleExactTwo
+    {q d : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin (m + 1) → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 6 * q < stratumBound (m + 1) 6)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (B : Finset (Fin (m + 1)))
+    (leaf : Fin d → Fin (m + 1))
+    (hd : 2 ≤ d)
+    (hretained : OddPrimaryFullCycleRetainedExternalChargeDescent
+      g y B d leaf)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (base : ZMod (2 ^ 6 * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - base = (2 : ℤ) • (g (leaf i) - base))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - base)) =
+      AddSubgroup.zmultiples y)
+    (hleaf : Function.Injective leaf)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple (m + 1) M) :
+    TwoRetainedSixthStratumLeafTerminal (q := q) B leaf R := by
+  have hyq : addOrderOf y ∣ q := hretained.1.1.2.2.2.2.1
+  have hleafIncidence :=
+    OddPrimaryFullCycleIncidenceChargeDescent.fullDeleted_or_exists_unique_retained_leaf
+      hretained.1 hleaf
+  exact hrows.sixthStratum_leafTerminal
+    g hg hcritical hunique hne y hyq B hminimal hd leaf hleaf R hRne base
+      hleafIncidence hdouble hspan
 
 /-- Uniform numerical consequence for every coefficient produced by the
 five-weight cycle split. -/
@@ -9700,6 +9874,9 @@ def PureEdgeStarLeafOddPrimaryFullCycleComponentRowOutcome
               disp ((P.symm.trans S) j) = 2 • disp j) ∧
             (2 < m + 1 - B.card ∨
               (TwoRetainedMinimalCyclicKernelPrivateRows g y B ∧
+                TwoRetainedMinimalCyclicKernelFiveWeightRows g y B ∧
+                ((∀ j : Fin d, leaf j ∈ B) ∨
+                  ∃ p : Fin d, ∀ j : Fin d, leaf j ∈ B ↔ j ≠ p) ∧
                 TwoRetainedExternalInternalDominantCycleComponentFrontier
                   g y (h + g r) B center P J (P.symm.trans S)
                     componentThreshold)))
@@ -9720,6 +9897,7 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
     (T : ↥(witnessPureEdgeStarLeaves g h r) →
       ↥(witnessPureEdgeStarLeaves g h r))
     {a : ↥(witnessPureEdgeStarLeaves g h r)} {d : ℕ}
+    (hcycle : IsMinimalFixedPointFreeCycle T a d)
     (center : Fin d → Fin (m + 1))
     (hout : PureEdgeStarLeafOddPrimaryFullCycleAlignedRowPartitionOutcome
       g h r T a d center) (componentThreshold : ℕ) :
@@ -9736,6 +9914,10 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
       fun j ↦ (T^[j.val] a : Fin (m + 1))
     let disp : Fin d → ZMod (2 ^ t * q) :=
       fun j ↦ g (leaf j) - (h + g r)
+    have hleaf : Function.Injective leaf := by
+      intro j k hjk
+      apply minimalFixedPointFreeCycle_iterates_injective T hcycle
+      exact Subtype.ext hjk
     have htwo : 2 ≤ m + 1 - B.card :=
       hretainedCharge.1.1.two_le_retained
     refine ⟨hcharge, y, B, P, J, ?_, ?_, ?_, ?_, hsharp,
@@ -9748,9 +9930,14 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
     · simpa [disp, leaf] using hdouble
     · by_cases hexact : m + 1 - B.card = 2
       · right
-        refine ⟨
+        have hprivate :=
           twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
-            g hg hh hne hunique hno y hretainedCharge.1.1.1 hexact, ?_⟩
+            g hg hh hne hunique hno y hretainedCharge.1.1.1 hexact
+        have hfive := hprivate.fiveWeightRows g y B
+        have hleafSplit :=
+          OddPrimaryFullCycleIncidenceChargeDescent.fullDeleted_or_exists_unique_retained_leaf
+            hretainedCharge.1 hleaf
+        refine ⟨hprivate, hfive, hleafSplit, ?_⟩
         have hcenter : ∀ j : Fin d, center j = leaf (P j) :=
           fun j ↦ (hlocal j).2.2.1
         have hdoubleCenter : ∀ j,
@@ -9833,7 +10020,7 @@ theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleComponentRowOutc
     · exact Or.inr (hhalf.trans hhCanonical.symm)
   have hout' :=
     pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
-      g hg hh hne hunique hno r T center hout componentThreshold
+      g hg hh hne hunique hno r T hcycle center hout componentThreshold
   exact ⟨T, a, d, center, hdCard, hcycle, hcenter, hcenterSpec, hout'⟩
 
 end MinModulus

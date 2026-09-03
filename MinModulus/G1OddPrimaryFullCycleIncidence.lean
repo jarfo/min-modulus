@@ -148,6 +148,47 @@ def OddPrimaryFullCycleIncidenceChargeDescent
     ((Finset.univ.image leaf) \ B).card ≤ 1 ∧
     d - 1 ≤ (B ∩ Finset.univ.image leaf).card
 
+/-- The all-but-one incidence statement in the pointwise form needed by the
+cycle recurrence.  Either every displayed leaf is deleted, or injectivity of
+the leaf parametrization identifies a unique retained index `p`. -/
+theorem OddPrimaryFullCycleIncidenceChargeDescent.fullDeleted_or_exists_unique_retained_leaf
+    {t q d : ℕ}
+    {g : Fin (m + 1) → ZMod (2 ^ t * q)}
+    {y : ZMod (2 ^ t * q)} {B : Finset (Fin (m + 1))}
+    {leaf : Fin d → Fin (m + 1)}
+    (hdesc : OddPrimaryFullCycleIncidenceChargeDescent
+      g y B d leaf)
+    (hleaf : Function.Injective leaf) :
+    (∀ i, leaf i ∈ B) ∨
+      ∃ p : Fin d, ∀ i, leaf i ∈ B ↔ i ≠ p := by
+  classical
+  by_cases hall : ∀ i, leaf i ∈ B
+  · exact Or.inl hall
+  · right
+    push Not at hall
+    obtain ⟨p, hp⟩ := hall
+    refine ⟨p, fun i ↦ ⟨?_, ?_⟩⟩
+    · intro hiB hip
+      exact hp (hip ▸ hiB)
+    · intro hip
+      by_contra hiNotB
+      have hpRange : leaf p ∈ Finset.univ.image leaf := by
+        exact Finset.mem_image.mpr ⟨p, Finset.mem_univ p, rfl⟩
+      have hiRange : leaf i ∈ Finset.univ.image leaf := by
+        exact Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩
+      have hpMiss : leaf p ∈ (Finset.univ.image leaf) \ B :=
+        Finset.mem_sdiff.mpr ⟨hpRange, hp⟩
+      have hiMiss : leaf i ∈ (Finset.univ.image leaf) \ B :=
+        Finset.mem_sdiff.mpr ⟨hiRange, hiNotB⟩
+      have hleafNe : leaf i ≠ leaf p := hleaf.ne hip
+      have htwo : 2 ≤ ((Finset.univ.image leaf) \ B).card := by
+        have hone : 1 < ((Finset.univ.image leaf) \ B).card :=
+          Finset.one_lt_card.mpr
+            ⟨leaf p, hpMiss, leaf i, hiMiss, hleafNe.symm⟩
+        omega
+      have hatMostOne := hdesc.2.1
+      omega
+
 /-- Install the all-but-one incidence conclusion on any full-cycle charge
 descent whose same generator contains every translated leaf. -/
 theorem fullCycleIncidenceChargeDescent_of_chargeDescent
