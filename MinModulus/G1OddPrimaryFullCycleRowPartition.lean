@@ -212,6 +212,89 @@ theorem fixedExternalCoefficientPrivateFiber_card_le_order_sub_one_or_pairGaps
     exact ⟨f, k, hfk, htargetEq', i, j, hi, hj,
       hiLocation, hjLocation, hij, hix, hjx⟩
 
+/-- Two equal-target rows in a fixed private external fiber either expose a
+coefficient at least two on one of their private owner diagonals, or force
+two mutually directed gaps at distinct retained coordinates away from the
+common external column. -/
+theorem fixedExternalCoefficientPrivateFiber_equalTarget_pair_heavyDiagonal_or_externalGaps
+    (g : Fin n → G) (hg : ValidTuple g) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (f k : ↥F) (hfk : f ≠ k)
+    (htarget : scalar ((f : ↥E) : ↥J) • y =
+      scalar ((k : ↥E) : ↥J) • y) :
+    2 ≤ coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) ∨
+      2 ≤ coeff ((k : ↥E) : ↥J)
+          (center (P.symm (((k : ↥E) : ↥J) : Fin d))) ∨
+      ∃ i j : Fin n,
+        i ∉ B ∧ j ∉ B ∧ i ≠ j ∧ i ≠ x ∧ j ≠ x ∧
+        coeff ((f : ↥E) : ↥J) i + 2 ≤
+          coeff ((k : ↥E) : ↥J) i ∧
+        coeff ((k : ↥E) : ↥J) j + 2 ≤
+          coeff ((f : ↥E) : ↥J) j := by
+  rcases hfiber with
+    ⟨_hxOutside, _hxNotB, _hlambda, _hownerInj, hcoeffInj,
+      hrowData, hprivacy, hoffdiag⟩
+  by_cases hfHeavy : 2 ≤ coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d)))
+  · exact Or.inl hfHeavy
+  by_cases hkHeavy : 2 ≤ coeff ((k : ↥E) : ↥J)
+      (center (P.symm (((k : ↥E) : ↥J) : Fin d)))
+  · exact Or.inr (Or.inl hkHeavy)
+  right
+  right
+  have hwf := (hrows ((f : ↥E) : ↥J)).2
+  have hwk := (hrows ((k : ↥E) : ↥J)).2
+  rw [← htarget] at hwk
+  have hcoeffNe : coeff ((f : ↥E) : ↥J) ≠
+      coeff ((k : ↥E) : ↥J) := hcoeffInj.ne hfk
+  obtain ⟨i, hi⟩ := exists_coefficient_add_two_le_of_distinct_witnesses
+    g hg hwf hwk hcoeffNe
+  obtain ⟨j, hj⟩ := exists_coefficient_add_two_le_of_distinct_witnesses
+    g hg hwk hwf hcoeffNe.symm
+  have hiOutside : i ∉ B := by
+    intro hiB
+    by_cases hiOwner :
+        i = center (P.symm (((k : ↥E) : ↥J) : Fin d))
+    · rw [hiOwner, hoffdiag f k hfk] at hi
+      omega
+    · have hkZero := hprivacy k i hiB hiOwner
+      have hfloor := hwf.2.1 i
+      omega
+  have hjOutside : j ∉ B := by
+    intro hjB
+    by_cases hjOwner :
+        j = center (P.symm (((f : ↥E) : ↥J) : Fin d))
+    · rw [hjOwner, hoffdiag k f hfk.symm] at hj
+      omega
+    · have hfZero := hprivacy f j hjB hjOwner
+      have hfloor := hwk.2.1 j
+      omega
+  have hij : i ≠ j := by
+    intro hij
+    subst j
+    omega
+  have hix : i ≠ x := by
+    intro hix
+    subst i
+    have hfX := (hrowData f).2.1
+    have hkX := (hrowData k).2.1
+    omega
+  have hjx : j ≠ x := by
+    intro hjx
+    subst j
+    have hfX := (hrowData f).2.1
+    have hkX := (hrowData k).2.1
+    omega
+  exact ⟨i, j, hiOutside, hjOutside, hij, hix, hjx, hi, hj⟩
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
