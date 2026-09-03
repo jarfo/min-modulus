@@ -1543,6 +1543,68 @@ def RetainedExternalInternalRowPartition
               (coeff (j : ↥J))
               (center (P.symm (j : Fin d))) (center pivot))
 
+/-- Lossless row-partition payload specialized to an exact two-coordinate
+quotient.  It retains the same external/internal sets and common-pivot arm,
+but replaces the generic `(n+1)` coefficient capacity by the constant-six
+adaptive frontier. -/
+def TwoRetainedExternalInternalRowFrontier
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d)) : Prop :=
+  ∃ scalar : ↥J → ℤ, ∃ coeff : ↥J → Fin n → ℤ,
+    ∃ E I : Finset ↥J,
+      E ∪ I = Finset.univ ∧ Disjoint E I ∧
+      E.card + I.card = J.card ∧ d - 1 ≤ E.card + I.card ∧
+      (∀ j, scalar j • y ≠ 0 ∧
+        Witness g (scalar j • y) (coeff j)) ∧
+      ∃ supportCoord : ↥E → Fin n,
+        (∀ e : ↥E,
+          supportCoord e ∉ Finset.univ.image center ∧
+          supportCoord e ∉ B ∧
+          coeff (e : ↥J) (supportCoord e) ≠ 0) ∧
+        (∀ K : ℕ,
+          E.card ≤ 6 * K ∨
+            ∃ z ∈ (((Finset.univ \ B) \
+                  (Finset.univ.image center : Finset (Fin n))).product
+                twoRetainedExternalCoefficientLevels),
+              K < (Finset.univ.filter (fun e : ↥E ↦
+                (supportCoord e,
+                  coeff (e : ↥J) (supportCoord e)) = z)).card ∧
+              FixedExternalCoefficientPrivateFiber B center P coeff
+                (Finset.univ.filter (fun e : ↥E ↦
+                  (supportCoord e,
+                    coeff (e : ↥J) (supportCoord e)) = z)) z.1 z.2) ∧
+        (I = ∅ ∨
+          ∃ pivot : Fin d, center pivot ∉ B ∧
+            ∀ j : ↥I,
+              ExactSignedPairWitness g (scalar (j : ↥J) • y)
+                (coeff (j : ↥J))
+                (center (P.symm (j : Fin d))) (center pivot))
+
+/-- Extract the constant-six frontier from the exact rows and choices already
+stored in `RetainedExternalInternalRowPartition`; no row, owner, coefficient,
+or pivot data is reselected. -/
+theorem twoRetainedExternalInternalRowFrontier_of_rowPartition
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d))
+    (hpart : RetainedExternalInternalRowPartition g y B center P J)
+    (hretained : n - B.card = 2) :
+    TwoRetainedExternalInternalRowFrontier g y B center P J := by
+  classical
+  rcases hpart with
+    ⟨scalar, coeff, E, I, _hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner, hunion, hdisjoint, hcard, hlarge,
+      _hEiff, supportCoord, hsupport, _hcoordFrontier,
+      _hgenericLevelFrontier, hinternal⟩
+  refine ⟨scalar, coeff, E, I, hunion, hdisjoint, hcard, hlarge,
+    hrows, supportCoord, hsupport, ?_, hinternal⟩
+  intro K
+  exact twoRetainedExternalRows_capacity_or_largePrivateFiber
+    g y B center P scalar coeff E supportCoord hsupport
+      (fun j ↦ (hrows j).2) hprivate hcenterInj hownerMem howner
+      hcoeffInj hretained K
+
 /-- Extract the explicit finite partition and one retained support coordinate
 per external row from the retained mixed normal form. -/
 theorem retainedExternalInternalRowPartition_of_mixed
