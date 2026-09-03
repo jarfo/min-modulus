@@ -1457,6 +1457,117 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_signedPair_or_pureEdge
     refine ⟨z, hzNotB, hzNeX, Or.inr (Or.inr ⟨hlambda, ?_⟩)⟩
     simpa [c, o] using hshape
 
+/-- The target represented by a pure-edge coefficient vector is its affine
+edge value.  This form is convenient when row normal forms are compared with
+the relative doubling recurrence. -/
+theorem witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+    (g : Fin n → G) {target : G} {c : Fin n → ℤ}
+    (hc : Witness g target c) (u v w : Fin n)
+    (hshape : c = pureEdgeCoeffs u v w) :
+    target = 2 • g u - g v - g w := by
+  rw [hshape] at hc
+  rw [← hc.2.2.2]
+  simp [pureEdgeCoeffs, sub_smul, Finset.sum_sub_distrib]
+  rw [two_zsmul, two_nsmul]
+
+/-- Family-level affine target equations in the exact two-retained regime.
+The second retained coordinate is chosen once for the entire fiber.  Every
+row target is then one of three fixed affine laws in its private owner; for
+`lambda = 1` or `lambda = 2` the law is already unique. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2) :
+    ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+      ∀ f : ↥F,
+        let o := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+        let target := scalar ((f : ↥E) : ↥J) • y
+        (lambda = -1 ∧
+            (target = 2 • g z - g o - g x ∨
+              target = g o - g x ∨
+              target = 2 • g o - g x - g z)) ∨
+          (lambda = 1 ∧ target = g x - g o) ∨
+          (lambda = 2 ∧ target = 2 • g x - g o - g z) := by
+  classical
+  have hxNotB : x ∉ B := hfiber.2.1
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxNotB⟩
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hCone : 1 < (Finset.univ \ B).card := by omega
+  obtain ⟨u, huC, z, hzC, huz⟩ := Finset.one_lt_card.mp hCone
+  obtain ⟨z, hzC, hzNeX⟩ :
+      ∃ z ∈ Finset.univ \ B, z ≠ x := by
+    by_cases hux : u = x
+    · refine ⟨z, hzC, ?_⟩
+      intro hzx
+      exact huz (hux.trans hzx.symm)
+    · exact ⟨u, huC, hux⟩
+  have hzNotB : z ∉ B := (Finset.mem_sdiff.mp hzC).2
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem
+      hCcard hxC hzC hzNeX.symm
+  refine ⟨z, hzNotB, hzNeX, ?_⟩
+  intro f
+  let o : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  let target : G := scalar ((f : ↥E) : ↥J) • y
+  let c : Fin n → ℤ := coeff ((f : ↥E) : ↥J)
+  have hc : Witness g target c := by
+    simpa [target, c] using hrows ((f : ↥E) : ↥J)
+  have hcx : c x = lambda := by
+    simpa [c] using (hfiber.2.2.2.2.2.1 f).2.1
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_signedPair_or_pureEdge
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained with
+    ⟨zf, hzfNotB, hzfNeX, hgeometry⟩
+  have hzfC : zf ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzfNotB⟩
+  have hzfEq : zf = z := by
+    have hpair : zf = x ∨ zf = z := by
+      have : zf ∈ ({x, z} : Finset (Fin n)) := by
+        rw [← hCeq]
+        exact hzfC
+      simpa using this
+    exact hpair.resolve_left hzfNeX
+  subst zf
+  rcases hgeometry with
+      ⟨hlambda, hleft | hsigned | hright⟩ |
+      ⟨hlambda, hsigned⟩ | ⟨hlambda, hcenter⟩
+  · left
+    refine ⟨hlambda, Or.inl ?_⟩
+    exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+      g hc z o x (by simpa [c, o] using hleft)
+  · left
+    refine ⟨hlambda, Or.inr (Or.inl ?_)⟩
+    rcases hsigned.2.1 with hforward | hreverse
+    · simpa [target, o] using hforward.2.2
+    · have hxOne : c x = 1 := by simpa [c] using hreverse.2.1
+      have hxMinus : c x = -1 := by rw [hcx, hlambda]
+      omega
+  · left
+    refine ⟨hlambda, Or.inr (Or.inr ?_)⟩
+    exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+      g hc o x z (by simpa [c, o] using hright)
+  · right
+    left
+    refine ⟨hlambda, ?_⟩
+    rcases hsigned.2.1 with hforward | hreverse
+    · have hxMinus : c x = -1 := by simpa [c] using hforward.2.1
+      have hxOne : c x = 1 := by rw [hcx, hlambda]
+      omega
+    · simpa [target, o] using hreverse.2.2
+  · right
+    right
+    refine ⟨hlambda, ?_⟩
+    exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+      g hc x o z (by simpa [c, o] using hcenter)
+
 /-- The constant-size alphabet for a common retained external coefficient
 when exactly two coordinates survive deletion. -/
 def twoRetainedExternalCoefficientLevels : Finset ℤ := {-1, 1, 2}
