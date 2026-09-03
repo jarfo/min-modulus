@@ -295,6 +295,130 @@ theorem fixedExternalCoefficientPrivateFiber_equalTarget_pair_heavyDiagonal_or_e
     omega
   exact ⟨i, j, hiOutside, hjOutside, hij, hix, hjx, hi, hj⟩
 
+/-- Rows in `S` whose private owner diagonal is at least two. -/
+def fixedExternalFiberHeavyDiagonalRows
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (S : Finset ↥F) : Finset ↥F :=
+  S.filter (fun f ↦ 2 ≤ coeff ((f : ↥E) : ↥J)
+    (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+
+/-- Rows in `S` whose private owner diagonal is below two. -/
+def fixedExternalFiberLightDiagonalRows
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (S : Finset ↥F) : Finset ↥F :=
+  S.filter (fun f ↦ ¬ 2 ≤ coeff ((f : ↥E) : ↥J)
+    (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+
+/-- Exact row partition into owner-heavy and light diagonals. -/
+theorem card_fixedExternalFiberHeavy_add_light
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (S : Finset ↥F) :
+    (fixedExternalFiberHeavyDiagonalRows center P coeff S).card +
+      (fixedExternalFiberLightDiagonalRows center P coeff S).card = S.card := by
+  classical
+  rw [fixedExternalFiberHeavyDiagonalRows,
+    fixedExternalFiberLightDiagonalRows]
+  exact Finset.card_filter_add_card_filter_not (s := S)
+    (fun f : ↥F ↦ 2 ≤ coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+
+/-- Removing a retained coordinate from the complement of `B` leaves
+exactly `n - |B| - 1` coordinates. -/
+theorem card_univ_sdiff_erase_of_not_mem
+    (B : Finset (Fin n)) (x : Fin n) (hx : x ∉ B) :
+    ((Finset.univ \ B).erase x).card = n - B.card - 1 := by
+  rw [Finset.card_erase_of_mem]
+  · rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simp
+  · exact Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hx⟩
+
+/-- Quadratic gap frontier for any same-target subfamily of a fixed private
+external fiber.  Every ordered pair of light-diagonal rows receives a
+directed gap outside `B` and away from the common external column.  Hence
+either those `|L|(|L|-1)` pairs fit at `K` per retained gap coordinate, or
+one coordinate supports more than `K` directed gaps. -/
+theorem fixedExternalCoefficientPrivateFiber_repeatedTarget_lightGapFrontier
+    (g : Fin n → G) (hg : ValidTuple g) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (S : Finset ↥F)
+    (htarget : ∀ f ∈ S, ∀ k ∈ S,
+      scalar ((f : ↥E) : ↥J) • y =
+        scalar ((k : ↥E) : ↥J) • y) :
+    let L := fixedExternalFiberLightDiagonalRows center P coeff S
+    ∃ gapCoord : ↥L.offDiag → Fin n,
+      (∀ p : ↥L.offDiag,
+        gapCoord p ∉ B ∧ gapCoord p ≠ x ∧
+          coeff ((p.1.1 : ↥E) : ↥J) (gapCoord p) + 2 ≤
+            coeff ((p.1.2 : ↥E) : ↥J) (gapCoord p)) ∧
+      ∀ K : ℕ,
+        L.card * (L.card - 1) ≤
+            (n - B.card - 1) * K ∨
+          ∃ i ∈ (Finset.univ \ B).erase x,
+            K < (Finset.univ.filter
+              (fun p : ↥L.offDiag ↦ gapCoord p = i)).card := by
+  classical
+  let L := fixedExternalFiberLightDiagonalRows center P coeff S
+  have hgapExists : ∀ p : ↥L.offDiag,
+      ∃ i : Fin n, i ∉ B ∧ i ≠ x ∧
+        coeff ((p.1.1 : ↥E) : ↥J) i + 2 ≤
+          coeff ((p.1.2 : ↥E) : ↥J) i := by
+    intro p
+    have hp := Finset.mem_offDiag.mp p.property
+    have hpFirstData : p.1.1 ∈ S ∧
+        coeff ((p.1.1 : ↥E) : ↥J)
+          (center (P.symm (((p.1.1 : ↥E) : ↥J) : Fin d))) ≤ 1 := by
+      simpa [L, fixedExternalFiberLightDiagonalRows] using hp.1
+    have hpSecondData : p.1.2 ∈ S ∧
+        coeff ((p.1.2 : ↥E) : ↥J)
+          (center (P.symm (((p.1.2 : ↥E) : ↥J) : Fin d))) ≤ 1 := by
+      simpa [L, fixedExternalFiberLightDiagonalRows] using hp.2.1
+    have hpFirst : p.1.1 ∈ S := by
+      exact hpFirstData.1
+    have hpSecond : p.1.2 ∈ S := by
+      exact hpSecondData.1
+    have hfirstLight : ¬ 2 ≤ coeff ((p.1.1 : ↥E) : ↥J)
+        (center (P.symm (((p.1.1 : ↥E) : ↥J) : Fin d))) := by
+      omega
+    have hsecondLight : ¬ 2 ≤ coeff ((p.1.2 : ↥E) : ↥J)
+        (center (P.symm (((p.1.2 : ↥E) : ↥J) : Fin d))) := by
+      omega
+    rcases fixedExternalCoefficientPrivateFiber_equalTarget_pair_heavyDiagonal_or_externalGaps
+        g hg y B center P scalar coeff F x lambda hfiber hrows
+        p.1.1 p.1.2 hp.2.2 (htarget p.1.1 hpFirst p.1.2 hpSecond) with
+      hfirst | hsecond | ⟨i, _j, hiB, _hjB, _hij, hix, _hjx, hi, _hj⟩
+    · exact False.elim (hfirstLight hfirst)
+    · exact False.elim (hsecondLight hsecond)
+    · exact ⟨i, hiB, hix, hi⟩
+  choose gapCoord hgap using hgapExists
+  refine ⟨gapCoord, hgap, ?_⟩
+  let R : Finset (Fin n) := (Finset.univ \ B).erase x
+  have hgapMem : ∀ p : ↥L.offDiag, gapCoord p ∈ R := by
+    intro p
+    exact Finset.mem_erase.mpr
+      ⟨(hgap p).2.1, Finset.mem_sdiff.mpr
+        ⟨Finset.mem_univ _, (hgap p).1⟩⟩
+  intro K
+  have hRcard : R.card = n - B.card - 1 := by
+    exact card_univ_sdiff_erase_of_not_mem B x hfiber.2.1
+  have hpairCard : Fintype.card ↥L.offDiag =
+      L.card * (L.card - 1) := by
+    rw [Fintype.card_coe, Finset.offDiag_card,
+      Nat.mul_sub_left_distrib, Nat.mul_one]
+  have hfrontier := finiteMap_capacity_or_largeFiber
+    R gapCoord hgapMem K
+  rw [hpairCard] at hfrontier
+  simpa [R, hRcard] using hfrontier
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
