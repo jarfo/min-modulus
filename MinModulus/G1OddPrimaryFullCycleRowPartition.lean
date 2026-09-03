@@ -6670,6 +6670,55 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fullDeletedCycle_split
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
   simpa only [cycleWeight] using hsplit
 
+/-- A constant five-weight transition has only one exceptional value after
+the retained cycle vertex is identified.  If `x` is in the cyclic-kernel
+coset of the cycle center, the transition gives a nonzero multiple of
+`x-z` of size at most four unless `w=-2`; with `z` retained, the sole
+exception is `w=0`. -/
+theorem constantFiveWeight_transition_terminal
+    (x z a : G) (H : AddSubgroup G) (w : ℤ)
+    (hw : w ∈ twoRetainedNormalizedWeightLevels)
+    (htransition :
+      (-w) • (x - z) + (2 : ℤ) • (z - a) ∈ H) :
+    ((x - a ∈ H) →
+      (∃ e : ℤ, e ≠ 0 ∧ -4 ≤ e ∧ e ≤ 4 ∧ e • (x - z) ∈ H) ∨
+        w = -2) ∧
+    ((z - a ∈ H) →
+      (∃ e : ℤ, e ≠ 0 ∧ -4 ≤ e ∧ e ≤ 4 ∧ e • (x - z) ∈ H) ∨
+        w = 0) := by
+  have hwBounds := twoRetainedNormalizedWeight_bounds hw
+  constructor
+  · intro hx
+    let e : ℤ := -(w + 2)
+    have heBounds : -4 ≤ e ∧ e ≤ 4 := by
+      dsimp only [e]
+      omega
+    have heMem : e • (x - z) ∈ H := by
+      have hsub := H.sub_mem htransition (H.zsmul_mem hx 2)
+      convert hsub using 1
+      dsimp only [e]
+      module
+    by_cases heZero : e = 0
+    · right
+      dsimp only [e] at heZero
+      omega
+    · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem⟩
+  · intro hz
+    let e : ℤ := -w
+    have heBounds : -4 ≤ e ∧ e ≤ 4 := by
+      dsimp only [e]
+      omega
+    have heMem : e • (x - z) ∈ H := by
+      have hsub := H.sub_mem htransition (H.zsmul_mem hz 2)
+      convert hsub using 1
+      dsimp only [e]
+      module
+    by_cases heZero : e = 0
+    · right
+      dsimp only [e] at heZero
+      omega
+    · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem⟩
+
 /-- Exact one-retained-leaf extension of `fullDeletedCycle_split`.  The two
 cycle edges incident to the retained leaf are replaced by their fourfold
 two-step relation, so the only new possible kernel coefficient is bounded by
@@ -6686,6 +6735,10 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
+        (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
+            (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y) ∧
       ((∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧
           e • (g x - g z) ∈ AddSubgroup.zmultiples y) ∨
         ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
@@ -6777,7 +6830,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
         (g x - g z) ((2 : ℤ) • (g z - a))
           (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
-    fun b ↦ (hweightData b).1, ?_⟩
+    fun b ↦ (hweightData b).1, htransition, ?_⟩
   rcases hsplit with hsmall | hconstant
   · exact Or.inl hsmall
   · right
@@ -6786,6 +6839,424 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
     have hj : j ≠ p := (hleafB j).1 hjB
     have hij := hconstant i hi j hj
     simpa only [cycleWeight, dif_pos hiB, dif_pos hjB] using hij
+
+/-- Terminal form of the one-retained-leaf five-weight reduction when the
+retained leaf lies in the same cyclic-kernel coset of the cycle center as all
+cycle leaves.  The constant arm collapses to the bounded-multiple arm except
+for the exact pure-pair weights: `-2` when the retained leaf is `x`, or `0`
+in the reversed orientation where it is `z`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_terminal
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d)) (a : G)
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hretainedMem : g (leaf p) - a ∈ AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧
+          e • (g x - g z) ∈ AddSubgroup.zmultiples y) ∨
+        (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  classical
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, htransition, hsplit⟩ :=
+    hrows.oneRetainedCycle_split g y B leaf R a p i₀ hp hi₀ hRi₀
+      hleafB hdouble
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  rcases hsplit with hsmall | hconstant
+  · exact Or.inl hsmall
+  · have hiB : leaf i₀ ∈ B := (hleafB i₀).2 hi₀
+    have hRiB : leaf (R i₀) ∈ B := (hleafB (R i₀)).2 hRi₀
+    let w : ℤ := weight ⟨leaf i₀, hiB⟩
+    have hw : w ∈ twoRetainedNormalizedWeightLevels :=
+      hweight ⟨leaf i₀, hiB⟩
+    have hwEdge : weight ⟨leaf (R i₀), hRiB⟩ = w := by
+      simpa only [w] using hconstant (R i₀) hRiB i₀ hiB
+    have htransitionSimple :
+        (-w) • (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y := by
+      have ht := htransition i₀ hiB hRiB
+      rw [hwEdge] at ht
+      convert ht using 1
+      dsimp only [w]
+      module
+    have hterminal := constantFiveWeight_transition_terminal
+      (g x) (g z) a (AddSubgroup.zmultiples y) w hw htransitionSimple
+    have hpNotB : leaf p ∉ B := by
+      intro hpB
+      exact (hleafB p).1 hpB rfl
+    have hpPair : leaf p = x ∨ leaf p = z := by
+      have hpComplement : leaf p ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hpNotB⟩
+      rw [hcomplement] at hpComplement
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hpComplement
+    rcases hpPair with hpX | hpZ
+    · have hxMem : g x - a ∈ AddSubgroup.zmultiples y := by
+        simpa only [hpX] using hretainedMem
+      rcases hterminal.1 hxMem with hsmall | hwMinusTwo
+      · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+        exact Or.inl ⟨e, he, by omega, by omega, heMem⟩
+      · exact Or.inr (Or.inl ⟨hpX, by
+          intro i hi
+          calc
+            weight ⟨leaf i, hi⟩ = w :=
+              hconstant i hi i₀ hiB
+            _ = -2 := hwMinusTwo⟩)
+    · have hzMem : g z - a ∈ AddSubgroup.zmultiples y := by
+        simpa only [hpZ] using hretainedMem
+      rcases hterminal.2 hzMem with hsmall | hwZero
+      · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+        exact Or.inl ⟨e, he, by omega, by omega, heMem⟩
+      · exact Or.inr (Or.inr ⟨hpZ, by
+          intro i hi
+          calc
+            weight ⟨leaf i, hi⟩ = w :=
+              hconstant i hi i₀ hiB
+            _ = 0 := hwZero⟩)
+
+/-- In a finite group with a unique nonzero involution, the preimage of an
+additive subgroup under doubling has at most twice the subgroup's order. -/
+theorem card_doublePreimage_le_two_mul
+    [Fintype G] {h : G}
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (K : AddSubgroup G) :
+    Nat.card (K.comap (nsmulAddMonoidHom 2)) ≤ 2 * Nat.card K := by
+  classical
+  let L : AddSubgroup G := K.comap (nsmulAddMonoidHom 2)
+  let doubleToK : L →+ K := AddMonoidHom.codRestrict
+    ((nsmulAddMonoidHom 2).comp L.subtype) K (fun x ↦ x.property)
+  let code : ↥doubleToK.ker → Bool := fun u ↦ (u.1.1 : G) = 0
+  have hcodeInjective : Function.Injective code := by
+    intro u v huv
+    have huTwo : (u.1.1 : G) + u.1.1 = 0 := by
+      have hu := congrArg Subtype.val u.property
+      change (2 : ℕ) • (u.1.1 : G) = 0 at hu
+      simpa only [two_nsmul] using hu
+    have hvTwo : (v.1.1 : G) + v.1.1 = 0 := by
+      have hv := congrArg Subtype.val v.property
+      change (2 : ℕ) • (v.1.1 : G) = 0 at hv
+      simpa only [two_nsmul] using hv
+    rcases hunique _ huTwo with huZero | huHalf
+    · rcases hunique _ hvTwo with hvZero | hvHalf
+      · apply Subtype.ext
+        apply Subtype.ext
+        exact huZero.trans hvZero.symm
+      · have hfalse : true = false := by
+          simpa only [code, huZero, eq_self, decide_true, hvHalf,
+            hne, decide_false] using huv
+        exact Bool.noConfusion hfalse
+    · rcases hunique _ hvTwo with hvZero | hvHalf
+      · have hfalse : false = true := by
+          simpa only [code, huHalf, hne, decide_false, hvZero,
+            eq_self, decide_true] using huv
+        exact Bool.noConfusion hfalse
+      · apply Subtype.ext
+        apply Subtype.ext
+        exact huHalf.trans hvHalf.symm
+  have hkerCard : Nat.card doubleToK.ker ≤ 2 := by
+    have hcard := Fintype.card_le_of_injective code hcodeInjective
+    simpa only [Nat.card_eq_fintype_card, Fintype.card_bool] using hcard
+  have hrangeCard : Nat.card doubleToK.range ≤ Nat.card K := by
+    have hcard := Fintype.card_le_of_injective
+      (fun u : ↥doubleToK.range ↦ (u : K))
+      (fun _ _ huv ↦ Subtype.ext huv)
+    simpa only [Nat.card_eq_fintype_card] using hcard
+  have hcardL : Nat.card L =
+      Nat.card doubleToK.ker * Nat.card doubleToK.range := by
+    calc
+      Nat.card L = Nat.card doubleToK.ker * doubleToK.ker.index :=
+        doubleToK.ker.card_mul_index.symm
+      _ = Nat.card doubleToK.ker * Nat.card doubleToK.range := by
+        rw [AddSubgroup.index_ker doubleToK]
+  change Nat.card L ≤ 2 * Nat.card K
+  rw [hcardL]
+  exact Nat.mul_le_mul hkerCard hrangeCard
+
+/-- Adjoining one element whose nonzero integer multiple already lies in a
+finite subgroup enlarges that subgroup by at most the absolute value of the
+coefficient. -/
+theorem card_sup_zmultiples_le_natAbs_mul
+    [Fintype G] (H : AddSubgroup G) (delta : G) (e : ℤ)
+    (he : e ≠ 0) (heMem : e • delta ∈ H) :
+    Nat.card ↥(H ⊔ AddSubgroup.zmultiples delta) ≤
+      e.natAbs * Nat.card H := by
+  classical
+  let K : AddSubgroup G := H ⊔ AddSubgroup.zmultiples delta
+  let pi : G →+ G ⧸ H := QuotientAddGroup.mk' H
+  let f : K →+ G ⧸ H := pi.comp K.subtype
+  let kernelToH : ↥f.ker → H := fun u ↦
+    ⟨u.1.1, by
+      apply (QuotientAddGroup.eq_zero_iff u.1.1).mp
+      have hu : f u.1 = 0 := u.property
+      change pi u.1.1 = 0 at hu
+      exact hu⟩
+  have hkernelInjective : Function.Injective kernelToH := by
+    intro u v huv
+    apply Subtype.ext
+    apply Subtype.ext
+    exact congrArg (fun q : H ↦ (q : G)) huv
+  have hkernelCard : Nat.card f.ker ≤ Nat.card H := by
+    have hcard := Fintype.card_le_of_injective kernelToH hkernelInjective
+    simpa only [Nat.card_eq_fintype_card] using hcard
+  have heQuotient : e • pi delta = 0 := by
+    rw [← map_zsmul]
+    exact QuotientAddGroup.eq_zero_iff (e • delta) |>.mpr heMem
+  have hnatQuotient : e.natAbs • pi delta = 0 := by
+    rw [← natCast_zsmul]
+    rcases Int.natAbs_eq e with hePos | heNeg
+    · rw [hePos] at heQuotient
+      exact heQuotient
+    · rw [heNeg, neg_smul] at heQuotient
+      exact neg_eq_zero.mp heQuotient
+  have horderDvd : addOrderOf (pi delta) ∣ e.natAbs :=
+    addOrderOf_dvd_of_nsmul_eq_zero hnatQuotient
+  have horderLe : addOrderOf (pi delta) ≤ e.natAbs :=
+    Nat.le_of_dvd (Int.natAbs_pos.mpr he) horderDvd
+  have hrangeLe : f.range ≤ AddSubgroup.zmultiples (pi delta) := by
+    rintro _ ⟨u, rfl⟩
+    rcases AddSubgroup.mem_sup.mp u.property with
+      ⟨v, hvH, w, hwDelta, hvw⟩
+    rcases AddSubgroup.mem_zmultiples_iff.mp hwDelta with ⟨c, rfl⟩
+    change pi (u : G) ∈ AddSubgroup.zmultiples (pi delta)
+    rw [← hvw, map_add, map_zsmul]
+    have hvZero : pi v = 0 := QuotientAddGroup.eq_zero_iff v |>.mpr hvH
+    rw [hvZero, zero_add]
+    exact AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples _) c
+  have hrangeCard : Nat.card f.range ≤ e.natAbs := by
+    have hdvd := AddSubgroup.card_dvd_of_le hrangeLe
+    have hpositive : 0 < Nat.card (AddSubgroup.zmultiples (pi delta)) :=
+      Nat.card_pos
+    have hle := Nat.le_of_dvd hpositive hdvd
+    rw [Nat.card_zmultiples] at hle
+    exact hle.trans horderLe
+  have hcardK : Nat.card K = Nat.card f.ker * Nat.card f.range := by
+    calc
+      Nat.card K = Nat.card f.ker * f.ker.index :=
+        f.ker.card_mul_index.symm
+      _ = Nat.card f.ker * Nat.card f.range := by
+        rw [AddSubgroup.index_ker f]
+  change Nat.card K ≤ e.natAbs * Nat.card H
+  rw [hcardK, mul_comm]
+  exact Nat.mul_le_mul hrangeCard hkernelCard
+
+/-- A bounded retained-difference relation confines an exact-two private-row
+tuple to a subgroup of size at most `2*|e|*addOrderOf y`.  Each normalized
+row puts twice its owner difference in `zmultiples y ⊔ zmultiples (g x-g z)`;
+the bounded relation controls the latter extension, and unique two-torsion
+controls the preimage under doubling. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_two_mul_natAbs_mul
+    [Fintype G] (g : Fin n → G) (hg : ValidTuple g)
+    {h : G} (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (e : ℤ) (he : e ≠ 0) :
+    (∃ x z : Fin n,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      e • (g x - g z) ∈ AddSubgroup.zmultiples y) →
+    2 ^ (n - 1) ≤ 2 * e.natAbs * addOrderOf y := by
+  classical
+  rintro ⟨x', z', hx'B, hz'B, hx'z', hcomplement', heMem'⟩
+  rcases hrows with
+    ⟨_hretained, x, z, scalar, coeff, weight,
+      hxB, hzB, hxz, hcomplement, _hcoeffInjective,
+      _hrowData, hweightData⟩
+  have hpairEq : ({x', z'} : Finset (Fin n)) = {x, z} := by
+    rw [← hcomplement', ← hcomplement]
+  have hx'Mem : x' ∈ ({x, z} : Finset (Fin n)) := by
+    rw [← hpairEq]
+    simp
+  have hz'Mem : z' ∈ ({x, z} : Finset (Fin n)) := by
+    rw [← hpairEq]
+    simp
+  have hdeltaRelation :
+      e • (g x - g z) ∈ AddSubgroup.zmultiples y := by
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hx'Mem hz'Mem
+    rcases hx'Mem with hxx | hxz' <;>
+      rcases hz'Mem with hzx | hzz
+    · exact (hx'z' (hxx.trans hzx.symm)).elim
+    · simpa only [hxx, hzz] using heMem'
+    · have hreverse : e • (g z - g x) ∈ AddSubgroup.zmultiples y := by
+        simpa only [hxz', hzx] using heMem'
+      have hneg := AddSubgroup.neg_mem _ hreverse
+      convert hneg using 1
+      module
+    · exact (hx'z' (hxz'.trans hzz.symm)).elim
+  let H : AddSubgroup G := AddSubgroup.zmultiples y
+  let delta : G := g x - g z
+  let K : AddSubgroup G := H ⊔ AddSubgroup.zmultiples delta
+  let L : AddSubgroup G := K.comap (nsmulAddMonoidHom 2)
+  have hcoordinate : ∀ i, g i - g z ∈ L := by
+    intro i
+    change (2 : ℕ) • (g i - g z) ∈ K
+    by_cases hiB : i ∈ B
+    · let b : ↥B := ⟨i, hiB⟩
+      let target : G :=
+        twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+          (scalar b • y)
+      have htargetH : target ∈ H := by
+        exact AddSubgroup.zsmul_mem _
+          (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _) _
+      have htargetK : target ∈ K :=
+        AddSubgroup.mem_sup_left htargetH
+      have hweightDelta : weight b • delta ∈ K :=
+        AddSubgroup.zsmul_mem _
+          (AddSubgroup.mem_sup_right (AddSubgroup.mem_zmultiples delta)) _
+      have hsub := K.sub_mem htargetK hweightDelta
+      have hrow := (hweightData b).2.2
+      convert hsub using 1
+      dsimp only [target, delta, b]
+      rw [hrow]
+      module
+    · have hiComplement : i ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiB⟩
+      rw [hcomplement] at hiComplement
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hiComplement
+      rcases hiComplement with hix | hiz
+      · subst i
+        exact K.nsmul_mem
+          (AddSubgroup.mem_sup_right (AddSubgroup.mem_zmultiples delta)) 2
+      · subst i
+        simp
+  let gL : Fin n → L := fun i ↦ ⟨g i - g z, hcoordinate i⟩
+  have hgL : ValidTuple gL := by
+    apply validTuple_of_comp L.subtype
+    simpa only [gL, AddSubgroup.coe_subtype] using
+      validTuple_sub_const g hg (g z)
+  have hlower : 2 ^ (n - 1) ≤ Nat.card L := by
+    have hcard := two_pow_pred_le_card_of_validTuple gL hgL
+    simpa only [Nat.card_eq_fintype_card] using hcard
+  have hKcard : Nat.card K ≤ e.natAbs * addOrderOf y := by
+    have hcard := card_sup_zmultiples_le_natAbs_mul H delta e he hdeltaRelation
+    simpa only [K, H, delta, Nat.card_zmultiples] using hcard
+  have hLcard : Nat.card L ≤ 2 * Nat.card K := by
+    simpa only [L] using card_doublePreimage_le_two_mul hunique hne K
+  calc
+    2 ^ (n - 1) ≤ Nat.card L := hlower
+    _ ≤ 2 * Nat.card K := hLcard
+    _ ≤ 2 * (e.natAbs * addOrderOf y) := Nat.mul_le_mul_left 2 hKcard
+    _ = 2 * e.natAbs * addOrderOf y := by simp only [Nat.mul_assoc]
+
+/-- Uniform numerical consequence for every coefficient produced by the
+five-weight cycle split. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_eightyFour_mul
+    [Fintype G] (g : Fin n → G) (hg : ValidTuple g)
+    {h : G} (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    2 ^ (n - 1) ≤ 84 * addOrderOf y := by
+  have habs : e.natAbs ≤ 42 := by
+    rcases Int.natAbs_eq e with hePos | heNeg
+    · have : (e.natAbs : ℤ) ≤ 42 := by omega
+      exact_mod_cast this
+    · have : (e.natAbs : ℤ) ≤ 42 := by omega
+      exact_mod_cast this
+  have hbound := hrows.card_le_two_mul_natAbs_mul
+    g hg hunique hne y B e he
+      ⟨x, z, hxB, hzB, hxz, hcomplement, heMem⟩
+  calc
+    2 ^ (n - 1) ≤ 2 * e.natAbs * addOrderOf y := hbound
+    _ ≤ 2 * 42 * addOrderOf y :=
+      Nat.mul_le_mul_right _ (Nat.mul_le_mul_left 2 habs)
+    _ = 84 * addOrderOf y := by omega
+
+/-- The bounded-multiple arm is impossible in every critical cyclic stratum
+with `t>=8`.  The factor-84 confinement contradicts the factor `2^t` already
+present in the ambient modulus. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.not_boundedMultiple_of_eight_le
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 8 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ t * q < stratumBound n t)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) : False := by
+  have hqpos : 0 < q := by
+    apply Nat.pos_of_ne_zero
+    intro hq
+    apply NeZero.ne (2 ^ t * q)
+    simp only [hq, mul_zero]
+  have hry : addOrderOf y ≤ q := Nat.le_of_dvd hqpos hyq
+  have h84 := hrows.card_le_eightyFour_mul
+    g hg hunique hne y B x z hxB hzB hxz hcomplement
+      e he helow hehigh heMem
+  have hbound : 2 ^ (n - 1) ≤ 84 * q :=
+    h84.trans (Nat.mul_le_mul_left 84 hry)
+  have hambient : 2 ^ t * q < 2 ^ n :=
+    hcritical.trans_le (Nat.sub_le _ _)
+  have hnpos : 0 < n := by
+    by_contra hn
+    have hnzero : n = 0 := by omega
+    subst n
+    simp only [pow_zero] at hambient
+    have hNpos : 0 < 2 ^ t * q := Nat.mul_pos (pow_pos (by omega) _) hqpos
+    omega
+  have hpowN : 2 ^ n = 2 * 2 ^ (n - 1) := by
+    have hnDecomp : n = (n - 1) + 1 := by omega
+    calc
+      2 ^ n = 2 ^ ((n - 1) + 1) := by rw [← hnDecomp]
+      _ = 2 * 2 ^ (n - 1) := by rw [pow_succ]; omega
+  have h256 : 256 ≤ 2 ^ t := by
+    have hp := Nat.pow_le_pow_right (by omega : 0 < (2 : ℕ)) ht
+    norm_num at hp ⊢
+    exact hp
+  have h256q : 256 * q ≤ 2 ^ t * q :=
+    Nat.mul_le_mul_right q h256
+  omega
+
+/-- High-stratum terminal endpoint for the unique-retained-leaf cycle.  At
+`t>=8` the factor-84 estimate removes the bounded-multiple alternative, so
+only the orientation-equivalent pure-pair weight remains. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_purePair_of_eight_le
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 8 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ t * q < stratumBound n t)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (a : ZMod (2 ^ t * q))
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hretainedMem : g (leaf p) - a ∈ AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      hsmall | hpure⟩ :=
+    hrows.oneRetainedCycle_terminal g y B leaf R a p i₀ hp hi₀ hRi₀
+      hleafB hdouble hretainedMem
+  · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+    exact (hrows.not_boundedMultiple_of_eight_le ht g hg hcritical
+      hunique hne y hyq B x z hxB hzB hxz hcomplement
+        e he helow hehigh heMem).elim
+  · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hpure⟩
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
