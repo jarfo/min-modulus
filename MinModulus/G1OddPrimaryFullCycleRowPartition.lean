@@ -788,6 +788,207 @@ theorem fixedExternalCoefficientPrivateFiber_equalTarget_twoLight_twoRetained_fa
       simpa using hretained
     omega
 
+/-- The only possible distinct equal-target pair left in the two-retained
+regime has a rigid adjacent-pure-edge form: the heavy row is centered at its
+private owner and omits the two retained coordinates, while the light row is
+centered at the second retained coordinate and omits the common column and
+its own private owner. -/
+theorem fixedExternalCoefficientPrivateFiber_equalTarget_heavyLight_twoRetained_shapes
+    (g : Fin n → G) (hg : ValidTuple g) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (f k : ↥F) (hfk : f ≠ k)
+    (htarget : scalar ((f : ↥E) : ↥J) • y =
+      scalar ((k : ↥E) : ↥J) • y)
+    (hfHeavy : 2 ≤ coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+    (hkLight : ¬ 2 ≤ coeff ((k : ↥E) : ↥J)
+      (center (P.symm (((k : ↥E) : ↥J) : Fin d))))
+    (hretained : n - B.card ≤ 2) :
+    lambda = -1 ∧
+      ∃ z : Fin n,
+        z ∉ B ∧ z ≠ x ∧
+        coeff ((f : ↥E) : ↥J) =
+          pureEdgeCoeffs
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x z ∧
+        coeff ((k : ↥E) : ↥J) =
+          pureEdgeCoeffs z x
+            (center (P.symm (((k : ↥E) : ↥J) : Fin d))) := by
+  classical
+  rcases
+      fixedExternalCoefficientPrivateFiber_heavyDiagonal_twoRetained_shape
+        g y B center P scalar coeff F x lambda hfiber
+          (fun j ↦ (hrows j).2) f hfHeavy hretained with
+    ⟨hlambda, z, hzNotB, hzNeX, hfOmit, _hfTwo, hfShape⟩
+  rcases hfiber with
+    ⟨_hxOutside, hxNotB, _hlambdaNonzero, _hownerInj, hcoeffInj,
+      hrowData, hprivacy, hoffdiag⟩
+  let of : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  let ok : Fin n := center (P.symm (((k : ↥E) : ↥J) : Fin d))
+  let cf : Fin n → ℤ := coeff ((f : ↥E) : ↥J)
+  let ck : Fin n → ℤ := coeff ((k : ↥E) : ↥J)
+  have hofB : of ∈ B := by
+    simpa [of] using (hrowData f).1
+  have hokB : ok ∈ B := by
+    simpa [ok] using (hrowData k).1
+  have hokNonzero : ck ok ≠ 0 := by
+    simpa [ck, ok] using (hrowData k).2.2
+  have hkx : ck x = -1 := by
+    have := (hrowData k).2.1
+    simpa [ck, hlambda] using this
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxNotB⟩
+  have hzC : z ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzNotB⟩
+  have hCcardUpper : (Finset.univ \ B).card ≤ 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hpairSub : ({x, z} : Finset (Fin n)) ⊆ Finset.univ \ B := by
+    intro i hi
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+    rcases hi with rfl | rfl
+    · exact hxC
+    · exact hzC
+  have hpairCard : ({x, z} : Finset (Fin n)).card = 2 :=
+    Finset.card_pair hzNeX.symm
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    have hlower := Finset.card_le_card hpairSub
+    rw [hpairCard] at hlower
+    omega
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem
+      hCcard hxC hzC hzNeX.symm
+  have hwf : Witness g (scalar ((f : ↥E) : ↥J) • y) cf := by
+    simpa [cf] using (hrows ((f : ↥E) : ↥J)).2
+  have hwk : Witness g (scalar ((f : ↥E) : ↥J) • y) ck := by
+    rw [htarget]
+    simpa [ck] using (hrows ((k : ↥E) : ↥J)).2
+  have hcoeffNe : cf ≠ ck := by
+    simpa [cf, ck] using hcoeffInj.ne hfk
+  obtain ⟨i, hiGap⟩ :=
+    exists_coefficient_add_two_le_of_distinct_witnesses
+      g hg hwf hwk hcoeffNe
+  have hiNotB : i ∉ B := by
+    intro hiB
+    by_cases hiok : i = ok
+    · subst i
+      have hfZero : cf ok = 0 := by
+        simpa [cf, ok] using hoffdiag f k hfk
+      have hkLight' : ck ok ≤ 1 := by
+        simpa [ck, ok] using (show
+          coeff ((k : ↥E) : ↥J)
+              (center (P.symm (((k : ↥E) : ↥J) : Fin d))) ≤ 1 by
+            omega)
+      omega
+    · have hkZero : ck i = 0 := by
+        simpa [ck, ok] using hprivacy k i hiB hiok
+      have hfloor := hwf.2.1 i
+      omega
+  have hix : i ≠ x := by
+    intro hix
+    subst i
+    have hfx : cf x = -1 := by
+      simpa [cf] using (hfOmit x).2 (Or.inl rfl)
+    omega
+  have hiC : i ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiNotB⟩
+  have hiz : i = z := by
+    have hiPair : i = x ∨ i = z := by
+      have : i ∈ ({x, z} : Finset (Fin n)) := by
+        rw [← hCeq]
+        exact hiC
+      simpa using this
+    rcases hiPair with hix' | hiz'
+    · exact False.elim (hix hix')
+    · exact hiz'
+  subst i
+  have hfz : cf z = -1 := by
+    simpa [cf] using (hfOmit z).2 (Or.inr rfl)
+  have hkzPositive : 1 ≤ ck z := by omega
+  have hokx : ok ≠ x := by
+    intro hokx
+    subst x
+    exact hxNotB hokB
+  have hokz : ok ≠ z := by
+    intro hokz
+    subst z
+    exact hzNotB hokB
+  have hzeroOutside : ∀ a : Fin n,
+      a ≠ x → a ≠ z → a ≠ ok → ck a = 0 := by
+    intro a hax haz haok
+    have haB : a ∈ B := by
+      by_contra haNotB
+      have haC : a ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, haNotB⟩
+      have haPair : a = x ∨ a = z := by
+        have : a ∈ ({x, z} : Finset (Fin n)) := by
+          rw [← hCeq]
+          exact haC
+        simpa using this
+      exact haPair.elim hax haz
+    simpa [ck, ok] using hprivacy k a haB haok
+  have hrestrict :
+      ∑ a ∈ ({x, z, ok} : Finset (Fin n)), ck a = ∑ a, ck a := by
+    exact Finset.sum_subset (by simp) (by
+      intro a _ ha
+      apply hzeroOutside a
+      · intro hax
+        exact ha (by simp [hax])
+      · intro haz
+        exact ha (by simp [haz])
+      · intro haok
+        exact ha (by simp [haok]))
+  have hxNotPair : x ∉ ({z, ok} : Finset (Fin n)) := by
+    simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+    exact ⟨hzNeX.symm, hokx.symm⟩
+  have hzNotOwner : z ∉ ({ok} : Finset (Fin n)) := by
+    simpa only [Finset.mem_singleton] using hokz.symm
+  have hsum : ck x + ck z + ck ok = 0 := by
+    calc
+      ck x + ck z + ck ok =
+          ∑ a ∈ ({x, z, ok} : Finset (Fin n)), ck a := by
+        rw [Finset.sum_insert hxNotPair, Finset.sum_insert hzNotOwner]
+        simp [add_assoc]
+      _ = ∑ a, ck a := hrestrict
+      _ = 0 := hwk.2.2.1
+  have hokFloor := hwk.2.1 ok
+  have hokUpper : ck ok ≤ 1 := by
+    simpa [ck, ok] using (show
+      coeff ((k : ↥E) : ↥J)
+          (center (P.symm (((k : ↥E) : ↥J) : Fin d))) ≤ 1 by
+        omega)
+  have hokMinus : ck ok = -1 := by omega
+  have hkzTwo : ck z = 2 := by omega
+  have hkOmit : ∀ a, ck a = -1 ↔ a = x ∨ a = ok := by
+    intro a
+    constructor
+    · intro haMinus
+      by_cases hax : a = x
+      · exact Or.inl hax
+      by_cases haz : a = z
+      · subst a
+        omega
+      by_cases haok : a = ok
+      · exact Or.inr haok
+      · have haZero := hzeroOutside a hax haz haok
+        omega
+    · intro ha
+      rcases ha with rfl | rfl
+      · exact hkx
+      · exact hokMinus
+  have hkShape : ck = pureEdgeCoeffs z x ok :=
+    exactPair_coeff_two_eq_pureEdgeCoeffs
+      g hwk x ok z hokx.symm hkOmit hzNeX hokz.symm hkzTwo
+  refine ⟨hlambda, z, hzNotB, hzNeX, ?_, ?_⟩
+  · simpa [cf, of] using hfShape
+  · simpa [ck, ok] using hkShape
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
