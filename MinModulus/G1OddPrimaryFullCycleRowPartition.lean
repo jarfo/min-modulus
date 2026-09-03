@@ -172,6 +172,145 @@ noncomputable def permutationFamilyOwnerSet
   classical
   exact Finset.univ.image owner
 
+/-- Rows whose owner's permutation successor is not owned by the selected
+family.  For an injective owner map these rows are in exact bijection with
+the owner-set boundary. -/
+noncomputable def permutationFamilyBoundaryRows
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) : Finset ι := by
+  classical
+  exact Finset.univ.filter fun i ↦
+    R (owner i) ∉ permutationFamilyOwnerSet owner
+
+/-- The owners represented by boundary source rows. -/
+noncomputable def permutationFamilyBoundaryOwnerSet
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) : Finset α := by
+  classical
+  exact (permutationFamilyBoundaryRows R owner).image owner
+
+/-- Boundary owners are exactly the images of boundary source rows. -/
+theorem permutationFamilyBoundaryOwnerSet_eq_boundary
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) :
+    permutationFamilyBoundaryOwnerSet R owner =
+      permutationSubsetBoundary R (permutationFamilyOwnerSet owner) := by
+  classical
+  unfold permutationFamilyBoundaryOwnerSet
+  ext x
+  constructor
+  · intro hx
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hx
+    exact Finset.mem_filter.mpr
+      ⟨Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩,
+        (Finset.mem_filter.mp hi).2⟩
+  · intro hx
+    obtain ⟨hxOwner, hxNext⟩ := Finset.mem_filter.mp hx
+    obtain ⟨i, _hi, rfl⟩ := Finset.mem_image.mp hxOwner
+    apply Finset.mem_image.mpr
+    refine ⟨i, ?_, rfl⟩
+    simpa [permutationFamilyBoundaryRows] using hxNext
+
+/-- An injective owner map loses no multiplicity when boundary owners are
+lifted back to their unique source rows. -/
+theorem card_permutationFamilyBoundaryRows_eq_boundary
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (howner : Function.Injective owner) :
+    (permutationFamilyBoundaryRows R owner).card =
+      (permutationSubsetBoundary R
+        (permutationFamilyOwnerSet owner)).card := by
+  classical
+  rw [← permutationFamilyBoundaryOwnerSet_eq_boundary]
+  exact (Finset.card_image_of_injective
+    (permutationFamilyBoundaryRows R owner) howner).symm
+
+/-- Each boundary owner of an injective family has one and only one
+boundary source row. -/
+theorem permutationFamilyBoundary_uniqueRow
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (howner : Function.Injective owner)
+    {x : α}
+    (hx : x ∈ permutationSubsetBoundary R
+      (permutationFamilyOwnerSet owner)) :
+    ∃! i : ι, i ∈ permutationFamilyBoundaryRows R owner ∧ owner i = x := by
+  classical
+  have hxOwnerSet : x ∈ permutationFamilyBoundaryOwnerSet R owner := by
+    rw [permutationFamilyBoundaryOwnerSet_eq_boundary]
+    exact hx
+  have hxImage : x ∈ (permutationFamilyBoundaryRows R owner).image owner := by
+    exact hxOwnerSet
+  obtain ⟨i, hi, hix⟩ := Finset.mem_image.mp hxImage
+  refine ⟨i, ⟨hi, hix⟩, ?_⟩
+  intro j hj
+  exact howner (hj.2.trans hix.symm)
+
+/-- A row in a full occupied component has a unique selected successor row.
+The successor remains in the same permutation component. -/
+theorem permutationFamilyFullComponent_uniqueSuccessorRow
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (howner : Function.Injective owner)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (hC : C ∈ permutationSubsetFullComponents R
+      (permutationFamilyOwnerSet owner))
+    (i : ι)
+    (hiC : Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C) :
+    ∃! j : ι,
+      owner j = R (owner i) ∧
+        Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner j) = C := by
+  classical
+  have hnextC :
+      Quotient.mk (Equiv.Perm.SameCycle.setoid R) (R (owner i)) = C :=
+    (permutationSameCycleQuotient_apply_eq R (owner i)).trans hiC
+  have hnextOwner : R (owner i) ∈ permutationFamilyOwnerSet owner :=
+    (Finset.mem_filter.mp hC).2 _ hnextC
+  obtain ⟨j, _hjUniv, hjOwner⟩ := Finset.mem_image.mp hnextOwner
+  refine ⟨j, ⟨hjOwner, ?_⟩, ?_⟩
+  · rw [hjOwner]
+    exact hnextC
+  · intro k hk
+    exact howner (hk.1.trans hjOwner.symm)
+
+/-- On a full occupied component, the unique selected successor row carries
+the exact centered affine doubling recurrence. -/
+theorem permutationFamilyFullComponent_uniqueSuccessorRow_affine
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (x : α → G) (target : ι → G)
+    (howner : Function.Injective owner)
+    (hdouble : ∀ a, x (R a) = 2 • x a)
+    (epsilon : ℤ) (offset : G)
+    (haffine : ∀ i, target i = epsilon • x (owner i) + offset)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (hC : C ∈ permutationSubsetFullComponents R
+      (permutationFamilyOwnerSet owner))
+    (i : ι)
+    (hiC : Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C) :
+    ∃! j : ι,
+      owner j = R (owner i) ∧
+        Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner j) = C ∧
+        target j - offset = 2 • (target i - offset) := by
+  obtain ⟨j, hj, hjUnique⟩ :=
+    permutationFamilyFullComponent_uniqueSuccessorRow
+      R owner howner C hC i hiC
+  have hcentered : ∀ k, target k - offset = epsilon • x (owner k) := by
+    intro k
+    rw [haffine k]
+    abel
+  refine ⟨j, ⟨hj.1, hj.2, ?_⟩, ?_⟩
+  · calc
+      target j - offset = epsilon • x (owner j) := hcentered j
+      _ = epsilon • x (R (owner i)) := by rw [hj.1]
+      _ = epsilon • (2 • x (owner i)) := by rw [hdouble]
+      _ = epsilon • x (owner i) + epsilon • x (owner i) := by
+        rw [two_nsmul, smul_add]
+      _ = 2 • (target i - offset) := by
+        rw [hcentered i, two_nsmul]
+  · intro k hk
+    exact hjUnique k ⟨hk.1, hk.2.1⟩
+
 /-- Family and owner-set definitions give the same occupied components. -/
 theorem permutationFamilyComponents_eq_subsetComponents
     {ι α : Type*} [Fintype ι] [Fintype α]
@@ -2309,6 +2448,21 @@ theorem FixedExternalTwoRetainedAffineProfileAbove.relative
       simp
       abel
 
+/-- The owner map of every selected fixed-external row family is injective.
+This is structural: all successive row types are subtypes of the original
+cycle-index set, so lifting boundary owners and successors loses no rows. -/
+theorem fixedExternalSelectedOwner_injective
+    {d : ℕ} {J : Finset (Fin d)} {E : Finset ↥J}
+    {F : Finset ↥E} (S : Finset ↥F) :
+    Function.Injective (fun f : ↥S ↦
+      (((f : ↥F) : ↥E) : ↥J) : ↥S → Fin d) := by
+  intro f k h
+  apply Subtype.ext
+  apply Subtype.ext
+  apply Subtype.ext
+  apply Subtype.ext
+  exact h
+
 /-- Named payload for the occupied relative-cycle frontier of a dense
 external affine profile. -/
 def FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
@@ -2332,7 +2486,8 @@ def FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
             g (center (P.symm j)) - base
           let target : ↥S → G := fun f ↦
             scalar (((f : ↥F) : ↥E) : ↥J) • y
-          (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
+          Function.Injective owner ∧
+            (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
             ((profileThreshold <
                   (permutationFamilyComponents R owner).card * componentThreshold ∧
                 profileThreshold <
@@ -2396,7 +2551,8 @@ theorem FixedExternalTwoRetainedRelativeAffineProfileAbove.cycleComponentFrontie
         simpa [Fintype.card_coe] using hlarge')
   refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
     S, rfl, hlarge', ?_⟩
-  refine ⟨haffine', ?_⟩
+  refine ⟨by simpa [owner] using fixedExternalSelectedOwner_injective S,
+    haffine', ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     refine ⟨by simpa [owner] using hcomponents, ?_⟩
