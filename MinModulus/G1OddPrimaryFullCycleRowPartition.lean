@@ -5338,6 +5338,180 @@ theorem choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
       sub_right_inj.mp (hsubST.trans hsubSU.symm)
     exact (hTU (hownerSumInjective hsumTU)).elim
 
+/-- Joint balanced-layer capacity for a finite affine profile partition.
+Choose a prescribed number of owners independently in every profile cell.
+All cell offsets then cancel, while the normalized owner slope `2` leaves
+fibers of size at most two by uniqueness of the involution. -/
+theorem prod_profile_choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
+    [Fintype G]
+    {ι β : Type*} [Fintype ι] [DecidableEq ι]
+    [Fintype β] [DecidableEq β]
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (owner : ι ↪ Fin n) (profile : ι → β)
+    (y : G) (offset : β → G) (target : ι → G)
+    (haffine : ∀ i, target i =
+      (2 : ℤ) • g (owner i) + offset (profile i))
+    (hmem : ∀ i, target i ∈ AddSubgroup.zmultiples y)
+    (k : β → ℕ) :
+    (∏ q : β,
+      ((Finset.univ.filter (fun i : ι ↦ profile i = q)).card.choose
+        (k q))) ≤ 2 * addOrderOf y := by
+  classical
+  let cell : β → Finset ι := fun q ↦
+    Finset.univ.filter (fun i : ι ↦ profile i = q)
+  let cellChoices : β → Finset (Finset ι) := fun q ↦
+    (cell q).powersetCard (k q)
+  let choices : Finset (β → Finset ι) := Fintype.piFinset cellChoices
+  have hchoiceCell : ∀ (A : ↥choices) (q : β), A.1 q ⊆ cell q := by
+    intro A q
+    exact (Finset.mem_powersetCard.mp
+      (Fintype.mem_piFinset.mp A.property q)).1
+  have hchoiceCard : ∀ (A : ↥choices) (q : β),
+      (A.1 q).card = k q := by
+    intro A q
+    exact (Finset.mem_powersetCard.mp
+      (Fintype.mem_piFinset.mp A.property q)).2
+  have hchoiceDisjoint : ∀ A : ↥choices,
+      (↑(Finset.univ : Finset β) : Set β).PairwiseDisjoint
+        (fun q ↦ A.1 q) := by
+    intro A
+    rw [Finset.pairwiseDisjoint_iff]
+    intro q _ r _ hinter
+    obtain ⟨i, hi⟩ := hinter
+    have hi' := Finset.mem_inter.mp hi
+    have hiq := hchoiceCell A q hi'.1
+    have hir := hchoiceCell A r hi'.2
+    have hq : profile i = q := (Finset.mem_filter.mp hiq).2
+    have hr : profile i = r := (Finset.mem_filter.mp hir).2
+    exact hq.symm.trans hr
+  let selected : ↥choices → Finset ι := fun A ↦
+    Finset.univ.biUnion (fun q ↦ A.1 q)
+  have hselectedCell : ∀ (A : ↥choices) (q : β),
+      (selected A).filter (fun i ↦ profile i = q) = A.1 q := by
+    intro A q
+    ext i
+    constructor
+    · intro hi
+      have hiData := Finset.mem_filter.mp hi
+      obtain ⟨r, _hr, hir⟩ := Finset.mem_biUnion.mp hiData.1
+      have hirCell := hchoiceCell A r hir
+      have hprofileR : profile i = r :=
+        (Finset.mem_filter.mp hirCell).2
+      have hrq : r = q := hprofileR.symm.trans hiData.2
+      simpa only [hrq] using hir
+    · intro hi
+      have hiCell := hchoiceCell A q hi
+      exact Finset.mem_filter.mpr
+        ⟨Finset.mem_biUnion.mpr ⟨q, Finset.mem_univ _, hi⟩,
+          (Finset.mem_filter.mp hiCell).2⟩
+  have hselectedInjective : Function.Injective selected := by
+    intro A C hAC
+    apply Subtype.ext
+    funext q
+    rw [← hselectedCell A q, ← hselectedCell C q, hAC]
+  have hselectedCard : ∀ A : ↥choices,
+      (selected A).card = ∑ q : β, k q := by
+    intro A
+    calc
+      (selected A).card =
+          ∑ q ∈ (Finset.univ : Finset β), (A.1 q).card := by
+        exact Finset.card_biUnion (hchoiceDisjoint A)
+      _ = ∑ q ∈ (Finset.univ : Finset β), k q := by
+        exact Finset.sum_congr rfl fun q _ ↦ hchoiceCard A q
+      _ = ∑ q : β, k q := by simp
+  have hselectedSum : ∀ A : ↥choices,
+      ∑ i ∈ selected A, g (owner i) =
+        ∑ q : β, ∑ i ∈ A.1 q, g (owner i) := by
+    intro A
+    simpa only [selected, Finset.sum_const_zero, Finset.sum_attach,
+      Finset.sum_filter] using
+        (Finset.sum_biUnion (f := fun i ↦ g (owner i))
+          (hchoiceDisjoint A))
+  let ownerSum : ↥choices → G := fun A ↦
+    ∑ q : β, ∑ i ∈ A.1 q, g (owner i)
+  have hownerSumInjective : Function.Injective ownerSum := by
+    intro A C hAC
+    apply hselectedInjective
+    apply validTuple_subsetSum_eq_of_card_eq g hg owner
+    · rw [hselectedCard A, hselectedCard C]
+    · rw [hselectedSum A, hselectedSum C]
+      exact hAC
+  let encode : ↥choices → AddSubgroup.zmultiples y := fun A ↦
+    ⟨∑ q : β, ∑ i ∈ A.1 q, target i,
+      AddSubgroup.sum_mem _ fun q _ ↦
+        AddSubgroup.sum_mem _ fun i _ ↦ hmem i⟩
+  have hsumAffine : ∀ A : ↥choices,
+      (∑ q : β, ∑ i ∈ A.1 q, target i) =
+        ∑ q : β,
+          ((2 : ℤ) • (∑ i ∈ A.1 q, g (owner i)) +
+            (k q) • offset q) := by
+    intro A
+    apply Finset.sum_congr rfl
+    intro q _hq
+    calc
+      (∑ i ∈ A.1 q, target i) =
+          ∑ i ∈ A.1 q,
+            ((2 : ℤ) • g (owner i) + offset q) := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        rw [haffine]
+        have hiCell := hchoiceCell A q hi
+        rw [(Finset.mem_filter.mp hiCell).2]
+      _ = (2 : ℤ) • (∑ i ∈ A.1 q, g (owner i)) +
+          (k q) • offset q := by
+        rw [Finset.sum_add_distrib, Finset.sum_zsmul,
+          Finset.sum_const, hchoiceCard A q]
+  have hdouble_of_encode_eq : ∀ {A C : ↥choices}, encode A = encode C →
+      (2 : ℤ) • ownerSum A = (2 : ℤ) • ownerSum C := by
+    intro A C hAC
+    have hval := congrArg Subtype.val hAC
+    dsimp only [encode] at hval
+    rw [hsumAffine A, hsumAffine C] at hval
+    rw [Finset.sum_add_distrib, Finset.sum_add_distrib,
+      Finset.sum_zsmul, Finset.sum_zsmul] at hval
+    dsimp only [ownerSum]
+    exact add_right_cancel hval
+  have hsub_eq_involution_of_ne : ∀ {A C : ↥choices},
+      encode A = encode C → A ≠ C → ownerSum A - ownerSum C = h := by
+    intro A C hencode hne
+    have hdouble := hdouble_of_encode_eq hencode
+    have htwoTorsion :
+        (ownerSum A - ownerSum C) + (ownerSum A - ownerSum C) = 0 := by
+      have hzsmul : (2 : ℤ) • (ownerSum A - ownerSum C) = 0 := by
+        rw [zsmul_sub, hdouble, sub_self]
+      simpa only [two_zsmul] using hzsmul
+    rcases hunique (ownerSum A - ownerSum C) htwoTorsion with
+      hzero | hinvolution
+    · exact (hne (hownerSumInjective (sub_eq_zero.mp hzero))).elim
+    · exact hinvolution
+  rcases finiteMap_capacity_or_largeFiber
+      (Finset.univ : Finset (AddSubgroup.zmultiples y))
+        encode (fun _ ↦ Finset.mem_univ _) 2 with
+    hcap | ⟨value, _hvalue, hlarge⟩
+  · have hchoicesCard : choices.card =
+        ∏ q : β, (cell q).card.choose (k q) := by
+      simp only [choices, Fintype.card_piFinset, cellChoices,
+        Finset.card_powersetCard]
+    rw [Fintype.card_coe, hchoicesCard,
+      Finset.card_univ, Fintype.card_zmultiples] at hcap
+    simpa only [cell, Nat.mul_comm] using hcap
+  · let fiber : Finset ↥choices :=
+      Finset.univ.filter (fun A : ↥choices ↦ encode A = value)
+    have hlarge' : 2 < fiber.card := by
+      simpa only [fiber] using hlarge
+    obtain ⟨A, C, D, hA, hC, hD, hAC, hAD, hCD⟩ :=
+      Finset.two_lt_card_iff.mp hlarge'
+    have hencodeAC : encode A = encode C :=
+      (Finset.mem_filter.mp hA).2.trans (Finset.mem_filter.mp hC).2.symm
+    have hencodeAD : encode A = encode D :=
+      (Finset.mem_filter.mp hA).2.trans (Finset.mem_filter.mp hD).2.symm
+    have hsubAC := hsub_eq_involution_of_ne hencodeAC hAC
+    have hsubAD := hsub_eq_involution_of_ne hencodeAD hAD
+    have hsumCD : ownerSum C = ownerSum D :=
+      sub_right_inj.mp (hsubAC.trans hsubAD.symm)
+    exact (hCD (hownerSumInjective hsumCD)).elim
+
 /-- The all-row normalized certificate behind the 18-profile decomposition.
 Every private row carries its complete finite label and, after the canonical
 owner rescaling, has owner slope exactly `2`; no dominant subfamily has been
@@ -5359,6 +5533,91 @@ def TwoRetainedMinimalCyclicKernelNormalizedRows
               (coeff b (supportCoord b) • g (supportCoord b) +
                 (-(coeff b (b : Fin n) + coeff b (supportCoord b))) •
                   g companion)
+
+/-- Apply the joint balanced-layer theorem to every row of the canonical
+18-profile exact-two certificate.  The returned profile map covers all of
+`B`, and arbitrary prescribed layer sizes are allowed in its cells. -/
+theorem TwoRetainedMinimalCyclicKernelNormalizedRows.profileProductChoose_le
+    [Fintype G] [DecidableEq G]
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (y : G) (B : Finset (Fin n))
+    (scalar : ↥B → ℤ) (coeff : ↥B → Fin n → ℤ)
+    (supportCoord : ↥B → Fin n)
+    (hretained : n - B.card = 2)
+    (hnormalized : TwoRetainedMinimalCyclicKernelNormalizedRows
+      g y B scalar coeff supportCoord)
+    (k : ↥(twoRetainedPrivateProfileLabels B) → ℕ) :
+    ∃ profile : ↥B → ↥(twoRetainedPrivateProfileLabels B),
+      (∏ q : ↥(twoRetainedPrivateProfileLabels B),
+        ((Finset.univ.filter (fun b : ↥B ↦ profile b = q)).card.choose
+          (k q))) ≤ 2 * addOrderOf y := by
+  classical
+  have hcomplementCard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  obtain ⟨x, z, hxz, hcomplement⟩ :=
+    Finset.card_eq_two.mp hcomplementCard
+  let companionOf : Fin n → Fin n := fun a ↦ if a = x then z else x
+  have hcompanionUnique : ∀ a c : Fin n,
+      a ∈ Finset.univ \ B → c ∈ Finset.univ \ B → c ≠ a →
+        c = companionOf a := by
+    intro a c haC hcC hca
+    have haPair : a = x ∨ a = z := by
+      rw [hcomplement] at haC
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using haC
+    have hcPair : c = x ∨ c = z := by
+      rw [hcomplement] at hcC
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hcC
+    rcases haPair with rfl | rfl
+    · have hcz : c = z := hcPair.resolve_left hca
+      subst c
+      simp only [companionOf, if_pos]
+    · have hcx : c = x := hcPair.resolve_right hca
+      subst c
+      simp only [companionOf, if_neg hxz.symm]
+  let owner : ↥B ↪ Fin n :=
+    { toFun := fun b ↦ b
+      inj' := Subtype.coe_injective }
+  let rawProfile : ↥B → ((Fin n × ℤ) × ℤ) := fun b ↦
+    ((supportCoord b, coeff b (supportCoord b)),
+      coeff b (b : Fin n))
+  let profile : ↥B → ↥(twoRetainedPrivateProfileLabels B) := fun b ↦
+    ⟨rawProfile b, (hnormalized b).1⟩
+  let offset : ↥(twoRetainedPrivateProfileLabels B) → G := fun q ↦
+    let label : ((Fin n × ℤ) × ℤ) := q
+    twoRetainedOwnerNormalization label.2 •
+      (label.1.2 • g label.1.1 +
+        (-(label.2 + label.1.2)) • g (companionOf label.1.1))
+  let target : ↥B → G := fun b ↦
+    twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+      (scalar b • y)
+  have haffine : ∀ b : ↥B,
+      target b = (2 : ℤ) • g (owner b) + offset (profile b) := by
+    intro b
+    rcases (hnormalized b).2 with
+      ⟨companion, hcompanionB, hcompanionNe,
+        _hrowComplement, hrow⟩
+    have hsupportC : supportCoord b ∈ Finset.univ \ B :=
+      (Finset.mem_product.mp
+        (Finset.mem_product.mp (hnormalized b).1).1).1
+    have hcompanionC : companion ∈ Finset.univ \ B :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hcompanionB⟩
+    have hcompanionEq := hcompanionUnique
+      (supportCoord b) companion hsupportC hcompanionC hcompanionNe
+    have howner : owner b = (b : Fin n) := rfl
+    rw [howner]
+    simpa only [target, offset, profile, rawProfile,
+      hcompanionEq] using hrow
+  have htargetMem : ∀ b : ↥B,
+      target b ∈ AddSubgroup.zmultiples y := by
+    intro b
+    exact AddSubgroup.zsmul_mem _
+      (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _) _
+  refine ⟨profile, ?_⟩
+  exact
+    prod_profile_choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
+      g hg hunique owner profile y offset target haffine htargetMem k
 
 /-- Canonical private witnesses indexed by every point of a minimal cyclic-
 kernel transversal when exactly two coordinates survive.  Each row uses its
