@@ -279,6 +279,7 @@ import MinModulus.G1OddPrimaryFullCycleCenterSparse
 import MinModulus.G1OddPrimaryFullCycleSparseRow
 import MinModulus.G1OddPrimaryFullCyclePivotStar
 import MinModulus.G1OddPrimaryFullCyclePivotGeneration
+import MinModulus.G1OddPrimaryFullCyclePivotArithmetic
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
