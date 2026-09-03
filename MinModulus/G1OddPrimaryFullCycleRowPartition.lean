@@ -37,6 +37,43 @@ theorem finiteMap_capacity_or_largeFiber
       (s := Finset.univ) (t := R) (f := f)
       (fun a _ha ↦ hf a) hlarge
 
+/-- Two indices in one component of a doubling permutation differ by a
+power-of-two iterate. -/
+theorem sameCycle_doubling_eq_pow_two_nsmul
+    {α : Type*} [Finite α] (R : Equiv.Perm α)
+    (x : α → G) (hdouble : ∀ i, x (R i) = 2 • x i)
+    {u v : α} (hsame : R.SameCycle u v) :
+    ∃ k : ℕ, x v = (2 ^ k) • x u := by
+  obtain ⟨k, hk⟩ := hsame.exists_nat_pow_eq
+  refine ⟨k, ?_⟩
+  rw [← hk]
+  exact apply_iterate_eq_pow_two_nsmul_of_apply_eq_two_nsmul
+    R x hdouble k u
+
+/-- Componentwise comparison of two rows satisfying one affine owner law.
+Under a doubling recurrence, their target difference is the same slope
+times a Mersenne multiple of the first owner displacement. -/
+theorem sameCycle_affineTargets_sub_eq_mersenne_nsmul
+    {α : Type*} [Finite α] (R : Equiv.Perm α)
+    (x target : α → G) (hdouble : ∀ i, x (R i) = 2 • x i)
+    {u v : α} (hsame : R.SameCycle u v)
+    (epsilon : ℤ) (offset : G)
+    (hu : target u = epsilon • x u + offset)
+    (hv : target v = epsilon • x v + offset) :
+    ∃ k : ℕ,
+      target v - target u = epsilon • ((2 ^ k - 1) • x u) := by
+  obtain ⟨k, hk⟩ :=
+    sameCycle_doubling_eq_pow_two_nsmul R x hdouble hsame
+  refine ⟨k, ?_⟩
+  rw [hv, hu, hk]
+  have hone : 1 ≤ 2 ^ k := Nat.one_le_two_pow
+  have hsplit : (2 ^ k) • x u = (2 ^ k - 1) • x u + x u := by
+    have hcoeff := congrArg (fun a : ℕ ↦ a • x u)
+      (Nat.sub_add_cancel hone).symm
+    simpa [add_nsmul, one_nsmul] using hcoeff
+  rw [hsplit, smul_add]
+  abel
+
 /-- The finite set of possible nonzero coefficient values at one coordinate
 of an `n`-coordinate witness. -/
 noncomputable def witnessNonzeroCoefficientLevels (n : ℕ) : Finset ℤ :=
