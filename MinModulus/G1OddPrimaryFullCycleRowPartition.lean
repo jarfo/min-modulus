@@ -1487,13 +1487,15 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
     ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
       ∀ f : ↥F,
         let o := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+        let c := coeff ((f : ↥E) : ↥J)
         let target := scalar ((f : ↥E) : ↥J) • y
         (lambda = -1 ∧
-            (target = 2 • g z - g o - g x ∨
-              target = g o - g x ∨
-              target = 2 • g o - g x - g z)) ∨
-          (lambda = 1 ∧ target = g x - g o) ∨
-          (lambda = 2 ∧ target = 2 • g x - g o - g z) := by
+            ((c o = -1 ∧ target = 2 • g z - g o - g x) ∨
+              (c o = 1 ∧ target = g o - g x) ∨
+              (c o = 2 ∧ target = 2 • g o - g x - g z))) ∨
+          (lambda = 1 ∧ c o = -1 ∧ target = g x - g o) ∨
+          (lambda = 2 ∧ c o = -1 ∧
+            target = 2 • g x - g o - g z) := by
   classical
   have hxNotB : x ∉ B := hfiber.2.1
   have hxC : x ∈ Finset.univ \ B :=
@@ -1523,6 +1525,16 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
     simpa [target, c] using hrows ((f : ↥E) : ↥J)
   have hcx : c x = lambda := by
     simpa [c] using (hfiber.2.2.2.2.2.1 f).2.1
+  have hoB : o ∈ B := by
+    simpa [o] using (hfiber.2.2.2.2.2.1 f).1
+  have hox : o ≠ x := by
+    intro hox
+    subst x
+    exact hxNotB hoB
+  have hoz : o ≠ z := by
+    intro hoz
+    subst z
+    exact hzNotB hoB
   rcases fixedExternalCoefficientPrivateFiber_twoRetained_signedPair_or_pureEdge
       g y B center P scalar coeff F x lambda hfiber hrows f hretained with
     ⟨zf, hzfNotB, hzfNeX, hgeometry⟩
@@ -1540,33 +1552,58 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
       ⟨hlambda, hleft | hsigned | hright⟩ |
       ⟨hlambda, hsigned⟩ | ⟨hlambda, hcenter⟩
   · left
-    refine ⟨hlambda, Or.inl ?_⟩
-    exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
-      g hc z o x (by simpa [c, o] using hleft)
+    refine ⟨hlambda, Or.inl ⟨?_, ?_⟩⟩
+    · have hleft' : c = pureEdgeCoeffs z o x := by
+        simpa [c, o] using hleft
+      change c o = -1
+      rw [hleft']
+      simp [pureEdgeCoeffs, hoz, hox]
+    · exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+        g hc z o x (by simpa [c, o] using hleft)
   · left
-    refine ⟨hlambda, Or.inr (Or.inl ?_)⟩
+    refine ⟨hlambda, Or.inr (Or.inl ⟨?_, ?_⟩)⟩
     rcases hsigned.2.1 with hforward | hreverse
-    · simpa [target, o] using hforward.2.2
+    · simpa [c, o] using hforward.1
     · have hxOne : c x = 1 := by simpa [c] using hreverse.2.1
       have hxMinus : c x = -1 := by rw [hcx, hlambda]
       omega
+    · rcases hsigned.2.1 with hforward | hreverse
+      · simpa [target, o] using hforward.2.2
+      · have hxOne : c x = 1 := by simpa [c] using hreverse.2.1
+        have hxMinus : c x = -1 := by rw [hcx, hlambda]
+        omega
   · left
-    refine ⟨hlambda, Or.inr (Or.inr ?_)⟩
-    exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
-      g hc o x z (by simpa [c, o] using hright)
+    refine ⟨hlambda, Or.inr (Or.inr ⟨?_, ?_⟩)⟩
+    · have hright' : c = pureEdgeCoeffs o x z := by
+        simpa [c, o] using hright
+      change c o = 2
+      rw [hright']
+      simp [pureEdgeCoeffs, hox, hoz]
+    · exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+        g hc o x z (by simpa [c, o] using hright)
   · right
     left
-    refine ⟨hlambda, ?_⟩
+    refine ⟨hlambda, ?_, ?_⟩
     rcases hsigned.2.1 with hforward | hreverse
     · have hxMinus : c x = -1 := by simpa [c] using hforward.2.1
       have hxOne : c x = 1 := by rw [hcx, hlambda]
       omega
-    · simpa [target, o] using hreverse.2.2
+    · simpa [c, o] using hreverse.1
+    · rcases hsigned.2.1 with hforward | hreverse
+      · have hxMinus : c x = -1 := by simpa [c] using hforward.2.1
+        have hxOne : c x = 1 := by rw [hcx, hlambda]
+        omega
+      · simpa [target, o] using hreverse.2.2
   · right
     right
-    refine ⟨hlambda, ?_⟩
-    exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
-      g hc x o z (by simpa [c, o] using hcenter)
+    refine ⟨hlambda, ?_, ?_⟩
+    · have hcenter' : c = pureEdgeCoeffs x o z := by
+        simpa [c, o] using hcenter
+      change c o = -1
+      rw [hcenter']
+      simp [pureEdgeCoeffs, hox, hoz]
+    · exact witness_target_eq_of_coeff_eq_pureEdgeCoeffs
+        g hc x o z (by simpa [c, o] using hcenter)
 
 /-- The constant-size alphabet for a common retained external coefficient
 when exactly two coordinates survive deletion. -/
@@ -1638,6 +1675,110 @@ theorem fixedExternalCoefficientPrivateFiber_lambda_isUnit_mod_odd
   exact twoRetainedExternalCoefficientLevel_isUnit_mod_odd hpOdd
     (fixedExternalCoefficientPrivateFiber_lambda_mem_twoRetainedLevels
       g y B center P scalar coeff F x lambda hfiber hrows f hretained)
+
+/-- The private-owner coefficient of every row belongs to the same constant
+three-element alphabet.  Combined with the common external coefficient, it
+identifies one of the five affine row profiles. -/
+theorem fixedExternalCoefficientPrivateFiber_ownerCoefficient_mem_twoRetainedLevels
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f : ↥F) (hretained : n - B.card = 2) :
+    coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) ∈
+      twoRetainedExternalCoefficientLevels := by
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
+      g y B center P scalar coeff F x lambda hfiber hrows hretained with
+    ⟨z, _hzB, _hzx, haffine⟩
+  rcases haffine f with
+      ⟨_hlambda, ⟨howner, _htarget⟩ |
+        ⟨howner, _htarget⟩ | ⟨howner, _htarget⟩⟩ |
+      ⟨_hlambda, howner, _htarget⟩ |
+      ⟨_hlambda, howner, _htarget⟩
+  all_goals simp [twoRetainedExternalCoefficientLevels, howner]
+
+/-- Adaptive extraction of a uniform affine external-row profile.  At most
+three owner coefficients occur, so either `3*K` rows pay for all profiles or
+one subfamily of more than `K` rows obeys one fixed affine law in its owner.
+The companion retained coordinate is common to the entire original fiber.
+-/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_capacity_or_largeAffineProfile
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card = 2) (K : ℕ) :
+    ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
+      (F.card ≤ 3 * K ∨
+        ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+          K < (Finset.univ.filter (fun f : ↥F ↦
+            coeff ((f : ↥E) : ↥J)
+              (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)).card ∧
+          ∀ f : ↥(Finset.univ.filter (fun f : ↥F ↦
+              coeff ((f : ↥E) : ↥J)
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)),
+            let o := center
+              (P.symm (((((f : ↥F) : ↥E) : ↥J)) : Fin d))
+            let target := scalar (((f : ↥F) : ↥E) : ↥J) • y
+            (lambda = -1 ∧ mu = -1 ∧
+                target = 2 • g z - g o - g x) ∨
+              (lambda = -1 ∧ mu = 1 ∧ target = g o - g x) ∨
+              (lambda = -1 ∧ mu = 2 ∧
+                target = 2 • g o - g x - g z) ∨
+              (lambda = 1 ∧ mu = -1 ∧ target = g x - g o) ∨
+              (lambda = 2 ∧ mu = -1 ∧
+                target = 2 • g x - g o - g z)) := by
+  classical
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
+      g y B center P scalar coeff F x lambda hfiber hrows hretained with
+    ⟨z, hzB, hzx, haffine⟩
+  let ownerCoeff : ↥F → ℤ := fun f ↦
+    coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d)))
+  have hownerMem : ∀ f : ↥F,
+      ownerCoeff f ∈ twoRetainedExternalCoefficientLevels := by
+    intro f
+    exact fixedExternalCoefficientPrivateFiber_ownerCoefficient_mem_twoRetainedLevels
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained
+  refine ⟨z, hzB, hzx, ?_⟩
+  rcases finiteMap_capacity_or_largeFiber
+      twoRetainedExternalCoefficientLevels ownerCoeff hownerMem K with
+    hcap | ⟨mu, hmuLevel, hlarge⟩
+  · left
+    have hcap' : F.card ≤
+        twoRetainedExternalCoefficientLevels.card * K := by
+      simpa [Fintype.card_coe] using hcap
+    simpa [card_twoRetainedExternalCoefficientLevels] using hcap'
+  · right
+    refine ⟨mu, hmuLevel, by simpa [ownerCoeff, Fintype.card_coe] using hlarge,
+      ?_⟩
+    intro f
+    have hmu : ownerCoeff (f : ↥F) = mu :=
+      (Finset.mem_filter.mp f.property).2
+    rcases haffine (f : ↥F) with
+        ⟨hlambda, ⟨howner, htarget⟩ |
+          ⟨howner, htarget⟩ | ⟨howner, htarget⟩⟩ |
+        ⟨hlambda, howner, htarget⟩ |
+        ⟨hlambda, howner, htarget⟩
+    · exact Or.inl ⟨hlambda, by simpa [ownerCoeff] using hmu.symm.trans howner,
+        htarget⟩
+    · exact Or.inr (Or.inl
+        ⟨hlambda, by simpa [ownerCoeff] using hmu.symm.trans howner, htarget⟩)
+    · exact Or.inr (Or.inr (Or.inl
+        ⟨hlambda, by simpa [ownerCoeff] using hmu.symm.trans howner, htarget⟩))
+    · exact Or.inr (Or.inr (Or.inr (Or.inl
+        ⟨hlambda, by simpa [ownerCoeff] using hmu.symm.trans howner, htarget⟩)))
+    · exact Or.inr (Or.inr (Or.inr (Or.inr
+        ⟨hlambda, by simpa [ownerCoeff] using hmu.symm.trans howner, htarget⟩)))
 
 /-- A private witness evaluated at any nonzero retained coordinate uses the
 same constant three-level alphabet when exactly two coordinates survive.
