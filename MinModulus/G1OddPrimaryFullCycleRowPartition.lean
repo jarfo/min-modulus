@@ -2773,6 +2773,100 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_selectedGeometry
     g y B center P scalar coeff F x lambda hfiber hrows hretained
       z hzB hzx mu f (hmu f hf)
 
+/-- The fixed labels make the rowwise five-way alternative uniform: a
+nonempty selected family occupies one exact signed/pure-edge class globally,
+not a row-dependent mixture of the five classes. -/
+def FixedExternalTwoRetainedUniformGeometry
+    (g : Fin n → G) (y : G)
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (S : Finset ↥F)
+    (x z : Fin n) (lambda mu : ℤ) : Prop :=
+  (lambda = -1 ∧ mu = -1 ∧ ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) =
+        pureEdgeCoeffs z
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+    (lambda = -1 ∧ mu = 1 ∧ ∀ f : ↥F, f ∈ S →
+      ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+        (coeff ((f : ↥E) : ↥J))
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+    (lambda = -1 ∧ mu = 2 ∧ ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) =
+        pureEdgeCoeffs
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x z) ∨
+    (lambda = 1 ∧ mu = -1 ∧ ∀ f : ↥F, f ∈ S →
+      ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+        (coeff ((f : ↥E) : ↥J))
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+    (lambda = 2 ∧ mu = -1 ∧ ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J) =
+        pureEdgeCoeffs x
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) z)
+
+/-- Collapse a rowwise selected geometry to one global case using any row of
+the nonempty selected family to determine the two fixed labels. -/
+theorem FixedExternalTwoRetainedSelectedGeometry.uniform
+    (g : Fin n → G) (y : G)
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (S : Finset ↥F)
+    (x z : Fin n) (lambda mu : ℤ)
+    (hgeometry : FixedExternalTwoRetainedSelectedGeometry
+      g y center P scalar coeff F S x z lambda mu)
+    (hS : S.Nonempty) :
+    FixedExternalTwoRetainedUniformGeometry
+      g y center P scalar coeff F S x z lambda mu := by
+  classical
+  unfold FixedExternalTwoRetainedSelectedGeometry at hgeometry
+  unfold FixedExternalTwoRetainedUniformGeometry
+  obtain ⟨f₀, hf₀⟩ := hS
+  rcases hgeometry f₀ hf₀ with hfirst | hsecond | hthird | hfourth | hfifth
+  · left
+    refine ⟨hfirst.1, hfirst.2.1, ?_⟩
+    intro f hf
+    rcases hgeometry f hf with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · exact hfirst'.2.2
+    all_goals omega
+  · right
+    left
+    refine ⟨hsecond.1, hsecond.2.1, ?_⟩
+    intro f hf
+    rcases hgeometry f hf with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · exact hsecond'.2.2
+    all_goals omega
+  · right
+    right
+    left
+    refine ⟨hthird.1, hthird.2.1, ?_⟩
+    intro f hf
+    rcases hgeometry f hf with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · omega
+    · exact hthird'.2.2
+    all_goals omega
+  · right
+    right
+    right
+    left
+    refine ⟨hfourth.1, hfourth.2.1, ?_⟩
+    intro f hf
+    rcases hgeometry f hf with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    · omega
+    · omega
+    · omega
+    · exact hfourth'.2.2
+    · omega
+  · right
+    right
+    right
+    right
+    refine ⟨hfifth.1, hfifth.2.1, ?_⟩
+    intro f hf
+    rcases hgeometry f hf with hfirst' | hsecond' | hthird' | hfourth' | hfifth'
+    all_goals try omega
+    exact hfifth'.2.2
+
 /-- The target represented by a pure-edge coefficient vector is its affine
 edge value.  This form is convenient when row normal forms are compared with
 the relative doubling recurrence. -/
@@ -3195,6 +3289,38 @@ def FixedExternalTwoRetainedRelativeAffineProfileAbove
           scalar (((f : ↥F) : ↥E) : ↥J) • y =
             epsilon • (g o - base) + offset
 
+/-- Exact slope and translation offset attached to each of the five uniform
+two-retained coefficient profiles.  In particular the affine slope is the
+private-owner coefficient `mu`, not a separately chosen unit. -/
+def FixedExternalTwoRetainedRelativeAffineParameters
+    (g : Fin n → G) (base : G) (x z : Fin n)
+    (lambda mu epsilon : ℤ) (offset : G) : Prop :=
+  (lambda = -1 ∧ mu = -1 ∧ epsilon = mu ∧
+      offset = 2 • g z - g x - base) ∨
+    (lambda = -1 ∧ mu = 1 ∧ epsilon = mu ∧
+      offset = base - g x) ∨
+    (lambda = -1 ∧ mu = 2 ∧ epsilon = mu ∧
+      offset = 2 • base - g x - g z) ∨
+    (lambda = 1 ∧ mu = -1 ∧ epsilon = mu ∧
+      offset = g x - base) ∨
+    (lambda = 2 ∧ mu = -1 ∧ epsilon = mu ∧
+      offset = 2 • g x - g z - base)
+
+/-- The homogeneous affine slope in every exact parameter profile is the
+selected private-owner coefficient. -/
+theorem FixedExternalTwoRetainedRelativeAffineParameters.slope_eq
+    (g : Fin n → G) (base : G) (x z : Fin n)
+    (lambda mu epsilon : ℤ) (offset : G)
+    (hparameters : FixedExternalTwoRetainedRelativeAffineParameters
+      g base x z lambda mu epsilon offset) :
+    epsilon = mu := by
+  rcases hparameters with hfirst | hsecond | hthird | hfourth | hfifth
+  · exact hfirst.2.2.1
+  · exact hsecond.2.2.1
+  · exact hthird.2.2.1
+  · exact hfourth.2.2.1
+  · exact hfifth.2.2.1
+
 /-- Dominant translation-normalized affine profile.  It retains the same
 homogeneous owner law as `FixedExternalTwoRetainedRelativeAffineProfileAbove`
 and additionally controls the whole fixed external fiber by three copies of
@@ -3204,10 +3330,12 @@ def FixedExternalTwoRetainedDominantRelativeAffineProfile
     (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
     (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
     (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
-    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) : Prop :=
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ) : Prop :=
   ∃ z : Fin n, z ∉ B ∧ z ≠ x ∧
     ∃ mu ∈ twoRetainedExternalCoefficientLevels,
       ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+        FixedExternalTwoRetainedRelativeAffineParameters
+            g base x z lambda mu epsilon offset ∧
         let S := Finset.univ.filter (fun f : ↥F ↦
           coeff ((f : ↥E) : ↥J)
             (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
@@ -3317,7 +3445,7 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
     (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
     (hretained : n - B.card = 2) (hF : F.Nonempty) :
     FixedExternalTwoRetainedDominantRelativeAffineProfile
-      g y base B center P scalar coeff F x := by
+      g y base B center P scalar coeff F x lambda := by
   classical
   unfold FixedExternalTwoRetainedDominantRelativeAffineProfile
   rcases fixedExternalCoefficientPrivateFiber_twoRetained_familyAffineTargets
@@ -3348,7 +3476,9 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
       simpa [ownerCoeff] using hmu₀.symm.trans howner
     refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
       by simp [twoRetainedExternalCoefficientLevels],
-      2 • g z - g x - base, by simpa [S, ownerCoeff] using hSnonemptyOut,
+      2 • g z - g x - base,
+      Or.inl ⟨hlambda, hmuValue, hmuValue.symm, rfl⟩,
+      by simpa [S, ownerCoeff] using hSnonemptyOut,
       by simpa [S, ownerCoeff] using hSdominant', ?_⟩
     intro f
     have hmu : ownerCoeff (f : ↥F) = mu :=
@@ -3367,7 +3497,9 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
       simpa [ownerCoeff] using hmu₀.symm.trans howner
     refine ⟨z, hzB, hzx, mu, hmuLevel, 1,
       by simp [twoRetainedExternalCoefficientLevels],
-      base - g x, by simpa [S, ownerCoeff] using hSnonemptyOut,
+      base - g x,
+      Or.inr (Or.inl ⟨hlambda, hmuValue, hmuValue.symm, rfl⟩),
+      by simpa [S, ownerCoeff] using hSnonemptyOut,
       by simpa [S, ownerCoeff] using hSdominant', ?_⟩
     intro f
     have hmu : ownerCoeff (f : ↥F) = mu :=
@@ -3387,6 +3519,8 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
     refine ⟨z, hzB, hzx, mu, hmuLevel, 2,
       by simp [twoRetainedExternalCoefficientLevels],
       2 • base - g x - g z,
+      Or.inr (Or.inr (Or.inl
+        ⟨hlambda, hmuValue, hmuValue.symm, rfl⟩)),
       by simpa [S, ownerCoeff] using hSnonemptyOut,
       by simpa [S, ownerCoeff] using hSdominant', ?_⟩
     intro f
@@ -3408,7 +3542,10 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
       simpa [ownerCoeff] using hmu₀.symm.trans howner
     refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
       by simp [twoRetainedExternalCoefficientLevels],
-      g x - base, by simpa [S, ownerCoeff] using hSnonemptyOut,
+      g x - base,
+      Or.inr (Or.inr (Or.inr (Or.inl
+        ⟨hlambda, hmuValue, hmuValue.symm, rfl⟩))),
+      by simpa [S, ownerCoeff] using hSnonemptyOut,
       by simpa [S, ownerCoeff] using hSdominant', ?_⟩
     intro f
     have hmu : ownerCoeff (f : ↥F) = mu :=
@@ -3427,6 +3564,8 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
     refine ⟨z, hzB, hzx, mu, hmuLevel, -1,
       by simp [twoRetainedExternalCoefficientLevels],
       2 • g x - g z - base,
+      Or.inr (Or.inr (Or.inr (Or.inr
+        ⟨hlambda, hmuValue, hmuValue.symm, rfl⟩))),
       by simpa [S, ownerCoeff] using hSnonemptyOut,
       by simpa [S, ownerCoeff] using hSdominant', ?_⟩
     intro f
@@ -3611,6 +3750,8 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
     lambda ∈ twoRetainedExternalCoefficientLevels ∧
     ∃ mu ∈ twoRetainedExternalCoefficientLevels,
       ∃ epsilon ∈ twoRetainedExternalCoefficientLevels, ∃ offset : G,
+        FixedExternalTwoRetainedRelativeAffineParameters
+            g base x z lambda mu epsilon offset ∧
         ∃ S : Finset ↥F,
           S = Finset.univ.filter (fun f : ↥F ↦
             coeff ((f : ↥E) : ↥J)
@@ -3623,7 +3764,7 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
           let target : ↥S → G := fun f ↦
             scalar (((f : ↥F) : ↥E) : ↥J) • y
           Function.Injective owner ∧
-            (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
+            (∀ f, target f = mu • displacement (owner f) + offset) ∧
             (permutationFamilyBoundaryRows R owner).card ≤
               (Finset.univ \ J).card + I.card + 17 * S.card ∧
             (permutationFamilyBoundaryRows R owner).card ≤ 35 * S.card ∧
@@ -3638,7 +3779,7 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
               (if 1 ≤ lambda then S else ∅) ∧
             fixedExternalFiberPositiveRowsAt coeff S z =
               (if 1 ≤ -(mu + lambda) then S else ∅) ∧
-            FixedExternalTwoRetainedSelectedGeometry
+            FixedExternalTwoRetainedUniformGeometry
               g y center P scalar coeff F S x z lambda mu ∧
             (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
                 (_hC : C ∈ permutationSubsetFullComponents R
@@ -3663,7 +3804,7 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
                     (permutationFamilyComponentFiber R owner C).card ∧
                 ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
                   ∃ k : ℕ, target (v : ↥S) - target (u : ↥S) =
-                    epsilon • ((2 ^ k - 1) •
+                    mu • ((2 ^ k - 1) •
                       displacement (owner (u : ↥S))))
 
 /-- A dominant translated affine profile, together with the global outer
@@ -3687,7 +3828,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     (hFdominant : E.card ≤ 6 * F.card)
     (hIsparse : 2 * I.card < d - 1)
     (hprofile : FixedExternalTwoRetainedDominantRelativeAffineProfile
-      g y base B center P scalar coeff F x)
+      g y base B center P scalar coeff F x lambda)
     (R : Equiv.Perm (Fin d))
     (hdouble : ∀ j,
       g (center (P.symm (R j))) - base =
@@ -3699,7 +3840,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
   classical
   unfold FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
   rcases hprofile with
-    ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
+    ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset, hparameters,
       hSnonempty, hSdominant, haffine⟩
   let S : Finset ↥F := Finset.univ.filter (fun f : ↥F ↦
     coeff ((f : ↥E) : ↥J)
@@ -3721,6 +3862,13 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       epsilon • displacement (owner f) + offset := by
     intro f
     simpa [S, owner, displacement, target] using haffine f
+  have hepsilonMu : epsilon = mu :=
+    hparameters.slope_eq g base x z lambda mu epsilon offset
+  have haffineMu : ∀ f, target f =
+      mu • displacement (owner f) + offset := by
+    intro f
+    rw [← hepsilonMu]
+    exact haffine' f
   have hboundary : (permutationFamilyBoundaryRows R owner).card ≤
       (Finset.univ \ J).card + I.card + 17 * S.card := by
     have hownerEq : owner = nestedSelectedOwner S := by
@@ -3778,6 +3926,10 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
                 (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) := by
             simpa [S] using hf
           exact (Finset.mem_filter.mp hf').2)
+  have huniform : FixedExternalTwoRetainedUniformGeometry
+      g y center P scalar coeff F S x z lambda mu :=
+    hgeometry.uniform g y center P scalar coeff F S x z lambda mu
+      hSnonempty'
   have hfull : ∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
       (hC : C ∈ permutationSubsetFullComponents R
         (permutationFamilyOwnerSet owner))
@@ -3788,16 +3940,16 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
         target j - offset = 2 • (target i - offset) := by
     intro C hC i hiC
     exact permutationFamilyFullComponent_uniqueSuccessorRow_affine
-      R owner displacement target howner hdouble' epsilon offset haffine'
+      R owner displacement target howner hdouble' mu offset haffineMu
         C hC i hiC
   have hfrontier := permutationFamily_affineComponentFrontier
-    R owner displacement target hdouble' epsilon offset haffine'
+    R owner displacement target hdouble' mu offset haffineMu
       componentThreshold
   refine ⟨z, hzB, hzx, hlambdaLevel, mu, hmuLevel, epsilon,
-    hepsilonLevel, offset,
-    S, rfl, hSnonempty', hSdominant', howner, haffine', hboundary,
+    hepsilonLevel, offset, hparameters,
+    S, rfl, hSnonempty', hSdominant', howner, haffineMu, hboundary,
     hboundaryRouted, hdense, hpositive, hcolumns, hxPositive, hzPositive,
-    hgeometry, hfull, ?_⟩
+    huniform, hfull, ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
