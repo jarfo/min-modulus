@@ -57,6 +57,145 @@ noncomputable def permutationFamilyComponentFiber
   exact Finset.univ.filter fun i ↦
     Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C
 
+/-- The components occupied by a selected subset of the permutation carrier. -/
+noncomputable def permutationSubsetComponents
+    {α : Type*} [Fintype α] (R : Equiv.Perm α) (A : Finset α) :
+    Finset (Quotient (Equiv.Perm.SameCycle.setoid R)) := by
+  classical
+  exact A.image fun a ↦
+    Quotient.mk (Equiv.Perm.SameCycle.setoid R) a
+
+/-- Occupied components whose every vertex belongs to the selected subset. -/
+noncomputable def permutationSubsetFullComponents
+    {α : Type*} [Fintype α] (R : Equiv.Perm α) (A : Finset α) :
+    Finset (Quotient (Equiv.Perm.SameCycle.setoid R)) := by
+  classical
+  exact (permutationSubsetComponents R A).filter fun C ↦
+    ∀ x : α,
+      Quotient.mk (Equiv.Perm.SameCycle.setoid R) x = C → x ∈ A
+
+/-- Selected vertices whose successor leaves the selected subset. -/
+noncomputable def permutationSubsetBoundary
+    {α : Type*} [Fintype α] (R : Equiv.Perm α) (A : Finset α) :
+    Finset α := by
+  classical
+  exact A.filter fun x ↦ R x ∉ A
+
+/-- Applying a permutation does not change its SameCycle quotient class. -/
+theorem permutationSameCycleQuotient_apply_eq
+    {α : Type*} [Fintype α] (R : Equiv.Perm α) (x : α) :
+    Quotient.mk (Equiv.Perm.SameCycle.setoid R) (R x) =
+      Quotient.mk (Equiv.Perm.SameCycle.setoid R) x := by
+  apply Quotient.sound
+  exact ⟨-1, by simp⟩
+
+/-- Every occupied component is either completely selected or contains a
+selected vertex whose successor is unselected. -/
+theorem mem_fullComponents_or_exists_mem_boundary
+    {α : Type*} [Fintype α] (R : Equiv.Perm α) (A : Finset α)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (hC : C ∈ permutationSubsetComponents R A) :
+    C ∈ permutationSubsetFullComponents R A ∨
+      ∃ x ∈ permutationSubsetBoundary R A,
+        Quotient.mk (Equiv.Perm.SameCycle.setoid R) x = C := by
+  classical
+  obtain ⟨a, haA, haC⟩ := Finset.mem_image.mp hC
+  by_cases hfull : ∀ x : α,
+      Quotient.mk (Equiv.Perm.SameCycle.setoid R) x = C → x ∈ A
+  · left
+    exact Finset.mem_filter.mpr ⟨hC, hfull⟩
+  · right
+    push Not at hfull
+    obtain ⟨b, hbC, hbNotA⟩ := hfull
+    have hsame : R.SameCycle a b := by
+      change (Equiv.Perm.SameCycle.setoid R).r a b
+      apply Quotient.exact
+      exact haC.trans hbC.symm
+    obtain ⟨k, hk⟩ := hsame.exists_nat_pow_eq
+    by_contra hboundary
+    push Not at hboundary
+    have hstep : ∀ x : α, x ∈ A →
+        Quotient.mk (Equiv.Perm.SameCycle.setoid R) x = C → R x ∈ A := by
+      intro x hxA hxC
+      by_contra hxNext
+      have hxBoundary : x ∈ permutationSubsetBoundary R A :=
+        Finset.mem_filter.mpr ⟨hxA, hxNext⟩
+      exact (hboundary x hxBoundary) hxC
+    have hiter : ∀ ell : ℕ,
+        (R^[ell] a) ∈ A ∧
+          Quotient.mk (Equiv.Perm.SameCycle.setoid R) (R^[ell] a) = C := by
+      intro ell
+      induction ell with
+      | zero => simpa using And.intro haA haC
+      | succ ell ih =>
+          rw [Function.iterate_succ_apply']
+          exact ⟨hstep _ ih.1 ih.2,
+            (permutationSameCycleQuotient_apply_eq R _).trans ih.2⟩
+    exact hbNotA (by rw [← hk]; exact (hiter k).1)
+
+/-- Occupied components are paid for by full selected components plus
+selected-to-unselected boundary vertices. -/
+theorem card_permutationSubsetComponents_le_full_add_boundary
+    {α : Type*} [Fintype α] (R : Equiv.Perm α) (A : Finset α) :
+    (permutationSubsetComponents R A).card ≤
+      (permutationSubsetFullComponents R A).card +
+        (permutationSubsetBoundary R A).card := by
+  classical
+  let boundaryComponents :
+      Finset (Quotient (Equiv.Perm.SameCycle.setoid R)) :=
+    (permutationSubsetBoundary R A).image fun x ↦
+      Quotient.mk (Equiv.Perm.SameCycle.setoid R) x
+  have hsubset : permutationSubsetComponents R A ⊆
+      permutationSubsetFullComponents R A ∪ boundaryComponents := by
+    intro C hC
+    rcases mem_fullComponents_or_exists_mem_boundary R A C hC with
+      hfull | ⟨x, hxBoundary, hxC⟩
+    · exact Finset.mem_union_left _ hfull
+    · apply Finset.mem_union_right
+      exact Finset.mem_image.mpr ⟨x, hxBoundary, hxC⟩
+  have hboundaryCard : boundaryComponents.card ≤
+      (permutationSubsetBoundary R A).card := by
+    exact Finset.card_image_le
+  calc
+    (permutationSubsetComponents R A).card ≤
+        (permutationSubsetFullComponents R A ∪ boundaryComponents).card :=
+      Finset.card_le_card hsubset
+    _ ≤ (permutationSubsetFullComponents R A).card +
+        boundaryComponents.card := Finset.card_union_le _ _
+    _ ≤ (permutationSubsetFullComponents R A).card +
+        (permutationSubsetBoundary R A).card :=
+      Nat.add_le_add_left hboundaryCard _
+
+/-- The selected owner set underlying an arbitrary finite family. -/
+noncomputable def permutationFamilyOwnerSet
+    {ι α : Type*} [Fintype ι] [Fintype α] (owner : ι → α) : Finset α := by
+  classical
+  exact Finset.univ.image owner
+
+/-- Family and owner-set definitions give the same occupied components. -/
+theorem permutationFamilyComponents_eq_subsetComponents
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) :
+    permutationFamilyComponents R owner =
+      permutationSubsetComponents R (permutationFamilyOwnerSet owner) := by
+  classical
+  simp [permutationFamilyComponents, permutationSubsetComponents,
+    permutationFamilyOwnerSet, Finset.image_image, Function.comp_def]
+
+/-- The occupied components of a finite family are controlled by full owner
+components and owner-set boundary vertices. -/
+theorem card_permutationFamilyComponents_le_full_add_boundary
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α) :
+    (permutationFamilyComponents R owner).card ≤
+      (permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner)).card +
+      (permutationSubsetBoundary R
+        (permutationFamilyOwnerSet owner)).card := by
+  rw [permutationFamilyComponents_eq_subsetComponents]
+  exact card_permutationSubsetComponents_le_full_add_boundary R
+    (permutationFamilyOwnerSet owner)
+
 /-- Exact occupied-component frontier for a finite family: either `K` slots
 per occupied component suffice, or one component contains more than `K`
 members. -/
@@ -208,6 +347,61 @@ theorem permutationFamily_large_affineComponentFrontier
     hcap | hcomponent
   · exact Or.inl (hlarge.trans_le hcap)
   · exact Or.inr hcomponent
+
+/-- Adaptive full-component/boundary form.  If the proposed full-component
+and boundary budgets would fit below `L`, a family larger than `L` forces
+one of those two budgets to overflow or yields a large affine component. -/
+theorem permutationFamily_affine_fullComponent_or_boundary_or_largeComponent
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (x : α → G) (target : ι → G)
+    (hdouble : ∀ a, x (R a) = 2 • x a)
+    (epsilon : ℤ) (offset : G)
+    (haffine : ∀ i, target i = epsilon • x (owner i) + offset)
+    (L fullThreshold boundaryThreshold componentThreshold : ℕ)
+    (hbudget :
+      (fullThreshold + boundaryThreshold) * componentThreshold ≤ L)
+    (hlarge : L < Fintype.card ι) :
+    fullThreshold <
+        (permutationSubsetFullComponents R
+          (permutationFamilyOwnerSet owner)).card ∨
+      boundaryThreshold <
+        (permutationSubsetBoundary R
+          (permutationFamilyOwnerSet owner)).card ∨
+      ∃ C ∈ permutationFamilyComponents R owner,
+        componentThreshold <
+            (permutationFamilyComponentFiber R owner C).card ∧
+        ∀ u v : ↥(permutationFamilyComponentFiber R owner C),
+          ∃ k : ℕ, target (v : ι) - target (u : ι) =
+            epsilon • ((2 ^ k - 1) • x (owner (u : ι))) := by
+  rcases permutationFamily_large_affineComponentFrontier
+      R owner x target hdouble epsilon offset haffine
+        L componentThreshold hlarge with
+    hcomponents | hcomponent
+  · by_cases hfull : fullThreshold <
+        (permutationSubsetFullComponents R
+          (permutationFamilyOwnerSet owner)).card
+    · exact Or.inl hfull
+    · right
+      by_cases hboundary : boundaryThreshold <
+          (permutationSubsetBoundary R
+            (permutationFamilyOwnerSet owner)).card
+      · exact Or.inl hboundary
+      · exfalso
+        have hcard := card_permutationFamilyComponents_le_full_add_boundary
+          R owner
+        have hsum :
+            (permutationSubsetFullComponents R
+                (permutationFamilyOwnerSet owner)).card +
+              (permutationSubsetBoundary R
+                (permutationFamilyOwnerSet owner)).card ≤
+            fullThreshold + boundaryThreshold :=
+          Nat.add_le_add (Nat.le_of_not_gt hfull)
+            (Nat.le_of_not_gt hboundary)
+        have hmul := Nat.mul_le_mul_right componentThreshold
+          (hcard.trans hsum)
+        exact (Nat.not_lt_of_ge (hmul.trans hbudget)) hcomponents
+  · exact Or.inr (Or.inr hcomponent)
 
 /-- The two-permutation affine relation gives the doubling recurrence on
 leaf displacements when the center permutation is the same `P`. -/
@@ -2139,8 +2333,14 @@ def FixedExternalTwoRetainedRelativeAffineCycleComponentFrontierAbove
           let target : ↥S → G := fun f ↦
             scalar (((f : ↥F) : ↥E) : ↥J) • y
           (∀ f, target f = epsilon • displacement (owner f) + offset) ∧
-            (profileThreshold <
-                (permutationFamilyComponents R owner).card * componentThreshold ∨
+            ((profileThreshold <
+                  (permutationFamilyComponents R owner).card * componentThreshold ∧
+                profileThreshold <
+                  ((permutationSubsetFullComponents R
+                      (permutationFamilyOwnerSet owner)).card +
+                    (permutationSubsetBoundary R
+                      (permutationFamilyOwnerSet owner)).card) *
+                    componentThreshold) ∨
               ∃ C ∈ permutationFamilyComponents R owner,
                 componentThreshold <
                     (permutationFamilyComponentFiber R owner C).card ∧
@@ -2197,7 +2397,16 @@ theorem FixedExternalTwoRetainedRelativeAffineProfileAbove.cycleComponentFrontie
   refine ⟨z, hzB, hzx, mu, hmuLevel, epsilon, hepsilonLevel, offset,
     S, rfl, hlarge', ?_⟩
   refine ⟨haffine', ?_⟩
-  simpa [owner, displacement, target] using hfrontier
+  rcases hfrontier with hcomponents | hcomponent
+  · left
+    refine ⟨by simpa [owner] using hcomponents, ?_⟩
+    have hcard := card_permutationFamilyComponents_le_full_add_boundary
+      R owner
+    have hbound := hcomponents.trans_le
+      (Nat.mul_le_mul_right componentThreshold hcard)
+    simpa [owner] using hbound
+  · right
+    simpa [owner, displacement, target] using hcomponent
 
 /-- A fiber above the external `1/12` scale contains an affine-homogeneous
 subfamily above the `1/36` scale.  This composes the only remaining
