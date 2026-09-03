@@ -406,6 +406,115 @@ theorem permutationFamilyFullComponent_uniqueSuccessorRow_affine
   · intro k hk
     exact hjUnique k ⟨hk.1, hk.2.1⟩
 
+/-- On a full occupied component, the unique selected successor rows assemble
+into a permutation of the component fiber.  This packages pointwise closure
+under the ambient permutation into the finite dynamical system needed for
+cycle iteration. -/
+theorem permutationFamilyFullComponent_exists_successorPerm
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (howner : Function.Injective owner)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (hC : C ∈ permutationSubsetFullComponents R
+      (permutationFamilyOwnerSet owner)) :
+    ∃ Q : Equiv.Perm ↥(permutationFamilyComponentFiber R owner C),
+      ∀ i, owner (Q i : ι) = R (owner (i : ι)) := by
+  classical
+  let fiber := permutationFamilyComponentFiber R owner C
+  let next : ↥fiber → ↥fiber := fun i ↦ by
+    have hiC : Quotient.mk (Equiv.Perm.SameCycle.setoid R)
+        (owner (i : ι)) = C := by
+      exact (Finset.mem_filter.mp i.property).2
+    let hnext := permutationFamilyFullComponent_uniqueSuccessorRow
+      R owner howner C hC (i : ι) hiC
+    let j : ι := Classical.choose hnext
+    have hj := (Classical.choose_spec hnext).1
+    exact ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ j, hj.2⟩⟩
+  have hnextOwner : ∀ i : ↥fiber,
+      owner (next i : ι) = R (owner (i : ι)) := by
+    intro i
+    dsimp only [next]
+    exact (Classical.choose_spec
+      (permutationFamilyFullComponent_uniqueSuccessorRow
+        R owner howner C hC (i : ι)
+          (Finset.mem_filter.mp i.property).2)).1.1
+  have hnextInjective : Function.Injective next := by
+    intro i k hik
+    apply Subtype.ext
+    apply howner
+    apply R.injective
+    calc
+      R (owner (i : ι)) = owner (next i : ι) := (hnextOwner i).symm
+      _ = owner (next k : ι) := congrArg (fun u : ↥fiber ↦ owner (u : ι)) hik
+      _ = R (owner (k : ι)) := hnextOwner k
+  have hnextBijective : Function.Bijective next :=
+    Finite.injective_iff_bijective.mp hnextInjective
+  let Q : Equiv.Perm ↥fiber := Equiv.ofBijective next hnextBijective
+  refine ⟨Q, ?_⟩
+  intro i
+  exact hnextOwner i
+
+/-- A fixed-point-free ambient permutation turns every full selected
+component into a bounded nontrivial successor cycle.  Any quantity which
+doubles along selected successors is consequently annihilated by the odd
+Mersenne coefficient attached to that cycle; its length is bounded by the
+ambient carrier, independently of the size of the original row family. -/
+theorem permutationFamilyFullComponent_exists_bounded_oddTorsion
+    {ι α A : Type*} [Fintype ι] [Fintype α] [AddCommGroup A]
+    (R : Equiv.Perm α) (owner : ι → α) (value : ι → A)
+    (howner : Function.Injective owner)
+    (hRne : ∀ a, R a ≠ a)
+    (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+    (hC : C ∈ permutationSubsetFullComponents R
+      (permutationFamilyOwnerSet owner))
+    (hvalue : ∀ (i j : ι),
+      Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C →
+      owner j = R (owner i) → value j = 2 • value i) :
+    ∃ Q : Equiv.Perm ↥(permutationFamilyComponentFiber R owner C),
+      (∀ i, owner (Q i : ι) = R (owner (i : ι))) ∧
+      (∀ i, value (Q i : ι) = 2 • value (i : ι)) ∧
+      ∃ i, ∃ ell : ℕ,
+        2 ≤ ell ∧ ell ≤ Fintype.card α ∧ Q^[ell] i = i ∧
+          Odd (2 ^ ell - 1) ∧ (2 ^ ell - 1) • value (i : ι) = 0 := by
+  classical
+  let fiber := permutationFamilyComponentFiber R owner C
+  obtain ⟨Q, hQOwner⟩ :=
+    permutationFamilyFullComponent_exists_successorPerm
+      R owner howner C hC
+  have hQValue : ∀ i : ↥fiber,
+      value (Q i : ι) = 2 • value (i : ι) := by
+    intro i
+    exact hvalue (i : ι) (Q i : ι)
+      (Finset.mem_filter.mp i.property).2 (hQOwner i)
+  have hQne : ∀ i : ↥fiber, Q i ≠ i := by
+    intro i hi
+    apply hRne (owner (i : ι))
+    calc
+      R (owner (i : ι)) = owner (Q i : ι) := (hQOwner i).symm
+      _ = owner (i : ι) :=
+        congrArg (fun k : ↥fiber ↦ owner (k : ι)) hi
+  have hoccupied : C ∈ permutationSubsetComponents R
+      (permutationFamilyOwnerSet owner) :=
+    (Finset.mem_filter.mp hC).1
+  obtain ⟨a, haOwner, haC⟩ := Finset.mem_image.mp hoccupied
+  obtain ⟨i₀, _hi₀, hi₀Owner⟩ := Finset.mem_image.mp haOwner
+  let i₀' : ↥fiber := ⟨i₀, Finset.mem_filter.mpr
+    ⟨Finset.mem_univ i₀, by simpa [hi₀Owner] using haC⟩⟩
+  obtain ⟨i, ell, hellTwo, hellFiber, hperiod⟩ :=
+    exists_bounded_cycle_of_fixedPointFree Q i₀' hQne
+  have hfiberCard : Fintype.card ↥fiber ≤ Fintype.card α := by
+    apply Fintype.card_le_of_injective
+      (fun k : ↥fiber ↦ owner (k : ι))
+    intro j k hjk
+    apply Subtype.ext
+    exact howner hjk
+  have htorsion : (2 ^ ell - 1) • value (i : ι) = 0 :=
+    pow_two_sub_one_nsmul_eq_zero_of_iterate_eq
+      Q (fun k : ↥fiber ↦ value (k : ι)) hQValue hperiod
+  refine ⟨Q, hQOwner, hQValue, i, ell, hellTwo,
+    hellFiber.trans hfiberCard, hperiod, ?_, htorsion⟩
+  exact odd_two_pow_sub_one (by omega)
+
 /-- The ambient owner of a row selected through three nested finite filters. -/
 def nestedSelectedOwner
     {α : Type*} {J : Finset α} {E : Finset ↥J}
@@ -3812,6 +3921,20 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
                 target j - offset = 2 • (target i - offset) ∧
                 (scalar (((j : ↥F) : ↥E) : ↥J) - rho) • y =
                   2 • ((scalar (((i : ↥F) : ↥E) : ↥J) - rho) • y)) ∧
+            (∀ (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+                (_hC : C ∈ permutationSubsetFullComponents R
+                  (permutationFamilyOwnerSet owner)),
+              ∃ Q : Equiv.Perm
+                  ↥(permutationFamilyComponentFiber R owner C),
+                (∀ i, owner (Q i : ↥S) = R (owner (i : ↥S))) ∧
+                (∀ i,
+                  (scalar ((((Q i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y =
+                    2 • ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y)) ∧
+                ∃ i, ∃ ell : ℕ,
+                  2 ≤ ell ∧ ell ≤ d ∧ Q^[ell] i = i ∧
+                    Odd (2 ^ ell - 1) ∧
+                    (2 ^ ell - 1) •
+                      ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) = 0) ∧
             ((S.card ≤
                   (permutationFamilyComponents R owner).card *
                     componentThreshold ∧
@@ -3852,6 +3975,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     (hprofile : FixedExternalTwoRetainedDominantRelativeAffineProfile
       g y base B center P scalar coeff F x lambda)
     (R : Equiv.Perm (Fin d))
+    (hRne : ∀ j, R j ≠ j)
     (hdouble : ∀ j,
       g (center (P.symm (R j))) - base =
         2 • (g (center (P.symm j)) - base))
@@ -3997,6 +4121,36 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       simpa only [sub_smul] using hrecurrence
     · intro k hk
       exact hjUnique k ⟨hk.1, hk.2.1, hk.2.2.1⟩
+  have hfullCycle : ∀
+      (C : Quotient (Equiv.Perm.SameCycle.setoid R))
+      (hC : C ∈ permutationSubsetFullComponents R
+        (permutationFamilyOwnerSet owner)),
+      ∃ Q : Equiv.Perm
+          ↥(permutationFamilyComponentFiber R owner C),
+        (∀ i, owner (Q i : ↥S) = R (owner (i : ↥S))) ∧
+        (∀ i,
+          (scalar ((((Q i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y =
+            2 • ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y)) ∧
+        ∃ i, ∃ ell : ℕ,
+          2 ≤ ell ∧ ell ≤ d ∧ Q^[ell] i = i ∧
+            Odd (2 ^ ell - 1) ∧
+            (2 ^ ell - 1) •
+              ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) = 0 := by
+    intro C hC
+    let value : ↥S → G := fun f ↦
+      (scalar (((f : ↥F) : ↥E) : ↥J) - rho) • y
+    have hvalue : ∀ (i j : ↥S),
+        Quotient.mk (Equiv.Perm.SameCycle.setoid R) (owner i) = C →
+        owner j = R (owner i) → value j = 2 • value i := by
+      intro i j hiC hjOwner
+      rcases hfull C hC i hiC with ⟨k, hk, _hkUnique⟩
+      have hjk : j = k := howner (hjOwner.trans hk.1.symm)
+      subst j
+      exact hk.2.2.2
+    have hcycle :=
+      permutationFamilyFullComponent_exists_bounded_oddTorsion
+        R owner value howner hRne C hC hvalue
+    simpa only [value, Fintype.card_fin] using hcycle
   have hfrontier := permutationFamily_affineComponentFrontier
     R owner displacement target hdouble' mu offset haffineMu
       componentThreshold
@@ -4004,7 +4158,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     hepsilonLevel, offset, hparameters, rho, hrho,
     S, rfl, hSnonemptyOut, hSdominant', howner, haffineMu, hboundary,
     hboundaryRouted, hdense, hpositive, hcolumns, hxPositive, hzPositive,
-    huniform, hfull, ?_⟩
+    huniform, hfull, hfullCycle, ?_⟩
   rcases hfrontier with hcomponents | hcomponent
   · left
     have hcomponents' : S.card ≤
@@ -4763,6 +4917,7 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
     (hpart : RetainedExternalInternalRowPartition g y B center P J)
     (hretained : n - B.card = 2)
     (R : Equiv.Perm (Fin d))
+    (hRne : ∀ j, R j ≠ j)
     (hdouble : ∀ j,
       g (center (P.symm (R j))) - base =
         2 • (g (center (P.symm j)) - base))
@@ -4803,7 +4958,7 @@ theorem retainedExternalInternalRowPartition_largeInternal_or_dominantCycleCompo
       g y base B center P scalar coeff I F label.1 label.2
         (Finset.mem_product.mp hlabel).2 (by simpa [F] using hfiber)
           hretained (fun j ↦ (hrows j).2) hJcard hunion hlarge
-            (by simpa [F] using hFdominant) hIsparse R hdouble
+            (by simpa [F] using hFdominant) hIsparse R hRne hdouble
               hdisplacement componentThreshold
     refine ⟨hIsparse, label, hlabel, ?_, ?_, ?_, ?_⟩
     · simpa [F] using hFnonempty
@@ -5322,10 +5477,13 @@ theorem pureEdgeStarLeafCycle_componentRowOutcome_of_alignedRowPartitionOutcome
             g (center (P.symm j)) - (h + g r) ∈
               AddSubgroup.zmultiples y := by
           simpa [disp, leaf, hcenter] using hmem
+        have hRne : ∀ j, (P.symm.trans S) j ≠ j :=
+          perm_symm_trans_fixedPointFree_of_apply_ne P S
+            (fun j ↦ (hlocal j).2.1)
         exact
           retainedExternalInternalRowPartition_largeInternal_or_dominantCycleComponentExternal
             g y (h + g r) B center P J hrowPartition hexact
-              (P.symm.trans S) hdoubleCenter hdisplacementCenter
+              (P.symm.trans S) hRne hdoubleCenter hdisplacementCenter
                 componentThreshold
       · left
         omega
