@@ -1519,6 +1519,33 @@ theorem card_nonzeroZMultiples [Fintype G] (y : G) :
       simp [nonzeroZMultiples]
     _ = addOrderOf y - 1 := by rw [Fintype.card_zmultiples]
 
+/-- An injective family of nonzero integer multiples of one element fits in
+the nonzero part of its cyclic subgroup.  This is the global capacity form of
+the cyclic-kernel charge; no decomposition into permutation components is
+needed. -/
+theorem card_le_addOrderOf_sub_one_of_injective_nonzero_zsmul
+    [Fintype G] {ι : Type*} [Fintype ι]
+    (y : G) (scalar : ι → ℤ)
+    (hnonzero : ∀ i, scalar i • y ≠ 0)
+    (hinjective : Function.Injective (fun i ↦ scalar i • y)) :
+    Fintype.card ι ≤ addOrderOf y - 1 := by
+  classical
+  let embed : ι → ↥(nonzeroZMultiples y) := fun i ↦ by
+    refine ⟨⟨scalar i • y, ?_⟩, ?_⟩
+    · exact AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _
+    · simp only [nonzeroZMultiples, Finset.mem_erase, Finset.mem_univ,
+        and_true]
+      intro hzero
+      exact hnonzero i (congrArg Subtype.val hzero)
+  have hembed : Function.Injective embed := by
+    intro i j hij
+    apply hinjective
+    exact congrArg
+      (fun u : ↥(nonzeroZMultiples y) ↦
+        ((u : AddSubgroup.zmultiples y) : G)) hij
+  have hcard := Fintype.card_le_of_injective embed hembed
+  simpa only [Fintype.card_coe, card_nonzeroZMultiples] using hcard
+
 /-- A fixed private external fiber either fits injectively among the nonzero
 targets in `zmultiples y`, or two rows have the same target.  In the collision
 case validity forces directed coefficient gaps in both directions.  The gaps
@@ -4254,6 +4281,8 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
             scalar (((f : ↥F) : ↥E) : ↥J) • y
           Function.Injective owner ∧
             (∀ f, target f = mu • displacement (owner f) + offset) ∧
+            S.card ≤ addOrderOf y - 1 ∧
+            d - 1 < 36 * (addOrderOf y - 1) ∧
             (permutationFamilyBoundaryRows R owner).card ≤
               (Finset.univ \ J).card + I.card + 17 * S.card ∧
             (permutationFamilyBoundaryRows R owner).card ≤ 35 * S.card ∧
@@ -4537,6 +4566,15 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     fixedExternalCoefficientPrivateFiber_fixedOwnerCoefficient_target_injective
       g hg hh hne hunique hno y B center P scalar coeff F x lambda mu
         hfiber hrows S hownerCoefficient (by omega)
+  have hselectedOrderBound : S.card ≤ addOrderOf y - 1 := by
+    have hcard :=
+      card_le_addOrderOf_sub_one_of_injective_nonzero_zsmul y
+        (fun f : ↥S ↦ scalar ((((f : ↥F) : ↥E) : ↥J)))
+        (fun f ↦ hrows ((((f : ↥F) : ↥E) : ↥J)) |>.1)
+        htargetInjective
+    simpa only [Fintype.card_coe] using hcard
+  have hdimensionOrderBound : d - 1 < 36 * (addOrderOf y - 1) :=
+    hdense.trans_le (Nat.mul_le_mul_left 36 hselectedOrderBound)
   have hcenteredInjective : Function.Injective (fun f : ↥S ↦
       centered (f : ↥F)) := by
     intro f k hcentered
@@ -4732,7 +4770,8 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       componentThreshold
   refine ⟨z, hzB, hzx, hlambdaLevel, mu, hmuLevel, epsilon,
     hepsilonLevel, offset, hparameters, rho, hrho,
-    S, rfl, hSnonemptyOut, hSdominant', howner, haffineMu, hboundary,
+    S, rfl, hSnonemptyOut, hSdominant', howner, haffineMu,
+    hselectedOrderBound, hdimensionOrderBound, hboundary,
     hboundaryRouted, hdense, hpositive, hcolumns, hxPositive, hzPositive,
     huniform, hfull, hfullCycle, hcomponentAggregate', ?_⟩
   rcases hfrontier with hcomponents | hcomponent
