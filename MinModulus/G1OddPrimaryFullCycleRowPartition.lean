@@ -7046,12 +7046,12 @@ theorem card_sup_zmultiples_le_natAbs_mul
   rw [hcardK, mul_comm]
   exact Nat.mul_le_mul hrangeCard hkernelCard
 
-/-- A bounded retained-difference relation confines an exact-two private-row
-tuple to a subgroup of size at most `2*|e|*addOrderOf y`.  Each normalized
-row puts twice its owner difference in `zmultiples y ⊔ zmultiples (g x-g z)`;
-the bounded relation controls the latter extension, and unique two-torsion
-controls the preimage under doubling. -/
-theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_two_mul_natAbs_mul
+/-- A bounded retained-difference relation realizes the exact-two private-row
+tuple inside an actual subgroup of size at most
+`2*|e|*addOrderOf y`.  Each normalized row puts twice its owner difference in
+`zmultiples y ⊔ zmultiples (g x-g z)`; the bounded relation controls the latter
+extension, and unique two-torsion controls the preimage under doubling. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_validTuple_boundedConfinementSubgroup
     [Fintype G] (g : Fin n → G) (hg : ValidTuple g)
     {h : G} (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
     (hne : h ≠ 0) (y : G) (B : Finset (Fin n))
@@ -7060,7 +7060,9 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_two_mul_natAbs_mul
     (∃ x z : Fin n,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       e • (g x - g z) ∈ AddSubgroup.zmultiples y) →
-    2 ^ (n - 1) ≤ 2 * e.natAbs * addOrderOf y := by
+    ∃ L : AddSubgroup G, ∃ gL : Fin n → L,
+      ValidTuple gL ∧
+        Nat.card L ≤ 2 * e.natAbs * addOrderOf y := by
   classical
   rintro ⟨x', z', hx'B, hz'B, hx'z', hcomplement', heMem'⟩
   rcases hrows with
@@ -7129,19 +7131,143 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_two_mul_natAbs_mul
     apply validTuple_of_comp L.subtype
     simpa only [gL, AddSubgroup.coe_subtype] using
       validTuple_sub_const g hg (g z)
-  have hlower : 2 ^ (n - 1) ≤ Nat.card L := by
-    have hcard := two_pow_pred_le_card_of_validTuple gL hgL
-    simpa only [Nat.card_eq_fintype_card] using hcard
   have hKcard : Nat.card K ≤ e.natAbs * addOrderOf y := by
     have hcard := card_sup_zmultiples_le_natAbs_mul H delta e he hdeltaRelation
     simpa only [K, H, delta, Nat.card_zmultiples] using hcard
   have hLcard : Nat.card L ≤ 2 * Nat.card K := by
     simpa only [L] using card_doublePreimage_le_two_mul hunique hne K
+  refine ⟨L, gL, hgL, ?_⟩
   calc
-    2 ^ (n - 1) ≤ Nat.card L := hlower
-    _ ≤ 2 * Nat.card K := hLcard
+    Nat.card L ≤ 2 * Nat.card K := hLcard
     _ ≤ 2 * (e.natAbs * addOrderOf y) := Nat.mul_le_mul_left 2 hKcard
     _ = 2 * e.natAbs * addOrderOf y := by simp only [Nat.mul_assoc]
+
+/-- Cardinal shadow of the actual bounded-confinement subgroup: validity
+inside that subgroup forces the usual finite-abelian lower bound. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.card_le_two_mul_natAbs_mul
+    [Fintype G] (g : Fin n → G) (hg : ValidTuple g)
+    {h : G} (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (e : ℤ) (he : e ≠ 0) :
+    (∃ x z : Fin n,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      e • (g x - g z) ∈ AddSubgroup.zmultiples y) →
+    2 ^ (n - 1) ≤ 2 * e.natAbs * addOrderOf y := by
+  classical
+  intro hrelation
+  obtain ⟨L, gL, hgL, hLcard⟩ :=
+    hrows.exists_validTuple_boundedConfinementSubgroup
+      g hg hunique hne y B e he hrelation
+  letI : Fintype L := Fintype.ofFinite L
+  have hlower : 2 ^ (n - 1) ≤ Nat.card L := by
+    have hcard := two_pow_pred_le_card_of_validTuple gL hgL
+    simpa only [Nat.card_eq_fintype_card] using hcard
+  exact hlower.trans hLcard
+
+/-- Structural cyclic form of bounded confinement.  Either the realized
+confinement subgroup gives a valid tuple at a strictly smaller divisor of the
+ambient modulus, or it is already large enough that the quotient by
+`zmultiples y` has order at most `2*|e|`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicModulus_or_quotientFactor_le
+    {N : ℕ} [NeZero N]
+    (g : Fin n → ZMod N) (hg : ValidTuple g)
+    {h : ZMod N}
+    (hunique : ∀ u : ZMod N, u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod N) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    (∃ M : ℕ,
+      0 < M ∧ M < N ∧ M ∣ N ∧ AdmitsValidTuple n M) ∨
+      N / addOrderOf y ≤ 2 * e.natAbs := by
+  classical
+  obtain ⟨L, gL, hgL, hLcard⟩ :=
+    hrows.exists_validTuple_boundedConfinementSubgroup
+      g hg hunique hne y B e he
+        ⟨x, z, hxB, hzB, hxz, hcomplement, heMem⟩
+  letI : Fintype L := Fintype.ofFinite L
+  have hMpos : 0 < Nat.card L := Nat.card_pos
+  have hMdiv : Nat.card L ∣ N := by
+    have hdiv : Nat.card L ∣ Nat.card (ZMod N) :=
+      AddSubgroup.card_addSubgroup_dvd_card L
+    simpa only [Nat.card_eq_fintype_card, ZMod.card] using hdiv
+  letI : IsAddCyclic L := AddSubgroup.isAddCyclic L
+  let equiv : L ≃+ ZMod (Nat.card L) :=
+    (zmodAddCyclicAddEquiv (G := L) inferInstance).symm
+  have hAdmits : AdmitsValidTuple n (Nat.card L) := by
+    refine ⟨fun i ↦ equiv (gL i), ?_⟩
+    exact validTuple_comp hgL equiv.toAddMonoidHom equiv.injective
+  by_cases hproper : Nat.card L < N
+  · exact Or.inl ⟨Nat.card L, hMpos, hproper, hMdiv, hAdmits⟩
+  · right
+    have hNbound : N ≤ 2 * e.natAbs * addOrderOf y :=
+      (Nat.le_of_not_gt hproper).trans hLcard
+    apply Nat.div_le_of_le_mul
+    simpa only [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm] using hNbound
+
+/-- Odd-primary specialization of the confinement dichotomy.  When
+`addOrderOf y ∣ q`, the nonsmaller arm bounds the exact quotient modulus
+`2^t*(q/addOrderOf y)` used by the existing charge/descent interfaces. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicModulus_or_oddPrimaryQuotientFactor_le
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    (∃ M : ℕ,
+      0 < M ∧ M < 2 ^ t * q ∧ M ∣ 2 ^ t * q ∧
+        AdmitsValidTuple n M) ∨
+      2 ^ t * (q / addOrderOf y) ≤ 2 * e.natAbs := by
+  rcases hrows.exists_smallerValidCyclicModulus_or_quotientFactor_le
+      g hg hunique hne y B x z hxB hzB hxz hcomplement e he heMem with
+    hsmaller | hfactor
+  · exact Or.inl hsmaller
+  · right
+    rw [← Nat.mul_div_assoc (2 ^ t) hyq]
+    exact hfactor
+
+/-- Uniform finite-factor form for coefficients supplied by the five-weight
+cycle boundary: absent a smaller valid cyclic modulus, the exact odd-primary
+quotient modulus is at most `84`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicModulus_or_oddPrimaryQuotientFactor_le_eightyFour
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    (∃ M : ℕ,
+      0 < M ∧ M < 2 ^ t * q ∧ M ∣ 2 ^ t * q ∧
+        AdmitsValidTuple n M) ∨
+      2 ^ t * (q / addOrderOf y) ≤ 84 := by
+  rcases hrows.exists_smallerValidCyclicModulus_or_oddPrimaryQuotientFactor_le
+      g hg hunique hne y hyq B x z hxB hzB hxz hcomplement e he heMem with
+    hsmaller | hfactor
+  · exact Or.inl hsmaller
+  · right
+    have habs : e.natAbs ≤ 42 := by
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · have : (e.natAbs : ℤ) ≤ 42 := by omega
+        exact_mod_cast this
+      · have : (e.natAbs : ℤ) ≤ 42 := by omega
+        exact_mod_cast this
+    exact hfactor.trans (by omega)
 
 /-- Uniform numerical consequence for every coefficient produced by the
 five-weight cycle split. -/
