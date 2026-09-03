@@ -624,6 +624,117 @@ theorem fixedExternalCoefficientPrivateFiber_heavyDiagonal_twoRetained_shape
   · simpa [c, o] using hdiag
   · simpa [c, o] using hshape
 
+/-- In the two-retained-coordinate regime, two distinct owner-heavy rows at
+the same target force the G1 common-touch conclusion.  Their rigid shapes
+have the same two omissions, so equality of targets gives equality of the
+doubled owner values; uniqueness of the nonzero involution then supplies a
+half-pair deletion coordinate. -/
+theorem fixedExternalCoefficientPrivateFiber_equalTarget_twoHeavy_twoRetained_commonTouched
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (y : G) (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f k : ↥F) (hfk : f ≠ k)
+    (htarget : scalar ((f : ↥E) : ↥J) • y =
+      scalar ((k : ↥E) : ↥J) • y)
+    (hfHeavy : 2 ≤ coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+    (hkHeavy : 2 ≤ coeff ((k : ↥E) : ↥J)
+      (center (P.symm (((k : ↥E) : ↥J) : Fin d))))
+    (hretained : n - B.card ≤ 2) :
+    ∃ j : Fin n, ∀ c : Fin n → ℤ, Witness g h c → c j ≠ 0 := by
+  classical
+  rcases
+      fixedExternalCoefficientPrivateFiber_heavyDiagonal_twoRetained_shape
+        g y B center P scalar coeff F x lambda hfiber hrows f hfHeavy
+          hretained with
+    ⟨_hlambda, zf, hzfNotB, hzfNeX, hfOmit, hfTwo, _hfShape⟩
+  rcases
+      fixedExternalCoefficientPrivateFiber_heavyDiagonal_twoRetained_shape
+        g y B center P scalar coeff F x lambda hfiber hrows k hkHeavy
+          hretained with
+    ⟨_hlambda', zk, hzkNotB, hzkNeX, hkOmit, hkTwo, _hkShape⟩
+  rcases hfiber with
+    ⟨_hxOutside, hxNotB, _hlambdaNonzero, hownerInj, _hcoeffInj,
+      hrowData, _hprivacy, _hoffdiag⟩
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxNotB⟩
+  have hzfC : zf ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzfNotB⟩
+  have hzkC : zk ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzkNotB⟩
+  have hCcardUpper : (Finset.univ \ B).card ≤ 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hpairSub : ({x, zf} : Finset (Fin n)) ⊆ Finset.univ \ B := by
+    intro i hi
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+    rcases hi with rfl | rfl
+    · exact hxC
+    · exact hzfC
+  have hpairCard : ({x, zf} : Finset (Fin n)).card = 2 := by
+    exact Finset.card_pair hzfNeX.symm
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    have hlower := Finset.card_le_card hpairSub
+    rw [hpairCard] at hlower
+    omega
+  have hCeq : Finset.univ \ B = {x, zf} :=
+    finset_eq_pair_of_card_eq_two_of_mem
+      hCcard hxC hzfC hzfNeX.symm
+  have hzkPair : zk = x ∨ zk = zf := by
+    have : zk ∈ ({x, zf} : Finset (Fin n)) := by
+      rw [← hCeq]
+      exact hzkC
+    simpa using this
+  have hzkEq : zk = zf := by
+    rcases hzkPair with hzkx | hzkf
+    · exact False.elim (hzkNeX hzkx)
+    · exact hzkf
+  subst zk
+  let of : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  let ok : Fin n := center (P.symm (((k : ↥E) : ↥J) : Fin d))
+  have hofB : of ∈ B := by
+    simpa [of] using (hrowData f).1
+  have hokB : ok ∈ B := by
+    simpa [ok] using (hrowData k).1
+  have hofx : of ≠ x := by
+    intro hofx
+    subst x
+    exact hxNotB hofB
+  have hofz : of ≠ zf := by
+    intro hofz
+    subst zf
+    exact hzfNotB hofB
+  have hokx : ok ≠ x := by
+    intro hokx
+    subst x
+    exact hxNotB hokB
+  have hokz : ok ≠ zf := by
+    intro hokz
+    subst zf
+    exact hzfNotB hokB
+  have hofk : of ≠ ok := by
+    simpa [of, ok] using hownerInj.ne hfk
+  have hwf : Witness g (scalar ((f : ↥E) : ↥J) • y)
+      (coeff ((f : ↥E) : ↥J)) := hrows ((f : ↥E) : ↥J)
+  have hwk : Witness g (scalar ((f : ↥E) : ↥J) • y)
+      (coeff ((k : ↥E) : ↥J)) := by
+    rw [htarget]
+    exact hrows ((k : ↥E) : ↥J)
+  have hdoubles : (2 : ℤ) • g of = (2 : ℤ) • g ok :=
+    two_smul_eq_of_same_exact_pair_coeff_two
+      g hwf hwk x zf of ok hzfNeX.symm hofx hofz hokx hokz
+        hfOmit hkOmit (by simpa [of] using hfTwo)
+          (by simpa [ok] using hkTwo)
+  exact common_touched_of_two_smul_eq
+    g hg hh hne hunique hofk hdoubles
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
