@@ -276,6 +276,7 @@ import MinModulus.G1OddPrimaryFullCycleCharge
 import MinModulus.G1OddPrimaryFullCycleIncidence
 import MinModulus.G1OddPrimaryFullCyclePrivateFamily
 import MinModulus.G1OddPrimaryFullCycleCenterSparse
+import MinModulus.G1OddPrimaryFullCycleSparseRow
 import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
