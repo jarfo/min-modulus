@@ -4906,15 +4906,21 @@ def TwoRetainedMinimalCyclicKernelPrivateRows
     ∃ scalar : ↥B → ℤ, ∃ coeff : ↥B → Fin n → ℤ,
       ∃ supportCoord : ↥B → Fin n,
         Function.Injective coeff ∧
-        ∀ b : ↥B,
-          scalar b • y ≠ 0 ∧
-          Witness g (scalar b • y) (coeff b) ∧
-          coeff b (b : Fin n) ≠ 0 ∧
-          (∀ a ∈ B, a ≠ (b : Fin n) → coeff b a = 0) ∧
-          supportCoord b ∉ B ∧
-          coeff b (supportCoord b) ≠ 0 ∧
-          coeff b (supportCoord b) ∈
-            twoRetainedExternalCoefficientLevels
+        (∀ b : ↥B,
+            scalar b • y ≠ 0 ∧
+            Witness g (scalar b • y) (coeff b) ∧
+            coeff b (b : Fin n) ≠ 0 ∧
+            (∀ a ∈ B, a ≠ (b : Fin n) → coeff b a = 0) ∧
+            supportCoord b ∉ B ∧
+            coeff b (supportCoord b) ≠ 0 ∧
+            coeff b (supportCoord b) ∈
+              twoRetainedExternalCoefficientLevels) ∧
+        (B = ∅ ∨
+          ∃ label ∈ (Finset.univ \ B).product
+              twoRetainedExternalCoefficientLevels,
+            let F : Finset ↥B := Finset.univ.filter (fun b : ↥B ↦
+              (supportCoord b, coeff b (supportCoord b)) = label)
+            F.Nonempty ∧ B.card ≤ 6 * F.card)
 
 /-- Minimality supplies the full exact-two private-row family canonically;
 unlike the cycle-owned subfamily, this retains every deleted coordinate. -/
@@ -4940,17 +4946,60 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
       supportCoord b ∉ B ∧ (data b).coeff (supportCoord b) ≠ 0 := by
     intro b
     exact Classical.choose_spec (hsupport b)
+  have hrowData : ∀ b : ↥B,
+      (data b).scalar • y ≠ 0 ∧
+      Witness g ((data b).scalar • y) (data b).coeff ∧
+      (data b).coeff (b : Fin n) ≠ 0 ∧
+      (∀ a ∈ B, a ≠ (b : Fin n) → (data b).coeff a = 0) ∧
+      supportCoord b ∉ B ∧
+      (data b).coeff (supportCoord b) ≠ 0 ∧
+      (data b).coeff (supportCoord b) ∈
+        twoRetainedExternalCoefficientLevels := by
+    intro b
+    refine ⟨(data b).target_ne_zero, (data b).isWitness,
+      (data b).owner_ne_zero, (data b).zero_other,
+      (hsupportCoord b).1, (hsupportCoord b).2, ?_⟩
+    exact privateWitness_externalCoefficient_mem_twoRetainedLevels
+      g (data b).isWitness B (b : Fin n) (supportCoord b)
+        b.property (data b).owner_ne_zero (data b).zero_other
+        (hsupportCoord b).1 (hsupportCoord b).2 hretained
   refine ⟨hretained, (fun b ↦ (data b).scalar),
     (fun b ↦ (data b).coeff), supportCoord,
-    minimalCyclicKernelPrivateWitness_coeff_injective g y hmin, ?_⟩
-  intro b
-  refine ⟨(data b).target_ne_zero, (data b).isWitness,
-    (data b).owner_ne_zero, (data b).zero_other,
-    (hsupportCoord b).1, (hsupportCoord b).2, ?_⟩
-  exact privateWitness_externalCoefficient_mem_twoRetainedLevels
-    g (data b).isWitness B (b : Fin n) (supportCoord b)
-      b.property (data b).owner_ne_zero (data b).zero_other
-      (hsupportCoord b).1 (hsupportCoord b).2 hretained
+    minimalCyclicKernelPrivateWitness_coeff_injective g y hmin,
+    hrowData, ?_⟩
+  by_cases hB : B = ∅
+  · exact Or.inl hB
+  · right
+    let label : ↥B → Fin n × ℤ := fun b ↦
+      (supportCoord b, (data b).coeff (supportCoord b))
+    let labels : Finset (Fin n × ℤ) :=
+      (Finset.univ \ B).product twoRetainedExternalCoefficientLevels
+    have hlabelMem : ∀ b : ↥B, label b ∈ labels := by
+      intro b
+      rcases hrowData b with
+        ⟨_htarget, _hwitness, _howner, _hprivate,
+          hsupportB, _hsupportNonzero, hlevel⟩
+      exact Finset.mem_product.mpr
+        ⟨Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hsupportB⟩, hlevel⟩
+    have hsource : (Finset.univ : Finset ↥B).Nonempty := by
+      obtain ⟨b, hb⟩ := Finset.nonempty_iff_ne_empty.mpr hB
+      exact ⟨(⟨b, hb⟩ : ↥B), Finset.mem_univ _⟩
+    obtain ⟨z, hz, hFnonempty, hdominant⟩ :=
+      finiteMap_exists_dominantFiber labels label hlabelMem hsource
+    have hcomplementCard : (Finset.univ \ B).card = 2 := by
+      rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+      simpa using hretained
+    have hlabelsCard : labels.card = 6 := by
+      calc
+        labels.card = (Finset.univ \ B).card *
+            twoRetainedExternalCoefficientLevels.card :=
+          Finset.card_product _ _
+        _ = 2 * 3 := by rw [hcomplementCard,
+          card_twoRetainedExternalCoefficientLevels]
+        _ = 6 := by omega
+    refine ⟨z, hz, by simpa [label] using hFnonempty, ?_⟩
+    rw [hlabelsCard] at hdominant
+    simpa only [Fintype.card_coe, label] using hdominant
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
