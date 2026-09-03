@@ -8076,6 +8076,62 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_na
     g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
       e he helow hehigh heMem).2
 
+/-- Every normalized five-weight value other than the unique odd value `-1`
+is twice an integer. -/
+theorem twoRetainedNormalizedWeight_eq_two_mul_of_ne_neg_one
+    {w : ℤ} (hw : w ∈ twoRetainedNormalizedWeightLevels)
+    (hne : w ≠ -1) : ∃ k : ℤ, w = 2 * k := by
+  simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hw
+  rcases hw with rfl | rfl | rfl | rfl | rfl
+  · exact ⟨-2, by norm_num⟩
+  · exact ⟨-1, by norm_num⟩
+  · exact (hne rfl).elim
+  · exact ⟨0, by norm_num⟩
+  · exact ⟨1, by norm_num⟩
+
+/-- A cyclic group of order `64` whose named element has order `32` has
+exactly the two doubling-kernel elements `0` and `16 • delta`. -/
+theorem eq_zero_or_sixteen_nsmul_of_add_self_eq_zero_of_card_sixtyFour
+    {Q : Type*} [AddCommGroup Q] [Fintype Q] [IsAddCyclic Q]
+    (hcard : Nat.card Q = 64) (delta u : Q)
+    (hdelta : addOrderOf delta = 32) (hu : u + u = 0) :
+    u = 0 ∨ u = (16 : ℕ) • delta := by
+  let equiv : Q ≃+ ZMod 64 :=
+    (zmodAddCyclicAddEquiv (G := Q) inferInstance).symm.trans
+      (ZMod.ringEquivCongr hcard).toAddEquiv
+  have huImage : equiv u + equiv u = 0 := by
+    rw [← map_add, hu, map_zero]
+  have huCases := zmod_eq_zero_or_half_of_add_self_eq_zero
+    (by norm_num : 64 = 2 * 32) (equiv u) huImage
+  have hdeltaThirtyTwo : (32 : ℕ) • delta = 0 := by
+    rw [← hdelta]
+    exact addOrderOf_nsmul_eq_zero delta
+  have hdeltaSixteenNe : (16 : ℕ) • delta ≠ 0 := by
+    intro hzero
+    have hdvd : addOrderOf delta ∣ 16 :=
+      addOrderOf_dvd_of_nsmul_eq_zero hzero
+    rw [hdelta] at hdvd
+    norm_num at hdvd
+  have hhalfImage : equiv ((16 : ℕ) • delta) = (32 : ZMod 64) := by
+    have htwo :
+        equiv ((16 : ℕ) • delta) + equiv ((16 : ℕ) • delta) = 0 := by
+      rw [← map_add]
+      calc
+        equiv ((16 : ℕ) • delta + (16 : ℕ) • delta) =
+            equiv ((32 : ℕ) • delta) := by congr 1; module
+        _ = 0 := by rw [hdeltaThirtyTwo, map_zero]
+    rcases zmod_eq_zero_or_half_of_add_self_eq_zero
+        (by norm_num : 64 = 2 * 32) _ htwo with hzero | hhalf
+    · exact (hdeltaSixteenNe
+        (equiv.injective (hzero.trans (map_zero equiv).symm))).elim
+    · exact hhalf
+  rcases huCases with hzero | hhalf
+  · exact Or.inl (equiv.injective (hzero.trans (map_zero equiv).symm))
+  · right
+    apply equiv.injective
+    exact hhalf.trans hhalfImage.symm
+
 /-- In a modulus-minimal sixth-stratum exact-two survivor whose cyclic kernel
 has full odd-primary order, the retained difference is either primitive in
 the order-`64` quotient or generates its unique index-two subgroup.  This is
@@ -8270,6 +8326,189 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.sixthStratum_quotientPhase
       simpa only [deltaQ, pi, H, Q] using hsixtyFour
     rw [horderQ] at hdvd
     norm_num at hdvd
+
+/-- Exact sixth-stratum quotient dichotomy.  The index-two branch must
+contain a heavy normalized row of weight `-1`: otherwise every row weight
+is even, the order-`32` doubling-kernel classification confines all
+translated coordinates to `zmultiples y ⊔ zmultiples (g x - g z)`, and
+that cyclic subgroup has at most half the ambient cardinality, contradicting
+minimality.  The other branch is primitive of order `64` and has no heavy row. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.sixthStratum_quotientPhase_heavy_or_primitive
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ b : ↥B,
+        (2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z) ∈ AddSubgroup.zmultiples y) ∧
+      let H : AddSubgroup (ZMod (2 ^ 6 * q)) :=
+        AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ 6 * q) →+
+          ZMod (2 ^ 6 * q) ⧸ H := QuotientAddGroup.mk' H
+      (addOrderOf (pi (g x - g z)) = 32 ∧
+          ∃ b : ↥B, weight b = -1) ∨
+        (addOrderOf (pi (g x - g z)) = 64 ∧
+          ∀ b : ↥B, weight b ≠ -1) := by
+  classical
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hlevels,
+      hrelation, hphase⟩ :=
+    hrows.sixthStratum_quotientPhase
+      g hg hunique hne y hyq hfullOdd B hminimal
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hlevels,
+    hrelation, ?_⟩
+  rcases hphase with hthirtyTwo | hprimitive
+  · left
+    refine ⟨hthirtyTwo, ?_⟩
+    by_contra hnoHeavy
+    push Not at hnoHeavy
+    let H : AddSubgroup (ZMod (2 ^ 6 * q)) :=
+      AddSubgroup.zmultiples y
+    let Q := ZMod (2 ^ 6 * q) ⧸ H
+    let pi : ZMod (2 ^ 6 * q) →+ Q := QuotientAddGroup.mk' H
+    let delta : ZMod (2 ^ 6 * q) := g x - g z
+    let deltaQ : Q := pi delta
+    let K : AddSubgroup (ZMod (2 ^ 6 * q)) :=
+      H ⊔ AddSubgroup.zmultiples delta
+    letI : Fintype Q := Fintype.ofFinite Q
+    letI : IsAddCyclic Q := isAddCyclic_of_surjective pi
+      (QuotientAddGroup.mk'_surjective H)
+    have hquotientModulus :
+        (2 ^ 6 * q) / addOrderOf y = 64 := by
+      rw [Nat.mul_div_assoc (2 ^ 6) hyq, hfullOdd]
+      norm_num
+    have hQcardNat : Nat.card Q = 64 := by
+      have hmul : Nat.card Q * addOrderOf y = 2 ^ 6 * q := by
+        simpa only [Q, H, Nat.card_zmod] using
+          nat_card_quotient_zmultiples_mul_addOrderOf y
+      have hcard : Nat.card Q = (2 ^ 6 * q) / addOrderOf y := by
+        exact (Nat.div_eq_of_eq_mul_left (addOrderOf_pos y) hmul.symm).symm
+      exact hcard.trans hquotientModulus
+    have hdeltaOrder : addOrderOf deltaQ = 32 := by
+      simpa only [deltaQ, delta, pi, H, Q] using hthirtyTwo
+    have hdeletedQuotient : ∀ b : ↥B,
+        pi (g (b : Fin n) - g z) ∈
+          AddSubgroup.zmultiples deltaQ := by
+      intro b
+      obtain ⟨k, hk⟩ :=
+        twoRetainedNormalizedWeight_eq_two_mul_of_ne_neg_one
+          (hlevels b) (hnoHeavy b)
+      let betaQ : Q := pi (g (b : Fin n) - g z)
+      let uQ : Q := betaQ + k • deltaQ
+      have hquotientRelation :
+          (2 : ℤ) • betaQ + weight b • deltaQ = 0 := by
+        apply (QuotientAddGroup.eq_zero_iff
+          ((2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z))).mpr
+        exact hrelation b
+      have huDouble : uQ + uQ = 0 := by
+        calc
+          uQ + uQ = (2 : ℤ) • betaQ + weight b • deltaQ := by
+            rw [hk]
+            dsimp only [uQ]
+            module
+          _ = 0 := hquotientRelation
+      have huCases : uQ = 0 ∨ uQ = (16 : ℕ) • deltaQ :=
+        eq_zero_or_sixteen_nsmul_of_add_self_eq_zero_of_card_sixtyFour
+          hQcardNat deltaQ uQ hdeltaOrder huDouble
+      have huMem : uQ ∈ AddSubgroup.zmultiples deltaQ := by
+        rcases huCases with hzero | hu
+        · rw [hzero]
+          exact AddSubgroup.zero_mem _
+        · rw [hu]
+          exact AddSubgroup.nsmul_mem _
+            (AddSubgroup.mem_zmultiples deltaQ) 16
+      have hkMem : k • deltaQ ∈ AddSubgroup.zmultiples deltaQ :=
+        AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples deltaQ) k
+      have hbetaEq : betaQ = uQ - k • deltaQ := by
+        simp only [uQ]
+        module
+      change betaQ ∈ AddSubgroup.zmultiples deltaQ
+      rw [hbetaEq]
+      exact AddSubgroup.sub_mem _ huMem hkMem
+    have hquotientMem_lift : ∀ v : ZMod (2 ^ 6 * q),
+        pi v ∈ AddSubgroup.zmultiples deltaQ → v ∈ K := by
+      intro v hv
+      obtain ⟨c, hc⟩ := AddSubgroup.mem_zmultiples_iff.mp hv
+      have hdiffH : v - c • delta ∈ H := by
+        apply (QuotientAddGroup.eq_zero_iff (v - c • delta)).mp
+        change pi (v - c • delta) = 0
+        rw [map_sub, map_zsmul]
+        change pi v - c • deltaQ = 0
+        rw [← hc]
+        simp
+      apply AddSubgroup.mem_sup.mpr
+      refine ⟨v - c • delta, hdiffH, c • delta, ?_, ?_⟩
+      · exact AddSubgroup.zsmul_mem _
+          (AddSubgroup.mem_zmultiples delta) c
+      · module
+    have hcoordinate : ∀ i, g i - g z ∈ K := by
+      intro i
+      by_cases hiB : i ∈ B
+      · exact hquotientMem_lift (g i - g z)
+          (hdeletedQuotient ⟨i, hiB⟩)
+      · have hiComplement : i ∈ Finset.univ \ B :=
+          Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiB⟩
+        rw [hcomplement] at hiComplement
+        simp only [Finset.mem_insert, Finset.mem_singleton] at hiComplement
+        rcases hiComplement with hix | hiz
+        · subst i
+          exact AddSubgroup.mem_sup_right
+            (AddSubgroup.mem_zmultiples delta)
+        · subst i
+          simp
+    let gK : Fin n → K := fun i ↦ ⟨g i - g z, hcoordinate i⟩
+    have hgK : ValidTuple gK := by
+      apply validTuple_of_comp K.subtype
+      simpa only [gK, AddSubgroup.coe_subtype] using
+        validTuple_sub_const g hg (g z)
+    let e : ℤ := addOrderOf deltaQ
+    have he : e ≠ 0 := by
+      change (addOrderOf deltaQ : ℤ) ≠ 0
+      exact_mod_cast (Nat.ne_of_gt (addOrderOf_pos deltaQ))
+    have heMem : e • delta ∈ H := by
+      apply (QuotientAddGroup.eq_zero_iff (e • delta)).mp
+      change pi (e • delta) = 0
+      rw [map_zsmul]
+      change (addOrderOf deltaQ : ℤ) • deltaQ = 0
+      simpa only [natCast_zsmul] using addOrderOf_nsmul_eq_zero deltaQ
+    have hKcard : Nat.card K ≤ 32 * addOrderOf y := by
+      have hbound := card_sup_zmultiples_le_natAbs_mul H delta e he heMem
+      have henatAbs : e.natAbs = 32 := by simp [e, hdeltaOrder]
+      rw [henatAbs] at hbound
+      simpa only [K, H, Nat.card_zmultiples] using hbound
+    have hqpos : 0 < q := by
+      have hNpos : 0 < 2 ^ 6 * q := NeZero.pos (2 ^ 6 * q)
+      omega
+    have hyLe : addOrderOf y ≤ q := Nat.le_of_dvd hqpos hyq
+    have hKlt : Nat.card K < 2 ^ 6 * q := by
+      calc
+        Nat.card K ≤ 32 * addOrderOf y := hKcard
+        _ ≤ 32 * q := Nat.mul_le_mul_left 32 hyLe
+        _ < 2 ^ 6 * q := by norm_num; omega
+    have hKpos : 0 < Nat.card K := Nat.card_pos
+    have hKdiv : Nat.card K ∣ 2 ^ 6 * q := by
+      have hdiv : Nat.card K ∣ Nat.card (ZMod (2 ^ 6 * q)) :=
+        AddSubgroup.card_addSubgroup_dvd_card K
+      simpa only [Nat.card_zmod] using hdiv
+    letI : IsAddCyclic K := AddSubgroup.isAddCyclic K
+    let equiv : K ≃+ ZMod (Nat.card K) :=
+      (zmodAddCyclicAddEquiv (G := K) inferInstance).symm
+    have hAdmits : AdmitsValidTuple n (Nat.card K) := by
+      refine ⟨fun i ↦ equiv (gK i), ?_⟩
+      exact validTuple_comp hgK equiv.toAddMonoidHom equiv.injective
+    exact (hminimal (Nat.card K) hKpos hKlt hKdiv hAdmits).elim
+  · exact Or.inr hprimitive
 
 /-- In a modulus-minimal sixth-stratum survivor, a fully deleted doubling
 cycle cannot take the nonconstant bounded-multiple arm: that arm has
