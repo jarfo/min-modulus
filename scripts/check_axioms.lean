@@ -1777,6 +1777,7 @@ import MinModulus
 #print axioms MinModulus.finiteMap_capacity_or_largeFiber
 #print axioms MinModulus.card_witnessNonzeroCoefficientLevels
 #print axioms MinModulus.witness_nonzeroCoefficient_mem_levels
+#print axioms MinModulus.FixedExternalCoefficientPrivateFiber
 #print axioms MinModulus.retainedExternalInternalRowPartition_of_mixed
 #print axioms MinModulus.pureEdgeStarLeafCycle_rowPartitionOutcome_of_retainedMixedOutcome
 #print axioms MinModulus.exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleRowPartitionOutcome

@@ -26,6 +26,9 @@ def CycleCenterSparseRetainedExternalOrCommonPivot
       Witness g (scalar j • y) (coeff j)) ∧
     (∀ (j : ↥J) x, x ∈ B →
       x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
+    Function.Injective center ∧
+    (∀ j : ↥J, center (P.symm (j : Fin d)) ∈ B) ∧
+    (∀ j : ↥J, coeff j (center (P.symm (j : Fin d))) ≠ 0) ∧
     ((∀ j : ↥J,
         HasRetainedExternalCenterSupport center B (coeff j)) ∨
       ∃ pivot : Fin d, center pivot ∉ B ∧
@@ -46,13 +49,16 @@ theorem cycleCenterSparse_retainedExternal_or_commonPivot
       g y B center P J := by
   rcases hout with
     ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner,
       hall | ⟨pivot, hpivot, hmixed⟩⟩
   · refine ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner,
       Or.inl ?_⟩
     intro j
     exact hasRetainedExternalCenterSupport_of_private
       center P B coeff j hprivate (hall j)
   · refine ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner,
       Or.inr ⟨pivot, hpivot, ?_⟩⟩
     intro j
     rcases hmixed j with hjExternal | hjPair

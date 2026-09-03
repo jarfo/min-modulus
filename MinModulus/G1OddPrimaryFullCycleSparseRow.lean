@@ -194,6 +194,9 @@ def CycleCenterSparseExternalOrCommonPivot
       Witness g (scalar j • y) (coeff j)) ∧
     (∀ (j : ↥J) x, x ∈ B →
       x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
+    Function.Injective center ∧
+    (∀ j : ↥J, center (P.symm (j : Fin d)) ∈ B) ∧
+    (∀ j : ↥J, coeff j (center (P.symm (j : Fin d))) ≠ 0) ∧
     ((∀ j : ↥J, HasExternalCenterSupport center (coeff j)) ∨
       ∃ pivot : Fin d, center pivot ∉ B ∧
         ∀ j : ↥J,
@@ -213,7 +216,7 @@ theorem cycleCenterSparse_external_or_commonPivot
       g y B center P J := by
   classical
   rcases hsparse with
-    ⟨scalar, coeff, hJcard, _hJiff, htarget, hwitness, _hownerLeaf,
+    ⟨scalar, coeff, hJcard, hJiff, htarget, hwitness, _hownerLeaf,
       _hzeroLeaf, hprivateLeaf, hcoeffInj, hcenter, hEcard, hrows⟩
   have hcenterInj : Function.Injective center := by
     intro k l hkl
@@ -231,13 +234,17 @@ theorem cycleCenterSparse_external_or_commonPivot
       g (coeff j) (hwitness j) center hcenterInj (P.symm j)
         (hrows j).1 (hrows j).2.1 (hrows j).2.2
   refine ⟨scalar, coeff, hJcard, hcoeffInj,
-    (fun j ↦ ⟨htarget j, hwitness j⟩), ?_, ?_⟩
+    (fun j ↦ ⟨htarget j, hwitness j⟩), ?_, hcenterInj, ?_,
+    (fun j ↦ (hrows j).1), ?_⟩
   · intro j x hxB hxOwner
     apply hprivateLeaf j x hxB
     intro hxLeaf
     apply hxOwner
     rw [hcenter (P.symm (j : Fin d)), P.apply_symm_apply]
     exact hxLeaf
+  · intro j
+    rw [hcenter (P.symm (j : Fin d)), P.apply_symm_apply]
+    exact (hJiff j).mp j.property
   · by_cases hall : ∀ j : ↥J,
         HasExternalCenterSupport center (coeff j)
     · exact Or.inl hall

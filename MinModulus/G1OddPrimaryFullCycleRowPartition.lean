@@ -67,6 +67,28 @@ theorem witness_nonzeroCoefficient_mem_levels
       exact_mod_cast hcard
     simp [witnessNonzeroCoefficientLevels, hlower, hupper.trans hcardInt]
 
+/-- Matrix structure carried by rows with one fixed retained external
+coordinate and one fixed nonzero coefficient there.  The owner columns are
+distinct deleted coordinates, each row is nonzero on its own owner and zero
+on every other owner, and the complete coefficient rows remain distinct. -/
+def FixedExternalCoefficientPrivateFiber
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (coeff : ↥J → Fin n → ℤ) {E : Finset ↥J} (F : Finset ↥E)
+    (x : Fin n) (lambda : ℤ) : Prop :=
+  x ∉ Finset.univ.image center ∧ x ∉ B ∧ lambda ≠ 0 ∧
+    Function.Injective (fun f : ↥F ↦
+      center (P.symm (((f : ↥E) : ↥J) : Fin d))) ∧
+    Function.Injective (fun f : ↥F ↦ coeff ((f : ↥E) : ↥J)) ∧
+    (∀ f : ↥F,
+      center (P.symm (((f : ↥E) : ↥J) : Fin d)) ∈ B ∧
+      coeff ((f : ↥E) : ↥J) x = lambda ∧
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) ≠ 0) ∧
+    ∀ f k : ↥F, f ≠ k →
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((k : ↥E) : ↥J) : Fin d))) = 0
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
@@ -79,6 +101,9 @@ def RetainedExternalInternalRowPartition
         Witness g (scalar j • y) (coeff j)) ∧
       (∀ (j : ↥J) x, x ∈ B →
         x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
+      Function.Injective center ∧
+      (∀ j : ↥J, center (P.symm (j : Fin d)) ∈ B) ∧
+      (∀ j : ↥J, coeff j (center (P.symm (j : Fin d))) ≠ 0) ∧
       E ∪ I = Finset.univ ∧ Disjoint E I ∧
       E.card + I.card = J.card ∧ d - 1 ≤ E.card + I.card ∧
       (∀ j : ↥J, j ∈ E ↔
@@ -105,7 +130,11 @@ def RetainedExternalInternalRowPartition
                   (Finset.univ.image center : Finset (Fin n))).product
                 (witnessNonzeroCoefficientLevels n),
               K < (Finset.univ.filter (fun e : ↥E ↦
-                (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z)).card) ∧
+                (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z)).card ∧
+              FixedExternalCoefficientPrivateFiber B center P coeff
+                (Finset.univ.filter (fun e : ↥E ↦
+                  (supportCoord e,
+                    coeff (e : ↥J) (supportCoord e)) = z)) z.1 z.2) ∧
         (I = ∅ ∨
         ∃ pivot : Fin d, center pivot ∉ B ∧
           ∀ j : ↥I,
@@ -125,6 +154,7 @@ theorem retainedExternalInternalRowPartition_of_mixed
   classical
   rcases hout with
     ⟨scalar, coeff, hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner,
       hall | ⟨pivot, hpivot, hmixed⟩⟩
   all_goals
     let E : Finset ↥J := Finset.univ.filter
@@ -186,13 +216,61 @@ theorem retainedExternalInternalRowPartition_of_mixed
             (R.product (witnessNonzeroCoefficientLevels n)).card * K ∨
           ∃ z ∈ R.product (witnessNonzeroCoefficientLevels n),
             K < (Finset.univ.filter
-              (fun e : ↥E ↦ level e = z)).card := by
+              (fun e : ↥E ↦ level e = z)).card ∧
+            FixedExternalCoefficientPrivateFiber B center P coeff
+              (Finset.univ.filter (fun e : ↥E ↦ level e = z)) z.1 z.2 := by
       intro K
-      simpa [Fintype.card_coe] using
-        finiteMap_capacity_or_largeFiber
+      rcases finiteMap_capacity_or_largeFiber
           (R.product (witnessNonzeroCoefficientLevels n))
-          level hlevelMem K
+          level hlevelMem K with hcap | ⟨z, hz, hlarge⟩
+      · exact Or.inl (by simpa [Fintype.card_coe] using hcap)
+      · right
+        refine ⟨z, hz, by simpa [Fintype.card_coe] using hlarge, ?_⟩
+        rcases Finset.mem_product.mp hz with ⟨hzR, hzLevel⟩
+        have hzParts := Finset.mem_sdiff.mp hzR
+        have hzNotB := (Finset.mem_sdiff.mp hzParts.1).2
+        have hzOutside := hzParts.2
+        have hzNonzero : z.2 ≠ 0 := by
+          intro hzZero
+          rw [hzZero] at hzLevel
+          simp [witnessNonzeroCoefficientLevels] at hzLevel
+        have hfiberLevel : ∀ f : ↥(Finset.univ.filter
+            (fun e : ↥E ↦ level e = z)), level (f : ↥E) = z := by
+          intro f
+          exact (Finset.mem_filter.mp f.property).2
+        refine ⟨hzOutside, hzNotB, hzNonzero, ?_, ?_, ?_, ?_⟩
+        · intro f k hownerEq
+          apply Subtype.ext
+          apply Subtype.ext
+          apply Subtype.ext
+          exact P.symm.injective (hcenterInj hownerEq)
+        · intro f k hcoeffEq
+          apply Subtype.ext
+          apply Subtype.ext
+          exact hcoeffInj hcoeffEq
+        · intro f
+          have hf := hfiberLevel f
+          have hcoord : supportCoord (f : ↥E) = z.1 :=
+            congrArg Prod.fst hf
+          have hvalue :
+              coeff ((f : ↥E) : ↥J) (supportCoord (f : ↥E)) = z.2 :=
+            congrArg Prod.snd hf
+          refine ⟨hownerMem ((f : ↥E) : ↥J), ?_,
+            howner ((f : ↥E) : ↥J)⟩
+          rw [← hcoord]
+          exact hvalue
+        · intro f k hfk
+          apply hprivate ((f : ↥E) : ↥J)
+            (center (P.symm (((k : ↥E) : ↥J) : Fin d)))
+            (hownerMem ((k : ↥E) : ↥J))
+          intro hownerEq
+          apply hfk
+          apply Subtype.ext
+          apply Subtype.ext
+          apply Subtype.ext
+          exact P.symm.injective (hcenterInj hownerEq.symm)
   · refine ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner,
       hunion, hdisjoint, hcard, ?_, hEiff, supportCoord, hsupportCoord,
       by simpa [R] using hfrontier,
       by simpa [R, level] using hlevelFrontier, Or.inl ?_⟩
@@ -200,6 +278,7 @@ theorem retainedExternalInternalRowPartition_of_mixed
     · ext j
       simp [I, E, hall j]
   · refine ⟨scalar, coeff, E, I, hJcard, hcoeffInj, hrows, hprivate,
+      hcenterInj, hownerMem, howner,
       hunion, hdisjoint, hcard, ?_, hEiff, supportCoord, hsupportCoord,
       by simpa [R] using hfrontier,
       by simpa [R, level] using hlevelFrontier, ?_⟩
