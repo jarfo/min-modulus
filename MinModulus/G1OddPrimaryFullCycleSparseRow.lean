@@ -192,6 +192,8 @@ def CycleCenterSparseExternalOrCommonPivot
     d - 1 ≤ J.card ∧ Function.Injective coeff ∧
     (∀ j, scalar j • y ≠ 0 ∧
       Witness g (scalar j • y) (coeff j)) ∧
+    (∀ (j : ↥J) x, x ∈ B →
+      x ≠ center (P.symm (j : Fin d)) → coeff j x = 0) ∧
     ((∀ j : ↥J, HasExternalCenterSupport center (coeff j)) ∨
       ∃ pivot : Fin d, center pivot ∉ B ∧
         ∀ j : ↥J,
@@ -212,7 +214,7 @@ theorem cycleCenterSparse_external_or_commonPivot
   classical
   rcases hsparse with
     ⟨scalar, coeff, hJcard, _hJiff, htarget, hwitness, _hownerLeaf,
-      _hzeroLeaf, _hprivate, hcoeffInj, hcenter, hEcard, hrows⟩
+      _hzeroLeaf, hprivateLeaf, hcoeffInj, hcenter, hEcard, hrows⟩
   have hcenterInj : Function.Injective center := by
     intro k l hkl
     apply P.injective
@@ -229,30 +231,36 @@ theorem cycleCenterSparse_external_or_commonPivot
       g (coeff j) (hwitness j) center hcenterInj (P.symm j)
         (hrows j).1 (hrows j).2.1 (hrows j).2.2
   refine ⟨scalar, coeff, hJcard, hcoeffInj,
-    (fun j ↦ ⟨htarget j, hwitness j⟩), ?_⟩
-  by_cases hall : ∀ j : ↥J,
-      HasExternalCenterSupport center (coeff j)
-  · exact Or.inl hall
-  · right
-    obtain ⟨j₀, hj₀⟩ := Classical.not_forall.mp hall
-    rcases hrowDichotomy j₀ with hj₀External |
-        ⟨pivot, _hpivotOwner, hpivotOutside, _hpivotPair⟩
-    · exact False.elim (hj₀ hj₀External)
-    · refine ⟨pivot, hpivotOutside, ?_⟩
-      intro j
-      rcases hrowDichotomy j with hjExternal |
-          ⟨k, _hkOwner, hkOutside, hkPair⟩
-      · exact Or.inl hjExternal
-      · right
-        have hkMem : k ∈ Finset.univ.filter
-            (fun l ↦ center l ∉ B) :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hkOutside⟩
-        have hpivotMem : pivot ∈ Finset.univ.filter
-            (fun l ↦ center l ∉ B) :=
-          Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpivotOutside⟩
-        have hkp : k = pivot :=
-          (Finset.card_le_one.mp hEcard) k hkMem pivot hpivotMem
-        simpa [hkp] using hkPair
+    (fun j ↦ ⟨htarget j, hwitness j⟩), ?_, ?_⟩
+  · intro j x hxB hxOwner
+    apply hprivateLeaf j x hxB
+    intro hxLeaf
+    apply hxOwner
+    rw [hcenter (P.symm (j : Fin d)), P.apply_symm_apply]
+    exact hxLeaf
+  · by_cases hall : ∀ j : ↥J,
+        HasExternalCenterSupport center (coeff j)
+    · exact Or.inl hall
+    · right
+      obtain ⟨j₀, hj₀⟩ := Classical.not_forall.mp hall
+      rcases hrowDichotomy j₀ with hj₀External |
+          ⟨pivot, _hpivotOwner, hpivotOutside, _hpivotPair⟩
+      · exact False.elim (hj₀ hj₀External)
+      · refine ⟨pivot, hpivotOutside, ?_⟩
+        intro j
+        rcases hrowDichotomy j with hjExternal |
+            ⟨k, _hkOwner, hkOutside, hkPair⟩
+        · exact Or.inl hjExternal
+        · right
+          have hkMem : k ∈ Finset.univ.filter
+              (fun l ↦ center l ∉ B) :=
+            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hkOutside⟩
+          have hpivotMem : pivot ∈ Finset.univ.filter
+              (fun l ↦ center l ∉ B) :=
+            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpivotOutside⟩
+          have hkp : k = pivot :=
+            (Finset.card_le_one.mp hEcard) k hkMem pivot hpivotMem
+          simpa [hkp] using hkPair
 
 /-- Global endpoint enriching the center-sparse family by its exact
 external-support/common-pivot row normal form. -/
