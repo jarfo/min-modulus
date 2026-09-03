@@ -1277,6 +1277,219 @@ theorem fixedExternalCoefficientPrivateFiber_lambda_mem_twoRetainedLevels
   · simp [twoRetainedExternalCoefficientLevels, hlambda]
   · simp [twoRetainedExternalCoefficientLevels, hlambda]
 
+/-- A private witness evaluated at any nonzero retained coordinate uses the
+same constant three-level alphabet when exactly two coordinates survive.
+This rowwise form does not presuppose that a larger fixed fiber has already
+been selected. -/
+theorem privateWitness_externalCoefficient_mem_twoRetainedLevels
+    (g : Fin n → G) {target : G} {c : Fin n → ℤ}
+    (hc : Witness g target c) (B : Finset (Fin n))
+    (owner x : Fin n) (hownerB : owner ∈ B) (_howner : c owner ≠ 0)
+    (hprivate : ∀ i, i ∈ B → i ≠ owner → c i = 0)
+    (hxB : x ∉ B) (hx : c x ≠ 0) (hretained : n - B.card = 2) :
+    c x ∈ twoRetainedExternalCoefficientLevels := by
+  classical
+  have hxC : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxB⟩
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hCone : 1 < (Finset.univ \ B).card := by omega
+  obtain ⟨u, huC, z, hzC, huz⟩ := Finset.one_lt_card.mp hCone
+  obtain ⟨z, hzC, hzNeX⟩ :
+      ∃ z ∈ Finset.univ \ B, z ≠ x := by
+    by_cases hux : u = x
+    · refine ⟨z, hzC, ?_⟩
+      intro hzx
+      exact huz (hux.trans hzx.symm)
+    · exact ⟨u, huC, hux⟩
+  have hzB : z ∉ B := (Finset.mem_sdiff.mp hzC).2
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem
+      hCcard hxC hzC hzNeX.symm
+  have hownerX : owner ≠ x := by
+    intro hownerX
+    subst x
+    exact hxB hownerB
+  have hownerZ : owner ≠ z := by
+    intro hownerZ
+    subst z
+    exact hzB hownerB
+  have hzeroOutside : ∀ i : Fin n,
+      i ≠ owner → i ≠ x → i ≠ z → c i = 0 := by
+    intro i hiOwner hix hiz
+    have hiB : i ∈ B := by
+      by_contra hiNotB
+      have hiC : i ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiNotB⟩
+      have hiPair : i = x ∨ i = z := by
+        have : i ∈ ({x, z} : Finset (Fin n)) := by
+          rw [← hCeq]
+          exact hiC
+        simpa using this
+      exact hiPair.elim hix hiz
+    exact hprivate i hiB hiOwner
+  have hrestrict :
+      ∑ i ∈ ({owner, x, z} : Finset (Fin n)), c i = ∑ i, c i := by
+    exact Finset.sum_subset (by simp) (by
+      intro i _ hi
+      apply hzeroOutside i
+      · intro hiOwner
+        exact hi (by simp [hiOwner])
+      · intro hix
+        exact hi (by simp [hix])
+      · intro hiz
+        exact hi (by simp [hiz]))
+  have hownerNotPair : owner ∉ ({x, z} : Finset (Fin n)) := by
+    simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+    exact ⟨hownerX, hownerZ⟩
+  have hxNotZ : x ∉ ({z} : Finset (Fin n)) := by
+    simpa only [Finset.mem_singleton] using hzNeX.symm
+  have hsum : c owner + c x + c z = 0 := by
+    calc
+      c owner + c x + c z =
+          ∑ i ∈ ({owner, x, z} : Finset (Fin n)), c i := by
+        rw [Finset.sum_insert hownerNotPair, Finset.sum_insert hxNotZ]
+        simp [add_assoc]
+      _ = ∑ i, c i := hrestrict
+      _ = 0 := hc.2.2.1
+  have hownerFloor := hc.2.1 owner
+  have hxFloor := hc.2.1 x
+  have hzFloor := hc.2.1 z
+  have hlevel : c x = -1 ∨ c x = 1 ∨ c x = 2 := by omega
+  rcases hlevel with hlevel | hlevel | hlevel
+  · simp [twoRetainedExternalCoefficientLevels, hlevel]
+  · simp [twoRetainedExternalCoefficientLevels, hlevel]
+  · simp [twoRetainedExternalCoefficientLevels, hlevel]
+
+/-- Constant-capacity adaptive external-row frontier in the exact
+two-retained regime.  There are at most two eligible retained coordinates
+and exactly three possible nonzero coefficient levels, so either `6*K` rows
+pay for all labels or one fixed label supports more than `K` rows with the
+full private diagonal-plus-common-column structure. -/
+theorem twoRetainedExternalRows_capacity_or_largePrivateFiber
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    {J : Finset (Fin d)} (scalar : ↥J → ℤ)
+    (coeff : ↥J → Fin n → ℤ) (E : Finset ↥J)
+    (supportCoord : ↥E → Fin n)
+    (hsupport : ∀ e : ↥E,
+      supportCoord e ∉ Finset.univ.image center ∧
+      supportCoord e ∉ B ∧
+      coeff (e : ↥J) (supportCoord e) ≠ 0)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (hprivate : ∀ (j : ↥J) i, i ∈ B →
+      i ≠ center (P.symm (j : Fin d)) → coeff j i = 0)
+    (hcenterInj : Function.Injective center)
+    (hownerMem : ∀ j : ↥J, center (P.symm (j : Fin d)) ∈ B)
+    (howner : ∀ j : ↥J,
+      coeff j (center (P.symm (j : Fin d))) ≠ 0)
+    (hcoeffInj : Function.Injective coeff)
+    (hretained : n - B.card = 2) (K : ℕ) :
+    E.card ≤ 6 * K ∨
+      ∃ z ∈ (((Finset.univ \ B) \
+            (Finset.univ.image center : Finset (Fin n))).product
+          twoRetainedExternalCoefficientLevels),
+        K < (Finset.univ.filter (fun e : ↥E ↦
+          (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z)).card ∧
+        FixedExternalCoefficientPrivateFiber B center P coeff
+          (Finset.univ.filter (fun e : ↥E ↦
+            (supportCoord e, coeff (e : ↥J) (supportCoord e)) = z))
+          z.1 z.2 := by
+  classical
+  let R : Finset (Fin n) :=
+    (Finset.univ \ B) \ Finset.univ.image center
+  let level : ↥E → (Fin n × ℤ) := fun e ↦
+    (supportCoord e, coeff (e : ↥J) (supportCoord e))
+  have hsupportMem : ∀ e : ↥E, supportCoord e ∈ R := by
+    intro e
+    exact Finset.mem_sdiff.mpr
+      ⟨Finset.mem_sdiff.mpr
+        ⟨Finset.mem_univ _, (hsupport e).2.1⟩,
+        (hsupport e).1⟩
+  have hlevelMem : ∀ e : ↥E,
+      level e ∈ R.product twoRetainedExternalCoefficientLevels := by
+    intro e
+    exact Finset.mem_product.mpr
+      ⟨hsupportMem e,
+        privateWitness_externalCoefficient_mem_twoRetainedLevels
+          g (hrows (e : ↥J)) B
+          (center (P.symm ((e : ↥J) : Fin d))) (supportCoord e)
+          (hownerMem (e : ↥J)) (howner (e : ↥J))
+          (hprivate (e : ↥J)) (hsupport e).2.1
+          (hsupport e).2.2 hretained⟩
+  rcases finiteMap_capacity_or_largeFiber
+      (R.product twoRetainedExternalCoefficientLevels)
+      level hlevelMem K with hcap | ⟨z, hz, hlarge⟩
+  · left
+    have hcap' : E.card ≤
+        (R.product twoRetainedExternalCoefficientLevels).card * K := by
+      simpa [Fintype.card_coe] using hcap
+    have hRsub : R ⊆ Finset.univ \ B := by
+      intro i hi
+      exact (Finset.mem_sdiff.mp hi).1
+    have hRcard : R.card ≤ 2 := by
+      have hle := Finset.card_le_card hRsub
+      rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)] at hle
+      simpa [hretained] using hle
+    have hproductCard :
+        (R.product twoRetainedExternalCoefficientLevels).card ≤ 6 := by
+      calc
+        (R.product twoRetainedExternalCoefficientLevels).card =
+            R.card * twoRetainedExternalCoefficientLevels.card :=
+          Finset.card_product R twoRetainedExternalCoefficientLevels
+        _ = R.card * 3 := by rw [card_twoRetainedExternalCoefficientLevels]
+        _ ≤ 6 := by omega
+    exact hcap'.trans (Nat.mul_le_mul_right K hproductCard)
+  · right
+    refine ⟨z, by simpa [R] using hz,
+      by simpa [level, Fintype.card_coe] using hlarge, ?_⟩
+    rcases Finset.mem_product.mp hz with ⟨hzR, hzLevel⟩
+    have hzParts := Finset.mem_sdiff.mp hzR
+    have hzNotB := (Finset.mem_sdiff.mp hzParts.1).2
+    have hzOutside := hzParts.2
+    have hzNonzero : z.2 ≠ 0 := by
+      intro hzZero
+      rw [hzZero] at hzLevel
+      simp [twoRetainedExternalCoefficientLevels] at hzLevel
+    have hfiberLevel : ∀ f : ↥(Finset.univ.filter
+        (fun e : ↥E ↦ level e = z)), level (f : ↥E) = z := by
+      intro f
+      exact (Finset.mem_filter.mp f.property).2
+    refine ⟨hzOutside, hzNotB, hzNonzero, ?_, ?_, ?_, ?_, ?_⟩
+    · intro f k hownerEq
+      apply Subtype.ext
+      apply Subtype.ext
+      apply Subtype.ext
+      exact P.symm.injective (hcenterInj hownerEq)
+    · intro f k hcoeffEq
+      apply Subtype.ext
+      apply Subtype.ext
+      exact hcoeffInj hcoeffEq
+    · intro f
+      have hf := hfiberLevel f
+      have hcoord : supportCoord (f : ↥E) = z.1 :=
+        congrArg Prod.fst hf
+      have hvalue :
+          coeff ((f : ↥E) : ↥J) (supportCoord (f : ↥E)) = z.2 :=
+        congrArg Prod.snd hf
+      refine ⟨hownerMem ((f : ↥E) : ↥J), ?_,
+        howner ((f : ↥E) : ↥J)⟩
+      rw [← hcoord]
+      exact hvalue
+    · intro f i hiB hiOwner
+      exact hprivate ((f : ↥E) : ↥J) i hiB hiOwner
+    · intro f k hfk
+      apply hprivate ((f : ↥E) : ↥J)
+        (center (P.symm (((k : ↥E) : ↥J) : Fin d)))
+        (hownerMem ((k : ↥E) : ↥J))
+      intro hownerEq
+      apply hfk
+      apply Subtype.ext
+      apply Subtype.ext
+      apply Subtype.ext
+      exact P.symm.injective (hcenterInj hownerEq.symm)
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
