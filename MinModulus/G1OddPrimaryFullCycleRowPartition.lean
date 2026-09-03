@@ -6276,6 +6276,262 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fixedCardWeightSum_le
     g hg hunique owner weight y (g x - g z) base target
       haffine htargetMem k w
 
+/-- Substituting a doubling transition into two five-weight affine rows.
+The target difference belongs to the cyclic kernel, so the displayed
+retained-coordinate expression does as well. -/
+theorem fiveWeightAffine_transition_mem_zmultiples
+    {ι : Type*} (g : Fin n → G) (y a : G)
+    (owner : ι → Fin n) (R : ι → ι)
+    (x z : Fin n) (weight : ι → ℤ) (target : ι → G)
+    (haffine : ∀ i, target i =
+      (2 : ℤ) • g (owner i) + weight i • (g x - g z) -
+        (2 : ℤ) • g z)
+    (hmem : ∀ i, target i ∈ AddSubgroup.zmultiples y)
+    (hdouble : ∀ i,
+      g (owner (R i)) - a = (2 : ℤ) • (g (owner i) - a))
+    (i : ι) :
+    (weight (R i) - 2 * weight i) • (g x - g z) +
+        (2 : ℤ) • (g z - a) ∈ AddSubgroup.zmultiples y := by
+  have hownerR :
+      g (owner (R i)) = (2 : ℤ) • g (owner i) - a := by
+    calc
+      g (owner (R i)) = (g (owner (R i)) - a) + a := by abel
+      _ = (2 : ℤ) • (g (owner i) - a) + a := by rw [hdouble i]
+      _ = (2 : ℤ) • g (owner i) - a := by
+        rw [zsmul_sub]
+        abel
+  have htargetIdentity :
+      target (R i) - (2 : ℤ) • target i =
+        (weight (R i) - 2 * weight i) • (g x - g z) +
+          (2 : ℤ) • (g z - a) := by
+    rw [haffine (R i), haffine i, hownerR]
+    module
+  rw [← htargetIdentity]
+  exact AddSubgroup.sub_mem _ (hmem (R i))
+    (AddSubgroup.zsmul_mem _ (hmem i) 2)
+
+/-- Two cycle transitions eliminate the common affine translate.  Their
+integer transition-coefficient difference annihilates the retained
+difference modulo the cyclic kernel. -/
+theorem fiveWeightAffine_transitionCoefficient_sub_smul_mem_zmultiples
+    {ι : Type*} (g : Fin n → G) (y a : G)
+    (owner : ι → Fin n) (R : ι → ι)
+    (x z : Fin n) (weight : ι → ℤ) (target : ι → G)
+    (haffine : ∀ i, target i =
+      (2 : ℤ) • g (owner i) + weight i • (g x - g z) -
+        (2 : ℤ) • g z)
+    (hmem : ∀ i, target i ∈ AddSubgroup.zmultiples y)
+    (hdouble : ∀ i,
+      g (owner (R i)) - a = (2 : ℤ) • (g (owner i) - a))
+    (i j : ι) :
+    ((weight (R i) - 2 * weight i) -
+        (weight (R j) - 2 * weight j)) • (g x - g z) ∈
+      AddSubgroup.zmultiples y := by
+  have hi := fiveWeightAffine_transition_mem_zmultiples
+    g y a owner R x z weight target haffine hmem hdouble i
+  have hj := fiveWeightAffine_transition_mem_zmultiples
+    g y a owner R x z weight target haffine hmem hdouble j
+  have hsub := AddSubgroup.sub_mem _ hi hj
+  convert hsub using 1
+  module
+
+/-- One transition version, for a family only partially closed under the
+doubling map.  This is the form used by deleted cycle leaves. -/
+theorem fiveWeightAffine_pairTransition_mem_zmultiples
+    (g : Fin n → G) (y a : G) (x z b c : Fin n)
+    (wb wc : ℤ) (tb tc : G)
+    (hb : tb = (2 : ℤ) • g b + wb • (g x - g z) - (2 : ℤ) • g z)
+    (hc : tc = (2 : ℤ) • g c + wc • (g x - g z) - (2 : ℤ) • g z)
+    (htb : tb ∈ AddSubgroup.zmultiples y)
+    (htc : tc ∈ AddSubgroup.zmultiples y)
+    (hdouble : g c - a = (2 : ℤ) • (g b - a)) :
+    (wc - 2 * wb) • (g x - g z) + (2 : ℤ) • (g z - a) ∈
+      AddSubgroup.zmultiples y := by
+  have hcValue : g c = (2 : ℤ) • g b - a := by
+    calc
+      g c = (g c - a) + a := by abel
+      _ = (2 : ℤ) • (g b - a) + a := by rw [hdouble]
+      _ = (2 : ℤ) • g b - a := by
+        rw [zsmul_sub]
+        abel
+  have hidentity :
+      tc - (2 : ℤ) • tb =
+        (wc - 2 * wb) • (g x - g z) + (2 : ℤ) • (g z - a) := by
+    rw [hb, hc, hcValue]
+    module
+  rw [← hidentity]
+  exact AddSubgroup.sub_mem _ htc (AddSubgroup.zsmul_mem _ htb 2)
+
+/-- Every deleted-to-deleted transition of the saturated cycle inherits the
+five-weight kernel invariant from the full minimal-transversal family. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.cycleTransition_mem
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    {ι : Type*} (leaf : ι → Fin n) (R : ι → ι) (a : G)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
+          (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
+              (g x - g z) + (2 : ℤ) • (g z - a) ∈
+            AddSubgroup.zmultiples y) ∧
+      ∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B)
+          j (hj : leaf j ∈ B) (hRj : leaf (R j) ∈ B),
+        ((weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) -
+            (weight ⟨leaf (R j), hRj⟩ - 2 * weight ⟨leaf j, hj⟩)) •
+              (g x - g z) ∈ AddSubgroup.zmultiples y := by
+  classical
+  rcases hrows with
+    ⟨_hretained, x, z, scalar, coeff, weight,
+      hxB, hzB, hxz, hcomplement, _hcoeffInjective,
+      _hrowData, hweightData⟩
+  let target : ↥B → G := fun b ↦
+    twoRetainedOwnerNormalization (coeff b (b : Fin n)) •
+      (scalar b • y)
+  have htargetMem : ∀ b, target b ∈ AddSubgroup.zmultiples y := by
+    intro b
+    exact AddSubgroup.zsmul_mem _
+      (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _) _
+  have htransition : ∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
+      (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
+          (g x - g z) + (2 : ℤ) • (g z - a) ∈
+        AddSubgroup.zmultiples y := by
+    intro i hi hRi
+    let b : ↥B := ⟨leaf i, hi⟩
+    let c : ↥B := ⟨leaf (R i), hRi⟩
+    exact fiveWeightAffine_pairTransition_mem_zmultiples
+      g y a x z (b : Fin n) (c : Fin n) (weight b) (weight c)
+        (target b) (target c) (hweightData b).2.2 (hweightData c).2.2
+          (htargetMem b) (htargetMem c) (hdouble i)
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+    fun b ↦ (hweightData b).1, htransition, ?_⟩
+  intro i hi hRi j hj hRj
+  have hiMem := htransition i hi hRi
+  have hjMem := htransition j hj hRj
+  have hsub := AddSubgroup.sub_mem _ hiMem hjMem
+  convert hsub using 1
+  module
+
+theorem twoRetainedNormalizedWeight_bounds
+    {w : ℤ} (hw : w ∈ twoRetainedNormalizedWeightLevels) :
+    -4 ≤ w ∧ w ≤ 2 := by
+  simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hw
+  omega
+
+/-- A bounded integer weight on a finite functional graph is constant when
+`weight(R i) - 2*weight(i)` is constant.  The proof uses only the minimum
+and maximum weights, so no cycle enumeration is needed. -/
+theorem weight_constant_of_transitionCoefficient_constant
+    {ι : Type*} [Fintype ι] (i₀ : ι)
+    (R : ι → ι) (weight : ι → ℤ)
+    (hcoefficient : ∀ i j,
+      weight (R i) - 2 * weight i = weight (R j) - 2 * weight j) :
+    ∀ i j, weight i = weight j := by
+  classical
+  have huniv : (Finset.univ : Finset ι).Nonempty :=
+    ⟨i₀, Finset.mem_univ _⟩
+  obtain ⟨imin, _himin, hmin⟩ :=
+    Finset.exists_min_image Finset.univ weight huniv
+  obtain ⟨imax, _himax, hmax⟩ :=
+    Finset.exists_max_image Finset.univ weight huniv
+  have hminStep : weight imin ≤ weight (R imin) :=
+    hmin (R imin) (Finset.mem_univ _)
+  have hmaxStep : weight (R imax) ≤ weight imax :=
+    hmax (R imax) (Finset.mem_univ _)
+  have hcoeff := hcoefficient imin imax
+  have hminmax : weight imin ≤ weight imax :=
+    hmin imax (Finset.mem_univ _)
+  have hmaxmin : weight imax ≤ weight imin := by omega
+  intro i j
+  have hmini : weight imin ≤ weight i := hmin i (Finset.mem_univ _)
+  have himaxi : weight i ≤ weight imax := hmax i (Finset.mem_univ _)
+  have hminj : weight imin ≤ weight j := hmin j (Finset.mem_univ _)
+  have hjmax : weight j ≤ weight imax := hmax j (Finset.mem_univ _)
+  omega
+
+/-- The five-weight transition invariant has only two outcomes.  Either all
+integer transition coefficients agree, forcing every weight to be equal, or
+a nonzero integer of absolute value at most 18 sends the retained difference
+into the cyclic kernel. -/
+theorem fiveWeightTransition_smallKernelMultiple_or_weight_constant
+    {ι : Type*} [Fintype ι] (i₀ : ι)
+    (R : ι → ι) (weight : ι → ℤ)
+    (hweight : ∀ i, weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta : G) (y : G)
+    (hpair : ∀ i j,
+      ((weight (R i) - 2 * weight i) -
+          (weight (R j) - 2 * weight j)) • delta ∈
+        AddSubgroup.zmultiples y) :
+    (∃ e : ℤ, e ≠ 0 ∧ -18 ≤ e ∧ e ≤ 18 ∧
+        e • delta ∈ AddSubgroup.zmultiples y) ∨
+      ∀ i j, weight i = weight j := by
+  classical
+  by_cases hconstant : ∀ i j,
+      weight (R i) - 2 * weight i =
+        weight (R j) - 2 * weight j
+  · exact Or.inr
+      (weight_constant_of_transitionCoefficient_constant
+        i₀ R weight hconstant)
+  · push Not at hconstant
+    obtain ⟨i, j, hij⟩ := hconstant
+    let e : ℤ :=
+      (weight (R i) - 2 * weight i) -
+        (weight (R j) - 2 * weight j)
+    have hi := twoRetainedNormalizedWeight_bounds (hweight i)
+    have hRi := twoRetainedNormalizedWeight_bounds (hweight (R i))
+    have hj := twoRetainedNormalizedWeight_bounds (hweight j)
+    have hRj := twoRetainedNormalizedWeight_bounds (hweight (R j))
+    refine Or.inl ⟨e, ?_, by omega, by omega, ?_⟩
+    · dsimp only [e]
+      exact sub_ne_zero.mpr hij
+    · simpa only [e] using hpair i j
+
+/-- If every leaf of a saturated doubling cycle is deleted by the minimal
+transversal, the five-weight transition invariant becomes global on that
+cycle.  Either the retained difference has a nonzero kernel multiple with
+coefficient at most 18, or every deleted cycle leaf has the same weight. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fullDeletedCycle_split
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (a : G)
+    (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((∃ e : ℤ, e ≠ 0 ∧ -18 ≤ e ∧ e ≤ 18 ∧
+          e • (g x - g z) ∈ AddSubgroup.zmultiples y) ∨
+        ∀ i j,
+          weight ⟨leaf i, hleafB i⟩ = weight ⟨leaf j, hleafB j⟩) := by
+  classical
+  rcases hrows.cycleTransition_mem g y B leaf R a hdouble with
+    ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, _htransition, hpair⟩
+  let cycleWeight : Fin d → ℤ := fun i ↦ weight ⟨leaf i, hleafB i⟩
+  let i₀ : Fin d := ⟨0, hd⟩
+  have hcycleWeight : ∀ i,
+      cycleWeight i ∈ twoRetainedNormalizedWeightLevels := by
+    intro i
+    exact hweight ⟨leaf i, hleafB i⟩
+  have hcyclePair : ∀ i j,
+      ((cycleWeight (R i) - 2 * cycleWeight i) -
+          (cycleWeight (R j) - 2 * cycleWeight j)) • (g x - g z) ∈
+        AddSubgroup.zmultiples y := by
+    intro i j
+    simpa only [cycleWeight] using
+      hpair i (hleafB i) (hleafB (R i))
+        j (hleafB j) (hleafB (R j))
+  have hsplit :=
+    fiveWeightTransition_smallKernelMultiple_or_weight_constant
+      i₀ R cycleWeight hcycleWeight (g x - g z) y hcyclePair
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  simpa only [cycleWeight] using hsplit
+
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
 the choice of threshold or dominant label. -/
