@@ -4896,6 +4896,80 @@ theorem privateWitness_externalCoefficient_mem_twoRetainedLevels
   · simp [twoRetainedExternalCoefficientLevels, hlevel]
   · simp [twoRetainedExternalCoefficientLevels, hlevel]
 
+/-- The private-owner coefficient obeys the same three-level restriction.
+Indeed, privacy confines every other nonzero entry to the two retained
+coordinates, whose lower bounds force the owner coefficient to be at most
+two. -/
+theorem privateWitness_ownerCoefficient_mem_twoRetainedLevels
+    (g : Fin n → G) {target : G} {c : Fin n → ℤ}
+    (hc : Witness g target c) (B : Finset (Fin n))
+    (owner : Fin n) (hownerB : owner ∈ B) (howner : c owner ≠ 0)
+    (hprivate : ∀ i, i ∈ B → i ≠ owner → c i = 0)
+    (hretained : n - B.card = 2) :
+    c owner ∈ twoRetainedExternalCoefficientLevels := by
+  classical
+  have hCcard : (Finset.univ \ B).card = 2 := by
+    rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+    simpa using hretained
+  have hCone : 1 < (Finset.univ \ B).card := by omega
+  obtain ⟨x, hxC, z, hzC, hxz⟩ := Finset.one_lt_card.mp hCone
+  have hCeq : Finset.univ \ B = {x, z} :=
+    finset_eq_pair_of_card_eq_two_of_mem hCcard hxC hzC hxz
+  have hxB : x ∉ B := (Finset.mem_sdiff.mp hxC).2
+  have hzB : z ∉ B := (Finset.mem_sdiff.mp hzC).2
+  have hownerX : owner ≠ x := by
+    intro hownerX
+    subst x
+    exact hxB hownerB
+  have hownerZ : owner ≠ z := by
+    intro hownerZ
+    subst z
+    exact hzB hownerB
+  have hzeroOutside : ∀ i : Fin n,
+      i ≠ owner → i ≠ x → i ≠ z → c i = 0 := by
+    intro i hiOwner hix hiz
+    have hiB : i ∈ B := by
+      by_contra hiNotB
+      have hiC : i ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiNotB⟩
+      have hiPair : i = x ∨ i = z := by
+        rw [hCeq] at hiC
+        simpa using hiC
+      exact hiPair.elim hix hiz
+    exact hprivate i hiB hiOwner
+  have hrestrict :
+      ∑ i ∈ ({owner, x, z} : Finset (Fin n)), c i = ∑ i, c i := by
+    exact Finset.sum_subset (by simp) (by
+      intro i _ hi
+      apply hzeroOutside i
+      · intro hiOwner
+        exact hi (by simp [hiOwner])
+      · intro hix
+        exact hi (by simp [hix])
+      · intro hiz
+        exact hi (by simp [hiz]))
+  have hownerNotPair : owner ∉ ({x, z} : Finset (Fin n)) := by
+    simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+    exact ⟨hownerX, hownerZ⟩
+  have hxNotZ : x ∉ ({z} : Finset (Fin n)) := by
+    simpa only [Finset.mem_singleton] using hxz
+  have hsum : c owner + c x + c z = 0 := by
+    calc
+      c owner + c x + c z =
+          ∑ i ∈ ({owner, x, z} : Finset (Fin n)), c i := by
+        rw [Finset.sum_insert hownerNotPair, Finset.sum_insert hxNotZ]
+        simp [add_assoc]
+      _ = ∑ i, c i := hrestrict
+      _ = 0 := hc.2.2.1
+  have hownerFloor := hc.2.1 owner
+  have hxFloor := hc.2.1 x
+  have hzFloor := hc.2.1 z
+  have hlevel : c owner = -1 ∨ c owner = 1 ∨ c owner = 2 := by omega
+  rcases hlevel with hlevel | hlevel | hlevel
+  · simp [twoRetainedExternalCoefficientLevels, hlevel]
+  · simp [twoRetainedExternalCoefficientLevels, hlevel]
+  · simp [twoRetainedExternalCoefficientLevels, hlevel]
+
 /-- Canonical private witnesses indexed by every point of a minimal cyclic-
 kernel transversal when exactly two coordinates survive.  Each row uses its
 own deleted coordinate and a chosen retained coordinate; the retained
@@ -4910,6 +4984,8 @@ def TwoRetainedMinimalCyclicKernelPrivateRows
             scalar b • y ≠ 0 ∧
             Witness g (scalar b • y) (coeff b) ∧
             coeff b (b : Fin n) ≠ 0 ∧
+            coeff b (b : Fin n) ∈
+              twoRetainedExternalCoefficientLevels ∧
             (∀ a ∈ B, a ≠ (b : Fin n) → coeff b a = 0) ∧
             supportCoord b ∉ B ∧
             coeff b (supportCoord b) ≠ 0 ∧
@@ -4920,7 +4996,12 @@ def TwoRetainedMinimalCyclicKernelPrivateRows
               twoRetainedExternalCoefficientLevels,
             let F : Finset ↥B := Finset.univ.filter (fun b : ↥B ↦
               (supportCoord b, coeff b (supportCoord b)) = label)
-            F.Nonempty ∧ B.card ≤ 6 * F.card)
+            F.Nonempty ∧ B.card ≤ 6 * F.card ∧
+              ∃ mu ∈ twoRetainedExternalCoefficientLevels,
+                let S : Finset ↥F := Finset.univ.filter (fun f : ↥F ↦
+                  coeff (f : ↥B) ((f : ↥B) : Fin n) = mu)
+                S.Nonempty ∧ F.card ≤ 3 * S.card ∧
+                  B.card ≤ 18 * S.card)
 
 /-- Minimality supplies the full exact-two private-row family canonically;
 unlike the cycle-owned subfamily, this retains every deleted coordinate. -/
@@ -4950,6 +5031,8 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
       (data b).scalar • y ≠ 0 ∧
       Witness g ((data b).scalar • y) (data b).coeff ∧
       (data b).coeff (b : Fin n) ≠ 0 ∧
+      (data b).coeff (b : Fin n) ∈
+        twoRetainedExternalCoefficientLevels ∧
       (∀ a ∈ B, a ≠ (b : Fin n) → (data b).coeff a = 0) ∧
       supportCoord b ∉ B ∧
       (data b).coeff (supportCoord b) ≠ 0 ∧
@@ -4957,8 +5040,11 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
         twoRetainedExternalCoefficientLevels := by
     intro b
     refine ⟨(data b).target_ne_zero, (data b).isWitness,
-      (data b).owner_ne_zero, (data b).zero_other,
+      (data b).owner_ne_zero, ?_, (data b).zero_other,
       (hsupportCoord b).1, (hsupportCoord b).2, ?_⟩
+    · exact privateWitness_ownerCoefficient_mem_twoRetainedLevels
+        g (data b).isWitness B (b : Fin n) b.property
+          (data b).owner_ne_zero (data b).zero_other hretained
     exact privateWitness_externalCoefficient_mem_twoRetainedLevels
       g (data b).isWitness B (b : Fin n) (supportCoord b)
         b.property (data b).owner_ne_zero (data b).zero_other
@@ -4977,7 +5063,7 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
     have hlabelMem : ∀ b : ↥B, label b ∈ labels := by
       intro b
       rcases hrowData b with
-        ⟨_htarget, _hwitness, _howner, _hprivate,
+        ⟨_htarget, _hwitness, _howner, _hownerLevel, _hprivate,
           hsupportB, _hsupportNonzero, hlevel⟩
       exact Finset.mem_product.mpr
         ⟨Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hsupportB⟩, hlevel⟩
@@ -4997,9 +5083,45 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
         _ = 2 * 3 := by rw [hcomplementCard,
           card_twoRetainedExternalCoefficientLevels]
         _ = 6 := by omega
-    refine ⟨z, hz, by simpa [label] using hFnonempty, ?_⟩
-    rw [hlabelsCard] at hdominant
-    simpa only [Fintype.card_coe, label] using hdominant
+    let F : Finset ↥B := Finset.univ.filter (fun b : ↥B ↦ label b = z)
+    have hFnonempty' : F.Nonempty := by
+      simpa [F, label] using hFnonempty
+    have hBdominant : B.card ≤ 6 * F.card := by
+      rw [hlabelsCard] at hdominant
+      simpa only [Fintype.card_coe, F] using hdominant
+    let ownerLevel : ↥F → ℤ := fun f ↦
+      (data (f : ↥B)).coeff ((f : ↥B) : Fin n)
+    have hownerLevelMem : ∀ f : ↥F,
+        ownerLevel f ∈ twoRetainedExternalCoefficientLevels := by
+      intro f
+      rcases hrowData (f : ↥B) with
+        ⟨_htarget, _hwitness, _howner, hlevel, _hprivate,
+          _hsupportB, _hsupportNonzero, _hsupportLevel⟩
+      exact hlevel
+    have hFsource : (Finset.univ : Finset ↥F).Nonempty := by
+      obtain ⟨f, hf⟩ := hFnonempty'
+      exact ⟨(⟨f, hf⟩ : ↥F), Finset.mem_univ _⟩
+    obtain ⟨mu, hmu, hSnonempty, hprofileDominant⟩ :=
+      finiteMap_exists_dominantFiber twoRetainedExternalCoefficientLevels
+        ownerLevel hownerLevelMem hFsource
+    let S : Finset ↥F := Finset.univ.filter (fun f : ↥F ↦
+      ownerLevel f = mu)
+    have hSnonempty' : S.Nonempty := by
+      simpa [S, ownerLevel] using hSnonempty
+    have hFprofile : F.card ≤ 3 * S.card := by
+      rw [card_twoRetainedExternalCoefficientLevels] at hprofileDominant
+      simpa only [Fintype.card_coe, S] using hprofileDominant
+    have hBprofile : B.card ≤ 18 * S.card := by
+      calc
+        B.card ≤ 6 * F.card := hBdominant
+        _ ≤ 6 * (3 * S.card) := Nat.mul_le_mul_left 6 hFprofile
+        _ = 18 * S.card := by omega
+    refine ⟨z, hz, ?_⟩
+    dsimp only
+    refine ⟨hFnonempty', hBdominant, mu, hmu, ?_, ?_, ?_⟩
+    · simpa only [S, ownerLevel]
+    · simpa only [S, ownerLevel] using hFprofile
+    · simpa only [S, ownerLevel] using hBprofile
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
