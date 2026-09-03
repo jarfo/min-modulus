@@ -1487,6 +1487,47 @@ theorem fixedExternalCoefficientPrivateFiber_lambda_mem_twoRetainedLevels
   · simp [twoRetainedExternalCoefficientLevels, hlambda]
   · simp [twoRetainedExternalCoefficientLevels, hlambda]
 
+/-- Every coefficient in the exact two-retained alphabet is a unit modulo
+an odd prime.  Thus projection to any odd-primary layer never erases the
+common external column and it may be normalized without a coefficient loss.
+-/
+theorem twoRetainedExternalCoefficientLevel_isUnit_mod_odd
+    {p : ℕ} (hpOdd : Odd p) {lambda : ℤ}
+    (hlevel : lambda ∈ twoRetainedExternalCoefficientLevels) :
+    IsUnit (lambda : ZMod p) := by
+  simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hlevel
+  rcases hlevel with hminus | hone | htwo
+  · subst lambda
+    simpa only [Int.cast_neg, Int.cast_one] using
+      (isUnit_neg_one : IsUnit (-1 : ZMod p))
+  · subst lambda
+    simpa only [Int.cast_one] using (isUnit_one : IsUnit (1 : ZMod p))
+  · subst lambda
+    have hunit : IsUnit ((2 : ℕ) : ZMod p) :=
+      (ZMod.isUnit_iff_coprime 2 p).mpr
+        ((Nat.prime_two.coprime_iff_not_dvd).mpr hpOdd.not_two_dvd_nat)
+    convert hunit using 1
+    all_goals norm_num
+
+/-- Fixed external fibers therefore retain an invertible common column in
+every odd-prime projection of the cyclic-kernel arithmetic. -/
+theorem fixedExternalCoefficientPrivateFiber_lambda_isUnit_mod_odd
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f : ↥F) (hretained : n - B.card = 2)
+    {p : ℕ} (hpOdd : Odd p) :
+    IsUnit (lambda : ZMod p) := by
+  exact twoRetainedExternalCoefficientLevel_isUnit_mod_odd hpOdd
+    (fixedExternalCoefficientPrivateFiber_lambda_mem_twoRetainedLevels
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained)
+
 /-- A private witness evaluated at any nonzero retained coordinate uses the
 same constant three-level alphabet when exactly two coordinates survive.
 This rowwise form does not presuppose that a larger fixed fiber has already
