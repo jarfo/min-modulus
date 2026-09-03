@@ -5191,6 +5191,84 @@ theorem choose_le_addOrderOf_of_uniform_unit_affine_targets
     Finset.card_univ, Fintype.card_zmultiples] at hcard
   exact hcard
 
+/-- Uniform affine targets with owner coefficient `2` still give a binomial
+layer bound with only a factor-two loss when the ambient group has a unique
+nonzero involution.  In one target-sum fiber, distinct owner-subset sums
+differ by that involution; hence a third distinct subset would force two
+owner-subset sums to coincide. -/
+theorem choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
+    [Fintype G] {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (owner : ι ↪ Fin n) (y offset : G) (target : ι → G)
+    (haffine : ∀ i, target i = (2 : ℤ) • g (owner i) + offset)
+    (hmem : ∀ i, target i ∈ AddSubgroup.zmultiples y)
+    (k : ℕ) :
+    (Fintype.card ι).choose k ≤ 2 * addOrderOf y := by
+  classical
+  let L := (Finset.univ : Finset ι).powersetCard k
+  let encode : ↥L → AddSubgroup.zmultiples y := fun S ↦
+    ⟨∑ i ∈ S.1, target i,
+      AddSubgroup.sum_mem _ fun i _ ↦ hmem i⟩
+  let ownerSum : ↥L → G := fun S ↦
+    ∑ i ∈ S.1, g (owner i)
+  have hownerSumInjective : Function.Injective ownerSum := by
+    intro S T hST
+    apply Subtype.ext
+    apply validTuple_subsetSum_eq_of_card_eq g hg owner
+    · have hScard := (Finset.mem_powersetCard.mp S.property).2
+      have hTcard := (Finset.mem_powersetCard.mp T.property).2
+      omega
+    · simpa only [ownerSum] using hST
+  have hdouble_of_encode_eq : ∀ {S T : ↥L}, encode S = encode T →
+      (2 : ℤ) • ownerSum S = (2 : ℤ) • ownerSum T := by
+    intro S T hST
+    have hval := congrArg Subtype.val hST
+    dsimp only [encode] at hval
+    simp_rw [haffine] at hval
+    rw [Finset.sum_add_distrib, Finset.sum_add_distrib,
+      Finset.sum_zsmul, Finset.sum_zsmul] at hval
+    simp only [Finset.sum_const] at hval
+    have hScard := (Finset.mem_powersetCard.mp S.property).2
+    have hTcard := (Finset.mem_powersetCard.mp T.property).2
+    rw [hScard, hTcard] at hval
+    dsimp only [ownerSum]
+    exact add_right_cancel hval
+  have hsub_eq_involution_of_ne : ∀ {S T : ↥L},
+      encode S = encode T → S ≠ T → ownerSum S - ownerSum T = h := by
+    intro S T hencode hne
+    have hdouble := hdouble_of_encode_eq hencode
+    have htwoTorsion :
+        (ownerSum S - ownerSum T) + (ownerSum S - ownerSum T) = 0 := by
+      have hzsmul : (2 : ℤ) • (ownerSum S - ownerSum T) = 0 := by
+        rw [zsmul_sub, hdouble, sub_self]
+      simpa only [two_zsmul] using hzsmul
+    rcases hunique (ownerSum S - ownerSum T) htwoTorsion with
+      hzero | hinvolution
+    · exact (hne (hownerSumInjective (sub_eq_zero.mp hzero))).elim
+    · exact hinvolution
+  rcases finiteMap_capacity_or_largeFiber
+      (Finset.univ : Finset (AddSubgroup.zmultiples y))
+        encode (fun _ ↦ Finset.mem_univ _) 2 with
+    hcap | ⟨value, _hvalue, hlarge⟩
+  · simpa only [L, Fintype.card_coe, Finset.card_powersetCard,
+      Finset.card_univ, Fintype.card_zmultiples, Nat.mul_comm] using hcap
+  · let fiber : Finset ↥L :=
+      Finset.univ.filter (fun S : ↥L ↦ encode S = value)
+    have hlarge' : 2 < fiber.card := by
+      simpa only [fiber] using hlarge
+    obtain ⟨S, T, U, hS, hT, hU, hST, hSU, hTU⟩ :=
+      Finset.two_lt_card_iff.mp hlarge'
+    have hencodeST : encode S = encode T :=
+      (Finset.mem_filter.mp hS).2.trans (Finset.mem_filter.mp hT).2.symm
+    have hencodeSU : encode S = encode U :=
+      (Finset.mem_filter.mp hS).2.trans (Finset.mem_filter.mp hU).2.symm
+    have hsubST := hsub_eq_involution_of_ne hencodeST hST
+    have hsubSU := hsub_eq_involution_of_ne hencodeSU hSU
+    have hsumTU : ownerSum T = ownerSum U :=
+      sub_right_inj.mp (hsubST.trans hsubSU.symm)
+    exact (hTU (hownerSumInjective hsumTU)).elim
+
 /-- Canonical private witnesses indexed by every point of a minimal cyclic-
 kernel transversal when exactly two coordinates survive.  Each row uses its
 own deleted coordinate and a chosen retained coordinate; the retained
@@ -5230,7 +5308,9 @@ def TwoRetainedMinimalCyclicKernelPrivateRows
                   S.card ≤ addOrderOf y - 1 ∧
                   B.card ≤ 18 * (addOrderOf y - 1) ∧
                   (mu = 2 ∨ ∀ k : ℕ,
-                    S.card.choose k ≤ addOrderOf y))
+                    S.card.choose k ≤ addOrderOf y) ∧
+                  (∀ k : ℕ,
+                    S.card.choose k ≤ 2 * addOrderOf y))
 
 /-- Minimality supplies the full exact-two private-row family canonically;
 unlike the cycle-owned subfamily, this retains every deleted coordinate. -/
@@ -5462,10 +5542,52 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
             g hg ownerEmbedding y offset target mu hmuUnit
               haffine htargetMem k
         simpa only [Fintype.card_coe] using hlayer
+    have hprofileLayersUniform : ∀ k : ℕ,
+        S.card.choose k ≤ 2 * addOrderOf y := by
+      by_cases hmuTwo : mu = 2
+      · have hgeometryCopy := hgeometry
+        rcases hgeometryCopy with
+          ⟨companion, _hcompanionB, _hcompanionNe,
+            _hcomplement, hgeometryRow⟩
+        let ownerEmbedding : ↥S ↪ Fin n :=
+          { toFun := fun f ↦ (((f : ↥S) : ↥F) : ↥B)
+            inj' := by
+              intro f k hfk
+              apply Subtype.ext
+              apply Subtype.ext
+              apply Subtype.ext
+              exact hfk }
+        let offset : G :=
+          z.2 • g z.1 + (-(mu + z.2)) • g companion
+        let target : ↥S → G := fun f ↦
+          (data (((f : ↥S) : ↥F) : ↥B)).scalar • y
+        have haffine : ∀ f : ↥S,
+            target f = (2 : ℤ) • g (ownerEmbedding f) + offset := by
+          intro f
+          have howner : ownerEmbedding f =
+              (((f : ↥S) : ↥F) : ↥B) := rfl
+          rw [howner]
+          simpa only [target, ownerEmbedding, offset, hmuTwo,
+            add_assoc] using (hgeometryRow f).2.2.2.2
+        have htargetMem : ∀ f : ↥S,
+            target f ∈ AddSubgroup.zmultiples y := by
+          intro f
+          exact AddSubgroup.zsmul_mem _
+            (AddSubgroup.mem_zmultiples y) _
+        intro k
+        have hlayer :=
+          choose_le_two_mul_addOrderOf_of_uniform_two_affine_targets
+            g hg hunique ownerEmbedding y offset target
+              haffine htargetMem k
+        simpa only [Fintype.card_coe] using hlayer
+      · have hunit := hprofileLayers.resolve_left hmuTwo
+        intro k
+        have hlayer := hunit k
+        omega
     refine ⟨z, hz, ?_⟩
     dsimp only
     refine ⟨hFnonempty', hBdominant, mu, hmu,
-      ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+      ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
     · simpa only [S, ownerLevel]
     · simpa only [S, ownerLevel] using hFprofile
     · simpa only [S, ownerLevel] using hBprofile
@@ -5474,6 +5596,7 @@ theorem twoRetainedMinimalCyclicKernelPrivateRows_of_minimalTransversal
     · simpa only [F, label, S, ownerLevel] using hSorder
     · simpa only [F, label, S, ownerLevel] using hBorder
     · simpa only [F, label, S, ownerLevel] using hprofileLayers
+    · simpa only [F, label, S, ownerLevel] using hprofileLayersUniform
 
 /-- Any realized exact-two external label fiber has the full private
 diagonal-plus-common-column structure.  This factors the geometric part from
