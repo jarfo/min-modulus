@@ -1247,6 +1247,216 @@ theorem fixedExternalCoefficientPrivateFiber_twoRetained_rowProfile
     simpa [c, o] using hzeroOutside i hio hix hiz
   · simpa [c, o] using hprofiles
 
+/-- Geometric form of the complete two-retained profile classification.
+Every external row is either an exact signed pair between its private owner
+and the common retained coordinate, or one of three pure edges on the owner
+and the retained pair. -/
+theorem fixedExternalCoefficientPrivateFiber_twoRetained_signedPair_or_pureEdge
+    (g : Fin n → G) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j))
+    (f : ↥F) (hretained : n - B.card = 2) :
+    ∃ z : Fin n,
+      z ∉ B ∧ z ≠ x ∧
+      ((lambda = -1 ∧
+          (coeff ((f : ↥E) : ↥J) =
+              pureEdgeCoeffs z
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x ∨
+            ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+              (coeff ((f : ↥E) : ↥J))
+              (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x ∨
+            coeff ((f : ↥E) : ↥J) =
+              pureEdgeCoeffs
+                (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x z)) ∨
+        (lambda = 1 ∧
+          ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y)
+            (coeff ((f : ↥E) : ↥J))
+            (center (P.symm (((f : ↥E) : ↥J) : Fin d))) x) ∨
+        (lambda = 2 ∧
+          coeff ((f : ↥E) : ↥J) =
+            pureEdgeCoeffs x
+              (center (P.symm (((f : ↥E) : ↥J) : Fin d))) z)) := by
+  classical
+  rcases fixedExternalCoefficientPrivateFiber_twoRetained_rowProfile
+      g y B center P scalar coeff F x lambda hfiber hrows f hretained with
+    ⟨z, hzNotB, hzNeX, hzero, hprofiles⟩
+  let o : Fin n := center (P.symm (((f : ↥E) : ↥J) : Fin d))
+  let c : Fin n → ℤ := coeff ((f : ↥E) : ↥J)
+  have hc : Witness g (scalar ((f : ↥E) : ↥J) • y) c := by
+    simpa [c] using hrows ((f : ↥E) : ↥J)
+  have hoB : o ∈ B := by
+    simpa [o] using hfiber.2.2.2.2.2.1 f |>.1
+  have hxNotB : x ∉ B := hfiber.2.1
+  have hox : o ≠ x := by
+    intro hox
+    subst x
+    exact hxNotB hoB
+  have hoz : o ≠ z := by
+    intro hoz
+    subst z
+    exact hzNotB hoB
+  have hzero' : ∀ i : Fin n,
+      i ≠ o → i ≠ x → i ≠ z → c i = 0 := by
+    intro i hio hix hiz
+    simpa [c, o] using hzero i hio hix hiz
+  have hcx : c x = lambda := by
+    simpa [c] using (hfiber.2.2.2.2.2.1 f).2.1
+  have signedOwnerOne
+      (hoOne : c o = 1) (hxMinus : c x = -1) (hzZero : c z = 0) :
+      ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y) c o x := by
+    have hzeroPair : ∀ i : Fin n, i ≠ o → i ≠ x → c i = 0 := by
+      intro i hio hix
+      by_cases hiz : i = z
+      · subst i
+        exact hzZero
+      · exact hzero' i hio hix hiz
+    have hrestrict :
+        ∑ i ∈ ({o, x} : Finset (Fin n)), c i • g i =
+          ∑ i, c i • g i := by
+      exact Finset.sum_subset (by simp) (by
+        intro i _ hi
+        rw [hzeroPair i (by
+          intro hio
+          exact hi (by simp [hio])) (by
+          intro hix
+          exact hi (by simp [hix])), zero_zsmul])
+    have htarget : scalar ((f : ↥E) : ↥J) • y = g o - g x := by
+      calc
+        scalar ((f : ↥E) : ↥J) • y = ∑ i, c i • g i := hc.2.2.2.symm
+        _ = ∑ i ∈ ({o, x} : Finset (Fin n)), c i • g i := hrestrict.symm
+        _ = g o - g x := by
+          rw [Finset.sum_pair hox]
+          simp [hoOne, hxMinus, sub_eq_add_neg]
+    exact ⟨hox, ⟨Or.inl ⟨hoOne, hxMinus, htarget⟩, hzeroPair⟩⟩
+  have signedOwnerMinus
+      (hoMinus : c o = -1) (hxOne : c x = 1) (hzZero : c z = 0) :
+      ExactSignedPairWitness g (scalar ((f : ↥E) : ↥J) • y) c o x := by
+    have hzeroPair : ∀ i : Fin n, i ≠ o → i ≠ x → c i = 0 := by
+      intro i hio hix
+      by_cases hiz : i = z
+      · subst i
+        exact hzZero
+      · exact hzero' i hio hix hiz
+    have hrestrict :
+        ∑ i ∈ ({o, x} : Finset (Fin n)), c i • g i =
+          ∑ i, c i • g i := by
+      exact Finset.sum_subset (by simp) (by
+        intro i _ hi
+        rw [hzeroPair i (by
+          intro hio
+          exact hi (by simp [hio])) (by
+          intro hix
+          exact hi (by simp [hix])), zero_zsmul])
+    have htarget : scalar ((f : ↥E) : ↥J) • y = g x - g o := by
+      calc
+        scalar ((f : ↥E) : ↥J) • y = ∑ i, c i • g i := hc.2.2.2.symm
+        _ = ∑ i ∈ ({o, x} : Finset (Fin n)), c i • g i := hrestrict.symm
+        _ = g x - g o := by
+          rw [Finset.sum_pair hox]
+          simp [hoMinus, hxOne, sub_eq_add_neg]
+          abel
+    exact ⟨hox, ⟨Or.inr ⟨hoMinus, hxOne, htarget⟩, hzeroPair⟩⟩
+  rcases hprofiles with
+      ⟨hlambda, ⟨hoMinus, hzTwo⟩ |
+        ⟨hoOne, hzZero⟩ | ⟨hoTwo, hzMinus⟩⟩ |
+      ⟨hlambda, hoMinus, hzZero⟩ |
+      ⟨hlambda, hoMinus, hzMinus⟩
+  · have hoMinus' : c o = -1 := by simpa [c, o] using hoMinus
+    have hzTwo' : c z = 2 := by simpa [c] using hzTwo
+    have hxMinus : c x = -1 := by rw [hcx, hlambda]
+    have homit : ∀ i, c i = -1 ↔ i = o ∨ i = x := by
+      intro i
+      constructor
+      · intro hi
+        by_cases hio : i = o
+        · exact Or.inl hio
+        by_cases hix : i = x
+        · exact Or.inr hix
+        by_cases hiz : i = z
+        · subst i
+          rw [hzTwo'] at hi
+          norm_num at hi
+        · have hiZero := hzero' i hio hix hiz
+          omega
+      · intro hi
+        rcases hi with rfl | rfl
+        · exact hoMinus'
+        · exact hxMinus
+    have hshape : c = pureEdgeCoeffs z o x :=
+      exactPair_coeff_two_eq_pureEdgeCoeffs
+        g hc o x z hox homit hoz.symm hzNeX hzTwo'
+    refine ⟨z, hzNotB, hzNeX, Or.inl ⟨hlambda, Or.inl ?_⟩⟩
+    simpa [c, o] using hshape
+  · have hoOne' : c o = 1 := by simpa [c, o] using hoOne
+    have hzZero' : c z = 0 := by simpa [c] using hzZero
+    have hxMinus : c x = -1 := by rw [hcx, hlambda]
+    have hsigned := signedOwnerOne hoOne' hxMinus hzZero'
+    refine ⟨z, hzNotB, hzNeX, Or.inl ⟨hlambda, Or.inr (Or.inl ?_)⟩⟩
+    simpa [c, o] using hsigned
+  · have hoTwo' : c o = 2 := by simpa [c, o] using hoTwo
+    have hzMinus' : c z = -1 := by simpa [c] using hzMinus
+    have hxMinus : c x = -1 := by rw [hcx, hlambda]
+    have homit : ∀ i, c i = -1 ↔ i = x ∨ i = z := by
+      intro i
+      constructor
+      · intro hi
+        by_cases hio : i = o
+        · subst i
+          rw [hoTwo'] at hi
+          norm_num at hi
+        by_cases hix : i = x
+        · exact Or.inl hix
+        by_cases hiz : i = z
+        · exact Or.inr hiz
+        · have hiZero := hzero' i hio hix hiz
+          omega
+      · intro hi
+        rcases hi with rfl | rfl
+        · exact hxMinus
+        · exact hzMinus'
+    have hshape : c = pureEdgeCoeffs o x z :=
+      exactPair_coeff_two_eq_pureEdgeCoeffs
+        g hc x z o hzNeX.symm homit hox hoz hoTwo'
+    refine ⟨z, hzNotB, hzNeX, Or.inl ⟨hlambda, Or.inr (Or.inr ?_)⟩⟩
+    simpa [c, o] using hshape
+  · have hoMinus' : c o = -1 := by simpa [c, o] using hoMinus
+    have hzZero' : c z = 0 := by simpa [c] using hzZero
+    have hxOne : c x = 1 := by rw [hcx, hlambda]
+    have hsigned := signedOwnerMinus hoMinus' hxOne hzZero'
+    refine ⟨z, hzNotB, hzNeX, Or.inr (Or.inl ⟨hlambda, ?_⟩)⟩
+    simpa [c, o] using hsigned
+  · have hoMinus' : c o = -1 := by simpa [c, o] using hoMinus
+    have hzMinus' : c z = -1 := by simpa [c] using hzMinus
+    have hxTwo : c x = 2 := by rw [hcx, hlambda]
+    have homit : ∀ i, c i = -1 ↔ i = o ∨ i = z := by
+      intro i
+      constructor
+      · intro hi
+        by_cases hio : i = o
+        · exact Or.inl hio
+        by_cases hix : i = x
+        · subst i
+          rw [hxTwo] at hi
+          norm_num at hi
+        by_cases hiz : i = z
+        · exact Or.inr hiz
+        · have hiZero := hzero' i hio hix hiz
+          omega
+      · intro hi
+        rcases hi with rfl | rfl
+        · exact hoMinus'
+        · exact hzMinus'
+    have hshape : c = pureEdgeCoeffs x o z :=
+      exactPair_coeff_two_eq_pureEdgeCoeffs
+        g hc o z x hoz homit hox.symm hzNeX.symm hxTwo
+    refine ⟨z, hzNotB, hzNeX, Or.inr (Or.inr ⟨hlambda, ?_⟩)⟩
+    simpa [c, o] using hshape
+
 /-- The constant-size alphabet for a common retained external coefficient
 when exactly two coordinates survive deletion. -/
 def twoRetainedExternalCoefficientLevels : Finset ℤ := {-1, 1, 2}
