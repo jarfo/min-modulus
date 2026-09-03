@@ -419,6 +419,75 @@ theorem fixedExternalCoefficientPrivateFiber_repeatedTarget_lightGapFrontier
   rw [hpairCard] at hfrontier
   simpa [R, hRcard] using hfrontier
 
+/-- Light rows whose coefficient at `w` is positive. -/
+def fixedExternalFiberPositiveRowsAt
+    {d : ℕ} {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (L : Finset ↥F) (w : Fin n) :
+    Finset ↥F :=
+  L.filter (fun f ↦ 1 ≤ coeff ((f : ↥E) : ↥J) w)
+
+/-- Ordered light-row pairs carrying a directed coefficient gap at `w`. -/
+def fixedExternalFiberDirectedGapPairsAt
+    {d : ℕ} {J : Finset (Fin d)} (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (L : Finset ↥F) (w : Fin n) :
+    Finset (↥F × ↥F) :=
+  L.offDiag.filter (fun p ↦
+    coeff ((p.1 : ↥E) : ↥J) w + 2 ≤
+      coeff ((p.2 : ↥E) : ↥J) w)
+
+/-- Every directed gap at `w` points into a row positive at `w`; forgetting
+the source embeds the relation into `L × positiveRowsAt(w)`. -/
+theorem card_fixedExternalFiberDirectedGapPairsAt_le
+    (g : Fin n → G) (y : G) {d : ℕ} {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (L : Finset ↥F) (w : Fin n)
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j)) :
+    (fixedExternalFiberDirectedGapPairsAt coeff L w).card ≤
+      L.card * (fixedExternalFiberPositiveRowsAt coeff L w).card := by
+  classical
+  let Q := fixedExternalFiberDirectedGapPairsAt coeff L w
+  let P := fixedExternalFiberPositiveRowsAt coeff L w
+  have hsubset : Q ⊆ L.product P := by
+    intro p hp
+    have hpData := Finset.mem_filter.mp hp
+    have hpOff := Finset.mem_offDiag.mp hpData.1
+    apply Finset.mem_product.mpr
+    refine ⟨hpOff.1, Finset.mem_filter.mpr ⟨hpOff.2.1, ?_⟩⟩
+    have hfloor := (hrows ((p.1 : ↥E) : ↥J)).2.1 w
+    omega
+  have hcard := Finset.card_le_card hsubset
+  simpa [Q, P, Finset.card_product] using hcard
+
+/-- A selected fixed-coordinate fiber from the adaptive frontier is bounded
+by light-row count times the number of gaining rows positive there. -/
+theorem card_selectedFixedExternalGapFiber_le_light_mul_positiveRows
+    (g : Fin n → G) (y : G) {d : ℕ} {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} {F : Finset ↥E} (L : Finset ↥F)
+    (gapCoord : ↥L.offDiag → Fin n)
+    (hgap : ∀ p : ↥L.offDiag,
+      coeff ((p.1.1 : ↥E) : ↥J) (gapCoord p) + 2 ≤
+        coeff ((p.1.2 : ↥E) : ↥J) (gapCoord p))
+    (hrows : ∀ j, Witness g (scalar j • y) (coeff j)) (w : Fin n) :
+    (Finset.univ.filter
+        (fun p : ↥L.offDiag ↦ gapCoord p = w)).card ≤
+      L.card * (fixedExternalFiberPositiveRowsAt coeff L w).card := by
+  classical
+  let S : Finset ↥L.offDiag := Finset.univ.filter
+    (fun p : ↥L.offDiag ↦ gapCoord p = w)
+  let Q := fixedExternalFiberDirectedGapPairsAt coeff L w
+  have hselected : S.card ≤ Q.card := by
+    refine Finset.card_le_card_of_injOn (s := S) (t := Q)
+      (fun p : ↥L.offDiag ↦ p.val) ?_ Subtype.val_injective.injOn
+    intro p hp
+    have hpEq := (Finset.mem_filter.mp hp).2
+    apply Finset.mem_filter.mpr
+    refine ⟨p.property, ?_⟩
+    simpa [hpEq] using hgap p
+  have hrelation := card_fixedExternalFiberDirectedGapPairsAt_le
+    g y scalar coeff L w hrows
+  exact hselected.trans hrelation
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
