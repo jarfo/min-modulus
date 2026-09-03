@@ -6449,6 +6449,29 @@ theorem twoRetainedNormalizedWeight_bounds
     Finset.mem_singleton] at hw
   omega
 
+/-- Exact arithmetic classification of the top surviving punctured-cycle
+coefficient.  Four and only four five-weight configurations can make the
+boundary expression have absolute value `32`. -/
+theorem fiveWeight_boundaryCoefficient_natAbs_eq_thirtyTwo
+    (u v a b : ℤ)
+    (hu : u ∈ twoRetainedNormalizedWeightLevels)
+    (hv : v ∈ twoRetainedNormalizedWeightLevels)
+    (ha : a ∈ twoRetainedNormalizedWeightLevels)
+    (hb : b ∈ twoRetainedNormalizedWeightLevels)
+    (habs : (v - 4 * u - 3 * (b - 2 * a)).natAbs = 32) :
+    (u = -4 ∧ v = -2 ∧ a = 2 ∧ b = -2) ∨
+    (u = -2 ∧ v = 0 ∧ a = 2 ∧ b = -4) ∨
+    (u = 0 ∧ v = -2 ∧ a = -4 ∧ b = 2) ∨
+    (u = 2 ∧ v = 0 ∧ a = -4 ∧ b = 0) := by
+  simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hu hv ha hb
+  rcases hu with rfl | rfl | rfl | rfl | rfl <;>
+    rcases hv with rfl | rfl | rfl | rfl | rfl <;>
+      rcases ha with rfl | rfl | rfl | rfl | rfl <;>
+        rcases hb with rfl | rfl | rfl | rfl | rfl
+  all_goals
+    norm_num at habs <;> norm_num
+
 /-- A bounded integer weight on a finite functional graph is constant when
 `weight(R i) - 2*weight(i)` is constant.  The proof uses only the minimum
 and maximum weights, so no cycle enumeration is needed. -/
@@ -6517,13 +6540,10 @@ theorem fiveWeightTransition_smallKernelMultiple_or_weight_constant
       exact sub_ne_zero.mpr hij
     · simpa only [e] using hpair i j
 
-/-- Closing a five-weight recurrence across one missing permutation vertex.
-All available edge coefficients are first compared with one internal edge.
-If they agree, the two-step transition across the missing vertex either
-produces a nonzero kernel multiple of size at most 42 or supplies the unique
-missing recurrence value, after which the finite min/max argument forces all
-available weights to be constant. -/
-theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
+/-- Provenance-preserving punctured five-weight recurrence.  A nonzero kernel
+coefficient is retained either as one available edge-coefficient difference
+or as the exact two-step boundary defect. -/
+theorem fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_constant
     {ι : Type*} [Fintype ι]
     (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
     (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
@@ -6536,7 +6556,12 @@ theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
     (htwoStep :
       (weight (R p) - 4 * weight (R.symm p)) • delta +
         (3 : ℤ) • C ∈ H) :
-    (∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧ e • delta ∈ H) ∨
+    (∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧ e • delta ∈ H ∧
+      ((∃ i : ι, i ≠ p ∧ R i ≠ p ∧
+        e = (weight (R i) - 2 * weight i) -
+          (weight (R i₀) - 2 * weight i₀)) ∨
+       e = (weight (R p) - 4 * weight (R.symm p)) -
+          3 * (weight (R i₀) - 2 * weight i₀))) ∨
       ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
   classical
   let q₀ : ℤ := weight (R i₀) - 2 * weight i₀
@@ -6606,7 +6631,8 @@ theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
       intro i hi j hj
       have hij := hweightsConstant i j
       simpa only [extendedWeight, hi, hj, if_false] using hij
-    · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem⟩
+    · exact Or.inl ⟨e, heZero, heBounds.1, heBounds.2, heMem,
+        Or.inr (by simp only [e, q₀, u, v])⟩
   · push Not at hall
     obtain ⟨i, hi, hRi, hne⟩ := hall
     let e : ℤ := (weight (R i) - 2 * weight i) - q₀
@@ -6625,7 +6651,85 @@ theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
       module
     exact Or.inl ⟨e, by
       dsimp only [e]
-      exact sub_ne_zero.mpr hne, by omega, by omega, heMem⟩
+      exact sub_ne_zero.mpr hne, by omega, by omega, heMem,
+        Or.inl ⟨i, hi, hRi, by simp only [e, q₀]⟩⟩
+
+/-- Compatibility projection of the provenance-preserving punctured-cycle
+split. -/
+theorem fiveWeightPuncturedPermutation_smallKernelMultiple_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H) :
+    (∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧ e • delta ∈ H) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep with
+    ⟨e, he, helow, hehigh, heMem, _hsource⟩ | hconstant
+  · exact Or.inl ⟨e, he, helow, hehigh, heMem⟩
+  · exact Or.inr hconstant
+
+/-- If every surviving bounded kernel coefficient has absolute value `32`,
+the internal-edge source is impossible and the punctured recurrence has only
+the four exact boundary configurations classified above, unless all available
+weights are constant. -/
+theorem fiveWeightPuncturedPermutation_thirtyTwo_boundaryPattern_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 32) :
+    ((weight (R.symm p) = -4 ∧ weight (R p) = -2 ∧
+        weight i₀ = 2 ∧ weight (R i₀) = -2) ∨
+     (weight (R.symm p) = -2 ∧ weight (R p) = 0 ∧
+        weight i₀ = 2 ∧ weight (R i₀) = -4) ∨
+     (weight (R.symm p) = 0 ∧ weight (R p) = -2 ∧
+        weight i₀ = -4 ∧ weight (R i₀) = 2) ∨
+     (weight (R.symm p) = 2 ∧ weight (R p) = 0 ∧
+        weight i₀ = -4 ∧ weight (R i₀) = 0)) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep with
+    ⟨e, he, helow, hehigh, heMem, hsource⟩ | hconstant
+  · have he32 := hkernel32 e he helow hehigh heMem
+    rcases hsource with ⟨i, hi, hRi, heq⟩ | heq
+    · have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
+      have hRiBounds :=
+        twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
+      have hi₀Bounds := twoRetainedNormalizedWeight_bounds (hweight i₀ hi₀)
+      have hRi₀Bounds :=
+        twoRetainedNormalizedWeight_bounds (hweight (R i₀) hRi₀)
+      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+    · left
+      rw [heq] at he32
+      exact fiveWeight_boundaryCoefficient_natAbs_eq_thirtyTwo
+        (weight (R.symm p)) (weight (R p)) (weight i₀) (weight (R i₀))
+          (hweight (R.symm p) (by
+            intro hsymm
+            apply hp
+            have := R.apply_symm_apply p
+            simpa only [hsymm] using this))
+          (hweight (R p) (by simpa only using hp))
+          (hweight i₀ hi₀) (hweight (R i₀) hRi₀) he32
+  · exact Or.inr hconstant
 
 /-- If every leaf of a saturated doubling cycle is deleted by the minimal
 transversal, the five-weight transition invariant becomes global on that
@@ -7494,6 +7598,68 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicMo
     have h128 : 2 ^ 7 ≤ 2 ^ t := pow_le_pow_right' (by omega) hseven
     have : 128 ≤ 84 := by norm_num at h128 ⊢; omega
     omega
+
+/-- Rigidity at the top surviving boundary stratum.  If `t≥6`, exact
+quotient divisibility and `|e|≤42` leave only `t=6`, full odd-primary order
+`addOrderOf y=q`, and coefficient magnitude `32`, unless a smaller cyclic
+modulus already carries a valid tuple of the same dimension. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicModulus_or_sixthStratum_boundary_rigidity
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 6 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    (∃ M : ℕ,
+      0 < M ∧ M < 2 ^ t * q ∧ M ∣ 2 ^ t * q ∧
+        AdmitsValidTuple n M) ∨
+      (t = 6 ∧ q / addOrderOf y = 1 ∧ e.natAbs = 32) := by
+  rcases hrows.exists_smallerValidCyclicModulus_or_oddPrimaryQuotientFactor_dvd
+      g hg hunique hne y hyq B x z hxB hzB hxz hcomplement e he heMem with
+    hsmaller | hfactor
+  · exact Or.inl hsmaller
+  · right
+    have hqpos : 0 < q := by
+      apply Nat.pos_of_ne_zero
+      intro hq
+      apply NeZero.ne (2 ^ t * q)
+      simp only [hq, mul_zero]
+    have hquotPos : 0 < q / addOrderOf y := by
+      apply Nat.div_pos (Nat.le_of_dvd hqpos hyq)
+      exact addOrderOf_pos y
+    have habsPos : 0 < e.natAbs := Int.natAbs_pos.mpr he
+    have habs : e.natAbs ≤ 42 := by
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · have : (e.natAbs : ℤ) ≤ 42 := by omega
+        exact_mod_cast this
+      · have : (e.natAbs : ℤ) ≤ 42 := by omega
+        exact_mod_cast this
+    have hfactorLe :
+        2 ^ t * (q / addOrderOf y) ≤ 2 * e.natAbs :=
+      Nat.le_of_dvd (Nat.mul_pos (by omega) habsPos) hfactor
+    have hpower84 : 2 ^ t ≤ 84 :=
+      (Nat.le_mul_of_pos_right (2 ^ t) hquotPos).trans
+        (hfactorLe.trans (Nat.mul_le_mul_left 2 habs))
+    have htLe : t ≤ 6 := by
+      by_contra htNot
+      have hseven : 7 ≤ t := by omega
+      have h128 : 2 ^ 7 ≤ 2 ^ t := pow_le_pow_right' (by omega) hseven
+      have : 128 ≤ 84 := by norm_num at h128 ⊢; omega
+      omega
+    have htEq : t = 6 := by omega
+    subst t
+    norm_num at hfactorLe
+    have hquotOne : q / addOrderOf y = 1 := by omega
+    obtain ⟨k, hk⟩ := hfactor
+    norm_num [hquotOne] at hk
+    have habsEq : e.natAbs = 32 := by omega
+    exact ⟨rfl, hquotOne, habsEq⟩
 
 /-- Uniform numerical consequence for every coefficient produced by the
 five-weight cycle split. -/
