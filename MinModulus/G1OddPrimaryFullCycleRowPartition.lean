@@ -246,6 +246,20 @@ theorem permutationFamilyBoundary_uniqueRow
   intro j hj
   exact howner (hj.2.trans hix.symm)
 
+/-- No selected row owns the successor of a boundary source row.  This is
+the pointwise form consumed by nested first-failure classifications. -/
+theorem permutationFamilyBoundaryRow_owner_ne_successor
+    {ι α : Type*} [Fintype ι] [Fintype α]
+    (R : Equiv.Perm α) (owner : ι → α)
+    (s : ↥(permutationFamilyBoundaryRows R owner)) :
+    ∀ f : ι, owner f ≠ R (owner (s : ι)) := by
+  classical
+  intro f hf
+  have hsBoundary := (Finset.mem_filter.mp s.property).2
+  apply hsBoundary
+  unfold permutationFamilyOwnerSet
+  exact Finset.mem_image.mpr ⟨f, Finset.mem_univ f, hf⟩
+
 /-- A row in a full occupied component has a unique selected successor row.
 The successor remains in the same permutation component. -/
 theorem permutationFamilyFullComponent_uniqueSuccessorRow
@@ -310,6 +324,132 @@ theorem permutationFamilyFullComponent_uniqueSuccessorRow_affine
         rw [hcentered i, two_nsmul]
   · intro k hk
     exact hjUnique k ⟨hk.1, hk.2.1⟩
+
+/-- The ambient owner of a row selected through three nested finite filters. -/
+def nestedSelectedOwner
+    {α : Type*} {J : Finset α} {E : Finset ↥J}
+    {F : Finset ↥E} (S : Finset ↥F) : ↥S → α := fun f ↦
+  (((f : ↥F) : ↥E) : ↥J)
+
+/-- Lossless first-failure classification for a successor leaving a nested
+selected row family.  The successor leaves the outer index set, lands in the
+other side of its partition, leaves the fixed-label fiber, or leaves only the
+final profile filter. -/
+theorem nestedSelectedBoundaryRow_successor_firstFailure
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (s : ↥S)
+    (hboundary : ∀ f : ↥S,
+      ((((f : ↥F) : ↥E) : ↥J) : α) ≠
+        R ((((s : ↥F) : ↥E) : ↥J) : α)) :
+    R ((((s : ↥F) : ↥E) : ↥J) : α) ∉ J ∨
+      (∃ i : ↥I,
+        ((i : ↥J) : α) = R ((((s : ↥F) : ↥E) : ↥J) : α)) ∨
+      (∃ e : ↥E,
+        ((e : ↥J) : α) = R ((((s : ↥F) : ↥E) : ↥J) : α) ∧ e ∉ F) ∨
+      ∃ f : ↥F,
+        (((f : ↥E) : ↥J) : α) =
+            R ((((s : ↥F) : ↥E) : ↥J) : α) ∧
+          f ∉ S := by
+  classical
+  let next : α := R ((((s : ↥F) : ↥E) : ↥J) : α)
+  by_cases hnextJ : next ∈ J
+  · let j : ↥J := ⟨next, hnextJ⟩
+    have hjPartition : j ∈ E ∪ I := by
+      rw [hpartition]
+      exact Finset.mem_univ j
+    rcases Finset.mem_union.mp hjPartition with hjE | hjI
+    · let e : ↥E := ⟨j, hjE⟩
+      by_cases heF : e ∈ F
+      · let f : ↥F := ⟨e, heF⟩
+        right
+        right
+        right
+        refine ⟨f, by rfl, ?_⟩
+        intro hfS
+        exact hboundary (⟨f, hfS⟩ : ↥S) (by rfl)
+      · right
+        right
+        left
+        exact ⟨e, by rfl, heF⟩
+    · right
+      left
+      exact ⟨(⟨j, hjI⟩ : ↥I), by rfl⟩
+  · left
+    exact hnextJ
+
+/-- Boundary-row form of the nested first-failure classification. -/
+theorem nestedSelectedBoundaryRow_successor_firstFailure_of_boundary
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (F : Finset ↥E) (S : Finset ↥F)
+    (s : ↥(permutationFamilyBoundaryRows R (nestedSelectedOwner S))) :
+    R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α) ∉ J ∨
+      (∃ i : ↥I, ((i : ↥J) : α) =
+        R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α)) ∨
+      (∃ e : ↥E, ((e : ↥J) : α) =
+          R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α) ∧ e ∉ F) ∨
+      ∃ f : ↥F, (((f : ↥E) : ↥J) : α) =
+          R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α) ∧ f ∉ S := by
+  apply nestedSelectedBoundaryRow_successor_firstFailure
+    R J E I hpartition F S (s : ↥S)
+  exact permutationFamilyBoundaryRow_owner_ne_successor
+    R (nestedSelectedOwner S) s
+
+/-- Semantic form of the nested boundary split when the last two selection
+layers are fibers of explicit label maps.  Exiting those layers is exactly a
+change of the corresponding label, so later counting may charge the finite
+label alphabets directly. -/
+theorem nestedFilteredBoundaryRow_successor_transition
+    {α β γ : Type*} [Fintype α] [DecidableEq α]
+    [DecidableEq β] [DecidableEq γ]
+    (R : Equiv.Perm α)
+    (J : Finset α) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (label : ↥E → β) (fixedLabel : β)
+    (F : Finset ↥E)
+    (hF : F = Finset.univ.filter (fun e ↦ label e = fixedLabel))
+    (profile : ↥F → γ) (fixedProfile : γ)
+    (S : Finset ↥F)
+    (hS : S = Finset.univ.filter (fun f ↦ profile f = fixedProfile))
+    (s : ↥(permutationFamilyBoundaryRows R (nestedSelectedOwner S))) :
+    R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α) ∉ J ∨
+      (∃ i : ↥I, ((i : ↥J) : α) =
+        R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α)) ∨
+      (∃ e : ↥E, ((e : ↥J) : α) =
+          R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α) ∧
+            label e ≠ fixedLabel) ∨
+      ∃ f : ↥F, (((f : ↥E) : ↥J) : α) =
+          R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : α) ∧
+            profile f ≠ fixedProfile := by
+  rcases nestedSelectedBoundaryRow_successor_firstFailure_of_boundary
+      R J E I hpartition F S s with
+    houtside | hinternal | hlabel | hprofile
+  · exact Or.inl houtside
+  · exact Or.inr (Or.inl hinternal)
+  · right
+    right
+    left
+    obtain ⟨e, heOwner, heNotF⟩ := hlabel
+    refine ⟨e, heOwner, ?_⟩
+    intro heLabel
+    apply heNotF
+    rw [hF]
+    simp [heLabel]
+  · right
+    right
+    right
+    obtain ⟨f, hfOwner, hfNotS⟩ := hprofile
+    refine ⟨f, hfOwner, ?_⟩
+    intro hfProfile
+    apply hfNotS
+    rw [hS]
+    simp [hfProfile]
 
 /-- Family and owner-set definitions give the same occupied components. -/
 theorem permutationFamilyComponents_eq_subsetComponents
@@ -2462,6 +2602,43 @@ theorem fixedExternalSelectedOwner_injective
   apply Subtype.ext
   apply Subtype.ext
   exact h
+
+/-- Concrete first-failure split for the selected fixed-external affine rows.
+A boundary successor either leaves the retained row set, enters the internal
+class, changes its external coordinate/coefficient label, or keeps that label
+and changes the private-owner coefficient profile. -/
+theorem fixedExternalBoundaryRow_successor_transition
+    {n d : ℕ} (R : Equiv.Perm (Fin d))
+    (J : Finset (Fin d)) (E I : Finset ↥J)
+    (hpartition : E ∪ I = Finset.univ)
+    (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (supportCoord : ↥E → Fin n) (coeff : ↥J → Fin n → ℤ)
+    (fixedLabel : Fin n × ℤ)
+    (F : Finset ↥E)
+    (hF : F = Finset.univ.filter (fun e ↦
+      (supportCoord e, coeff (e : ↥J) (supportCoord e)) = fixedLabel))
+    (mu : ℤ) (S : Finset ↥F)
+    (hS : S = Finset.univ.filter (fun f : ↥F ↦
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu))
+    (s : ↥(permutationFamilyBoundaryRows R (nestedSelectedOwner S))) :
+    R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : Fin d) ∉ J ∨
+      (∃ i : ↥I, ((i : ↥J) : Fin d) =
+        R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : Fin d)) ∨
+      (∃ e : ↥E, ((e : ↥J) : Fin d) =
+          R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : Fin d) ∧
+        (supportCoord e, coeff (e : ↥J) (supportCoord e)) ≠ fixedLabel) ∨
+      ∃ f : ↥F, (((f : ↥E) : ↥J) : Fin d) =
+          R (((((s : ↥S) : ↥F) : ↥E) : ↥J) : Fin d) ∧
+        coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) ≠ mu := by
+  exact nestedFilteredBoundaryRow_successor_transition
+    R J E I hpartition
+      (fun e ↦ (supportCoord e, coeff (e : ↥J) (supportCoord e)))
+      fixedLabel F hF
+      (fun f ↦ coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+      mu S hS s
 
 /-- Named payload for the occupied relative-cycle frontier of a dense
 external affine profile. -/
