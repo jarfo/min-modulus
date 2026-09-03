@@ -735,6 +735,59 @@ theorem fixedExternalCoefficientPrivateFiber_equalTarget_twoHeavy_twoRetained_co
   exact common_touched_of_two_smul_eq
     g hg hh hne hunique hofk hdoubles
 
+/-- Two distinct light-diagonal rows cannot have the same target when at most
+two coordinates survive deletion.  Validity would require two distinct
+external gap coordinates away from the common external column, producing
+three distinct retained coordinates. -/
+theorem fixedExternalCoefficientPrivateFiber_equalTarget_twoLight_twoRetained_false
+    (g : Fin n → G) (hg : ValidTuple g) (y : G)
+    (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (f k : ↥F) (hfk : f ≠ k)
+    (htarget : scalar ((f : ↥E) : ↥J) • y =
+      scalar ((k : ↥E) : ↥J) • y)
+    (hfLight : ¬ 2 ≤ coeff ((f : ↥E) : ↥J)
+      (center (P.symm (((f : ↥E) : ↥J) : Fin d))))
+    (hkLight : ¬ 2 ≤ coeff ((k : ↥E) : ↥J)
+      (center (P.symm (((k : ↥E) : ↥J) : Fin d))))
+    (hretained : n - B.card ≤ 2) : False := by
+  classical
+  rcases
+      fixedExternalCoefficientPrivateFiber_equalTarget_pair_heavyDiagonal_or_externalGaps
+        g hg y B center P scalar coeff F x lambda hfiber hrows
+          f k hfk htarget with
+    hfHeavy | hkHeavy | ⟨i, j, hiB, hjB, hij, hix, hjx, _hi, _hj⟩
+  · exact hfLight hfHeavy
+  · exact hkLight hkHeavy
+  · have hxB : x ∉ B := hfiber.2.1
+    have htripleSub : ({x, i, j} : Finset (Fin n)) ⊆
+        Finset.univ \ B := by
+      intro z hz
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hz
+      rcases hz with rfl | rfl | rfl
+      · exact Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxB⟩
+      · exact Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiB⟩
+      · exact Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hjB⟩
+    have htripleCard : ({x, i, j} : Finset (Fin n)).card = 3 := by
+      rw [Finset.card_insert_of_notMem]
+      · rw [Finset.card_insert_of_notMem]
+        · simp
+        · simpa using hij
+      · simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+        exact ⟨fun hxi ↦ hix hxi.symm, fun hxj ↦ hjx hxj.symm⟩
+    have hlower := Finset.card_le_card htripleSub
+    rw [htripleCard] at hlower
+    have hupper : (Finset.univ \ B).card ≤ 2 := by
+      rw [Finset.card_sdiff_of_subset (Finset.subset_univ B)]
+      simpa using hretained
+    omega
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
