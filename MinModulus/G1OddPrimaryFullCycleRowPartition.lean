@@ -989,6 +989,128 @@ theorem fixedExternalCoefficientPrivateFiber_equalTarget_heavyLight_twoRetained_
   · simpa [cf, of] using hfShape
   · simpa [ck, ok] using hkShape
 
+/-- Under no common touch, every same-target subfamily of a fixed private
+external fiber has at most two rows when at most two coordinates survive
+deletion.  There is at most one owner-heavy row by the doubled-owner deletion
+argument and at most one light row by the three-retained-coordinate gap
+contradiction. -/
+theorem fixedExternalCoefficientPrivateFiber_sameTarget_card_le_two_of_noCommonTouched
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : G) (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (S : Finset ↥F)
+    (htarget : ∀ f ∈ S, ∀ k ∈ S,
+      scalar ((f : ↥E) : ↥J) • y =
+        scalar ((k : ↥E) : ↥J) • y)
+    (hretained : n - B.card ≤ 2) : S.card ≤ 2 := by
+  classical
+  let H := fixedExternalFiberHeavyDiagonalRows center P coeff S
+  let L := fixedExternalFiberLightDiagonalRows center P coeff S
+  have hHcard : H.card ≤ 1 := by
+    by_contra hH
+    have hHtwo : 1 < H.card := by omega
+    obtain ⟨f, hfH, k, hkH, hfk⟩ := Finset.one_lt_card.mp hHtwo
+    have hfData : f ∈ S ∧
+        2 ≤ coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) := by
+      simpa [H, fixedExternalFiberHeavyDiagonalRows] using hfH
+    have hkData : k ∈ S ∧
+        2 ≤ coeff ((k : ↥E) : ↥J)
+          (center (P.symm (((k : ↥E) : ↥J) : Fin d))) := by
+      simpa [H, fixedExternalFiberHeavyDiagonalRows] using hkH
+    apply hno
+    exact
+      fixedExternalCoefficientPrivateFiber_equalTarget_twoHeavy_twoRetained_commonTouched
+        g hg hh hne hunique y B center P scalar coeff F x lambda hfiber
+          (fun j ↦ (hrows j).2) f k hfk
+          (htarget f hfData.1 k hkData.1) hfData.2 hkData.2 hretained
+  have hLcard : L.card ≤ 1 := by
+    by_contra hL
+    have hLtwo : 1 < L.card := by omega
+    obtain ⟨f, hfL, k, hkL, hfk⟩ := Finset.one_lt_card.mp hLtwo
+    have hfData : f ∈ S ∧
+        ¬ 2 ≤ coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) := by
+      simpa [L, fixedExternalFiberLightDiagonalRows] using hfL
+    have hkData : k ∈ S ∧
+        ¬ 2 ≤ coeff ((k : ↥E) : ↥J)
+          (center (P.symm (((k : ↥E) : ↥J) : Fin d))) := by
+      simpa [L, fixedExternalFiberLightDiagonalRows] using hkL
+    exact
+      fixedExternalCoefficientPrivateFiber_equalTarget_twoLight_twoRetained_false
+        g hg y B center P scalar coeff F x lambda hfiber hrows
+          f k hfk (htarget f hfData.1 k hkData.1)
+          hfData.2 hkData.2 hretained
+  have hpartition : H.card + L.card = S.card := by
+    simpa [H, L] using
+      card_fixedExternalFiberHeavy_add_light center P coeff S
+  omega
+
+/-- Quantitative target-capacity consequence of the two-retained rigidity:
+under no common touch, every nonzero target in `zmultiples y` supports at most
+two rows, so the whole fixed external coefficient fiber has cardinality at
+most twice the punctured cyclic-subgroup order. -/
+theorem fixedExternalCoefficientPrivateFiber_card_le_two_mul_order_sub_one_of_twoRetained
+    [Fintype G] (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : G) (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (hretained : n - B.card ≤ 2) :
+    F.card ≤ 2 * (addOrderOf y - 1) := by
+  classical
+  let target : ↥F → AddSubgroup.zmultiples y := fun f ↦
+    ⟨scalar ((f : ↥E) : ↥J) • y,
+      AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _⟩
+  let R : Finset (AddSubgroup.zmultiples y) := nonzeroZMultiples y
+  have htargetMem : ∀ f : ↥F, target f ∈ R := by
+    intro f
+    have hneTarget : target f ≠ (0 : AddSubgroup.zmultiples y) := by
+      intro hzero
+      apply (hrows ((f : ↥E) : ↥J)).1
+      exact congrArg Subtype.val hzero
+    simpa [R, nonzeroZMultiples] using hneTarget
+  rcases finiteMap_capacity_or_largeFiber R target htargetMem 2 with
+      hcap | ⟨z, _hzR, hlarge⟩
+  · simpa [R, card_nonzeroZMultiples, Nat.mul_comm, Fintype.card_coe]
+      using hcap
+  · let S : Finset ↥F :=
+      Finset.univ.filter (fun f : ↥F ↦ target f = z)
+    have htarget : ∀ f ∈ S, ∀ k ∈ S,
+        scalar ((f : ↥E) : ↥J) • y =
+          scalar ((k : ↥E) : ↥J) • y := by
+      intro f hf k hk
+      have hfEq : target f = z := by
+        exact (Finset.mem_filter.mp hf).2
+      have hkEq : target k = z := by
+        exact (Finset.mem_filter.mp hk).2
+      exact congrArg Subtype.val (hfEq.trans hkEq.symm)
+    have hSle :=
+      fixedExternalCoefficientPrivateFiber_sameTarget_card_le_two_of_noCommonTouched
+        g hg hh hne hunique hno y B center P scalar coeff F x lambda
+          hfiber hrows S htarget hretained
+    have hlarge' : 2 < S.card := by
+      simpa [S, Fintype.card_coe] using hlarge
+    omega
+
 /-- Countable form of the retained external/internal row split. -/
 def RetainedExternalInternalRowPartition
     (g : Fin n → G) (y : G) (B : Finset (Fin n))
