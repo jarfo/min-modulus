@@ -6774,6 +6774,128 @@ theorem fiveWeightPuncturedPermutation_thirtyTwo_boundaryPattern_or_weight_const
   · exact Or.inl hpattern
   · exact Or.inr hconstant
 
+/-- Pure five-weight arithmetic behind the top-boundary cycle collapse.  If
+one of the four boundary patterns has a common available-edge transition
+coefficient, no two available edges can be consecutive. -/
+theorem fiveWeight_boundaryPatternWithTransition_noTwoConsecutiveAvailableEdges
+    {ι : Type*} (R : Equiv.Perm ι) (p i₀ : ι)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (hpattern :
+      (weight (R.symm p) = -4 ∧ weight (R p) = -2 ∧
+          weight i₀ = 2 ∧ weight (R i₀) = -2) ∨
+       (weight (R.symm p) = -2 ∧ weight (R p) = 0 ∧
+          weight i₀ = 2 ∧ weight (R i₀) = -4) ∨
+       (weight (R.symm p) = 0 ∧ weight (R p) = -2 ∧
+          weight i₀ = -4 ∧ weight (R i₀) = 2) ∨
+       (weight (R.symm p) = 2 ∧ weight (R p) = 0 ∧
+          weight i₀ = -4 ∧ weight (R i₀) = 0))
+    (hall : ∀ i, i ≠ p → R i ≠ p →
+      weight (R i) - 2 * weight i =
+        weight (R i₀) - 2 * weight i₀) :
+    ∀ i, i ≠ p → R i ≠ p → R (R i) ≠ p → False := by
+  intro i hi hRi hRRi
+  have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
+  have hRiBounds :=
+    twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
+  have hRRiBounds :=
+    twoRetainedNormalizedWeight_bounds (hweight (R (R i)) hRRi)
+  have hfirst := hall i hi hRi
+  have hsecond := hall (R i) hRi hRRi
+  rcases hpattern with hpattern | hpattern | hpattern | hpattern <;>
+    rcases hpattern with ⟨_hu, _hv, hi₀Value, hRi₀Value⟩ <;>
+    rw [hi₀Value, hRi₀Value] at hfirst hsecond <;>
+    omega
+
+/-- Cycle-return form of the four-pattern transition obstruction. -/
+theorem fiveWeight_boundaryPatternWithTransition_shortReturn
+    {ι : Type*} (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (hpattern :
+      (weight (R.symm p) = -4 ∧ weight (R p) = -2 ∧
+          weight i₀ = 2 ∧ weight (R i₀) = -2) ∨
+       (weight (R.symm p) = -2 ∧ weight (R p) = 0 ∧
+          weight i₀ = 2 ∧ weight (R i₀) = -4) ∨
+       (weight (R.symm p) = 0 ∧ weight (R p) = -2 ∧
+          weight i₀ = -4 ∧ weight (R i₀) = 2) ∨
+       (weight (R.symm p) = 2 ∧ weight (R p) = 0 ∧
+          weight i₀ = -4 ∧ weight (R i₀) = 0))
+    (hall : ∀ i, i ≠ p → R i ≠ p →
+      weight (R i) - 2 * weight i =
+        weight (R i₀) - 2 * weight i₀) :
+    R (R p) = p ∨ R (R (R p)) = p := by
+  have hnoTwo :=
+    fiveWeight_boundaryPatternWithTransition_noTwoConsecutiveAvailableEdges
+      R p i₀ weight hweight hpattern hall
+  by_cases htwo : R (R p) = p
+  · exact Or.inl htwo
+  · exact Or.inr (by
+      by_contra hthree
+      exact hnoTwo (R p) hp htwo hthree)
+
+/-- If one full doubling cycle spans `Z*y`, a two- or three-step return forces
+the order of `y` to divide the corresponding Mersenne number `3` or `7`.
+This is independent of the five-weight construction. -/
+theorem addOrderOf_dvd_three_or_seven_of_isCycle_doubling_shortReturn
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (disp : ι → G)
+    (hdouble : ∀ i, disp (R i) = 2 • disp i)
+    (p : ι) (y : G)
+    (hspan : AddSubgroup.closure (Set.range disp) =
+      AddSubgroup.zmultiples y)
+    (hshort : R (R p) = p ∨ R (R (R p)) = p) :
+    addOrderOf y ∣ 3 ∨ addOrderOf y ∣ 7 := by
+  have hspanLe : AddSubgroup.zmultiples y ≤
+      AddSubgroup.zmultiples (disp p) := by
+    rw [← hspan]
+    apply (AddSubgroup.closure_le _).mpr
+    rintro v ⟨i, rfl⟩
+    obtain ⟨k, hk⟩ := sameCycle_doubling_eq_pow_two_nsmul
+      R disp hdouble (hcycle.sameCycle (hRne p) (hRne i))
+    rw [hk]
+    exact (AddSubgroup.zmultiples (disp p)).nsmul_mem
+      (AddSubgroup.mem_zmultiples (disp p)) (2 ^ k)
+  have hyMem : y ∈ AddSubgroup.zmultiples (disp p) :=
+    hspanLe (AddSubgroup.mem_zmultiples y)
+  rcases hshort with htwo | hthree
+  · left
+    have hfirst := hdouble p
+    have hsecond := hdouble (R p)
+    rw [htwo, hfirst] at hsecond
+    have hpTorsion : 3 • disp p = 0 := by
+      calc
+        3 • disp p = 2 • (2 • disp p) - disp p := by module
+        _ = disp p - disp p := by rw [← hsecond]
+        _ = 0 := sub_self _
+    have hZle : AddSubgroup.zmultiples (disp p) ≤
+        (nsmulAddMonoidHom 3).ker := by
+      rw [AddSubgroup.zmultiples_le, AddMonoidHom.mem_ker]
+      exact hpTorsion
+    have hyTorsion := hZle hyMem
+    rw [AddMonoidHom.mem_ker] at hyTorsion
+    exact addOrderOf_dvd_of_nsmul_eq_zero hyTorsion
+  · right
+    have hfirst := hdouble p
+    have hsecond := hdouble (R p)
+    have hthird := hdouble (R (R p))
+    rw [hthree, hsecond, hfirst] at hthird
+    have hpTorsion : 7 • disp p = 0 := by
+      calc
+        7 • disp p = 2 • (2 • (2 • disp p)) - disp p := by module
+        _ = disp p - disp p := by rw [← hthird]
+        _ = 0 := sub_self _
+    have hZle : AddSubgroup.zmultiples (disp p) ≤
+        (nsmulAddMonoidHom 7).ker := by
+      rw [AddSubgroup.zmultiples_le, AddMonoidHom.mem_ker]
+      exact hpTorsion
+    have hyTorsion := hZle hyMem
+    rw [AddMonoidHom.mem_ker] at hyTorsion
+    exact addOrderOf_dvd_of_nsmul_eq_zero hyTorsion
+
 /-- The four top-boundary configurations cannot support two consecutive
 available edges.  Their common transition coefficients are respectively
 `-6`, `-8`, `10`, and `8`; iterating any of these affine recurrences twice
@@ -6800,19 +6922,9 @@ theorem fiveWeightPuncturedPermutation_thirtyTwo_noTwoConsecutiveAvailableEdges_
         R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
           hkernel32 with
     ⟨hpattern, hall⟩ | hconstant
-  · left
-    intro i hi hRi hRRi
-    have hiBounds := twoRetainedNormalizedWeight_bounds (hweight i hi)
-    have hRiBounds :=
-      twoRetainedNormalizedWeight_bounds (hweight (R i) hRi)
-    have hRRiBounds :=
-      twoRetainedNormalizedWeight_bounds (hweight (R (R i)) hRRi)
-    have hfirst := hall i hi hRi
-    have hsecond := hall (R i) hRi hRRi
-    rcases hpattern with hpattern | hpattern | hpattern | hpattern <;>
-      rcases hpattern with ⟨_hu, _hv, hi₀Value, hRi₀Value⟩ <;>
-      rw [hi₀Value, hRi₀Value] at hfirst hsecond <;>
-      omega
+  · exact Or.inl
+      (fiveWeight_boundaryPatternWithTransition_noTwoConsecutiveAvailableEdges
+        R p i₀ weight hweight hpattern hall)
   · exact Or.inr hconstant
 
 /-- A top-boundary nonconstant punctured permutation returns from `p` after
@@ -6840,12 +6952,12 @@ theorem fiveWeightPuncturedPermutation_thirtyTwo_shortReturn_or_weight_constant
         R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
           hkernel32 with
     hnoTwo | hconstant
-  · left
-    by_cases htwo : R (R p) = p
-    · exact Or.inl htwo
-    · exact Or.inr (by
-        by_contra hthree
-        exact hnoTwo (R p) hp htwo hthree)
+  · exact Or.inl (by
+      by_cases htwo : R (R p) = p
+      · exact Or.inl htwo
+      · exact Or.inr (by
+          by_contra hthree
+          exact hnoTwo (R p) hp htwo hthree))
   · exact Or.inr hconstant
 
 /-- If every leaf of a saturated doubling cycle is deleted by the minimal
@@ -7819,8 +7931,34 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.exists_smallerValidCyclicMo
     have habsEq : e.natAbs = 32 := by omega
     exact ⟨rfl, hquotOne, habsEq⟩
 
-/-- In a modulus-minimal sixth-stratum survivor, every nonzero bounded
-five-weight coefficient has absolute value exactly `32`. -/
+/-- A bounded coefficient in a modulus-minimal sixth-stratum survivor forces
+the cyclic kernel to have the full odd order and has absolute value `32`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z})
+    (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
+    (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
+    q / addOrderOf y = 1 ∧ e.natAbs = 32 := by
+  rcases
+      hrows.exists_smallerValidCyclicModulus_or_sixthStratum_boundary_rigidity
+        (t := 6) (q := q) (by omega) g hg hunique hne y hyq B x z hxB hzB
+          hxz hcomplement e he helow hehigh heMem with
+    ⟨M, hMpos, hMlt, hMdiv, hvalid⟩ | hrigid
+  · exact (hminimal M hMpos hMlt hMdiv hvalid).elim
+  · exact hrigid.2
+
+/-- Compatibility projection retaining only the coefficient magnitude. -/
 theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
     {q : ℕ} [NeZero (2 ^ 6 * q)]
     (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
@@ -7837,14 +7975,10 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_na
     (hcomplement : Finset.univ \ B = {x, z})
     (e : ℤ) (he : e ≠ 0) (helow : -42 ≤ e) (hehigh : e ≤ 42)
     (heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y) :
-    e.natAbs = 32 := by
-  rcases
-      hrows.exists_smallerValidCyclicModulus_or_sixthStratum_boundary_rigidity
-        (t := 6) (q := q) (by omega) g hg hunique hne y hyq B x z hxB hzB
-          hxz hcomplement e he helow hehigh heMem with
-    ⟨M, hMpos, hMlt, hMdiv, hvalid⟩ | hrigid
-  · exact (hminimal M hMpos hMlt hMdiv hvalid).elim
-  · exact hrigid.2.2
+    e.natAbs = 32 :=
+  (hrows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+    g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+      e he helow hehigh heMem).2
 
 /-- Integrated top-stratum one-retained endpoint.  In a modulus-minimal
 `2^6*q` survivor, the nonconstant five-weight arm returns to the unavailable
@@ -7875,7 +8009,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
         (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
             (g x - g z) + (2 : ℤ) • (g z - a) ∈
           AddSubgroup.zmultiples y) ∧
-      ((R (R p) = p ∨ R (R (R p)) = p) ∨
+      ((q / addOrderOf y = 1 ∧
+          (R (R p) = p ∨ R (R (R p)) = p)) ∨
         ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
           weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
   obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
@@ -7889,14 +8024,41 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
       g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
         e he helow hehigh heMem
   have hout :=
-    fiveWeightPuncturedPermutation_thirtyTwo_shortReturn_or_weight_constant
+    fiveWeightPuncturedPermutation_thirtyTwo_boundaryPatternWithTransition_or_weight_constant
       R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
         (g x - g z) ((2 : ℤ) • (g z - a))
           (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep hkernel32
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
     hweight, htransition, ?_⟩
-  rcases hout with hshort | hconstant
-  · exact Or.inl hshort
+  rcases hout with ⟨hpattern, hall⟩ | hconstant
+  · have hshort := fiveWeight_boundaryPatternWithTransition_shortReturn
+      R p i₀ hp cycleWeight hcycleWeight hpattern hall
+    let e : ℤ :=
+      (cycleWeight (R p) - 4 * cycleWeight (R.symm p)) -
+        3 * (cycleWeight (R i₀) - 2 * cycleWeight i₀)
+    have heBounds : -42 ≤ e ∧ e ≤ 42 := by
+      rcases hpattern with hpattern | hpattern | hpattern | hpattern <;>
+        rcases hpattern with ⟨hu, hv, hi, hRi⟩ <;>
+        simp only [e, hu, hv, hi, hRi] <;>
+        omega
+    have he : e ≠ 0 := by
+      intro heZero
+      rcases hpattern with hpattern | hpattern | hpattern | hpattern <;>
+        rcases hpattern with ⟨hu, hv, hi, hRi⟩ <;>
+        simp only [e, hu, hv, hi, hRi] at heZero <;>
+        omega
+    have heMem : e • (g x - g z) ∈ AddSubgroup.zmultiples y := by
+      have hthree := (AddSubgroup.zmultiples y).zsmul_mem
+        (hcycleTransition i₀ hi₀ hRi₀) 3
+      have hsub := (AddSubgroup.zmultiples y).sub_mem hcycleTwoStep hthree
+      convert hsub using 1
+      dsimp only [e]
+      module
+    have hfull :=
+      hrows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+        g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+          e he heBounds.1 heBounds.2 heMem
+    exact Or.inl ⟨hfull.1, hshort⟩
   · right
     intro i hiB j hjB
     have hi : i ≠ p := (hleafB i).1 hiB
@@ -7933,7 +8095,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
-      ((R (R p) = p ∨ R (R (R p)) = p) ∨
+      ((q / addOrderOf y = 1 ∧
+          (R (R p) = p ∨ R (R (R p)) = p)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
@@ -8038,10 +8201,161 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_purePair_o
     hrows.oneRetainedCycle_shortReturn_or_purePair_of_sixthStratum_minimal
       g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
         hleafB hdouble hretainedMem
-  · rcases hshort with htwo | hthree
+  · rcases hshort.2 with htwo | hthree
     · exact (hreturnTwo htwo).elim
     · exact (hreturnThree hthree).elim
   · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hpure⟩
+
+/-- Critical full-cycle specialization of the sixth-stratum short-return
+endpoint.  Exact span generation turns the two possible returns into
+`q | 3` or `q | 7`; nontriviality removes `q=1`, and the universal tuple
+cardinality bound plus criticality leaves exactly `(n,q)=(8,3),(9,3),(9,7)`.
+Every other case is the common pure-pair arm. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalSixthStratum_finitePairs_or_purePair
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 6 * q < stratumBound n 6)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hRcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ 6 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - a)) =
+      AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (((n = 8 ∧ q = 3) ∨ (n = 9 ∧ q = 3) ∨
+          (n = 9 ∧ q = 7)) ∨
+        (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  let disp : Fin d → ZMod (2 ^ 6 * q) :=
+    fun i ↦ g (leaf i) - a
+  have hspanDisp : AddSubgroup.closure (Set.range disp) =
+      AddSubgroup.zmultiples y := by
+    simpa only [disp] using hspan
+  have hdispMem : ∀ i, disp i ∈ AddSubgroup.zmultiples y := by
+    intro i
+    rw [← hspanDisp]
+    exact AddSubgroup.subset_closure ⟨i, rfl⟩
+  have hretainedMem :
+      g (leaf p) - a ∈ AddSubgroup.zmultiples y := by
+    simpa only [disp] using hdispMem p
+  have hp : R p ≠ p := hRne p
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      hshort | hpure⟩ :=
+    hrows.oneRetainedCycle_shortReturn_or_purePair_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
+        hleafB hdouble hretainedMem
+  · have hdoubleNat : ∀ i, disp (R i) = 2 • disp i := by
+      intro i
+      simpa only [disp, two_nsmul, two_zsmul] using hdouble i
+    have horderDvd :=
+      addOrderOf_dvd_three_or_seven_of_isCycle_doubling_shortReturn
+        R hRcycle hRne disp hdoubleNat p y hspanDisp hshort.2
+    have hqpos : 0 < q := by
+      apply Nat.pos_of_ne_zero
+      intro hq
+      apply NeZero.ne (2 ^ 6 * q)
+      simp only [hq, mul_zero]
+    have hqEq : q = addOrderOf y := by
+      calc
+        q = (q / addOrderOf y) * addOrderOf y :=
+          (Nat.div_mul_cancel hyq).symm
+        _ = 1 * addOrderOf y := by rw [hshort.1]
+        _ = addOrderOf y := one_mul _
+    have hyne : y ≠ 0 := by
+      intro hyzero
+      have hpZero : disp p = 0 := by
+        obtain ⟨k, hk⟩ := AddSubgroup.mem_zmultiples_iff.mp (hdispMem p)
+        calc
+          disp p = k • y := hk.symm
+          _ = 0 := by rw [hyzero]; simp
+      have hRpZero : disp (R p) = 0 := by
+        obtain ⟨k, hk⟩ :=
+          AddSubgroup.mem_zmultiples_iff.mp (hdispMem (R p))
+        calc
+          disp (R p) = k • y := hk.symm
+          _ = 0 := by rw [hyzero]; simp
+      have hvalueEq : g (leaf p) = g (leaf (R p)) := by
+        dsimp only [disp] at hpZero hRpZero
+        calc
+          g (leaf p) = (g (leaf p) - a) + a := by abel
+          _ = 0 + a := by rw [hpZero]
+          _ = (g (leaf (R p)) - a) + a := by rw [hRpZero]
+          _ = g (leaf (R p)) := by abel
+      have hindexEq : p = R p :=
+        hleafInj (validTuple_injective g hg hvalueEq)
+      exact hp hindexEq.symm
+    have hqNeOne : q ≠ 1 := by
+      rw [hqEq]
+      intro horderOne
+      exact hyne (AddMonoid.addOrderOf_eq_one_iff.mp horderOne)
+    have hqCases : q = 3 ∨ q = 7 := by
+      rcases horderDvd with hthree | hseven
+      · left
+        have hqThree : q ∣ 3 := by simpa only [hqEq] using hthree
+        exact ((Nat.dvd_prime Nat.prime_three).mp hqThree).resolve_left hqNeOne
+      · right
+        have hqSeven : q ∣ 7 := by simpa only [hqEq] using hseven
+        have hprimeSeven : Nat.Prime 7 := by norm_num
+        exact ((Nat.dvd_prime hprimeSeven).mp hqSeven).resolve_left hqNeOne
+    have hqle : q ≤ 7 := by
+      rcases hqCases with rfl | rfl <;> omega
+    have hlower : 2 ^ (n - 1) ≤ 2 ^ 6 * q := by
+      simpa only [← Nat.card_eq_fintype_card, Nat.card_zmod] using
+        (two_pow_pred_le_card_of_validTuple g hg)
+    have hnle : n ≤ 9 := by
+      by_contra hnNot
+      have hnTen : 10 ≤ n := by omega
+      have hpow : 2 ^ 9 ≤ 2 ^ (n - 1) :=
+        Nat.pow_le_pow_right (by omega) (by omega)
+      have hmodLe : 2 ^ 6 * q ≤ 2 ^ 6 * 7 :=
+        Nat.mul_le_mul_left (2 ^ 6) hqle
+      norm_num at hpow hmodLe
+      omega
+    refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, Or.inl ?_⟩
+    rcases hqCases with hqThree | hqSeven
+    · subst q
+      have hnCases : n = 8 ∨ n = 9 := by
+        have hnEight : 8 ≤ n := by
+          by_contra hnNot
+          have hnSeven : n ≤ 7 := by omega
+          have hbound : stratumBound n 6 ≤ 128 := by
+            interval_cases n <;> norm_num [stratumBound]
+          norm_num at hcritical
+          omega
+        omega
+      rcases hnCases with hnEight | hnNine
+      · exact Or.inl ⟨hnEight, rfl⟩
+      · exact Or.inr (Or.inl ⟨hnNine, rfl⟩)
+    · subst q
+      have hnNine : n = 9 := by
+        have hnNineLower : 9 ≤ n := by
+          by_contra hnNot
+          have hnEight : n ≤ 8 := by omega
+          have hbound : stratumBound n 6 ≤ 248 := by
+            interval_cases n <;> norm_num [stratumBound]
+          norm_num at hcritical
+          omega
+        omega
+      exact Or.inr (Or.inr ⟨hnNine, rfl⟩)
+  · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      Or.inr hpure⟩
 
 /-- Uniform numerical consequence for every coefficient produced by the
 five-weight cycle split. -/
