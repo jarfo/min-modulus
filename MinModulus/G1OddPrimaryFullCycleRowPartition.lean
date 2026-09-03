@@ -2447,6 +2447,64 @@ theorem fixedExternalCoefficientPrivateFiber_sameTarget_card_le_two_of_noCommonT
       card_fixedExternalFiberHeavy_add_light center P coeff S
   omega
 
+/-- Once the private-owner coefficient is fixed across a selected subfamily,
+the target map is injective in the two-retained no-common-touch regime.  If
+the fixed owner coefficient is at least two, an equal-target pair is a
+forbidden heavy/heavy pair; otherwise it is the already impossible
+light/light pair. -/
+theorem fixedExternalCoefficientPrivateFiber_fixedOwnerCoefficient_target_injective
+    (g : Fin n → G) (hg : ValidTuple g) {h : G}
+    (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : G, u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : G) (B : Finset (Fin n)) {d : ℕ} (center : Fin d → Fin n)
+    (P : Equiv.Perm (Fin d)) {J : Finset (Fin d)}
+    (scalar : ↥J → ℤ) (coeff : ↥J → Fin n → ℤ)
+    {E : Finset ↥J} (F : Finset ↥E) (x : Fin n) (lambda mu : ℤ)
+    (hfiber : FixedExternalCoefficientPrivateFiber
+      B center P coeff F x lambda)
+    (hrows : ∀ j, scalar j • y ≠ 0 ∧
+      Witness g (scalar j • y) (coeff j))
+    (S : Finset ↥F)
+    (hownerCoefficient : ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu)
+    (hretained : n - B.card ≤ 2) :
+    Function.Injective (fun f : ↥S ↦
+      scalar ((((f : ↥F) : ↥E) : ↥J)) • y) := by
+  intro f k htarget
+  by_contra hfk
+  have hfkF : (f : ↥F) ≠ (k : ↥F) := by
+    intro h
+    exact hfk (Subtype.ext h)
+  by_cases hmuHeavy : 2 ≤ mu
+  · have hfHeavy : 2 ≤ coeff (((f : ↥S) : ↥F) : ↥E)
+        (center (P.symm (((((f : ↥S) : ↥F) : ↥E) : ↥J) : Fin d))) := by
+      rw [hownerCoefficient (f : ↥F) f.property]
+      exact hmuHeavy
+    have hkHeavy : 2 ≤ coeff (((k : ↥S) : ↥F) : ↥E)
+        (center (P.symm (((((k : ↥S) : ↥F) : ↥E) : ↥J) : Fin d))) := by
+      rw [hownerCoefficient (k : ↥F) k.property]
+      exact hmuHeavy
+    apply hno
+    exact
+      fixedExternalCoefficientPrivateFiber_equalTarget_twoHeavy_twoRetained_commonTouched
+        g hg hh hne hunique y B center P scalar coeff F x lambda hfiber
+          (fun j ↦ (hrows j).2) f k hfkF htarget hfHeavy hkHeavy hretained
+  · have hfLight : ¬ 2 ≤ coeff (((f : ↥S) : ↥F) : ↥E)
+        (center (P.symm (((((f : ↥S) : ↥F) : ↥E) : ↥J) : Fin d))) := by
+      rw [hownerCoefficient (f : ↥F) f.property]
+      exact hmuHeavy
+    have hkLight : ¬ 2 ≤ coeff (((k : ↥S) : ↥F) : ↥E)
+        (center (P.symm (((((k : ↥S) : ↥F) : ↥E) : ↥J) : Fin d))) := by
+      rw [hownerCoefficient (k : ↥F) k.property]
+      exact hmuHeavy
+    exact
+      fixedExternalCoefficientPrivateFiber_equalTarget_twoLight_twoRetained_false
+        g hg y B center P scalar coeff F x lambda hfiber hrows
+          f k hfkF htarget hfLight hkLight hretained
+
 /-- Quantitative target-capacity consequence of the two-retained rigidity:
 under no common touch, every nonzero target in `zmultiples y` supports at most
 two rows, so the whole fixed external coefficient fiber has cardinality at
@@ -4126,16 +4184,14 @@ def FixedExternalTwoRetainedDominantRelativeAffineCycleComponentFrontier
                   (scalar ((((Q i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y =
                     2 • ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y)) ∧
                 Q.IsCycle ∧
-                ((∀ i : ↥(permutationFamilyComponentFiber R owner C),
-                    (scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y = 0) ∨
-                  ∃ i : ↥(permutationFamilyComponentFiber R owner C),
-                    (scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y ≠ 0 ∧
+                (∃ i : ↥(permutationFamilyComponentFiber R owner C),
+                  (scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y ≠ 0 ∧
+                  addOrderOf
+                      ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
+                    2 ^ (permutationFamilyComponentFiber R owner C).card - 1 ∧
+                  (permutationFamilyComponentFiber R owner C).card ≤
                     addOrderOf
-                        ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
-                      2 ^ (permutationFamilyComponentFiber R owner C).card - 1 ∧
-                    (permutationFamilyComponentFiber R owner C).card ≤
-                      2 * (addOrderOf
-                        ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1)) ∧
+                      ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1) ∧
                 ∃ i, ∃ ell : ℕ,
                   2 ≤ ell ∧ ell ≤ d ∧ Q^[ell] i = i ∧
                     Odd (2 ^ ell - 1) ∧
@@ -4338,20 +4394,37 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
       exact hjUnique k ⟨hk.1, hk.2.1, hk.2.2.1⟩
   let centered : ↥F → G := fun f ↦
     (scalar ((f : ↥E) : ↥J) - rho) • y
+  have hownerCoefficient : ∀ f : ↥F, f ∈ S →
+      coeff ((f : ↥E) : ↥J)
+        (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu := by
+    intro f hf
+    have hf' : f ∈ Finset.univ.filter (fun f : ↥F ↦
+        coeff ((f : ↥E) : ↥J)
+          (center (P.symm (((f : ↥E) : ↥J) : Fin d))) = mu) := by
+      simpa [S] using hf
+    exact (Finset.mem_filter.mp hf').2
+  have htargetInjective : Function.Injective (fun f : ↥S ↦
+      scalar ((((f : ↥F) : ↥E) : ↥J)) • y) :=
+    fixedExternalCoefficientPrivateFiber_fixedOwnerCoefficient_target_injective
+      g hg hh hne hunique hno y B center P scalar coeff F x lambda mu
+        hfiber hrows S hownerCoefficient (by omega)
+  have hcenteredInjective : Function.Injective (fun f : ↥S ↦
+      centered (f : ↥F)) := by
+    intro f k hcentered
+    apply htargetInjective
+    have heq := congrArg (fun u : G ↦ u + rho • y) hcentered
+    simpa only [centered, sub_smul, sub_add_cancel] using heq
   have hcenteredMultiplicity : ∀ v : G,
-      (S.filter (fun f ↦ centered f = v)).card ≤ 2 := by
+      (S.filter (fun f ↦ centered f = v)).card ≤ 1 := by
     intro v
-    apply
-      fixedExternalCoefficientPrivateFiber_sameTarget_card_le_two_of_noCommonTouched
-        g hg hh hne hunique hno y B center P scalar coeff F x lambda
-          hfiber hrows (S.filter (fun f ↦ centered f = v))
-    · intro f hf k hk
-      have hfEq : centered f = v := (Finset.mem_filter.mp hf).2
-      have hkEq : centered k = v := (Finset.mem_filter.mp hk).2
-      have heq := congrArg (fun u : G ↦ u + rho • y)
-        (hfEq.trans hkEq.symm)
-      simpa only [centered, sub_smul, sub_add_cancel] using heq
-    · omega
+    rw [Finset.card_le_one]
+    intro f hf k hk
+    let f' : ↥S := ⟨f, (Finset.mem_filter.mp hf).1⟩
+    let k' : ↥S := ⟨k, (Finset.mem_filter.mp hk).1⟩
+    have hfk : f' = k' := hcenteredInjective (by
+      exact (Finset.mem_filter.mp hf).2.trans
+        (Finset.mem_filter.mp hk).2.symm)
+    exact congrArg Subtype.val hfk
   have hfullCycle : ∀
       (C : Quotient (Equiv.Perm.SameCycle.setoid R))
       (hC : C ∈ permutationSubsetFullComponents R
@@ -4363,16 +4436,14 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
           (scalar ((((Q i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y =
             2 • ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y)) ∧
         Q.IsCycle ∧
-        ((∀ i : ↥(permutationFamilyComponentFiber R owner C),
-            (scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y = 0) ∨
-          ∃ i : ↥(permutationFamilyComponentFiber R owner C),
-            (scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y ≠ 0 ∧
+        (∃ i : ↥(permutationFamilyComponentFiber R owner C),
+          (scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y ≠ 0 ∧
+          addOrderOf
+              ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
+            2 ^ (permutationFamilyComponentFiber R owner C).card - 1 ∧
+          (permutationFamilyComponentFiber R owner C).card ≤
             addOrderOf
-                ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) ∣
-              2 ^ (permutationFamilyComponentFiber R owner C).card - 1 ∧
-            (permutationFamilyComponentFiber R owner C).card ≤
-              2 * (addOrderOf
-                ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1)) ∧
+              ((scalar ((((i : ↥S) : ↥F) : ↥E) : ↥J) - rho) • y) - 1) ∧
         ∃ i, ∃ ell : ℕ,
           2 ≤ ell ∧ ell ≤ d ∧ Q^[ell] i = i ∧
             Odd (2 ^ ell - 1) ∧
@@ -4411,16 +4482,37 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     have hcomponentMultiplicity : ∀ v : G,
         (Finset.univ.filter (fun i :
           ↥(permutationFamilyComponentFiber R owner C) ↦
-            value (i : ↥S) = v)).card ≤ 2 := by
+            value (i : ↥S) = v)).card ≤ 1 := by
       have hrestrict := permutationFamilyComponentFiber_valueFiber_card_le
         R (fun f : ↥F ↦ (((f : ↥E) : ↥J) : Fin d))
-          S centered C 2 hcenteredMultiplicity
+          S centered C 1 hcenteredMultiplicity
       simpa only [owner, value, centered] using hrestrict
+    have hvalueInjective : Function.Injective (fun i :
+        ↥(permutationFamilyComponentFiber R owner C) ↦
+          value (i : ↥S)) := by
+      intro i j hij
+      apply Subtype.ext
+      apply hcenteredInjective
+      simpa only [value, centered] using hij
     have horderCharge := isCycle_doubling_zero_or_orderCharge
-      Q (fun i ↦ value (i : ↥S)) hQCycle hQne hQValue 2
+      Q (fun i ↦ value (i : ↥S)) hQCycle hQne hQValue 1
         hcomponentMultiplicity
     have hQCycle' := hQCycle
     obtain ⟨i₀, _hi₀, _hsame⟩ := hQCycle'
+    have horderCharge' : ∃ i :
+        ↥(permutationFamilyComponentFiber R owner C),
+        value (i : ↥S) ≠ 0 ∧
+        addOrderOf (value (i : ↥S)) ∣
+          2 ^ Fintype.card
+            ↥(permutationFamilyComponentFiber R owner C) - 1 ∧
+        Fintype.card ↥(permutationFamilyComponentFiber R owner C) ≤
+          addOrderOf (value (i : ↥S)) - 1 := by
+      rcases horderCharge with hzero | hcharge
+      · exfalso
+        apply hQne i₀
+        apply hvalueInjective
+        exact (hzero (Q i₀)).trans (hzero i₀).symm
+      · simpa using hcharge
     obtain ⟨i, ell, hellTwo, hellFiber, hperiod⟩ :=
       exists_bounded_cycle_of_fixedPointFree Q i₀ hQne
     have hfiberCard :
@@ -4438,7 +4530,7 @@ theorem FixedExternalTwoRetainedDominantRelativeAffineProfile.cycleComponentFron
     refine ⟨Q, hQOwner, hQValue, hQCycle, ?_, i, ell, hellTwo,
       hellFiber.trans hfiberCard, hperiod, odd_two_pow_sub_one (by omega),
       htorsion⟩
-    simpa only [value, Fintype.card_coe] using horderCharge
+    simpa only [value, Fintype.card_coe] using horderCharge'
   have hfrontier := permutationFamily_affineComponentFrontier
     R owner displacement target hdouble' mu offset haffineMu
       componentThreshold
