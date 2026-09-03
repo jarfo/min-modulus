@@ -1815,6 +1815,57 @@ theorem twoRetainedExternalInternalRowFrontier_of_rowPartition
       (fun j ↦ (hrows j).2) hprivate hcenterInj hownerMem howner
       hcoeffInj hretained K
 
+/-- Quantitative external/internal alternative at the exact two-retained
+endpoint.  Choosing the constant-capacity threshold `(d-1)/12` shows that
+either the common-pivot internal class carries at least half of the required
+rows, or one exact external `(coordinate, coefficient)` fiber has more than
+one twelfth of them.  All row and fiber data are retained for the next
+geometric comparison. -/
+theorem twoRetainedExternalInternalRowFrontier_largeInternal_or_largeExternal
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    {d : ℕ} (center : Fin d → Fin n) (P : Equiv.Perm (Fin d))
+    (J : Finset (Fin d))
+    (hfrontier : TwoRetainedExternalInternalRowFrontier
+      g y B center P J) :
+    ∃ scalar : ↥J → ℤ, ∃ coeff : ↥J → Fin n → ℤ,
+      ∃ E I : Finset ↥J, ∃ supportCoord : ↥E → Fin n,
+        E ∪ I = Finset.univ ∧ Disjoint E I ∧
+        E.card + I.card = J.card ∧
+        (∀ j, scalar j • y ≠ 0 ∧
+          Witness g (scalar j • y) (coeff j)) ∧
+        (∀ e : ↥E,
+          supportCoord e ∉ Finset.univ.image center ∧
+          supportCoord e ∉ B ∧
+          coeff (e : ↥J) (supportCoord e) ≠ 0) ∧
+        ((d - 1 ≤ 2 * I.card ∧
+            (I = ∅ ∨
+              ∃ pivot : Fin d, center pivot ∉ B ∧
+                ∀ j : ↥I,
+                  ExactSignedPairWitness g (scalar (j : ↥J) • y)
+                    (coeff (j : ↥J))
+                    (center (P.symm (j : Fin d))) (center pivot))) ∨
+          ∃ z ∈ (((Finset.univ \ B) \
+                (Finset.univ.image center : Finset (Fin n))).product
+              twoRetainedExternalCoefficientLevels),
+            (d - 1) / 12 < (Finset.univ.filter (fun e : ↥E ↦
+              (supportCoord e,
+                coeff (e : ↥J) (supportCoord e)) = z)).card ∧
+            FixedExternalCoefficientPrivateFiber B center P coeff
+              (Finset.univ.filter (fun e : ↥E ↦
+                (supportCoord e,
+                  coeff (e : ↥J) (supportCoord e)) = z)) z.1 z.2) := by
+  classical
+  rcases hfrontier with
+    ⟨scalar, coeff, E, I, hunion, hdisjoint, hcard, hlarge,
+      hrows, supportCoord, hsupport, hcapacity, hinternal⟩
+  refine ⟨scalar, coeff, E, I, supportCoord, hunion, hdisjoint, hcard,
+    hrows, hsupport, ?_⟩
+  rcases hcapacity ((d - 1) / 12) with hcap | hfiber
+  · left
+    refine ⟨?_, hinternal⟩
+    omega
+  · exact Or.inr hfiber
+
 /-- Extract the explicit finite partition and one retained support coordinate
 per external row from the retained mixed normal form. -/
 theorem retainedExternalInternalRowPartition_of_mixed
