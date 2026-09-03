@@ -1863,6 +1863,7 @@ import MinModulus
 #print axioms MinModulus.FixedExternalTwoRetainedDominantRelativeAffineProfile
 #print axioms MinModulus.FixedExternalTwoRetainedRelativeAffineParameters
 #print axioms MinModulus.FixedExternalTwoRetainedRelativeAffineParameters.slope_eq
+#print axioms MinModulus.affineOffset_mem_zmultiples
 #print axioms MinModulus.FixedExternalTwoRetainedAffineProfileAbove.relative
 #print axioms MinModulus.fixedExternalCoefficientPrivateFiber_twoRetained_dominantRelativeProfile
 #print axioms MinModulus.fixedExternalSelectedOwner_injective
