@@ -452,4 +452,92 @@ theorem PrimitiveMiddleExactMersenneFiveExternalRows.external_owner_eq_neg_one
         g hg y root v B hd hv leaf hleaf e hnormal hcyclic b hbLeaf k₂
           hrow.1 hrow.2.1
 
+/-- Once the owner coefficient is `-1`, the normalized row parameter gives
+the two retained coefficients exactly. -/
+theorem TwoRetainedCanonicalPrivatePresentation.retained_coefficients_of_owner_eq_neg_one
+    {n : ℕ} (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (b : ↥B) (k : ℤ)
+    (howner : p.coeff b (b : Fin n) = -1)
+    (hweight : p.weight b = 2 * k) :
+    p.coeff b p.x = -k ∧ p.coeff b p.z = k + 1 := by
+  have hshape := privateWitness_twoRetained_exactShape
+    g (p.isWitness b) B (b : Fin n) b.property (p.zero_other b)
+      p.x p.z p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+  have hx : p.coeff b p.x = -k := by
+    have hw := p.weight_eq b
+    rw [howner, hweight] at hw
+    norm_num [twoRetainedOwnerNormalization] at hw
+    omega
+  refine ⟨hx, ?_⟩
+  rw [hshape.1, howner, hx]
+  omega
+
+/-- For a parameter adjacent to the primary middle parameter, the external
+private row has nonnegative coefficient at the unique retained leaf. -/
+theorem TwoRetainedCanonicalPrivatePresentation.external_insertedCoefficient_nonneg_of_adjacent
+    {n : ℕ} (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (b : ↥B) (k₀ k : ℤ) (r : Fin n)
+    (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (hr : r = if k₀ = -1 then p.x else p.z)
+    (hadjacent : k = k₀ + 1 ∨ k₀ = k + 1)
+    (howner : p.coeff b (b : Fin n) = -1)
+    (hweight : p.weight b = 2 * k) :
+    0 ≤ p.coeff b r := by
+  have hretained := p.retained_coefficients_of_owner_eq_neg_one
+    g y B b k howner hweight
+  rcases hmiddle with hk₀ | hk₀
+  · have hrx : r = p.x := by simpa only [hk₀, if_true] using hr
+    rw [hrx, hretained.1]
+    rcases hadjacent with hadjacent | hadjacent <;> omega
+  · have hk₀Ne : k₀ ≠ -1 := by omega
+    have hrz : r = p.z := by simpa only [hk₀Ne, if_false] using hr
+    rw [hrz, hretained.2]
+    rcases hadjacent with hadjacent | hadjacent <;> omega
+
+/-- Adjacent external parameters cannot use the weak exceptional outcome of
+the localized gap: even at the unique retained leaf, the private coefficient
+is nonnegative, so the leaf competitor is heavy somewhere. -/
+theorem TwoRetainedCanonicalPrivatePresentation.exists_mersenneLeaf_heavy_competitor_of_adjacent
+    {n d : ℕ} (g : Fin n → G) (hg : ValidTuple g)
+    (y root v : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (hd : 3 ≤ d) (hv : addOrderOf v = 2 ^ d - 1)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v)
+    (hcyclic : AddSubgroup.zmultiples v = AddSubgroup.zmultiples y)
+    (k₀ k : ℤ) (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (r : Fin n) (hr : r = if k₀ = -1 then p.x else p.z)
+    (hdeleted : ∀ i,
+      i ∈ (Finset.univ : Finset (Fin d)).image leaf → i ≠ r → i ∈ B)
+    (b : ↥B)
+    (hb : (b : Fin n) ∉ (Finset.univ : Finset (Fin d)).image leaf)
+    (hadjacent : k = k₀ + 1 ∨ k₀ = k + 1)
+    (howner : p.coeff b (b : Fin n) = -1 ∨
+      p.coeff b (b : Fin n) = 1)
+    (hweight : p.weight b = 2 * k) :
+    ∃ s : ℕ, 0 < s ∧ s < 2 ^ d - 1 ∧
+      p.scalar b • y = s • v ∧
+      ∃ c : Fin n → ℤ, Witness g (p.scalar b • y) c ∧
+        (∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0) ∧
+        ∃ i : Fin n,
+          i ∈ (Finset.univ : Finset (Fin d)).image leaf ∧ 2 ≤ c i := by
+  have hownerNeg := p.external_owner_eq_neg_one_of_mersenneLeaf
+    g hg y root v B hd hv leaf hleaf e hnormal hcyclic b hb k
+      howner hweight
+  have hrNonneg := p.external_insertedCoefficient_nonneg_of_adjacent
+    g y B b k₀ k r hmiddle hr hadjacent hownerNeg hweight
+  obtain ⟨s, hs0, hsq, htarget, c, hc, hcoff, i, hiLeaf,
+      hiExceptional, hi⟩ :=
+    p.exists_mersenneLeaf_competitor_with_localized_gap
+      g hg y root v B hd hv leaf hleaf e hnormal hcyclic r hdeleted b hb
+  refine ⟨s, hs0, hsq, htarget, c, hc, hcoff, i, hiLeaf, ?_⟩
+  rcases hiExceptional with hir | hiHeavy
+  · subst i
+    omega
+  · exact hiHeavy
+
 end MinModulus
