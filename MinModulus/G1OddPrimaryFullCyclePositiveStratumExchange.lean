@@ -116,6 +116,67 @@ theorem cycleRange_mem_insert_erase_leaf_iff
     intro hleafEq
     exact hir (hleafInj hleafEq)
 
+/-- Literal exchanges of distinct injective cycle leaves give distinct
+deletion sets when the inserted point was not deleted originally. -/
+theorem insert_erase_cycleLeaf_injective
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    {B : Finset (Fin n)} (hleafB : ∀ i, leaf i ∈ B)
+    {x : Fin n} (hxB : x ∉ B) :
+    Function.Injective (fun r ↦ insert x (B.erase (leaf r))) := by
+  classical
+  intro r s hrs
+  change insert x (B.erase (leaf r)) = insert x (B.erase (leaf s)) at hrs
+  apply hleafInj
+  by_contra hleafNe
+  have hmemRight : leaf r ∈ insert x (B.erase (leaf s)) := by
+    apply Finset.mem_insert_of_mem
+    exact Finset.mem_erase.mpr ⟨hleafNe, hleafB r⟩
+  have hmemLeft : leaf r ∈ insert x (B.erase (leaf r)) := by
+    rw [hrs]
+    exact hmemRight
+  simp only [Finset.mem_insert, Finset.mem_erase] at hmemLeft
+  rcases hmemLeft with hleafX | hfalse
+  · exact hxB (hleafX ▸ hleafB r)
+  · exact hfalse.1 rfl
+
+/-- A cycle whose translated displacements span the cyclic kernel has one
+quotient coset: all leaf displacements from any fixed base have the same
+image modulo that kernel. -/
+theorem cycle_quotient_displacement_eq_of_span
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (y a base : G)
+    {d : ℕ} (leaf : Fin d → Fin n)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    let H := AddSubgroup.zmultiples y
+    let pi : G →+ G ⧸ H := QuotientAddGroup.mk' H
+    ∀ i j,
+      pi (g (leaf i) - base) = pi (g (leaf j) - base) := by
+  let H : AddSubgroup G := AddSubgroup.zmultiples y
+  let pi : G →+ G ⧸ H := QuotientAddGroup.mk' H
+  change ∀ i j,
+    pi (g (leaf i) - base) = pi (g (leaf j) - base)
+  intro i j
+  apply sub_eq_zero.mp
+  rw [← map_sub]
+  apply (QuotientAddGroup.eq_zero_iff
+    ((g (leaf i) - base) - (g (leaf j) - base))).mpr
+  have hi : g (leaf i) - a ∈ H := by
+    change g (leaf i) - a ∈ AddSubgroup.zmultiples y
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨i, rfl⟩
+  have hj : g (leaf j) - a ∈ H := by
+    change g (leaf j) - a ∈ AddSubgroup.zmultiples y
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨j, rfl⟩
+  have hij := H.sub_mem hi hj
+  have heq :
+      (g (leaf i) - base) - (g (leaf j) - base) =
+        (g (leaf i) - a) - (g (leaf j) - a) := by
+    abel
+  rw [heq]
+  exact hij
+
 /-- The full-order two-retained state after positive-stratum exchange. -/
 def PrimitiveTwoRetainedPositiveStratumRows
     {t q : ℕ} (g : Fin n → ZMod (2 ^ t * q))
@@ -711,6 +772,113 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_fullDeleted_cyc
   · exact Or.inr (Or.inr ⟨by simpa only [b] using hz,
       cycleRange_mem_insert_erase_leaf_iff
         leaf hleafInj hleafB r hzOutside⟩)
+
+/-- The odd-kernel cycle coset makes the primitive exchange orientation
+uniform over all fully deleted leaves.  Therefore either one leaf exchange
+enters C2, or every leaf simultaneously supplies a literal full-order
+exact-two transversal using the same retained endpoint. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted_cycleLeaves_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (hleafInj : Function.Injective leaf)
+    (a : ZMod (2 ^ t * q)) (hleafB : ∀ i, leaf i ∈ B)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ((∀ r,
+          PrimitiveTwoRetainedPositiveStratumRows g y
+            (insert p.x (B.erase (leaf r)))) ∧
+        Function.Injective
+          (fun r ↦ insert p.x (B.erase (leaf r)))) ∨
+      ((∀ r,
+          PrimitiveTwoRetainedPositiveStratumRows g y
+            (insert p.z (B.erase (leaf r)))) ∧
+        Function.Injective
+          (fun r ↦ insert p.z (B.erase (leaf r)))) := by
+  classical
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let r₀ : Fin d := ⟨0, hd⟩
+  have hcosetZ : ∀ r,
+      pi (g (leaf r) - g p.z) = pi (g (leaf r₀) - g p.z) := by
+    intro r
+    exact cycle_quotient_displacement_eq_of_span
+      g y a (g p.z) leaf hspan r r₀
+  have hcosetX : ∀ r,
+      pi (g (leaf r) - g p.x) = pi (g (leaf r₀) - g p.x) := by
+    intro r
+    exact cycle_quotient_displacement_eq_of_span
+      g y a (g p.x) leaf hspan r r₀
+  let b₀ : ↥B := ⟨leaf r₀, hleafB r₀⟩
+  have horientation := hpres.owner_primitive_at_one_retained g y B p b₀
+  rcases hpres with ⟨hmin, hretained, _hrows, _hfull⟩
+  rcases horientation with hprimitiveZ | hprimitiveX
+  · by_cases hthree : ∃ r : Fin d, ∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card
+    · obtain ⟨_r, B₀, hB₀⟩ := hthree
+      exact Or.inl ⟨B₀, hB₀⟩
+    · right
+      left
+      refine ⟨?_, insert_erase_cycleLeaf_injective
+        leaf hleafInj hleafB p.x_not_mem⟩
+      intro r
+      have hprimitiveZr :
+          addOrderOf (pi (g (leaf r) - g p.z)) = 2 ^ t := by
+        rw [hcosetZ r]
+        simpa only [b₀, pi, H, Q] using hprimitiveZ
+      let br : ↥B := ⟨leaf r, hleafB r⟩
+      rcases exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
+          ht g hg hh hne hunique hno y hyq hfullOdd hmin hretained
+            br.property p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+              hprimitiveZr hminimal with
+        hthreeR | hexact
+      · exfalso
+        apply hthree
+        exact ⟨r, hthreeR⟩
+      · simpa only [br] using hexact
+  · by_cases hthree : ∃ r : Fin d, ∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card
+    · obtain ⟨_r, B₀, hB₀⟩ := hthree
+      exact Or.inl ⟨B₀, hB₀⟩
+    · right
+      right
+      refine ⟨?_, insert_erase_cycleLeaf_injective
+        leaf hleafInj hleafB p.z_not_mem⟩
+      intro r
+      have hprimitiveXr :
+          addOrderOf (pi (g (leaf r) - g p.x)) = 2 ^ t := by
+        rw [hcosetX r]
+        simpa only [b₀, pi, H, Q] using hprimitiveX
+      have hcomplementReverse : Finset.univ \ B = {p.z, p.x} := by
+        simpa only [pair_comm] using p.complement_eq
+      let br : ↥B := ⟨leaf r, hleafB r⟩
+      rcases exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
+          ht g hg hh hne hunique hno y hyq hfullOdd hmin hretained
+            br.property p.z_not_mem p.x_not_mem p.x_ne_z.symm
+              hcomplementReverse hprimitiveXr hminimal with
+        hthreeR | hexact
+      · exfalso
+        apply hthree
+        exact ⟨r, hthreeR⟩
+      · simpa only [br] using hexact
 
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
