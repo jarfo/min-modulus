@@ -111,6 +111,159 @@ def PrimitiveTwoRetainedPositiveStratumRows
             pi (g (b : Fin n) - g p.z) =
               (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ)
 
+/-- A full-order positive-stratum state with its exact row presentation kept
+as explicit data.  This carrier prevents later cycle arguments from choosing
+a second, potentially oppositely oriented presentation. -/
+def PrimitiveTwoRetainedPositiveStratumPresentation
+    {t q : ℕ} (g : Fin n → ZMod (2 ^ t * q))
+    (y : ZMod (2 ^ t * q)) (B : Finset (Fin n))
+    (p : TwoRetainedFiveWeightPresentation g y B) : Prop :=
+  MinimalCyclicKernelSupportTransversal g y B ∧
+    n - B.card = 2 ∧
+    TwoRetainedMinimalCyclicKernelFiveWeightRows g y B ∧
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    let deltaQ := pi (g p.x - g p.z)
+    addOrderOf deltaQ = 2 ^ t ∧
+      ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+        (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+          pi (g (b : Fin n) - g p.z) =
+            (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ)
+
+/-- The existential state is exactly the existence of one explicit
+presentation carrier. -/
+theorem primitiveTwoRetainedPositiveStratumRows_iff_exists_presentation
+    {t q : ℕ} (g : Fin n → ZMod (2 ^ t * q))
+    (y : ZMod (2 ^ t * q)) (B : Finset (Fin n)) :
+    PrimitiveTwoRetainedPositiveStratumRows g y B ↔
+      ∃ p : TwoRetainedFiveWeightPresentation g y B,
+        PrimitiveTwoRetainedPositiveStratumPresentation g y B p := by
+  constructor
+  · rintro ⟨hmin, hretained, hrows, p, hp⟩
+    exact ⟨p, hmin, hretained, hrows, hp⟩
+  · rintro ⟨p, hmin, hretained, hrows, hp⟩
+    exact ⟨hmin, hretained, hrows, p, hp⟩
+
+/-- Full quotient order makes the five-weight labels of a fully deleted
+doubling cycle constant in the *given* row presentation.  This is the
+presentation-preserving version of the generic cycle split: the alternative
+nonzero coefficient has absolute value at most `18`, while full order forces
+its absolute value to be divisible by `2^t`. -/
+theorem TwoRetainedFiveWeightPresentation.fullDeleted_weight_constant_of_fullOrder
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hfull :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g p.x - g p.z)) = 2 ^ t)
+    (hpow : 18 < 2 ^ t)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (a : ZMod (2 ^ t * q))
+    (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∀ i j,
+      p.weight ⟨leaf i, hleafB i⟩ = p.weight ⟨leaf j, hleafB j⟩ := by
+  let H : AddSubgroup (ZMod (2 ^ t * q)) :=
+    AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let delta : ZMod (2 ^ t * q) := g p.x - g p.z
+  let deltaQ : Q := pi delta
+  have hdeltaOrder : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, delta, pi, H, Q] using hfull
+  have htransition : ∀ i,
+      (p.weight ⟨leaf (R i), hleafB (R i)⟩ -
+          2 * p.weight ⟨leaf i, hleafB i⟩) • delta +
+        (2 : ℤ) • (g p.z - a) ∈ H := by
+    intro i
+    have hsub := H.sub_mem (p.row_mem ⟨leaf (R i), hleafB (R i)⟩)
+      (H.zsmul_mem (p.row_mem ⟨leaf i, hleafB i⟩) 2)
+    have hvalue :
+        g (leaf (R i)) = (2 : ℤ) • g (leaf i) - a := by
+      calc
+        g (leaf (R i)) = (g (leaf (R i)) - a) + a := by abel
+        _ = (2 : ℤ) • (g (leaf i) - a) + a := by rw [hdouble i]
+        _ = (2 : ℤ) • g (leaf i) - a := by module
+    convert hsub using 1
+    dsimp only [H, delta]
+    rw [hvalue]
+    module
+  have hpair : ∀ i j,
+      ((p.weight ⟨leaf (R i), hleafB (R i)⟩ -
+          2 * p.weight ⟨leaf i, hleafB i⟩) -
+        (p.weight ⟨leaf (R j), hleafB (R j)⟩ -
+          2 * p.weight ⟨leaf j, hleafB j⟩)) • delta ∈ H := by
+    intro i j
+    have hsub := H.sub_mem (htransition i) (htransition j)
+    convert hsub using 1
+    module
+  let cycleWeight : Fin d → ℤ := fun i ↦
+    p.weight ⟨leaf i, hleafB i⟩
+  let i₀ : Fin d := ⟨0, hd⟩
+  have hcycleWeight : ∀ i,
+      cycleWeight i ∈ twoRetainedNormalizedWeightLevels := by
+    intro i
+    exact p.weight_mem ⟨leaf i, hleafB i⟩
+  have hcyclePair : ∀ i j,
+      ((cycleWeight (R i) - 2 * cycleWeight i) -
+        (cycleWeight (R j) - 2 * cycleWeight j)) • delta ∈ H := by
+    intro i j
+    simpa only [cycleWeight] using hpair i j
+  rcases fiveWeightTransition_smallKernelMultiple_or_weight_constant
+      i₀ R cycleWeight hcycleWeight delta y hcyclePair with
+    ⟨e, he, helow, hehigh, heMem⟩ | hconstant
+  · have heQuotient : e • deltaQ = 0 := by
+      apply (QuotientAddGroup.eq_zero_iff (e • delta)).mpr
+      simpa only [H] using heMem
+    have hnatQuotient : e.natAbs • deltaQ = 0 := by
+      rw [← natCast_zsmul]
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · rw [hePos] at heQuotient
+        exact heQuotient
+      · rw [heNeg, neg_smul] at heQuotient
+        exact neg_eq_zero.mp heQuotient
+    have horderDvd : 2 ^ t ∣ e.natAbs := by
+      rw [← hdeltaOrder]
+      exact addOrderOf_dvd_of_nsmul_eq_zero hnatQuotient
+    have horderLe : 2 ^ t ≤ e.natAbs :=
+      Nat.le_of_dvd (Int.natAbs_pos.mpr he) horderDvd
+    have habsLe : e.natAbs ≤ 18 := by
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · have : (e.natAbs : ℤ) ≤ 18 := by omega
+        exact_mod_cast this
+      · have : (e.natAbs : ℤ) ≤ 18 := by omega
+        exact_mod_cast this
+    omega
+  · simpa only [cycleWeight] using hconstant
+
+/-- The constant cycle and the exact quotient-row normal form use one and the
+same presentation.  In particular, no orientation or existential witness is
+lost before the positive-stratum descent step. -/
+theorem PrimitiveTwoRetainedPositiveStratumRows.fullDeletedCycle_exactPresentation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n))
+    (hstate : PrimitiveTwoRetainedPositiveStratumRows g y B)
+    (hpow : 18 < 2 ^ t)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (a : ZMod (2 ^ t * q))
+    (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ p : TwoRetainedFiveWeightPresentation g y B,
+      PrimitiveTwoRetainedPositiveStratumPresentation g y B p ∧
+      ∀ i j,
+        p.weight ⟨leaf i, hleafB i⟩ =
+          p.weight ⟨leaf j, hleafB j⟩ := by
+  rcases hstate with ⟨hmin, hretained, hrows, p, hpfull⟩
+  refine ⟨p, ⟨hmin, hretained, hrows, hpfull⟩, ?_⟩
+  exact p.fullDeleted_weight_constant_of_fullOrder
+    g y B hpfull.1 hpow hd leaf R a hleafB hdouble
+
 /-- In a full-order positive-stratum state, a fully deleted doubling cycle
 has constant five-weight label as soon as the quotient order exceeds the
 universal coefficient bound `18` from `fullDeletedCycle_split`. -/
@@ -472,5 +625,73 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       refine ⟨hmin, hrows.1, hrows, pres, ?_⟩
       simpa using hfull
     exact ⟨B, hstate, Or.inr ⟨rfl, pres, hpure, hfull.1⟩⟩
+
+/-- Presentation-aligned fifth-stratum terminal.  Both the exchanged
+fully-deleted cycle and the unexchanged one-retained pure cycle now expose
+the very presentation that carries the full-order exact two-lift rows. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ∃ B₀ : Finset (Fin n),
+        ∃ pres : TwoRetainedFiveWeightPresentation g y B₀,
+          PrimitiveTwoRetainedPositiveStratumPresentation g y B₀ pres ∧
+            ((∃ hleafB₀ : ∀ i, leaf i ∈ B₀,
+                ∀ i j,
+                  pres.weight ⟨leaf i, hleafB₀ i⟩ =
+                    pres.weight ⟨leaf j, hleafB₀ j⟩) ∨
+              (B₀ = B ∧
+                ((leaf p = pres.x ∧ ∀ i (hi : leaf i ∈ B₀),
+                    pres.weight ⟨leaf i, hi⟩ = -2) ∨
+                  (leaf p = pres.z ∧ ∀ i (hi : leaf i ∈ B₀),
+                    pres.weight ⟨leaf i, hi⟩ = 0)))) := by
+  classical
+  rcases hrows.oneRetainedCycle_criticalFifthStratum_exchangeRejoin
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
+          hdouble hspan with
+    hthree | ⟨B₀, hstate, hgeometry⟩
+  · exact Or.inl hthree
+  · right
+    rcases hgeometry with hall | ⟨hB₀, pres, hpure, horder⟩
+    · obtain ⟨pres, hpres, hconstant⟩ :=
+        hstate.fullDeletedCycle_exactPresentation
+          g y B₀ (by norm_num) (by omega) leaf R a hall hdouble
+      exact ⟨B₀, pres, hpres, Or.inl ⟨hall, hconstant⟩⟩
+    · subst B₀
+      have hnormal := pres.fifthStratum_quotientRowNormalForm
+        g hg hunique hne y hyq hfullOdd B hrows hminimal
+      rcases hnormal with hhalf | hfull
+      · have hfalse : (16 : ℕ) = 32 := hhalf.1.symm.trans horder
+        norm_num at hfalse
+      · refine ⟨B, pres, ?_, Or.inr ⟨rfl, hpure⟩⟩
+        exact ⟨hmin, hrows.1, hrows, by simpa using hfull⟩
 
 end MinModulus
