@@ -18,6 +18,38 @@ open Finset
 
 variable {n : ℕ}
 
+/-- For a canonical unit row, the corrected owner coordinate is not merely in
+the odd cyclic subgroup: it is exactly the private target scalar, with sign
+given by the owner coefficient. -/
+theorem TwoRetainedCanonicalPrivatePresentation.corrected_eq_owner_smul_scalar
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (b : ↥B) (k : ℤ)
+    (howner : p.coeff b (b : Fin n) = -1 ∨
+      p.coeff b (b : Fin n) = 1)
+    (hweight : p.weight b = 2 * k) :
+    g (b : Fin n) - g p.z + k • (g p.x - g p.z) =
+      p.coeff b (b : Fin n) • (p.scalar b • y) := by
+  have hshape := privateWitness_twoRetained_exactShape
+    g (p.isWitness b) B (b : Fin n) b.property (p.zero_other b)
+      p.x p.z p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+  rcases howner with hminus | hone
+  · have hx : p.coeff b p.x = -k := by
+      have hw := p.weight_eq b
+      rw [hminus, hweight] at hw
+      norm_num [twoRetainedOwnerNormalization] at hw
+      omega
+    rw [hshape.2.2, hshape.1, hminus, hx]
+    module
+  · have hx : p.coeff b p.x = k := by
+      have hw := p.weight_eq b
+      rw [hone, hweight] at hw
+      norm_num [twoRetainedOwnerNormalization] at hw
+      omega
+    rw [hshape.2.2, hshape.1, hone, hx]
+    module
+
 /-- The exact five-coordinate external partition, with every secondary and
 final canonical private-row equation retained on one presentation. -/
 def PrimitiveMiddleExactMersenneFiveExternalRows
@@ -41,6 +73,9 @@ def PrimitiveMiddleExactMersenneFiveExternalRows
           -(k₁ •
             (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
               (g p.x - g p.z))) ∧
+      (∀ b : ↥B, (b : Fin n) ∈ T →
+        g (b : Fin n) - g p.z + k₁ • (g p.x - g p.z) =
+          p.coeff b (b : Fin n) • (p.scalar b • y)) ∧
       (∀ b : ↥B,
         ((b : Fin n) ∈ T ↔
           g (b : Fin n) - g t ∈ AddSubgroup.zmultiples y)) ∧
@@ -67,6 +102,9 @@ def PrimitiveMiddleExactMersenneFiveExternalRows
               -(k₂ •
                 (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
                   (g p.x - g p.z))) ∧
+          (∀ b : ↥B, (b : Fin n) ∈ F →
+            g (b : Fin n) - g p.z + k₂ • (g p.x - g p.z) =
+              p.coeff b (b : Fin n) • (p.scalar b • y)) ∧
           ∀ b : ↥B,
             ((b : Fin n) ∈ F ↔
               g (b : Fin n) - g f ∈ AddSubgroup.zmultiples y)) ∧
@@ -220,6 +258,45 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
     intro k
     exact fullCycleLeaf_eq_point_add_superincreasing
       g leaf R hcycle hRne missing base hdouble k
+  have hTexact : ∀ b : ↥B, (b : Fin n) ∈ T →
+      g (b : Fin n) - g p.z + k₁ • (g p.x - g p.z) =
+        p.coeff b (b : Fin n) • (p.scalar b • y) := by
+    intro b hbT
+    exact p.corrected_eq_owner_smul_scalar g y B b k₁
+      (hTrows b hbT).1 (hTrows b hbT).2.1
+  have hFcaseExact :
+      F = ∅ ∨
+        ∃ k₂ : ℤ, ∃ f : Fin n,
+          f ∈ F ∧
+          k₂ ∈ ({-2, -1, 0, 1} : Finset ℤ) ∧
+          k₂ ≠ k₀ ∧ k₂ ≠ k₁ ∧
+          (∀ b : ↥B, (b : Fin n) ∈ F →
+            (p.coeff b (b : Fin n) = -1 ∨
+              p.coeff b (b : Fin n) = 1) ∧
+            p.weight b = 2 * k₂ ∧
+            g (b : Fin n) - g p.z + k₂ • (g p.x - g p.z) ∈
+              AddSubgroup.zmultiples y ∧
+            (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                (g (b : Fin n) - g p.z) =
+              -(k₂ •
+                (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                  (g p.x - g p.z))) ∧
+          (∀ b : ↥B, (b : Fin n) ∈ F →
+            g (b : Fin n) - g p.z + k₂ • (g p.x - g p.z) =
+              p.coeff b (b : Fin n) • (p.scalar b • y)) ∧
+          ∀ b : ↥B,
+            ((b : Fin n) ∈ F ↔
+              g (b : Fin n) - g f ∈ AddSubgroup.zmultiples y) := by
+    rcases hFcase with hFempty | hFfull
+    · exact Or.inl hFempty
+    · rcases hFfull with
+        ⟨k₂, f, hfF, hk₂Mem, hk₂Ne₀, hk₂Ne₁,
+          hFrows, hFcomplete⟩
+      refine Or.inr ⟨k₂, f, hfF, hk₂Mem, hk₂Ne₀, hk₂Ne₁,
+        hFrows, ?_, hFcomplete⟩
+      intro b hbF
+      exact p.corrected_eq_owner_smul_scalar g y B b k₂
+        (hFrows b hbF).1 (hFrows b hbF).2.1
   refine ⟨p, S, T₀, Sfull, k₀, w, ?_, ?_⟩
   · exact ⟨hdata, hSsubset, hprimitive, hScard, hSsub, hmiddle,
       hrows, hcomplete, hwindow⟩
@@ -239,8 +316,8 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
       hn, hBcard, hdLower, hdUpper, hezero, hleafOrder missing,
       hnormal, ?_⟩
     exact ⟨T, k₁, t, F, hTcard, hTle, hFle, hTsub, htT,
-      hk₁Mem, hk₁Ne, hTrows, hTcomplete, hTseparated,
+      hk₁Mem, hk₁Ne, hTrows, hTexact, hTcomplete, hTseparated,
       hexternalPartition, hTFdisjoint, hTFcard, hprofiles,
-      hFcase, hcap, hcrit⟩
+      hFcaseExact, hcap, hcrit⟩
 
 end MinModulus
