@@ -351,6 +351,225 @@ theorem TwoRetainedFiveWeightPresentation.positiveStratum_phase
       p.weight_ne_neg_one_of_fullOrder (by omega) g y B hyq hfullOdd
         hprimitive⟩
 
+/-- A half of an element of order `2^(t-1)` in a group of order `2^t` has
+full order, once the half-order subgroup has a nontrivial involution. -/
+theorem addOrderOf_eq_full_twoPower_of_two_nsmul_eq_halfOrder
+    {Q : Type*} [AddCommGroup Q] [Fintype Q]
+    (t : ℕ) (ht : 2 ≤ t) (hcard : Nat.card Q = 2 ^ t)
+    (delta beta : Q) (hdelta : addOrderOf delta = 2 ^ (t - 1))
+    (hdouble : (2 : ℕ) • beta = delta) :
+    addOrderOf beta = 2 ^ t := by
+  have hhalfDvd : 2 ^ (t - 1) ∣ addOrderOf beta := by
+    rw [← hdelta, ← hdouble]
+    exact addOrderOf_smul_dvd 2
+  have horderDvd : addOrderOf beta ∣ 2 ^ t := by
+    rw [← hcard]
+    simpa only [Nat.card_eq_fintype_card] using
+      (addOrderOf_dvd_card (x := beta))
+  have horderLe : addOrderOf beta ≤ 2 ^ t :=
+    Nat.le_of_dvd (pow_pos (by omega) _) horderDvd
+  obtain ⟨k, hk⟩ := hhalfDvd
+  have hhalfPos : 0 < 2 ^ (t - 1) := pow_pos (by omega) _
+  have hfullEq : 2 ^ t = 2 ^ (t - 1) * 2 := by
+    calc
+      2 ^ t = 2 ^ (t - 1 + 1) := by congr 1; omega
+      _ = 2 ^ (t - 1) * 2 := pow_succ 2 (t - 1)
+  have hkPos : 0 < k :=
+    Nat.pos_of_mul_pos_left (hk ▸ addOrderOf_pos beta)
+  have hkLe : k ≤ 2 := by
+    apply Nat.le_of_mul_le_mul_left (c := 2 ^ (t - 1))
+    · rw [← hk]
+      exact horderLe.trans_eq hfullEq
+    · exact hhalfPos
+  have hkCases : k = 1 ∨ k = 2 := by omega
+  rcases hkCases with hkOne | hkTwo
+  · subst k
+    simp only [Nat.mul_one] at hk
+    have hbetaZero : (2 ^ (t - 1) : ℕ) • beta = 0 := by
+      simpa only [hk] using addOrderOf_nsmul_eq_zero beta
+    have hquarterEq : 2 * 2 ^ (t - 2) = 2 ^ (t - 1) := by
+      calc
+        2 * 2 ^ (t - 2) = 2 ^ (t - 2) * 2 := Nat.mul_comm _ _
+        _ = 2 ^ (t - 2 + 1) := (pow_succ 2 (t - 2)).symm
+        _ = 2 ^ (t - 1) := by congr 1; omega
+    have hquarterDelta : (2 ^ (t - 2) : ℕ) • delta = 0 := by
+      rw [← hdouble]
+      calc
+        (2 ^ (t - 2) : ℕ) • ((2 : ℕ) • beta) =
+            (2 * 2 ^ (t - 2) : ℕ) • beta :=
+          (mul_nsmul beta 2 (2 ^ (t - 2))).symm
+        _ = (2 ^ (t - 1) : ℕ) • beta := by
+          apply congrArg (fun j : ℕ ↦ j • beta)
+          exact hquarterEq
+        _ = 0 := hbetaZero
+    have hdvd : addOrderOf delta ∣ 2 ^ (t - 2) :=
+      addOrderOf_dvd_of_nsmul_eq_zero hquarterDelta
+    rw [hdelta] at hdvd
+    have hquarterLt : 2 ^ (t - 2) < 2 ^ (t - 1) :=
+      Nat.pow_lt_pow_right (by omega) (by omega)
+    exact (Nat.not_le_of_gt hquarterLt
+      (Nat.le_of_dvd (pow_pos (by omega) _) hdvd)).elim
+  · subst k
+    exact hk.trans hfullEq.symm
+
+/-- A primitive element of a cyclic group of order `2^t` names its unique
+nonzero involution as `2^(t-1)` times that element. -/
+theorem eq_zero_or_half_nsmul_of_add_self_eq_zero_of_twoPower_card
+    {Q : Type*} [AddCommGroup Q] [Fintype Q] [IsAddCyclic Q]
+    (t : ℕ) (ht : 1 ≤ t) (hcard : Nat.card Q = 2 ^ t)
+    (delta u : Q) (hdelta : addOrderOf delta = 2 ^ t)
+    (hu : u + u = 0) :
+    u = 0 ∨ u = (2 ^ (t - 1) : ℕ) • delta := by
+  let v : Q := (2 ^ (t - 1) : ℕ) • delta
+  have hhalfLt : 2 ^ (t - 1) < 2 ^ t :=
+    Nat.pow_lt_pow_right (by omega) (by omega)
+  have hvne : v ≠ 0 := by
+    intro hvZero
+    have hdvd : addOrderOf delta ∣ 2 ^ (t - 1) :=
+      addOrderOf_dvd_of_nsmul_eq_zero hvZero
+    rw [hdelta] at hdvd
+    exact (Nat.not_le_of_gt hhalfLt
+      (Nat.le_of_dvd (pow_pos (by omega) _) hdvd)).elim
+  have hfullEq : 2 * 2 ^ (t - 1) = 2 ^ t := by
+    calc
+      2 * 2 ^ (t - 1) = 2 ^ (t - 1) * 2 := Nat.mul_comm _ _
+      _ = 2 ^ (t - 1 + 1) := (pow_succ 2 (t - 1)).symm
+      _ = 2 ^ t := by congr 1; omega
+  have hdeltaZero : (2 ^ t : ℕ) • delta = 0 := by
+    rw [← hdelta]
+    exact addOrderOf_nsmul_eq_zero delta
+  have hv : v + v = 0 := by
+    calc
+      v + v = (2 * 2 ^ (t - 1) : ℕ) • delta := by
+        dsimp only [v]
+        module
+      _ = (2 ^ t : ℕ) • delta := by
+        apply congrArg (fun j : ℕ ↦ j • delta)
+        exact hfullEq
+      _ = 0 := hdeltaZero
+  have hcardEq : 2 ^ t = 2 * 2 ^ (t - 1) := hfullEq.symm
+  exact eq_zero_or_eq_of_add_self_eq_zero_of_isAddCyclic_even_card
+    hcard hcardEq hvne hv hu
+
+/-- Exact solution of every quotient row for one fixed presentation,
+uniformly over all strata `t ≥ 2`. -/
+theorem TwoRetainedFiveWeightPresentation.positiveStratum_quotientRowNormalForm
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 2 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    let deltaQ := pi (g p.x - g p.z)
+    (addOrderOf deltaQ = 2 ^ (t - 1) ∧
+        ∃ b : ↥B, p.weight b = -1 ∧
+          addOrderOf (pi (g (b : Fin n) - g p.z)) = 2 ^ t) ∨
+      (addOrderOf deltaQ = 2 ^ t ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) =
+              (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ)) := by
+  classical
+  have hphase := p.positiveStratum_phase
+    ht g hg hunique hne y hyq hfullOdd B hrows hminimal
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  letI : Fintype Q := Fintype.ofFinite Q
+  letI : IsAddCyclic Q := isAddCyclic_of_surjective pi
+    (QuotientAddGroup.mk'_surjective H)
+  have hquotientModulus : (2 ^ t * q) / addOrderOf y = 2 ^ t := by
+    rw [Nat.mul_div_assoc (2 ^ t) hyq, hfullOdd]
+    simp
+  have hQcardNat : Nat.card Q = 2 ^ t := by
+    have hmul : Nat.card Q * addOrderOf y = 2 ^ t * q := by
+      simpa only [Q, H, Nat.card_zmod] using
+        nat_card_quotient_zmultiples_mul_addOrderOf y
+    have hcard : Nat.card Q = (2 ^ t * q) / addOrderOf y := by
+      exact (Nat.div_eq_of_eq_mul_left (addOrderOf_pos y) hmul.symm).symm
+    exact hcard.trans hquotientModulus
+  change
+    (addOrderOf deltaQ = 2 ^ (t - 1) ∧
+        ∃ b : ↥B, p.weight b = -1 ∧
+          addOrderOf (pi (g (b : Fin n) - g p.z)) = 2 ^ t) ∨
+      (addOrderOf deltaQ = 2 ^ t ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) =
+              (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ))
+  rcases hphase with ⟨hindex, b, hb⟩ | ⟨hprimitive, hallEven⟩
+  · left
+    refine ⟨hindex, b, hb, ?_⟩
+    let betaQ : Q := pi (g (b : Fin n) - g p.z)
+    have hquotientRelation :
+        (2 : ℤ) • betaQ + p.weight b • deltaQ = 0 := by
+      apply (QuotientAddGroup.eq_zero_iff
+        ((2 : ℤ) • (g (b : Fin n) - g p.z) +
+          p.weight b • (g p.x - g p.z))).mpr
+      exact p.row_mem b
+    have hdouble : (2 : ℕ) • betaQ = deltaQ := by
+      rw [hb] at hquotientRelation
+      change (2 : ℤ) • betaQ + (-1 : ℤ) • deltaQ = 0 at hquotientRelation
+      have hrelation' : betaQ + betaQ - deltaQ = 0 := by
+        simpa only [two_zsmul, neg_one_zsmul, sub_eq_add_neg] using
+          hquotientRelation
+      calc
+        (2 : ℕ) • betaQ = betaQ + betaQ := two_nsmul betaQ
+        _ = (betaQ + betaQ - deltaQ) + deltaQ := by abel
+        _ = deltaQ := by rw [hrelation', zero_add]
+    have hdeltaOrder : addOrderOf deltaQ = 2 ^ (t - 1) := by
+      simpa only [deltaQ, pi, H, Q] using hindex
+    simpa only [betaQ, pi, H, Q] using
+      addOrderOf_eq_full_twoPower_of_two_nsmul_eq_halfOrder
+        t ht hQcardNat deltaQ betaQ hdeltaOrder hdouble
+  · right
+    refine ⟨hprimitive, ?_⟩
+    intro b
+    obtain ⟨k, hk⟩ :=
+      twoRetainedNormalizedWeight_eq_two_mul_of_ne_neg_one
+        (p.weight_mem b) (hallEven b)
+    refine ⟨k, hk, ?_⟩
+    let betaQ : Q := pi (g (b : Fin n) - g p.z)
+    let uQ : Q := betaQ + k • deltaQ
+    have hquotientRelation :
+        (2 : ℤ) • betaQ + p.weight b • deltaQ = 0 := by
+      apply (QuotientAddGroup.eq_zero_iff
+        ((2 : ℤ) • (g (b : Fin n) - g p.z) +
+          p.weight b • (g p.x - g p.z))).mpr
+      exact p.row_mem b
+    have huDouble : uQ + uQ = 0 := by
+      calc
+        uQ + uQ = (2 : ℤ) • betaQ + p.weight b • deltaQ := by
+          rw [hk]
+          dsimp only [uQ]
+          module
+        _ = 0 := hquotientRelation
+    have hdeltaOrder : addOrderOf deltaQ = 2 ^ t := by
+      simpa only [deltaQ, pi, H, Q] using hprimitive
+    rcases eq_zero_or_half_nsmul_of_add_self_eq_zero_of_twoPower_card
+        t (by omega) hQcardNat deltaQ uQ hdeltaOrder huDouble with
+      hzero | hhalf
+    · left
+      change betaQ = -(k • deltaQ)
+      dsimp only [uQ] at hzero
+      exact eq_neg_of_add_eq_zero_left hzero
+    · right
+      change betaQ = (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ
+      dsimp only [uQ] at hhalf
+      apply eq_sub_of_add_eq
+      exact hhalf
+
 /-- Fifth-stratum specialization of the uniform fixed-presentation phase. -/
 theorem TwoRetainedFiveWeightPresentation.fifthStratum_phase
     {q : ℕ} [NeZero (2 ^ 5 * q)]
@@ -375,6 +594,37 @@ theorem TwoRetainedFiveWeightPresentation.fifthStratum_phase
         ∀ b : ↥B, p.weight b ≠ -1) := by
   simpa using p.positiveStratum_phase (t := 5) (q := q) (by omega)
     g hg hunique hne y hyq hfullOdd B hrows hminimal
+
+/-- Fifth-stratum specialization of the uniform quotient-row normal form. -/
+theorem TwoRetainedFiveWeightPresentation.fifthStratum_quotientRowNormalForm
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ 5 * q) →+ ZMod (2 ^ 5 * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    let deltaQ := pi (g p.x - g p.z)
+    (addOrderOf deltaQ = 16 ∧
+        ∃ b : ↥B, p.weight b = -1 ∧
+          addOrderOf (pi (g (b : Fin n) - g p.z)) = 32) ∨
+      (addOrderOf deltaQ = 32 ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) =
+              (16 : ℕ) • deltaQ - k • deltaQ)) := by
+  simpa using p.positiveStratum_quotientRowNormalForm
+    (t := 5) (q := q) (by omega) g hg hunique hne y hyq hfullOdd B hrows
+      hminimal
 
 /-- The critical fifth-stratum endpoint and its quotient phase on one
 definitionally shared presentation. -/
@@ -425,5 +675,77 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
   · simpa only [pres] using hpure
   · exact pres.fifthStratum_phase
       g hg hunique hne y hyq hfullOdd B hrows hminimal
+
+/-- Lossless critical fifth-stratum rejoin.  The half-order arm supplies a
+primitive odd row outside the displayed pure leaf cycle; the full-order arm
+solves every owner row by the two exact quotient lifts. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_quotientRejoin
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    ∃ pres : TwoRetainedFiveWeightPresentation g y B,
+      ((leaf p = pres.x ∧ ∀ i (hi : leaf i ∈ B),
+          pres.weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = pres.z ∧ ∀ i (hi : leaf i ∈ B),
+          pres.weight ⟨leaf i, hi⟩ = 0)) ∧
+      (let H := AddSubgroup.zmultiples y
+       let pi : ZMod (2 ^ 5 * q) →+ ZMod (2 ^ 5 * q) ⧸ H :=
+         QuotientAddGroup.mk' H
+       let deltaQ := pi (g pres.x - g pres.z)
+       (addOrderOf deltaQ = 16 ∧
+           ∃ b : ↥B, pres.weight b = -1 ∧
+             addOrderOf (pi (g (b : Fin n) - g pres.z)) = 32 ∧
+             (b : Fin n) ∉ Set.range leaf) ∨
+         (addOrderOf deltaQ = 32 ∧
+           ∀ b : ↥B, ∃ k : ℤ, pres.weight b = 2 * k ∧
+             (pi (g (b : Fin n) - g pres.z) = -(k • deltaQ) ∨
+               pi (g (b : Fin n) - g pres.z) =
+                 (16 : ℕ) • deltaQ - k • deltaQ))) := by
+  classical
+  obtain ⟨pres, hpure, _hphase⟩ :=
+    hrows.oneRetainedCycle_criticalFifthStratum_presentationAndPhase
+      hq g hg hcritical hunique hne y hyq hfullOdd hrTwo B hminimal leaf
+        hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB hdouble hspan
+  refine ⟨pres, hpure, ?_⟩
+  have hnormal := pres.fifthStratum_quotientRowNormalForm
+    g hg hunique hne y hyq hfullOdd B hrows hminimal
+  rcases hnormal with ⟨hindex, b, hb, hbprimitive⟩ |
+      ⟨hprimitive, hrowsSolved⟩
+  · left
+    refine ⟨hindex, b, hb, hbprimitive, ?_⟩
+    intro hbrange
+    obtain ⟨i, hi⟩ := hbrange
+    have hiB : leaf i ∈ B := by
+      rw [hi]
+      exact b.property
+    have hsubtype : (⟨leaf i, hiB⟩ : ↥B) = b := Subtype.ext hi
+    rcases hpure with ⟨_hpX, hminusTwo⟩ | ⟨_hpZ, hzero⟩
+    · have hweightEq := congrArg pres.weight hsubtype
+      rw [hminusTwo i hiB, hb] at hweightEq
+      norm_num at hweightEq
+    · have hweightEq := congrArg pres.weight hsubtype
+      rw [hzero i hiB, hb] at hweightEq
+      norm_num at hweightEq
+  · exact Or.inr ⟨hprimitive, hrowsSolved⟩
 
 end MinModulus
