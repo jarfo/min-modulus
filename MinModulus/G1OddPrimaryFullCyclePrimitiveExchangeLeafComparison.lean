@@ -34,7 +34,19 @@ def UniformAlignedPrimitiveExchangeLeafTerminal
             (g p.x - g p.z)) = 64 ∧
       p.weight ⟨inserted, hinserted⟩ = -2 ∧
       w ∈ twoRetainedNormalizedWeightLevels ∧
-      ∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = w
+      (∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = w) ∧
+      ((∃ hfull : ∀ i, leaf i ∈ B,
+          ∀ i j,
+            p.weight ⟨leaf i, hfull i⟩ =
+              p.weight ⟨leaf j, hfull j⟩) ∨
+        ∃ missing : Fin d,
+          (∀ i, leaf i ∈ B ↔ i ≠ missing) ∧
+          ((leaf missing = p.x ∧
+              ∀ i (hi : leaf i ∈ B),
+                p.weight ⟨leaf i, hi⟩ = -2) ∨
+            (leaf missing = p.z ∧
+              ∀ i (hi : leaf i ∈ B),
+                p.weight ⟨leaf i, hi⟩ = 0)))
 
 /-- Every aligned full-or-one-missing leaf terminal has a single named
 weight on all leaves that remain in its deletion set. -/
@@ -58,16 +70,19 @@ theorem AlignedPrimitiveExchangeLeafTerminal.exists_uniformLeafValue
     let w : ℤ := p.weight ⟨leaf i₀, hleafB i₀⟩
     have hw : w ∈ twoRetainedNormalizedWeightLevels :=
       p.weight_mem ⟨leaf i₀, hleafB i₀⟩
-    refine ⟨w, p, hinserted, hpx, hpz, hprimitive, hanchor, hw, ?_⟩
-    intro i hi
-    simpa only [w] using hconstant i i₀
+    refine ⟨w, p, hinserted, hpx, hpz, hprimitive, hanchor, hw, ?_, ?_⟩
+    · intro i hi
+      simpa only [w] using hconstant i i₀
+    · exact Or.inl ⟨hleafB, hconstant⟩
   · rcases hpure with hminus | hzero
-    · refine ⟨-2, p, hinserted, hpx, hpz, hprimitive, hanchor, ?_, ?_⟩
+    · refine ⟨-2, p, hinserted, hpx, hpz, hprimitive, hanchor,
+        ?_, hminus.2, ?_⟩
       · norm_num [twoRetainedNormalizedWeightLevels]
-      · exact hminus.2
-    · refine ⟨0, p, hinserted, hpx, hpz, hprimitive, hanchor, ?_, ?_⟩
+      · exact Or.inr ⟨missing, hpunctured, Or.inl hminus⟩
+    · refine ⟨0, p, hinserted, hpx, hpz, hprimitive, hanchor,
+        ?_, hzero.2, ?_⟩
       · norm_num [twoRetainedNormalizedWeightLevels]
-      · exact hzero.2
+      · exact Or.inr ⟨missing, hpunctured, Or.inr hzero⟩
 
 /-- The uniform-value form of the two possible canonical orientations of one
 middle exchange. -/
@@ -116,16 +131,14 @@ theorem exists_middleExchangeUniformAlignedLeafTerminal
           (b : Fin n) p.x p.z leaf hd
     exact ⟨w, Or.inr ⟨hzero.1, hw⟩⟩
 
-/-- A four-exchange monochromatic subfamily.  All original primitive state,
-leaf-terminal, and middle-geometry data remain available on the ambient
-sixteen-owner family; the named subfamily shares one fixed leaf weight. -/
-def PrimitiveMiddleUniformLeafValueSubfamily
+/-- Lossless data carried by a named common-leaf-value subfamily. -/
+def PrimitiveMiddleUniformLeafValueData
     {q : ℕ} (g : Fin n → ZMod (2 ^ 6 * q))
     (y : ZMod (2 ^ 6 * q)) (B : Finset (Fin n))
-    {d : ℕ} (leaf : Fin d → Fin n) : Prop :=
-  ∃ p : TwoRetainedCanonicalPrivatePresentation g y B,
-    ∃ S T : Finset (Fin n), ∃ k₀ w : ℤ,
-      16 ≤ S.card ∧ S ⊆ B ∧ T ⊆ S ∧ 4 ≤ T.card ∧
+    {d : ℕ} (leaf : Fin d → Fin n)
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (S T : Finset (Fin n)) (k₀ w : ℤ) : Prop :=
+  16 ≤ S.card ∧ S ⊆ B ∧ T ⊆ S ∧ 4 ≤ T.card ∧
       (k₀ = -1 ∨ k₀ = 0) ∧
       w ∈ twoRetainedNormalizedWeightLevels ∧
       (∀ b : ↥B, (b : Fin n) ∈ S →
@@ -155,6 +168,17 @@ def PrimitiveMiddleUniformLeafValueSubfamily
       ∀ b : ↥B, (b : Fin n) ∈ T →
         MiddleExchangeUniformAlignedLeafTerminal
           g y p k₀ b leaf w
+
+/-- A four-exchange monochromatic subfamily.  All original primitive state,
+leaf-terminal, and middle-geometry data remain available on the ambient
+sixteen-owner family; the named subfamily shares one fixed leaf weight. -/
+def PrimitiveMiddleUniformLeafValueSubfamily
+    {q : ℕ} (g : Fin n → ZMod (2 ^ 6 * q))
+    (y : ZMod (2 ^ 6 * q)) (B : Finset (Fin n))
+    {d : ℕ} (leaf : Fin d → Fin n) : Prop :=
+  ∃ p : TwoRetainedCanonicalPrivatePresentation g y B,
+    ∃ S T : Finset (Fin n), ∃ k₀ w : ℤ,
+      PrimitiveMiddleUniformLeafValueData g y B leaf p S T k₀ w
 
 /-- Five-color compression of the aligned terminal family.  At least four of
 the sixteen literal exchanges share one uniform leaf weight. -/
@@ -189,10 +213,10 @@ theorem PrimitiveMiddleAlignedExchangeLeafTerminalFamily.toUniformLeafValueSubfa
     intro b
     rcases hlabelSpec b with hminus | hzero
     · rcases hminus.2 with
-        ⟨_, _, _, _, _, _, hw, _⟩
+        ⟨_, _, _, _, _, _, hw, _, _⟩
       exact hw
     · rcases hzero.2 with
-        ⟨_, _, _, _, _, _, hw, _⟩
+        ⟨_, _, _, _, _, _, hw, _, _⟩
       exact hw
   have hmaps : ∀ b ∈ (Finset.univ : Finset ↥S),
       label b ∈ twoRetainedNormalizedWeightLevels := by
