@@ -81,6 +81,110 @@ theorem primitiveMiddle_corrected_pointedLeaf_eq_digit
     rw [hleaf, hroot]
     module
 
+/-- A deleted coordinate paired with one retained coordinate cannot have the
+same two-element sum as another deleted coordinate paired with the other
+retained coordinate. -/
+theorem validTuple_deleted_retained_pairSum_ne
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (hg : ValidTuple g) (B : Finset (Fin n))
+    {b c x z : Fin n} (hb : b ∈ B) (hc : c ∈ B)
+    (hx : x ∉ B) (hz : z ∉ B) (hxz : x ≠ z) :
+    g b + g x ≠ g c + g z := by
+  intro hsum
+  let e : Fin n ↪ Fin n := Function.Embedding.refl _
+  have hbx : b ≠ x := fun h ↦ hx (h ▸ hb)
+  have hcz : c ≠ z := fun h ↦ hz (h ▸ hc)
+  have hsets : ({b, x} : Finset (Fin n)) = {c, z} := by
+    apply validTuple_subsetSum_eq_of_card_eq g hg e
+    · simp [hbx, hcz]
+    · simpa only [e, Function.Embedding.coe_refl, id_eq,
+        Finset.sum_pair hbx, Finset.sum_pair hcz] using hsum
+  have hxRight : x ∈ ({c, z} : Finset (Fin n)) := by
+    rw [← hsets]
+    simp
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hxRight
+  rcases hxRight with hxc | hxz'
+  · apply hx
+    rw [hxc]
+    exact hc
+  · exact hxz hxz'
+
+/-- Corrected targets belonging to adjacent quotient-residue parameters
+cannot coincide on two deleted owners.  Such a coincidence is exactly one of
+the forbidden deleted/retained pair-sum collisions above. -/
+theorem correctedTargets_ne_of_valid_of_adjacentParameters
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (hg : ValidTuple g) (B : Finset (Fin n))
+    {b c x z : Fin n} (hb : b ∈ B) (hc : c ∈ B)
+    (hx : x ∉ B) (hz : z ∉ B) (hxz : x ≠ z)
+    (k ℓ : ℤ) (hadj : k = ℓ + 1 ∨ ℓ = k + 1) :
+    g b - g z + k • (g x - g z) ≠
+      g c - g z + ℓ • (g x - g z) := by
+  intro heq
+  rcases hadj with hkl | hlk
+  · have hpair : g b + g x = g c + g z := by
+      rw [hkl, add_smul, one_smul] at heq
+      have hcommon :
+          (g b + (g x - g z)) +
+              (-g z + ℓ • (g x - g z)) =
+            g c + (-g z + ℓ • (g x - g z)) := by
+        calc
+          _ = g b - g z +
+                (ℓ • (g x - g z) + (g x - g z)) := by abel
+          _ = g c - g z + ℓ • (g x - g z) := heq
+          _ = _ := by abel
+      have hbase := add_right_cancel hcommon
+      apply sub_eq_iff_eq_add.mp
+      calc
+        (g b + g x) - g z = g b + (g x - g z) := by abel
+        _ = g c := hbase
+    exact (validTuple_deleted_retained_pairSum_ne
+      g hg B hb hc hx hz hxz) hpair
+  · have hpair : g b + g z = g c + g x := by
+      rw [hlk, add_smul, one_smul] at heq
+      have hcommon :
+          g b + (-g z + k • (g x - g z)) =
+            (g c + (g x - g z)) +
+              (-g z + k • (g x - g z)) := by
+        calc
+          _ = g b - g z + k • (g x - g z) := by abel
+          _ = g c - g z +
+                (k • (g x - g z) + (g x - g z)) := heq
+          _ = _ := by abel
+      have hbase := add_right_cancel hcommon
+      apply eq_sub_iff_add_eq.mp
+      calc
+        g b = g c + (g x - g z) := hbase
+        _ = (g c + g x) - g z := by abel
+    exact (validTuple_deleted_retained_pairSum_ne
+      g hg B hb hc hz hx hxz.symm) hpair
+
+/-- Relative to a middle parameter `-1` or `0`, every distinct member of the
+four-value row alphabet is either adjacent or the unique opposite extreme. -/
+theorem fourLevelParameter_adjacent_or_oppositeExtreme
+    (k₀ k : ℤ) (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (hk : k ∈ ({-2, -1, 0, 1} : Finset ℤ)) (hne : k ≠ k₀) :
+    (k = k₀ + 1 ∨ k₀ = k + 1) ∨
+      (k₀ = -1 ∧ k = 1) ∨ (k₀ = 0 ∧ k = -2) := by
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hk
+  rcases hmiddle with hmiddle | hmiddle <;>
+    rcases hk with hk | hk | hk | hk <;> omega
+
+/-- Among two distinct non-middle parameters in the four-value alphabet, at
+least one is adjacent to the middle parameter; they cannot both be its unique
+opposite extreme. -/
+theorem twoDistinctFourLevelParameters_one_adjacentToMiddle
+    (k₀ k₁ k₂ : ℤ) (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (hk₁ : k₁ ∈ ({-2, -1, 0, 1} : Finset ℤ))
+    (hk₂ : k₂ ∈ ({-2, -1, 0, 1} : Finset ℤ))
+    (hk₁Ne : k₁ ≠ k₀) (hk₂Ne : k₂ ≠ k₀) (hne : k₁ ≠ k₂) :
+    (k₁ = k₀ + 1 ∨ k₀ = k₁ + 1) ∨
+      (k₂ = k₀ + 1 ∨ k₀ = k₂ + 1) := by
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hk₁ hk₂
+  rcases hmiddle with hmiddle | hmiddle <;>
+    rcases hk₁ with hk₁ | hk₁ | hk₁ | hk₁ <;>
+    rcases hk₂ with hk₂ | hk₂ | hk₂ | hk₂ <;> omega
+
 /-- The exact five-coordinate external partition, with every secondary and
 final canonical private-row equation retained on one presentation. -/
 def PrimitiveMiddleExactMersenneFiveExternalRows
@@ -93,6 +197,8 @@ def PrimitiveMiddleExactMersenneFiveExternalRows
       3 ≤ T.card ∧ T.card ≤ 5 ∧ F.card ≤ 2 ∧
       T ⊆ B \ L ∧ t ∈ T ∧
       k₁ ∈ ({-2, -1, 0, 1} : Finset ℤ) ∧ k₁ ≠ k₀ ∧
+      ((k₁ = k₀ + 1 ∨ k₀ = k₁ + 1) ∨
+        (k₀ = -1 ∧ k₁ = 1) ∨ (k₀ = 0 ∧ k₁ = -2)) ∧
       (∀ b : ↥B, (b : Fin n) ∈ T →
         (p.coeff b (b : Fin n) = -1 ∨
           p.coeff b (b : Fin n) = 1) ∧
@@ -107,6 +213,11 @@ def PrimitiveMiddleExactMersenneFiveExternalRows
       (∀ b : ↥B, (b : Fin n) ∈ T →
         g (b : Fin n) - g p.z + k₁ • (g p.x - g p.z) =
           p.coeff b (b : Fin n) • (p.scalar b • y)) ∧
+      (∀ b : ↥B, (b : Fin n) ∈ T →
+        ∀ c : ↥B, (c : Fin n) ∈ L →
+          (k₁ = k₀ + 1 ∨ k₀ = k₁ + 1) →
+          p.coeff b (b : Fin n) • (p.scalar b • y) ≠
+            p.coeff c (c : Fin n) • (p.scalar c • y)) ∧
       (∀ b : ↥B,
         ((b : Fin n) ∈ T ↔
           g (b : Fin n) - g t ∈ AddSubgroup.zmultiples y)) ∧
@@ -122,6 +233,10 @@ def PrimitiveMiddleExactMersenneFiveExternalRows
           f ∈ F ∧
           k₂ ∈ ({-2, -1, 0, 1} : Finset ℤ) ∧
           k₂ ≠ k₀ ∧ k₂ ≠ k₁ ∧
+          ((k₂ = k₀ + 1 ∨ k₀ = k₂ + 1) ∨
+            (k₀ = -1 ∧ k₂ = 1) ∨ (k₀ = 0 ∧ k₂ = -2)) ∧
+          ((k₁ = k₀ + 1 ∨ k₀ = k₁ + 1) ∨
+            (k₂ = k₀ + 1 ∨ k₀ = k₂ + 1)) ∧
           (∀ b : ↥B, (b : Fin n) ∈ F →
             (p.coeff b (b : Fin n) = -1 ∨
               p.coeff b (b : Fin n) = 1) ∧
@@ -136,6 +251,11 @@ def PrimitiveMiddleExactMersenneFiveExternalRows
           (∀ b : ↥B, (b : Fin n) ∈ F →
             g (b : Fin n) - g p.z + k₂ • (g p.x - g p.z) =
               p.coeff b (b : Fin n) • (p.scalar b • y)) ∧
+          (∀ b : ↥B, (b : Fin n) ∈ F →
+            ∀ c : ↥B, (c : Fin n) ∈ L →
+              (k₂ = k₀ + 1 ∨ k₀ = k₂ + 1) →
+              p.coeff b (b : Fin n) • (p.scalar b • y) ≠
+                p.coeff c (c : Fin n) • (p.scalar c • y)) ∧
           ∀ b : ↥B,
             ((b : Fin n) ∈ F ↔
               g (b : Fin n) - g f ∈ AddSubgroup.zmultiples y)) ∧
@@ -384,12 +504,36 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
     intro b hbT
     exact p.corrected_eq_owner_smul_scalar g y B b k₁
       (hTrows b hbT).1 (hTrows b hbT).2.1
+  have hk₁Class := fourLevelParameter_adjacent_or_oppositeExtreme
+    k₀ k₁ hmiddle hk₁Mem hk₁Ne
+  have hTadjacent : ∀ b : ↥B, (b : Fin n) ∈ T →
+      ∀ c : ↥B, (c : Fin n) ∈ L →
+        (k₁ = k₀ + 1 ∨ k₀ = k₁ + 1) →
+        p.coeff b (b : Fin n) • (p.scalar b • y) ≠
+          p.coeff c (c : Fin n) • (p.scalar c • y) := by
+    intro b hbT c hcL hadj htarget
+    have hcSfull : (c : Fin n) ∈ Sfull := by
+      rw [← hBinterL]
+      exact Finset.mem_inter.mpr ⟨c.property, hcL⟩
+    have hcUnit :=
+      (p.primitive_unitRowNormalForm
+        g y B hyq hfullOdd hprimitive c).1
+    have hcExact := p.corrected_eq_owner_smul_scalar
+      g y B c k₀ hcUnit (hrows c hcSfull).1
+    apply correctedTargets_ne_of_valid_of_adjacentParameters
+      g hg B b.property c.property p.x_not_mem p.z_not_mem p.x_ne_z
+        k₁ k₀ hadj
+    exact (hTexact b hbT).trans (htarget.trans hcExact.symm)
   have hFcaseExact :
       F = ∅ ∨
         ∃ k₂ : ℤ, ∃ f : Fin n,
           f ∈ F ∧
           k₂ ∈ ({-2, -1, 0, 1} : Finset ℤ) ∧
           k₂ ≠ k₀ ∧ k₂ ≠ k₁ ∧
+          ((k₂ = k₀ + 1 ∨ k₀ = k₂ + 1) ∨
+            (k₀ = -1 ∧ k₂ = 1) ∨ (k₀ = 0 ∧ k₂ = -2)) ∧
+          ((k₁ = k₀ + 1 ∨ k₀ = k₁ + 1) ∨
+            (k₂ = k₀ + 1 ∨ k₀ = k₂ + 1)) ∧
           (∀ b : ↥B, (b : Fin n) ∈ F →
             (p.coeff b (b : Fin n) = -1 ∨
               p.coeff b (b : Fin n) = 1) ∧
@@ -404,6 +548,11 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
           (∀ b : ↥B, (b : Fin n) ∈ F →
             g (b : Fin n) - g p.z + k₂ • (g p.x - g p.z) =
               p.coeff b (b : Fin n) • (p.scalar b • y)) ∧
+          (∀ b : ↥B, (b : Fin n) ∈ F →
+            ∀ c : ↥B, (c : Fin n) ∈ L →
+              (k₂ = k₀ + 1 ∨ k₀ = k₂ + 1) →
+              p.coeff b (b : Fin n) • (p.scalar b • y) ≠
+                p.coeff c (c : Fin n) • (p.scalar c • y)) ∧
           ∀ b : ↥B,
             ((b : Fin n) ∈ F ↔
               g (b : Fin n) - g f ∈ AddSubgroup.zmultiples y) := by
@@ -412,11 +561,38 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
     · rcases hFfull with
         ⟨k₂, f, hfF, hk₂Mem, hk₂Ne₀, hk₂Ne₁,
           hFrows, hFcomplete⟩
-      refine Or.inr ⟨k₂, f, hfF, hk₂Mem, hk₂Ne₀, hk₂Ne₁,
-        hFrows, ?_, hFcomplete⟩
-      intro b hbF
-      exact p.corrected_eq_owner_smul_scalar g y B b k₂
-        (hFrows b hbF).1 (hFrows b hbF).2.1
+      have hFexact : ∀ b : ↥B, (b : Fin n) ∈ F →
+          g (b : Fin n) - g p.z + k₂ • (g p.x - g p.z) =
+            p.coeff b (b : Fin n) • (p.scalar b • y) := by
+        intro b hbF
+        exact p.corrected_eq_owner_smul_scalar g y B b k₂
+          (hFrows b hbF).1 (hFrows b hbF).2.1
+      have hk₂Class := fourLevelParameter_adjacent_or_oppositeExtreme
+        k₀ k₂ hmiddle hk₂Mem hk₂Ne₀
+      have hOneAdjacent :=
+        twoDistinctFourLevelParameters_one_adjacentToMiddle
+          k₀ k₁ k₂ hmiddle hk₁Mem hk₂Mem hk₁Ne hk₂Ne₀ hk₂Ne₁.symm
+      have hFadjacent : ∀ b : ↥B, (b : Fin n) ∈ F →
+          ∀ c : ↥B, (c : Fin n) ∈ L →
+            (k₂ = k₀ + 1 ∨ k₀ = k₂ + 1) →
+            p.coeff b (b : Fin n) • (p.scalar b • y) ≠
+              p.coeff c (c : Fin n) • (p.scalar c • y) := by
+        intro b hbF c hcL hadj htarget
+        have hcSfull : (c : Fin n) ∈ Sfull := by
+          rw [← hBinterL]
+          exact Finset.mem_inter.mpr ⟨c.property, hcL⟩
+        have hcUnit :=
+          (p.primitive_unitRowNormalForm
+            g y B hyq hfullOdd hprimitive c).1
+        have hcExact := p.corrected_eq_owner_smul_scalar
+          g y B c k₀ hcUnit (hrows c hcSfull).1
+        apply correctedTargets_ne_of_valid_of_adjacentParameters
+          g hg B b.property c.property p.x_not_mem p.z_not_mem p.x_ne_z
+            k₂ k₀ hadj
+        exact (hFexact b hbF).trans (htarget.trans hcExact.symm)
+      exact Or.inr ⟨k₂, f, hfF, hk₂Mem, hk₂Ne₀, hk₂Ne₁,
+        hk₂Class, hOneAdjacent, hFrows, hFexact,
+        hFadjacent, hFcomplete⟩
   refine ⟨p, S, T₀, Sfull, k₀, w, ?_, ?_⟩
   · exact ⟨hdata, hSsubset, hprimitive, hScard, hSsub, hmiddle,
       hrows, hcomplete, hwindow⟩
@@ -451,7 +627,8 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
       hnormal, hleafGenerator, μ, ν, hμ, hν, hnormalY,
       hpointedLeafMem, hprimaryDigit, ?_⟩
     exact ⟨T, k₁, t, F, hTcard, hTle, hFle, hTsub, htT,
-      hk₁Mem, hk₁Ne, hTrows, hTexact, hTcomplete, hTseparated,
+      hk₁Mem, hk₁Ne, hk₁Class, hTrows, hTexact, hTadjacent,
+      hTcomplete, hTseparated,
       hexternalPartition, hTFdisjoint, hTFcard, hprofiles,
       hFcaseExact, hcap, hcrit⟩
 
