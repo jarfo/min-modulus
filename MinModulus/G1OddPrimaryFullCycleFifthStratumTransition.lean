@@ -15,6 +15,14 @@ namespace MinModulus
 
 variable {G : Type*} [AddCommGroup G]
 
+private theorem perm_isCycleOn_univ_of_apply_ne
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (R : Equiv.Perm α) (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i) :
+    R.IsCycleOn (Finset.univ : Finset α) := by
+  convert hcycle.isCycleOn using 1
+  ext i
+  simp [hRne i]
+
 /-- Exact arithmetic classification of an internal five-weight transition
 gap of magnitude `16`.  This is the lower-stratum analogue of the existing
 four-pattern boundary classification at magnitude `32`. -/
@@ -37,6 +45,201 @@ theorem fiveWeight_transitionDifference_natAbs_eq_sixteen
         rcases hb with rfl | rfl | rfl | rfl | rfl
   all_goals
     norm_num at habs <;> norm_num
+
+/-- On a punctured three-cycle, eliminating the common affine term between
+the sole available edge and the boundary relation produces
+`7 * (u-v)`.  The fifth-stratum `16/32` spectrum therefore forces the two
+available weights to agree. -/
+theorem fiveWeight_threeCycle_availableWeights_eq
+    (u v : ℤ) (hu : u ∈ twoRetainedNormalizedWeightLevels)
+    (hv : v ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : (v - 2 * u) • delta + C ∈ H)
+    (hboundary : (u - 4 * v) • delta + (3 : ℤ) • C ∈ H)
+    (hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 16 ∨ e.natAbs = 32) :
+    u = v := by
+  have huBounds := twoRetainedNormalizedWeight_bounds hu
+  have hvBounds := twoRetainedNormalizedWeight_bounds hv
+  let e : ℤ := 7 * (u - v)
+  have heMem : e • delta ∈ H := by
+    have hsub := H.sub_mem hboundary (H.zsmul_mem htransition 3)
+    convert hsub using 1
+    dsimp only [e]
+    module
+  by_contra huv
+  have he : e ≠ 0 := by
+    dsimp only [e]
+    omega
+  have hspectrum := hkernel1632 e he (by dsimp only [e]; omega)
+    (by dsimp only [e]; omega) heMem
+  rcases hspectrum with h16 | h32
+  all_goals
+    rcases Int.natAbs_eq e with he | he <;>
+      dsimp only [e] at he <;> omega
+
+/-- On a punctured four-cycle, eliminating the common affine term first
+produces `5 * (u-w)` and then `3 * (v-u)`.  Neither nonzero coefficient can
+have fifth-stratum magnitude `16` or `32`, so all three available weights
+agree. -/
+theorem fiveWeight_fourCycle_availableWeights_eq
+    (u v w : ℤ)
+    (hu : u ∈ twoRetainedNormalizedWeightLevels)
+    (hv : v ∈ twoRetainedNormalizedWeightLevels)
+    (hw : w ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (hfirst : (v - 2 * u) • delta + C ∈ H)
+    (hsecond : (w - 2 * v) • delta + C ∈ H)
+    (hboundary : (u - 4 * w) • delta + (3 : ℤ) • C ∈ H)
+    (hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 16 ∨ e.natAbs = 32) :
+    u = v ∧ v = w := by
+  have huBounds := twoRetainedNormalizedWeight_bounds hu
+  have hvBounds := twoRetainedNormalizedWeight_bounds hv
+  have hwBounds := twoRetainedNormalizedWeight_bounds hw
+  have huw : u = w := by
+    let e : ℤ := 5 * (u - w)
+    have heMem : e • delta ∈ H := by
+      have hsub := H.sub_mem
+        (H.sub_mem hboundary (H.zsmul_mem hfirst 2)) hsecond
+      convert hsub using 1
+      dsimp only [e]
+      module
+    by_contra huw
+    have he : e ≠ 0 := by
+      dsimp only [e]
+      omega
+    have hspectrum := hkernel1632 e he (by dsimp only [e]; omega)
+      (by dsimp only [e]; omega) heMem
+    rcases hspectrum with h16 | h32
+    all_goals
+      rcases Int.natAbs_eq e with he | he <;>
+        dsimp only [e] at he <;> omega
+  have huv : u = v := by
+    let e : ℤ := 3 * (v - u)
+    have heMem : e • delta ∈ H := by
+      have hsub := H.sub_mem hfirst hsecond
+      convert hsub using 1
+      dsimp only [e]
+      rw [← huw]
+      module
+    by_contra huv
+    have he : e ≠ 0 := by
+      dsimp only [e]
+      omega
+    have hspectrum := hkernel1632 e he (by dsimp only [e]; omega)
+      (by dsimp only [e]; omega) heMem
+    rcases hspectrum with h16 | h32
+    all_goals
+      rcases Int.natAbs_eq e with he | he <;>
+        dsimp only [e] at he <;> omega
+  exact ⟨huv, huv.symm.trans huw⟩
+
+/-- A full punctured cycle of length three or four has constant available
+five-weight labels under the fifth-stratum bounded-kernel spectrum. -/
+theorem fiveWeightPuncturedPermutation_threeOrFourCycle_weight_constant
+    {d : ℕ} (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (p : Fin d)
+    (weight : Fin d → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (hboundary :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 16 ∨ e.natAbs = 32)
+    (hd : d = 3 ∨ d = 4) :
+    ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases hd with rfl | rfl
+  · have hcycleOn := perm_isCycleOn_univ_of_apply_ne R hcycle hRne
+    have hreturnPow := hcycleOn.pow_card_apply (Finset.mem_univ p)
+    have hreturn : R (R (R p)) = p := by
+      simpa [pow_succ] using hreturnPow
+    have hnotTwo : R (R p) ≠ p := by
+      intro htwo
+      have hpow : (R ^ 2) p = p := by
+        simpa [pow_succ] using htwo
+      have hdvd :=
+        (hcycleOn.pow_apply_eq (Finset.mem_univ p)).mp hpow
+      norm_num at hdvd
+    have hsymm : R.symm p = R (R p) := by
+      apply R.injective
+      rw [R.apply_symm_apply, hreturn]
+    have havailableEq : weight (R p) = weight (R (R p)) := by
+      apply fiveWeight_threeCycle_availableWeights_eq
+        (weight (R p)) (weight (R (R p)))
+          (hweight (R p) (hRne p)) (hweight (R (R p)) hnotTwo) delta C H
+          (htransition (R p) (hRne p) hnotTwo)
+      · simpa only [hsymm] using hboundary
+      · exact hkernel1632
+    have hvalue : ∀ i, i ≠ p → weight i = weight (R p) := by
+      intro i hi
+      obtain ⟨k, hklt, hki⟩ :=
+        hcycleOn.exists_pow_eq (Finset.mem_univ p) (Finset.mem_univ i)
+      simp only [Finset.card_univ, Fintype.card_fin] at hklt
+      interval_cases k
+      · simp at hki
+        exact (hi hki.symm).elim
+      · have hw := congrArg weight hki
+        simpa [pow_succ] using hw.symm
+      · have hw : weight (R (R p)) = weight i := by
+          simpa [pow_succ] using congrArg weight hki
+        exact hw.symm.trans havailableEq.symm
+    intro i hi j hj
+    exact (hvalue i hi).trans (hvalue j hj).symm
+  · have hcycleOn := perm_isCycleOn_univ_of_apply_ne R hcycle hRne
+    have hreturnPow := hcycleOn.pow_card_apply (Finset.mem_univ p)
+    have hreturn : R (R (R (R p))) = p := by
+      simpa [pow_succ] using hreturnPow
+    have hnotTwo : R (R p) ≠ p := by
+      intro htwo
+      have hpow : (R ^ 2) p = p := by
+        simpa [pow_succ] using htwo
+      have hdvd :=
+        (hcycleOn.pow_apply_eq (Finset.mem_univ p)).mp hpow
+      norm_num at hdvd
+    have hnotThree : R (R (R p)) ≠ p := by
+      intro hthree
+      have hpow : (R ^ 3) p = p := by
+        simpa [pow_succ] using hthree
+      have hdvd :=
+        (hcycleOn.pow_apply_eq (Finset.mem_univ p)).mp hpow
+      norm_num at hdvd
+    have hsymm : R.symm p = R (R (R p)) := by
+      apply R.injective
+      rw [R.apply_symm_apply, hreturn]
+    have havailableEq :
+        weight (R p) = weight (R (R p)) ∧
+          weight (R (R p)) = weight (R (R (R p))) := by
+      apply fiveWeight_fourCycle_availableWeights_eq
+        (weight (R p)) (weight (R (R p))) (weight (R (R (R p))))
+          (hweight (R p) (hRne p)) (hweight (R (R p)) hnotTwo)
+          (hweight (R (R (R p))) hnotThree) delta C H
+          (htransition (R p) (hRne p) hnotTwo)
+          (htransition (R (R p)) hnotTwo hnotThree)
+      · simpa only [hsymm] using hboundary
+      · exact hkernel1632
+    have hvalue : ∀ i, i ≠ p → weight i = weight (R p) := by
+      intro i hi
+      obtain ⟨k, hklt, hki⟩ :=
+        hcycleOn.exists_pow_eq (Finset.mem_univ p) (Finset.mem_univ i)
+      simp only [Finset.card_univ, Fintype.card_fin] at hklt
+      interval_cases k
+      · simp at hki
+        exact (hi hki.symm).elim
+      · have hw := congrArg weight hki
+        simpa [pow_succ] using hw.symm
+      · have hw : weight (R (R p)) = weight i := by
+          simpa [pow_succ] using congrArg weight hki
+        exact hw.symm.trans havailableEq.1.symm
+      · have hw : weight (R (R (R p))) = weight i := by
+          simpa [pow_succ] using congrArg weight hki
+        exact hw.symm.trans (havailableEq.2.symm.trans havailableEq.1.symm)
+    intro i hi j hj
+    exact (hvalue i hi).trans (hvalue j hj).symm
 
 /-- Three consecutive integer transitions from the pair `{-8,8}` cannot
 stay in the five-weight interval when the initial value is an actual
@@ -870,5 +1073,145 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
     · exact Or.inr h915
   · exact Or.inr (Or.inl hpureX)
   · exact Or.inr (Or.inr hpureZ)
+
+/-- Final critical fifth-stratum full-cycle endpoint.  The only two exact
+small cycles from the finite-triple interface have constant available
+weights by three/four-cycle arithmetic, so both also enter the canonical
+pure-pair terminal.  No finite exceptional branch remains. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_purePair
+    {n q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hrTwo : 2 ≤ addOrderOf y)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  have hendpoint :=
+    hrows.oneRetainedCycle_criticalFifthStratum_finiteTriples_or_purePair
+      hq g hg hcritical hunique hne y hyq hrTwo B hminimal leaf hleafInj
+        R hcycle hRne a p i₀ hi₀ hRi₀ hleafB hdouble hspan
+  obtain ⟨x₀, z₀, weight₀, hx₀B, hz₀B, hx₀z₀, hcomplement₀,
+      hweight₀, hout⟩ := hendpoint
+  rcases hout with hsmall | hpureX | hpureZ
+  · obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
+        hweight, htransition, hcycleValue, hcycleWeight,
+        hcycleTransition, hcycleTwoStep⟩ :=
+      hrows.oneRetainedCycle_recurrence
+        g y B leaf R a p (hRne p) hleafB hdouble
+    have hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+        e • (g x - g z) ∈ AddSubgroup.zmultiples y →
+          e.natAbs = 16 ∨ e.natAbs = 32 := by
+      intro e he helow hehigh heMem
+      exact
+        (hrows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_sixteen_or_thirtyTwo_of_fifthStratum_minimal
+          hq g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+            e he helow hehigh heMem).2
+    have hd34 : d = 3 ∨ d = 4 := by
+      rcases hsmall with h873 | h9154
+      · exact Or.inl h873.2.2
+      · exact Or.inr h9154.2.2
+    have hconstantCycle :=
+      fiveWeightPuncturedPermutation_threeOrFourCycle_weight_constant
+        R hcycle hRne p cycleWeight hcycleWeight
+          (g x - g z) ((2 : ℤ) • (g z - a))
+          (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep
+            hkernel1632 hd34
+    have hconstant : ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
+        weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩ := by
+      intro i hiB j hjB
+      have hi : i ≠ p := (hleafB i).1 hiB
+      have hj : j ≠ p := (hleafB j).1 hjB
+      calc
+        weight ⟨leaf i, hiB⟩ = cycleWeight i := (hcycleValue i hiB).symm
+        _ = cycleWeight j := hconstantCycle i hi j hj
+        _ = weight ⟨leaf j, hjB⟩ := hcycleValue j hjB
+    have hiB : leaf i₀ ∈ B := (hleafB i₀).2 hi₀
+    have hRiB : leaf (R i₀) ∈ B := (hleafB (R i₀)).2 hRi₀
+    let w : ℤ := weight ⟨leaf i₀, hiB⟩
+    have hw : w ∈ twoRetainedNormalizedWeightLevels :=
+      hweight ⟨leaf i₀, hiB⟩
+    have hwEdge : weight ⟨leaf (R i₀), hRiB⟩ = w := by
+      simpa only [w] using hconstant (R i₀) hRiB i₀ hiB
+    have htransitionSimple :
+        (-w) • (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y := by
+      have ht := htransition i₀ hiB hRiB
+      rw [hwEdge] at ht
+      convert ht using 1
+      dsimp only [w]
+      module
+    have hterminal := constantFiveWeight_transition_terminal
+      (g x) (g z) a (AddSubgroup.zmultiples y) w hw htransitionSimple
+    have hpNotB : leaf p ∉ B := by
+      intro hpB
+      exact (hleafB p).1 hpB rfl
+    have hpPair : leaf p = x ∨ leaf p = z := by
+      have hpComplement : leaf p ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hpNotB⟩
+      rw [hcomplement] at hpComplement
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hpComplement
+    refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+    rcases hpPair with hpX | hpZ
+    · have hxMem : g x - a ∈ AddSubgroup.zmultiples y := by
+        rw [← hpX]
+        rw [← hspan]
+        exact AddSubgroup.subset_closure ⟨p, rfl⟩
+      rcases hterminal.1 hxMem with hbounded | hwMinusTwo
+      · obtain ⟨e, he, helow, hehigh, heMem⟩ := hbounded
+        have hspectrum := hkernel1632 e he (by omega) (by omega) heMem
+        have habsLe : e.natAbs ≤ 4 := by
+          rcases Int.natAbs_eq e with hePos | heNeg
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+        rcases hspectrum with h16 | h32 <;> omega
+      · exact Or.inl ⟨hpX, by
+          intro i hi
+          exact (hconstant i hi i₀ hiB).trans hwMinusTwo⟩
+    · have hzMem : g z - a ∈ AddSubgroup.zmultiples y := by
+        rw [← hpZ]
+        rw [← hspan]
+        exact AddSubgroup.subset_closure ⟨p, rfl⟩
+      rcases hterminal.2 hzMem with hbounded | hwZero
+      · obtain ⟨e, he, helow, hehigh, heMem⟩ := hbounded
+        have hspectrum := hkernel1632 e he (by omega) (by omega) heMem
+        have habsLe : e.natAbs ≤ 4 := by
+          rcases Int.natAbs_eq e with hePos | heNeg
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+        rcases hspectrum with h16 | h32 <;> omega
+      · exact Or.inr ⟨hpZ, by
+          intro i hi
+          exact (hconstant i hi i₀ hiB).trans hwZero⟩
+  · exact ⟨x₀, z₀, weight₀, hx₀B, hz₀B, hx₀z₀, hcomplement₀,
+      hweight₀, Or.inl hpureX⟩
+  · exact ⟨x₀, z₀, weight₀, hx₀B, hz₀B, hx₀z₀, hcomplement₀,
+      hweight₀, Or.inr hpureZ⟩
 
 end MinModulus
