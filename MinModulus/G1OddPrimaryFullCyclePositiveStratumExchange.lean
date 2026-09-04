@@ -111,6 +111,104 @@ def PrimitiveTwoRetainedPositiveStratumRows
             pi (g (b : Fin n) - g p.z) =
               (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ)
 
+/-- In a full-order positive-stratum state, a fully deleted doubling cycle
+has constant five-weight label as soon as the quotient order exceeds the
+universal coefficient bound `18` from `fullDeletedCycle_split`. -/
+theorem PrimitiveTwoRetainedPositiveStratumRows.fullDeletedCycle_weight_constant_of_eighteen_lt_twoPower
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n))
+    (hstate : PrimitiveTwoRetainedPositiveStratumRows g y B)
+    (hpow : 18 < 2 ^ t)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (a : ZMod (2 ^ t * q))
+    (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ∀ i j,
+        weight ⟨leaf i, hleafB i⟩ = weight ⟨leaf j, hleafB j⟩ := by
+  classical
+  rcases hstate with ⟨_hmin, _hretained, hrows, p, hpfull⟩
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  have hpOrder : addOrderOf (pi (g p.x - g p.z)) = 2 ^ t := by
+    simpa only [pi, H, Q] using hpfull.1
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight,
+      hsmall | hconstant⟩ :=
+    hrows.fullDeletedCycle_split g y B hd leaf R a hleafB hdouble
+  · have hxCase : x = p.x ∨ x = p.z := by
+      have hxMem : x ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxB⟩
+      rw [p.complement_eq] at hxMem
+      simpa using hxMem
+    have hzCase : z = p.x ∨ z = p.z := by
+      have hzMem : z ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzB⟩
+      rw [p.complement_eq] at hzMem
+      simpa using hzMem
+    have hxzOrder : addOrderOf (pi (g x - g z)) = 2 ^ t := by
+      rcases hxCase with hxpX | hxpZ
+      · have hzpZ : z = p.z := hzCase.resolve_left (by
+          intro hzpX
+          exact hxz (hxpX.trans hzpX.symm))
+        simpa only [hxpX, hzpZ] using hpOrder
+      · have hzpX : z = p.x := hzCase.resolve_right (by
+          intro hzpZ
+          exact hxz (hxpZ.trans hzpZ.symm))
+        have hneg : g x - g z = -(g p.x - g p.z) := by
+          rw [hxpZ, hzpX]
+          abel
+        rw [hneg, map_neg, addOrderOf_neg]
+        exact hpOrder
+    obtain ⟨e, he, helow, hehigh, heMem⟩ := hsmall
+    have heQuotient : e • pi (g x - g z) = 0 := by
+      rw [← map_zsmul]
+      exact (QuotientAddGroup.eq_zero_iff (e • (g x - g z))).2 heMem
+    have hnatQuotient : e.natAbs • pi (g x - g z) = 0 := by
+      rw [← natCast_zsmul]
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · rw [hePos] at heQuotient
+        exact heQuotient
+      · rw [heNeg, neg_smul] at heQuotient
+        exact neg_eq_zero.mp heQuotient
+    have horderDvd : 2 ^ t ∣ e.natAbs := by
+      rw [← hxzOrder]
+      exact addOrderOf_dvd_of_nsmul_eq_zero hnatQuotient
+    have horderLe : 2 ^ t ≤ e.natAbs :=
+      Nat.le_of_dvd (Int.natAbs_pos.mpr he) horderDvd
+    have habsLe : e.natAbs ≤ 18 := by
+      rcases Int.natAbs_eq e with hePos | heNeg
+      · have : (e.natAbs : ℤ) ≤ 18 := by omega
+        exact_mod_cast this
+      · have : (e.natAbs : ℤ) ≤ 18 := by omega
+        exact_mod_cast this
+    omega
+  · exact ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hconstant⟩
+
+/-- Fifth-stratum specialization of full-order fully-deleted-cycle
+constancy. -/
+theorem PrimitiveTwoRetainedPositiveStratumRows.fullDeletedCycle_weight_constant_of_fifthStratum
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n))
+    (hstate : PrimitiveTwoRetainedPositiveStratumRows g y B)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (a : ZMod (2 ^ 5 * q))
+    (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ∀ i j,
+        weight ⟨leaf i, hleafB i⟩ = weight ⟨leaf j, hleafB j⟩ := by
+  exact hstate.fullDeletedCycle_weight_constant_of_eighteen_lt_twoPower
+    g y B (by norm_num) hd leaf R a hleafB hdouble
+
 /-- Minimize one literal positive-stratum primitive-owner exchange.  A strict
 shrink enters C2; equality retains the literal exchanged deletion set as a
 full-order two-retained state. -/
