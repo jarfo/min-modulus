@@ -344,4 +344,310 @@ theorem addOrderOf_dvd_three_or_seven_or_fifteen_of_isCycle_doubling_shortReturn
     rw [AddMonoidHom.mem_ker] at hyTorsion
     exact addOrderOf_dvd_of_nsmul_eq_zero hyTorsion
 
+/-- Pure endpoint arithmetic for the common-transition boundary arm.  If the
+punctured boundary coefficient has magnitude `16` or `32`, the same affine
+transition cannot persist for three steps both forward from the successor
+and backward into the predecessor.  Only the four boundary weights are
+enumerated; the intermediate values are handled symbolically by the affine
+recurrences, with only the final predecessor-side value using its uniform
+interval bound. -/
+theorem fiveWeight_boundaryCoefficient_sixteenOrThirtyTwo_false_of_three_forward_and_backward
+    (u v a b x₁ x₂ x₃ z₃ z₂ z₁ : ℤ)
+    (hu : u ∈ twoRetainedNormalizedWeightLevels)
+    (hv : v ∈ twoRetainedNormalizedWeightLevels)
+    (ha : a ∈ twoRetainedNormalizedWeightLevels)
+    (hb : b ∈ twoRetainedNormalizedWeightLevels)
+    (hz₁ : -4 ≤ z₁) (hz₁' : z₁ ≤ 2)
+    (habs : (v - 4 * u - 3 * (b - 2 * a)).natAbs = 16 ∨
+      (v - 4 * u - 3 * (b - 2 * a)).natAbs = 32)
+    (hforward₁ : x₁ - 2 * v = b - 2 * a)
+    (hforward₂ : x₂ - 2 * x₁ = b - 2 * a)
+    (hforward₃ : x₃ - 2 * x₂ = b - 2 * a)
+    (hbackward₃ : z₂ - 2 * z₃ = b - 2 * a)
+    (hbackward₂ : z₁ - 2 * z₂ = b - 2 * a)
+    (hbackward₁ : u - 2 * z₁ = b - 2 * a) : False := by
+  simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hu hv ha hb
+  rcases hu with rfl | rfl | rfl | rfl | rfl <;>
+    rcases hv with rfl | rfl | rfl | rfl | rfl <;>
+      rcases ha with rfl | rfl | rfl | rfl | rfl <;>
+        rcases hb with rfl | rfl | rfl | rfl | rfl
+  all_goals
+    norm_num at habs <;> omega
+
+/-- A common-transition punctured-boundary coefficient of magnitude `16` or
+`32` also forces return after at most four steps.  The forward three-edge
+segment starts at `R p`; the backward segment ends at `R⁻¹ p`. -/
+theorem fiveWeightPuncturedPermutation_boundary_sixteenOrThirtyTwo_shortReturn
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (hboundary :
+      ((weight (R p) - 4 * weight (R.symm p)) -
+          3 * (weight (R i₀) - 2 * weight i₀)).natAbs = 16 ∨
+       ((weight (R p) - 4 * weight (R.symm p)) -
+          3 * (weight (R i₀) - 2 * weight i₀)).natAbs = 32)
+    (hall : ∀ i, i ≠ p → R i ≠ p →
+      weight (R i) - 2 * weight i =
+        weight (R i₀) - 2 * weight i₀) :
+    R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p := by
+  by_cases htwo : R (R p) = p
+  · exact Or.inl htwo
+  · right
+    by_cases hthree : R (R (R p)) = p
+    · exact Or.inl hthree
+    · right
+      by_contra hfour
+      let u : ι := R.symm p
+      let z₁ : ι := R.symm u
+      let z₂ : ι := R.symm z₁
+      let z₃ : ι := R.symm z₂
+      have hu : u ≠ p := by
+        intro hup
+        apply hp
+        have happly := R.apply_symm_apply p
+        simpa only [u, hup] using happly
+      have hz₁ : z₁ ≠ p := by
+        intro hz
+        have h₁ := congrArg R hz
+        have h₂ := congrArg R h₁
+        apply htwo
+        simpa only [z₁, u, R.apply_symm_apply] using h₂.symm
+      have hz₂ : z₂ ≠ p := by
+        intro hz
+        have h₁ := congrArg R hz
+        have h₂ := congrArg R h₁
+        have h₃ := congrArg R h₂
+        apply hthree
+        simpa only [z₂, z₁, u, R.apply_symm_apply] using h₃.symm
+      have hz₃ : z₃ ≠ p := by
+        intro hz
+        have h₁ := congrArg R hz
+        have h₂ := congrArg R h₁
+        have h₃ := congrArg R h₂
+        have h₄ := congrArg R h₃
+        apply hfour
+        simpa only [z₃, z₂, z₁, u, R.apply_symm_apply] using h₄.symm
+      have hRp := twoRetainedNormalizedWeight_bounds (hweight (R p) hp)
+      have hz₁Bounds := twoRetainedNormalizedWeight_bounds (hweight z₁ hz₁)
+      apply fiveWeight_boundaryCoefficient_sixteenOrThirtyTwo_false_of_three_forward_and_backward
+        (weight u) (weight (R p)) (weight i₀) (weight (R i₀))
+          (weight (R (R p))) (weight (R (R (R p))))
+          (weight (R (R (R (R p))))) (weight z₃) (weight z₂)
+          (weight z₁) (hweight u hu) (hweight (R p) hp)
+          (hweight i₀ hi₀) (hweight (R i₀) hRi₀)
+          hz₁Bounds.1 hz₁Bounds.2
+      · simpa only [u] using hboundary
+      · exact hall (R p) hp htwo
+      · exact hall (R (R p)) htwo hthree
+      · exact hall (R (R (R p))) hthree hfour
+      · simpa only [z₃, R.apply_symm_apply] using hall z₃ hz₃ (by
+          simpa only [z₃, R.apply_symm_apply] using hz₂)
+      · simpa only [z₂, R.apply_symm_apply] using hall z₂ hz₂ (by
+          simpa only [z₂, R.apply_symm_apply] using hz₁)
+      · simpa only [z₁, u, R.apply_symm_apply] using hall z₁ hz₁ (by
+          simpa only [z₁, R.apply_symm_apply] using hu)
+
+/-- Final generic fifth-stratum punctured-cycle reduction: every nonconstant
+five-weight arm has cycle return at two, three, or four steps.  Hence every
+long-cycle survivor already lies in the existing constant-weight/pure-pair
+pipeline. -/
+theorem fiveWeightPuncturedPermutation_fifthStratum_shortReturn_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 16 ∨ e.natAbs = 32) :
+    (R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases
+      fiveWeightPuncturedPermutation_fifthStratum_shortReturn_or_boundaryCoefficient_or_weight_constant
+        R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
+          hkernel1632 with
+    hshort | ⟨hboundary, hall⟩ | hconstant
+  · exact Or.inl hshort
+  · exact Or.inl
+      (fiveWeightPuncturedPermutation_boundary_sixteenOrThirtyTwo_shortReturn
+        R p i₀ hp hi₀ hRi₀ weight hweight hboundary hall)
+  · exact Or.inr hconstant
+
+/-- Integrated fifth-stratum one-retained endpoint.  In a modulus-minimal
+odd-primary survivor, the punctured cycle returns after two, three, or four
+steps, or the actual canonical five-weight rows form one of the two
+orientation-equivalent pure-pair matrices. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortReturn_or_purePair_of_fifthStratum_minimal
+    {n q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hretainedMem : g (leaf p) - a ∈ AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p) ∨
+        (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
+      hweight, htransition, hcycleValue, hcycleWeight,
+      hcycleTransition, hcycleTwoStep⟩ :=
+    hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
+  have hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • (g x - g z) ∈ AddSubgroup.zmultiples y →
+        e.natAbs = 16 ∨ e.natAbs = 32 := by
+    intro e he helow hehigh heMem
+    exact
+      (hrows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_sixteen_or_thirtyTwo_of_fifthStratum_minimal
+        hq g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+          e he helow hehigh heMem).2
+  have hsplit :=
+    fiveWeightPuncturedPermutation_fifthStratum_shortReturn_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
+        (g x - g z) ((2 : ℤ) • (g z - a))
+          (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep hkernel1632
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  rcases hsplit with hshort | hconstantCycle
+  · exact Or.inl hshort
+  · have hconstant : ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
+        weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩ := by
+      intro i hiB j hjB
+      have hi : i ≠ p := (hleafB i).1 hiB
+      have hj : j ≠ p := (hleafB j).1 hjB
+      calc
+        weight ⟨leaf i, hiB⟩ = cycleWeight i := (hcycleValue i hiB).symm
+        _ = cycleWeight j := hconstantCycle i hi j hj
+        _ = weight ⟨leaf j, hjB⟩ := hcycleValue j hjB
+    have hiB : leaf i₀ ∈ B := (hleafB i₀).2 hi₀
+    have hRiB : leaf (R i₀) ∈ B := (hleafB (R i₀)).2 hRi₀
+    let w : ℤ := weight ⟨leaf i₀, hiB⟩
+    have hw : w ∈ twoRetainedNormalizedWeightLevels :=
+      hweight ⟨leaf i₀, hiB⟩
+    have hwEdge : weight ⟨leaf (R i₀), hRiB⟩ = w := by
+      simpa only [w] using hconstant (R i₀) hRiB i₀ hiB
+    have htransitionSimple :
+        (-w) • (g x - g z) + (2 : ℤ) • (g z - a) ∈
+          AddSubgroup.zmultiples y := by
+      have ht := htransition i₀ hiB hRiB
+      rw [hwEdge] at ht
+      convert ht using 1
+      dsimp only [w]
+      module
+    have hterminal := constantFiveWeight_transition_terminal
+      (g x) (g z) a (AddSubgroup.zmultiples y) w hw htransitionSimple
+    have hpNotB : leaf p ∉ B := by
+      intro hpB
+      exact (hleafB p).1 hpB rfl
+    have hpPair : leaf p = x ∨ leaf p = z := by
+      have hpComplement : leaf p ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hpNotB⟩
+      rw [hcomplement] at hpComplement
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hpComplement
+    rcases hpPair with hpX | hpZ
+    · have hxMem : g x - a ∈ AddSubgroup.zmultiples y := by
+        simpa only [hpX] using hretainedMem
+      rcases hterminal.1 hxMem with hsmall | hwMinusTwo
+      · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+        have heAbs := hkernel1632 e he (by omega) (by omega) heMem
+        have habsLe : e.natAbs ≤ 4 := by
+          rcases Int.natAbs_eq e with hePos | heNeg
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+        rcases heAbs with h16 | h32 <;> omega
+      · exact Or.inr (Or.inl ⟨hpX, by
+          intro i hi
+          exact (hconstant i hi i₀ hiB).trans hwMinusTwo⟩)
+    · have hzMem : g z - a ∈ AddSubgroup.zmultiples y := by
+        simpa only [hpZ] using hretainedMem
+      rcases hterminal.2 hzMem with hsmall | hwZero
+      · rcases hsmall with ⟨e, he, helow, hehigh, heMem⟩
+        have heAbs := hkernel1632 e he (by omega) (by omega) heMem
+        have habsLe : e.natAbs ≤ 4 := by
+          rcases Int.natAbs_eq e with hePos | heNeg
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+          · have : (e.natAbs : ℤ) ≤ 4 := by omega
+            exact_mod_cast this
+        rcases heAbs with h16 | h32 <;> omega
+      · exact Or.inr (Or.inr ⟨hpZ, by
+          intro i hi
+          exact (hconstant i hi i₀ hiB).trans hwZero⟩)
+
+/-- Full-cycle fifth-stratum endpoint in odd-order currency.  Once the leaf
+permutation is one cycle and its displacements span `Z*y`, the short-return
+arm is exactly `addOrderOf(y) | 3`, `7`, or `15`; every other arm is one of
+the two canonical pure-pair orientations. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_smallKernelOrder_or_purePair_of_fifthStratum_minimal
+    {n q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hp : R p ≠ p) (hi₀ : i₀ ≠ p)
+    (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hretainedMem : g (leaf p) - a ∈ AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      ((addOrderOf y ∣ 3 ∨ addOrderOf y ∣ 7 ∨ addOrderOf y ∣ 15) ∨
+        (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hout⟩ :=
+    hrows.oneRetainedCycle_shortReturn_or_purePair_of_fifthStratum_minimal
+      hq g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
+        hleafB hdouble hretainedMem
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  rcases hout with hshort | hpureX | hpureZ
+  · left
+    apply addOrderOf_dvd_three_or_seven_or_fifteen_of_isCycle_doubling_shortReturn
+      R hcycle hRne (fun i ↦ g (leaf i) - a) ?_ p y hspan hshort
+    intro i
+    simpa only [two_nsmul, two_zsmul] using hdouble i
+  · exact Or.inr (Or.inl hpureX)
+  · exact Or.inr (Or.inr hpureZ)
+
 end MinModulus
