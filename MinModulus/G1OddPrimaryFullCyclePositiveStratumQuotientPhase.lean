@@ -748,4 +748,147 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       norm_num at hweightEq
   · exact Or.inr ⟨hprimitive, hrowsSolved⟩
 
+/-- Complete quotient-row normal form at the first positive stratum.  The
+half-order branch is now the explicit residual `deltaQ = 0`; in the full-order
+branch the quotient has two elements and every row has the same two affine
+solutions as in the uniform higher-stratum theorem. -/
+theorem TwoRetainedFiveWeightPresentation.firstStratum_quotientRowNormalForm
+    {q : ℕ} [NeZero (2 ^ 1 * q)]
+    (g : Fin n → ZMod (2 ^ 1 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 1 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 1 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 1 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 1 * q → M ∣ 2 ^ 1 * q →
+        ¬ AdmitsValidTuple n M) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ 1 * q) →+ ZMod (2 ^ 1 * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    let deltaQ := pi (g p.x - g p.z)
+    (addOrderOf deltaQ = 1) ∨
+      (addOrderOf deltaQ = 2 ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) = deltaQ - k • deltaQ)) := by
+  classical
+  have horder :=
+    hrows.retainedDifference_quotientOrder_eq_half_or_full_of_positiveStratum_minimal
+      (t := 1) (q := q) (by omega) g hg hunique hne y hyq hfullOdd B
+        hminimal p.x p.z p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+  let H : AddSubgroup (ZMod (2 ^ 1 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 1 * q) ⧸ H
+  let pi : ZMod (2 ^ 1 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  letI : Fintype Q := Fintype.ofFinite Q
+  letI : IsAddCyclic Q := isAddCyclic_of_surjective pi
+    (QuotientAddGroup.mk'_surjective H)
+  have hquotientModulus : (2 ^ 1 * q) / addOrderOf y = 2 := by
+    rw [Nat.mul_div_assoc (2 ^ 1) hyq, hfullOdd]
+    norm_num
+  have hQcardNat : Nat.card Q = 2 := by
+    have hmul : Nat.card Q * addOrderOf y = 2 ^ 1 * q := by
+      simpa only [Q, H, Nat.card_zmod] using
+        nat_card_quotient_zmultiples_mul_addOrderOf y
+    have hcard : Nat.card Q = (2 ^ 1 * q) / addOrderOf y := by
+      exact (Nat.div_eq_of_eq_mul_left (addOrderOf_pos y) hmul.symm).symm
+    exact hcard.trans hquotientModulus
+  change
+    (addOrderOf deltaQ = 1) ∨
+      (addOrderOf deltaQ = 2 ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) = deltaQ - k • deltaQ))
+  rcases horder with htrivial | hprimitive
+  · exact Or.inl (by simpa [deltaQ, pi, H, Q] using htrivial)
+  · right
+    have hprimitive' : addOrderOf deltaQ = 2 := by
+      simpa [deltaQ, pi, H, Q] using hprimitive
+    refine ⟨hprimitive', ?_⟩
+    have hallEven : ∀ b : ↥B, p.weight b ≠ -1 :=
+      p.weight_ne_neg_one_of_fullOrder (t := 1) (q := q) (by omega)
+        g y B hyq hfullOdd hprimitive
+    intro b
+    obtain ⟨k, hk⟩ :=
+      twoRetainedNormalizedWeight_eq_two_mul_of_ne_neg_one
+        (p.weight_mem b) (hallEven b)
+    refine ⟨k, hk, ?_⟩
+    let betaQ : Q := pi (g (b : Fin n) - g p.z)
+    let uQ : Q := betaQ + k • deltaQ
+    have hquotientRelation :
+        (2 : ℤ) • betaQ + p.weight b • deltaQ = 0 := by
+      apply (QuotientAddGroup.eq_zero_iff
+        ((2 : ℤ) • (g (b : Fin n) - g p.z) +
+          p.weight b • (g p.x - g p.z))).mpr
+      exact p.row_mem b
+    have huDouble : uQ + uQ = 0 := by
+      calc
+        uQ + uQ = (2 : ℤ) • betaQ + p.weight b • deltaQ := by
+          rw [hk]
+          dsimp only [uQ]
+          module
+        _ = 0 := hquotientRelation
+    rcases eq_zero_or_half_nsmul_of_add_self_eq_zero_of_twoPower_card
+        1 (by omega) hQcardNat deltaQ uQ hprimitive' huDouble with
+      hzero | hhalf
+    · left
+      change betaQ = -(k • deltaQ)
+      dsimp only [uQ] at hzero
+      exact eq_neg_of_add_eq_zero_left hzero
+    · right
+      change betaQ = deltaQ - k • deltaQ
+      norm_num at hhalf
+      dsimp only [uQ] at hhalf
+      apply eq_sub_of_add_eq
+      exact hhalf
+
+/-- One all-positive-stratum quotient endpoint.  For `t=1` it records the
+only genuinely new residual, namely trivial retained difference in the
+two-element quotient.  Every other arm has the uniform primitive-owner or
+two-lift row normal form. -/
+theorem TwoRetainedFiveWeightPresentation.positiveStratum_completeQuotientRowNormalForm
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    let deltaQ := pi (g p.x - g p.z)
+    (t = 1 ∧ addOrderOf deltaQ = 1) ∨
+      (addOrderOf deltaQ = 2 ^ (t - 1) ∧
+        ∃ b : ↥B, p.weight b = -1 ∧
+          addOrderOf (pi (g (b : Fin n) - g p.z)) = 2 ^ t) ∨
+      (addOrderOf deltaQ = 2 ^ t ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) =
+              (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ)) := by
+  by_cases htOne : t = 1
+  · subst t
+    have hfirst := p.firstStratum_quotientRowNormalForm
+      (q := q) g hg hunique hne y hyq hfullOdd B hrows hminimal
+    rcases hfirst with htrivial | hfull
+    · exact Or.inl ⟨rfl, htrivial⟩
+    · exact Or.inr (Or.inr (by simpa using hfull))
+  · have htTwo : 2 ≤ t := by omega
+    have hnormal := p.positiveStratum_quotientRowNormalForm
+      htTwo g hg hunique hne y hyq hfullOdd B hrows hminimal
+    rcases hnormal with hhalf | hfull
+    · exact Or.inr (Or.inl hhalf)
+    · exact Or.inr (Or.inr hfull)
+
 end MinModulus
