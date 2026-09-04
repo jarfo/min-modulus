@@ -53,6 +53,7 @@ def PrimitiveFinalResiduePartition
     (k₀ k₁ : ℤ) : Prop :=
   ∃ F : Finset (Fin n),
     B = (S ∪ T) ∪ F ∧
+    F ⊆ B \ (S ∪ T) ∧
     (F = ∅ ∨
       ∃ k₂ : ℤ, ∃ f : Fin n,
         f ∈ F ∧
@@ -169,6 +170,9 @@ theorem PrimitiveSaturatedSecondaryResidueCapacity.toThreeResiduePartition
     have hweightRaw := (hkSpec b).2.1
     omega
   let F : Finset (Fin n) := B \ (S ∪ T)
+  have hFsub : F ⊆ B \ (S ∪ T) := by
+    intro b hbF
+    exact hbF
   have hpartition : B = (S ∪ T) ∪ F := by
     ext b
     simp only [F, Finset.mem_union, Finset.mem_sdiff]
@@ -185,7 +189,8 @@ theorem PrimitiveSaturatedSecondaryResidueCapacity.toThreeResiduePartition
       · exact hbF.1
   by_cases hFempty : F = ∅
   · refine ⟨T, k₁, t, hTcard, hTsub, htT, hk₁Mem, hk₁Ne,
-      hTrows, hTcomplete, hTseparated, hcap, F, hpartition, Or.inl hFempty⟩
+      hTrows, hTcomplete, hTseparated, hcap, F, hpartition, hFsub,
+      Or.inl hFempty⟩
   · have hFnonempty : F.Nonempty := Finset.nonempty_iff_ne_empty.mpr hFempty
     obtain ⟨f, hfF⟩ := hFnonempty
     have hfB : f ∈ B := (Finset.mem_sdiff.mp hfF).1
@@ -310,7 +315,8 @@ theorem PrimitiveSaturatedSecondaryResidueCapacity.toThreeResiduePartition
         · apply hrawNe₁ fB hfF
           exact hkEq.symm.trans (hTraw b hbT)
     refine ⟨T, k₁, t, hTcard, hTsub, htT, hk₁Mem, hk₁Ne,
-      hTrows, hTcomplete, hTseparated, hcap, F, hpartition, Or.inr ?_⟩
+      hTrows, hTcomplete, hTseparated, hcap, F, hpartition, hFsub,
+      Or.inr ?_⟩
     exact ⟨k₂, f, hfF, (hkSpec fB).1, hrawNe₀ fB hfF,
       hrawNe₁ fB hfF, hFrows, hFcomplete⟩
 
