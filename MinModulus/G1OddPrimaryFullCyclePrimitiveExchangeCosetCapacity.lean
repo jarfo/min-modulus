@@ -12,7 +12,7 @@ are another.  If these cosets meet, their union is one coset and gives the
 usual exponential subgroup bound.  If they do not, every product of their
 binomial layers is bounded by the odd factor.
 -/
-import MinModulus.G1OddPrimaryFullCyclePrimitiveExchangeLeafLocation
+import MinModulus.G1OddPrimaryFullCyclePrimitiveExchangeSaturation
 
 namespace MinModulus
 
@@ -229,14 +229,6 @@ theorem choose_mul_choose_le_addOrderOf_of_disjoint_kernelCosets
       (fun i ↦ hAcoset (eA i) (heA i) a haA)
       (fun j ↦ hCcoset (eC j) (heC j) c hcC) k₁ k₂
 
-/-- The old retained coordinate inserted in every middle exchange. -/
-def primitiveMiddleInsertedCoordinate
-    {q : ℕ} {g : Fin n → ZMod (2 ^ 6 * q)}
-    {y : ZMod (2 ^ 6 * q)} {B : Finset (Fin n)}
-    (p : TwoRetainedCanonicalPrivatePresentation g y B)
-    (k₀ : ℤ) : Fin n :=
-  if k₀ = -1 then p.x else p.z
-
 /-- Lossless capacity endpoint of the middle family.  The leaf coset and the
 selected-owner coset either coincide, giving an exponential union bound, or
 are genuinely distinct, giving cross-coset separation and all products of
@@ -260,6 +252,10 @@ def PrimitiveMiddleExchangeCosetCapacity
             addOrderOf
               ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
                 (g (b : Fin n) - g p.x)) = 64))) ∧
+      let r := primitiveMiddleInsertedCoordinate p k₀
+      (∀ b : ↥B,
+        ((b : Fin n) ∈ S ↔
+          g (b : Fin n) - g r ∈ AddSubgroup.zmultiples y)) ∧
       let C := insert (primitiveMiddleInsertedCoordinate p k₀) S
       C.card = S.card + 1 ∧
       let L := (Finset.univ : Finset (Fin d)).image leaf
@@ -287,8 +283,9 @@ theorem PrimitiveMiddleExchangeFamily.toCosetCapacity
       AddSubgroup.zmultiples y) :
     PrimitiveMiddleExchangeCosetCapacity g y B leaf := by
   classical
-  rcases hfamily with
-    ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows⟩
+  have hsaturated := hfamily.toSaturated g y B hyq hfullOdd
+  rcases hsaturated with
+    ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows, hcomplete⟩
   let r : Fin n := primitiveMiddleInsertedCoordinate p k₀
   let C : Finset (Fin n) := insert r S
   let L : Finset (Fin n) :=
@@ -362,6 +359,7 @@ theorem PrimitiveMiddleExchangeFamily.toCosetCapacity
     Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
   refine ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows, ?_⟩
   dsimp only
+  refine ⟨by simpa only [r] using hcomplete, ?_⟩
   refine ⟨by simpa only [C, r] using hCcard, ?_⟩
   by_cases hsame : ∃ b ∈ L, ∃ c ∈ C,
       g b - g c ∈ AddSubgroup.zmultiples y

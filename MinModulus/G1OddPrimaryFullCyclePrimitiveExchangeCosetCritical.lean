@@ -7,8 +7,9 @@ At an exact-two sixth-stratum critical modulus, the odd factor satisfies
 
 Combining this strict upper bound with the exact coset dichotomy gives a
 lossless numerical residual.  If the leaf and selected-owner cosets coincide,
-at least four deleted coordinates lie outside their union.  If they are
-distinct, every product layer remains available and the middle layers give
+at least five deleted owners lie outside their union and are separated from
+that saturated coset.  If the cosets are distinct, every product layer
+remains available and the middle layers give
 
     388960 * choose(d, floor(d/2)) < 2^|B|.
 
@@ -62,6 +63,27 @@ theorem card_add_four_le_transversalCard_of_critical_kernelCoset
     (Nat.pow_lt_pow_iff_right Nat.one_lt_two).mp hpow
   omega
 
+/-- If the critical coset union contains one retained coordinate outside the
+transversal, its four-cardinality deficit leaves at least five deleted owners
+outside the union. -/
+theorem five_le_card_transversal_sdiff_of_card_add_four_le
+    (B U : Finset (Fin n)) {r : Fin n}
+    (hrU : r ∈ U) (hrB : r ∉ B)
+    (hgap : U.card + 4 ≤ B.card) :
+    5 ≤ (B \ U).card := by
+  have hrInter : r ∉ B ∩ U := by
+    intro hr
+    exact hrB (Finset.mem_inter.mp hr).1
+  have hsubset : insert r (B ∩ U) ⊆ U := by
+    intro b hb
+    rcases Finset.mem_insert.mp hb with rfl | hbInter
+    · exact hrU
+    · exact (Finset.mem_inter.mp hbInter).2
+  have hcard := Finset.card_le_card hsubset
+  rw [Finset.card_insert_of_notMem hrInter] at hcard
+  have hpartition := Finset.card_sdiff_add_card_inter B U
+  omega
+
 /-- The selected-owner middle layer supplies the explicit factor
 `choose(17,8)=24310` in every distinct-coset branch. -/
 theorem central_leaf_product_lt_two_pow_transversalCard_of_critical
@@ -113,13 +135,20 @@ def PrimitiveMiddleExchangeCriticalCosetResidual
             addOrderOf
               ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
                 (g (b : Fin n) - g p.x)) = 64))) ∧
+      let r := primitiveMiddleInsertedCoordinate p k₀
+      (∀ b : ↥B,
+        ((b : Fin n) ∈ S ↔
+          g (b : Fin n) - g r ∈ AddSubgroup.zmultiples y)) ∧
       let C := insert (primitiveMiddleInsertedCoordinate p k₀) S
       let L := (Finset.univ : Finset (Fin d)).image leaf
       C.card = S.card + 1 ∧
       ((2 ^ ((L ∪ C).card - 1) ≤ q ∧
           (∀ b ∈ L, ∀ c ∈ C,
             g b - g c ∈ AddSubgroup.zmultiples y) ∧
-          (L ∪ C).card + 4 ≤ B.card) ∨
+          (L ∪ C).card + 4 ≤ B.card ∧
+          5 ≤ (B \ (L ∪ C)).card ∧
+          (∀ b ∈ B \ (L ∪ C), ∀ c ∈ L ∪ C,
+            g b - g c ∉ AddSubgroup.zmultiples y)) ∨
         ((∀ b ∈ L, ∀ c ∈ C,
             g b - g c ∉ AddSubgroup.zmultiples y) ∧
           (∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q) ∧
@@ -146,8 +175,10 @@ theorem PrimitiveMiddleExchangeFamily.toCriticalCosetResidual
   classical
   rcases hfamily.toCosetCapacity
       g hg y hyq hfullOdd B hd leaf hleaf base hspan with
-    ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows, hCcard, hcase⟩
-  refine ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows, hCcard, ?_⟩
+    ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows, hcomplete,
+      hCcard, hcase⟩
+  refine ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows,
+    hcomplete, hCcard, ?_⟩
   let C : Finset (Fin n) :=
     insert (primitiveMiddleInsertedCoordinate p k₀) S
   let L : Finset (Fin n) :=
@@ -156,7 +187,10 @@ theorem PrimitiveMiddleExchangeFamily.toCriticalCosetResidual
     ((2 ^ ((L ∪ C).card - 1) ≤ q ∧
         (∀ b ∈ L, ∀ c ∈ C,
           g b - g c ∈ AddSubgroup.zmultiples y) ∧
-        (L ∪ C).card + 4 ≤ B.card) ∨
+        (L ∪ C).card + 4 ≤ B.card ∧
+        5 ≤ (B \ (L ∪ C)).card ∧
+        (∀ b ∈ B \ (L ∪ C), ∀ c ∈ L ∪ C,
+          g b - g c ∉ AddSubgroup.zmultiples y)) ∨
       ((∀ b ∈ L, ∀ c ∈ C,
           g b - g c ∉ AddSubgroup.zmultiples y) ∧
         (∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q) ∧
@@ -178,9 +212,51 @@ theorem PrimitiveMiddleExchangeFamily.toCriticalCosetResidual
         rw [Finset.card_image_of_injective _ hleaf]
         simp]
       exact hd
-    exact card_add_four_le_transversalCard_of_critical_kernelCoset
+    have hgap := card_add_four_le_transversalCard_of_critical_kernelCoset
       B (L ∪ C) hretained hcritical
         (hLnonempty.mono Finset.subset_union_left) hcap
+    refine ⟨hgap, ?_⟩
+    let r : Fin n := primitiveMiddleInsertedCoordinate p k₀
+    have hrC : r ∈ C := by
+      exact Finset.mem_insert_self _ _
+    have hrU : r ∈ L ∪ C := Finset.mem_union_right _ hrC
+    have hrB : r ∉ B := by
+      rcases hmiddle with hk | hk
+      · simpa only [r, primitiveMiddleInsertedCoordinate, hk, if_true]
+          using p.x_not_mem
+      · have hkNe : k₀ ≠ -1 := by omega
+        simpa only [r, primitiveMiddleInsertedCoordinate, hkNe, if_false]
+          using p.z_not_mem
+    have hfive := five_le_card_transversal_sdiff_of_card_add_four_le
+      B (L ∪ C) hrU hrB hgap
+    refine ⟨hfive, ?_⟩
+    intro b hbOutside c hcUnion hbc
+    let bB : ↥B := ⟨b, (Finset.mem_sdiff.mp hbOutside).1⟩
+    have hbNotS : b ∉ S := by
+      intro hbS
+      apply (Finset.mem_sdiff.mp hbOutside).2
+      exact Finset.mem_union_right _
+        (Finset.mem_insert_of_mem hbS)
+    have hbNotParallel :
+        g b - g r ∉ AddSubgroup.zmultiples y := by
+      intro hbParallel
+      apply hbNotS
+      exact (hcomplete bB).2 hbParallel
+    have hcParallel :
+        g c - g r ∈ AddSubgroup.zmultiples y := by
+      rcases Finset.mem_union.mp hcUnion with hcL | hcC
+      · exact hcross c hcL r hrC
+      · rcases Finset.mem_insert.mp hcC with hcr | hcS
+        · subst c
+          change g r - g r ∈ AddSubgroup.zmultiples y
+          simp
+        · let cB : ↥B := ⟨c, hSsub hcS⟩
+          exact (hcomplete cB).1 hcS
+    have hsum :=
+      (AddSubgroup.zmultiples y).add_mem hbc hcParallel
+    apply hbNotParallel
+    convert hsum using 1
+    module
   · right
     exact ⟨hcross, hcap,
       central_leaf_product_lt_two_pow_transversalCard_of_critical
