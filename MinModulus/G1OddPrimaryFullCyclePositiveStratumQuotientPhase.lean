@@ -846,6 +846,117 @@ theorem TwoRetainedFiveWeightPresentation.firstStratum_quotientRowNormalForm
       apply eq_sub_of_add_eq
       exact hhalf
 
+/-- If the retained difference is trivial in the first-stratum quotient,
+minimality forces a deleted owner into the other quotient coset.  Its
+displacement from `z` therefore has the full quotient order two and supplies
+the exact exchange seed missing from the raw row normal form. -/
+theorem TwoRetainedFiveWeightPresentation.exists_primitiveOwner_of_firstStratum_trivialRetained
+    {q : ℕ} [NeZero (2 ^ 1 * q)]
+    (g : Fin n → ZMod (2 ^ 1 * q)) (hg : ValidTuple g)
+    (y : ZMod (2 ^ 1 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 1 * q → M ∣ 2 ^ 1 * q →
+        ¬ AdmitsValidTuple n M)
+    (htrivial :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ 1 * q) →+ ZMod (2 ^ 1 * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g p.x - g p.z)) = 1) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ 1 * q) →+ ZMod (2 ^ 1 * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    ∃ b : ↥B, addOrderOf (pi (g (b : Fin n) - g p.z)) = 2 := by
+  classical
+  let H : AddSubgroup (ZMod (2 ^ 1 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 1 * q) ⧸ H
+  let pi : ZMod (2 ^ 1 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  letI : Fintype Q := Fintype.ofFinite Q
+  have hquotientModulus : (2 ^ 1 * q) / addOrderOf y = 2 := by
+    rw [Nat.mul_div_assoc (2 ^ 1) hyq, hfullOdd]
+    norm_num
+  have hQcardNat : Nat.card Q = 2 := by
+    have hmul : Nat.card Q * addOrderOf y = 2 ^ 1 * q := by
+      simpa only [Q, H, Nat.card_zmod] using
+        nat_card_quotient_zmultiples_mul_addOrderOf y
+    have hcard : Nat.card Q = (2 ^ 1 * q) / addOrderOf y := by
+      exact (Nat.div_eq_of_eq_mul_left (addOrderOf_pos y) hmul.symm).symm
+    exact hcard.trans hquotientModulus
+  have hdeltaOrder : addOrderOf deltaQ = 1 := by
+    simpa only [deltaQ, pi, H, Q] using htrivial
+  have hdeltaZero : deltaQ = 0 :=
+    AddMonoid.addOrderOf_eq_one_iff.mp hdeltaOrder
+  have hownerNonzero : ∃ b : ↥B,
+      pi (g (b : Fin n) - g p.z) ≠ 0 := by
+    by_contra hnone
+    have hallZero : ∀ b : ↥B,
+        pi (g (b : Fin n) - g p.z) = 0 := by
+      intro b
+      by_contra hb
+      exact hnone ⟨b, hb⟩
+    have hcoordinate : ∀ i, g i - g p.z ∈ H := by
+      intro i
+      by_cases hiB : i ∈ B
+      · apply (QuotientAddGroup.eq_zero_iff (g i - g p.z)).mp
+        exact hallZero ⟨i, hiB⟩
+      · have hiComplement : i ∈ Finset.univ \ B :=
+          Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiB⟩
+        rw [p.complement_eq] at hiComplement
+        simp only [Finset.mem_insert, Finset.mem_singleton] at hiComplement
+        rcases hiComplement with hix | hiz
+        · subst i
+          apply (QuotientAddGroup.eq_zero_iff (g p.x - g p.z)).mp
+          exact hdeltaZero
+        · subst i
+          simp
+    let gH : Fin n → H := fun i ↦ ⟨g i - g p.z, hcoordinate i⟩
+    have hgH : ValidTuple gH := by
+      apply validTuple_of_comp H.subtype
+      simpa only [gH, AddSubgroup.coe_subtype] using
+        validTuple_sub_const g hg (g p.z)
+    have hHpos : 0 < Nat.card H := Nat.card_pos
+    have hqpos : 0 < q := by
+      have hNpos : 0 < 2 ^ 1 * q := NeZero.pos (2 ^ 1 * q)
+      exact Nat.pos_of_mul_pos_left hNpos
+    have hHlt : Nat.card H < 2 ^ 1 * q := by
+      calc
+        Nat.card H = addOrderOf y := by
+          simp only [H, Nat.card_zmultiples]
+        _ ≤ q := Nat.le_of_dvd hqpos hyq
+        _ < 2 ^ 1 * q := by omega
+    have hHdiv : Nat.card H ∣ 2 ^ 1 * q := by
+      have hdiv : Nat.card H ∣ Nat.card (ZMod (2 ^ 1 * q)) :=
+        AddSubgroup.card_addSubgroup_dvd_card H
+      simpa only [Nat.card_zmod] using hdiv
+    letI : IsAddCyclic H := AddSubgroup.isAddCyclic H
+    let equiv : H ≃+ ZMod (Nat.card H) :=
+      (zmodAddCyclicAddEquiv (G := H) inferInstance).symm
+    have hAdmits : AdmitsValidTuple n (Nat.card H) := by
+      refine ⟨fun i ↦ equiv (gH i), ?_⟩
+      exact validTuple_comp hgH equiv.toAddMonoidHom equiv.injective
+    exact (hminimal (Nat.card H) hHpos hHlt hHdiv hAdmits).elim
+  obtain ⟨b, hb⟩ := hownerNonzero
+  refine ⟨b, ?_⟩
+  let betaQ : Q := pi (g (b : Fin n) - g p.z)
+  have hbetaNe : betaQ ≠ 0 := by
+    simpa only [betaQ] using hb
+  have horderDvd : addOrderOf betaQ ∣ 2 := by
+    have horderDvdCard : addOrderOf betaQ ∣ Nat.card Q := by
+      simpa only [Nat.card_eq_fintype_card] using
+        (addOrderOf_dvd_card (x := betaQ))
+    simpa only [hQcardNat] using horderDvdCard
+  have horderLe : addOrderOf betaQ ≤ 2 :=
+    Nat.le_of_dvd (by omega) horderDvd
+  have horderNeOne : addOrderOf betaQ ≠ 1 := by
+    intro horder
+    exact hbetaNe (AddMonoid.addOrderOf_eq_one_iff.mp horder)
+  have horderPos : 0 < addOrderOf betaQ := addOrderOf_pos betaQ
+  have horder : addOrderOf betaQ = 2 := by omega
+  simpa only [betaQ, pi, H, Q] using horder
+
 /-- One all-positive-stratum quotient endpoint.  For `t=1` it records the
 only genuinely new residual, namely trivial retained difference in the
 two-element quotient.  Every other arm has the uniform primitive-owner or
@@ -890,5 +1001,48 @@ theorem TwoRetainedFiveWeightPresentation.positiveStratum_completeQuotientRowNor
     rcases hnormal with hhalf | hfull
     · exact Or.inr (Or.inl hhalf)
     · exact Or.inr (Or.inr hfull)
+
+/-- The complete positive-stratum quotient endpoint with the first-stratum
+exchange seed retained.  The sole algebraically trivial retained-difference
+arm already contains a deleted owner of full quotient order two. -/
+theorem TwoRetainedFiveWeightPresentation.positiveStratum_completeQuotientRowNormalForm_withExchangeSeed
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    let deltaQ := pi (g p.x - g p.z)
+    (t = 1 ∧ addOrderOf deltaQ = 1 ∧
+        ∃ b : ↥B,
+          addOrderOf (pi (g (b : Fin n) - g p.z)) = 2) ∨
+      (addOrderOf deltaQ = 2 ^ (t - 1) ∧
+        ∃ b : ↥B, p.weight b = -1 ∧
+          addOrderOf (pi (g (b : Fin n) - g p.z)) = 2 ^ t) ∨
+      (addOrderOf deltaQ = 2 ^ t ∧
+        ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+          (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+            pi (g (b : Fin n) - g p.z) =
+              (2 ^ (t - 1) : ℕ) • deltaQ - k • deltaQ)) := by
+  have hnormal := p.positiveStratum_completeQuotientRowNormalForm
+    ht g hg hunique hne y hyq hfullOdd B hrows hminimal
+  rcases hnormal with hfirst | hhalf | hfull
+  · rcases hfirst with ⟨htOne, htrivial⟩
+    subst t
+    have howner := p.exists_primitiveOwner_of_firstStratum_trivialRetained
+      (q := q) g hg y hyq hfullOdd B hminimal htrivial
+    exact Or.inl ⟨rfl, htrivial, howner⟩
+  · exact Or.inr (Or.inl hhalf)
+  · exact Or.inr (Or.inr hfull)
 
 end MinModulus
