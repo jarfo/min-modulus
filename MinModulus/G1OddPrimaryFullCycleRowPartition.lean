@@ -7162,6 +7162,9 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_recurrence
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ, ∃ cycleWeight : Fin d → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ b : ↥B,
+        (2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z) ∈ AddSubgroup.zmultiples y) ∧
       (∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
         (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
             (g x - g z) + (2 : ℤ) • (g z - a) ∈
@@ -7189,6 +7192,15 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_recurrence
     intro b
     exact AddSubgroup.zsmul_mem _
       (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _) _
+  have hrowMem : ∀ b : ↥B,
+      (2 : ℤ) • (g (b : Fin n) - g z) +
+          weight b • (g x - g z) ∈ AddSubgroup.zmultiples y := by
+    intro b
+    have ht := htargetMem b
+    convert ht using 1
+    dsimp only [target]
+    rw [(hweightData b).2.2]
+    module
   have htransition : ∀ i (hi : leaf i ∈ B) (hRi : leaf (R i) ∈ B),
       (weight ⟨leaf (R i), hRi⟩ - 2 * weight ⟨leaf i, hi⟩) •
           (g x - g z) + (2 : ℤ) • (g z - a) ∈
@@ -7259,7 +7271,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_recurrence
     convert htwoStep using 1
     module
   refine ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
-    fun b ↦ (hweightData b).1, htransition, ?_, hcycleWeight,
+    fun b ↦ (hweightData b).1, hrowMem, htransition, ?_, hcycleWeight,
       hcycleTransition, hcycleTwoStep⟩
   intro i hiB
   simp only [cycleWeight, dif_pos hiB]
@@ -7289,7 +7301,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_split
         ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
           weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
   obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
-      hweight, htransition, hcycleValue, hcycleWeight,
+      hweight, _hrowMem, htransition, hcycleValue, hcycleWeight,
       hcycleTransition, hcycleTwoStep⟩ :=
     hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
   have hsplit :=
@@ -8788,7 +8800,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_weight_con
       ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
         weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩ := by
   obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
-      hweight, htransition, hcycleValue, hcycleWeight,
+      hweight, _hrowMem, htransition, hcycleValue, hcycleWeight,
       hcycleTransition, hcycleTwoStep⟩ :=
     hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
   have hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
@@ -8933,7 +8945,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
         ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
           weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩) := by
   obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
-      hweight, htransition, hcycleValue, hcycleWeight,
+      hweight, _hrowMem, htransition, hcycleValue, hcycleWeight,
       hcycleTransition, hcycleTwoStep⟩ :=
     hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
   have hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →

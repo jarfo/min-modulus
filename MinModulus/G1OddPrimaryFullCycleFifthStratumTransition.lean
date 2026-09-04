@@ -855,6 +855,9 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ b : ↥B,
+        (2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z) ∈ AddSubgroup.zmultiples y) ∧
       ((q / addOrderOf y = 1 ∧
           (R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
@@ -862,7 +865,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = 0)) := by
   obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
-      hweight, htransition, hcycleValue, hcycleWeight,
+      hweight, hrowMem, htransition, hcycleValue, hcycleWeight,
       hcycleTransition, hcycleTwoStep⟩ :=
     hrows.oneRetainedCycle_recurrence g y B leaf R a p hp hleafB hdouble
   have hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
@@ -878,7 +881,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
       R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
         (g x - g z) ((2 : ℤ) • (g z - a))
           (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep hkernel1632
-  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hrowMem, ?_⟩
   rcases hsplit with ⟨e, he, helow, hehigh, heMem, hshort⟩ | hconstantCycle
   · have hfull :=
       hrows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_sixteen_or_thirtyTwo_of_fifthStratum_minimal
@@ -981,17 +984,21 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_smallKerne
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ b : ↥B,
+        (2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z) ∈ AddSubgroup.zmultiples y) ∧
       ((q / addOrderOf y = 1 ∧
           (addOrderOf y ∣ 3 ∨ addOrderOf y ∣ 7 ∨ addOrderOf y ∣ 15)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = 0)) := by
-  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hout⟩ :=
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, hrowMem, hout⟩ :=
     hrows.oneRetainedCycle_shortReturn_or_purePair_of_fifthStratum_minimal
       hq g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
         hleafB hdouble hretainedMem
-  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hrowMem, ?_⟩
   rcases hout with ⟨hfullOdd, hshort⟩ | hpureX | hpureZ
   · left
     refine ⟨hfullOdd, ?_⟩
@@ -1033,6 +1040,9 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ b : ↥B,
+        (2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z) ∈ AddSubgroup.zmultiples y) ∧
       (((n = 8 ∧ q = 7 ∧ d = 3) ∨ (n = 9 ∧ q = 15 ∧ d = 4)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
@@ -1042,11 +1052,12 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       g (leaf p) - a ∈ AddSubgroup.zmultiples y := by
     rw [← hspan]
     exact AddSubgroup.subset_closure ⟨p, rfl⟩
-  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hout⟩ :=
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, hrowMem, hout⟩ :=
     hrows.oneRetainedCycle_smallKernelOrder_or_purePair_of_fifthStratum_minimal
       hq g hg hunique hne y hyq B hminimal leaf R hcycle hRne a p i₀
         (hRne p) hi₀ hRi₀ hleafB hdouble hspan hretainedMem
-  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hrowMem, ?_⟩
   rcases hout with ⟨hfull, hsmall⟩ | hpureX | hpureZ
   · left
     have hqSmall :=
@@ -1105,6 +1116,9 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (∀ b : ↥B,
+        (2 : ℤ) • (g (b : Fin n) - g z) +
+            weight b • (g x - g z) ∈ AddSubgroup.zmultiples y) ∧
       ((leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
@@ -1114,10 +1128,10 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       hq g hg hcritical hunique hne y hyq hrTwo B hminimal leaf hleafInj
         R hcycle hRne a p i₀ hi₀ hRi₀ hleafB hdouble hspan
   obtain ⟨x₀, z₀, weight₀, hx₀B, hz₀B, hx₀z₀, hcomplement₀,
-      hweight₀, hout⟩ := hendpoint
+      hweight₀, hrowMem₀, hout⟩ := hendpoint
   rcases hout with hsmall | hpureX | hpureZ
   · obtain ⟨x, z, weight, cycleWeight, hxB, hzB, hxz, hcomplement,
-        hweight, htransition, hcycleValue, hcycleWeight,
+        hweight, hrowMem, htransition, hcycleValue, hcycleWeight,
         hcycleTransition, hcycleTwoStep⟩ :=
       hrows.oneRetainedCycle_recurrence
         g y B leaf R a p (hRne p) hleafB hdouble
@@ -1173,7 +1187,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
         Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hpNotB⟩
       rw [hcomplement] at hpComplement
       simpa only [Finset.mem_insert, Finset.mem_singleton] using hpComplement
-    refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+    refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement,
+      hweight, hrowMem, ?_⟩
     rcases hpPair with hpX | hpZ
     · have hxMem : g x - a ∈ AddSubgroup.zmultiples y := by
         rw [← hpX]
@@ -1210,8 +1225,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
           intro i hi
           exact (hconstant i hi i₀ hiB).trans hwZero⟩
   · exact ⟨x₀, z₀, weight₀, hx₀B, hz₀B, hx₀z₀, hcomplement₀,
-      hweight₀, Or.inl hpureX⟩
+      hweight₀, hrowMem₀, Or.inl hpureX⟩
   · exact ⟨x₀, z₀, weight₀, hx₀B, hz₀B, hx₀z₀, hcomplement₀,
-      hweight₀, Or.inr hpureZ⟩
+      hweight₀, hrowMem₀, Or.inr hpureZ⟩
 
 end MinModulus
