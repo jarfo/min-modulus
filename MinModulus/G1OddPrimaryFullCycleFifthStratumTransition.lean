@@ -344,6 +344,26 @@ theorem addOrderOf_dvd_three_or_seven_or_fifteen_of_isCycle_doubling_shortReturn
     rw [AddMonoidHom.mem_ker] at hyTorsion
     exact addOrderOf_dvd_of_nsmul_eq_zero hyTorsion
 
+/-- Exact odd-factor classification behind the fifth-stratum short-cycle
+arm.  Full odd order, nontriviality, and divisibility by `3`, `7`, or `15`
+leave only the four odd factors `3`, `5`, `7`, and `15`. -/
+theorem oddFactor_eq_three_or_five_or_seven_or_fifteen_of_fullOrder_smallKernel
+    {q r : ℕ} (hq : Odd q) (hrq : r ∣ q) (hrTwo : 2 ≤ r)
+    (hfull : q / r = 1)
+    (hsmall : r ∣ 3 ∨ r ∣ 7 ∨ r ∣ 15) :
+    q = 3 ∨ q = 5 ∨ q = 7 ∨ q = 15 := by
+  have hqr : q = r := by
+    calc
+      q = r * (q / r) := (Nat.mul_div_cancel' hrq).symm
+      _ = r := by rw [hfull]; omega
+  subst q
+  rcases hsmall with h3 | h7 | h15
+  · exact Or.inl ((Nat.dvd_prime_two_le (by norm_num) hrTwo).mp h3)
+  · exact Or.inr (Or.inr (Or.inl
+      ((Nat.dvd_prime_two_le (by norm_num) hrTwo).mp h7)))
+  · have hrLe : r ≤ 15 := Nat.le_of_dvd (by omega) h15
+    interval_cases r <;> norm_num at h15 <;> omega
+
 /-- Pure endpoint arithmetic for the common-transition boundary arm.  If the
 punctured boundary coefficient has magnitude `16` or `32`, the same affine
 transition cannot persist for three steps both forward from the successor
@@ -483,6 +503,58 @@ theorem fiveWeightPuncturedPermutation_fifthStratum_shortReturn_or_weight_consta
         R p i₀ hp hi₀ hRi₀ weight hweight hboundary hall)
   · exact Or.inr hconstant
 
+/-- Provenance-preserving form of the final generic fifth-stratum reduction.
+The short-return arm retains the actual nonzero bounded kernel coefficient
+that forced it.  This lets odd-primary minimality recover full odd order at
+the upstream endpoint rather than losing that information when the cycle is
+shortened. -/
+theorem fiveWeightPuncturedPermutation_fifthStratum_boundedRelationAndShortReturn_or_weight_constant
+    {ι : Type*} [Fintype ι]
+    (R : Equiv.Perm ι) (p i₀ : ι) (hp : R p ≠ p)
+    (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (weight : ι → ℤ)
+    (hweight : ∀ i, i ≠ p →
+      weight i ∈ twoRetainedNormalizedWeightLevels)
+    (delta C : G) (H : AddSubgroup G)
+    (htransition : ∀ i, i ≠ p → R i ≠ p →
+      (weight (R i) - 2 * weight i) • delta + C ∈ H)
+    (htwoStep :
+      (weight (R p) - 4 * weight (R.symm p)) • delta +
+        (3 : ℤ) • C ∈ H)
+    (hkernel1632 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 16 ∨ e.natAbs = 32) :
+    (∃ e : ℤ, e ≠ 0 ∧ -42 ≤ e ∧ e ≤ 42 ∧ e • delta ∈ H ∧
+      (R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p)) ∨
+      ∀ i, i ≠ p → ∀ j, j ≠ p → weight i = weight j := by
+  rcases fiveWeightPuncturedPermutation_smallKernelMultipleWithSource_or_weight_constant
+      R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep with
+    ⟨e, he, helow, hehigh, heMem, hsource⟩ | hconstant
+  · rcases
+        fiveWeightPuncturedPermutation_fifthStratum_shortReturn_or_weight_constant
+          R p i₀ hp hi₀ hRi₀ weight hweight delta C H htransition htwoStep
+            hkernel1632 with
+      hshort | hconstant
+    · exact Or.inl ⟨e, he, helow, hehigh, heMem, hshort⟩
+    · exfalso
+      rcases hsource with ⟨i, hi, hRi, heq⟩ | ⟨heq, _hall⟩
+      · have hsourceEq := hconstant i hi i₀ hi₀
+        have htargetEq := hconstant (R i) hRi (R i₀) hRi₀
+        apply he
+        rw [heq, hsourceEq, htargetEq]
+        simp
+      · have hsymmNe : R.symm p ≠ p := by
+          intro hsymm
+          apply hp
+          have happly := R.apply_symm_apply p
+          simpa only [hsymm] using happly
+        have hRpEq := hconstant (R p) hp i₀ hi₀
+        have hsymmEq := hconstant (R.symm p) hsymmNe i₀ hi₀
+        have hRi₀Eq := hconstant (R i₀) hRi₀ i₀ hi₀
+        apply he
+        rw [heq, hRpEq, hsymmEq, hRi₀Eq]
+        ring
+  · exact Or.inr hconstant
+
 /-- Integrated fifth-stratum one-retained endpoint.  In a modulus-minimal
 odd-primary survivor, the punctured cycle returns after two, three, or four
 steps, or the actual canonical five-weight rows form one of the two
@@ -510,7 +582,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
-      ((R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p) ∨
+      ((q / addOrderOf y = 1 ∧
+          (R (R p) = p ∨ R (R (R p)) = p ∨ R (R (R (R p))) = p)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
@@ -528,13 +601,17 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_shortRetur
         hq g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
           e he helow hehigh heMem).2
   have hsplit :=
-    fiveWeightPuncturedPermutation_fifthStratum_shortReturn_or_weight_constant
+    fiveWeightPuncturedPermutation_fifthStratum_boundedRelationAndShortReturn_or_weight_constant
       R p i₀ hp hi₀ hRi₀ cycleWeight hcycleWeight
         (g x - g z) ((2 : ℤ) • (g z - a))
           (AddSubgroup.zmultiples y) hcycleTransition hcycleTwoStep hkernel1632
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
-  rcases hsplit with hshort | hconstantCycle
-  · exact Or.inl hshort
+  rcases hsplit with ⟨e, he, helow, hehigh, heMem, hshort⟩ | hconstantCycle
+  · have hfull :=
+      hrows.boundedKernelCoefficient_fullOddOrder_and_natAbs_eq_sixteen_or_thirtyTwo_of_fifthStratum_minimal
+        hq g hg hunique hne y hyq B hminimal x z hxB hzB hxz hcomplement
+          e he helow hehigh heMem
+    exact Or.inl ⟨hfull.1, hshort⟩
   · have hconstant : ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
         weight ⟨leaf i, hi⟩ = weight ⟨leaf j, hj⟩ := by
       intro i hiB j hjB
@@ -631,7 +708,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_smallKerne
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
-      ((addOrderOf y ∣ 3 ∨ addOrderOf y ∣ 7 ∨ addOrderOf y ∣ 15) ∨
+      ((q / addOrderOf y = 1 ∧
+          (addOrderOf y ∣ 3 ∨ addOrderOf y ∣ 7 ∨ addOrderOf y ∣ 15)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
@@ -641,8 +719,9 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_smallKerne
       hq g hg hunique hne y hyq B hminimal leaf R a p i₀ hp hi₀ hRi₀
         hleafB hdouble hretainedMem
   refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
-  rcases hout with hshort | hpureX | hpureZ
+  rcases hout with ⟨hfullOdd, hshort⟩ | hpureX | hpureZ
   · left
+    refine ⟨hfullOdd, ?_⟩
     apply addOrderOf_dvd_three_or_seven_or_fifteen_of_isCycle_doubling_shortReturn
       R hcycle hRne (fun i ↦ g (leaf i) - a) ?_ p y hspan hshort
     intro i
