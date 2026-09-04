@@ -62,6 +62,25 @@ theorem AddSubgroup.zmultiples_eq_of_mem_of_addOrderOf_eq
   · simpa only [Nat.card_zmultiples, horder] using
       (le_refl (addOrderOf y))
 
+/-- In either middle orientation, correcting a pointed leaf by the retained
+row parameter removes the common root and leaves exactly its SI digit. -/
+theorem primitiveMiddle_corrected_pointedLeaf_eq_digit
+    {G : Type*} [AddCommGroup G]
+    (x z root leafValue digit : G) (k₀ : ℤ)
+    (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (hroot : root = if k₀ = -1 then x else z)
+    (hleaf : leafValue = root + digit) :
+    leafValue - z + k₀ • (x - z) = digit := by
+  rcases hmiddle with hk | hk
+  · subst k₀
+    simp at hroot
+    rw [hleaf, hroot]
+    module
+  · subst k₀
+    simp at hroot
+    rw [hleaf, hroot]
+    module
+
 /-- The exact five-coordinate external partition, with every secondary and
 final canonical private-row equation retained on one presentation. -/
 def PrimitiveMiddleExactMersenneFiveExternalRows
@@ -158,6 +177,12 @@ def PrimitiveMiddleExactMersenneFiveExternalRowNormalFormResidual
             (∀ k : Fin d,
               g (leaf (e k)) =
                 g (leaf missing) + a k.val • (μ • y)) ∧
+            (∀ k : Fin d,
+              leaf (e k) ∈ B ↔ k ≠ ⟨0, hd⟩) ∧
+            (∀ k : Fin d, ∀ hk : leaf (e k) ∈ B,
+              p.coeff ⟨leaf (e k), hk⟩ (leaf (e k)) •
+                  (p.scalar ⟨leaf (e k), hk⟩ • y) =
+                a k.val • (μ • y)) ∧
             PrimitiveMiddleExactMersenneFiveExternalRows
               g y B L p k₀
 
@@ -312,6 +337,47 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
         g (leaf missing) + a k.val • (μ • y) := by
     intro k
     simpa only [hμ] using hnormal k
+  have hpointedLeafMem : ∀ k : Fin d,
+      leaf (e k) ∈ B ↔ k ≠ ⟨0, hd⟩ := by
+    intro k
+    rw [hpunctured]
+    constructor
+    · intro hek hkZero
+      apply hek
+      rw [hkZero, hezero]
+    · intro hkZero hek
+      apply hkZero
+      apply e.injective
+      rw [hek, hezero]
+  have hrootValue :
+      g (leaf missing) = if k₀ = -1 then g p.x else g p.z := by
+    have hrootCoordinate :
+        leaf missing = if k₀ = -1 then p.x else p.z := by
+      simpa only [r, primitiveMiddleInsertedCoordinate] using hmissing
+    simpa only [apply_ite] using congrArg g hrootCoordinate
+  have hprimaryDigit : ∀ k : Fin d, ∀ hk : leaf (e k) ∈ B,
+      p.coeff ⟨leaf (e k), hk⟩ (leaf (e k)) •
+          (p.scalar ⟨leaf (e k), hk⟩ • y) =
+        a k.val • (μ • y) := by
+    intro k hk
+    let b : ↥B := ⟨leaf (e k), hk⟩
+    have hbL : leaf (e k) ∈ L :=
+      Finset.mem_image.mpr ⟨e k, Finset.mem_univ _, rfl⟩
+    have hbSfull : (b : Fin n) ∈ Sfull := by
+      rw [← hBinterL]
+      exact Finset.mem_inter.mpr ⟨hk, hbL⟩
+    have hunit :=
+      (p.primitive_unitRowNormalForm
+        g y B hyq hfullOdd hprimitive b).1
+    have hexact := p.corrected_eq_owner_smul_scalar
+      g y B b k₀ hunit (hrows b hbSfull).1
+    have hcorrected :
+        g (leaf (e k)) - g p.z + k₀ • (g p.x - g p.z) =
+          a k.val • (μ • y) :=
+      primitiveMiddle_corrected_pointedLeaf_eq_digit
+        (g p.x) (g p.z) (g (leaf missing)) (g (leaf (e k)))
+          (a k.val • (μ • y)) k₀ hmiddle hrootValue (hnormalY k)
+    exact hexact.symm.trans hcorrected
   have hTexact : ∀ b : ↥B, (b : Fin n) ∈ T →
       g (b : Fin n) - g p.z + k₁ • (g p.x - g p.z) =
         p.coeff b (b : Fin n) • (p.scalar b • y) := by
@@ -372,11 +438,18 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
         (∀ k : Fin d,
           g (leaf (e k)) =
             g (leaf missing) + a k.val • (μ • y)) ∧
+        (∀ k : Fin d,
+          leaf (e k) ∈ B ↔ k ≠ ⟨0, hd⟩) ∧
+        (∀ k : Fin d, ∀ hk : leaf (e k) ∈ B,
+          p.coeff ⟨leaf (e k), hk⟩ (leaf (e k)) •
+              (p.scalar ⟨leaf (e k), hk⟩ • y) =
+            a k.val • (μ • y)) ∧
         PrimitiveMiddleExactMersenneFiveExternalRows
           g y B L p k₀
     refine ⟨missing, hd, e, hpunctured, hmissing, hSeq, hw,
       hn, hBcard, hdLower, hdUpper, hezero, hleafOrder missing,
-      hnormal, hleafGenerator, μ, ν, hμ, hν, hnormalY, ?_⟩
+      hnormal, hleafGenerator, μ, ν, hμ, hν, hnormalY,
+      hpointedLeafMem, hprimaryDigit, ?_⟩
     exact ⟨T, k₁, t, F, hTcard, hTle, hFle, hTsub, htT,
       hk₁Mem, hk₁Ne, hTrows, hTexact, hTcomplete, hTseparated,
       hexternalPartition, hTFdisjoint, hTFcard, hprofiles,
