@@ -129,6 +129,8 @@ def PrimitiveCanonicalResidueClass
           -(k₀ •
             (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
               (g p.x - g p.z))) ∧
+      ((∀ b : ↥B, p.weight b ≠ -4) ∨
+        ∀ b : ↥B, p.weight b ≠ 2) ∧
       ((k₀ = -1 ∨ k₀ = 0) ∨
         ((k₀ = -2 ∨ k₀ = 1) ∧
           ∀ b : ↥B, (b : Fin n) ∈ S →
@@ -152,7 +154,7 @@ theorem PrimitiveTwoRetainedSixthStratumUnitWindow.toCanonicalResidueClass_of_cr
     g y B hretained hyq hfullOdd hcritical
   obtain ⟨S, hScard, hSsub, hcoset⟩ :=
     hlarge.exists_kernelCoset_card_sixteen g y B
-  rcases hwindow with ⟨p, hprimitive, hunit, _houterWindow⟩
+  rcases hwindow with ⟨p, hprimitive, hunit, houterWindow⟩
   have hSnonempty : S.Nonempty := by
     apply Finset.card_pos.mp
     omega
@@ -215,6 +217,7 @@ theorem PrimitiveTwoRetainedSixthStratumUnitWindow.toCanonicalResidueClass_of_cr
       intro b hbS
       exact p.owner_eq_neg_one_of_outerParameter g y B b k₀
         (hrow b hbS).1 (hrow b hbS).2.1 (Or.inr hk₀)
-  exact ⟨p, S, k₀, hprimitive, hScard, hSsub, hk₀Mem, hrow, hsplit⟩
+  exact ⟨p, S, k₀, hprimitive, hScard, hSsub, hk₀Mem, hrow,
+    houterWindow, hsplit⟩
 
 end MinModulus

@@ -143,7 +143,7 @@ theorem PrimitiveCanonicalResidueClass.middleExchange_or_outerPureHeavy
     PrimitiveMiddleExchangeFamily g y B ∨
       PrimitiveOuterPureHeavyFamily g y B := by
   rcases hclass with ⟨p, S, k₀, hprimitive, hScard, hSsub, _hk₀Mem,
-    hrow, hsplit⟩
+    hrow, _hwindow, hsplit⟩
   rcases hsplit with hmiddle | ⟨houter, howner⟩
   · left
     refine ⟨p, S, k₀, hScard, hSsub, hmiddle, ?_⟩
