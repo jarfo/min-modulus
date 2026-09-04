@@ -9,6 +9,7 @@ unordered transition-level pairs, `{-8,8}` and `{-6,10}`.  Neither pair can
 label three consecutive available edges of the punctured doubling cycle.
 -/
 import MinModulus.G1OddPrimaryFullCycleExactDivisorDescent
+import MinModulus.G1OddPrimaryFullCyclePrimitiveExchangeMersenneProperDivisorElimination
 
 namespace MinModulus
 
@@ -392,6 +393,47 @@ theorem criticalFifthStratum_smallOddFactor_finitePairs
   all_goals subst q
   all_goals interval_cases n <;> norm_num [stratumBound] at *
 
+/-- Adding injective full-cycle span to the critical fifth-stratum pair list
+forces exact Mersenne odd factor.  The factor `5` disappears, and the other
+three cases have cycle lengths `2`, `3`, and `4` respectively. -/
+theorem criticalFifthStratum_fullCycle_smallOddFactor_finiteTriples
+    {n q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hqSmall : q = 3 ∨ q = 5 ∨ q = 7 ∨ q = 15)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hRcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (base : ZMod (2 ^ 5 * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - base = (2 : ℤ) • (g (leaf i) - base))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - base)) =
+      AddSubgroup.zmultiples y) :
+    (n = 7 ∧ q = 3 ∧ d = 2) ∨ (n = 8 ∧ q = 7 ∧ d = 3) ∨
+      (n = 9 ∧ q = 15 ∧ d = 4) := by
+  have hpairs :=
+    criticalFifthStratum_smallOddFactor_finitePairs
+      g hg hcritical hqSmall
+  have hmersenne : q = 2 ^ d - 1 :=
+    oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+      g hg y hyq hfullOdd leaf hleaf R hRcycle hRne base (by
+        intro i
+        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+  have hqle : q ≤ 15 := by
+    rcases hqSmall with rfl | rfl | rfl | rfl <;> omega
+  have hdle : d ≤ 4 := by
+    by_contra hdNot
+    have hdFive : 5 ≤ d := by omega
+    have hpow : 2 ^ 5 ≤ 2 ^ d :=
+      Nat.pow_le_pow_right (by omega) hdFive
+    norm_num at hpow
+    omega
+  rcases hpairs with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ |
+      ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+  all_goals interval_cases d <;> norm_num at *
+
 /-- Pure endpoint arithmetic for the common-transition boundary arm.  If the
 punctured boundary coefficient has magnitude `16` or `32`, the same affine
 transition cannot persist for three steps both forward from the successor
@@ -757,10 +799,11 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_smallKerne
   · exact Or.inr (Or.inl hpureX)
   · exact Or.inr (Or.inr hpureZ)
 
-/-- Critical fifth-stratum full-cycle endpoint.  The short-return arm is
-confined to four exact `(dimension, odd factor)` pairs; outside those pairs
-the actual canonical rows form one of the two pure-pair orientations. -/
-theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_finitePairs_or_purePair
+/-- Critical fifth-stratum full-cycle endpoint.  Exact Mersenne rigidity and
+the named available punctured edge confine the short-return arm to two exact
+`(dimension, odd factor, cycle length)` triples; every other arm is one of
+the two pure-pair orientations. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_finiteTriples_or_purePair
     {n q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
     (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
     (hcritical : 2 ^ 5 * q < stratumBound n 5)
@@ -774,7 +817,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
     (hminimal : ∀ M : ℕ,
       0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
         ¬ AdmitsValidTuple n M)
-    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
     (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
     (a : ZMod (2 ^ 5 * q))
     (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
@@ -786,8 +830,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
     ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
       x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
       (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
-      (((n = 7 ∧ q = 3) ∨ (n = 8 ∧ q = 5) ∨
-          (n = 8 ∧ q = 7) ∨ (n = 9 ∧ q = 15)) ∨
+      (((n = 8 ∧ q = 7 ∧ d = 3) ∨ (n = 9 ∧ q = 15 ∧ d = 4)) ∨
         (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
           weight ⟨leaf i, hi⟩ = -2) ∨
         (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
@@ -806,8 +849,25 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
     have hqSmall :=
       oddFactor_eq_three_or_five_or_seven_or_fifteen_of_fullOrder_smallKernel
         hq hyq hrTwo hfull hsmall
-    exact criticalFifthStratum_smallOddFactor_finitePairs
-      g hg hcritical hqSmall
+    have htriples := criticalFifthStratum_fullCycle_smallOddFactor_finiteTriples
+      g hg hcritical y hyq hfull hqSmall leaf hleafInj R hcycle hRne a
+        hdouble hspan
+    have hdThree : 3 ≤ d := by
+      let S : Finset (Fin d) := {p, i₀, R i₀}
+      have hScard : S.card = 3 := by
+        have hp_i₀ : p ≠ i₀ := Ne.symm hi₀
+        have hp_Ri₀ : p ≠ R i₀ := Ne.symm hRi₀
+        have hi₀_Ri₀ : i₀ ≠ R i₀ := Ne.symm (hRne i₀)
+        simp [S, hp_i₀, hp_Ri₀, hi₀_Ri₀]
+      calc
+        3 = S.card := hScard.symm
+        _ ≤ (Finset.univ : Finset (Fin d)).card :=
+          Finset.card_le_card (Finset.subset_univ S)
+        _ = d := by simp
+    rcases htriples with ⟨_hn, _hq, hdTwo⟩ | h87 | h915
+    · omega
+    · exact Or.inl h87
+    · exact Or.inr h915
   · exact Or.inr (Or.inl hpureX)
   · exact Or.inr (Or.inr hpureZ)
 

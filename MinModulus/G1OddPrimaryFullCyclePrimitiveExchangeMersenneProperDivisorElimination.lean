@@ -19,17 +19,18 @@ open Finset
 
 variable {n : ℕ}
 
-/-- A valid injective full doubling cycle spanning the full odd kernel forces
-the kernel order to be the whole Mersenne number, not a proper divisor. -/
-theorem addOrderOf_eq_mersenne_of_valid_fullCycle_doubling_span
-    {d q : ℕ} [NeZero (2 ^ 6 * q)]
-    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
-    (y : ZMod (2 ^ 6 * q))
+/-- At every two-adic stratum, a valid injective full doubling cycle spanning
+the full odd kernel forces the odd factor to be the whole Mersenne number.
+The proof is independent of the ambient two-adic exponent. -/
+theorem oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+    {d t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (y : ZMod (2 ^ t * q))
     (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
     (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
     (R : Equiv.Perm (Fin d)) (hRcycle : R.IsCycle)
     (hRne : ∀ i, R i ≠ i)
-    (base : ZMod (2 ^ 6 * q))
+    (base : ZMod (2 ^ t * q))
     (hdouble : ∀ i,
       g (leaf (R i)) - base = 2 • (g (leaf i) - base))
     (hspan : AddSubgroup.closure
@@ -37,7 +38,7 @@ theorem addOrderOf_eq_mersenne_of_valid_fullCycle_doubling_span
       AddSubgroup.zmultiples y) :
     q = 2 ^ d - 1 := by
   classical
-  let disp : Fin d → ZMod (2 ^ 6 * q) :=
+  let disp : Fin d → ZMod (2 ^ t * q) :=
     fun i ↦ g (leaf i) - base
   have hd : 0 < d := by
     by_contra hdZero
@@ -87,6 +88,26 @@ theorem addOrderOf_eq_mersenne_of_valid_fullCycle_doubling_span
       | succ k => simp [pow_succ, Nat.mul_comm]
     have hpositive : 0 < 2 ^ (d - 1) := pow_pos (by decide) _
     omega
+
+/-- A valid injective full doubling cycle spanning the full odd kernel forces
+the kernel order to be the whole Mersenne number, not a proper divisor. -/
+theorem addOrderOf_eq_mersenne_of_valid_fullCycle_doubling_span
+    {d q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hRcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (base : ZMod (2 ^ 6 * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - base = 2 • (g (leaf i) - base))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - base)) =
+      AddSubgroup.zmultiples y) :
+    q = 2 ^ d - 1 :=
+  oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+    g hg y hyq hfullOdd leaf hleaf R hRcycle hRne base hdouble hspan
 
 /-- In particular, the full windowed critical coset residual's Mersenne split
 always takes its exact branch; its two quantified proper-divisor outputs are
