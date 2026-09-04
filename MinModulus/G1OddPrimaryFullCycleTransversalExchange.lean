@@ -143,9 +143,10 @@ def PrimitiveTwoRetainedSixthStratumRows
             pi (g (b : Fin n) - g p.z) =
               (32 : ℕ) • deltaQ - k • deltaQ)
 
-/-- Minimize the exchanged transversal.  A strict shrink retains at least
-three coordinates; equality retains exactly the primitive pair `{b,z}`. -/
-theorem exists_minimalCyclicKernelTransversal_exchange_primitive_or_three
+/-- Minimize the exchanged transversal without forgetting its identity.  A
+strict shrink retains at least three coordinates; equality makes the literal
+set `insert x (B.erase b)` the new primitive exact-two transversal. -/
+theorem exists_minimalCyclicKernelTransversal_exchange_fixed_primitive_or_three
     {q : ℕ} [NeZero (2 ^ 6 * q)]
     (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
     {h : ZMod (2 ^ 6 * q)} (hh : h + h = 0) (hne : h ≠ 0)
@@ -171,8 +172,7 @@ theorem exists_minimalCyclicKernelTransversal_exchange_primitive_or_three
     (∃ B₀ : Finset (Fin n),
         MinimalCyclicKernelSupportTransversal g y B₀ ∧
           3 ≤ n - B₀.card) ∨
-      ∃ B₀ : Finset (Fin n),
-        PrimitiveTwoRetainedSixthStratumRows g y B₀ := by
+      PrimitiveTwoRetainedSixthStratumRows g y (insert x (B.erase b)) := by
   classical
   let H : AddSubgroup (ZMod (2 ^ 6 * q)) := AddSubgroup.zmultiples y
   let pi : ZMod (2 ^ 6 * q) →+ ZMod (2 ^ 6 * q) ⧸ H :=
@@ -258,8 +258,47 @@ theorem exists_minimalCyclicKernelTransversal_exchange_primitive_or_three
       · have : (32 : ℕ) = 64 := hindex.symm.trans hp₀primitive
         omega
       · simpa only [pi, H] using hrowsSolved
-    refine ⟨B₀, hB₀min, hretained₀, hfive₀, p₀, ?_⟩
-    simpa only [pi, H] using And.intro hp₀primitive hsolved
+    have hstate₀ : PrimitiveTwoRetainedSixthStratumRows g y B₀ := by
+      refine ⟨hB₀min, hretained₀, hfive₀, p₀, ?_⟩
+      simpa only [pi, H] using And.intro hp₀primitive hsolved
+    rw [hB₀eq] at hstate₀
+    simpa only [Bexchange] using hstate₀
+
+/-- Compatibility wrapper for callers that do not need the identity of the
+exact-two exchanged set. -/
+theorem exists_minimalCyclicKernelTransversal_exchange_primitive_or_three
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    {B : Finset (Fin n)}
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hretained : n - B.card = 2)
+    {b x z : Fin n} (hb : b ∈ B) (hxB : x ∉ B) (hzB : z ∉ B)
+    (hxz : x ≠ z) (hcomplement : Finset.univ \ B = {x, z})
+    (hprimitive :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ 6 * q) →+ ZMod (2 ^ 6 * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g b - g z)) = 64)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ∃ B₀ : Finset (Fin n),
+        PrimitiveTwoRetainedSixthStratumRows g y B₀ := by
+  rcases exists_minimalCyclicKernelTransversal_exchange_fixed_primitive_or_three
+      g hg hh hne hunique hno y hyq hfullOdd hmin hretained hb hxB hzB hxz
+        hcomplement hprimitive hminimal with hthree | hexact
+  · exact Or.inl hthree
+  · exact Or.inr ⟨insert x (B.erase b), hexact⟩
 
 /-- Every sixth-stratum exact-two survivor can be placed directly in the
 primitive retained-difference state, unless minimizing the primitive-owner

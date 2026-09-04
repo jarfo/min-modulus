@@ -204,4 +204,56 @@ theorem PrimitiveMiddleExchangeFamily.exchange_each_to_primitive_or_three
         b.property p.z_not_mem p.x_not_mem p.x_ne_z.symm hcomplementReverse
         hzero.2.2 hminimal
 
+/-- Lossless simultaneous form of the middle exchange theorem.  The
+exact-two outcome is stated on the literal owner exchange, so the whole large
+family can be compared coordinate-by-coordinate in the next step. -/
+theorem PrimitiveMiddleExchangeFamily.exchange_each_fixed_to_primitive_or_three
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hretained : n - B.card = 2)
+    (hfamily : PrimitiveMiddleExchangeFamily g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M) :
+    ∃ p : TwoRetainedCanonicalPrivatePresentation g y B,
+      ∃ S : Finset (Fin n), ∃ k₀ : ℤ,
+        16 ≤ S.card ∧ S ⊆ B ∧ (k₀ = -1 ∨ k₀ = 0) ∧
+        ∀ b : ↥B, (b : Fin n) ∈ S →
+          (∃ B₀ : Finset (Fin n),
+              MinimalCyclicKernelSupportTransversal g y B₀ ∧
+                3 ≤ n - B₀.card) ∨
+            (k₀ = -1 ∧
+                PrimitiveTwoRetainedSixthStratumRows g y
+                  (insert p.x (B.erase (b : Fin n)))) ∨
+              (k₀ = 0 ∧
+                PrimitiveTwoRetainedSixthStratumRows g y
+                  (insert p.z (B.erase (b : Fin n)))) := by
+  rcases hfamily with ⟨p, S, k₀, hScard, hSsub, hmiddle, hrow⟩
+  refine ⟨p, S, k₀, hScard, hSsub, hmiddle, ?_⟩
+  intro b hbS
+  rcases (hrow b hbS).2 with hminus | hzero
+  · rcases exists_minimalCyclicKernelTransversal_exchange_fixed_primitive_or_three
+      g hg hh hne hunique hno y hyq hfullOdd hmin hretained
+        b.property p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+        hminus.2.2 hminimal with hthree | hexact
+    · exact Or.inl hthree
+    · exact Or.inr (Or.inl ⟨hminus.1, hexact⟩)
+  · have hcomplementReverse : Finset.univ \ B = {p.z, p.x} := by
+      simpa only [pair_comm] using p.complement_eq
+    rcases exists_minimalCyclicKernelTransversal_exchange_fixed_primitive_or_three
+      g hg hh hne hunique hno y hyq hfullOdd hmin hretained
+        b.property p.z_not_mem p.x_not_mem p.x_ne_z.symm hcomplementReverse
+        hzero.2.2 hminimal with hthree | hexact
+    · exact Or.inl hthree
+    · exact Or.inr (Or.inr ⟨hzero.1, hexact⟩)
+
 end MinModulus
