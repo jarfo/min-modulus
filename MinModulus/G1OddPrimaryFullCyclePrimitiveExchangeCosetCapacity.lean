@@ -238,8 +238,9 @@ def primitiveMiddleInsertedCoordinate
   if k₀ = -1 then p.x else p.z
 
 /-- Lossless capacity endpoint of the middle family.  The leaf coset and the
-selected-owner coset either merge, giving an exponential union bound, or
-remain disjoint, giving all products of their binomial-layer bounds. -/
+selected-owner coset either coincide, giving an exponential union bound, or
+are genuinely distinct, giving cross-coset separation and all products of
+their binomial-layer bounds. -/
 def PrimitiveMiddleExchangeCosetCapacity
     {q : ℕ} (g : Fin n → ZMod (2 ^ 6 * q))
     (y : ZMod (2 ^ 6 * q)) (B : Finset (Fin n))
@@ -261,8 +262,13 @@ def PrimitiveMiddleExchangeCosetCapacity
                 (g (b : Fin n) - g p.x)) = 64))) ∧
       let C := insert (primitiveMiddleInsertedCoordinate p k₀) S
       C.card = S.card + 1 ∧
-      (2 ^ ((((Finset.univ : Finset (Fin d)).image leaf) ∪ C).card - 1) ≤ q ∨
-        ∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q)
+      let L := (Finset.univ : Finset (Fin d)).image leaf
+      ((2 ^ ((L ∪ C).card - 1) ≤ q ∧
+          ∀ b ∈ L, ∀ c ∈ C,
+            g b - g c ∈ AddSubgroup.zmultiples y) ∨
+        ((∀ b ∈ L, ∀ c ∈ C,
+            g b - g c ∉ AddSubgroup.zmultiples y) ∧
+          ∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q))
 
 /-- The primitive middle geometry itself supplies a two-coset capacity
 dichotomy, before any further leaf-terminal case analysis. -/
@@ -357,34 +363,31 @@ theorem PrimitiveMiddleExchangeFamily.toCosetCapacity
   refine ⟨p, S, k₀, hScard, hSsub, hmiddle, hrows, ?_⟩
   dsimp only
   refine ⟨by simpa only [C, r] using hCcard, ?_⟩
-  by_cases hdisjoint : Disjoint L C
-  · right
-    intro i j
-    have hcap :=
-      choose_mul_choose_le_addOrderOf_of_disjoint_kernelCosets
-        g hg y L C hLnonempty hCnonempty hdisjoint
-          hLcoset hCcoset i j
-    rw [hLcard, hCcard, horder] at hcap
-    exact hcap
+  by_cases hsame : ∃ b ∈ L, ∃ c ∈ C,
+      g b - g c ∈ AddSubgroup.zmultiples y
   · left
-    obtain ⟨z, hzL, hzC⟩ :=
-      Finset.not_disjoint_iff.mp hdisjoint
+    rcases hsame with ⟨b₀, hb₀L, c₀, hc₀C, hcross₀⟩
+    have hcross : ∀ b ∈ L, ∀ c ∈ C,
+        g b - g c ∈ AddSubgroup.zmultiples y := by
+      intro b hbL c hcC
+      have hadd :=
+        (AddSubgroup.zmultiples y).add_mem
+          (hLcoset b hbL b₀ hb₀L)
+          ((AddSubgroup.zmultiples y).add_mem hcross₀
+            (hCcoset c₀ hc₀C c hcC))
+      convert hadd using 1
+      module
     have hunionCoset : ∀ b ∈ L ∪ C, ∀ c ∈ L ∪ C,
         g b - g c ∈ AddSubgroup.zmultiples y := by
       intro b hb c hc
       rcases Finset.mem_union.mp hb with hbL | hbC
       · rcases Finset.mem_union.mp hc with hcL | hcC
         · exact hLcoset b hbL c hcL
-        · have hadd :=
-            (AddSubgroup.zmultiples y).add_mem
-              (hLcoset b hbL z hzL) (hCcoset z hzC c hcC)
-          convert hadd using 1
-          module
+        · exact hcross b hbL c hcC
       · rcases Finset.mem_union.mp hc with hcL | hcC
-        · have hadd :=
-            (AddSubgroup.zmultiples y).add_mem
-              (hCcoset b hbC z hzC) (hLcoset z hzL c hcL)
-          convert hadd using 1
+        · have hneg :=
+            (AddSubgroup.zmultiples y).neg_mem (hcross c hcL b hbC)
+          convert hneg using 1
           module
         · exact hCcoset b hbC c hcC
     have hunionNonempty : (L ∪ C).Nonempty :=
@@ -393,6 +396,23 @@ theorem PrimitiveMiddleExchangeFamily.toCosetCapacity
       two_pow_pred_le_addOrderOf_of_valid_kernelCoset
         g hg y (L ∪ C) hunionNonempty hunionCoset
     rw [horder] at hcap
-    simpa only [L, C, r] using hcap
+    exact ⟨hcap, hcross⟩
+  · right
+    have hcross : ∀ b ∈ L, ∀ c ∈ C,
+        g b - g c ∉ AddSubgroup.zmultiples y := by
+      intro b hbL c hcC hmem
+      exact hsame ⟨b, hbL, c, hcC, hmem⟩
+    have hdisjoint : Disjoint L C := by
+      rw [Finset.disjoint_left]
+      intro b hbL hbC
+      exact hcross b hbL b hbC (by simp)
+    refine ⟨hcross, ?_⟩
+    intro i j
+    have hcap :=
+      choose_mul_choose_le_addOrderOf_of_disjoint_kernelCosets
+        g hg y L C hLnonempty hCnonempty hdisjoint
+          hLcoset hCcoset i j
+    rw [hLcard, hCcard, horder] at hcap
+    exact hcap
 
 end MinModulus
