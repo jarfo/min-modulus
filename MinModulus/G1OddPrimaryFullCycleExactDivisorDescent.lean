@@ -138,4 +138,134 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.boundedKernelCoefficient_fu
   · exact (hminimal M hMpos hMlt hMdiv hvalid).elim
   · exact hrigid
 
+/-- Uniform positive-stratum quotient-order split.  When the odd kernel has
+full odd-primary order, minimality forces the retained difference to generate
+either the unique index-two subgroup or the whole quotient of order `2^t`.
+This is the reusable quotient phase for the descent through `t ≤ 5`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.retainedDifference_quotientOrder_eq_half_or_full_of_positiveStratum_minimal
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)}
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z}) :
+    let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    addOrderOf (pi (g x - g z)) = 2 ^ (t - 1) ∨
+      addOrderOf (pi (g x - g z)) = 2 ^ t := by
+  classical
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let delta : ZMod (2 ^ t * q) := g x - g z
+  let deltaQ : Q := pi delta
+  let eNat : ℕ := addOrderOf deltaQ
+  let e : ℤ := eNat
+  have hquotientModulus : (2 ^ t * q) / addOrderOf y = 2 ^ t := by
+    rw [Nat.mul_div_assoc (2 ^ t) hyq, hfullOdd]
+    simp
+  letI : Fintype Q := Fintype.ofFinite Q
+  have hQcardNat : Nat.card Q = 2 ^ t := by
+    have hmul : Nat.card Q * addOrderOf y = 2 ^ t * q := by
+      simpa only [Q, H, Nat.card_zmod] using
+        nat_card_quotient_zmultiples_mul_addOrderOf y
+    have hcard : Nat.card Q = (2 ^ t * q) / addOrderOf y := by
+      exact (Nat.div_eq_of_eq_mul_left (addOrderOf_pos y) hmul.symm).symm
+    exact hcard.trans hquotientModulus
+  have hQcard : Fintype.card Q = 2 ^ t := by
+    simpa only [Nat.card_eq_fintype_card] using hQcardNat
+  have hePos : 0 < eNat := addOrderOf_pos deltaQ
+  have he : e ≠ 0 := by
+    change (eNat : ℤ) ≠ 0
+    omega
+  have heMem : e • delta ∈ H := by
+    apply (QuotientAddGroup.eq_zero_iff (e • delta)).mp
+    change pi (e • delta) = 0
+    rw [map_zsmul]
+    change (eNat : ℤ) • deltaQ = 0
+    simpa only [natCast_zsmul] using addOrderOf_nsmul_eq_zero deltaQ
+  have hfactor : (2 ^ t * q) / addOrderOf y ∣ 2 * e.natAbs := by
+    rcases hrows.exists_smallerValidCyclicModulus_or_quotientFactor_dvd
+        g hg hunique hne y B x z hxB hzB hxz hcomplement e he heMem with
+      ⟨M, hMpos, hMlt, hMdiv, hvalid⟩ | hfactor
+    · exact (hminimal M hMpos hMlt hMdiv hvalid).elim
+    · exact hfactor
+  have hfactorPow : 2 ^ t ∣ 2 * eNat := by
+    rw [hquotientModulus] at hfactor
+    simpa [e] using hfactor
+  have heDvdPow : eNat ∣ 2 ^ t := by
+    rw [← hQcard]
+    exact addOrderOf_dvd_card (x := deltaQ)
+  have hpow : 2 ^ t = 2 * 2 ^ (t - 1) := by
+    calc
+      2 ^ t = 2 ^ (t - 1 + 1) := by congr 1; omega
+      _ = 2 ^ (t - 1) * 2 := pow_succ 2 (t - 1)
+      _ = 2 * 2 ^ (t - 1) := Nat.mul_comm _ _
+  have hhalfDvd : 2 ^ (t - 1) ∣ eNat := by
+    obtain ⟨k, hk⟩ := hfactorPow
+    have hkCancel : 2 * eNat = 2 * (2 ^ (t - 1) * k) := by
+      simpa only [hpow, Nat.mul_assoc] using hk
+    exact ⟨k, Nat.eq_of_mul_eq_mul_left (by omega) hkCancel⟩
+  have heLe : eNat ≤ 2 ^ t := Nat.le_of_dvd (pow_pos (by decide) t) heDvdPow
+  obtain ⟨k, hk⟩ := hhalfDvd
+  have hhalfPos : 0 < 2 ^ (t - 1) := pow_pos (by decide) _
+  have hdoubleHalf : 2 ^ (t - 1) * 2 = 2 ^ t := by
+    calc
+      2 ^ (t - 1) * 2 = 2 * 2 ^ (t - 1) := Nat.mul_comm _ _
+      _ = 2 ^ t := hpow.symm
+  have hkPos : 0 < k := by
+    apply Nat.pos_of_ne_zero
+    intro hkZero
+    subst k
+    simp at hk
+    omega
+  have hkLe : k ≤ 2 := by
+    apply Nat.le_of_mul_le_mul_left (c := 2 ^ (t - 1))
+    · rw [← hk, hdoubleHalf]
+      exact heLe
+    · exact hhalfPos
+  have hkCases : k = 1 ∨ k = 2 := by
+    omega
+  rcases hkCases with rfl | rfl
+  · left
+    simpa only [eNat, deltaQ, delta, pi, H, Q, Nat.mul_one] using hk
+  · right
+    simpa only [eNat, deltaQ, delta, pi, H, Q, hdoubleHalf] using hk
+
+/-- Fifth-stratum specialization of the uniform quotient phase: the retained
+difference has quotient order exactly `16` or `32`. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.retainedDifference_quotientOrder_eq_sixteen_or_thirtyTwo_of_fifthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z)
+    (hcomplement : Finset.univ \ B = {x, z}) :
+    let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ 5 * q) →+ ZMod (2 ^ 5 * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    addOrderOf (pi (g x - g z)) = 16 ∨
+      addOrderOf (pi (g x - g z)) = 32 := by
+  simpa using
+    hrows.retainedDifference_quotientOrder_eq_half_or_full_of_positiveStratum_minimal
+      (t := 5) (q := q) (by omega) g hg hunique hne y hyq hfullOdd B
+        hminimal x z hxB hzB hxz hcomplement
+
 end MinModulus
