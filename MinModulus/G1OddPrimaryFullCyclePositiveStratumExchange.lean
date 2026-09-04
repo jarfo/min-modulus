@@ -93,6 +93,29 @@ theorem cycleRange_subset_insert_erase_missing
     intro hleafb
     exact hbOutside ⟨i, hleafb⟩
 
+/-- Exchanging one deleted cycle leaf for a point outside the cycle leaves
+exactly that leaf undeleted. -/
+theorem cycleRange_mem_insert_erase_leaf_iff
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    {B : Finset (Fin n)} (hleafB : ∀ i, leaf i ∈ B)
+    (r : Fin d) {x : Fin n} (hxOutside : x ∉ Set.range leaf) :
+    ∀ i, leaf i ∈ insert x (B.erase (leaf r)) ↔ i ≠ r := by
+  classical
+  intro i
+  constructor
+  · intro hi hir
+    subst i
+    simp only [Finset.mem_insert, Finset.mem_erase] at hi
+    rcases hi with hxr | hir
+    · exact hxOutside ⟨r, hxr⟩
+    · exact hir.1 rfl
+  · intro hir
+    apply Finset.mem_insert_of_mem
+    apply Finset.mem_erase.mpr
+    refine ⟨?_, hleafB i⟩
+    intro hleafEq
+    exact hir (hleafInj hleafEq)
+
 /-- The full-order two-retained state after positive-stratum exchange. -/
 def PrimitiveTwoRetainedPositiveStratumRows
     {t q : ℕ} (g : Fin n → ZMod (2 ^ t * q))
@@ -144,6 +167,102 @@ theorem primitiveTwoRetainedPositiveStratumRows_iff_exists_presentation
     exact ⟨p, hmin, hretained, hrows, hp⟩
   · rintro ⟨p, hmin, hretained, hrows, hp⟩
     exact ⟨hmin, hretained, hrows, p, hp⟩
+
+/-- An odd integer multiple of an element of order `2^t` has the same order.
+This is the parity fact that makes the positive-stratum exchange orientation
+uniform. -/
+theorem addOrderOf_odd_zsmul_eq_twoPower
+    {Q : Type*} [AddCommGroup Q] [Finite Q]
+    {t : ℕ} (delta : Q) (hdelta : addOrderOf delta = 2 ^ t)
+    (c : ℤ) (hc : Odd c) :
+    addOrderOf (c • delta) = 2 ^ t := by
+  rcases Int.eq_nat_or_neg c with ⟨k, rfl | rfl⟩
+  · have hkOdd : Odd k := by exact_mod_cast hc
+    have hcoprime : (2 ^ t).Coprime k :=
+      hkOdd.coprime_two_left.pow_left t
+    rw [natCast_zsmul, addOrderOf_nsmul, hdelta,
+      hcoprime.gcd_eq_one, Nat.div_one]
+  · have hkOdd : Odd k := by simpa using hc
+    have hcoprime : (2 ^ t).Coprime k :=
+      hkOdd.coprime_two_left.pow_left t
+    rw [neg_zsmul, addOrderOf_neg, natCast_zsmul, addOrderOf_nsmul,
+      hdelta, hcoprime.gcd_eq_one, Nat.div_one]
+
+/-- If `beta` is any integer multiple of a primitive `2^t`-element, then
+`beta` or `beta-delta` is primitive: their integer coefficients are
+consecutive, hence one is odd. -/
+theorem addOrderOf_eq_twoPower_or_sub_eq_twoPower_of_eq_zsmul
+    {Q : Type*} [AddCommGroup Q] [Finite Q]
+    {t : ℕ} (delta beta : Q) (hdelta : addOrderOf delta = 2 ^ t)
+    (c : ℤ) (hbeta : beta = c • delta) :
+    addOrderOf beta = 2 ^ t ∨ addOrderOf (beta - delta) = 2 ^ t := by
+  rcases Int.even_or_odd c with hc | hc
+  · right
+    have hcSub : Odd (c - 1) := hc.sub_odd odd_one
+    have hsub : beta - delta = (c - 1) • delta := by
+      rw [hbeta]
+      module
+    rw [hsub]
+    exact addOrderOf_odd_zsmul_eq_twoPower delta hdelta (c - 1) hcSub
+  · left
+    rw [hbeta]
+    exact addOrderOf_odd_zsmul_eq_twoPower delta hdelta c hc
+
+/-- Every deleted owner in an exact full-order presentation is primitive
+relative to at least one of the two retained coordinates.  The exact row
+normal form puts its quotient displacement in `Z*delta`; switching the
+retained base point subtracts one copy of `delta`. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.owner_primitive_at_one_retained
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (b : ↥B) :
+    let H := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    addOrderOf (pi (g (b : Fin n) - g p.z)) = 2 ^ t ∨
+      addOrderOf (pi (g (b : Fin n) - g p.x)) = 2 ^ t := by
+  rcases hpres with ⟨_hmin, _hretained, _hrows, hfull⟩
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  let betaQ : Q := pi (g (b : Fin n) - g p.z)
+  have hdelta : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, pi, H, Q] using hfull.1
+  obtain ⟨k, _hweight, hbeta | hbeta⟩ := hfull.2 b
+  · have hmultiple : betaQ = (-k) • deltaQ := by
+      simpa only [betaQ, deltaQ, pi, H, Q, neg_zsmul] using hbeta
+    have hprimitive :=
+      addOrderOf_eq_twoPower_or_sub_eq_twoPower_of_eq_zsmul
+        deltaQ betaQ hdelta (-k) hmultiple
+    have hbaseChange :
+        pi (g (b : Fin n) - g p.x) = betaQ - deltaQ := by
+      have hvalue :
+          g (b : Fin n) - g p.x =
+            (g (b : Fin n) - g p.z) - (g p.x - g p.z) := by
+        abel
+      rw [hvalue, map_sub]
+    simpa only [betaQ, deltaQ, pi, H, Q, hbaseChange] using hprimitive
+  · have hmultiple :
+        betaQ = ((2 ^ (t - 1) : ℕ) : ℤ) • deltaQ - k • deltaQ := by
+      simpa only [betaQ, deltaQ, pi, H, Q, natCast_zsmul] using hbeta
+    have hmultiple' :
+        betaQ = (((2 ^ (t - 1) : ℕ) : ℤ) - k) • deltaQ := by
+      rw [hmultiple]
+      module
+    have hprimitive :=
+      addOrderOf_eq_twoPower_or_sub_eq_twoPower_of_eq_zsmul
+        deltaQ betaQ hdelta (((2 ^ (t - 1) : ℕ) : ℤ) - k) hmultiple'
+    have hbaseChange :
+        pi (g (b : Fin n) - g p.x) = betaQ - deltaQ := by
+      have hvalue :
+          g (b : Fin n) - g p.x =
+            (g (b : Fin n) - g p.z) - (g p.x - g p.z) := by
+        abel
+      rw [hvalue, map_sub]
+    simpa only [betaQ, deltaQ, pi, H, Q, hbaseChange] using hprimitive
 
 /-- Full quotient order makes the five-weight labels of a fully deleted
 doubling cycle constant in the *given* row presentation.  This is the
@@ -490,6 +609,108 @@ theorem exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
       simpa only [pi, H] using And.intro hp₀primitive hsolved
     rw [hB₀eq] at hstate₀
     simpa only [Bexchange] using hstate₀
+
+/-- Exchange any named deleted owner in an explicit full-order presentation.
+One of the two retained orientations is primitive, so minimization either
+enters C2 or preserves one of the two literal exchanged deletion sets as a
+new full-order exact-two state. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_owner_to_fullOrder_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    (b : ↥B) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      PrimitiveTwoRetainedPositiveStratumRows g y
+          (insert p.x (B.erase (b : Fin n))) ∨
+        PrimitiveTwoRetainedPositiveStratumRows g y
+          (insert p.z (B.erase (b : Fin n))) := by
+  classical
+  have horientation := hpres.owner_primitive_at_one_retained g y B p b
+  rcases hpres with ⟨hmin, hretained, hrows, _hfull⟩
+  rcases horientation with hprimitiveZ | hprimitiveX
+  · rcases exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
+        ht g hg hh hne hunique hno y hyq hfullOdd hmin hretained b.property
+          p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq hprimitiveZ
+            hminimal with
+      hthree | hexact
+    · exact Or.inl hthree
+    · exact Or.inr (Or.inl hexact)
+  · have hcomplementReverse : Finset.univ \ B = {p.z, p.x} := by
+      simpa only [pair_comm] using p.complement_eq
+    rcases exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
+        ht g hg hh hne hunique hno y hyq hfullOdd hmin hretained b.property
+          p.z_not_mem p.x_not_mem p.x_ne_z.symm hcomplementReverse
+            hprimitiveX hminimal with
+      hthree | hexact
+    · exact Or.inl hthree
+    · exact Or.inr (Or.inr hexact)
+
+/-- On a fully deleted cycle, exchanging any chosen leaf either enters C2 or
+produces a literal one-retained-leaf cycle state.  This is the uniform
+full-to-punctured transition needed for the remaining positive-stratum
+descent. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_fullDeleted_cycleLeaf_to_oneRetained_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (hleafB : ∀ i, leaf i ∈ B) (r : Fin d) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      (PrimitiveTwoRetainedPositiveStratumRows g y
+          (insert p.x (B.erase (leaf r))) ∧
+        ∀ i, leaf i ∈ insert p.x (B.erase (leaf r)) ↔ i ≠ r) ∨
+      (PrimitiveTwoRetainedPositiveStratumRows g y
+          (insert p.z (B.erase (leaf r))) ∧
+        ∀ i, leaf i ∈ insert p.z (B.erase (leaf r)) ↔ i ≠ r) := by
+  classical
+  have hrB : leaf r ∈ B := hleafB r
+  let b : ↥B := ⟨leaf r, hrB⟩
+  have hxOutside : p.x ∉ Set.range leaf := by
+    rintro ⟨i, hix⟩
+    apply p.x_not_mem
+    rw [← hix]
+    exact hleafB i
+  have hzOutside : p.z ∉ Set.range leaf := by
+    rintro ⟨i, hiz⟩
+    apply p.z_not_mem
+    rw [← hiz]
+    exact hleafB i
+  rcases hpres.exchange_owner_to_fullOrder_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd B p hminimal b with
+    hthree | hx | hz
+  · exact Or.inl hthree
+  · exact Or.inr (Or.inl ⟨by simpa only [b] using hx,
+      cycleRange_mem_insert_erase_leaf_iff
+        leaf hleafInj hleafB r hxOutside⟩)
+  · exact Or.inr (Or.inr ⟨by simpa only [b] using hz,
+      cycleRange_mem_insert_erase_leaf_iff
+        leaf hleafInj hleafB r hzOutside⟩)
 
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
