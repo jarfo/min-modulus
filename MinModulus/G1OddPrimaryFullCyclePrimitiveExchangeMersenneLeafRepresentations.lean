@@ -11,6 +11,7 @@ multiset equality, its signed `Witness` form, and zero-extension to the
 ambient tuple along an injective pointed leaf map.
 -/
 import MinModulus.G1OddPrimaryFullCyclePrimitiveExchangeMersenneFiveExternalRows
+import MinModulus.G1PrivateHeavyJointFiberAlgebra
 
 namespace MinModulus
 
@@ -150,6 +151,65 @@ theorem exists_mersenneLeaf_witness
     dsimp only [c]
     omega
 
+/-- Every nonzero element of a finite cyclic subgroup has a unique-style
+positive natural representative below the order of its chosen generator. -/
+theorem exists_positive_nsmul_eq_of_mem_zmultiples
+    {v t : G} {q : ℕ} (hq : 0 < q) (hv : addOrderOf v = q)
+    (ht : t ∈ AddSubgroup.zmultiples v) (ht0 : t ≠ 0) :
+    ∃ s : ℕ, 0 < s ∧ s < q ∧ t = s • v := by
+  obtain ⟨z, rfl⟩ := AddSubgroup.mem_zmultiples_iff.mp ht
+  let s : ℕ := (z % (q : ℤ)).toNat
+  have hqz : (0 : ℤ) < (q : ℤ) := by exact_mod_cast hq
+  have hznonneg : 0 ≤ z % (q : ℤ) :=
+    Int.emod_nonneg z (by omega)
+  have hscast : (s : ℤ) = z % (q : ℤ) := by
+    simpa only [s] using Int.toNat_of_nonneg hznonneg
+  have hsltZ : (s : ℤ) < (q : ℤ) := by
+    rw [hscast]
+    exact Int.emod_lt_of_pos z hqz
+  have hslt : s < q := by exact_mod_cast hsltZ
+  have heq : z • v = s • v := by
+    calc
+      z • v = (z % (addOrderOf v : ℤ)) • v :=
+        (mod_addOrderOf_zsmul v z).symm
+      _ = (z % (q : ℤ)) • v := by rw [hv]
+      _ = (s : ℤ) • v := by rw [hscast]
+      _ = s • v := by rw [natCast_zsmul]
+  have hs0 : 0 < s := by
+    by_contra hs
+    have hsZero : s = 0 := Nat.eq_zero_of_not_pos hs
+    apply ht0
+    rw [heq, hsZero]
+    simp
+  exact ⟨s, hs0, hslt, heq⟩
+
+/-- Extend the leaf witness by zero along an injective pointed leaf map, and
+retain the exact support certificate outside the leaf image. -/
+theorem exists_mersenneLeaf_ambientWitness_zero_off
+    {n d s : ℕ} (hd : 3 ≤ d) (hs0 : 0 < s) (hsq : s < 2 ^ d - 1)
+    (root v : G) (hv : addOrderOf v = 2 ^ d - 1)
+    (g : Fin n → G) (leaf : Fin d → Fin n)
+    (hleaf : Function.Injective leaf) (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v) :
+    ∃ c : Fin n → ℤ, Witness g (s • v) c ∧
+      ∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0 := by
+  classical
+  let emb : Fin d ↪ Fin n :=
+    ⟨fun i ↦ leaf (e i), hleaf.comp e.injective⟩
+  obtain ⟨c, hc⟩ := exists_mersenneLeaf_witness
+    hd hs0 hsq root v hv (fun i ↦ g (emb i)) hnormal
+  refine ⟨Function.extend emb c (fun _ ↦ 0),
+    (witness_extend_embedding_iff emb g c).2 hc, ?_⟩
+  intro j hj
+  apply Function.extend_apply'
+  rintro ⟨i, hi⟩
+  apply hj
+  apply Finset.mem_image.mpr
+  refine ⟨e i, Finset.mem_univ _, ?_⟩
+  change leaf (e i) = j at hi
+  exact hi
+
 /-- Extend the leaf witness by zero along an injective pointed leaf map. -/
 theorem exists_mersenneLeaf_ambientWitness
     {n d s : ℕ} (hd : 3 ≤ d) (hs0 : 0 < s) (hsq : s < 2 ^ d - 1)
@@ -159,11 +219,74 @@ theorem exists_mersenneLeaf_ambientWitness
     (hnormal : ∀ i,
       g (leaf (e i)) = root + a i.val • v) :
     ∃ c : Fin n → ℤ, Witness g (s • v) c := by
-  let emb : Fin d ↪ Fin n :=
-    ⟨fun i ↦ leaf (e i), hleaf.comp e.injective⟩
-  obtain ⟨c, hc⟩ := exists_mersenneLeaf_witness
-    hd hs0 hsq root v hv (fun i ↦ g (emb i)) hnormal
-  exact ⟨Function.extend emb c (fun _ ↦ 0),
-    (witness_extend_embedding_iff emb g c).2 hc⟩
+  obtain ⟨c, hc, _hoff⟩ := exists_mersenneLeaf_ambientWitness_zero_off
+    hd hs0 hsq root v hv g leaf hleaf e hnormal
+  exact ⟨c, hc⟩
+
+/-- A same-target witness that is nonzero outside a pointed Mersenne leaf is
+distinct from the leaf-supported competitor.  Validity therefore forces an
+ordered coefficient gap of at least two toward the leaf competitor. -/
+theorem exists_mersenneLeaf_competitor_with_gap_of_externalWitness
+    {n d : ℕ} (hd : 3 ≤ d)
+    (root v : G) (hv : addOrderOf v = 2 ^ d - 1)
+    (g : Fin n → G) (hg : ValidTuple g) (leaf : Fin d → Fin n)
+    (hleaf : Function.Injective leaf) (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v)
+    (t : G) (ht : t ∈ AddSubgroup.zmultiples v) (ht0 : t ≠ 0)
+    (u : Fin n → ℤ) (hu : Witness g t u)
+    (b : Fin n) (hb : b ∉ (Finset.univ : Finset (Fin d)).image leaf)
+    (hub : u b ≠ 0) :
+    ∃ s : ℕ, 0 < s ∧ s < 2 ^ d - 1 ∧ t = s • v ∧
+      ∃ c : Fin n → ℤ, Witness g t c ∧
+        (∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0) ∧
+        ∃ i : Fin n, u i + 2 ≤ c i := by
+  have hq : 0 < 2 ^ d - 1 := by
+    have hpow : 0 < 2 ^ (d - 3) := pow_pos (by norm_num) _
+    rw [show d = 3 + (d - 3) by omega, pow_add]
+    norm_num
+    omega
+  obtain ⟨s, hs0, hsq, htarget⟩ :=
+    exists_positive_nsmul_eq_of_mem_zmultiples hq hv ht ht0
+  obtain ⟨c, hc, hcoff⟩ := exists_mersenneLeaf_ambientWitness_zero_off
+    hd hs0 hsq root v hv g leaf hleaf e hnormal
+  have hcTarget : Witness g t c := by simpa only [htarget] using hc
+  have hcb : c b = 0 := hcoff b hb
+  have huc : u ≠ c := by
+    intro hEq
+    apply hub
+    rw [hEq, hcb]
+  obtain ⟨i, hi⟩ := exists_coefficient_add_two_le_of_distinct_witnesses
+    g hg hu hcTarget huc
+  exact ⟨s, hs0, hsq, htarget, c, hcTarget, hcoff, i, hi⟩
+
+/-- Every canonical private row whose owner lies outside the pointed leaf has
+a normalized leaf-supported competitor at the same nonzero target and hence
+a forced coefficient gap. -/
+theorem TwoRetainedCanonicalPrivatePresentation.exists_mersenneLeaf_competitor_with_gap
+    {n d : ℕ} (g : Fin n → G) (hg : ValidTuple g)
+    (y root v : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (hd : 3 ≤ d) (hv : addOrderOf v = 2 ^ d - 1)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v)
+    (hcyclic : AddSubgroup.zmultiples v = AddSubgroup.zmultiples y)
+    (b : ↥B)
+    (hb : (b : Fin n) ∉ (Finset.univ : Finset (Fin d)).image leaf) :
+    ∃ s : ℕ, 0 < s ∧ s < 2 ^ d - 1 ∧
+      p.scalar b • y = s • v ∧
+      ∃ c : Fin n → ℤ, Witness g (p.scalar b • y) c ∧
+        (∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0) ∧
+        ∃ i : Fin n, p.coeff b i + 2 ≤ c i := by
+  apply exists_mersenneLeaf_competitor_with_gap_of_externalWitness
+    hd root v hv g hg leaf hleaf e hnormal (p.scalar b • y)
+  · rw [hcyclic]
+    exact AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _
+  · exact p.target_ne_zero b
+  · exact p.isWitness b
+  · exact hb
+  · exact p.owner_ne_zero b
 
 end MinModulus
