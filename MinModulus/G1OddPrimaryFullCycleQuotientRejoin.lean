@@ -563,4 +563,441 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fullDeleted_sixthStratum_qu
     · exact Or.inl hbrange
   · exact Or.inr ⟨hprimitive, hrowsSolved⟩
 
+/-- Fixed-presentation form of the exceptional two-leaf pure-pair endpoint. -/
+theorem TwoRetainedFiveWeightPresentation.oneRetainedTwoLeaf_purePair_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    (leaf : Fin 2 → Fin n) (a : ZMod (2 ^ 6 * q)) (r : Fin 2)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ r)
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin 2 ↦ g (leaf i) - a)) =
+      AddSubgroup.zmultiples y) :
+    (leaf r = p.x ∧ ∀ i (hi : leaf i ∈ B),
+        p.weight ⟨leaf i, hi⟩ = -2) ∨
+      (leaf r = p.z ∧ ∀ i (hi : leaf i ∈ B),
+        p.weight ⟨leaf i, hi⟩ = 0) := by
+  classical
+  obtain ⟨i₀, hi₀r⟩ :=
+    Fintype.exists_ne_of_one_lt_card (by simp : 1 < Fintype.card (Fin 2)) r
+  have hi₀B : leaf i₀ ∈ B := (hleafB i₀).2 hi₀r
+  let b : ↥B := ⟨leaf i₀, hi₀B⟩
+  let w : ℤ := p.weight b
+  have hw : w ∈ twoRetainedNormalizedWeightLevels := p.weight_mem b
+  have hi₀Disp : g (leaf i₀) - a ∈ AddSubgroup.zmultiples y := by
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨i₀, rfl⟩
+  have htransitionSimple :
+      (-w) • (g p.x - g p.z) + (2 : ℤ) • (g p.z - a) ∈
+        AddSubgroup.zmultiples y := by
+    have hsub := (AddSubgroup.zmultiples y).sub_mem (p.row_mem b)
+      ((AddSubgroup.zmultiples y).zsmul_mem hi₀Disp 2)
+    have hneg := (AddSubgroup.zmultiples y).neg_mem hsub
+    convert hneg using 1
+    dsimp only [b, w]
+    module
+  have hterminal := constantFiveWeight_transition_terminal
+    (g p.x) (g p.z) a (AddSubgroup.zmultiples y) w hw htransitionSimple
+  have hrNotB : leaf r ∉ B := by
+    intro hrB
+    exact (hleafB r).1 hrB rfl
+  have hrPair : leaf r = p.x ∨ leaf r = p.z := by
+    have hrComplement : leaf r ∈ Finset.univ \ B :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hrNotB⟩
+    rw [p.complement_eq] at hrComplement
+    simpa only [Finset.mem_insert, Finset.mem_singleton] using hrComplement
+  have hrDisp : g (leaf r) - a ∈ AddSubgroup.zmultiples y := by
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨r, rfl⟩
+  have hother : ∀ i : Fin 2, i ≠ r → i = i₀ := by
+    intro i hir
+    fin_omega
+  have hweightOther : ∀ i (hi : leaf i ∈ B),
+      p.weight ⟨leaf i, hi⟩ = w := by
+    intro i hi
+    have hir : i ≠ r := (hleafB i).1 hi
+    have hii : i = i₀ := hother i hir
+    subst i
+    have hb : (⟨leaf i₀, hi⟩ : ↥B) = b := by
+      apply Subtype.ext
+      rfl
+    exact (congrArg p.weight hb).trans rfl
+  rcases hrPair with hrX | hrZ
+  · have hxMem : g p.x - a ∈ AddSubgroup.zmultiples y := by
+      simpa only [hrX] using hrDisp
+    rcases hterminal.1 hxMem with hsmall | hwMinusTwo
+    · obtain ⟨e, he, helow, hehigh, heMem⟩ := hsmall
+      have he32 :=
+        hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+          g hg hunique hne y hyq B hminimal p.x p.z p.x_not_mem p.z_not_mem
+            p.x_ne_z p.complement_eq e he (by omega) (by omega) heMem
+      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+    · exact Or.inl ⟨hrX, fun i hi ↦
+        (hweightOther i hi).trans hwMinusTwo⟩
+  · have hzMem : g p.z - a ∈ AddSubgroup.zmultiples y := by
+      simpa only [hrZ] using hrDisp
+    rcases hterminal.2 hzMem with hsmall | hwZero
+    · obtain ⟨e, he, helow, hehigh, heMem⟩ := hsmall
+      have he32 :=
+        hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+          g hg hunique hne y hyq B hminimal p.x p.z p.x_not_mem p.z_not_mem
+            p.x_ne_z p.complement_eq e he (by omega) (by omega) heMem
+      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+    · exact Or.inr ⟨hrZ, fun i hi ↦
+        (hweightOther i hi).trans hwZero⟩
+
+/-- With at least three leaves, the punctured recurrence forces constant
+weight on every displayed deleted leaf of one fixed presentation. -/
+theorem TwoRetainedFiveWeightPresentation.oneRetained_weight_constant_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 6 * q)) (r : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ r)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∀ i (hi : leaf i ∈ B) j (hj : leaf j ∈ B),
+      p.weight ⟨leaf i, hi⟩ = p.weight ⟨leaf j, hj⟩ := by
+  classical
+  obtain ⟨i₀, hi₀r, hi₀prev⟩ :=
+    Fin.exists_ne_and_ne_of_two_lt r (R.symm r) hd
+  have hRi₀ : R i₀ ≠ r := by
+    intro hRi₀
+    apply hi₀prev
+    calc
+      i₀ = R.symm (R i₀) := (R.symm_apply_apply i₀).symm
+      _ = R.symm r := congrArg R.symm hRi₀
+  let H : AddSubgroup (ZMod (2 ^ 6 * q)) :=
+    AddSubgroup.zmultiples y
+  let delta : ZMod (2 ^ 6 * q) := g p.x - g p.z
+  have htransition : ∀ i (hi : i ≠ r) (hRi : R i ≠ r),
+      (p.weight ⟨leaf (R i), (hleafB (R i)).2 hRi⟩ -
+          2 * p.weight ⟨leaf i, (hleafB i).2 hi⟩) • delta +
+        (2 : ℤ) • (g p.z - a) ∈ H := by
+    intro i hi hRi
+    have hiB : leaf i ∈ B := (hleafB i).2 hi
+    have hRiB : leaf (R i) ∈ B := (hleafB (R i)).2 hRi
+    have hsub := H.sub_mem (p.row_mem ⟨leaf (R i), hRiB⟩)
+      (H.zsmul_mem (p.row_mem ⟨leaf i, hiB⟩) 2)
+    have hvalue :
+        g (leaf (R i)) = (2 : ℤ) • g (leaf i) - a := by
+      calc
+        g (leaf (R i)) = (g (leaf (R i)) - a) + a := by abel
+        _ = (2 : ℤ) • (g (leaf i) - a) + a := by rw [hdouble i]
+        _ = (2 : ℤ) • g (leaf i) - a := by module
+    convert hsub using 1
+    dsimp only [H, delta]
+    rw [hvalue]
+    module
+  let u : Fin d := R.symm r
+  let v : Fin d := R r
+  have hu : u ≠ r := by
+    intro hur
+    apply hRne r
+    have happly : R (R.symm r) = r := R.apply_symm_apply r
+    simpa only [u, hur] using happly
+  have hv : v ≠ r := by simpa only [v] using hRne r
+  have huB : leaf u ∈ B := (hleafB u).2 hu
+  have hvB : leaf v ∈ B := (hleafB v).2 hv
+  have hfour : g (leaf v) - a = (4 : ℤ) • (g (leaf u) - a) := by
+    have huStep : g (leaf r) - a =
+        (2 : ℤ) • (g (leaf u) - a) := by
+      have hstep := hdouble u
+      simpa only [u, R.apply_symm_apply] using hstep
+    calc
+      g (leaf v) - a = (2 : ℤ) • (g (leaf r) - a) := by
+        simpa only [v] using hdouble r
+      _ = (2 : ℤ) • ((2 : ℤ) • (g (leaf u) - a)) := by rw [huStep]
+      _ = (4 : ℤ) • (g (leaf u) - a) := by module
+  have htwoStep :
+      (p.weight ⟨leaf v, hvB⟩ - 4 * p.weight ⟨leaf u, huB⟩) •
+          delta + (6 : ℤ) • (g p.z - a) ∈ H := by
+    have hsub := H.sub_mem (p.row_mem ⟨leaf v, hvB⟩)
+      (H.zsmul_mem (p.row_mem ⟨leaf u, huB⟩) 4)
+    convert hsub using 1
+    dsimp only [H, delta]
+    have hvValue : g (leaf v) = (4 : ℤ) • (g (leaf u) - a) + a := by
+      calc
+        g (leaf v) = (g (leaf v) - a) + a := by abel
+        _ = (4 : ℤ) • (g (leaf u) - a) + a := by rw [hfour]
+    rw [hvValue]
+    module
+  let cycleWeight : Fin d → ℤ := fun i ↦
+    if hi : leaf i ∈ B then p.weight ⟨leaf i, hi⟩ else 0
+  have hcycleWeight : ∀ i, i ≠ r →
+      cycleWeight i ∈ twoRetainedNormalizedWeightLevels := by
+    intro i hi
+    have hiB : leaf i ∈ B := (hleafB i).2 hi
+    simp only [cycleWeight, dif_pos hiB]
+    exact p.weight_mem ⟨leaf i, hiB⟩
+  have hcycleTransition : ∀ i, i ≠ r → R i ≠ r →
+      (cycleWeight (R i) - 2 * cycleWeight i) • delta +
+        (2 : ℤ) • (g p.z - a) ∈ H := by
+    intro i hi hRi
+    have hiB : leaf i ∈ B := (hleafB i).2 hi
+    have hRiB : leaf (R i) ∈ B := (hleafB (R i)).2 hRi
+    simpa only [cycleWeight, dif_pos hiB, dif_pos hRiB] using
+      htransition i hi hRi
+  have hcycleTwoStep :
+      (cycleWeight (R r) - 4 * cycleWeight (R.symm r)) • delta +
+        (3 : ℤ) • ((2 : ℤ) • (g p.z - a)) ∈ H := by
+    have hvValue : cycleWeight (R r) = p.weight ⟨leaf v, hvB⟩ := by
+      simp only [cycleWeight, v, dif_pos hvB]
+    have huValue : cycleWeight (R.symm r) = p.weight ⟨leaf u, huB⟩ := by
+      simp only [cycleWeight, u, dif_pos huB]
+    rw [hvValue, huValue]
+    convert htwoStep using 1
+    module
+  have hkernel32 : ∀ e : ℤ, e ≠ 0 → -42 ≤ e → e ≤ 42 →
+      e • delta ∈ H → e.natAbs = 32 := by
+    intro e he helow hehigh heMem
+    exact hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hminimal p.x p.z p.x_not_mem p.z_not_mem
+        p.x_ne_z p.complement_eq e he helow hehigh (by
+          simpa only [delta, H] using heMem)
+  have hconstant :=
+    fiveWeightPuncturedPermutation_thirtyTwo_weight_constant
+      R r i₀ (hRne r) hi₀r hRi₀ cycleWeight hcycleWeight delta
+        ((2 : ℤ) • (g p.z - a)) H hcycleTransition hcycleTwoStep hkernel32
+  intro i hiB j hjB
+  have hi : i ≠ r := (hleafB i).1 hiB
+  have hj : j ≠ r := (hleafB j).1 hjB
+  have hiValue : cycleWeight i = p.weight ⟨leaf i, hiB⟩ := by
+    simp only [cycleWeight, dif_pos hiB]
+  have hjValue : cycleWeight j = p.weight ⟨leaf j, hjB⟩ := by
+    simp only [cycleWeight, dif_pos hjB]
+  rw [← hiValue, ← hjValue]
+  exact hconstant i hi j hj
+
+/-- Fixed-presentation pure-pair endpoint for a unique retained leaf in a
+cycle of length at least three. -/
+theorem TwoRetainedFiveWeightPresentation.oneRetained_purePair_of_sixthStratum_minimal
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 < d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 6 * q)) (r : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ r)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - a)) =
+      AddSubgroup.zmultiples y) :
+    (leaf r = p.x ∧ ∀ i (hi : leaf i ∈ B),
+        p.weight ⟨leaf i, hi⟩ = -2) ∨
+      (leaf r = p.z ∧ ∀ i (hi : leaf i ∈ B),
+        p.weight ⟨leaf i, hi⟩ = 0) := by
+  classical
+  have hconstant := p.oneRetained_weight_constant_of_sixthStratum_minimal
+    g hg hunique hne y hyq B hrows hminimal hd leaf R hRne a r hleafB hdouble
+  obtain ⟨i₀, hi₀r, hi₀prev⟩ :=
+    Fin.exists_ne_and_ne_of_two_lt r (R.symm r) hd
+  have hRi₀ : R i₀ ≠ r := by
+    intro hRi₀
+    apply hi₀prev
+    calc
+      i₀ = R.symm (R i₀) := (R.symm_apply_apply i₀).symm
+      _ = R.symm r := congrArg R.symm hRi₀
+  have hi₀B : leaf i₀ ∈ B := (hleafB i₀).2 hi₀r
+  have hRi₀B : leaf (R i₀) ∈ B := (hleafB (R i₀)).2 hRi₀
+  let w : ℤ := p.weight ⟨leaf i₀, hi₀B⟩
+  have hw : w ∈ twoRetainedNormalizedWeightLevels :=
+    p.weight_mem ⟨leaf i₀, hi₀B⟩
+  have hwEdge : p.weight ⟨leaf (R i₀), hRi₀B⟩ = w := by
+    simpa only [w] using hconstant (R i₀) hRi₀B i₀ hi₀B
+  have htransitionSimple :
+      (-w) • (g p.x - g p.z) + (2 : ℤ) • (g p.z - a) ∈
+        AddSubgroup.zmultiples y := by
+    let H : AddSubgroup (ZMod (2 ^ 6 * q)) := AddSubgroup.zmultiples y
+    have hsub := H.sub_mem (p.row_mem ⟨leaf (R i₀), hRi₀B⟩)
+      (H.zsmul_mem (p.row_mem ⟨leaf i₀, hi₀B⟩) 2)
+    have hvalue :
+        g (leaf (R i₀)) = (2 : ℤ) • g (leaf i₀) - a := by
+      calc
+        g (leaf (R i₀)) = (g (leaf (R i₀)) - a) + a := by abel
+        _ = (2 : ℤ) • (g (leaf i₀) - a) + a := by rw [hdouble i₀]
+        _ = (2 : ℤ) • g (leaf i₀) - a := by module
+    convert hsub using 1
+    dsimp only [H]
+    rw [hvalue, hwEdge]
+    dsimp only [w]
+    module
+  have hterminal := constantFiveWeight_transition_terminal
+    (g p.x) (g p.z) a (AddSubgroup.zmultiples y) w hw htransitionSimple
+  have hrNotB : leaf r ∉ B := by
+    intro hrB
+    exact (hleafB r).1 hrB rfl
+  have hrPair : leaf r = p.x ∨ leaf r = p.z := by
+    have hrComplement : leaf r ∈ Finset.univ \ B :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hrNotB⟩
+    rw [p.complement_eq] at hrComplement
+    simpa only [Finset.mem_insert, Finset.mem_singleton] using hrComplement
+  have hrDisp : g (leaf r) - a ∈ AddSubgroup.zmultiples y := by
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨r, rfl⟩
+  rcases hrPair with hrX | hrZ
+  · have hxMem : g p.x - a ∈ AddSubgroup.zmultiples y := by
+      simpa only [hrX] using hrDisp
+    rcases hterminal.1 hxMem with hsmall | hwMinusTwo
+    · obtain ⟨e, he, helow, hehigh, heMem⟩ := hsmall
+      have he32 :=
+        hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+          g hg hunique hne y hyq B hminimal p.x p.z p.x_not_mem p.z_not_mem
+            p.x_ne_z p.complement_eq e he (by omega) (by omega) heMem
+      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+    · exact Or.inl ⟨hrX, fun i hi ↦
+        (hconstant i hi i₀ hi₀B).trans hwMinusTwo⟩
+  · have hzMem : g p.z - a ∈ AddSubgroup.zmultiples y := by
+      simpa only [hrZ] using hrDisp
+    rcases hterminal.2 hzMem with hsmall | hwZero
+    · obtain ⟨e, he, helow, hehigh, heMem⟩ := hsmall
+      have he32 :=
+        hrows.boundedKernelCoefficient_natAbs_eq_thirtyTwo_of_sixthStratum_minimal
+          g hg hunique hne y hyq B hminimal p.x p.z p.x_not_mem p.z_not_mem
+            p.x_ne_z p.complement_eq e he (by omega) (by omega) heMem
+      have he32Z : (e.natAbs : ℤ) = 32 := by exact_mod_cast he32
+      rcases Int.natAbs_eq e with hePos | heNeg <;> exfalso <;> omega
+    · exact Or.inr ⟨hrZ, fun i hi ↦
+        (hconstant i hi i₀ hi₀B).trans hwZero⟩
+
+/-- Uniform fixed-presentation pure-pair endpoint, including the special
+two-leaf cycle where no deleted-to-deleted edge is available. -/
+theorem TwoRetainedFiveWeightPresentation.oneRetained_purePair_of_two_le
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (p : TwoRetainedFiveWeightPresentation g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 ≤ d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 6 * q)) (r : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ r)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - a)) =
+      AddSubgroup.zmultiples y) :
+    (leaf r = p.x ∧ ∀ i (hi : leaf i ∈ B),
+        p.weight ⟨leaf i, hi⟩ = -2) ∨
+      (leaf r = p.z ∧ ∀ i (hi : leaf i ∈ B),
+        p.weight ⟨leaf i, hi⟩ = 0) := by
+  by_cases hdTwo : d = 2
+  · subst d
+    exact p.oneRetainedTwoLeaf_purePair_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hrows hminimal leaf a r hleafB hspan
+  · have hdThree : 2 < d := by omega
+    exact p.oneRetained_purePair_of_sixthStratum_minimal
+      g hg hunique hne y hyq B hrows hminimal hdThree leaf R hRne a r
+        hleafB hdouble hspan
+
+/-- Lossless rejoin of the unique-retained pure-pair terminal with the exact
+all-owner quotient normal form.  In the index-two phase its primitive heavy
+owner is necessarily outside the displayed leaf cycle. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetained_sixthStratum_quotientRejoin
+    {q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ 6 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 6 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 6 * q → M ∣ 2 ^ 6 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 ≤ d) (leaf : Fin d → Fin n)
+    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 6 * q)) (r : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ r)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - a)) =
+      AddSubgroup.zmultiples y) :
+    ∃ p : TwoRetainedFiveWeightPresentation g y B,
+      ((leaf r = p.x ∧ ∀ i (hi : leaf i ∈ B),
+          p.weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf r = p.z ∧ ∀ i (hi : leaf i ∈ B),
+          p.weight ⟨leaf i, hi⟩ = 0)) ∧
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ 6 * q) →+ ZMod (2 ^ 6 * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      let deltaQ := pi (g p.x - g p.z)
+      (addOrderOf deltaQ = 32 ∧
+          ∃ b : ↥B, p.weight b = -1 ∧
+            addOrderOf (pi (g (b : Fin n) - g p.z)) = 64 ∧
+            (b : Fin n) ∉ Set.range leaf) ∨
+        (addOrderOf deltaQ = 64 ∧
+          ∀ b : ↥B, ∃ k : ℤ, p.weight b = 2 * k ∧
+            (pi (g (b : Fin n) - g p.z) = -(k • deltaQ) ∨
+              pi (g (b : Fin n) - g p.z) =
+                (32 : ℕ) • deltaQ - k • deltaQ)) := by
+  classical
+  obtain ⟨p⟩ := hrows.fiveWeightPresentation g y B
+  have hpure := p.oneRetained_purePair_of_two_le
+    g hg hunique hne y hyq B hrows hminimal hd leaf R hRne a r hleafB
+      hdouble hspan
+  refine ⟨p, hpure, ?_⟩
+  have hnormal := p.sixthStratum_quotientRowNormalForm
+    g hg hunique hne y hyq hfullOdd B hrows hminimal
+  rcases hnormal with ⟨hindex, b, hb, hbprimitive⟩ |
+      ⟨hprimitive, hrowsSolved⟩
+  · left
+    refine ⟨hindex, b, hb, hbprimitive, ?_⟩
+    intro hbrange
+    obtain ⟨i, hi⟩ := hbrange
+    have hiB : leaf i ∈ B := by
+      rw [hi]
+      exact b.property
+    have hsubtype : (⟨leaf i, hiB⟩ : ↥B) = b := Subtype.ext hi
+    rcases hpure with ⟨_hrX, hminusTwo⟩ | ⟨_hrZ, hzero⟩
+    · have hweightEq := congrArg p.weight hsubtype
+      rw [hminusTwo i hiB, hb] at hweightEq
+      norm_num at hweightEq
+    · have hweightEq := congrArg p.weight hsubtype
+      rw [hzero i hiB, hb] at hweightEq
+      norm_num at hweightEq
+  · exact Or.inr ⟨hprimitive, hrowsSolved⟩
+
 end MinModulus
