@@ -181,6 +181,231 @@ def PrimitiveMiddleWindowedCriticalCosetResidual
           (∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q) ∧
           388960 * d.choose (d / 2) < 2 ^ B.card))
 
+/-- Fixed-presentation form of the critical leaf/owner-coset split.  It
+consumes one explicitly saturated middle fiber and returns the quantitative
+split without existentially repackaging `p`, `S`, or `k₀`. -/
+theorem primitiveMiddleWindowedCriticalCosetSplit_of_fixedPresentation
+    {q d : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    (y : ZMod (2 ^ 6 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n))
+    (hretained : n - B.card = 2)
+    (hcritical : 2 ^ 6 * q < stratumBound n 6)
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (S : Finset (Fin n)) (k₀ : ℤ)
+    (hprimitive :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g p.x - g p.z)) = 64)
+    (hScard : 16 ≤ S.card) (hSsub : S ⊆ B)
+    (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (hcomplete :
+      let r := primitiveMiddleInsertedCoordinate p k₀
+      ∀ b : ↥B,
+        ((b : Fin n) ∈ S ↔
+          g (b : Fin n) - g r ∈ AddSubgroup.zmultiples y))
+    (hwindow :
+      (∀ b : ↥B, p.weight b ≠ -4) ∨
+        ∀ b : ↥B, p.weight b ≠ 2)
+    (hd : 0 < d) (leaf : Fin d → Fin n)
+    (hleaf : Function.Injective leaf)
+    (base : ZMod (2 ^ 6 * q))
+    (hspan : AddSubgroup.closure
+        (Set.range (fun i : Fin d ↦ g (leaf i) - base)) =
+      AddSubgroup.zmultiples y) :
+    let r := primitiveMiddleInsertedCoordinate p k₀
+    let C := insert r S
+    let L := (Finset.univ : Finset (Fin d)).image leaf
+    let U := L ∪ C
+    C.card = S.card + 1 ∧
+    ((2 ^ (U.card - 1) ≤ q ∧
+        (∀ b ∈ U, ∀ c ∈ U,
+          g b - g c ∈ AddSubgroup.zmultiples y) ∧
+        U.card + 4 ≤ B.card ∧
+        5 ≤ (B \ U).card ∧
+        (∀ b ∈ B \ U, ∀ c ∈ U,
+          g b - g c ∉ AddSubgroup.zmultiples y) ∧
+        PrimitiveSaturatedSecondaryResidueCapacity g y B U p k₀ ∧
+        48 * U.card.choose (U.card / 2) < 2 ^ B.card) ∨
+      ((∀ b ∈ L, ∀ c ∈ C,
+          g b - g c ∉ AddSubgroup.zmultiples y) ∧
+        (∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q) ∧
+        388960 * d.choose (d / 2) < 2 ^ B.card)) := by
+  classical
+  let r : Fin n := primitiveMiddleInsertedCoordinate p k₀
+  let C : Finset (Fin n) := insert r S
+  let L : Finset (Fin n) :=
+    (Finset.univ : Finset (Fin d)).image leaf
+  let U : Finset (Fin n) := L ∪ C
+  have hrNotB : r ∉ B := by
+    rcases hmiddle with hk | hk
+    · simpa only [r, primitiveMiddleInsertedCoordinate, hk, if_true]
+        using p.x_not_mem
+    · have hkNe : k₀ ≠ -1 := by omega
+      simpa only [r, primitiveMiddleInsertedCoordinate, hkNe, if_false]
+        using p.z_not_mem
+  have hrNotS : r ∉ S := fun hrS ↦ hrNotB (hSsub hrS)
+  have hCcard : C.card = S.card + 1 := by
+    simp only [C, Finset.card_insert_of_notMem hrNotS]
+  have hselected : ∀ b ∈ S,
+      g b - g r ∈ AddSubgroup.zmultiples y := by
+    intro b hbS
+    exact (hcomplete ⟨b, hSsub hbS⟩).1 hbS
+  have hCcoset : ∀ b ∈ C, ∀ c ∈ C,
+      g b - g c ∈ AddSubgroup.zmultiples y := by
+    intro b hbC c hcC
+    rcases Finset.mem_insert.mp hbC with rfl | hbS
+    · rcases Finset.mem_insert.mp hcC with rfl | hcS
+      · simp
+      · have hneg :=
+          (AddSubgroup.zmultiples y).neg_mem (hselected c hcS)
+        convert hneg using 1
+        module
+    · rcases Finset.mem_insert.mp hcC with rfl | hcS
+      · exact hselected b hbS
+      · have hsub :=
+          (AddSubgroup.zmultiples y).sub_mem
+            (hselected b hbS) (hselected c hcS)
+        convert hsub using 1
+        module
+  have hleafDisp : ∀ i,
+      g (leaf i) - base ∈ AddSubgroup.zmultiples y := by
+    intro i
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨i, rfl⟩
+  have hLcoset : ∀ b ∈ L, ∀ c ∈ L,
+      g b - g c ∈ AddSubgroup.zmultiples y := by
+    intro b hbL c hcL
+    obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hbL
+    obtain ⟨j, _, rfl⟩ := Finset.mem_image.mp hcL
+    have hsub :=
+      (AddSubgroup.zmultiples y).sub_mem (hleafDisp i) (hleafDisp j)
+    convert hsub using 1
+    module
+  have hLcard : L.card = d := by
+    simp only [L]
+    rw [Finset.card_image_of_injective _ hleaf]
+    simp
+  have hLnonempty : L.Nonempty := by
+    apply Finset.card_pos.mp
+    rw [hLcard]
+    exact hd
+  have hCnonempty : C.Nonempty :=
+    ⟨r, Finset.mem_insert_self _ _⟩
+  have hUnonempty : U.Nonempty :=
+    hLnonempty.mono Finset.subset_union_left
+  have horder : addOrderOf y = q :=
+    Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+  change C.card = S.card + 1 ∧
+    ((2 ^ (U.card - 1) ≤ q ∧
+        (∀ b ∈ U, ∀ c ∈ U,
+          g b - g c ∈ AddSubgroup.zmultiples y) ∧
+        U.card + 4 ≤ B.card ∧
+        5 ≤ (B \ U).card ∧
+        (∀ b ∈ B \ U, ∀ c ∈ U,
+          g b - g c ∉ AddSubgroup.zmultiples y) ∧
+        PrimitiveSaturatedSecondaryResidueCapacity g y B U p k₀ ∧
+        48 * U.card.choose (U.card / 2) < 2 ^ B.card) ∨
+      ((∀ b ∈ L, ∀ c ∈ C,
+          g b - g c ∉ AddSubgroup.zmultiples y) ∧
+        (∀ i j : ℕ, d.choose i * (S.card + 1).choose j ≤ q) ∧
+        388960 * d.choose (d / 2) < 2 ^ B.card))
+  refine ⟨hCcard, ?_⟩
+  by_cases hsame : ∃ b ∈ L, ∃ c ∈ C,
+      g b - g c ∈ AddSubgroup.zmultiples y
+  · left
+    rcases hsame with ⟨b₀, hb₀L, c₀, hc₀C, hcross₀⟩
+    have hcross : ∀ b ∈ L, ∀ c ∈ C,
+        g b - g c ∈ AddSubgroup.zmultiples y := by
+      intro b hbL c hcC
+      have hadd :=
+        (AddSubgroup.zmultiples y).add_mem
+          (hLcoset b hbL b₀ hb₀L)
+          ((AddSubgroup.zmultiples y).add_mem hcross₀
+            (hCcoset c₀ hc₀C c hcC))
+      convert hadd using 1
+      module
+    have hUcoset : ∀ b ∈ U, ∀ c ∈ U,
+        g b - g c ∈ AddSubgroup.zmultiples y := by
+      intro b hbU c hcU
+      rcases Finset.mem_union.mp hbU with hbL | hbC
+      · rcases Finset.mem_union.mp hcU with hcL | hcC
+        · exact hLcoset b hbL c hcL
+        · exact hcross b hbL c hcC
+      · rcases Finset.mem_union.mp hcU with hcL | hcC
+        · have hneg :=
+            (AddSubgroup.zmultiples y).neg_mem (hcross c hcL b hbC)
+          convert hneg using 1
+          module
+        · exact hCcoset b hbC c hcC
+    have hcap :=
+      two_pow_pred_le_addOrderOf_of_valid_kernelCoset
+        g hg y U hUnonempty hUcoset
+    rw [horder] at hcap
+    have hgap := card_add_four_le_transversalCard_of_critical_kernelCoset
+      B U hretained hcritical hUnonempty hcap
+    have hrC : r ∈ C := Finset.mem_insert_self _ _
+    have hrU : r ∈ U := Finset.mem_union_right _ hrC
+    have hfive := five_le_card_transversal_sdiff_of_card_add_four_le
+      B U hrU hrNotB hgap
+    have hseparated : ∀ b ∈ B \ U, ∀ c ∈ U,
+        g b - g c ∉ AddSubgroup.zmultiples y := by
+      intro b hbOutside c hcU hbc
+      let bB : ↥B := ⟨b, (Finset.mem_sdiff.mp hbOutside).1⟩
+      have hbNotS : b ∉ S := by
+        intro hbS
+        apply (Finset.mem_sdiff.mp hbOutside).2
+        exact Finset.mem_union_right _
+          (Finset.mem_insert_of_mem hbS)
+      have hbNotParallel :
+          g b - g r ∉ AddSubgroup.zmultiples y := by
+        intro hbParallel
+        apply hbNotS
+        exact (hcomplete bB).2 hbParallel
+      have hcParallel :
+          g c - g r ∈ AddSubgroup.zmultiples y := by
+        rcases Finset.mem_union.mp hcU with hcL | hcC
+        · exact hcross c hcL r hrC
+        · rcases Finset.mem_insert.mp hcC with hcr | hcS
+          · subst c
+            simp
+          · exact (hcomplete ⟨c, hSsub hcS⟩).1 hcS
+      have hsum :=
+        (AddSubgroup.zmultiples y).add_mem hbc hcParallel
+      apply hbNotParallel
+      convert hsum using 1
+      module
+    have hsecondary :=
+      exists_primitiveSaturatedSecondaryResidueCapacity_of_five_separated
+        g hg y B U p k₀ hprimitive hyq hfullOdd hmiddle hwindow
+          hUnonempty hUcoset hrU hfive hseparated
+    obtain ⟨_T, _hTcard, hcentral⟩ :=
+      hsecondary.exists_centralCriticalBound
+        g y B U p k₀ hretained hcritical
+    exact ⟨hcap, hUcoset, hgap, hfive, hseparated,
+      hsecondary, hcentral⟩
+  · right
+    have hcross : ∀ b ∈ L, ∀ c ∈ C,
+        g b - g c ∉ AddSubgroup.zmultiples y := by
+      intro b hbL c hcC hmem
+      exact hsame ⟨b, hbL, c, hcC, hmem⟩
+    have hdisjoint : Disjoint L C := by
+      rw [Finset.disjoint_left]
+      intro b hbL hbC
+      exact hcross b hbL b hbC (by simp)
+    have hcap : ∀ i j : ℕ,
+        d.choose i * (S.card + 1).choose j ≤ q := by
+      intro i j
+      have h := choose_mul_choose_le_addOrderOf_of_disjoint_kernelCosets
+        g hg y L C hLnonempty hCnonempty hdisjoint
+          hLcoset hCcoset i j
+      rw [hLcard, hCcard, horder] at h
+      exact h
+    exact ⟨hcross, hcap,
+      central_leaf_product_lt_two_pow_transversalCard_of_critical
+        B hretained hcritical hScard hcap⟩
+
 /-- Carry the global unit window through the complete critical coset split.
 The equal-coset branch immediately extracts, saturates, and counts the
 secondary residue class on the same canonical presentation. -/

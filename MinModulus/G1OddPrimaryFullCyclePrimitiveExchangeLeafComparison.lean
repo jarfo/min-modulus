@@ -180,6 +180,115 @@ def PrimitiveMiddleUniformLeafValueSubfamily
     ∃ S T : Finset (Fin n), ∃ k₀ w : ℤ,
       PrimitiveMiddleUniformLeafValueData g y B leaf p S T k₀ w
 
+/-- Fixed-presentation form of the five-color compression.  Unlike the
+existential family wrapper below, this theorem keeps the literal `p`, `S`,
+and `k₀` supplied by the caller, so later saturation and arithmetic can be
+performed on the same witnesses. -/
+theorem exists_primitiveMiddleUniformLeafValueData
+    {q d : ℕ} (g : Fin n → ZMod (2 ^ 6 * q))
+    (y : ZMod (2 ^ 6 * q)) (B : Finset (Fin n))
+    (leaf : Fin d → Fin n) (hd : 0 < d)
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (S : Finset (Fin n)) (k₀ : ℤ)
+    (hScard : 16 ≤ S.card) (hSsub : S ⊆ B)
+    (hmiddle : k₀ = -1 ∨ k₀ = 0)
+    (hrows : ∀ b : ↥B, (b : Fin n) ∈ S →
+      p.weight b = 2 * k₀ ∧
+      ((k₀ = -1 ∧
+          g (b : Fin n) - g p.x ∈ AddSubgroup.zmultiples y ∧
+          addOrderOf
+            ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+              (g (b : Fin n) - g p.z)) = 64) ∨
+        (k₀ = 0 ∧
+          g (b : Fin n) - g p.z ∈ AddSubgroup.zmultiples y ∧
+          addOrderOf
+            ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+              (g (b : Fin n) - g p.x)) = 64)) ∧
+      PrimitiveTwoRetainedSixthStratumRows g y
+        (middleExchangeSet g y p k₀ b) ∧
+      TwoRetainedSixthStratumLeafTerminal
+        (middleExchangeSet g y p k₀ b) leaf ∧
+      ((k₀ = -1 ∧
+          AlignedPrimitiveExchangeLeafTerminal g y
+            (middleExchangeSet g y p k₀ b)
+              (b : Fin n) p.z p.x leaf) ∨
+        (k₀ = 0 ∧
+          AlignedPrimitiveExchangeLeafTerminal g y
+            (middleExchangeSet g y p k₀ b)
+              (b : Fin n) p.x p.z leaf))) :
+    ∃ T : Finset (Fin n), ∃ w : ℤ,
+      PrimitiveMiddleUniformLeafValueData
+        g y B leaf p S T k₀ w := by
+  classical
+  have hexists : ∀ b : ↥S, ∃ w : ℤ,
+      MiddleExchangeUniformAlignedLeafTerminal g y p k₀
+        (⟨(b : Fin n), hSsub b.property⟩ : ↥B) leaf w := by
+    intro b
+    have hrow :=
+      hrows (⟨(b : Fin n), hSsub b.property⟩ : ↥B) b.property
+    exact exists_middleExchangeUniformAlignedLeafTerminal
+      g y p k₀ (⟨(b : Fin n), hSsub b.property⟩ : ↥B)
+        leaf hd hrow.2.2.2.2
+  let label : ↥S → ℤ := fun b ↦ Classical.choose (hexists b)
+  have hlabelSpec : ∀ b : ↥S,
+      MiddleExchangeUniformAlignedLeafTerminal g y p k₀
+        (⟨(b : Fin n), hSsub b.property⟩ : ↥B)
+          leaf (label b) := by
+    intro b
+    exact Classical.choose_spec (hexists b)
+  have hlabelMem : ∀ b : ↥S,
+      label b ∈ twoRetainedNormalizedWeightLevels := by
+    intro b
+    rcases hlabelSpec b with hminus | hzero
+    · rcases hminus.2 with
+        ⟨_, _, _, _, _, _, hw, _, _⟩
+      exact hw
+    · rcases hzero.2 with
+        ⟨_, _, _, _, _, _, hw, _, _⟩
+      exact hw
+  have hmaps : ∀ b ∈ (Finset.univ : Finset ↥S),
+      label b ∈ twoRetainedNormalizedWeightLevels := by
+    intro b _
+    exact hlabelMem b
+  have hmul :
+      twoRetainedNormalizedWeightLevels.card * 3 <
+        (Finset.univ : Finset ↥S).card := by
+    rw [card_twoRetainedNormalizedWeightLevels, Finset.card_univ,
+      Fintype.card_coe]
+    omega
+  obtain ⟨w, hw, hwFiber⟩ :=
+    Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to
+      (f := label) hmaps hmul
+  let F : Finset ↥S :=
+    (Finset.univ : Finset ↥S).filter (fun b ↦ label b = w)
+  let T : Finset (Fin n) := F.image (fun b : ↥S ↦ (b : Fin n))
+  have hTsub : T ⊆ S := by
+    intro i hi
+    change i ∈ F.image (fun b : ↥S ↦ (b : Fin n)) at hi
+    obtain ⟨b, _hbF, hbi⟩ := Finset.mem_image.mp hi
+    rw [← hbi]
+    exact b.property
+  have hTcard : 4 ≤ T.card := by
+    have himage : T.card = F.card := by
+      change (F.image (fun b : ↥S ↦ (b : Fin n))).card = F.card
+      exact Finset.card_image_of_injective F Subtype.coe_injective
+    have hfiber : 3 < F.card := by
+      simpa only [F] using hwFiber
+    omega
+  refine ⟨T, w, hScard, hSsub, hTsub, hTcard,
+    hmiddle, hw, hrows, ?_⟩
+  intro b hbT
+  change (b : Fin n) ∈ F.image (fun s : ↥S ↦ (s : Fin n)) at hbT
+  obtain ⟨s, hsF, hsb⟩ := Finset.mem_image.mp hbT
+  have hlabelEq : label s = w := by
+    exact (Finset.mem_filter.mp hsF).2
+  have hspec := hlabelSpec s
+  rw [hlabelEq] at hspec
+  have hsB :
+      (⟨(s : Fin n), hSsub s.property⟩ : ↥B) = b := by
+    exact Subtype.ext hsb
+  simpa only [hsB] using hspec
+
 /-- Five-color compression of the aligned terminal family.  At least four of
 the sixteen literal exchanges share one uniform leaf weight. -/
 theorem PrimitiveMiddleAlignedExchangeLeafTerminalFamily.toUniformLeafValueSubfamily
