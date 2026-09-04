@@ -484,6 +484,55 @@ lemma succ_le_two_pow_pred : ∀ n, 3 ≤ n → n + 1 ≤ 2 ^ (n - 1) := by
         omega
       omega
 
+/-! ### Exact Mersenne residue representations -/
+
+/-- Every nonzero residue below the Mersenne modulus has a power-of-two
+representation with exactly `d` coins, either at the residue itself or one
+Mersenne period above it.
+
+The second alternative is needed only for the small residues `s < d`: write
+`s + (2^d - 1) = (s - 1) + 2 * 2^(d-1)`, represent `s - 1` sharply below
+the top bit, and split coins until the digit sum is exactly `d`. -/
+theorem exists_exact_dsum_rep_of_lt_mersenne {d s : ℕ} (hd : 3 ≤ d)
+    (hs0 : 0 < s) (hsq : s < 2 ^ d - 1) :
+    ∃ k, dsum d k = d ∧
+      (val d k = s ∨ val d k = s + (2 ^ d - 1)) := by
+  by_cases hds : d ≤ s
+  · obtain ⟨k₀, _, hv₀, hk₀⟩ := exists_rep_le d s (by omega)
+    obtain ⟨k, hv, hk⟩ := exists_dsum_eq ⟨k₀, hv₀, hk₀⟩ hds
+    exact ⟨k, hk, Or.inl hv⟩
+  · have hpow := succ_le_two_pow_pred d hd
+    obtain ⟨k₀, hsupp, hv₀, hk₀⟩ :=
+      exists_rep_lt (d - 1) (s - 1) (by omega)
+    obtain ⟨hsupp', hv', hk'⟩ := update_top (d - 1) 2 k₀ hsupp
+    have hd' : d - 1 + 1 = d := by omega
+    rw [hd'] at hsupp' hv' hk'
+    have hpow' : 2 * 2 ^ (d - 1) = 2 ^ d := by
+      rw [← pow_succ']
+      congr 1
+    rw [hv₀, hpow'] at hv'
+    have hv : val d (Function.update k₀ (d - 1) 2) =
+        s + (2 ^ d - 1) := by omega
+    have hk : dsum d (Function.update k₀ (d - 1) 2) ≤ d := by omega
+    obtain ⟨k, hkval, hkdsum⟩ :=
+      exists_dsum_eq ⟨Function.update k₀ (d - 1) 2, hv, hk⟩ (by omega)
+    exact ⟨k, hkdsum, Or.inr hkval⟩
+
+/-- Every nonzero residue modulo `2^d - 1` has a power-of-two representation
+whose digit sum is exactly `d`. -/
+theorem exists_exact_dsum_rep_modEq_mersenne {d s : ℕ} (hd : 3 ≤ d)
+    (hs0 : 0 < s) (hsq : s < 2 ^ d - 1) :
+    ∃ k, dsum d k = d ∧ val d k ≡ s [MOD 2 ^ d - 1] := by
+  obtain ⟨k, hk, hv | hv⟩ :=
+    exists_exact_dsum_rep_of_lt_mersenne hd hs0 hsq
+  · refine ⟨k, hk, ?_⟩
+    rw [hv]
+  · refine ⟨k, hk, ?_⟩
+    rw [hv]
+    have hm : (2 ^ d - 1) * 1 + s ≡ s [MOD 2 ^ d - 1] :=
+      Nat.ModEq.modulus_mul_add
+    simpa only [mul_one, Nat.add_comm] using hm
+
 /-! ### Theorem B: optimality (paper §6) -/
 
 /-- **Theorem B** (lower bound): every modulus `2 ≤ N < 2^n − 2^⌊log₂ n⌋` is

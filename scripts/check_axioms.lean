@@ -15,6 +15,8 @@ import MinModulus
 #print axioms MinModulus.valid_gap
 #print axioms MinModulus.theoremB
 #print axioms MinModulus.nmin_eq
+#print axioms MinModulus.exists_exact_dsum_rep_of_lt_mersenne
+#print axioms MinModulus.exists_exact_dsum_rep_modEq_mersenne
 
 -- Proposition 2: optimality among elementary abelian 2-groups.
 #print axioms MinModulus.elementaryAbelianTwoGroups_optimal
