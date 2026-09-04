@@ -151,8 +151,8 @@ theorem exists_mersenneLeaf_witness
     dsimp only [c]
     omega
 
-/-- Every nonzero element of a finite cyclic subgroup has a unique-style
-positive natural representative below the order of its chosen generator. -/
+/-- Every nonzero element of a finite cyclic subgroup has a positive natural
+representative below the order of its chosen generator. -/
 theorem exists_positive_nsmul_eq_of_mem_zmultiples
     {v t : G} {q : ℕ} (hq : 0 < q) (hv : addOrderOf v = q)
     (ht : t ∈ AddSubgroup.zmultiples v) (ht0 : t ≠ 0) :
@@ -240,7 +240,8 @@ theorem exists_mersenneLeaf_competitor_with_gap_of_externalWitness
     ∃ s : ℕ, 0 < s ∧ s < 2 ^ d - 1 ∧ t = s • v ∧
       ∃ c : Fin n → ℤ, Witness g t c ∧
         (∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0) ∧
-        ∃ i : Fin n, u i + 2 ≤ c i := by
+        ∃ i : Fin n, i ∈ (Finset.univ : Finset (Fin d)).image leaf ∧
+          u i + 2 ≤ c i := by
   have hq : 0 < 2 ^ d - 1 := by
     have hpow : 0 < 2 ^ (d - 3) := pow_pos (by norm_num) _
     rw [show d = 3 + (d - 3) by omega, pow_add]
@@ -258,7 +259,12 @@ theorem exists_mersenneLeaf_competitor_with_gap_of_externalWitness
     rw [hEq, hcb]
   obtain ⟨i, hi⟩ := exists_coefficient_add_two_le_of_distinct_witnesses
     g hg hu hcTarget huc
-  exact ⟨s, hs0, hsq, htarget, c, hcTarget, hcoff, i, hi⟩
+  have hiLeaf : i ∈ (Finset.univ : Finset (Fin d)).image leaf := by
+    by_contra hiOutside
+    have hci : c i = 0 := hcoff i hiOutside
+    have hui := hu.2.1 i
+    omega
+  exact ⟨s, hs0, hsq, htarget, c, hcTarget, hcoff, i, hiLeaf, hi⟩
 
 /-- Every canonical private row whose owner lies outside the pointed leaf has
 a normalized leaf-supported competitor at the same nonzero target and hence
@@ -279,7 +285,8 @@ theorem TwoRetainedCanonicalPrivatePresentation.exists_mersenneLeaf_competitor_w
       p.scalar b • y = s • v ∧
       ∃ c : Fin n → ℤ, Witness g (p.scalar b • y) c ∧
         (∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0) ∧
-        ∃ i : Fin n, p.coeff b i + 2 ≤ c i := by
+        ∃ i : Fin n, i ∈ (Finset.univ : Finset (Fin d)).image leaf ∧
+          p.coeff b i + 2 ≤ c i := by
   apply exists_mersenneLeaf_competitor_with_gap_of_externalWitness
     hd root v hv g hg leaf hleaf e hnormal (p.scalar b • y)
   · rw [hcyclic]
@@ -288,5 +295,161 @@ theorem TwoRetainedCanonicalPrivatePresentation.exists_mersenneLeaf_competitor_w
   · exact p.isWitness b
   · exact hb
   · exact p.owner_ne_zero b
+
+/-- If every leaf except one retained coordinate belongs to the deletion set,
+the private-row gap occurs either at that exceptional leaf or at a leaf where
+the zero pattern forces the competitor coefficient to be at least two. -/
+theorem TwoRetainedCanonicalPrivatePresentation.exists_mersenneLeaf_competitor_with_localized_gap
+    {n d : ℕ} (g : Fin n → G) (hg : ValidTuple g)
+    (y root v : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (hd : 3 ≤ d) (hv : addOrderOf v = 2 ^ d - 1)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v)
+    (hcyclic : AddSubgroup.zmultiples v = AddSubgroup.zmultiples y)
+    (r : Fin n)
+    (hdeleted : ∀ i,
+      i ∈ (Finset.univ : Finset (Fin d)).image leaf → i ≠ r → i ∈ B)
+    (b : ↥B)
+    (hb : (b : Fin n) ∉ (Finset.univ : Finset (Fin d)).image leaf) :
+    ∃ s : ℕ, 0 < s ∧ s < 2 ^ d - 1 ∧
+      p.scalar b • y = s • v ∧
+      ∃ c : Fin n → ℤ, Witness g (p.scalar b • y) c ∧
+        (∀ j, j ∉ (Finset.univ : Finset (Fin d)).image leaf → c j = 0) ∧
+        ∃ i : Fin n,
+          i ∈ (Finset.univ : Finset (Fin d)).image leaf ∧
+          (i = r ∨ 2 ≤ c i) ∧ p.coeff b i + 2 ≤ c i := by
+  obtain ⟨s, hs0, hsq, htarget, c, hc, hcoff, i, hiLeaf, hi⟩ :=
+    p.exists_mersenneLeaf_competitor_with_gap
+      g hg y root v B hd hv leaf hleaf e hnormal hcyclic b hb
+  refine ⟨s, hs0, hsq, htarget, c, hc, hcoff, i, hiLeaf, ?_, hi⟩
+  by_cases hir : i = r
+  · exact Or.inl hir
+  · right
+    have hiB : i ∈ B := hdeleted i hiLeaf hir
+    have hib : i ≠ (b : Fin n) := by
+      intro hib
+      apply hb
+      rw [← hib]
+      exact hiLeaf
+    have hizero : p.coeff b i = 0 := p.zero_other b i hiB hib
+    omega
+
+/-- In the exact-two row geometry, a canonical private row based outside a
+Mersenne leaf cannot have owner coefficient `1`.  The reverse coefficient gap
+must occur at one of the two retained coordinates; the row sum and witness
+floor then contradict either possible retained coordinate. -/
+theorem TwoRetainedCanonicalPrivatePresentation.external_owner_eq_neg_one_of_mersenneLeaf
+    {n d : ℕ} (g : Fin n → G) (hg : ValidTuple g)
+    (y root v : G) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (hd : 3 ≤ d) (hv : addOrderOf v = 2 ^ d - 1)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v)
+    (hcyclic : AddSubgroup.zmultiples v = AddSubgroup.zmultiples y)
+    (b : ↥B)
+    (hb : (b : Fin n) ∉ (Finset.univ : Finset (Fin d)).image leaf)
+    (k : ℤ)
+    (howner : p.coeff b (b : Fin n) = -1 ∨
+      p.coeff b (b : Fin n) = 1)
+    (hweight : p.weight b = 2 * k) :
+    p.coeff b (b : Fin n) = -1 := by
+  rcases howner with hminus | hone
+  · exact hminus
+  · exfalso
+    obtain ⟨_s, _hs0, _hsq, _htarget, c, hc, hcoff,
+        _i, _hiLeaf, _hi⟩ :=
+      p.exists_mersenneLeaf_competitor_with_gap
+        g hg y root v B hd hv leaf hleaf e hnormal hcyclic b hb
+    have hcb : c (b : Fin n) = 0 := hcoff (b : Fin n) hb
+    have hne : c ≠ p.coeff b := by
+      intro heq
+      have heqb := congrFun heq (b : Fin n)
+      rw [hcb, hone] at heqb
+      omega
+    obtain ⟨j, hj⟩ := exists_coefficient_add_two_le_of_distinct_witnesses
+      g hg hc (p.isWitness b) hne
+    have hjNotB : j ∉ B := by
+      intro hjB
+      by_cases hjb : j = (b : Fin n)
+      · subst j
+        rw [hcb, hone] at hj
+        omega
+      · have hjzero : p.coeff b j = 0 := p.zero_other b j hjB hjb
+        have hcfloor := hc.2.1 j
+        omega
+    have hjRetained : j = p.x ∨ j = p.z := by
+      have hjComp : j ∈ Finset.univ \ B :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hjNotB⟩
+      rw [p.complement_eq] at hjComp
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hjComp
+    have hshape := privateWitness_twoRetained_exactShape
+      g (p.isWitness b) B (b : Fin n) b.property (p.zero_other b)
+        p.x p.z p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+    have hx : p.coeff b p.x = k := by
+      have hw := p.weight_eq b
+      rw [hone, hweight] at hw
+      norm_num [twoRetainedOwnerNormalization] at hw
+      omega
+    have hcfloor := hc.2.1 j
+    have hjPositive : 1 ≤ p.coeff b j := by omega
+    rcases hjRetained with hjx | hjz
+    · rw [hjx, hx] at hjPositive
+      have hzfloor := (p.isWitness b).2.1 p.z
+      rw [hshape.1, hone, hx] at hzfloor
+      omega
+    · rw [hjz, hshape.1, hone, hx] at hjPositive
+      have hxfloor := (p.isWitness b).2.1 p.x
+      rw [hx] at hxfloor
+      omega
+
+/-- The complete secondary/final partition inherits the sign rigidity: all
+five external canonical rows have owner coefficient `-1`. -/
+theorem PrimitiveMiddleExactMersenneFiveExternalRows.external_owner_eq_neg_one
+    {n d q : ℕ} [NeZero (2 ^ 6 * q)]
+    (g : Fin n → ZMod (2 ^ 6 * q)) (hg : ValidTuple g)
+    (y root v : ZMod (2 ^ 6 * q)) (B L : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (k₀ : ℤ) (hd : 3 ≤ d) (hv : addOrderOf v = 2 ^ d - 1)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (e : Fin d ≃ Fin d)
+    (hnormal : ∀ i,
+      g (leaf (e i)) = root + a i.val • v)
+    (hcyclic : AddSubgroup.zmultiples v = AddSubgroup.zmultiples y)
+    (hL : L = (Finset.univ : Finset (Fin d)).image leaf)
+    (hfive : PrimitiveMiddleExactMersenneFiveExternalRows
+      g y B L p k₀) :
+    ∀ b : ↥B, (b : Fin n) ∉ L →
+      p.coeff b (b : Fin n) = -1 := by
+  rcases hfive with
+    ⟨T, k₁, _t, F, _hTcard, _hTle, _hFle, _hTsub, _htT,
+      _hk₁Mem, _hk₁Ne, _hk₁Class, hTrows, _hTexact, _hTadjacent,
+      _hTcomplete, _hTseparated, hexternalPartition, _hTFdisjoint,
+      _hTFcard, _hprofiles, hFcase, _hcap, _hcrit⟩
+  intro b hbL
+  have hbLeaf : (b : Fin n) ∉
+      (Finset.univ : Finset (Fin d)).image leaf := by
+    simpa only [← hL] using hbL
+  have hbUnion : (b : Fin n) ∈ T ∪ F := by
+    rw [← hexternalPartition]
+    exact Finset.mem_sdiff.mpr ⟨b.property, hbL⟩
+  rcases Finset.mem_union.mp hbUnion with hbT | hbF
+  · have hrow := hTrows b hbT
+    exact p.external_owner_eq_neg_one_of_mersenneLeaf
+      g hg y root v B hd hv leaf hleaf e hnormal hcyclic b hbLeaf k₁
+        hrow.1 hrow.2.1
+  · rcases hFcase with hFempty |
+        ⟨k₂, _f, _hfF, _hk₂Mem, _hk₂Ne₀, _hk₂Ne₁, _hk₂Class,
+          _hOneAdjacent, hFrows, _hFexact, _hFadjacent, _hFcomplete⟩
+    · rw [hFempty] at hbF
+      simp at hbF
+    · have hrow := hFrows b hbF
+      exact p.external_owner_eq_neg_one_of_mersenneLeaf
+        g hg y root v B hd hv leaf hleaf e hnormal hcyclic b hbLeaf k₂
+          hrow.1 hrow.2.1
 
 end MinModulus
