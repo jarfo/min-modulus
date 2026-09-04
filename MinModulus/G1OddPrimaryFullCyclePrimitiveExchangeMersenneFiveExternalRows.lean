@@ -50,6 +50,18 @@ theorem TwoRetainedCanonicalPrivatePresentation.corrected_eq_owner_smul_scalar
     rw [hshape.2.2, hshape.1, hone, hx]
     module
 
+/-- A finite-order element lying in a cyclic subgroup and having the same
+additive order as its generator generates that whole subgroup. -/
+theorem AddSubgroup.zmultiples_eq_of_mem_of_addOrderOf_eq
+    {G : Type*} [AddCommGroup G] [Finite G] {x y : G}
+    (hx : x ∈ AddSubgroup.zmultiples y)
+    (horder : addOrderOf x = addOrderOf y) :
+    AddSubgroup.zmultiples x = AddSubgroup.zmultiples y := by
+  apply AddSubgroup.eq_of_le_of_card_ge
+  · rwa [AddSubgroup.zmultiples_le]
+  · simpa only [Nat.card_zmultiples, horder] using
+      (le_refl (addOrderOf y))
+
 /-- The exact five-coordinate external partition, with every secondary and
 final canonical private-row equation retained on one presentation. -/
 def PrimitiveMiddleExactMersenneFiveExternalRows
@@ -138,8 +150,16 @@ def PrimitiveMiddleExactMersenneFiveExternalRowNormalFormResidual
             g (leaf (e k)) =
               g (leaf missing) +
                 a k.val • (g (leaf missing) - base)) ∧
-          PrimitiveMiddleExactMersenneFiveExternalRows
-            g y B L p k₀
+          AddSubgroup.zmultiples (g (leaf missing) - base) =
+            AddSubgroup.zmultiples y ∧
+          ∃ μ ν : ℤ,
+            μ • y = g (leaf missing) - base ∧
+            ν • (g (leaf missing) - base) = y ∧
+            (∀ k : Fin d,
+              g (leaf (e k)) =
+                g (leaf missing) + a k.val • (μ • y)) ∧
+            PrimitiveMiddleExactMersenneFiveExternalRows
+              g y B L p k₀
 
 /-- Rebuild the pointed cycle and the exhaustive external residue partition
 from one dimension-locked presentation, retaining all row equations and
@@ -258,6 +278,40 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
     intro k
     exact fullCycleLeaf_eq_point_add_superincreasing
       g leaf R hcycle hRne missing base hdouble k
+  let one : Fin d := ⟨1, by omega⟩
+  have hleafGeneratorMem :
+      g (leaf missing) - base ∈ AddSubgroup.zmultiples y := by
+    have hdiff := hLcoset (leaf (e one))
+      (Finset.mem_image.mpr ⟨e one, Finset.mem_univ _, rfl⟩)
+      (leaf missing)
+      (Finset.mem_image.mpr ⟨missing, Finset.mem_univ _, rfl⟩)
+    have hnormalOne := hnormal one
+    have hdiffEq :
+        g (leaf (e one)) - g (leaf missing) =
+          g (leaf missing) - base := by
+      rw [hnormalOne]
+      simp [one, a]
+    rwa [hdiffEq] at hdiff
+  have horderY : addOrderOf y = q :=
+    Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+  have hleafGenerator :
+      AddSubgroup.zmultiples (g (leaf missing) - base) =
+        AddSubgroup.zmultiples y :=
+    AddSubgroup.zmultiples_eq_of_mem_of_addOrderOf_eq
+      hleafGeneratorMem ((hleafOrder missing).trans horderY.symm)
+  have hyLeafGenerator :
+      y ∈ AddSubgroup.zmultiples (g (leaf missing) - base) := by
+    rw [hleafGenerator]
+    exact AddSubgroup.mem_zmultiples y
+  obtain ⟨ν, hν⟩ :=
+    AddSubgroup.mem_zmultiples_iff.mp hyLeafGenerator
+  obtain ⟨μ, hμ⟩ :=
+    AddSubgroup.mem_zmultiples_iff.mp hleafGeneratorMem
+  have hnormalY : ∀ k : Fin d,
+      g (leaf (e k)) =
+        g (leaf missing) + a k.val • (μ • y) := by
+    intro k
+    simpa only [hμ] using hnormal k
   have hTexact : ∀ b : ↥B, (b : Fin n) ∈ T →
       g (b : Fin n) - g p.z + k₁ • (g p.x - g p.z) =
         p.coeff b (b : Fin n) • (p.scalar b • y) := by
@@ -310,11 +364,19 @@ theorem PrimitiveMiddleExactMersenneDimensionLockedResidual.toFiveExternalRowNor
         g (leaf (e k)) =
           g (leaf missing) +
             a k.val • (g (leaf missing) - base)) ∧
-      PrimitiveMiddleExactMersenneFiveExternalRows
-        g y B L p k₀
+      AddSubgroup.zmultiples (g (leaf missing) - base) =
+        AddSubgroup.zmultiples y ∧
+      ∃ μ ν : ℤ,
+        μ • y = g (leaf missing) - base ∧
+        ν • (g (leaf missing) - base) = y ∧
+        (∀ k : Fin d,
+          g (leaf (e k)) =
+            g (leaf missing) + a k.val • (μ • y)) ∧
+        PrimitiveMiddleExactMersenneFiveExternalRows
+          g y B L p k₀
     refine ⟨missing, hd, e, hpunctured, hmissing, hSeq, hw,
       hn, hBcard, hdLower, hdUpper, hezero, hleafOrder missing,
-      hnormal, ?_⟩
+      hnormal, hleafGenerator, μ, ν, hμ, hν, hnormalY, ?_⟩
     exact ⟨T, k₁, t, F, hTcard, hTle, hFle, hTsub, htT,
       hk₁Mem, hk₁Ne, hTrows, hTexact, hTcomplete, hTseparated,
       hexternalPartition, hTFdisjoint, hTFcard, hprofiles,
