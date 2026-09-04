@@ -364,6 +364,34 @@ theorem oddFactor_eq_three_or_five_or_seven_or_fifteen_of_fullOrder_smallKernel
   · have hrLe : r ≤ 15 := Nat.le_of_dvd (by omega) h15
     interval_cases r <;> norm_num at h15 <;> omega
 
+/-- The four fifth-stratum small odd factors have only four possible critical
+ambient dimensions.  This uses the universal valid-tuple cardinality bound
+and the strict stratum inequality, not a tuple or modulus enumeration. -/
+theorem criticalFifthStratum_smallOddFactor_finitePairs
+    {n q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    (hqSmall : q = 3 ∨ q = 5 ∨ q = 7 ∨ q = 15) :
+    (n = 7 ∧ q = 3) ∨ (n = 8 ∧ q = 5) ∨
+      (n = 8 ∧ q = 7) ∨ (n = 9 ∧ q = 15) := by
+  have hlower : 2 ^ (n - 1) ≤ 2 ^ 5 * q := by
+    simpa only [← Nat.card_eq_fintype_card, Nat.card_zmod] using
+      (two_pow_pred_le_card_of_validTuple g hg)
+  have hqle : q ≤ 15 := by
+    rcases hqSmall with rfl | rfl | rfl | rfl <;> omega
+  have hnle : n ≤ 9 := by
+    by_contra hnNot
+    have hnTen : 10 ≤ n := by omega
+    have hpow : 2 ^ 9 ≤ 2 ^ (n - 1) :=
+      Nat.pow_le_pow_right (by omega) (by omega)
+    have hmodLe : 2 ^ 5 * q ≤ 2 ^ 5 * 15 :=
+      Nat.mul_le_mul_left (2 ^ 5) hqle
+    norm_num at hpow hmodLe
+    omega
+  rcases hqSmall with hqThree | hqFive | hqSeven | hqFifteen
+  all_goals subst q
+  all_goals interval_cases n <;> norm_num [stratumBound] at *
+
 /-- Pure endpoint arithmetic for the common-transition boundary arm.  If the
 punctured boundary coefficient has magnitude `16` or `32`, the same affine
 transition cannot persist for three steps both forward from the successor
@@ -726,6 +754,60 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_smallKerne
       R hcycle hRne (fun i ↦ g (leaf i) - a) ?_ p y hspan hshort
     intro i
     simpa only [two_nsmul, two_zsmul] using hdouble i
+  · exact Or.inr (Or.inl hpureX)
+  · exact Or.inr (Or.inr hpureZ)
+
+/-- Critical fifth-stratum full-cycle endpoint.  The short-return arm is
+confined to four exact `(dimension, odd factor)` pairs; outside those pairs
+the actual canonical rows form one of the two pure-pair orientations. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_finitePairs_or_purePair
+    {n q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)}
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0) (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hrTwo : 2 ≤ addOrderOf y)
+    (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (leaf : Fin d → Fin n) (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    ∃ x z : Fin n, ∃ weight : ↥B → ℤ,
+      x ∉ B ∧ z ∉ B ∧ x ≠ z ∧ Finset.univ \ B = {x, z} ∧
+      (∀ b, weight b ∈ twoRetainedNormalizedWeightLevels) ∧
+      (((n = 7 ∧ q = 3) ∨ (n = 8 ∧ q = 5) ∨
+          (n = 8 ∧ q = 7) ∨ (n = 9 ∧ q = 15)) ∨
+        (leaf p = x ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = -2) ∨
+        (leaf p = z ∧ ∀ i (hi : leaf i ∈ B),
+          weight ⟨leaf i, hi⟩ = 0)) := by
+  have hretainedMem :
+      g (leaf p) - a ∈ AddSubgroup.zmultiples y := by
+    rw [← hspan]
+    exact AddSubgroup.subset_closure ⟨p, rfl⟩
+  obtain ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, hout⟩ :=
+    hrows.oneRetainedCycle_smallKernelOrder_or_purePair_of_fifthStratum_minimal
+      hq g hg hunique hne y hyq B hminimal leaf R hcycle hRne a p i₀
+        (hRne p) hi₀ hRi₀ hleafB hdouble hspan hretainedMem
+  refine ⟨x, z, weight, hxB, hzB, hxz, hcomplement, hweight, ?_⟩
+  rcases hout with ⟨hfull, hsmall⟩ | hpureX | hpureZ
+  · left
+    have hqSmall :=
+      oddFactor_eq_three_or_five_or_seven_or_fifteen_of_fullOrder_smallKernel
+        hq hyq hrTwo hfull hsmall
+    exact criticalFifthStratum_smallOddFactor_finitePairs
+      g hg hcritical hqSmall
   · exact Or.inr (Or.inl hpureX)
   · exact Or.inr (Or.inr hpureZ)
 
