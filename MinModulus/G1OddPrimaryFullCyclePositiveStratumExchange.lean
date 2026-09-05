@@ -4438,6 +4438,134 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
             g y B pres b hbMissing'
         · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
 
+private theorem sum_nsmul_coeff
+    {α G : Type*} [DecidableEq α] [AddCommMonoid G]
+    (S : Finset α) (k : α → ℕ) (v : G) :
+    (∑ i ∈ S, k i • v) = (∑ i ∈ S, k i) • v := by
+  induction S using Finset.induction_on with
+  | empty => simp
+  | @insert i S hi ih =>
+      rw [Finset.sum_insert hi, Finset.sum_insert hi, add_nsmul, ih]
+
+/-- Every natural number below `2^d` is the binary value of a subset of
+`Fin d`.  This small bridge from `Nat.bitIndices` is useful whenever the
+displayed powers of two are indexed by a finite doubling cycle. -/
+theorem exists_finset_fin_sum_two_pow_eq
+    {d s : ℕ} (hs : s < 2 ^ d) :
+    ∃ S : Finset (Fin d), ∑ i ∈ S, 2 ^ i.val = s := by
+  classical
+  let bits : Finset ℕ := s.bitIndices.toFinset
+  have hbit_lt : ∀ i ∈ bits, i < d := by
+    intro i hi
+    have hiList : i ∈ s.bitIndices := by simpa [bits] using hi
+    have hpowLe : 2 ^ i ≤ s := Nat.two_pow_le_of_mem_bitIndices hiList
+    have hpowLt : 2 ^ i < 2 ^ d := hpowLe.trans_lt hs
+    exact (Nat.pow_lt_pow_iff_right (by omega : 1 < 2)).mp hpowLt
+  let S : Finset (Fin d) :=
+    Finset.univ.filter (fun i : Fin d ↦ i.val ∈ bits)
+  have himage : S.image (fun i : Fin d ↦ i.val) = bits := by
+    ext i
+    constructor
+    · intro hi
+      obtain ⟨j, hjS, rfl⟩ := Finset.mem_image.mp hi
+      exact (Finset.mem_filter.mp hjS).2
+    · intro hi
+      let j : Fin d := ⟨i, hbit_lt i hi⟩
+      exact Finset.mem_image.mpr
+        ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ j, hi⟩, rfl⟩
+  refine ⟨S, ?_⟩
+  calc
+    (∑ i ∈ S, 2 ^ i.val) =
+        ∑ i ∈ S.image (fun j : Fin d ↦ j.val), 2 ^ i := by
+          rw [Finset.sum_image]
+          intro a _ha b _hb hab
+          exact Fin.ext hab
+    _ = ∑ i ∈ bits, 2 ^ i := by rw [himage]
+    _ = s := Finset.sum_toFinset_bitIndices_two_pow s
+
+/-- Every nonzero element of a full Mersenne doubling cycle is the difference
+of two equal-cardinality subsets of that cycle.  If `S` is the binary subset
+representing the element, then `R(S)` has the same cardinality and doubling
+gives `sum(R(S)) - sum(S) = sum(S)`.  This is the dimension-free structural
+form of the finite order-`7`/`15` table below. -/
+theorem exists_balancedCycleDifference_of_mersenne
+    {G : Type*} [AddCommGroup G] [Fintype G] {d : ℕ}
+    (R : Equiv.Perm (Fin d)) (hRcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (disp : Fin d → G) (hdouble : ∀ i, disp (R i) = (2 : ℕ) • disp i)
+    (v C : G) (hv : addOrderOf v = 2 ^ d - 1)
+    (hspan : AddSubgroup.closure (Set.range disp) = AddSubgroup.zmultiples v)
+    (hCmem : C ∈ AddSubgroup.zmultiples v) (hC0 : C ≠ 0) :
+    ∃ A D : Finset (Fin d), A.card = D.card ∧
+      C = (∑ i ∈ A, disp i) - ∑ i ∈ D, disp i := by
+  classical
+  have hdpos : 0 < d := by
+    by_contra hd0
+    have hd : d = 0 := by omega
+    subst d
+    exact Fin.elim0 (Classical.choose hRcycle)
+  let root : Fin d := ⟨0, hdpos⟩
+  let e : Fin d ≃ Fin d := fullCycleOrbitEquiv R hRcycle hRne root
+  have hdispE : ∀ r : Fin d, disp (e r) = (2 ^ r.val) • disp root := by
+    intro r
+    exact fullCycleOrbitEquiv_doubling_eq_pow_two
+      R hRcycle hRne root disp hdouble r
+  have hrootOrder : addOrderOf (disp root) = 2 ^ d - 1 := by
+    calc
+      addOrderOf (disp root) = addOrderOf v :=
+        addOrderOf_eq_of_isCycle_doubling_span
+          R hRcycle hRne disp hdouble v hspan root
+      _ = 2 ^ d - 1 := hv
+  have hrootSpan :
+      AddSubgroup.zmultiples (disp root) = AddSubgroup.zmultiples v :=
+    zmultiples_eq_of_isCycle_doubling_span
+      R hRcycle hRne disp hdouble v hspan root
+  have hCroot : C ∈ AddSubgroup.zmultiples (disp root) := by
+    rw [hrootSpan]
+    exact hCmem
+  have hqpos : 0 < 2 ^ d - 1 := by
+    have : 1 < 2 ^ d := one_lt_pow₀ (by omega) (by omega)
+    omega
+  obtain ⟨s, hs0, hslt, hC⟩ :=
+    exists_positive_nsmul_eq_of_mem_zmultiples
+      (v := disp root) (t := C) (q := 2 ^ d - 1)
+        hqpos hrootOrder hCroot hC0
+  obtain ⟨S, hS⟩ := exists_finset_fin_sum_two_pow_eq
+    (show s < 2 ^ d by omega)
+  let D : Finset (Fin d) := S.image e
+  let A : Finset (Fin d) := D.image R
+  have hAcard : A.card = D.card :=
+    Finset.card_image_iff.mpr R.injective.injOn
+  have hsumD : (∑ i ∈ D, disp i) = C := by
+    calc
+      (∑ i ∈ D, disp i) = ∑ i ∈ S, disp (e i) := by
+        rw [Finset.sum_image]
+        exact e.injective.injOn
+      _ = ∑ i ∈ S, (2 ^ i.val) • disp root := by
+        apply Finset.sum_congr rfl
+        intro i _hi
+        exact hdispE i
+      _ = (∑ i ∈ S, 2 ^ i.val) • disp root :=
+        sum_nsmul_coeff S (fun i : Fin d ↦ 2 ^ i.val) (disp root)
+      _ = s • disp root := by rw [hS]
+      _ = C := hC.symm
+  have hsumA : (∑ i ∈ A, disp i) = (2 : ℕ) • C := by
+    calc
+      (∑ i ∈ A, disp i) = ∑ i ∈ D, disp (R i) := by
+        rw [Finset.sum_image]
+        exact R.injective.injOn
+      _ = ∑ i ∈ D, (2 : ℕ) • disp i := by
+        apply Finset.sum_congr rfl
+        intro i _hi
+        exact hdouble i
+      _ = (2 : ℕ) • ∑ i ∈ D, disp i := by
+        simp only [two_nsmul, Finset.sum_add_distrib]
+      _ = (2 : ℕ) • C := by rw [hsumD]
+  refine ⟨A, D, hAcard, ?_⟩
+  rw [hsumA, hsumD]
+  simp only [two_nsmul]
+  abel
+
 /-- Every nonzero element of a cyclic group of order seven or fifteen is the
 difference of two equal-cardinality subsets of the displayed doubling powers.
 This is the balanced form of the small Mersenne orbit cover. -/
@@ -4589,6 +4717,118 @@ theorem exists_balancedPowerDifference_of_order_seven_or_fifteen
       calc
         14 • v = -(1 • v) := hwrap
         _ = v - 2 • v := by module
+
+/-- Outside any full Mersenne doubling cycle, quotienting by the odd cycle
+kernel is injective on tuple coordinates.  A quotient collision is a balanced
+difference of cycle leaves by `exists_balancedCycleDifference_of_mersenne`,
+and therefore gives a forbidden equal-cardinality subset-sum collision. -/
+theorem validTuple_offCycle_quotient_injective_of_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    (y : ZMod (2 ^ t * q)) {d : ℕ}
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ t * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (horder : addOrderOf y = 2 ^ d - 1)
+    {b c : Fin n} (hbOutside : b ∉ Set.range leaf)
+    (hcOutside : c ∉ Set.range leaf)
+    (hdiff : g b - g c ∈ AddSubgroup.zmultiples y) :
+    b = c := by
+  classical
+  by_contra hbc
+  let disp : Fin d → ZMod (2 ^ t * q) := fun r ↦ g (leaf r) - a
+  have hdoubleN : ∀ i, disp (R i) = (2 : ℕ) • disp i := by
+    intro i
+    simpa only [disp, two_nsmul, two_zsmul] using hdouble i
+  let C : ZMod (2 ^ t * q) := g b - g c
+  have hC0 : C ≠ 0 := by
+    intro hzero
+    apply hbc
+    apply validTuple_injective g hg
+    exact sub_eq_zero.mp hzero
+  obtain ⟨A, D, hcardAD, hC⟩ :=
+    exists_balancedCycleDifference_of_mersenne
+      R hcycle hRne disp hdoubleN y C horder hspan hdiff hC0
+  have hsumA :
+      (∑ i ∈ A, disp i) =
+        (∑ i ∈ A, g (leaf i)) - A.card • a := by
+    calc
+      (∑ i ∈ A, disp i) = ∑ i ∈ A, (g (leaf i) - a) := rfl
+      _ = (∑ i ∈ A, g (leaf i)) - A.card • a := by
+        rw [Finset.sum_sub_distrib, Finset.sum_const]
+  have hsumD :
+      (∑ i ∈ D, disp i) =
+        (∑ i ∈ D, g (leaf i)) - D.card • a := by
+    calc
+      (∑ i ∈ D, disp i) = ∑ i ∈ D, (g (leaf i) - a) := rfl
+      _ = (∑ i ∈ D, g (leaf i)) - D.card • a := by
+        rw [Finset.sum_sub_distrib, Finset.sum_const]
+  have hbalanced :
+      g b - g c =
+        (∑ i ∈ A, g (leaf i)) - ∑ i ∈ D, g (leaf i) := by
+    change C = _
+    rw [hC, hsumA, hsumD, hcardAD]
+    abel
+  have hsumBase :
+      g b + ∑ i ∈ D, g (leaf i) =
+        g c + ∑ i ∈ A, g (leaf i) := by
+    calc
+      g b + ∑ i ∈ D, g (leaf i) =
+          (g b - g c) + g c + ∑ i ∈ D, g (leaf i) := by abel
+      _ = ((∑ i ∈ A, g (leaf i)) -
+          ∑ i ∈ D, g (leaf i)) + g c +
+            ∑ i ∈ D, g (leaf i) := by rw [hbalanced]
+      _ = g c + ∑ i ∈ A, g (leaf i) := by abel
+  have hbNotD : b ∉ D.image leaf := by
+    intro hb
+    obtain ⟨i, _hiD, hi⟩ := Finset.mem_image.mp hb
+    exact hbOutside ⟨i, hi⟩
+  have hcNotA : c ∉ A.image leaf := by
+    intro hc
+    obtain ⟨i, _hiA, hi⟩ := Finset.mem_image.mp hc
+    exact hcOutside ⟨i, hi⟩
+  let S : Finset (Fin n) := insert b (D.image leaf)
+  let T : Finset (Fin n) := insert c (A.image leaf)
+  have hcardST : S.card = T.card := by
+    rw [show S.card = D.card + 1 by
+      simp only [S, Finset.card_insert_of_notMem hbNotD,
+        Finset.card_image_of_injective _ hleafInj],
+      show T.card = A.card + 1 by
+        simp only [T, Finset.card_insert_of_notMem hcNotA,
+          Finset.card_image_of_injective _ hleafInj], hcardAD]
+  have hsumS : (∑ i ∈ S, g i) =
+      g b + ∑ i ∈ D, g (leaf i) := by
+    rw [show S = insert b (D.image leaf) by rfl,
+      Finset.sum_insert hbNotD, Finset.sum_image]
+    exact hleafInj.injOn
+  have hsumT : (∑ i ∈ T, g i) =
+      g c + ∑ i ∈ A, g (leaf i) := by
+    rw [show T = insert c (A.image leaf) by rfl,
+      Finset.sum_insert hcNotA, Finset.sum_image]
+    exact hleafInj.injOn
+  have hsumST : (∑ i ∈ S, g i) = ∑ i ∈ T, g i :=
+    hsumS.trans (hsumBase.trans hsumT.symm)
+  let idEmb : Fin n ↪ Fin n := ⟨id, Function.injective_id⟩
+  have hST : S = T := validTuple_subsetSum_eq_of_card_eq
+    g hg idEmb hcardST (by
+      change (∑ i ∈ S, g i) = ∑ i ∈ T, g i
+      exact hsumST)
+  have hbNotA : b ∉ A.image leaf := by
+    intro hb
+    obtain ⟨i, _hiA, hi⟩ := Finset.mem_image.mp hb
+    exact hbOutside ⟨i, hi⟩
+  have hbT : b ∉ T := by
+    intro hbmem
+    rcases Finset.mem_insert.mp hbmem with hbc' | hbA
+    · exact hbc hbc'
+    · exact hbNotA hbA
+  apply hbT
+  rw [← hST]
+  exact Finset.mem_insert_self b (D.image leaf)
 
 /-- Outside a three- or four-leaf full Mersenne doubling cycle, quotienting by
 the odd cycle kernel is injective on tuple coordinates.  A quotient collision
@@ -4816,8 +5056,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
           ((g b - g pres.z) - (g c - g pres.z)) = 0
         rw [map_sub, hquotient, sub_self]
       have heq :=
-        validTuple_offCycle_quotient_injective_of_mersenne_threeOrFour
-          g hg y hd leaf hleafInj R hcycle hRne a hdouble hspan horder
+        validTuple_offCycle_quotient_injective_of_mersenne
+          g hg y leaf hleafInj R hcycle hRne a hdouble hspan horder
             hbOutside hcOutside hdiff
       exact (hbc heq).elim
     · have hcollision :=
@@ -4844,8 +5084,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
           ((g b - g pres.z) - (g c - g pres.z)) = 0
         rw [map_sub, hquotient, sub_self]
       have heq :=
-        validTuple_offCycle_quotient_injective_of_mersenne_threeOrFour
-          g hg y hd leaf hleafInj R hcycle hRne a hdouble hspan horder
+        validTuple_offCycle_quotient_injective_of_mersenne
+          g hg y leaf hleafInj R hcycle hRne a hdouble hspan horder
             hbOutside hcOutside hdiff
       exact (hbc heq).elim
 
