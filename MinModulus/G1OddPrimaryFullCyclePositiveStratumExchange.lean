@@ -177,6 +177,62 @@ theorem cycle_quotient_displacement_eq_of_span
   rw [heq]
   exact hij
 
+/-- Reverse the retained orientation of one five-weight presentation.  The
+normalized weight transforms by `w ↦ -2-w`, leaving the underlying affine
+row unchanged. -/
+def TwoRetainedFiveWeightPresentation.reverse
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (p : TwoRetainedFiveWeightPresentation g y B) :
+    TwoRetainedFiveWeightPresentation g y B where
+  x := p.z
+  z := p.x
+  weight := fun b ↦ -2 - p.weight b
+  x_not_mem := p.z_not_mem
+  z_not_mem := p.x_not_mem
+  x_ne_z := p.x_ne_z.symm
+  complement_eq := by simpa only [pair_comm] using p.complement_eq
+  weight_mem := by
+    intro b
+    have hb := p.weight_mem b
+    simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+      Finset.mem_singleton] at hb ⊢
+    rcases hb with hb | hb | hb | hb | hb <;> omega
+  row_mem := by
+    intro b
+    have hb := p.row_mem b
+    convert hb using 1
+    module
+
+/-- Extract a five-weight presentation in either prescribed ordering of the
+two retained coordinates. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.fiveWeightPresentation_with_orientation
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (y : G) (B : Finset (Fin n))
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z) :
+    ∃ p : TwoRetainedFiveWeightPresentation g y B,
+      p.x = x ∧ p.z = z := by
+  classical
+  obtain ⟨p⟩ := hrows.fiveWeightPresentation g y B
+  have hxComplement : x ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxB⟩
+  have hzComplement : z ∈ Finset.univ \ B :=
+    Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzB⟩
+  rw [p.complement_eq] at hxComplement hzComplement
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hxComplement hzComplement
+  rcases hxComplement with hxpX | hxpZ
+  · have hzpZ : z = p.z := hzComplement.resolve_left (by
+      intro hzpX
+      exact hxz (hxpX.trans hzpX.symm))
+    exact ⟨p, hxpX.symm, hzpZ.symm⟩
+  · have hzpX : z = p.x := hzComplement.resolve_right (by
+      intro hzpZ
+      exact hxz (hxpZ.trans hzpZ.symm))
+    refine ⟨p.reverse g y B, ?_, ?_⟩
+    · exact hxpZ.symm
+    · exact hzpX.symm
+
 /-- The full-order two-retained state after positive-stratum exchange. -/
 def PrimitiveTwoRetainedPositiveStratumRows
     {t q : ℕ} (g : Fin n → ZMod (2 ^ t * q))
@@ -228,6 +284,57 @@ theorem primitiveTwoRetainedPositiveStratumRows_iff_exists_presentation
     exact ⟨p, hmin, hretained, hrows, hp⟩
   · rintro ⟨p, hmin, hretained, hrows, hp⟩
     exact ⟨hmin, hretained, hrows, p, hp⟩
+
+/-- Reorient a full-order state by any prescribed ordering of its two
+retained coordinates while preserving the intrinsic quotient order. -/
+theorem PrimitiveTwoRetainedPositiveStratumRows.exists_fullOrderPresentation_with_orientation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n))
+    (hstate : PrimitiveTwoRetainedPositiveStratumRows g y B)
+    (x z : Fin n) (hxB : x ∉ B) (hzB : z ∉ B) (hxz : x ≠ z) :
+    ∃ p : TwoRetainedFiveWeightPresentation g y B,
+      p.x = x ∧ p.z = z ∧
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.x - g p.z)) = 2 ^ t := by
+  classical
+  rcases hstate with ⟨_hmin, _hretained, hrows, p₀, hp₀full⟩
+  obtain ⟨p, hpx, hpz⟩ :=
+    hrows.fiveWeightPresentation_with_orientation
+      g y B x z hxB hzB hxz
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  have hp₀Order : addOrderOf (pi (g p₀.x - g p₀.z)) = 2 ^ t := by
+    simpa only [pi, H, Q] using hp₀full.1
+  have hxCase : x = p₀.x ∨ x = p₀.z := by
+    have hxMem : x ∈ Finset.univ \ B :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hxB⟩
+    rw [p₀.complement_eq] at hxMem
+    simpa using hxMem
+  have hzCase : z = p₀.x ∨ z = p₀.z := by
+    have hzMem : z ∈ Finset.univ \ B :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hzB⟩
+    rw [p₀.complement_eq] at hzMem
+    simpa using hzMem
+  have hxzOrder : addOrderOf (pi (g x - g z)) = 2 ^ t := by
+    rcases hxCase with hxpX | hxpZ
+    · have hzpZ : z = p₀.z := hzCase.resolve_left (by
+        intro hzpX
+        exact hxz (hxpX.trans hzpX.symm))
+      simpa only [hxpX, hzpZ] using hp₀Order
+    · have hzpX : z = p₀.x := hzCase.resolve_right (by
+        intro hzpZ
+        exact hxz (hxpZ.trans hzpZ.symm))
+      have hneg : g x - g z = -(g p₀.x - g p₀.z) := by
+        rw [hxpZ, hzpX]
+        abel
+      rw [hneg, map_neg, addOrderOf_neg]
+      exact hp₀Order
+  refine ⟨p, hpx, hpz, ?_⟩
+  rw [hpx, hpz]
+  simpa only [pi, H, Q] using hxzOrder
 
 /-- An odd integer multiple of an element of order `2^t` has the same order.
 This is the parity fact that makes the positive-stratum exchange orientation
@@ -419,6 +526,122 @@ theorem TwoRetainedFiveWeightPresentation.fullDeleted_weight_constant_of_fullOrd
         exact_mod_cast this
     omega
   · simpa only [cycleWeight] using hconstant
+
+/-- In a presentation oriented with the unique retained cycle leaf first,
+full quotient order forces every deleted cycle-leaf row to have pure weight
+`-2`.  Only the common cycle coset and the order gap `4 < 2^t` are used. -/
+theorem TwoRetainedFiveWeightPresentation.oneRetainedCycle_weight_eq_neg_two_of_fullOrder
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hfull :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g p.x - g p.z)) = 2 ^ t)
+    (hpow : 4 < 2 ^ t)
+    {d : ℕ} (leaf : Fin d → Fin n) (a : ZMod (2 ^ t * q))
+    (r : Fin d) (hpx : leaf r = p.x)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    ∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = -2 := by
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  have hdelta : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, pi, H, Q] using hfull
+  intro i hi
+  have hbeta : pi (g (leaf i) - g p.z) = deltaQ := by
+    calc
+      pi (g (leaf i) - g p.z) = pi (g (leaf r) - g p.z) :=
+        cycle_quotient_displacement_eq_of_span
+          g y a (g p.z) leaf hspan i r
+      _ = deltaQ := by rw [hpx]
+  have hquotientRelation :
+      (2 : ℤ) • pi (g (leaf i) - g p.z) +
+        p.weight ⟨leaf i, hi⟩ • deltaQ = 0 := by
+    apply (QuotientAddGroup.eq_zero_iff
+      ((2 : ℤ) • (g (leaf i) - g p.z) +
+        p.weight ⟨leaf i, hi⟩ • (g p.x - g p.z))).mpr
+    exact p.row_mem ⟨leaf i, hi⟩
+  rw [hbeta] at hquotientRelation
+  let e : ℤ := p.weight ⟨leaf i, hi⟩ + 2
+  have heZero : e • deltaQ = 0 := by
+    dsimp only [e]
+    rw [add_zsmul]
+    rw [add_comm]
+    exact hquotientRelation
+  by_contra hweight
+  have he : e ≠ 0 := by
+    intro he
+    apply hweight
+    dsimp only [e] at he
+    omega
+  have hnatZero : e.natAbs • deltaQ = 0 := by
+    rw [← natCast_zsmul]
+    rcases Int.natAbs_eq e with hePos | heNeg
+    · rw [hePos] at heZero
+      exact heZero
+    · rw [heNeg, neg_smul] at heZero
+      exact neg_eq_zero.mp heZero
+  have horderDvd : 2 ^ t ∣ e.natAbs := by
+    rw [← hdelta]
+    exact addOrderOf_dvd_of_nsmul_eq_zero hnatZero
+  have horderLe : 2 ^ t ≤ e.natAbs :=
+    Nat.le_of_dvd (Int.natAbs_pos.mpr he) horderDvd
+  have hweightMem := p.weight_mem ⟨leaf i, hi⟩
+  have habsLe : e.natAbs ≤ 4 := by
+    simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+      Finset.mem_singleton] at hweightMem
+    rcases Int.natAbs_eq e with hePos | heNeg
+    · have : (e.natAbs : ℤ) ≤ 4 := by
+        dsimp only [e]
+        rcases hweightMem with hw | hw | hw | hw | hw <;> omega
+      exact_mod_cast this
+    · have : (e.natAbs : ℤ) ≤ 4 := by
+        dsimp only [e]
+        rcases hweightMem with hw | hw | hw | hw | hw <;> omega
+      exact_mod_cast this
+  omega
+
+/-- A punctured-cycle full-order state in the common comparison orientation:
+the missing leaf is retained first, a fixed off-cycle endpoint is retained
+second, and every surviving cycle leaf has pure normalized weight `-2`. -/
+def PrimitiveOneRetainedCyclePurePresentation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n)) {d : ℕ} (leaf : Fin d → Fin n)
+    (r : Fin d) (z : Fin n) : Prop :=
+  ∃ p : TwoRetainedFiveWeightPresentation g y B,
+    p.x = leaf r ∧ p.z = z ∧
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g p.x - g p.z)) = 2 ^ t ∧
+      ∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = -2
+
+/-- Put one punctured-cycle full-order state into the common pure comparison
+orientation. -/
+theorem PrimitiveTwoRetainedPositiveStratumRows.to_oneRetainedCyclePurePresentation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n))
+    (hstate : PrimitiveTwoRetainedPositiveStratumRows g y B)
+    (hpow : 4 < 2 ^ t)
+    {d : ℕ} (leaf : Fin d → Fin n) (a : ZMod (2 ^ t * q))
+    (r : Fin d) (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ r)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (z : Fin n) (hzB : z ∉ B) (hrz : leaf r ≠ z) :
+    PrimitiveOneRetainedCyclePurePresentation g y B leaf r z := by
+  have hrB : leaf r ∉ B := by
+    rw [hleafB r]
+    simp
+  obtain ⟨p, hpx, hpz, hfull⟩ :=
+    hstate.exists_fullOrderPresentation_with_orientation
+      g y B (leaf r) z hrB hzB hrz
+  refine ⟨p, hpx, hpz, hfull, ?_⟩
+  exact p.oneRetainedCycle_weight_eq_neg_two_of_fullOrder
+    g y B hfull hpow leaf a r hpx.symm hspan
 
 /-- The constant cycle and the exact quotient-row normal form use one and the
 same presentation.  In particular, no orientation or existential witness is
@@ -879,6 +1102,99 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted
         apply hthree
         exact ⟨r, hthreeR⟩
       · simpa only [br] using hexact
+
+/-- Simultaneous cycle exchange in a directly comparable row normal form.
+Unless C2 is reached, every missing leaf has a distinct punctured transversal
+whose retained pair is oriented as `(missing leaf, fixed endpoint)` and whose
+surviving cycle rows all have weight `-2`. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted_cycleLeaves_to_purePresentations_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (hleafInj : Function.Injective leaf)
+    (a : ZMod (2 ^ t * q)) (hleafB : ∀ i, leaf i ∈ B)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 4 < 2 ^ t) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ((∀ r,
+          PrimitiveOneRetainedCyclePurePresentation g y
+            (insert p.x (B.erase (leaf r))) leaf r p.z) ∧
+        Function.Injective
+          (fun r ↦ insert p.x (B.erase (leaf r)))) ∨
+      ((∀ r,
+          PrimitiveOneRetainedCyclePurePresentation g y
+            (insert p.z (B.erase (leaf r))) leaf r p.x) ∧
+        Function.Injective
+          (fun r ↦ insert p.z (B.erase (leaf r)))) := by
+  classical
+  have hxOutside : p.x ∉ Set.range leaf := by
+    rintro ⟨i, hix⟩
+    apply p.x_not_mem
+    rw [← hix]
+    exact hleafB i
+  have hzOutside : p.z ∉ Set.range leaf := by
+    rintro ⟨i, hiz⟩
+    apply p.z_not_mem
+    rw [← hiz]
+    exact hleafB i
+  rcases hpres.exchange_all_fullDeleted_cycleLeaves_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd B p hminimal hd leaf
+        hleafInj a hleafB hspan with
+    hthree | hx | hz
+  · exact Or.inl hthree
+  · right
+    left
+    refine ⟨?_, hx.2⟩
+    intro r
+    let Br : Finset (Fin n) := insert p.x (B.erase (leaf r))
+    have hincidence : ∀ i, leaf i ∈ Br ↔ i ≠ r := by
+      simpa only [Br] using cycleRange_mem_insert_erase_leaf_iff
+        leaf hleafInj hleafB r hxOutside
+    have hzBr : p.z ∉ Br := by
+      simp only [Br, Finset.mem_insert, Finset.mem_erase, Ne.symm p.x_ne_z,
+        false_or, p.z_not_mem, and_false, not_false_eq_true]
+    have hrz : leaf r ≠ p.z := by
+      intro hrz
+      apply p.z_not_mem
+      rw [← hrz]
+      exact hleafB r
+    apply PrimitiveTwoRetainedPositiveStratumRows.to_oneRetainedCyclePurePresentation
+      g y Br (by simpa only [Br] using hx.1 r) hpow leaf a r hincidence
+        hspan p.z hzBr hrz
+  · right
+    right
+    refine ⟨?_, hz.2⟩
+    intro r
+    let Br : Finset (Fin n) := insert p.z (B.erase (leaf r))
+    have hincidence : ∀ i, leaf i ∈ Br ↔ i ≠ r := by
+      simpa only [Br] using cycleRange_mem_insert_erase_leaf_iff
+        leaf hleafInj hleafB r hzOutside
+    have hxBr : p.x ∉ Br := by
+      simp only [Br, Finset.mem_insert, Finset.mem_erase, p.x_ne_z,
+        false_or, p.x_not_mem, and_false, not_false_eq_true]
+    have hrx : leaf r ≠ p.x := by
+      intro hrx
+      apply p.x_not_mem
+      rw [← hrx]
+      exact hleafB r
+    apply PrimitiveTwoRetainedPositiveStratumRows.to_oneRetainedCyclePurePresentation
+      g y Br (by simpa only [Br] using hz.1 r) hpow leaf a r hincidence
+        hspan p.x hxBr hrx
 
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
