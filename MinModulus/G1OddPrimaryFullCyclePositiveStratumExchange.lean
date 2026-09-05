@@ -6085,6 +6085,53 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
         · simpa using hbMissing
         · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
 
+/-- Install the unrestricted critical fifth-stratum terminal at the public
+full-order exact-two package boundary.  The package already carries the
+minimal transversal and five-weight private rows; the dimension-free owner
+closure therefore leaves only the existing three-retained C2 currency or a
+pure edge whose second omission is outside the original cycle. -/
+theorem PrimitiveTwoRetainedPositiveStratumRows.oneRetainedCycle_criticalFifthStratum_offCycleOwnerClosure_mersenne
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hstate : PrimitiveTwoRetainedPositiveStratumRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 ≤ d)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (anchor : Fin n) (hbase : a = h + g anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ∃ x z : Fin n,
+        Witness g h (pureEdgeCoeffs x z anchor) ∧
+          z ∉ Set.range leaf := by
+  rcases hstate with ⟨hmin, _hretained, hrows, _pres⟩
+  exact
+    hrows.oneRetainedCycle_criticalFifthStratum_offCycleOwnerClosure_mersenne
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal hd leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
+          hdouble hspan anchor hbase
+
 /-- Close the critical fifth-stratum one-retained terminal.  Canonical unit
 rows force two of the four off-cycle owners to collide in the quotient, while
 the balanced Mersenne orbit cover proves that the quotient map is injective on
