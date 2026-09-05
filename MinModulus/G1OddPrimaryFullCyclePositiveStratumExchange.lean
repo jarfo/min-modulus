@@ -1416,6 +1416,437 @@ theorem PrimitivePuncturedCyclePrivateMatrix.all_negativeProfile_of_mersenne
   · exact (M.not_all_positiveProfiles_of_mersenne
       hg horder hpositive).elim
 
+/-- A negative profiled row is literally the pure edge centered at the fixed
+endpoint and joining the common inserted coordinate to the missing leaf. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCoeff_eq_pureEdgeCoeffs_of_negativeProfile
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d)
+    (hnegative : M.commonProfile r = (-1, -1)) :
+    M.commonCoeff r = pureEdgeCoeffs fixed inserted (leaf r) := by
+  have hmu : M.commonCoeff r inserted = -1 :=
+    congrArg Prod.fst hnegative
+  have hlambda : M.commonCoeff r (leaf r) = -1 :=
+    congrArg Prod.snd hnegative
+  have hsum := (M.commonCoeff_threeSupport_sevenProfiles r).2.1
+  have hfixedCoeff : M.commonCoeff r fixed = 2 := by omega
+  have hsupport := (M.commonCoeff_threeSupport_sevenProfiles r).1
+  have hleafNeInserted : leaf r ≠ inserted := by
+    intro hli
+    have hmem : leaf r ∈ set r := by
+      simpa only [hli] using M.common_mem r
+    exact ((M.leaf_mem_iff r r).1 hmem) rfl
+  have hinsertedNeFixed : inserted ≠ fixed := by
+    intro hif
+    apply (M.presentation r).z_not_mem
+    rw [M.fixed_second r, ← hif]
+    exact M.common_mem r
+  have hleafNeFixed : leaf r ≠ fixed := by
+    intro hlf
+    apply (M.presentation r).x_ne_z
+    rw [M.missing_first r, M.fixed_second r, hlf]
+  funext i
+  by_cases hiFixed : i = fixed
+  · subst i
+    simp [pureEdgeCoeffs, hfixedCoeff, Ne.symm hinsertedNeFixed,
+      Ne.symm hleafNeFixed]
+  by_cases hiInserted : i = inserted
+  · subst i
+    simp [pureEdgeCoeffs, hmu, hinsertedNeFixed,
+      Ne.symm hleafNeInserted]
+  by_cases hiLeaf : i = leaf r
+  · subst i
+    simp [pureEdgeCoeffs, hlambda, hleafNeFixed, hleafNeInserted]
+  rw [hsupport i hiInserted hiLeaf hiFixed]
+  simp [pureEdgeCoeffs, hiFixed, hiInserted, hiLeaf]
+
+/-- The all-negative target plus its leaf displacement is independent of the
+puncture.  This is the constant-center recurrence left by HAD. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (a : ZMod (2 ^ t * q)) (r : Fin d)
+    (hnegative : M.commonProfile r = (-1, -1)) :
+    M.commonTarget r + (g (leaf r) - a) =
+      (2 : ℤ) • g fixed - g inserted - a := by
+  have hmu : M.commonCoeff r inserted = -1 :=
+    congrArg Prod.fst hnegative
+  have hlambda : M.commonCoeff r (leaf r) = -1 :=
+    congrArg Prod.snd hnegative
+  have hsum := (M.commonCoeff_threeSupport_sevenProfiles r).2.1
+  have hfixedCoeff : M.commonCoeff r fixed = 2 := by omega
+  have hvalue := (M.commonCoeff_threeSupport_sevenProfiles r).2.2.2
+  change M.commonScalar r • y + (g (leaf r) - a) =
+    (2 : ℤ) • g fixed - g inserted - a
+  rw [← hvalue, hmu, hlambda, hfixedCoeff]
+  simp only [neg_one_zsmul]
+  module
+
+/-- Three distinct all-negative rows cannot realize the common center as one
+signed three-leaf displacement.  Their coefficient combination `uᵢ+uⱼ-uₖ`
+would otherwise be a legal nonzero witness at zero. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCenter_ne_signedThreeLeaf_of_negativeProfiles
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (a : ZMod (2 ^ t * q))
+    (hnegative : ∀ r, M.commonProfile r = (-1, -1))
+    {i j k : Fin d} (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
+    (2 : ℤ) • g fixed - g inserted - a ≠
+      (g (leaf i) - a) + (g (leaf j) - a) - (g (leaf k) - a) := by
+  intro hcenter
+  let c : Fin n → ℤ :=
+    M.commonCoeff i + M.commonCoeff j - M.commonCoeff k
+  apply (validTuple_iff_no_zero_witness g).mp hg c
+  have hshapeI := M.commonCoeff_eq_pureEdgeCoeffs_of_negativeProfile
+    i (hnegative i)
+  have hshapeJ := M.commonCoeff_eq_pureEdgeCoeffs_of_negativeProfile
+    j (hnegative j)
+  have hshapeK := M.commonCoeff_eq_pureEdgeCoeffs_of_negativeProfile
+    k (hnegative k)
+  have hleafIJ : leaf i ≠ leaf j := fun h ↦ hij (M.leaf_injective h)
+  have hleafIK : leaf i ≠ leaf k := fun h ↦ hik (M.leaf_injective h)
+  have hleafJK : leaf j ≠ leaf k := fun h ↦ hjk (M.leaf_injective h)
+  have hinsertedNeFixed : inserted ≠ fixed := by
+    intro hif
+    apply (M.presentation i).z_not_mem
+    rw [M.fixed_second i, ← hif]
+    exact M.common_mem i
+  have hleafNeInserted : ∀ r, leaf r ≠ inserted := by
+    intro r hli
+    have hmem : leaf r ∈ set r := by
+      simpa only [hli] using M.common_mem r
+    exact ((M.leaf_mem_iff r r).1 hmem) rfl
+  have hleafNeFixed : ∀ r, leaf r ≠ fixed := by
+    intro r hlf
+    apply (M.presentation r).x_ne_z
+    rw [M.missing_first r, M.fixed_second r, hlf]
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro hc
+    have hcfixed := congrFun hc fixed
+    simp only [c, Pi.sub_apply, Pi.add_apply, Pi.zero_apply,
+      hshapeI, hshapeJ, hshapeK, pureEdgeCoeffs] at hcfixed
+    simp [Ne.symm hinsertedNeFixed, Ne.symm (hleafNeFixed i),
+      Ne.symm (hleafNeFixed j), Ne.symm (hleafNeFixed k)] at hcfixed
+  · intro x
+    simp only [c, hshapeI, hshapeJ, hshapeK, pureEdgeCoeffs,
+      Pi.sub_apply, Pi.add_apply]
+    have hfi := Ne.symm (hleafNeFixed i)
+    have hfj := Ne.symm (hleafNeFixed j)
+    have hfk := Ne.symm (hleafNeFixed k)
+    have hii := Ne.symm (hleafNeInserted i)
+    have hij' := Ne.symm (hleafNeInserted j)
+    have hik' := Ne.symm (hleafNeInserted k)
+    split_ifs <;> omega
+  · simp only [c, Pi.sub_apply, Pi.add_apply]
+    rw [Finset.sum_sub_distrib, Finset.sum_add_distrib,
+      (M.common_private_row i).2.1.2.2.1,
+      (M.common_private_row j).2.1.2.2.1,
+      (M.common_private_row k).2.1.2.2.1]
+    ring
+  · simp only [c, Pi.sub_apply, Pi.add_apply, add_smul, sub_smul]
+    rw [Finset.sum_sub_distrib, Finset.sum_add_distrib,
+      (M.common_private_row i).2.1.2.2.2,
+      (M.common_private_row j).2.1.2.2.2,
+      (M.common_private_row k).2.1.2.2.2]
+    have hiTarget :=
+      M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a i (hnegative i)
+    have hjTarget :=
+      M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a j (hnegative j)
+    have hkTarget :=
+      M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a k (hnegative k)
+    change M.commonTarget i + M.commonTarget j - M.commonTarget k = 0
+    rw [show M.commonTarget i =
+        ((2 : ℤ) • g fixed - g inserted - a) - (g (leaf i) - a) by
+          apply eq_sub_of_add_eq
+          exact hiTarget,
+      show M.commonTarget j =
+        ((2 : ℤ) • g fixed - g inserted - a) - (g (leaf j) - a) by
+          apply eq_sub_of_add_eq
+          exact hjTarget,
+      show M.commonTarget k =
+        ((2 : ℤ) • g fixed - g inserted - a) - (g (leaf k) - a) by
+          apply eq_sub_of_add_eq
+          exact hkTarget,
+      hcenter]
+    module
+
+/-- In cyclic order seven or fifteen, every nonzero element other than one of
+the displayed doubling-orbit points is a signed sum of three distinct orbit
+points.  This is the finite arithmetic input needed by the general row
+combination obstruction above. -/
+theorem exists_signedThreePowers_of_order_seven_or_fifteen
+    {G : Type*} [AddCommGroup G] (v C : G) {d : ℕ}
+    (hd : d = 3 ∨ d = 4) (hv : addOrderOf v = 2 ^ d - 1)
+    (hCmem : C ∈ AddSubgroup.zmultiples v) (hC0 : C ≠ 0)
+    (hCpower : ∀ r : Fin d, C ≠ (2 ^ r.val) • v) :
+    ∃ i j k : Fin d, i ≠ j ∧ i ≠ k ∧ j ≠ k ∧
+      C = (2 ^ i.val) • v + (2 ^ j.val) • v - (2 ^ k.val) • v := by
+  rcases hd with rfl | rfl
+  · have hv' : addOrderOf v = 7 := by norm_num at hv ⊢; exact hv
+    obtain ⟨s, hs0, hslt, rfl⟩ :=
+      exists_positive_nsmul_eq_of_mem_zmultiples
+        (v := v) (t := C) (q := 7) (by norm_num) hv' hCmem hC0
+    have hvzero : (7 : ℕ) • v = 0 := by
+      simpa only [hv'] using addOrderOf_nsmul_eq_zero v
+    interval_cases s
+    · exfalso
+      exact (hCpower ⟨0, by norm_num⟩) (by norm_num)
+    · exfalso
+      exact (hCpower ⟨1, by norm_num⟩) (by norm_num)
+    · refine ⟨⟨0, by norm_num⟩, ⟨2, by norm_num⟩,
+        ⟨1, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · exfalso
+      exact (hCpower ⟨2, by norm_num⟩) (by norm_num)
+    · refine ⟨⟨1, by norm_num⟩, ⟨2, by norm_num⟩,
+        ⟨0, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · refine ⟨⟨0, by norm_num⟩, ⟨1, by norm_num⟩,
+        ⟨2, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      change 6 • v = 1 • v + 2 • v - 4 • v
+      calc
+        6 • v = 7 • v - v := by
+          rw [show 7 = 6 + 1 by norm_num, add_nsmul, one_nsmul]
+          abel
+        _ = 0 - v := by rw [hvzero]
+        _ = 1 • v + 2 • v - 4 • v := by module
+  · have hv' : addOrderOf v = 15 := by norm_num at hv ⊢; exact hv
+    obtain ⟨s, hs0, hslt, rfl⟩ :=
+      exists_positive_nsmul_eq_of_mem_zmultiples
+        (v := v) (t := C) (q := 15) (by norm_num) hv' hCmem hC0
+    have hvzero : (15 : ℕ) • v = 0 := by
+      simpa only [hv'] using addOrderOf_nsmul_eq_zero v
+    interval_cases s
+    · exfalso
+      exact (hCpower ⟨0, by norm_num⟩) (by norm_num)
+    · exfalso
+      exact (hCpower ⟨1, by norm_num⟩) (by norm_num)
+    · refine ⟨⟨0, by norm_num⟩, ⟨2, by norm_num⟩,
+        ⟨1, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · exfalso
+      exact (hCpower ⟨2, by norm_num⟩) (by norm_num)
+    · refine ⟨⟨1, by norm_num⟩, ⟨2, by norm_num⟩,
+        ⟨0, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · refine ⟨⟨1, by norm_num⟩, ⟨3, by norm_num⟩,
+        ⟨2, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · refine ⟨⟨0, by norm_num⟩, ⟨3, by norm_num⟩,
+        ⟨1, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · exfalso
+      exact (hCpower ⟨3, by norm_num⟩) (by norm_num)
+    · refine ⟨⟨1, by norm_num⟩, ⟨3, by norm_num⟩,
+        ⟨0, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · refine ⟨⟨2, by norm_num⟩, ⟨3, by norm_num⟩,
+        ⟨1, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · refine ⟨⟨2, by norm_num⟩, ⟨3, by norm_num⟩,
+        ⟨0, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      norm_num
+      module
+    · refine ⟨⟨0, by norm_num⟩, ⟨2, by norm_num⟩,
+        ⟨3, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      change 12 • v = 1 • v + 4 • v - 8 • v
+      calc
+        12 • v = 15 • v - 3 • v := by
+          rw [show 15 = 12 + 3 by norm_num, add_nsmul]
+          abel
+        _ = 0 - 3 • v := by rw [hvzero]
+        _ = 1 • v + 4 • v - 8 • v := by module
+    · refine ⟨⟨1, by norm_num⟩, ⟨2, by norm_num⟩,
+        ⟨3, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      change 13 • v = 2 • v + 4 • v - 8 • v
+      calc
+        13 • v = 15 • v - 2 • v := by
+          rw [show 15 = 13 + 2 by norm_num, add_nsmul]
+          abel
+        _ = 0 - 2 • v := by rw [hvzero]
+        _ = 2 • v + 4 • v - 8 • v := by module
+    · refine ⟨⟨0, by norm_num⟩, ⟨1, by norm_num⟩,
+        ⟨2, by norm_num⟩, by decide, by decide, by decide, ?_⟩
+      change 14 • v = 1 • v + 2 • v - 4 • v
+      calc
+        14 • v = 15 • v - v := by
+          rw [show 15 = 14 + 1 by norm_num, add_nsmul, one_nsmul]
+          abel
+        _ = 0 - v := by rw [hvzero]
+        _ = 1 • v + 2 • v - 4 • v := by module
+
+/-- On a three- or four-leaf full Mersenne cycle, the all-negative recurrence
+forces its common center to vanish.  The proof combines the preceding cyclic
+cover with the ambient-validity obstruction, so the finite arithmetic is
+used only to discharge a general structural pattern. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCenter_eq_zero_of_negativeProfiles_threeOrFour
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ t * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (horder : addOrderOf y = 2 ^ d - 1)
+    (hnegative : ∀ r, M.commonProfile r = (-1, -1))
+    (hd : d = 3 ∨ d = 4) :
+    (2 : ℤ) • g fixed - g inserted - a = 0 := by
+  have hdpos : 0 < d := by rcases hd with rfl | rfl <;> norm_num
+  let disp : Fin d → ZMod (2 ^ t * q) := fun r ↦ g (leaf r) - a
+  have hdoubleN : ∀ i, disp (R i) = (2 : ℕ) • disp i := by
+    intro i
+    simpa only [disp, two_nsmul, two_zsmul] using hdouble i
+  let root : Fin d := ⟨0, hdpos⟩
+  let e : Fin d ≃ Fin d := fullCycleOrbitEquiv R hcycle hRne root
+  let v : ZMod (2 ^ t * q) := disp root
+  let C : ZMod (2 ^ t * q) :=
+    (2 : ℤ) • g fixed - g inserted - a
+  have hdispE : ∀ r : Fin d, disp (e r) = (2 ^ r.val) • v := by
+    intro r
+    exact fullCycleOrbitEquiv_doubling_eq_pow_two
+      R hcycle hRne root disp hdoubleN r
+  have hgroups : AddSubgroup.zmultiples v = AddSubgroup.zmultiples y := by
+    exact zmultiples_eq_of_isCycle_doubling_span
+      R hcycle hRne disp hdoubleN y hspan root
+  have hv : addOrderOf v = 2 ^ d - 1 := by
+    calc
+      addOrderOf v = addOrderOf y :=
+        addOrderOf_eq_of_isCycle_doubling_span
+          R hcycle hRne disp hdoubleN y hspan root
+      _ = 2 ^ d - 1 := horder
+  have hCmemY : C ∈ AddSubgroup.zmultiples y := by
+    have htarget : M.commonTarget root ∈ AddSubgroup.zmultiples y :=
+      (AddSubgroup.zmultiples y).zsmul_mem
+        (AddSubgroup.mem_zmultiples y) (M.commonScalar root)
+    have hdisp : disp root ∈ AddSubgroup.zmultiples y := by
+      rw [← hspan]
+      exact AddSubgroup.subset_closure ⟨root, rfl⟩
+    have hadd := (AddSubgroup.zmultiples y).add_mem htarget hdisp
+    have hrec :=
+      M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a root (hnegative root)
+    change M.commonTarget root + disp root = C at hrec
+    rwa [hrec] at hadd
+  have hCmem : C ∈ AddSubgroup.zmultiples v := by
+    rw [hgroups]
+    exact hCmemY
+  have hCpower : ∀ r : Fin d, C ≠ (2 ^ r.val) • v := by
+    intro r hpow
+    apply (M.common_private_row (e r)).1
+    have hrec :=
+      M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a (e r) (hnegative (e r))
+    change M.commonTarget (e r) + disp (e r) = C at hrec
+    calc
+      M.commonTarget (e r) =
+          (M.commonTarget (e r) + disp (e r)) - disp (e r) := by abel
+      _ = C - disp (e r) := by rw [hrec]
+      _ = 0 := by rw [hpow, hdispE]; abel
+  change C = 0
+  by_contra hC0
+  obtain ⟨i, j, k, hij, hik, hjk, hsigned⟩ :=
+    exists_signedThreePowers_of_order_seven_or_fifteen
+      v C hd hv hCmem hC0 hCpower
+  apply M.commonCenter_ne_signedThreeLeaf_of_negativeProfiles
+    hg a hnegative (e.injective.ne hij) (e.injective.ne hik)
+      (e.injective.ne hjk)
+  change C = disp (e i) + disp (e j) - disp (e k)
+  rw [hdispE, hdispE, hdispE]
+  exact hsigned
+
+/-- A displayed pure-edge value with three distinct coordinates is a legal
+witness.  This small constructor lets structural endpoints expose their
+coefficient vector without rebuilding the floor and sum checks. -/
+theorem pureEdgeCoeffs_witness_of_value
+    {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (h : G) (x a b : Fin n)
+    (hxa : x ≠ a) (hxb : x ≠ b) (hab : a ≠ b)
+    (hval : (2 : ℤ) • g x - g a - g b = h) :
+    Witness g h (pureEdgeCoeffs x a b) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro hzero
+    have hx := congrFun hzero x
+    simp [pureEdgeCoeffs, hxa, hxb] at hx
+  · intro i
+    simp only [pureEdgeCoeffs]
+    split_ifs <;> omega
+  · simp [pureEdgeCoeffs, Finset.sum_sub_distrib]
+  · simpa [pureEdgeCoeffs, sub_smul, Finset.sum_sub_distrib] using hval
+
+/-- Restore the original affine base `h + g(anchor)` after the order-seven or
+order-fifteen center obstruction.  The resulting identity is the literal
+pure-edge witness at the half target `h`, an accepted upstream G1 currency. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.pureEdgeWitness_of_mersenne_threeOrFour
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ t * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 2 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
+    (hd : d = 3 ∨ d = 4)
+    (h : ZMod (2 ^ t * q)) (anchor : Fin n)
+    (hbase : a = h + g anchor)
+    (hfixedAnchor : fixed ≠ anchor)
+    (hinsertedAnchor : inserted ≠ anchor) :
+    Witness g h (pureEdgeCoeffs fixed inserted anchor) := by
+  have hnegative :=
+    M.all_negativeProfile_of_mersenne hg hpow a hspan horder
+  have hcenter :=
+    M.commonCenter_eq_zero_of_negativeProfiles_threeOrFour
+      hg R hcycle hRne a hdouble hspan horder hnegative hd
+  have hinsertedNeFixed : inserted ≠ fixed := by
+    have hdpos : 0 < d := by rcases hd with rfl | rfl <;> norm_num
+    let r : Fin d := ⟨0, hdpos⟩
+    intro hif
+    apply (M.presentation r).z_not_mem
+    rw [M.fixed_second r, ← hif]
+    exact M.common_mem r
+  have hvalue :
+      (2 : ℤ) • g fixed - g inserted - g anchor = h := by
+    rw [hbase] at hcenter
+    calc
+      (2 : ℤ) • g fixed - g inserted - g anchor =
+          ((2 : ℤ) • g fixed - g inserted - (h + g anchor)) + h := by
+            abel
+      _ = 0 + h := by rw [hcenter]
+      _ = h := zero_add h
+  exact pureEdgeCoeffs_witness_of_value
+    g h fixed inserted anchor hinsertedNeFixed.symm
+      hfixedAnchor hinsertedAnchor hvalue
+
 /-- Rows in one exact profile differ only through their missing-leaf term. -/
 theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_sub_eq_zsmul_leaf_sub_of_profile_eq
     {t q : ℕ} [NeZero (2 ^ t * q)]
