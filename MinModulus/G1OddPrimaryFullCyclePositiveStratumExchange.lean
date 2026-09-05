@@ -433,6 +433,301 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.owner_primitive_at_one_r
       rw [hvalue, map_sub]
     simpa only [betaQ, deltaQ, pi, H, Q, hbaseChange] using hprimitive
 
+/-- At the fifth stratum, an owner primitive relative to the first retained
+coordinate can only have normalized weight `-4` or `0`. -/
+private theorem fifthStratum_xPrimitive_ownerWeight
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (b : ↥B)
+    (hprimitive :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (b : Fin n) - g p.x)) = 32) :
+    p.weight b = -4 ∨ p.weight b = 0 := by
+  let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 5 * q) ⧸ H
+  let pi : ZMod (2 ^ 5 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  let betaQ : Q := pi (g (b : Fin n) - g p.z)
+  let gammaQ : Q := pi (g (b : Fin n) - g p.x)
+  have hdeltaOrder : addOrderOf deltaQ = 32 := by
+    have hraw := hpres.2.2.2.1
+    change addOrderOf (pi (g p.x - g p.z)) = 2 ^ 5 at hraw
+    norm_num at hraw
+    exact hraw
+  have hgammaOrder : addOrderOf gammaQ = 32 := by
+    simpa only [gammaQ, pi, H, Q] using hprimitive
+  have hgamma : gammaQ = betaQ - deltaQ := by
+    have hvalue :
+        g (b : Fin n) - g p.x =
+          (g (b : Fin n) - g p.z) - (g p.x - g p.z) := by
+      abel
+    change pi (g (b : Fin n) - g p.x) =
+      pi (g (b : Fin n) - g p.z) - pi (g p.x - g p.z)
+    rw [hvalue, map_sub]
+  have hdeltaZero : (32 : ℕ) • deltaQ = 0 := by
+    simpa only [hdeltaOrder] using addOrderOf_nsmul_eq_zero deltaQ
+  obtain ⟨k, hk, hbeta⟩ := hpres.2.2.2.2 b
+  change betaQ = -(k • deltaQ) ∨
+    betaQ = (2 ^ (5 - 1) : ℕ) • deltaQ - k • deltaQ at hbeta
+  have hweightMem := p.weight_mem b
+  simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hweightMem
+  rcases hweightMem with hw | hw | hw | hw | hw
+  · exact Or.inl hw
+  · have hk' : k = -1 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · have hgammaZero : (16 : ℕ) • gammaQ = 0 := by
+        rw [hgamma, hbeta]
+        module
+      have hdvd : 32 ∣ 16 := by
+        rw [← hgammaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hgammaZero
+      omega
+    · have hgammaZero : (16 : ℕ) • gammaQ = 0 := by
+        norm_num at hbeta
+        calc
+          (16 : ℕ) • gammaQ = 8 • ((32 : ℕ) • deltaQ) := by
+            rw [hgamma, hbeta]
+            module
+          _ = 0 := by rw [hdeltaZero]; simp
+      have hdvd : 32 ∣ 16 := by
+        rw [← hgammaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hgammaZero
+      omega
+  · omega
+  · exact Or.inr hw
+  · have hk' : k = 1 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · have hgammaZero : (16 : ℕ) • gammaQ = 0 := by
+        calc
+          (16 : ℕ) • gammaQ = -((32 : ℕ) • deltaQ) := by
+            rw [hgamma, hbeta]
+            module
+          _ = 0 := by rw [hdeltaZero, neg_zero]
+      have hdvd : 32 ∣ 16 := by
+        rw [← hgammaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hgammaZero
+      omega
+    · have hgammaZero : (16 : ℕ) • gammaQ = 0 := by
+        norm_num at hbeta
+        calc
+          (16 : ℕ) • gammaQ = 7 • ((32 : ℕ) • deltaQ) := by
+            rw [hgamma, hbeta]
+            module
+          _ = 0 := by rw [hdeltaZero]; simp
+      have hdvd : 32 ∣ 16 := by
+        rw [← hgammaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hgammaZero
+      omega
+
+/-- Exact quotient positions of a fifth-stratum owner primitive relative to
+the first retained coordinate.  The four positions are the two lifts of each
+of the only two surviving normalized weights. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_xPrimitive_ownerPosition
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (b : ↥B)
+    (hprimitive :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (b : Fin n) - g p.x)) = 32) :
+    let pi := QuotientAddGroup.mk' (AddSubgroup.zmultiples y)
+    let deltaQ := pi (g p.x - g p.z)
+    let betaQ := pi (g (b : Fin n) - g p.z)
+    (p.weight b = -4 ∧
+        (betaQ = (2 : ℕ) • deltaQ ∨ betaQ = (18 : ℕ) • deltaQ)) ∨
+      (p.weight b = 0 ∧
+        (betaQ = 0 ∨ betaQ = (16 : ℕ) • deltaQ)) := by
+  let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 5 * q) ⧸ H
+  let pi : ZMod (2 ^ 5 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  let betaQ : Q := pi (g (b : Fin n) - g p.z)
+  change
+    (p.weight b = -4 ∧
+        (betaQ = (2 : ℕ) • deltaQ ∨ betaQ = (18 : ℕ) • deltaQ)) ∨
+      (p.weight b = 0 ∧
+        (betaQ = 0 ∨ betaQ = (16 : ℕ) • deltaQ))
+  have hweight := fifthStratum_xPrimitive_ownerWeight
+    g y B p hpres b hprimitive
+  obtain ⟨k, hk, hbeta⟩ := hpres.2.2.2.2 b
+  change betaQ = -(k • deltaQ) ∨
+    betaQ = (2 ^ (5 - 1) : ℕ) • deltaQ - k • deltaQ at hbeta
+  rcases hweight with hweight | hweight
+  · left
+    refine ⟨hweight, ?_⟩
+    have hk' : k = -2 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · left
+      rw [hbeta]
+      module
+    · right
+      norm_num at hbeta
+      rw [hbeta]
+      module
+  · right
+    refine ⟨hweight, ?_⟩
+    have hk' : k = 0 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · left
+      rw [hbeta]
+      module
+    · right
+      norm_num at hbeta
+      rw [hbeta]
+
+/-- At the fifth stratum, an owner primitive relative to the second retained
+coordinate can only have normalized weight `-2` or `2`. -/
+private theorem fifthStratum_zPrimitive_ownerWeight
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (b : ↥B)
+    (hprimitive :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (b : Fin n) - g p.z)) = 32) :
+    p.weight b = -2 ∨ p.weight b = 2 := by
+  let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 5 * q) ⧸ H
+  let pi : ZMod (2 ^ 5 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  let betaQ : Q := pi (g (b : Fin n) - g p.z)
+  have hbetaOrder : addOrderOf betaQ = 32 := by
+    simpa only [betaQ, pi, H, Q] using hprimitive
+  have hdeltaOrder : addOrderOf deltaQ = 32 := by
+    have hraw := hpres.2.2.2.1
+    change addOrderOf (pi (g p.x - g p.z)) = 2 ^ 5 at hraw
+    norm_num at hraw
+    exact hraw
+  have hdeltaZero : (32 : ℕ) • deltaQ = 0 := by
+    simpa only [hdeltaOrder] using addOrderOf_nsmul_eq_zero deltaQ
+  obtain ⟨k, hk, hbeta⟩ := hpres.2.2.2.2 b
+  change betaQ = -(k • deltaQ) ∨
+    betaQ = (2 ^ (5 - 1) : ℕ) • deltaQ - k • deltaQ at hbeta
+  have hweightMem := p.weight_mem b
+  simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+    Finset.mem_singleton] at hweightMem
+  rcases hweightMem with hw | hw | hw | hw | hw
+  · have hk' : k = -2 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · have hbetaZero : (16 : ℕ) • betaQ = 0 := by
+        calc
+          (16 : ℕ) • betaQ = (32 : ℕ) • deltaQ := by
+            rw [hbeta]
+            module
+          _ = 0 := hdeltaZero
+      have hdvd : 32 ∣ 16 := by
+        rw [← hbetaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hbetaZero
+      omega
+    · have hbetaZero : (16 : ℕ) • betaQ = 0 := by
+        norm_num at hbeta
+        calc
+          (16 : ℕ) • betaQ = 9 • ((32 : ℕ) • deltaQ) := by
+            rw [hbeta]
+            module
+          _ = 0 := by rw [hdeltaZero]; simp
+      have hdvd : 32 ∣ 16 := by
+        rw [← hbetaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hbetaZero
+      omega
+  · exact Or.inl hw
+  · omega
+  · have hk' : k = 0 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · have hbetaZero : (16 : ℕ) • betaQ = 0 := by
+        rw [hbeta]
+        simp
+      have hdvd : 32 ∣ 16 := by
+        rw [← hbetaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hbetaZero
+      omega
+    · have hbetaZero : (16 : ℕ) • betaQ = 0 := by
+        norm_num at hbeta
+        calc
+          (16 : ℕ) • betaQ = 8 • ((32 : ℕ) • deltaQ) := by
+            rw [hbeta]
+            module
+          _ = 0 := by rw [hdeltaZero]; simp
+      have hdvd : 32 ∣ 16 := by
+        rw [← hbetaOrder]
+        exact addOrderOf_dvd_of_nsmul_eq_zero hbetaZero
+      omega
+  · exact Or.inr hw
+
+/-- Exact quotient positions of a fifth-stratum owner primitive relative to
+the second retained coordinate. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_ownerPosition
+    {q : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (b : ↥B)
+    (hprimitive :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (b : Fin n) - g p.z)) = 32) :
+    let pi := QuotientAddGroup.mk' (AddSubgroup.zmultiples y)
+    let deltaQ := pi (g p.x - g p.z)
+    let betaQ := pi (g (b : Fin n) - g p.z)
+    (p.weight b = -2 ∧
+        (betaQ = deltaQ ∨ betaQ = (17 : ℕ) • deltaQ)) ∨
+      (p.weight b = 2 ∧
+        (betaQ = -deltaQ ∨ betaQ = (15 : ℕ) • deltaQ)) := by
+  let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 5 * q) ⧸ H
+  let pi : ZMod (2 ^ 5 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g p.x - g p.z)
+  let betaQ : Q := pi (g (b : Fin n) - g p.z)
+  change
+    (p.weight b = -2 ∧
+        (betaQ = deltaQ ∨ betaQ = (17 : ℕ) • deltaQ)) ∨
+      (p.weight b = 2 ∧
+        (betaQ = -deltaQ ∨ betaQ = (15 : ℕ) • deltaQ))
+  have hweight := fifthStratum_zPrimitive_ownerWeight
+    g y B p hpres b hprimitive
+  obtain ⟨k, hk, hbeta⟩ := hpres.2.2.2.2 b
+  change betaQ = -(k • deltaQ) ∨
+    betaQ = (2 ^ (5 - 1) : ℕ) • deltaQ - k • deltaQ at hbeta
+  rcases hweight with hweight | hweight
+  · left
+    refine ⟨hweight, ?_⟩
+    have hk' : k = -1 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · left
+      rw [hbeta]
+      module
+    · right
+      norm_num at hbeta
+      rw [hbeta]
+      module
+  · right
+    refine ⟨hweight, ?_⟩
+    have hk' : k = 1 := by omega
+    subst k
+    rcases hbeta with hbeta | hbeta
+    · left
+      rw [hbeta]
+      module
+    · right
+      norm_num at hbeta
+      rw [hbeta]
+      module
+
 /-- Full quotient order makes the five-weight labels of a fully deleted
 doubling cycle constant in the *given* row presentation.  This is the
 presentation-preserving version of the generic cycle split: the alternative
@@ -3353,15 +3648,35 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
                 pres.weight ⟨leaf i, hi⟩ = -2) ∧
               ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
                 addOrderOf
-                  ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
-                    (g (b : Fin n) - g pres.x)) = 32) ∨
+                    ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                      (g (b : Fin n) - g pres.x)) = 32 ∧
+                  (let pi :=
+                      QuotientAddGroup.mk' (AddSubgroup.zmultiples y)
+                   let deltaQ := pi (g pres.x - g pres.z)
+                   let betaQ := pi (g (b : Fin n) - g pres.z)
+                   (pres.weight b = -4 ∧
+                        (betaQ = (2 : ℕ) • deltaQ ∨
+                          betaQ = (18 : ℕ) • deltaQ)) ∨
+                     (pres.weight b = 0 ∧
+                        (betaQ = 0 ∨
+                          betaQ = (16 : ℕ) • deltaQ)))) ∨
             (leaf p = pres.z ∧
               (∀ i (hi : leaf i ∈ B),
                 pres.weight ⟨leaf i, hi⟩ = 0) ∧
               ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
                 addOrderOf
-                  ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
-                    (g (b : Fin n) - g pres.z)) = 32)) := by
+                    ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                      (g (b : Fin n) - g pres.z)) = 32 ∧
+                  (let pi :=
+                      QuotientAddGroup.mk' (AddSubgroup.zmultiples y)
+                   let deltaQ := pi (g pres.x - g pres.z)
+                   let betaQ := pi (g (b : Fin n) - g pres.z)
+                   (pres.weight b = -2 ∧
+                        (betaQ = deltaQ ∨
+                          betaQ = (17 : ℕ) • deltaQ)) ∨
+                     (pres.weight b = 2 ∧
+                        (betaQ = -deltaQ ∨
+                          betaQ = (15 : ℕ) • deltaQ))))) := by
   have horder : addOrderOf y = 2 ^ d - 1 := by
     have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
       g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
@@ -3400,7 +3715,14 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
         rcases hpres.owner_primitive_at_one_retained g y B pres b with
           hbFixed | hbMissing
         · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
-        · simpa using hbMissing
+        · have hbMissing' :
+              addOrderOf
+                ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                  (g (b : Fin n) - g pres.x)) = 32 := by
+            simpa using hbMissing
+          refine ⟨hbMissing', ?_⟩
+          exact hpres.fifthStratum_xPrimitive_ownerPosition
+            g y B pres b hbMissing'
     · by_cases hgood : ∃ b : ↥B,
           (b : Fin n) ∉ Set.range leaf ∧
             addOrderOf
@@ -3424,7 +3746,14 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
         intro b hbOutside
         rcases hpres.owner_primitive_at_one_retained g y B pres b with
           hbMissing | hbFixed
-        · simpa using hbMissing
+        · have hbMissing' :
+              addOrderOf
+                ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                  (g (b : Fin n) - g pres.z)) = 32 := by
+            simpa using hbMissing
+          refine ⟨hbMissing', ?_⟩
+          exact hpres.fifthStratum_zPrimitive_ownerPosition
+            g y B pres b hbMissing'
         · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
 
 end MinModulus
