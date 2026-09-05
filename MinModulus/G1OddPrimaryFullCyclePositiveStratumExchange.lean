@@ -1799,6 +1799,82 @@ theorem pureEdgeCoeffs_witness_of_value
   · simp [pureEdgeCoeffs, Finset.sum_sub_distrib]
   · simpa [pureEdgeCoeffs, sub_smul, Finset.sum_sub_distrib] using hval
 
+/-- A three- or four-leaf cycle always has a directed edge whose two leaf
+coordinates avoid any prescribed ambient coordinate.  If the prescribed
+coordinate is itself a leaf, only that leaf and its predecessor are
+forbidden; two indices cannot cover a cycle of size at least three. -/
+theorem exists_leaf_cycle_edge_avoiding_coordinate_threeOrFour
+    {d : ℕ} (hd : d = 3 ∨ d = 4)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (anchor : Fin n) :
+    ∃ i : Fin d, leaf i ≠ anchor ∧ leaf (R i) ≠ anchor := by
+  classical
+  by_cases hanchor : ∃ j, leaf j = anchor
+  · obtain ⟨j, hj⟩ := hanchor
+    by_contra hnone
+    have hall : (Finset.univ : Finset (Fin d)) ⊆ {j, R.symm j} := by
+      intro i _hi
+      by_cases hi : leaf i = anchor
+      · simp only [Finset.mem_insert, Finset.mem_singleton]
+        exact Or.inl (hleafInj (hi.trans hj.symm))
+      · have hRi : leaf (R i) = anchor := by
+          by_contra hRi
+          exact hnone ⟨i, hi, hRi⟩
+        simp only [Finset.mem_insert, Finset.mem_singleton]
+        right
+        apply R.injective
+        simpa using hleafInj (hRi.trans hj.symm)
+    have hcard := Finset.card_le_card hall
+    have hpair : ({j, R.symm j} : Finset (Fin d)).card ≤ 2 :=
+      Finset.card_le_two
+    rw [Finset.card_univ, Fintype.card_fin] at hcard
+    rcases hd with rfl | rfl <;> omega
+  · have hdpos : 0 < d := by rcases hd with rfl | rfl <;> norm_num
+    let i : Fin d := ⟨0, hdpos⟩
+    exact ⟨i, fun hi ↦ hanchor ⟨i, hi⟩,
+      fun hRi ↦ hanchor ⟨R i, hRi⟩⟩
+
+/-- A full relative-doubling cycle of length three or four whose affine base
+is `h + g anchor` already contains a literal pure-edge witness at `h`.
+Choose an edge avoiding the anchor and rewrite its doubling identity as
+`2*g(source) - g(target) - g(anchor) = h`. -/
+theorem fullDoublingCycle_pureEdgeWitness_of_threeOrFour
+    {d : ℕ} {G : Type*} [AddCommGroup G]
+    (hd : d = 3 ∨ d = 4)
+    (g : Fin n → G) (leaf : Fin d → Fin n)
+    (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (a h : G) (anchor : Fin n) (hbase : a = h + g anchor)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a)) :
+    ∃ x z : Fin n, Witness g h (pureEdgeCoeffs x z anchor) := by
+  obtain ⟨i, hiAnchor, hRiAnchor⟩ :=
+    exists_leaf_cycle_edge_avoiding_coordinate_threeOrFour
+      hd leaf hleafInj R anchor
+  have hiRi : leaf i ≠ leaf (R i) := by
+    intro heq
+    exact hRne i (hleafInj heq).symm
+  have hvalue :
+      (2 : ℤ) • g (leaf i) - g (leaf (R i)) - g anchor = h := by
+    have hdbl := hdouble i
+    have hcenter :
+        (2 : ℤ) • g (leaf i) - g (leaf (R i)) - a = 0 := by
+      calc
+        (2 : ℤ) • g (leaf i) - g (leaf (R i)) - a =
+            (2 : ℤ) • (g (leaf i) - a) -
+              (g (leaf (R i)) - a) := by module
+        _ = 0 := by rw [← hdbl]; simp
+    calc
+      (2 : ℤ) • g (leaf i) - g (leaf (R i)) - g anchor =
+          ((2 : ℤ) • g (leaf i) - g (leaf (R i)) - a) + h := by
+            rw [hbase, two_zsmul]
+            abel
+      _ = 0 + h := by rw [hcenter]
+      _ = h := zero_add h
+  exact ⟨leaf i, leaf (R i),
+    pureEdgeCoeffs_witness_of_value g h (leaf i) (leaf (R i)) anchor
+      hiRi hiAnchor hRiAnchor hvalue⟩
+
 /-- A zero pure-edge center cannot use the affine anchor as either retained
 endpoint when their quotient difference has order greater than four.  In
 either collision the retained difference becomes four-torsion in the ambient
@@ -3048,75 +3124,47 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       · refine ⟨B, pres, ?_, Or.inr ⟨rfl, hpure⟩⟩
         exact ⟨hmin, hrows.1, hrows, by simpa using hfull⟩
 
-/-- Rejoin the critical fifth-stratum cycle at the first presentation-level
-caller that still carries the original affine base.  Exact Mersenne order is
-derived from the full doubling span.  The fully deleted branch is consumed by
-HAF, so the only non-C2, non-half-witness output is the already-full
-one-retained pure presentation on the original transversal. -/
+/-- Close the critical fifth-stratum cycle at the first presentation-level
+caller that still carries the original affine base.  A three- or four-cycle
+has an edge avoiding the affine anchor, and its relative-doubling identity is
+already a literal pure-edge witness at the half target.  Thus the formerly
+residual one-retained presentation is consumed without a further profile
+census. -/
 theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness
-    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
-    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
-    (hcritical : 2 ^ 5 * q < stratumBound n 5)
-    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
-    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (_hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (_hg : ValidTuple g)
+    (_hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (_hh : h + h = 0)
+    (_hunique : ∀ u : ZMod (2 ^ 5 * q),
       u + u = 0 → u = 0 ∨ u = h)
-    (hne : h ≠ 0)
-    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+    (_hne : h ≠ 0)
+    (_hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
       Witness g h c → c j ≠ 0)
     (y : ZMod (2 ^ 5 * q))
-    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
-    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
-    (hmin : MinimalCyclicKernelSupportTransversal g y B)
-    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
-    (hminimal : ∀ M : ℕ,
+    (_hyq : addOrderOf y ∣ q) (_hfullOdd : q / addOrderOf y = 1)
+    (_hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (_hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (_hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (_hminimal : ∀ M : ℕ,
       0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
         ¬ AdmitsValidTuple n M)
     {d : ℕ} (hd : d = 3 ∨ d = 4)
     (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
     (R : Equiv.Perm (Fin d))
-    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (_hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
     (a : ZMod (2 ^ 5 * q))
-    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
-    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (p i₀ : Fin d) (_hi₀ : i₀ ≠ p) (_hRi₀ : R i₀ ≠ p)
+    (_hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
     (hdouble : ∀ i,
       g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
-    (hspan : AddSubgroup.closure
+    (_hspan : AddSubgroup.closure
       (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
     (anchor : Fin n) (hbase : a = h + g anchor) :
     (∃ B₀ : Finset (Fin n),
         MinimalCyclicKernelSupportTransversal g y B₀ ∧
           3 ≤ n - B₀.card) ∨
-      (∃ x z : Fin n, Witness g h (pureEdgeCoeffs x z anchor)) ∨
-      ∃ pres : TwoRetainedFiveWeightPresentation g y B,
-        PrimitiveTwoRetainedPositiveStratumPresentation g y B pres ∧
-          ((leaf p = pres.x ∧ ∀ i (hi : leaf i ∈ B),
-              pres.weight ⟨leaf i, hi⟩ = -2) ∨
-            (leaf p = pres.z ∧ ∀ i (hi : leaf i ∈ B),
-              pres.weight ⟨leaf i, hi⟩ = 0)) := by
-  have horder : addOrderOf y = 2 ^ d - 1 := by
-    have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
-      g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
-        intro i
-        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
-    calc
-      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
-      _ = 2 ^ d - 1 := hqMersenne
-  rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin
-      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
-        hminimal leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
-          hdouble hspan with
-    hthree | ⟨B₀, pres, hpres, hgeometry⟩
-  · exact Or.inl hthree
-  · rcases hgeometry with ⟨hleafB₀, _hconstant⟩ | ⟨hB₀, hpure⟩
-    · rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three
-        (by omega) g hg hh hne hunique hno y hyq hfullOdd B₀ pres hminimal
-          hd leaf hleafInj R hcycle hRne a hleafB₀ hdouble hspan
-            (by norm_num) horder anchor hbase with
-      hthree | hwitnessX | hwitnessZ
-      · exact Or.inl hthree
-      · exact Or.inr (Or.inl ⟨pres.z, pres.x, hwitnessX⟩)
-      · exact Or.inr (Or.inl ⟨pres.x, pres.z, hwitnessZ⟩)
-    · subst B₀
-      exact Or.inr (Or.inr ⟨pres, hpres, hpure⟩)
+      ∃ x z : Fin n, Witness g h (pureEdgeCoeffs x z anchor) := by
+  exact Or.inr (fullDoublingCycle_pureEdgeWitness_of_threeOrFour
+    hd g leaf hleafInj R hRne a h anchor hbase hdouble)
 
 end MinModulus
