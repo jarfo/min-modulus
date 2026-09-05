@@ -1171,6 +1171,124 @@ theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_mem_fullOrderProfiles
     exact (ne_two_nsmul_of_addOrderOf_eq_same_twoPower
       ht betaQ deltaQ hbeta hdelta heq).elim
 
+/-- Once the cycle leaves share one quotient coset, the negative profile
+cannot coexist with either positive profile.  Thus the entire punctured
+private matrix has one global quotient orientation. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_globalOrientation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hpow : 2 < 2 ^ t)
+    (a : ZMod (2 ^ t * q))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    (∀ r, M.commonProfile r = (-1, -1)) ∨
+      ∀ r, M.commonProfile r = (-1, 1) ∨
+        M.commonProfile r = (1, -1) := by
+  classical
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g inserted - g fixed)
+  let betaQ : Fin d → Q := fun r ↦ pi (g (leaf r) - g fixed)
+  have hdeltaOrder : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, pi, H, Q] using M.common_full_order
+  have hcoset : ∀ r s, betaQ r = betaQ s := by
+    intro r s
+    simpa only [betaQ, pi, H, Q] using
+      cycle_quotient_displacement_eq_of_span
+        g y a (g fixed) leaf hspan r s
+  have hrelation : ∀ r,
+      M.commonCoeff r inserted • deltaQ +
+        M.commonCoeff r (leaf r) • betaQ r = 0 := by
+    intro r
+    simpa only [deltaQ, betaQ, pi, H, Q] using
+      M.commonProfile_quotientRelation r
+  have ht : 1 ≤ t := by
+    apply Nat.one_le_iff_ne_zero.mpr
+    intro htZero
+    subst t
+    norm_num at hpow
+  have hprofiles : ∀ r,
+      M.commonProfile r = (-1, -1) ∨
+        M.commonProfile r = (-1, 1) ∨
+          M.commonProfile r = (1, -1) := by
+    intro r
+    have hr := M.commonProfile_mem_fullOrderProfiles ht r
+    simpa only [puncturedCycleFullOrderPrivateProfiles,
+      Finset.mem_insert, Finset.mem_singleton] using hr
+  have hnegative : ∀ {r}, M.commonProfile r = (-1, -1) →
+      betaQ r = -deltaQ := by
+    intro r hr
+    have hmu := congrArg Prod.fst hr
+    have hlambda := congrArg Prod.snd hr
+    change M.commonCoeff r inserted = -1 at hmu
+    change M.commonCoeff r (leaf r) = -1 at hlambda
+    have hrel := hrelation r
+    rw [hmu, hlambda] at hrel
+    simp only [neg_one_zsmul] at hrel
+    calc
+      betaQ r = - -betaQ r := (neg_neg (betaQ r)).symm
+      _ = -deltaQ := neg_eq_of_add_eq_zero_left hrel
+  have hpositive : ∀ {r},
+      M.commonProfile r = (-1, 1) ∨ M.commonProfile r = (1, -1) →
+        betaQ r = deltaQ := by
+    intro r hr
+    rcases hr with hr | hr
+    · have hmu := congrArg Prod.fst hr
+      have hlambda := congrArg Prod.snd hr
+      change M.commonCoeff r inserted = -1 at hmu
+      change M.commonCoeff r (leaf r) = 1 at hlambda
+      have hrel := hrelation r
+      rw [hmu, hlambda] at hrel
+      simp only [neg_one_zsmul, one_zsmul] at hrel
+      exact (neg_add_eq_zero.mp hrel).symm
+    · have hmu := congrArg Prod.fst hr
+      have hlambda := congrArg Prod.snd hr
+      change M.commonCoeff r inserted = 1 at hmu
+      change M.commonCoeff r (leaf r) = -1 at hlambda
+      have hrel := hrelation r
+      rw [hmu, hlambda] at hrel
+      simp only [one_zsmul, neg_one_zsmul] at hrel
+      exact (add_neg_eq_zero.mp hrel).symm
+  have hnotSelfNeg : deltaQ ≠ -deltaQ := by
+    intro hself
+    have htwoZero : (2 : ℕ) • deltaQ = 0 := by
+      rw [two_nsmul]
+      calc
+        deltaQ + deltaQ = deltaQ + -deltaQ :=
+          congrArg (fun z ↦ deltaQ + z) hself
+        _ = 0 := add_neg_cancel deltaQ
+    have hdvd : 2 ^ t ∣ 2 := by
+      rw [← hdeltaOrder]
+      exact addOrderOf_dvd_of_nsmul_eq_zero htwoZero
+    have hle : 2 ^ t ≤ 2 := Nat.le_of_dvd (by omega) hdvd
+    omega
+  by_cases hallNegative : ∀ r, M.commonProfile r = (-1, -1)
+  · exact Or.inl hallNegative
+  · right
+    push Not at hallNegative
+    obtain ⟨r, hrNotNegative⟩ := hallNegative
+    have hrCases := hprofiles r
+    have hrPositive :
+        M.commonProfile r = (-1, 1) ∨
+          M.commonProfile r = (1, -1) := by
+      rcases hrCases with hrNegative | hrPositive
+      · exact (hrNotNegative hrNegative).elim
+      · exact hrPositive
+    intro s
+    have hsCases := hprofiles s
+    rcases hsCases with hsNegative | hsPositive
+    · exfalso
+      apply hnotSelfNeg
+      calc
+        deltaQ = betaQ r := (hpositive hrPositive).symm
+        _ = betaQ s := hcoset r s
+        _ = -deltaQ := hnegative hsNegative
+    · exact hsPositive
+
 /-- Rows in one exact profile differ only through their missing-leaf term. -/
 theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_sub_eq_zsmul_leaf_sub_of_profile_eq
     {t q : ℕ} [NeZero (2 ^ t * q)]
