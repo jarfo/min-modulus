@@ -1289,6 +1289,133 @@ theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_globalOrientation
         _ = -deltaQ := hnegative hsNegative
     · exact hsPositive
 
+/-- Either positive profile places the missing leaf in the same quotient
+coset as the common inserted coordinate. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.leaf_sub_inserted_mem_of_positiveProfile
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d)
+    (hpositive : M.commonProfile r = (-1, 1) ∨
+      M.commonProfile r = (1, -1)) :
+    g (leaf r) - g inserted ∈ AddSubgroup.zmultiples y := by
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g inserted - g fixed)
+  let betaQ : Q := pi (g (leaf r) - g fixed)
+  have hrelation : M.commonCoeff r inserted • deltaQ +
+      M.commonCoeff r (leaf r) • betaQ = 0 := by
+    simpa only [deltaQ, betaQ, pi, H, Q] using
+      M.commonProfile_quotientRelation r
+  have hbetaEq : betaQ = deltaQ := by
+    rcases hpositive with hpositive | hpositive
+    · have hmu := congrArg Prod.fst hpositive
+      have hlambda := congrArg Prod.snd hpositive
+      change M.commonCoeff r inserted = -1 at hmu
+      change M.commonCoeff r (leaf r) = 1 at hlambda
+      rw [hmu, hlambda] at hrelation
+      simp only [neg_one_zsmul, one_zsmul] at hrelation
+      exact (neg_add_eq_zero.mp hrelation).symm
+    · have hmu := congrArg Prod.fst hpositive
+      have hlambda := congrArg Prod.snd hpositive
+      change M.commonCoeff r inserted = 1 at hmu
+      change M.commonCoeff r (leaf r) = -1 at hlambda
+      rw [hmu, hlambda] at hrelation
+      simp only [one_zsmul, neg_one_zsmul] at hrelation
+      exact (add_neg_eq_zero.mp hrelation).symm
+  apply (QuotientAddGroup.eq_zero_iff (g (leaf r) - g inserted)).1
+  change pi (g (leaf r) - g inserted) = 0
+  have hdecomp :
+      g (leaf r) - g inserted =
+        (g (leaf r) - g fixed) - (g inserted - g fixed) := by
+    abel
+  rw [hdecomp, map_sub]
+  exact sub_eq_zero.mpr hbetaEq
+
+/-- The positive global orientation is impossible at an exact Mersenne
+kernel.  It would put the common inserted coordinate together with all `d`
+injective cycle leaves in one kernel coset, forcing `2^d ≤ 2^d - 1`. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.not_all_positiveProfiles_of_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (horder : addOrderOf y = 2 ^ d - 1)
+    (hpositive : ∀ r, M.commonProfile r = (-1, 1) ∨
+      M.commonProfile r = (1, -1)) : False := by
+  classical
+  let L : Finset (Fin n) := Finset.univ.image leaf
+  let S : Finset (Fin n) := insert inserted L
+  have hinsertedNotL : inserted ∉ L := by
+    intro hinserted
+    rcases Finset.mem_image.mp hinserted with ⟨r, _hr, hr⟩
+    have hleafMem : leaf r ∈ set r := by
+      rw [hr]
+      exact M.common_mem r
+    exact ((M.leaf_mem_iff r r).1 hleafMem) rfl
+  have hSnonempty : S.Nonempty := by
+    exact ⟨inserted, Finset.mem_insert_self _ _⟩
+  have hleafInserted : ∀ r,
+      g (leaf r) - g inserted ∈ AddSubgroup.zmultiples y := by
+    intro r
+    exact M.leaf_sub_inserted_mem_of_positiveProfile r (hpositive r)
+  have hScoset : ∀ b ∈ S, ∀ c ∈ S,
+      g b - g c ∈ AddSubgroup.zmultiples y := by
+    intro b hb c hc
+    rcases Finset.mem_insert.mp hb with rfl | hb
+    · rcases Finset.mem_insert.mp hc with rfl | hc
+      · simp
+      · rcases Finset.mem_image.mp hc with ⟨j, _hj, rfl⟩
+        have hj := hleafInserted j
+        have hneg := (AddSubgroup.zmultiples y).neg_mem hj
+        convert hneg using 1
+        abel
+    · rcases Finset.mem_image.mp hb with ⟨i, _hi, rfl⟩
+      rcases Finset.mem_insert.mp hc with rfl | hc
+      · exact hleafInserted i
+      · rcases Finset.mem_image.mp hc with ⟨j, _hj, rfl⟩
+        have hij := (AddSubgroup.zmultiples y).sub_mem
+          (hleafInserted i) (hleafInserted j)
+        convert hij using 1
+        abel
+  have hLcard : L.card = d := by
+    simp only [L, Finset.card_image_of_injective _ M.leaf_injective,
+      Finset.card_univ, Fintype.card_fin]
+  have hScard : S.card = d + 1 := by
+    change (insert inserted L).card = d + 1
+    rw [Finset.card_insert_of_notMem hinsertedNotL, hLcard]
+  have hlower := two_pow_pred_le_addOrderOf_of_valid_kernelCoset
+    g hg y S hSnonempty hScoset
+  rw [horder, hScard] at hlower
+  simp only [Nat.add_sub_cancel] at hlower
+  have hpowPositive : 0 < 2 ^ d := pow_pos (by decide) d
+  omega
+
+/-- At an exact Mersenne kernel the global orientation is forced to be the
+single negative profile. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.all_negativeProfile_of_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (hpow : 2 < 2 ^ t) (a : ZMod (2 ^ t * q))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (horder : addOrderOf y = 2 ^ d - 1) :
+    ∀ r, M.commonProfile r = (-1, -1) := by
+  rcases M.commonProfile_globalOrientation hpow a hspan with
+    hnegative | hpositive
+  · exact hnegative
+  · exact (M.not_all_positiveProfiles_of_mersenne
+      hg horder hpositive).elim
+
 /-- Rows in one exact profile differ only through their missing-leaf term. -/
 theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_sub_eq_zsmul_leaf_sub_of_profile_eq
     {t q : ℕ} [NeZero (2 ^ t * q)]
