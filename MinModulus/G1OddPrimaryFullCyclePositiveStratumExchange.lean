@@ -1799,6 +1799,88 @@ theorem pureEdgeCoeffs_witness_of_value
   · simp [pureEdgeCoeffs, Finset.sum_sub_distrib]
   · simpa [pureEdgeCoeffs, sub_smul, Finset.sum_sub_distrib] using hval
 
+/-- A zero pure-edge center cannot use the affine anchor as either retained
+endpoint when their quotient difference has order greater than four.  In
+either collision the retained difference becomes four-torsion in the ambient
+group, hence also in the quotient, contradicting its full two-power order. -/
+theorem fullOrder_pureEdgeCenter_endpoints_ne_anchor
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q))
+    (y : ZMod (2 ^ t * q))
+    {h a : ZMod (2 ^ t * q)} (hh : h + h = 0)
+    (inserted fixed anchor : Fin n)
+    (horder : addOrderOf
+      ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+        (g inserted - g fixed)) = 2 ^ t)
+    (hpow : 4 < 2 ^ t) (hbase : a = h + g anchor)
+    (hcenter : (2 : ℤ) • g fixed - g inserted - a = 0) :
+    inserted ≠ anchor ∧ fixed ≠ anchor := by
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g inserted - g fixed)
+  have horder' : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, pi, H, Q] using horder
+  have hnotFourTorsion : ¬ (4 : ℕ) • deltaQ = 0 := by
+    intro hzero
+    have hdvd : addOrderOf deltaQ ∣ 4 :=
+      addOrderOf_dvd_of_nsmul_eq_zero hzero
+    rw [horder'] at hdvd
+    have hle : 2 ^ t ≤ 4 := Nat.le_of_dvd (by norm_num) hdvd
+    omega
+  constructor
+  · intro hinserted
+    have hfourAmbient :
+        (4 : ℕ) • (g inserted - g fixed) = 0 := by
+      rw [hbase, ← hinserted] at hcenter
+      have htwoDiff :
+          (2 : ℤ) • (g fixed - g inserted) = h := by
+        calc
+          (2 : ℤ) • (g fixed - g inserted) =
+              ((2 : ℤ) • g fixed - g inserted -
+                (h + g inserted)) + h := by module
+          _ = 0 + h := by rw [hcenter]
+          _ = h := zero_add h
+      have htwoH : (2 : ℤ) • h = 0 := by
+        simpa only [two_zsmul] using hh
+      have hfourAmbientZ :
+          (4 : ℤ) • (g inserted - g fixed) = 0 := by
+        calc
+          (4 : ℤ) • (g inserted - g fixed) =
+              -((2 : ℤ) • ((2 : ℤ) • (g fixed - g inserted))) := by
+                module
+          _ = -((2 : ℤ) • h) := by rw [htwoDiff]
+          _ = 0 := by rw [htwoH]; simp
+      exact_mod_cast hfourAmbientZ
+    apply hnotFourTorsion
+    change (4 : ℕ) • pi (g inserted - g fixed) = 0
+    rw [← map_nsmul, hfourAmbient, map_zero]
+  · intro hfixed
+    have hfourAmbient :
+        (4 : ℕ) • (g inserted - g fixed) = 0 := by
+      rw [hbase, ← hfixed] at hcenter
+      have hdiff : g fixed - g inserted = h := by
+        calc
+          g fixed - g inserted =
+              ((2 : ℤ) • g fixed - g inserted -
+                (h + g fixed)) + h := by module
+          _ = 0 + h := by rw [hcenter]
+          _ = h := zero_add h
+      have htwoH : (2 : ℤ) • h = 0 := by
+        simpa only [two_zsmul] using hh
+      have hfourAmbientZ :
+          (4 : ℤ) • (g inserted - g fixed) = 0 := by
+        calc
+          (4 : ℤ) • (g inserted - g fixed) =
+              -((2 : ℤ) • ((2 : ℤ) • (g fixed - g inserted))) := by
+                module
+          _ = -((2 : ℤ) • ((2 : ℤ) • h)) := by rw [hdiff]
+          _ = 0 := by rw [htwoH]; simp
+      exact_mod_cast hfourAmbientZ
+    apply hnotFourTorsion
+    change (4 : ℕ) • pi (g inserted - g fixed) = 0
+    rw [← map_nsmul, hfourAmbient, map_zero]
+
 /-- Restore the original affine base `h + g(anchor)` after the order-seven or
 order-fifteen center obstruction.  The resulting identity is the literal
 pure-edge witness at the half target `h`, an accepted upstream G1 currency. -/
@@ -2712,8 +2794,7 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted
     (hspan : AddSubgroup.closure
       (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
     (hpow : 4 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
-    (anchor : Fin n) (hbase : a = h + g anchor)
-    (hxAnchor : p.x ≠ anchor) (hzAnchor : p.z ≠ anchor) :
+    (anchor : Fin n) (hbase : a = h + g anchor) :
     (∃ B₀ : Finset (Fin n),
         MinimalCyclicKernelSupportTransversal g y B₀ ∧
           3 ≤ n - B₀.card) ∨
@@ -2726,17 +2807,43 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted
     hthree | hmatrixX | hmatrixZ
   · exact Or.inl hthree
   · rcases hmatrixX with ⟨M, _hcoeffInjective⟩
+    have hnegative :=
+      M.all_negativeProfile_of_mersenne hg (by omega) a hspan horder
+    have hcenter :=
+      M.commonCenter_eq_zero_of_negativeProfiles_threeOrFour
+        hg R hcycle hRne a hdouble hspan horder hnegative hd
+    have hquotientOrder :
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.x - g p.z)) = 2 ^ t := by
+      simpa using hpres.2.2.2.1
+    have hanchors := fullOrder_pureEdgeCenter_endpoints_ne_anchor
+      g y hh p.x p.z anchor hquotientOrder hpow hbase hcenter
     right
     left
     exact M.pureEdgeWitness_of_mersenne_threeOrFour
       hg R hcycle hRne a hdouble hspan (by omega) horder hd h anchor hbase
-        hzAnchor hxAnchor
+        hanchors.2 hanchors.1
   · rcases hmatrixZ with ⟨M, _hcoeffInjective⟩
+    have hnegative :=
+      M.all_negativeProfile_of_mersenne hg (by omega) a hspan horder
+    have hcenter :=
+      M.commonCenter_eq_zero_of_negativeProfiles_threeOrFour
+        hg R hcycle hRne a hdouble hspan horder hnegative hd
+    have hquotientOrder :
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.z - g p.x)) = 2 ^ t := by
+      have hneg : g p.z - g p.x = -(g p.x - g p.z) := by abel
+      rw [hneg, map_neg, addOrderOf_neg]
+      simpa using hpres.2.2.2.1
+    have hanchors := fullOrder_pureEdgeCenter_endpoints_ne_anchor
+      g y hh p.z p.x anchor hquotientOrder hpow hbase hcenter
     right
     right
     exact M.pureEdgeWitness_of_mersenne_threeOrFour
       hg R hcycle hRne a hdouble hspan (by omega) horder hd h anchor hbase
-        hxAnchor hzAnchor
+        hanchors.2 hanchors.1
 
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
