@@ -341,8 +341,9 @@ def PureEdgeStarLeafOddPrimaryFullCycleC2DenseExchangeOutcome
                 ((∀ j : Fin d, leaf j ∈ B) ∨
                   ∃ p : Fin d, ∀ j : Fin d, leaf j ∈ B ↔ j ≠ p) ∧
                 (q / addOrderOf y ≠ 1 ∨
-                  TwoRetainedPivotAlignedDenseExchangeFamily
-                    g y B leaf J ∨
+                  (q / addOrderOf y = 1 ∧
+                    TwoRetainedPivotAlignedDenseExchangeFamily
+                      g y B leaf J) ∨
                   TwoRetainedDominantExternalCycleComponentArm
                     g y (h + g r) B center P J (P.symm.trans S)
                       componentThreshold))))
@@ -391,10 +392,17 @@ theorem pureEdgeStarLeafCycle_c2DenseExchangeOutcome_of_pivotAlignmentOutcome
           ht g hg hunique hne y (h + g r) hfullOdd B hd leaf center
             hleafInj P J (P.symm.trans S) componentThreshold hretained hfive
               hminimal hcenter hfrontier
-      exact Or.inr (Or.inr
-        ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
-          harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-          Or.inr ⟨hprivate, hfive, hleafSplit, Or.inr hrefined⟩⟩)
+      rcases hrefined with hdense | hexternal
+      · exact Or.inr (Or.inr
+          ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+            harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+            Or.inr ⟨hprivate, hfive, hleafSplit,
+              Or.inr (Or.inl ⟨hfullOdd, hdense⟩)⟩⟩)
+      · exact Or.inr (Or.inr
+          ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+            harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+            Or.inr ⟨hprivate, hfive, hleafSplit,
+              Or.inr (Or.inr hexternal)⟩⟩)
     · exact Or.inr (Or.inr
         ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
           harithmetic, hnormal, hpartition, S, hlocal, hdouble,

@@ -173,11 +173,13 @@ def PureEdgeStarLeafOddPrimaryFullCycleC2DenseAggregateOutcome
                 ((∀ j : Fin d, leaf j ∈ B) ∨
                   ∃ p : Fin d, ∀ j : Fin d, leaf j ∈ B ↔ j ≠ p) ∧
                 (q / addOrderOf y ≠ 1 ∨
-                  (∃ B₀ : Finset (Fin (m + 1)),
-                    MinimalCyclicKernelSupportTransversal g y B₀ ∧
-                      3 ≤ m + 1 - B₀.card) ∨
-                  TwoRetainedPivotAlignedDenseExactExchangeFamily
-                    g y B leaf J ∨
+                  (q / addOrderOf y = 1 ∧
+                    ∃ B₀ : Finset (Fin (m + 1)),
+                      MinimalCyclicKernelSupportTransversal g y B₀ ∧
+                        3 ≤ m + 1 - B₀.card) ∨
+                  (q / addOrderOf y = 1 ∧
+                    TwoRetainedPivotAlignedDenseExactExchangeFamily
+                      g y B leaf J) ∨
                   TwoRetainedDominantExternalCycleComponentArm
                     g y (h + g r) B center P J (P.symm.trans S)
                       componentThreshold))))
@@ -211,32 +213,41 @@ theorem pureEdgeStarLeafCycle_c2DenseAggregateOutcome_of_denseExchangeOutcome
       ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
         harithmetic, hnormal, hpartition, S, hlocal, hdouble,
         Or.inl hthree⟩)
-  · rcases hexact with
-      ⟨hprivate, hfive, hleafSplit, hproper | hdense | hexternal⟩
-    · exact Or.inr (Or.inr
-        ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
-          harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-          Or.inr ⟨hprivate, hfive, hleafSplit, Or.inl hproper⟩⟩)
-    · let leaf : Fin d → Fin (m + 1) :=
-        fun j ↦ (T^[j.val] a : Fin (m + 1))
-      have haggregate := hdense.aggregate_or_three
-        g hg hh hne hunique hno y B leaf J
-      rcases haggregate with hshrink | hexactFamily
-      · exact Or.inr (Or.inr
+  · rcases hexact with ⟨hprivate, hfive, hleafSplit, hterminal⟩
+    cases hterminal with
+    | inl hproper =>
+        exact Or.inr (Or.inr
           ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
             harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-            Or.inr ⟨hprivate, hfive, hleafSplit,
-              Or.inr (Or.inl hshrink)⟩⟩)
-      · exact Or.inr (Or.inr
-          ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
-            harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-            Or.inr ⟨hprivate, hfive, hleafSplit,
-              Or.inr (Or.inr (Or.inl hexactFamily))⟩⟩)
-    · exact Or.inr (Or.inr
-        ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
-          harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-          Or.inr ⟨hprivate, hfive, hleafSplit,
-            Or.inr (Or.inr (Or.inr hexternal))⟩⟩)
+            Or.inr ⟨hprivate, hfive, hleafSplit, Or.inl hproper⟩⟩)
+    | inr hterminal =>
+        cases hterminal with
+        | inl hfullDense =>
+            have hfullOdd : q / addOrderOf y = 1 := hfullDense.1
+            have hdense : TwoRetainedPivotAlignedDenseExchangeFamily
+                g y B (fun j ↦ (T^[j.val] a : Fin (m + 1))) J :=
+              hfullDense.2
+            let leaf : Fin d → Fin (m + 1) :=
+              fun j ↦ (T^[j.val] a : Fin (m + 1))
+            have haggregate := hdense.aggregate_or_three
+              g hg hh hne hunique hno y B leaf J
+            rcases haggregate with hshrink | hexactFamily
+            · exact Or.inr (Or.inr
+                ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+                  harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+                  Or.inr ⟨hprivate, hfive, hleafSplit,
+                    Or.inr (Or.inl ⟨hfullOdd, hshrink⟩)⟩⟩)
+            · exact Or.inr (Or.inr
+                ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+                  harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+                  Or.inr ⟨hprivate, hfive, hleafSplit,
+                    Or.inr (Or.inr (Or.inl ⟨hfullOdd, hexactFamily⟩))⟩⟩)
+        | inr hexternal =>
+            exact Or.inr (Or.inr
+              ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+                harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+                Or.inr ⟨hprivate, hfive, hleafSplit,
+                  Or.inr (Or.inr (Or.inr hexternal))⟩⟩)
 
 /-- Global minimal-counterexample constructor for the aggregated dense C2
 exchange endpoint. -/
