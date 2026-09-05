@@ -1,11 +1,13 @@
 /-
-# Uniform cycle rigidity from the odd-stratum lower bound
+# Unconditional doubling-cycle rigidity and exact Mersenne order
 
 Every fixed-point-free doubling permutation annihilates its generated cyclic
-subgroup by the product of its component Mersenne numbers.  G2 on the valid
-displacement tuple rules out two or more components and forces exact Mersenne
-order.  No private-row, full-odd-factor, or critical-stratum hypothesis is used.
+subgroup by the product of its component Mersenne numbers. Validity alone
+forces one cycle, and the general binary half bound then forces exact
+Mersenne order. No G2, cyclic ambient group, or criticality is required.
+The former G2-dependent signatures are retained as compatibility wrappers.
 -/
+import MinModulus.DoublingValidity
 import MinModulus.G1OddPrimaryFullCycleC2DensePrimitiveComponentG2Reduction
 
 namespace MinModulus
@@ -52,86 +54,75 @@ theorem addOrderOf_dvd_cycleMersenneProduct_of_doubling_span
   apply addOrderOf_dvd_of_nsmul_eq_zero
   exact hclosure (by rw [hspan]; exact AddSubgroup.mem_zmultiples y)
 
-/-- Under G2 a valid cyclic tuple with a fixed-point-free doubling
-permutation has one component, and its span has exact Mersenne order. -/
-theorem isCycle_and_order_eq_mersenne_of_valid_doubling_span
-    {G : Type*} [AddCommGroup G] [IsAddCyclic G]
-    {d : ℕ} (hd : 2 ≤ d) (hG2 : OddStratumLowerBound)
+/-- The binary half bound saturates the Mersenne order of a valid full
+cycle. The ambient abelian group need not be finite or cyclic. -/
+theorem addOrderOf_eq_mersenne_of_valid_cycle_span
+    {G : Type*} [AddCommGroup G]
+    {d : ℕ} (hd : 2 ≤ d)
     (x : Fin d → G) (hx : ValidTuple x)
-    (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
     (hdouble : ∀ i, x (R i) = 2 • x i)
     (y : G) (hspan : AddSubgroup.closure (Set.range x) =
       AddSubgroup.zmultiples y) :
-    R.IsCycle ∧ addOrderOf y = 2 ^ d - 1 := by
+    addOrderOf y = 2 ^ d - 1 := by
   classical
-  have hOdd : Odd (addOrderOf y) :=
-    Odd.of_dvd_nat (odd_two_pow_sub_one (orderOf_pos R))
-      (addOrderOf_dvd_mersenne_of_perm_doubling_span R x hdouble y hspan)
+  have hdvd : addOrderOf y ∣ 2 ^ d - 1 := by
+    simpa using addOrderOf_dvd_mersenne_of_isCycle_doubling_span
+      R hcycle hRne x hdouble y hspan
+  have hpos : 0 < 2 ^ d - 1 := by
+    have := one_lt_pow₀ (by omega : 1 < (2 : ℕ)) (by omega : d ≠ 0)
+    omega
+  have hfinite : IsOfFinAddOrder y := isOfFinAddOrder_iff_nsmul_eq_zero.mpr
+    ⟨2 ^ d - 1, hpos, addOrderOf_dvd_iff_nsmul_eq_zero.mp hdvd⟩
+  letI : Fintype (AddSubgroup.zmultiples y) :=
+    @Fintype.ofFinite _ hfinite.finite_zmultiples.to_subtype
   have hmem : ∀ i, x i ∈ AddSubgroup.zmultiples y := by
     intro i
     rw [← hspan]
     exact AddSubgroup.subset_closure ⟨i, rfl⟩
-  have hlower : 2 ^ d - 1 ≤ addOrderOf y :=
-    hG2 hOdd (admitsValidTuple_addOrderOf_of_validTuple_mem_zmultiples x hx y hmem)
-  have hcycle : R.IsCycle := by
-    by_contra hnot
-    have hsupport : R.support = Finset.univ := by
-      ext i
-      simp [hRne i]
-    have hsum : R.cycleType.sum = d := by
-      rw [Equiv.Perm.sum_cycleType, hsupport, Finset.card_univ, Fintype.card_fin]
-    have hRone : R ≠ 1 := by
-      intro heq
-      exact hRne ⟨0, by omega⟩ (by simp [heq])
-    have hcardPos : 0 < R.cycleType.card :=
-      (Equiv.Perm.card_cycleType_pos).2 hRone
-    have hcardNe : R.cycleType.card ≠ 1 := by
-      intro heq
-      exact hnot ((Equiv.Perm.card_cycleType_eq_one).1 heq)
-    let ell : ↥R.cycleFactorsFinset → ℕ :=
-      fun C ↦ (C : Equiv.Perm (Fin d)).support.card
-    have hell : ∀ C : ↥R.cycleFactorsFinset, 0 < ell C := by
-      intro C
-      exact ((Equiv.Perm.mem_cycleFactorsFinset_iff.mp C.property).1).nonempty_support.card_pos
-    have hcard : 2 ≤ (Finset.univ : Finset ↥R.cycleFactorsFinset).card := by
-      have heq : (Finset.univ : Finset ↥R.cycleFactorsFinset).card =
-          R.cycleType.card := by
-        rw [Finset.card_univ, Fintype.card_coe]
-        rw [Equiv.Perm.cycleType_def, Multiset.card_map, Finset.card_def]
-      omega
-    have hellSum : ∑ C : ↥R.cycleFactorsFinset, ell C = d := by
-      dsimp only [ell]
-      rw [Finset.sum_coe_sort R.cycleFactorsFinset
-        (fun C ↦ C.support.card)]
-      change (R.cycleFactorsFinset.1.map (fun C ↦ C.support.card)).sum = d
-      simpa only [Equiv.Perm.cycleType_def, Function.comp_apply] using hsum
-    have hprodPos : 0 < ∏ C : ↥R.cycleFactorsFinset, (2 ^ ell C - 1) := by
-      apply Finset.prod_pos
-      intro C _
-      have := one_lt_pow₀ (by omega : 1 < (2 : ℕ)) (Nat.ne_of_gt (hell C))
-      omega
-    have hupper := Nat.le_of_dvd hprodPos
-      (addOrderOf_dvd_cycleMersenneProduct_of_doubling_span R hRne x hdouble y hspan)
-    have hstrict := mersenneProd_lt_twoPowSum_sub_one_of_two_le_card
-      Finset.univ ell hcard (fun C _ ↦ hell C)
-    rw [hellSum] at hstrict
-    omega
-  refine ⟨hcycle, Nat.le_antisymm ?_ hlower⟩
-  have hpos : 0 < 2 ^ d - 1 := by
-    have := one_lt_pow₀ (by omega : 1 < (2 : ℕ)) (by omega : d ≠ 0)
-    omega
-  apply Nat.le_of_dvd hpos
-  simpa using addOrderOf_dvd_mersenne_of_isCycle_doubling_span
-    R hcycle hRne x hdouble y hspan
+  let xY : Fin d → AddSubgroup.zmultiples y := fun i ↦ ⟨x i, hmem i⟩
+  have hxY : ValidTuple xY := by
+    apply validTuple_of_comp (AddSubgroup.zmultiples y).subtype
+    simpa [xY] using hx
+  have hlower := two_pow_pred_le_card_of_validTuple xY hxY
+  rw [← Nat.card_eq_fintype_card, Nat.card_zmultiples] at hlower
+  exact eq_mersenne_of_dvd_of_two_pow_pred_le (by omega) hlower hdvd
 
-/-- Apply the uniform G2 cycle rigidity to a translated injective subtuple
-of an arbitrary valid cyclic tuple. -/
-theorem leaf_isCycle_and_order_eq_mersenne_of_oddStratumLowerBound
+/-- A valid doubling tuple has one cycle and exact Mersenne span order,
+without G2 or a separate fixed-point-free assumption. -/
+theorem isCycle_and_order_eq_mersenne_of_valid_doubling
+    {G : Type*} [AddCommGroup G]
+    {d : ℕ} (hd : 2 ≤ d)
+    (x : Fin d → G) (hx : ValidTuple x)
+    (R : Equiv.Perm (Fin d)) (hdouble : ∀ i, x (R i) = 2 • x i)
+    (y : G) (hspan : AddSubgroup.closure (Set.range x) =
+      AddSubgroup.zmultiples y) :
+    R.IsCycle ∧ addOrderOf y = 2 ^ d - 1 := by
+  have hcycle := isCycle_of_valid_doubling hd x hx R hdouble
+  exact ⟨hcycle, addOrderOf_eq_mersenne_of_valid_cycle_span hd x hx R hcycle
+    (doubling_apply_ne_of_valid hd x hx R hdouble) hdouble y hspan⟩
+
+/-- Backwards-compatible signature; the supplied G2 and fixed-point-free
+hypotheses are redundant in the unconditional proof. -/
+theorem isCycle_and_order_eq_mersenne_of_valid_doubling_span
     {G : Type*} [AddCommGroup G] [IsAddCyclic G]
-    {n d : ℕ} (hd : 2 ≤ d) (hG2 : OddStratumLowerBound)
+    {d : ℕ} (hd : 2 ≤ d) (_hG2 : OddStratumLowerBound)
+    (x : Fin d → G) (hx : ValidTuple x)
+    (R : Equiv.Perm (Fin d)) (_hRne : ∀ i, R i ≠ i)
+    (hdouble : ∀ i, x (R i) = 2 • x i)
+    (y : G) (hspan : AddSubgroup.closure (Set.range x) =
+      AddSubgroup.zmultiples y) :
+    R.IsCycle ∧ addOrderOf y = 2 ^ d - 1 :=
+  isCycle_and_order_eq_mersenne_of_valid_doubling hd x hx R hdouble y hspan
+
+/-- Apply unconditional cycle rigidity to a translated injective subtuple
+of an arbitrary valid abelian-group tuple. -/
+theorem leaf_isCycle_and_order_eq_mersenne_of_valid_doubling
+    {G : Type*} [AddCommGroup G]
+    {n d : ℕ} (hd : 2 ≤ d)
     (g : Fin n → G) (hg : ValidTuple g)
     (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
-    (base y : G) (R : Equiv.Perm (Fin d)) (hRne : ∀ i, R i ≠ i)
+    (base y : G) (R : Equiv.Perm (Fin d))
     (hdouble : ∀ i, g (leaf (R i)) - base = 2 • (g (leaf i) - base))
     (hspan : AddSubgroup.closure (Set.range (fun i ↦ g (leaf i) - base)) =
       AddSubgroup.zmultiples y) :
@@ -139,7 +130,66 @@ theorem leaf_isCycle_and_order_eq_mersenne_of_oddStratumLowerBound
   let e : Fin d ↪ Fin n := ⟨leaf, hleaf⟩
   have hvalid := validTuple_sub_const (fun i ↦ g (e i))
     (validTuple_embedding e g hg) base
-  exact isCycle_and_order_eq_mersenne_of_valid_doubling_span hd hG2
-    (fun i ↦ g (leaf i) - base) hvalid R hRne hdouble y hspan
+  exact isCycle_and_order_eq_mersenne_of_valid_doubling hd
+    (fun i ↦ g (leaf i) - base) hvalid R hdouble y hspan
+
+/-- Backwards-compatible translated signature; G2 is no longer needed. -/
+theorem leaf_isCycle_and_order_eq_mersenne_of_oddStratumLowerBound
+    {G : Type*} [AddCommGroup G] [IsAddCyclic G]
+    {n d : ℕ} (hd : 2 ≤ d) (_hG2 : OddStratumLowerBound)
+    (g : Fin n → G) (hg : ValidTuple g)
+    (leaf : Fin d → Fin n) (hleaf : Function.Injective leaf)
+    (base y : G) (R : Equiv.Perm (Fin d)) (_hRne : ∀ i, R i ≠ i)
+    (hdouble : ∀ i, g (leaf (R i)) - base = 2 • (g (leaf i) - base))
+    (hspan : AddSubgroup.closure (Set.range (fun i ↦ g (leaf i) - base)) =
+      AddSubgroup.zmultiples y) :
+    R.IsCycle ∧ addOrderOf y = 2 ^ d - 1 :=
+  leaf_isCycle_and_order_eq_mersenne_of_valid_doubling hd g hg leaf hleaf
+    base y R hdouble hspan
+
+/-- Every entry generates the entire span of a valid doubling tuple. -/
+theorem doubling_span_eq_zmultiples_of_valid
+    {G : Type*} [AddCommGroup G] {d : ℕ} (hd : 2 ≤ d)
+    (x : Fin d → G) (hx : ValidTuple x) (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ i, x (R i) = 2 • x i) (i : Fin d) :
+    AddSubgroup.closure (Set.range x) = AddSubgroup.zmultiples (x i) := by
+  have hcycle := isCycle_of_valid_doubling hd x hx R hdouble
+  have hRne := doubling_apply_ne_of_valid hd x hx R hdouble
+  apply le_antisymm
+  · apply (AddSubgroup.closure_le _).mpr
+    rintro z ⟨j, rfl⟩
+    have hsame : R.SameCycle i j :=
+      ((Equiv.Perm.isCycle_iff_sameCycle (hRne i)).mp hcycle).mpr (hRne j)
+    obtain ⟨k, hk⟩ := sameCycle_doubling_eq_pow_two_nsmul R x hdouble hsame
+    rw [hk]
+    exact (AddSubgroup.zmultiples (x i)).nsmul_mem (AddSubgroup.mem_zmultiples (x i)) _
+  · exact (AddSubgroup.zmultiples_le).mpr (AddSubgroup.subset_closure ⟨i, rfl⟩)
+
+/-- Every entry of a valid doubling tuple has exact Mersenne order. -/
+theorem addOrderOf_eq_mersenne_of_valid_doubling
+    {G : Type*} [AddCommGroup G] {d : ℕ} (hd : 2 ≤ d)
+    (x : Fin d → G) (hx : ValidTuple x) (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ i, x (R i) = 2 • x i) (i : Fin d) :
+    addOrderOf (x i) = 2 ^ d - 1 :=
+  (isCycle_and_order_eq_mersenne_of_valid_doubling hd x hx R hdouble (x i)
+    (doubling_span_eq_zmultiples_of_valid hd x hx R hdouble i)).2
+
+/-- A doubling-stable valid tuple modulo a positive modulus forces
+Mersenne divisibility, not merely the general binary half bound. -/
+theorem mersenne_dvd_modulus_of_valid_doubling
+    {d N : ℕ} [NeZero N] (hd : 2 ≤ d)
+    (x : Fin d → ZMod N) (hx : ValidTuple x) (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ i, x (R i) = 2 • x i) : 2 ^ d - 1 ∣ N := by
+  let i : Fin d := ⟨0, by omega⟩
+  rw [← addOrderOf_eq_mersenne_of_valid_doubling hd x hx R hdouble i]
+  simpa using (addOrderOf_dvd_card (x := x i))
+
+/-- The odd-stratum threshold holds in every dimension for doubling-stable
+valid tuples, without assuming G2 or even that the modulus is odd. -/
+theorem mersenne_le_modulus_of_valid_doubling
+    {d N : ℕ} [NeZero N] (hd : 2 ≤ d)
+    (x : Fin d → ZMod N) (hx : ValidTuple x) (R : Equiv.Perm (Fin d))
+    (hdouble : ∀ i, x (R i) = 2 • x i) : 2 ^ d - 1 ≤ N :=
+  Nat.le_of_dvd (NeZero.pos N) (mersenne_dvd_modulus_of_valid_doubling hd x hx R hdouble)
 
 end MinModulus

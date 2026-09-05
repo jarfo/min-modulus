@@ -86,6 +86,26 @@ their separate obligations have been bypassed by the new general frontier.
 Conjecture 1 and all three global obligations remain open. Historical local
 lemma counts do not measure the fraction of the global proof completed.
 
+There is also a new unconditional structural result in every dimension:
+`DoublingValidity.lean` proves that validity forces a doubling permutation
+to be a single cycle. A proper zero-sum component can be extended to full
+tuple length by splitting an entry into two predecessors, contradicting
+validity. `G1DoublingCycleRigidity.lean` then proves that every entry has
+exact order `2^n-1`, and `mersenne_dvd_modulus_of_valid_doubling` forces
+`2^n-1 ∣ N` for positive modulus `N`. In particular the odd-stratum bound
+is proved for doubling-stable valid tuples in all dimensions, without G2.
+The old G2-dependent cycle signatures remain compatibility wrappers; the
+local proper-factor exact-two consumer now drops G2. Its upstream global
+constructor still uses G2 elsewhere. No theorem makes arbitrary valid odd
+tuples doubling-stable, and three-omission deletion is still open. This
+closes a structural dependency, not a fourth roadmap package or a global
+conjecture.
+
+Verification for this milestone: the full 15,075-job build passes, and all
+2,731 printed axiom lists use only `propext`, `Classical.choice`, and
+`Quot.sound`. All twelve new declarations are included in the audit; no
+proof placeholders or `native_decide` were introduced.
+
 ## Layout
 
 A single Lake package rooted at the repository root:

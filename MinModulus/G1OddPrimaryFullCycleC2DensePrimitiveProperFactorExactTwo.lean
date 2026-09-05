@@ -242,7 +242,7 @@ def PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveProperFactorExactTwoOutco
                       componentThreshold))))
 
 /-- Install the exact-two proper-factor normalization directly from HBN's
-finite-shrink endpoint, with G2 cycle rigidity in every kernel branch. -/
+finite-shrink endpoint, with unconditional cycle rigidity in every kernel branch. -/
 theorem PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome.properFactorExactTwo
     {q : ℕ} [NeZero (2 ^ 5 * q)]
     (g : Fin (m + 1) → ZMod (2 ^ 5 * q))
@@ -252,7 +252,7 @@ theorem PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome.p
     (a : ↥(witnessPureEdgeStarLeaves g h r)) (d : ℕ)
     (center : Fin d → Fin (m + 1)) (componentThreshold : ℕ)
     (hq : Odd q) (hcritical : 2 ^ 5 * q < stratumBound (m + 1) 5)
-    (hd : 2 ≤ d) (hG2 : OddStratumLowerBound) (hg : ValidTuple g)
+    (hd : 2 ≤ d) (hg : ValidTuple g)
     (hleafInj : Function.Injective
       (fun j : Fin d ↦ (T^[j.val] a : Fin (m + 1))))
     (hout : PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome
@@ -268,14 +268,8 @@ theorem PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome.p
   · exact Or.inr (Or.inl hmixed)
   · let leaf : Fin d → Fin (m + 1) :=
       fun j ↦ (T^[j.val] a : Fin (m + 1))
-    have hRne : ∀ j, (P.symm.trans S) j ≠ j := by
-      intro j hj
-      have hneq := (hlocal (P.symm j)).2.1
-      apply hneq
-      simpa only [Equiv.apply_symm_apply, Equiv.trans_apply] using hj.symm
-    have hrigid := leaf_isCycle_and_order_eq_mersenne_of_oddStratumLowerBound
-      hd hG2 g hg leaf hleafInj (h + g r) y (P.symm.trans S)
-        hRne hdouble hspan
+    have hrigid := leaf_isCycle_and_order_eq_mersenne_of_valid_doubling
+      hd g hg leaf hleafInj (h + g r) y (P.symm.trans S) hdouble hspan
     rcases hdimension with hthree | hexact
     · exact Or.inr (Or.inr
       ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
@@ -353,6 +347,6 @@ theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleC2DensePrimitive
     exact Subtype.ext hjk
   exact ⟨T, a, d, center, hdCard, hTcycle, hcenter, hcenterSpec,
     hout.properFactorExactTwo g h r T a d center componentThreshold hq
-      hcritical hTcycle.1 hG2 hg hleafInj⟩
+      hcritical hTcycle.1 hg hleafInj⟩
 
 end MinModulus

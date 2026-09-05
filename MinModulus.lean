@@ -1,6 +1,7 @@
 import MinModulus.UniqueSums
 import MinModulus.ElemAbelian2
 import MinModulus.AbelianMin
+import MinModulus.DoublingValidity
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
