@@ -169,6 +169,27 @@ Verification: the full 15,078-job build passes; all four new declarations
 are audited, and all 2,747 printed axiom lists use only the standard Lean
 axioms. The regression uses ordinary kernel `decide`.
 
+### Saturated overlap: actual deletion proved
+
+`G1SaturatedOverlap.lean` closes the case where the whole subset-sum cube
+equals its half translate (equivalently, the overlap has cardinality
+`2^(n-1)`). A faithful cyclic character factors the cube transform as
+`prod (1 + character(diff_i))`. Half-translation invariance makes this
+product zero, forcing one difference to be exactly the half modulus.
+That antipodal pair gives common touch and an actual valid `(n-1)`-tuple
+at half the modulus. Both the set-equality and overlap-cardinality deletion
+consumers are proved in all dimensions and even strata, without G2 or G3.
+
+Consequently an unresolved G1 case must have proper overlap at every anchor;
+saturated overlap no longer needs a counting argument. This closes a
+structural deletion case, not the full three-omission input. Partial overlap,
+the general odd threshold, and exceptional lifts remain open. No new
+conjectural interface is added.
+
+Verification: full build 15,079 jobs; all five declarations are audited,
+and all 2,752 printed axiom lists use only the standard Lean axioms.
+No proof placeholders or `native_decide` were introduced.
+
 ## Layout
 
 A single Lake package rooted at the repository root:
