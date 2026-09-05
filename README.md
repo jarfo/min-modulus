@@ -106,6 +106,25 @@ Verification for this milestone: the full 15,075-job build passes, and all
 `Quot.sound`. All twelve new declarations are included in the audit; no
 proof placeholders or `native_decide` were introduced.
 
+### Guardrail for the remaining G1 proof
+
+`G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
+for a valid length-`n` tuple, `N + overlap = 2^n + uncovered`, where
+`uncovered` counts residues outside the subset-sum cube and its half
+translate. Criticality is therefore `uncovered + stratumGap < overlap`.
+Overlap greater than the gap alone is insufficient to force common touch,
+even at every anchor: the existing valid seven-tuple modulo 1006 has a
+three-omission witness, no common touch, and certified all-anchor overlaps
+`(16,16,16,40,40,16,24)`, all greater than the first-even gap 2. Its original
+anchor leaves 894 residues uncovered. This is not a counterexample to
+critical G1 or to deletion; it is a regression against discarding the
+ambient-complement term. The three global obligations remain open.
+
+All six declarations are audited. The full 15,076-job build passes, and all
+2,737 printed axiom lists use only the standard Lean axioms. The finite
+overlap counts use ordinary kernel `decide`, with no proof placeholders or
+`native_decide`.
+
 ## Layout
 
 A single Lake package rooted at the repository root:

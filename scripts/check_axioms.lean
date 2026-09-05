@@ -2730,6 +2730,12 @@ import MinModulus
 #print axioms MinModulus.CriticalThreeOmissionDeleteStep
 #print axioms MinModulus.criticalRangeDeleteStep_of_threeOmissions
 #print axioms MinModulus.global_lower_bound_of_threeOmissionDeleteStep
+#print axioms MinModulus.card_subsetSumShift_uncovered_add_two_pow
+#print axioms MinModulus.modulus_add_gap_lt_iff_uncovered_add_gap_lt_overlap
+#print axioms MinModulus.criticalRange_iff_uncovered_add_gap_lt_overlap
+#print axioms MinModulus.g1Counterexample_all_anchor_overlap
+#print axioms MinModulus.g1Counterexample_uncovered
+#print axioms MinModulus.g1Counterexample_large_overlap_without_common_touch
 #print axioms MinModulus.isCycle_and_order_eq_mersenne_of_valid_doubling_span
 #print axioms MinModulus.sum_eq_zero_of_doubling_invariant
 #print axioms MinModulus.exists_zero_multiset_of_doubling_closed
