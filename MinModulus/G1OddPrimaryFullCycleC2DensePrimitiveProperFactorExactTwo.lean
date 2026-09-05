@@ -9,6 +9,7 @@ factor induction hypothesis from the public endpoint and exposes the actual
 remaining object: a valid two-coordinate quotient at proper odd cofactor.
 -/
 import MinModulus.G1OddPrimaryFullCycleC2DensePrimitiveProperFactorCriticalCapacity
+import MinModulus.G1DoublingCycleRigidity
 
 namespace MinModulus
 
@@ -184,8 +185,9 @@ theorem TwoRetainedPivotAlignedDensePrimitiveProperFactorExactTwoTerminal.cycle_
   · exact hshrink.2.1
   · exact hexact.2.1
 
-/-- Public C2 endpoint exposing the unconditional exact-two proper-factor
-quotient and retaining all full-odd and external alternatives. -/
+/-- Public C2 endpoint exposing the exact-two proper-factor quotient and
+retaining all full-odd and external alternatives.  Under G2, every displayed
+kernel branch now has a single relative cycle and exact Mersenne order. -/
 def PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveProperFactorExactTwoOutcome
     {q : ℕ} (g : Fin (m + 1) → ZMod (2 ^ 5 * q))
     (h : ZMod (2 ^ 5 * q)) (r : Fin (m + 1))
@@ -227,6 +229,7 @@ def PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveProperFactorExactTwoOutco
                 h + g r + g (leaf (S j))) ∧
             (∀ j : Fin d,
               disp ((P.symm.trans S) j) = 2 • disp j) ∧
+            Equiv.Perm.IsCycle (P.symm.trans S) ∧ addOrderOf y = 2 ^ d - 1 ∧
             (2 < m + 1 - B.card ∨
               (TwoRetainedMinimalCyclicKernelPrivateRows g y B ∧
                 TwoRetainedMinimalCyclicKernelFiveWeightRows g y B ∧
@@ -239,7 +242,7 @@ def PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveProperFactorExactTwoOutco
                       componentThreshold))))
 
 /-- Install the exact-two proper-factor normalization directly from HBN's
-finite-shrink endpoint. -/
+finite-shrink endpoint, with G2 cycle rigidity in every kernel branch. -/
 theorem PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome.properFactorExactTwo
     {q : ℕ} [NeZero (2 ^ 5 * q)]
     (g : Fin (m + 1) → ZMod (2 ^ 5 * q))
@@ -249,7 +252,9 @@ theorem PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome.p
     (a : ↥(witnessPureEdgeStarLeaves g h r)) (d : ℕ)
     (center : Fin d → Fin (m + 1)) (componentThreshold : ℕ)
     (hq : Odd q) (hcritical : 2 ^ 5 * q < stratumBound (m + 1) 5)
-    (hd : 1 ≤ d)
+    (hd : 2 ≤ d) (hG2 : OddStratumLowerBound) (hg : ValidTuple g)
+    (hleafInj : Function.Injective
+      (fun j : Fin d ↦ (T^[j.val] a : Fin (m + 1))))
     (hout : PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome
       g h r T a d center componentThreshold) :
     PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveProperFactorExactTwoOutcome
@@ -258,30 +263,42 @@ theorem PureEdgeStarLeafOddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome.p
   rcases hbase with hcap | hmixed |
       ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
         harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-        hthree | hexact⟩
+        hdimension⟩
   · exact Or.inl hcap
   · exact Or.inr (Or.inl hmixed)
-  · exact Or.inr (Or.inr
+  · let leaf : Fin d → Fin (m + 1) :=
+      fun j ↦ (T^[j.val] a : Fin (m + 1))
+    have hRne : ∀ j, (P.symm.trans S) j ≠ j := by
+      intro j hj
+      have hneq := (hlocal (P.symm j)).2.1
+      apply hneq
+      simpa only [Equiv.apply_symm_apply, Equiv.trans_apply] using hj.symm
+    have hrigid := leaf_isCycle_and_order_eq_mersenne_of_oddStratumLowerBound
+      hd hG2 g hg leaf hleafInj (h + g r) y (P.symm.trans S)
+        hRne hdouble hspan
+    rcases hdimension with hthree | hexact
+    · exact Or.inr (Or.inr
       ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
         harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+        hrigid.1, hrigid.2,
         Or.inl hthree⟩)
-  · rcases hexact with
+    · rcases hexact with
       ⟨hprivate, hfive, hleafSplit, hterminal | hexternal⟩
-    · let leaf : Fin d → Fin (m + 1) :=
-        fun j ↦ (T^[j.val] a : Fin (m + 1))
-      have hdesc : OddPrimaryFullCycleMinimalTransversalChargeDescent
+      · have hdesc : OddPrimaryFullCycleMinimalTransversalChargeDescent
           g y B d := hretained.1.1
-      have hfiniteTerminal :=
-        hfinite y B leaf J hdesc.2.2.2.2.1 hterminal
-      have hterminal' := hfiniteTerminal.properFactorExactTwo
-        g h r y B leaf J hq hcritical hd hdesc hprivate
-      exact Or.inr (Or.inr
+        have hfiniteTerminal :=
+          hfinite y B leaf J hdesc.2.2.2.2.1 hterminal
+        have hterminal' := hfiniteTerminal.properFactorExactTwo
+          g h r y B leaf J hq hcritical (by omega) hdesc hprivate
+        exact Or.inr (Or.inr
+          ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
+            harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+            hrigid.1, hrigid.2,
+            Or.inr ⟨hprivate, hfive, hleafSplit, Or.inl hterminal'⟩⟩)
+      · exact Or.inr (Or.inr
         ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
           harithmetic, hnormal, hpartition, S, hlocal, hdouble,
-          Or.inr ⟨hprivate, hfive, hleafSplit, Or.inl hterminal'⟩⟩)
-    · exact Or.inr (Or.inr
-        ⟨hcharge, y, B, P, J, hspan, hmem, hretained, hsparse,
-          harithmetic, hnormal, hpartition, S, hlocal, hdouble,
+          hrigid.1, hrigid.2,
           Or.inr ⟨hprivate, hfive, hleafSplit, Or.inr hexternal⟩⟩)
 
 /-- Global minimal-counterexample constructor with an unconditional exact-two
@@ -329,8 +346,13 @@ theorem exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleC2DensePrimitive
     exists_minimal_pureEdgeStarLeafCycle_oddPrimaryFullCycleC2DensePrimitiveFiniteShrinkOutcome
       hG2 g hg hcritical hminimal hh hne hno r qroot hqCanonical hcoeff
         hthree hcross hL componentThreshold
+  have hleafInj : Function.Injective
+      (fun j : Fin d ↦ (T^[j.val] a : Fin (m + 1))) := by
+    intro j k hjk
+    apply minimalFixedPointFreeCycle_iterates_injective T hTcycle
+    exact Subtype.ext hjk
   exact ⟨T, a, d, center, hdCard, hTcycle, hcenter, hcenterSpec,
     hout.properFactorExactTwo g h r T a d center componentThreshold hq
-      hcritical (by have hdTwo : 2 ≤ d := hTcycle.1; omega)⟩
+      hcritical hTcycle.1 hG2 hg hleafInj⟩
 
 end MinModulus
