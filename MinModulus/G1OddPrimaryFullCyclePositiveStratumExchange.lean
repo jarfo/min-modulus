@@ -1016,6 +1016,150 @@ theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_capacity_or_largeFibe
   simpa only [Fintype.card_fin, card_puncturedCyclePrivateProfiles] using
     hcapacity
 
+/-- The actual nonzero odd-kernel target of the common-owner row. -/
+def PrimitivePuncturedCyclePrivateMatrix.commonTarget
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) : ZMod (2 ^ t * q) :=
+  M.commonScalar r • y
+
+/-- Rows in one exact profile differ only through their missing-leaf term. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_sub_eq_zsmul_leaf_sub_of_profile_eq
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) {r s : Fin d}
+    (hprofile : M.commonProfile r = M.commonProfile s) :
+    M.commonTarget s - M.commonTarget r =
+      M.commonCoeff r (leaf r) • (g (leaf s) - g (leaf r)) := by
+  have hmu : M.commonCoeff r inserted = M.commonCoeff s inserted := by
+    exact congrArg Prod.fst hprofile
+  have hlambda :
+      M.commonCoeff r (leaf r) = M.commonCoeff s (leaf s) := by
+    exact congrArg Prod.snd hprofile
+  have hsumR := (M.commonCoeff_threeSupport_sevenProfiles r).2.1
+  have hsumS := (M.commonCoeff_threeSupport_sevenProfiles s).2.1
+  have hfixed : M.commonCoeff r fixed = M.commonCoeff s fixed := by
+    omega
+  have hvalueR := (M.commonCoeff_threeSupport_sevenProfiles r).2.2.2
+  have hvalueS := (M.commonCoeff_threeSupport_sevenProfiles s).2.2.2
+  calc
+    M.commonTarget s - M.commonTarget r =
+        (M.commonCoeff s inserted • g inserted +
+          M.commonCoeff s (leaf s) • g (leaf s) +
+          M.commonCoeff s fixed • g fixed) -
+        (M.commonCoeff r inserted • g inserted +
+          M.commonCoeff r (leaf r) • g (leaf r) +
+          M.commonCoeff r fixed • g fixed) := by
+            rw [hvalueS, hvalueR]
+            rfl
+    _ = M.commonCoeff r (leaf r) •
+        (g (leaf s) - g (leaf r)) := by
+      rw [← hmu, ← hlambda, ← hfixed]
+      module
+
+/-- On an edge that stays inside one profile, the private target difference
+is the missing-leaf coefficient times the original doubling displacement. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_cycleEdge_sub_eq
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed)
+    (R : Equiv.Perm (Fin d)) (a : ZMod (2 ^ t * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (r : Fin d) (hprofile : M.commonProfile (R r) = M.commonProfile r) :
+    M.commonTarget (R r) - M.commonTarget r =
+      M.commonCoeff r (leaf r) • (g (leaf r) - a) := by
+  have htarget :=
+    M.commonTarget_sub_eq_zsmul_leaf_sub_of_profile_eq hprofile.symm
+  have hleafDiff : g (leaf (R r)) - g (leaf r) = g (leaf r) - a := by
+    have hr := hdouble r
+    calc
+      g (leaf (R r)) - g (leaf r) =
+          (g (leaf (R r)) - a) - (g (leaf r) - a) := by abel
+      _ = (2 : ℤ) • (g (leaf r) - a) - (g (leaf r) - a) := by
+        rw [hr]
+      _ = g (leaf r) - a := by module
+  rw [hleafDiff] at htarget
+  exact htarget
+
+/-- Either of the two zero-missing-coefficient profiles occurs at most once.
+Indeed its exact three-supported coefficient vector is determined entirely by
+the profile, so HY's cross-puncture injectivity identifies the punctures. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.eq_of_commonProfile_eq_of_missingCoeff_eq_zero
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed)
+    (hcoeffInjective : Function.Injective M.commonCoeff)
+    {r s : Fin d} (hmissing : M.commonCoeff r (leaf r) = 0)
+    (hprofile : M.commonProfile r = M.commonProfile s) : r = s := by
+  apply hcoeffInjective
+  have hmu : M.commonCoeff r inserted = M.commonCoeff s inserted :=
+    congrArg Prod.fst hprofile
+  have hlambda :
+      M.commonCoeff r (leaf r) = M.commonCoeff s (leaf s) :=
+    congrArg Prod.snd hprofile
+  have hmissingS : M.commonCoeff s (leaf s) = 0 := by
+    rw [← hlambda, hmissing]
+  have hsumR := (M.commonCoeff_threeSupport_sevenProfiles r).2.1
+  have hsumS := (M.commonCoeff_threeSupport_sevenProfiles s).2.1
+  have hfixed : M.commonCoeff r fixed = M.commonCoeff s fixed := by omega
+  have hsupportR := (M.commonCoeff_threeSupport_sevenProfiles r).1
+  have hsupportS := (M.commonCoeff_threeSupport_sevenProfiles s).1
+  funext i
+  by_cases hiInserted : i = inserted
+  · subst i
+    exact hmu
+  by_cases hiFixed : i = fixed
+  · subst i
+    exact hfixed
+  have hzeroR : M.commonCoeff r i = 0 := by
+    by_cases hiLeaf : i = leaf r
+    · subst i
+      exact hmissing
+    · exact hsupportR i hiInserted hiLeaf hiFixed
+  have hzeroS : M.commonCoeff s i = 0 := by
+    by_cases hiLeaf : i = leaf s
+    · subst i
+      exact hmissingS
+    · exact hsupportS i hiInserted hiLeaf hiFixed
+  rw [hzeroR, hzeroS]
+
+theorem PrimitivePuncturedCyclePrivateMatrix.zeroMissing_profileFiber_card_le_one
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed)
+    (hcoeffInjective : Function.Injective M.commonCoeff)
+    (profile : ℤ × ℤ) (hzero : profile.2 = 0) :
+    (Finset.univ.filter
+      (fun r : Fin d ↦ M.commonProfile r = profile)).card ≤ 1 := by
+  classical
+  rw [Finset.card_le_one]
+  intro r hr s hs
+  have hrProfile := (Finset.mem_filter.mp hr).2
+  have hsProfile := (Finset.mem_filter.mp hs).2
+  have hrMissing : M.commonCoeff r (leaf r) = 0 := by
+    calc
+      M.commonCoeff r (leaf r) = (M.commonProfile r).2 := rfl
+      _ = profile.2 := congrArg Prod.snd hrProfile
+      _ = 0 := hzero
+  exact M.eq_of_commonProfile_eq_of_missingCoeff_eq_zero hcoeffInjective
+    hrMissing (hrProfile.trans hsProfile.symm)
+
 /-- Private coefficient rows attached to distinct punctures are distinct.
 If two rows agreed, privacy in the other puncture would make the missing-leaf
 coefficient zero.  The normalized row would then kill twice the common
