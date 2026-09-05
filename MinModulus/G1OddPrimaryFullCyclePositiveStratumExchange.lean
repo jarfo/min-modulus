@@ -612,12 +612,13 @@ def PrimitiveOneRetainedCyclePurePresentation
     (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
     (B : Finset (Fin n)) {d : ℕ} (leaf : Fin d → Fin n)
     (r : Fin d) (z : Fin n) : Prop :=
-  ∃ p : TwoRetainedFiveWeightPresentation g y B,
-    p.x = leaf r ∧ p.z = z ∧
-      addOrderOf
-        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
-          (g p.x - g p.z)) = 2 ^ t ∧
-      ∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = -2
+  PrimitiveTwoRetainedPositiveStratumRows g y B ∧
+    ∃ p : TwoRetainedFiveWeightPresentation g y B,
+      p.x = leaf r ∧ p.z = z ∧
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.x - g p.z)) = 2 ^ t ∧
+        ∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = -2
 
 /-- Put one punctured-cycle full-order state into the common pure comparison
 orientation. -/
@@ -639,7 +640,7 @@ theorem PrimitiveTwoRetainedPositiveStratumRows.to_oneRetainedCyclePurePresentat
   obtain ⟨p, hpx, hpz, hfull⟩ :=
     hstate.exists_fullOrderPresentation_with_orientation
       g y B (leaf r) z hrB hzB hrz
-  refine ⟨p, hpx, hpz, hfull, ?_⟩
+  refine ⟨hstate, p, hpx, hpz, hfull, ?_⟩
   exact p.oneRetainedCycle_weight_eq_neg_two_of_fullOrder
     g y B hfull hpow leaf a r hpx.symm hspan
 
