@@ -106,6 +106,29 @@ Verification for this milestone: the full 15,075-job build passes, and all
 `Quot.sound`. All twelve new declarations are included in the audit; no
 proof placeholders or `native_decide` were introduced.
 
+### Full global bound for affine-doubling-closed tuples
+
+`DoublingClosure.lean` extends the permutation result to maps that can merge
+coordinates. If a cyclic valid tuple is closed under `x ↦ 2*x+b` for one
+constant `b`, validity forces all periodic coordinates onto one cycle.
+Cyclic two-torsion permits at most one collision pair. Starting at a
+coordinate with no predecessor then visits every coordinate; another
+branch would create a second collision pair. Consequently the translated
+tuple is a reindexed full initial segment of a doubling orbit.
+
+`global_lower_bound_of_valid_affine_doubling_closed` reflects validity
+through multiplication by the first orbit entry, transports to the fixed
+super-increasing set, and applies `nmin_eq`. It proves `globalBound n ≤ N`
+for this entire structural class, in every dimension and modulus valuation,
+without G1, G2, G3, or a permutation assumption. This is a numerical global
+lower-bound consumer, not only another local constraint. It does not prove
+that arbitrary valid tuples have affine doubling closure; Conjecture 1 and
+its three global inputs remain open. No new conjectural interface is added.
+
+Verification: full build 15,080 jobs; all twelve new declarations audited;
+all 2,764 printed axiom lists are standard-only, with no proof placeholders
+or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
