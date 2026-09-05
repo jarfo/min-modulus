@@ -2921,6 +2921,100 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted
       hg R hcycle hRne a hdouble hspan (by omega) horder hd h anchor hbase
         hanchors.2 hanchors.1
 
+/-- Exchange an off-cycle owner through the missing leaf of a one-retained
+cycle.  If that owner is primitive relative to the fixed retained endpoint,
+the exchanged state contains the full cycle.  Consequently the established
+full-deleted-cycle theorem returns C2 or a pure-edge witness whose second
+omitted coordinate is genuinely outside the original cycle. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_offCycleOwner_to_freshPureEdgeWitness_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (pres : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B pres)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : d = 3 ∨ d = 4)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ t * q)) (p : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 18 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
+    (anchor : Fin n) (hbase : a = h + g anchor)
+    (missing fixed : Fin n) (hmissing : leaf p = missing)
+    (hmissingB : missing ∉ B) (hfixedB : fixed ∉ B)
+    (hmissingFixed : missing ≠ fixed)
+    (hcomplement : Finset.univ \ B = {missing, fixed})
+    (b : ↥B) (hbOutside : (b : Fin n) ∉ Set.range leaf)
+    (hprimitive :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g (b : Fin n) - g fixed)) = 2 ^ t) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ∃ x z : Fin n,
+        Witness g h (pureEdgeCoeffs x z anchor) ∧
+          z ∉ Set.range leaf := by
+  classical
+  rcases exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd hpres.1 hpres.2.1
+        b.property hmissingB hfixedB hmissingFixed hcomplement hprimitive
+          hminimal with
+    hthree | hstate
+  · exact Or.inl hthree
+  · have hleafExchange :
+        ∀ i, leaf i ∈ insert missing (B.erase (b : Fin n)) := by
+      intro i
+      by_cases hip : i = p
+      · subst i
+        rw [hmissing]
+        exact Finset.mem_insert_self _ _
+      · apply Finset.mem_insert_of_mem
+        apply Finset.mem_erase.mpr
+        refine ⟨?_, (hleafB i).2 hip⟩
+        intro hleafEq
+        apply hbOutside
+        exact ⟨i, hleafEq⟩
+    obtain ⟨pres₀, hpres₀, _hconstant⟩ :=
+      hstate.fullDeletedCycle_exactPresentation
+        g y (insert missing (B.erase (b : Fin n))) hpow (by omega)
+          leaf R a hleafExchange hdouble
+    rcases hpres₀.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three
+        ht g hg hh hne hunique hno y hyq hfullOdd
+          (insert missing (B.erase (b : Fin n))) pres₀ hminimal hd leaf
+            hleafInj R hcycle hRne a hleafExchange hdouble hspan (by omega)
+              horder anchor hbase with
+      hthree | hwitnessX | hwitnessZ
+    · exact Or.inl hthree
+    · right
+      refine ⟨pres₀.z, pres₀.x, hwitnessX, ?_⟩
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      apply pres₀.x_not_mem
+      rw [← hi]
+      exact hleafExchange i
+    · right
+      refine ⟨pres₀.x, pres₀.z, hwitnessZ, ?_⟩
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      apply pres₀.z_not_mem
+      rw [← hi]
+      exact hleafExchange i
+
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
 handled by the primitive owner furnished by minimality. -/
@@ -3124,47 +3218,213 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       · refine ⟨B, pres, ?_, Or.inr ⟨rfl, hpure⟩⟩
         exact ⟨hmin, hrows.1, hrows, by simpa using hfull⟩
 
-/-- Close the critical fifth-stratum cycle at the first presentation-level
-caller that still carries the original affine base.  A three- or four-cycle
-has an edge avoiding the affine anchor, and its relative-doubling identity is
-already a literal pure-edge witness at the half target.  Thus the formerly
-residual one-retained presentation is consumed without a further profile
-census. -/
+/-- Rejoin the critical fifth-stratum cycle at the first presentation-level
+caller that still carries the original affine base.  Exact Mersenne order is
+derived from the full doubling span.  The fully deleted branch is consumed by
+HAF, so the only non-C2, non-fresh-half-witness output is the already-full
+one-retained pure presentation on the original transversal. -/
 theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness
-    {q : ℕ} [NeZero (2 ^ 5 * q)] (_hq : Odd q)
-    (g : Fin n → ZMod (2 ^ 5 * q)) (_hg : ValidTuple g)
-    (_hcritical : 2 ^ 5 * q < stratumBound n 5)
-    {h : ZMod (2 ^ 5 * q)} (_hh : h + h = 0)
-    (_hunique : ∀ u : ZMod (2 ^ 5 * q),
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
       u + u = 0 → u = 0 ∨ u = h)
-    (_hne : h ≠ 0)
-    (_hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
       Witness g h c → c j ≠ 0)
     (y : ZMod (2 ^ 5 * q))
-    (_hyq : addOrderOf y ∣ q) (_hfullOdd : q / addOrderOf y = 1)
-    (_hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
-    (_hmin : MinimalCyclicKernelSupportTransversal g y B)
-    (_hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
-    (_hminimal : ∀ M : ℕ,
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
       0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
         ¬ AdmitsValidTuple n M)
     {d : ℕ} (hd : d = 3 ∨ d = 4)
     (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
     (R : Equiv.Perm (Fin d))
-    (_hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
     (a : ZMod (2 ^ 5 * q))
-    (p i₀ : Fin d) (_hi₀ : i₀ ≠ p) (_hRi₀ : R i₀ ≠ p)
-    (_hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
     (hdouble : ∀ i,
       g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
-    (_hspan : AddSubgroup.closure
+    (hspan : AddSubgroup.closure
       (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
     (anchor : Fin n) (hbase : a = h + g anchor) :
     (∃ B₀ : Finset (Fin n),
         MinimalCyclicKernelSupportTransversal g y B₀ ∧
           3 ≤ n - B₀.card) ∨
-      ∃ x z : Fin n, Witness g h (pureEdgeCoeffs x z anchor) := by
-  exact Or.inr (fullDoublingCycle_pureEdgeWitness_of_threeOrFour
-    hd g leaf hleafInj R hRne a h anchor hbase hdouble)
+      (∃ x z : Fin n,
+          Witness g h (pureEdgeCoeffs x z anchor) ∧
+            z ∉ Set.range leaf) ∨
+      ∃ pres : TwoRetainedFiveWeightPresentation g y B,
+        PrimitiveTwoRetainedPositiveStratumPresentation g y B pres ∧
+          ((leaf p = pres.x ∧ ∀ i (hi : leaf i ∈ B),
+              pres.weight ⟨leaf i, hi⟩ = -2) ∨
+            (leaf p = pres.z ∧ ∀ i (hi : leaf i ∈ B),
+              pres.weight ⟨leaf i, hi⟩ = 0)) := by
+  have horder : addOrderOf y = 2 ^ d - 1 := by
+    have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+      g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+        intro i
+        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+    calc
+      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+      _ = 2 ^ d - 1 := hqMersenne
+  rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
+          hdouble hspan with
+    hthree | ⟨B₀, pres, hpres, hgeometry⟩
+  · exact Or.inl hthree
+  · rcases hgeometry with ⟨hleafB₀, _hconstant⟩ | ⟨hB₀, hpure⟩
+    · rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three
+        (by omega) g hg hh hne hunique hno y hyq hfullOdd B₀ pres hminimal
+          hd leaf hleafInj R hcycle hRne a hleafB₀ hdouble hspan
+            (by norm_num) horder anchor hbase with
+      hthree | hwitnessX | hwitnessZ
+      · exact Or.inl hthree
+      · right
+        left
+        refine ⟨pres.z, pres.x, hwitnessX, ?_⟩
+        intro hrange
+        obtain ⟨i, hi⟩ := hrange
+        apply pres.x_not_mem
+        rw [← hi]
+        exact hleafB₀ i
+      · right
+        left
+        refine ⟨pres.x, pres.z, hwitnessZ, ?_⟩
+        intro hrange
+        obtain ⟨i, hi⟩ := hrange
+        apply pres.z_not_mem
+        rw [← hi]
+        exact hleafB₀ i
+    · subst B₀
+      exact Or.inr (Or.inr ⟨pres, hpres, hpure⟩)
+
+/-- The honest terminal after exploiting every off-cycle owner of the
+one-retained presentation.  A primitive orientation toward the fixed endpoint
+is exchanged back to a full-deleted cycle and hence produces C2 or a genuinely
+fresh half-witness.  Therefore the only remaining presentation-level branch
+has every off-cycle owner primitive toward the missing cycle leaf. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_offCycleOwnerReduction
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : d = 3 ∨ d = 4)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (anchor : Fin n) (hbase : a = h + g anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      (∃ x z : Fin n,
+          Witness g h (pureEdgeCoeffs x z anchor) ∧
+            z ∉ Set.range leaf) ∨
+      ∃ pres : TwoRetainedFiveWeightPresentation g y B,
+        PrimitiveTwoRetainedPositiveStratumPresentation g y B pres ∧
+          ((leaf p = pres.x ∧
+              (∀ i (hi : leaf i ∈ B),
+                pres.weight ⟨leaf i, hi⟩ = -2) ∧
+              ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
+                addOrderOf
+                  ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                    (g (b : Fin n) - g pres.x)) = 32) ∨
+            (leaf p = pres.z ∧
+              (∀ i (hi : leaf i ∈ B),
+                pres.weight ⟨leaf i, hi⟩ = 0) ∧
+              ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
+                addOrderOf
+                  ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                    (g (b : Fin n) - g pres.z)) = 32)) := by
+  have horder : addOrderOf y = 2 ^ d - 1 := by
+    have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+      g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+        intro i
+        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+    calc
+      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+      _ = 2 ^ d - 1 := hqMersenne
+  rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal hd leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
+          hdouble hspan anchor hbase with
+    hthree | hfresh | ⟨pres, hpres, hpure⟩
+  · exact Or.inl hthree
+  · exact Or.inr (Or.inl hfresh)
+  · rcases hpure with hpureX | hpureZ
+    · by_cases hgood : ∃ b : ↥B,
+          (b : Fin n) ∉ Set.range leaf ∧
+            addOrderOf
+              ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                (g (b : Fin n) - g pres.z)) = 32
+      · obtain ⟨b, hbOutside, hbprimitive⟩ := hgood
+        rcases hpres.exchange_offCycleOwner_to_freshPureEdgeWitness_or_three
+            (by omega) g hg hh hne hunique hno y hyq hfullOdd B pres
+              hminimal hd leaf hleafInj R hcycle hRne a p hleafB hdouble
+                hspan (by norm_num) horder anchor hbase pres.x pres.z
+                  hpureX.1 pres.x_not_mem pres.z_not_mem pres.x_ne_z
+                    pres.complement_eq b hbOutside hbprimitive with
+          hthree | hfresh
+        · exact Or.inl hthree
+        · exact Or.inr (Or.inl hfresh)
+      · right
+        right
+        refine ⟨pres, hpres, Or.inl ⟨hpureX.1, hpureX.2, ?_⟩⟩
+        intro b hbOutside
+        rcases hpres.owner_primitive_at_one_retained g y B pres b with
+          hbFixed | hbMissing
+        · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
+        · simpa using hbMissing
+    · by_cases hgood : ∃ b : ↥B,
+          (b : Fin n) ∉ Set.range leaf ∧
+            addOrderOf
+              ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                (g (b : Fin n) - g pres.x)) = 32
+      · obtain ⟨b, hbOutside, hbprimitive⟩ := hgood
+        have hcomplementReverse : Finset.univ \ B = {pres.z, pres.x} := by
+          simpa only [pair_comm] using pres.complement_eq
+        rcases hpres.exchange_offCycleOwner_to_freshPureEdgeWitness_or_three
+            (by omega) g hg hh hne hunique hno y hyq hfullOdd B pres
+              hminimal hd leaf hleafInj R hcycle hRne a p hleafB hdouble
+                hspan (by norm_num) horder anchor hbase pres.z pres.x
+                  hpureZ.1 pres.z_not_mem pres.x_not_mem pres.x_ne_z.symm
+                    hcomplementReverse b hbOutside hbprimitive with
+          hthree | hfresh
+        · exact Or.inl hthree
+        · exact Or.inr (Or.inl hfresh)
+      · right
+        right
+        refine ⟨pres, hpres, Or.inr ⟨hpureZ.1, hpureZ.2, ?_⟩⟩
+        intro b hbOutside
+        rcases hpres.owner_primitive_at_one_retained g y B pres b with
+          hbMissing | hbFixed
+        · simpa using hbMissing
+        · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
 
 end MinModulus
