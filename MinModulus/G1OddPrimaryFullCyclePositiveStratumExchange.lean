@@ -2682,6 +2682,62 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted
           hcommonZ hpow hspan
     exact ⟨M, M.commonCoeff_injective (by omega)⟩
 
+/-- Preserve the original affine base and full-cycle data through the
+simultaneous puncture construction.  The matrix branch is then no longer a
+dangling terminal: for the live Mersenne cycles it returns one of the two
+orientation-equivalent pure-edge witnesses at `h`, while strict
+re-minimization still enters the existing three-retained C2 currency. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : d = 3 ∨ d = 4) (leaf : Fin d → Fin n)
+    (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ t * q)) (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 4 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
+    (anchor : Fin n) (hbase : a = h + g anchor)
+    (hxAnchor : p.x ≠ anchor) (hzAnchor : p.z ≠ anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      Witness g h (pureEdgeCoeffs p.z p.x anchor) ∨
+      Witness g h (pureEdgeCoeffs p.x p.z anchor) := by
+  have hdpos : 0 < d := by rcases hd with rfl | rfl <;> norm_num
+  rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_injectivePrivateMatrix_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd B p hminimal hdpos leaf
+        hleafInj a hleafB hspan hpow with
+    hthree | hmatrixX | hmatrixZ
+  · exact Or.inl hthree
+  · rcases hmatrixX with ⟨M, _hcoeffInjective⟩
+    right
+    left
+    exact M.pureEdgeWitness_of_mersenne_threeOrFour
+      hg R hcycle hRne a hdouble hspan (by omega) horder hd h anchor hbase
+        hzAnchor hxAnchor
+  · rcases hmatrixZ with ⟨M, _hcoeffInjective⟩
+    right
+    right
+    exact M.pureEdgeWitness_of_mersenne_threeOrFour
+      hg R hcycle hRne a hdouble hspan (by omega) horder hd h anchor hbase
+        hxAnchor hzAnchor
+
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
 handled by the primitive owner furnished by minimality. -/
