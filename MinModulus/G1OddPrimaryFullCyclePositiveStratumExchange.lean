@@ -14,6 +14,7 @@ argument.
 -/
 import MinModulus.G1OddPrimaryFullCyclePositiveStratumQuotientPhase
 import MinModulus.G1OddPrimaryFullCycleTransversalExchange
+import MinModulus.G1OddPrimaryFullCyclePrimitiveUnitRows
 
 namespace MinModulus
 
@@ -644,6 +645,245 @@ theorem PrimitiveTwoRetainedPositiveStratumRows.to_oneRetainedCyclePurePresentat
   exact p.oneRetainedCycle_weight_eq_neg_two_of_fullOrder
     g y B hfull hpow leaf a r hpx.symm hspan
 
+/-- Canonical private-row data for every member of a simultaneous punctured
+cycle family.  Besides the aligned presentations, the carrier keeps the
+literal deletion sets, cycle incidence, both relevant full-order differences,
+and the common inserted owner in every transversal. -/
+structure PrimitivePuncturedCyclePrivateMatrix
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    {d : ℕ} (set : Fin d → Finset (Fin n)) (leaf : Fin d → Fin n)
+    (inserted fixed : Fin n) where
+  state : ∀ r, PrimitiveTwoRetainedPositiveStratumRows g y (set r)
+  presentation : ∀ r,
+    TwoRetainedCanonicalPrivatePresentation g y (set r)
+  leaf_injective : Function.Injective leaf
+  common_mem : ∀ r, inserted ∈ set r
+  leaf_mem_iff : ∀ r i, leaf i ∈ set r ↔ i ≠ r
+  missing_first : ∀ r, (presentation r).x = leaf r
+  fixed_second : ∀ r, (presentation r).z = fixed
+  retained_full_order : ∀ r,
+    addOrderOf
+      ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+        (g (presentation r).x - g (presentation r).z)) = 2 ^ t
+  common_full_order :
+    addOrderOf
+      ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+        (g inserted - g fixed)) = 2 ^ t
+  surviving_weight : ∀ r i (hi : leaf i ∈ set r),
+    (presentation r).weight ⟨leaf i, hi⟩ = -2
+  set_injective : Function.Injective set
+
+/-- Reconstruct the canonical private witnesses in the same pure orientation
+as one punctured state. -/
+theorem PrimitiveOneRetainedCyclePurePresentation.exists_canonicalPrivatePresentation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n))
+    {d : ℕ} (leaf : Fin d → Fin n) (a : ZMod (2 ^ t * q))
+    (r : Fin d) (z : Fin n)
+    (hpure : PrimitiveOneRetainedCyclePurePresentation g y B leaf r z)
+    (hpow : 4 < 2 ^ t)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    ∃ p : TwoRetainedCanonicalPrivatePresentation g y B,
+      p.x = leaf r ∧ p.z = z ∧
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.x - g p.z)) = 2 ^ t ∧
+        ∀ i (hi : leaf i ∈ B), p.weight ⟨leaf i, hi⟩ = -2 := by
+  classical
+  rcases hpure with ⟨hstate, p₀, hp₀x, hp₀z, hp₀full, _hp₀weight⟩
+  have hrB : leaf r ∉ B := by
+    simpa only [← hp₀x] using p₀.x_not_mem
+  have hzB : z ∉ B := by
+    simpa only [← hp₀z] using p₀.z_not_mem
+  have hrz : leaf r ≠ z := by
+    intro hrz
+    apply p₀.x_ne_z
+    rw [hp₀x, hp₀z, hrz]
+  have hcomplement : Finset.univ \ B = {leaf r, z} := by
+    simpa only [hp₀x, hp₀z] using p₀.complement_eq
+  obtain ⟨p, hpx, hpz⟩ :=
+    exists_twoRetainedCanonicalPrivatePresentation
+      g y hstate.1 hstate.2.1 (leaf r) z hrB hzB hrz hcomplement
+  have hfull :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g p.x - g p.z)) = 2 ^ t := by
+    simpa only [hpx, hpz, hp₀x, hp₀z] using hp₀full
+  let pFive := p.toFiveWeightPresentation g y B
+  have hweight :=
+    pFive.oneRetainedCycle_weight_eq_neg_two_of_fullOrder
+      g y B hfull hpow leaf a r hpx.symm hspan
+  refine ⟨p, hpx, hpz, hfull, ?_⟩
+  intro i hi
+  simpa only [pFive,
+    TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation] using
+      hweight i hi
+
+/-- Assemble canonical private presentations pointwise from an aligned pure
+punctured family. -/
+theorem exists_primitivePuncturedCyclePrivateMatrix_of_pureFamily
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    {d : ℕ} (set : Fin d → Finset (Fin n)) (leaf : Fin d → Fin n)
+    (inserted fixed : Fin n) (a : ZMod (2 ^ t * q))
+    (hfamily : ∀ r,
+      PrimitiveOneRetainedCyclePurePresentation g y (set r) leaf r fixed)
+    (hleafInj : Function.Injective leaf)
+    (hcommonMem : ∀ r, inserted ∈ set r)
+    (hleafMem : ∀ r i, leaf i ∈ set r ↔ i ≠ r)
+    (hsetsInj : Function.Injective set)
+    (hcommonFull :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g inserted - g fixed)) = 2 ^ t)
+    (hpow : 4 < 2 ^ t)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y) :
+    Nonempty
+      (PrimitivePuncturedCyclePrivateMatrix
+        g y set leaf inserted fixed) := by
+  classical
+  have hcanonical : ∀ r, ∃ p :
+      TwoRetainedCanonicalPrivatePresentation g y (set r),
+      p.x = leaf r ∧ p.z = fixed ∧
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.x - g p.z)) = 2 ^ t ∧
+        ∀ i (hi : leaf i ∈ set r), p.weight ⟨leaf i, hi⟩ = -2 := by
+    intro r
+    exact (hfamily r).exists_canonicalPrivatePresentation
+      g y (set r) leaf a r fixed hpow hspan
+  choose presentation hpresentation using hcanonical
+  exact ⟨{
+    state := fun r ↦ (hfamily r).1
+    presentation := presentation
+    leaf_injective := hleafInj
+    common_mem := hcommonMem
+    leaf_mem_iff := hleafMem
+    missing_first := fun r ↦ (hpresentation r).1
+    fixed_second := fun r ↦ (hpresentation r).2.1
+    retained_full_order := fun r ↦ (hpresentation r).2.2.1
+    common_full_order := hcommonFull
+    surviving_weight := fun r ↦ (hpresentation r).2.2.2
+    set_injective := hsetsInj }⟩
+
+/-- The common inserted coordinate viewed as an owner in one punctured
+transversal. -/
+def PrimitivePuncturedCyclePrivateMatrix.commonOwner
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) : ↥(set r) :=
+  ⟨inserted, M.common_mem r⟩
+
+/-- The selected scalar of the common inserted owner's private row. -/
+def PrimitivePuncturedCyclePrivateMatrix.commonScalar
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) : ℤ :=
+  (M.presentation r).scalar (M.commonOwner r)
+
+/-- The selected coefficient vector of the common inserted owner's private
+row. -/
+def PrimitivePuncturedCyclePrivateMatrix.commonCoeff
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) : Fin n → ℤ :=
+  (M.presentation r).coeff (M.commonOwner r)
+
+/-- Every row selected at the common inserted owner retains its nonzero
+kernel target, witness equation, nonzero owner diagonal, bounded owner level,
+and privacy on the corresponding literal punctured transversal. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.common_private_row
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) :
+    M.commonScalar r • y ≠ 0 ∧
+      Witness g (M.commonScalar r • y) (M.commonCoeff r) ∧
+      M.commonCoeff r inserted ≠ 0 ∧
+      M.commonCoeff r inserted ∈ twoRetainedExternalCoefficientLevels ∧
+      ∀ b ∈ set r, b ≠ inserted → M.commonCoeff r b = 0 := by
+  exact ⟨(M.presentation r).target_ne_zero (M.commonOwner r),
+    (M.presentation r).isWitness (M.commonOwner r),
+    (M.presentation r).owner_ne_zero (M.commonOwner r),
+    (M.presentation r).owner_mem (M.commonOwner r),
+    (M.presentation r).zero_other (M.commonOwner r)⟩
+
+/-- Private coefficient rows attached to distinct punctures are distinct.
+If two rows agreed, privacy in the other puncture would make the missing-leaf
+coefficient zero.  The normalized row would then kill twice the common
+inserted-to-fixed difference, contradicting its full `2^t` quotient order. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCoeff_injective
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hpow : 2 < 2 ^ t) :
+    Function.Injective M.commonCoeff := by
+  intro r s hrs
+  by_contra hrsNe
+  have hrMemS : leaf r ∈ set s :=
+    (M.leaf_mem_iff s r).2 hrsNe
+  have hrNeInserted : leaf r ≠ inserted := by
+    intro hri
+    have : leaf r ∈ set r := by simpa only [hri] using M.common_mem r
+    exact ((M.leaf_mem_iff r r).1 this) rfl
+  have hzeroS : M.commonCoeff s (leaf r) = 0 :=
+    (M.presentation s).zero_other (M.commonOwner s)
+      (leaf r) hrMemS hrNeInserted
+  have hzeroR : M.commonCoeff r (leaf r) = 0 := by
+    rw [hrs]
+    exact hzeroS
+  have hweightR :
+      (M.presentation r).weight (M.commonOwner r) = 0 := by
+    rw [(M.presentation r).weight_eq, M.missing_first r]
+    change twoRetainedOwnerNormalization
+      (M.commonCoeff r inserted) * M.commonCoeff r (leaf r) = 0
+    rw [hzeroR, mul_zero]
+  let pFive :=
+    (M.presentation r).toFiveWeightPresentation g y (set r)
+  have hrow := pFive.row_mem (M.commonOwner r)
+  have hmem :
+      (2 : ℤ) • (g inserted - g fixed) ∈ AddSubgroup.zmultiples y := by
+    change (2 : ℤ) • (g inserted - g (M.presentation r).z) +
+      (M.presentation r).weight (M.commonOwner r) •
+        (g (M.presentation r).x - g (M.presentation r).z) ∈
+          AddSubgroup.zmultiples y at hrow
+    rw [M.fixed_second r, hweightR, zero_zsmul, add_zero] at hrow
+    exact hrow
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g inserted - g fixed)
+  have hzeroZ : (2 : ℤ) • deltaQ = 0 := by
+    rw [← map_zsmul]
+    exact (QuotientAddGroup.eq_zero_iff
+      ((2 : ℤ) • (g inserted - g fixed))).2 hmem
+  have hzeroN : (2 : ℕ) • deltaQ = 0 := by
+    simpa only [two_nsmul, two_zsmul] using hzeroZ
+  have horder : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, pi, H, Q] using M.common_full_order
+  have hdvd : 2 ^ t ∣ 2 := by
+    rw [← horder]
+    exact addOrderOf_dvd_of_nsmul_eq_zero hzeroN
+  have hle : 2 ^ t ≤ 2 := Nat.le_of_dvd (by omega) hdvd
+  omega
+
 /-- The constant cycle and the exact quotient-row normal form use one and the
 same presentation.  In particular, no orientation or existential witness is
 lost before the positive-stratum descent step. -/
@@ -1196,6 +1436,93 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted
     apply PrimitiveTwoRetainedPositiveStratumRows.to_oneRetainedCyclePurePresentation
       g y Br (by simpa only [Br] using hz.1 r) hpow leaf a r hincidence
         hspan p.x hxBr hrx
+
+/-- The simultaneous pure family carries an injective matrix of canonical
+private witnesses at its one common inserted owner.  This is the first
+cross-puncture invariant: the rows themselves, not only their deletion sets,
+are pairwise distinct. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted_cycleLeaves_to_injectivePrivateMatrix_or_three
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (hleafInj : Function.Injective leaf)
+    (a : ZMod (2 ^ t * q)) (hleafB : ∀ i, leaf i ∈ B)
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 4 < 2 ^ t) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      (∃ M : PrimitivePuncturedCyclePrivateMatrix g y
+          (fun r ↦ insert p.x (B.erase (leaf r))) leaf p.x p.z,
+        Function.Injective M.commonCoeff) ∨
+      (∃ M : PrimitivePuncturedCyclePrivateMatrix g y
+          (fun r ↦ insert p.z (B.erase (leaf r))) leaf p.z p.x,
+        Function.Injective M.commonCoeff) := by
+  classical
+  have hxOutside : p.x ∉ Set.range leaf := by
+    rintro ⟨i, hix⟩
+    apply p.x_not_mem
+    rw [← hix]
+    exact hleafB i
+  have hzOutside : p.z ∉ Set.range leaf := by
+    rintro ⟨i, hiz⟩
+    apply p.z_not_mem
+    rw [← hiz]
+    exact hleafB i
+  have hcommonX :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g p.x - g p.z)) = 2 ^ t := by
+    simpa using hpres.2.2.2.1
+  have hcommonZ :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g p.z - g p.x)) = 2 ^ t := by
+    have hneg : g p.z - g p.x = -(g p.x - g p.z) := by abel
+    rw [hneg, map_neg, addOrderOf_neg]
+    exact hcommonX
+  rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_purePresentations_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd B p hminimal hd leaf
+        hleafInj a hleafB hspan hpow with
+    hthree | hx | hz
+  · exact Or.inl hthree
+  · right
+    left
+    have hincidence : ∀ r i,
+        leaf i ∈ insert p.x (B.erase (leaf r)) ↔ i ≠ r := by
+      intro r
+      exact cycleRange_mem_insert_erase_leaf_iff
+        leaf hleafInj hleafB r hxOutside
+    obtain ⟨M⟩ := exists_primitivePuncturedCyclePrivateMatrix_of_pureFamily
+      g y (fun r ↦ insert p.x (B.erase (leaf r))) leaf p.x p.z a hx.1
+        hleafInj (fun r ↦ Finset.mem_insert_self _ _) hincidence hx.2
+          hcommonX hpow hspan
+    exact ⟨M, M.commonCoeff_injective (by omega)⟩
+  · right
+    right
+    have hincidence : ∀ r i,
+        leaf i ∈ insert p.z (B.erase (leaf r)) ↔ i ≠ r := by
+      intro r
+      exact cycleRange_mem_insert_erase_leaf_iff
+        leaf hleafInj hleafB r hzOutside
+    obtain ⟨M⟩ := exists_primitivePuncturedCyclePrivateMatrix_of_pureFamily
+      g y (fun r ↦ insert p.z (B.erase (leaf r))) leaf p.z p.x a hz.1
+        hleafInj (fun r ↦ Finset.mem_insert_self _ _) hincidence hz.2
+          hcommonZ hpow hspan
+    exact ⟨M, M.commonCoeff_injective (by omega)⟩
 
 /-- Every positive-stratum exact-two state reaches C2 or the uniform
 full-order two-retained state.  The first-stratum trivial-difference case is
