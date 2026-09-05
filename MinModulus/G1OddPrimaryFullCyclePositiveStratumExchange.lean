@@ -823,6 +823,199 @@ theorem PrimitivePuncturedCyclePrivateMatrix.common_private_row
     (M.presentation r).owner_mem (M.commonOwner r),
     (M.presentation r).zero_other (M.commonOwner r)⟩
 
+/-- Every common-owner row has exact three-coordinate support and one of
+seven integer profiles.  Writing its coefficients on
+`(inserted, missing leaf, fixed)` as `(mu, lambda, gamma)`, the possibilities
+are
+
+* `mu = -1`, `-1 ≤ lambda ≤ 2`;
+* `mu = 1`, `-1 ≤ lambda ≤ 0`;
+* `mu = 2`, `lambda = -1`;
+
+and always `mu + lambda + gamma = 0`. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCoeff_threeSupport_sevenProfiles
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) :
+    (∀ i, i ≠ inserted → i ≠ leaf r → i ≠ fixed →
+      M.commonCoeff r i = 0) ∧
+    M.commonCoeff r inserted + M.commonCoeff r (leaf r) +
+        M.commonCoeff r fixed = 0 ∧
+    ((M.commonCoeff r inserted = -1 ∧
+        -1 ≤ M.commonCoeff r (leaf r) ∧
+        M.commonCoeff r (leaf r) ≤ 2) ∨
+      (M.commonCoeff r inserted = 1 ∧
+        -1 ≤ M.commonCoeff r (leaf r) ∧
+        M.commonCoeff r (leaf r) ≤ 0) ∨
+      (M.commonCoeff r inserted = 2 ∧
+        M.commonCoeff r (leaf r) = -1)) ∧
+    M.commonCoeff r inserted • g inserted +
+        M.commonCoeff r (leaf r) • g (leaf r) +
+        M.commonCoeff r fixed • g fixed = M.commonScalar r • y := by
+  classical
+  let c : Fin n → ℤ := M.commonCoeff r
+  have hleafNeInserted : leaf r ≠ inserted := by
+    intro hli
+    have hmem : leaf r ∈ set r := by
+      simpa only [hli] using M.common_mem r
+    exact ((M.leaf_mem_iff r r).1 hmem) rfl
+  have hinsertedNeFixed : inserted ≠ fixed := by
+    intro hif
+    apply (M.presentation r).z_not_mem
+    rw [M.fixed_second r, ← hif]
+    exact M.common_mem r
+  have hleafNeFixed : leaf r ≠ fixed := by
+    intro hlf
+    apply (M.presentation r).x_ne_z
+    rw [M.missing_first r, M.fixed_second r, hlf]
+  have hinsertedNotTail : inserted ∉ ({leaf r, fixed} : Finset (Fin n)) := by
+    simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+    exact ⟨Ne.symm hleafNeInserted, hinsertedNeFixed⟩
+  have hleafNotFixed : leaf r ∉ ({fixed} : Finset (Fin n)) := by
+    simpa only [Finset.mem_singleton] using hleafNeFixed
+  have hzero : ∀ i, i ≠ inserted → i ≠ leaf r → i ≠ fixed → c i = 0 := by
+    intro i hiInserted hiLeaf hiFixed
+    by_cases hiSet : i ∈ set r
+    · exact (M.presentation r).zero_other
+        (M.commonOwner r) i hiSet hiInserted
+    · have hiComplement : i ∈ Finset.univ \ set r :=
+        Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hiSet⟩
+      rw [(M.presentation r).complement_eq] at hiComplement
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hiComplement
+      rcases hiComplement with hix | hiz
+      · exact False.elim (hiLeaf (hix.trans (M.missing_first r)))
+      · exact False.elim (hiFixed (hiz.trans (M.fixed_second r)))
+  have hrestrict :
+      ∑ i ∈ ({inserted, leaf r, fixed} : Finset (Fin n)), c i =
+        ∑ i, c i := by
+    exact Finset.sum_subset (by simp) (by
+      intro i _ hi
+      apply hzero i
+      · intro hii
+        exact hi (by simp [hii])
+      · intro hil
+        exact hi (by simp [hil])
+      · intro hif
+        exact hi (by simp [hif]))
+  have hsumRight : c inserted + (c (leaf r) + c fixed) = 0 := by
+    calc
+      c inserted + (c (leaf r) + c fixed) =
+          ∑ i ∈ ({inserted, leaf r, fixed} : Finset (Fin n)), c i := by
+            rw [Finset.sum_insert hinsertedNotTail,
+              Finset.sum_insert hleafNotFixed]
+            simp
+      _ = ∑ i, c i := hrestrict
+      _ = 0 := (M.presentation r).isWitness (M.commonOwner r) |>.2.2.1
+  have hsum : c inserted + c (leaf r) + c fixed = 0 := by
+    simpa only [add_assoc] using hsumRight
+  have hvalueRestrict :
+      ∑ i ∈ ({inserted, leaf r, fixed} : Finset (Fin n)), c i • g i =
+        ∑ i, c i • g i := by
+    exact Finset.sum_subset (by simp) (by
+      intro i _ hi
+      rw [hzero i (by
+        intro hii
+        exact hi (by simp [hii])) (by
+        intro hil
+        exact hi (by simp [hil])) (by
+        intro hif
+        exact hi (by simp [hif])), zero_zsmul])
+  have hvalueRight : c inserted • g inserted +
+      (c (leaf r) • g (leaf r) + c fixed • g fixed) =
+        M.commonScalar r • y := by
+    calc
+      c inserted • g inserted +
+          (c (leaf r) • g (leaf r) + c fixed • g fixed) =
+          ∑ i ∈ ({inserted, leaf r, fixed} : Finset (Fin n)),
+            c i • g i := by
+              rw [Finset.sum_insert hinsertedNotTail,
+                Finset.sum_insert hleafNotFixed]
+              simp
+      _ = ∑ i, c i • g i := hvalueRestrict
+      _ = M.commonScalar r • y :=
+        (M.presentation r).isWitness (M.commonOwner r) |>.2.2.2
+  have hvalue : c inserted • g inserted + c (leaf r) • g (leaf r) +
+      c fixed • g fixed = M.commonScalar r • y := by
+    simpa only [add_assoc] using hvalueRight
+  have hownerMem : c inserted ∈ twoRetainedExternalCoefficientLevels := by
+    simpa only [c] using (M.common_private_row r).2.2.2.1
+  have hmissingLower : -1 ≤ c (leaf r) := by
+    simpa only [c,
+      PrimitivePuncturedCyclePrivateMatrix.commonCoeff] using
+      ((M.presentation r).isWitness (M.commonOwner r)).2.1 (leaf r)
+  have hfixedLower : -1 ≤ c fixed := by
+    simpa only [c,
+      PrimitivePuncturedCyclePrivateMatrix.commonCoeff] using
+      ((M.presentation r).isWitness (M.commonOwner r)).2.1 fixed
+  have hprofiles :
+      (c inserted = -1 ∧ -1 ≤ c (leaf r) ∧ c (leaf r) ≤ 2) ∨
+      (c inserted = 1 ∧ -1 ≤ c (leaf r) ∧ c (leaf r) ≤ 0) ∨
+      (c inserted = 2 ∧ c (leaf r) = -1) := by
+    simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+      Finset.mem_singleton] at hownerMem
+    rcases hownerMem with hminus | hone | htwo
+    · exact Or.inl ⟨hminus, hmissingLower, by omega⟩
+    · exact Or.inr (Or.inl ⟨hone, hmissingLower, by omega⟩)
+    · exact Or.inr (Or.inr ⟨htwo, by omega⟩)
+  exact ⟨by simpa only [c] using hzero,
+    by simpa only [c] using hsum,
+    by simpa only [c] using hprofiles,
+    by simpa only [c] using hvalue⟩
+
+/-- The seven possible `(common owner, missing leaf)` coefficient pairs.  The
+fixed-endpoint coefficient is their negative sum. -/
+def puncturedCyclePrivateProfiles : Finset (ℤ × ℤ) :=
+  {(-1, -1), (-1, 0), (-1, 1), (-1, 2),
+    (1, -1), (1, 0), (2, -1)}
+
+theorem card_puncturedCyclePrivateProfiles :
+    puncturedCyclePrivateProfiles.card = 7 := by
+  norm_num [puncturedCyclePrivateProfiles]
+
+/-- The finite profile of one common-owner private row. -/
+def PrimitivePuncturedCyclePrivateMatrix.commonProfile
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) : ℤ × ℤ :=
+  (M.commonCoeff r inserted, M.commonCoeff r (leaf r))
+
+theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_mem
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) :
+    M.commonProfile r ∈ puncturedCyclePrivateProfiles := by
+  have hprofile := (M.commonCoeff_threeSupport_sevenProfiles r).2.2.1
+  simp only [puncturedCyclePrivateProfiles,
+    PrimitivePuncturedCyclePrivateMatrix.commonProfile,
+    Finset.mem_insert, Finset.mem_singleton, Prod.mk.injEq]
+  rcases hprofile with hminus | hone | htwo <;> omega
+
+/-- Seven-profile pigeonhole for the cross-puncture private matrix. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_capacity_or_largeFiber
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (K : ℕ) :
+    d ≤ 7 * K ∨
+      ∃ profile ∈ puncturedCyclePrivateProfiles,
+        K < (Finset.univ.filter
+          (fun r : Fin d ↦ M.commonProfile r = profile)).card := by
+  have hcapacity := finiteMap_capacity_or_largeFiber
+    puncturedCyclePrivateProfiles M.commonProfile M.commonProfile_mem K
+  simpa only [Fintype.card_fin, card_puncturedCyclePrivateProfiles] using
+    hcapacity
+
 /-- Private coefficient rows attached to distinct punctures are distinct.
 If two rows agreed, privacy in the other puncture would make the missing-leaf
 coefficient zero.  The normalized row would then kill twice the common
