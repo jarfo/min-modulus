@@ -67,8 +67,23 @@ protected private-heavy endpoint. Its historical leaf-cycle and odd-kernel
 continuations are no longer required on that proof path, although their
 standalone conditional theorems remain available.
 
-The surviving private-heavy, crossing, and non-profile deletion obligations,
-the finite G1 interface, full G2, and uniform G3 remain open. Completed local
+`G1CriticalThreeOmissions.lean` now proves the stronger all-dimensional
+frontier: every valid even-modulus tuple with `N < 2^n` has common touch or
+a three-omission half-witness. The proof changes the subset-sum anchor and
+excludes the complete pure-edge triangle; it assumes no G2.
+
+The conditional theorem `global_lower_bound_of_threeOmissionDeleteStep`
+requires exactly these three still-open inputs:
+
+- `CriticalThreeOmissionDeleteStep`: deletion in critical cases carrying a
+  three-omission witness;
+- `OddStratumLowerBound` (G2): the all-dimensional odd threshold;
+- `ExceptionalLiftObstruction` (G3): the uniform exceptional-lift exclusion.
+
+There are no separate crossing, private-heavy, odd-kernel, or `n<7` base
+inputs on this route. Their old deletion theorems have not been proved;
+their separate obligations have been bypassed by the new general frontier.
+Conjecture 1 and all three global obligations remain open. Historical local
 lemma counts do not measure the fraction of the global proof completed.
 
 ## Layout
