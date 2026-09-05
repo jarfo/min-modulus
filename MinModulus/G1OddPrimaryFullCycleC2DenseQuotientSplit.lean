@@ -30,6 +30,9 @@ def TwoRetainedPivotAlignedDenseHalfOrderOwnerFamily
     x ∉ B ∧ x ∉ Finset.univ.image leaf ∧
     ∀ j : ↥I,
       let B_j := insert (leaf p) (B.erase (leaf (j : Fin d)))
+      MinimalCyclicKernelSupportTransversal g y B_j ∧
+      n - B_j.card = 2 ∧
+      TwoRetainedMinimalCyclicKernelFiveWeightRows g y B_j ∧
       (∀ i, leaf i ∈ B_j ↔ i ≠ (j : Fin d)) ∧
       ∃ pres : TwoRetainedFiveWeightPresentation g y B_j,
         pres.x = leaf (j : Fin d) ∧ pres.z = x ∧
@@ -124,8 +127,8 @@ theorem TwoRetainedPivotAlignedDenseExactExchangeFamily.halfOrderOwner_or_fullOr
     have hnormal := pres.positiveStratum_quotientRowNormalForm
       ht g hg hunique hne y hyq hfullOdd B_j hfive_j hminimal
     rcases hnormal with hhalfNormal | hfullNormal
-    · exact ⟨hleaf_j, pres, hpresX, hpresZ, hpresHalf,
-        hhalfNormal.2⟩
+    · exact ⟨hminimal_j, hdim_j, hfive_j, hleaf_j, pres, hpresX,
+        hpresZ, hpresHalf, hhalfNormal.2⟩
     · have hpowers : 2 ^ (t - 1) = 2 ^ t :=
         hpresHalf.symm.trans hfullNormal.1
       have hlt : 2 ^ (t - 1) < 2 ^ t :=
