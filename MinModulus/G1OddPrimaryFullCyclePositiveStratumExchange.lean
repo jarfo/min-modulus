@@ -955,6 +955,82 @@ theorem card_offCycleOwners_eq_four_of_oneRetained_dimension
       exact Fin.elim0 p)
   simpa only [L] using (show (B \ L).card = 4 by omega)
 
+/-- At the fifth stratum, a full Mersenne cycle of length at least two forces
+the ambient dimension to be at least five larger than the cycle.  This uses
+only the strict critical inequality; unlike the earlier exact equality it is
+uniform in the cycle length. -/
+theorem criticalFifthStratum_mersenne_dimension_lower
+    {q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    (hd : 2 ≤ d) (hq : q = 2 ^ d - 1) :
+    d + 5 ≤ n := by
+  have hNpow : 2 ^ 5 * q < 2 ^ n :=
+    hcritical.trans_le (Nat.sub_le _ _)
+  by_contra hn
+  have hnle : n ≤ d + 4 := by omega
+  have hpowle : 2 ^ n ≤ 2 ^ (d + 4) :=
+    Nat.pow_le_pow_right (by omega) hnle
+  have hfour : 4 ≤ 2 ^ d := by
+    have h : 2 ^ 2 ≤ 2 ^ d := Nat.pow_le_pow_right (by omega) hd
+    norm_num at h ⊢
+    exact h
+  have hreverse : 2 ^ (d + 4) ≤ 2 ^ 5 * q := by
+    rw [hq, pow_add]
+    norm_num
+    omega
+  omega
+
+/-- Exact owner count outside an injective cycle when an exact-two
+transversal contains all but one cycle leaf.  The count is `n-d-1` in every
+dimension, independently of criticality or the ambient group. -/
+theorem card_offCycleOwners_eq_dimension_sub_of_oneRetained
+    {d : ℕ} (hd : 1 ≤ d)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (B : Finset (Fin n)) (p : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hretained : n - B.card = 2) :
+    (B \ (Finset.univ.image leaf)).card = n - d - 1 := by
+  let L : Finset (Fin n) := Finset.univ.image leaf
+  have hLinter : (B ∩ L).card = d - 1 := by
+    rw [← card_cycleIndicesInTransversal_eq_card_inter_cycleRange
+      leaf hleafInj]
+    have hfilter :
+        Finset.univ.filter (fun i ↦ leaf i ∈ B) =
+          (Finset.univ : Finset (Fin d)).erase p := by
+      ext i
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_erase]
+      rw [hleafB]
+      tauto
+    rw [hfilter, Finset.card_erase_of_mem (Finset.mem_univ p),
+      Finset.card_univ, Fintype.card_fin]
+  have hBcardLe : B.card ≤ n := by
+    simpa using Finset.card_le_univ B
+  have hBcard : B.card = n - 2 := by omega
+  have hdle : d ≤ n := by
+    simpa only [Fintype.card_fin] using
+      Fintype.card_le_of_injective leaf hleafInj
+  have hdecomp := Finset.card_sdiff_add_card_inter B L
+  rw [hLinter, hBcard] at hdecomp
+  simpa only [L] using (show (B \ L).card = n - d - 1 by omega)
+
+/-- A critical exact-two one-retained full Mersenne cycle has at least four
+off-cycle owners in every cycle length. -/
+theorem four_le_card_offCycleOwners_of_criticalFifthStratum_mersenne
+    {q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    (hd : 2 ≤ d) (hq : q = 2 ^ d - 1)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (B : Finset (Fin n)) (p : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hretained : n - B.card = 2) :
+    4 ≤ (B \ (Finset.univ.image leaf)).card := by
+  rw [card_offCycleOwners_eq_dimension_sub_of_oneRetained
+    (by omega) leaf hleafInj B p hleafB hretained]
+  have hn := criticalFifthStratum_mersenne_dimension_lower
+    hcritical hd hq
+  omega
+
 /-- The four quotient coefficients for owners primitive toward the first
 retained coordinate. -/
 def fifthStratumXOwnerQuotientCoefficients : Finset ℕ := {2, 18, 0, 16}
@@ -1251,9 +1327,33 @@ theorem finiteMap_collision_of_card_four_image_subset_pair
       _ = 2 := by simp
   omega
 
-/-- Canonical private rows collapse the four HAK positions in the
+/-- Any source set with at least three points mapping into a set of at most
+two values necessarily contains a collision.  This is the cardinal form used
+by the dimension-free fifth-stratum owner argument. -/
+theorem finiteMap_collision_of_three_le_image_subset_pair
+    {α β : Type*} [DecidableEq α] [DecidableEq β]
+    (S : Finset α) (f : α → β) (u v : β)
+    (hcard : 3 ≤ S.card) (hsubset : S.image f ⊆ {u, v}) :
+    ∃ a ∈ S, ∃ b ∈ S, a ≠ b ∧ f a = f b := by
+  by_contra hcollision
+  push Not at hcollision
+  have hinj : Set.InjOn f S := by
+    intro a ha b hb hab
+    by_contra hne
+    exact hcollision a ha b hb hne hab
+  have himageCard : (S.image f).card = S.card :=
+    Finset.card_image_iff.mpr hinj
+  have hle := Finset.card_le_card hsubset
+  have hpairCard : ({u, v} : Finset β).card ≤ 2 := by
+    calc
+      ({u, v} : Finset β).card ≤ ({v} : Finset β).card + 1 :=
+        Finset.card_insert_le u {v}
+      _ = 2 := by simp
+  omega
+
+/-- Canonical private rows collapse the HAK positions in the
 first-retained primitive orientation to the two first-lift positions.
-Consequently four off-cycle owners must collide in the quotient; the HAM
+Consequently any three off-cycle owners must collide in the quotient; the HAM
 full-occupancy arm cannot occur. -/
 theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_xPrimitive_offCycle_collision_of_canonicalRows
     {q d : ℕ} [NeZero (2 ^ 5 * q)]
@@ -1262,7 +1362,7 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_xPrimitive_
     (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
     (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
     (leaf : Fin d → Fin n)
-    (hcard : (B \ (Finset.univ.image leaf)).card = 4)
+    (hcard : 3 ≤ (B \ (Finset.univ.image leaf)).card)
     (hall : ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
       addOrderOf
         ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
@@ -1321,13 +1421,13 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_xPrimitive_
       rw [hquotient, hk]
       simp
   have hcollision :=
-    finiteMap_collision_of_card_four_image_subset_pair
+    finiteMap_collision_of_three_le_image_subset_pair
       S f ((2 : ℕ) • deltaQ) 0 hcard hsubset
   simpa only [S, f, pi, H, Q, hpcz] using hcollision
 
-/-- Canonical private rows collapse the four HAK positions in the
+/-- Canonical private rows collapse the HAK positions in the
 second-retained primitive orientation to the two first-lift positions.
-Consequently four off-cycle owners must collide in the quotient; the HAM
+Consequently any three off-cycle owners must collide in the quotient; the HAM
 full-occupancy arm cannot occur. -/
 theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_offCycle_collision_of_canonicalRows
     {q d : ℕ} [NeZero (2 ^ 5 * q)]
@@ -1336,7 +1436,7 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_
     (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
     (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
     (leaf : Fin d → Fin n)
-    (hcard : (B \ (Finset.univ.image leaf)).card = 4)
+    (hcard : 3 ≤ (B \ (Finset.univ.image leaf)).card)
     (hall : ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
       addOrderOf
         ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
@@ -1395,7 +1495,7 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_
       rw [hquotient, hk]
       simp
   have hcollision :=
-    finiteMap_collision_of_card_four_image_subset_pair
+    finiteMap_collision_of_three_le_image_subset_pair
       S f deltaQ (-deltaQ) hcard hsubset
   simpa only [S, f, pi, H, Q, hpcz] using hcollision
 
@@ -4975,6 +5075,105 @@ theorem validTuple_offCycle_quotient_injective_of_mersenne_threeOrFour
   rw [← hST]
   exact Finset.mem_insert_self b (D.image orbitLeaf)
 
+/-- A critical fifth-stratum one-retained Mersenne cycle cannot have every
+off-cycle owner primitive toward the same retained endpoint.  Criticality
+provides at least four owners in every cycle dimension, canonical unit rows
+collapse their quotient positions to two values, and full-cycle quotient
+injectivity forbids the resulting collision. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.not_uniformPrimitiveOffCycleOwners_of_criticalFifthStratum_mersenne
+    {q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (pres : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B pres)
+    (hd : 2 ≤ d)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ 5 * q))
+    (p : Fin d) (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hall :
+      (∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g (b : Fin n) - g pres.x)) = 32) ∨
+      (∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g (b : Fin n) - g pres.z)) = 32)) :
+    False := by
+  have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+    g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+      intro i
+      simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+  have horder : addOrderOf y = 2 ^ d - 1 := by
+    calc
+      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+      _ = 2 ^ d - 1 := hqMersenne
+  have hoffCycleCard : 4 ≤ (B \ (Finset.univ.image leaf)).card :=
+    four_le_card_offCycleOwners_of_criticalFifthStratum_mersenne
+      hcritical hd hqMersenne leaf hleafInj B p hleafB hpres.2.1
+  rcases hall with hallX | hallZ
+  · have hcollision :=
+      hpres.fifthStratum_xPrimitive_offCycle_collision_of_canonicalRows
+        g y B pres hyq hfullOdd leaf
+          (Nat.le_trans (by norm_num : 3 ≤ 4) hoffCycleCard) hallX
+    obtain ⟨b, hbS, c, hcS, hbc, hquotient⟩ := hcollision
+    have hbOutside : b ∉ Set.range leaf := by
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      exact (Finset.mem_sdiff.mp hbS).2
+        (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, hi⟩)
+    have hcOutside : c ∉ Set.range leaf := by
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      exact (Finset.mem_sdiff.mp hcS).2
+        (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, hi⟩)
+    have hdiff : g b - g c ∈ AddSubgroup.zmultiples y := by
+      apply (QuotientAddGroup.eq_zero_iff (g b - g c)).mp
+      have hdecomp : g b - g c =
+          (g b - g pres.z) - (g c - g pres.z) := by abel
+      rw [hdecomp]
+      change (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+        ((g b - g pres.z) - (g c - g pres.z)) = 0
+      rw [map_sub, hquotient, sub_self]
+    have heq := validTuple_offCycle_quotient_injective_of_mersenne
+      g hg y leaf hleafInj R hcycle hRne a hdouble hspan horder
+        hbOutside hcOutside hdiff
+    exact hbc heq
+  · have hcollision :=
+      hpres.fifthStratum_zPrimitive_offCycle_collision_of_canonicalRows
+        g y B pres hyq hfullOdd leaf
+          (Nat.le_trans (by norm_num : 3 ≤ 4) hoffCycleCard) hallZ
+    obtain ⟨b, hbS, c, hcS, hbc, hquotient⟩ := hcollision
+    have hbOutside : b ∉ Set.range leaf := by
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      exact (Finset.mem_sdiff.mp hbS).2
+        (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, hi⟩)
+    have hcOutside : c ∉ Set.range leaf := by
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      exact (Finset.mem_sdiff.mp hcS).2
+        (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, hi⟩)
+    have hdiff : g b - g c ∈ AddSubgroup.zmultiples y := by
+      apply (QuotientAddGroup.eq_zero_iff (g b - g c)).mp
+      have hdecomp : g b - g c =
+          (g b - g pres.z) - (g c - g pres.z) := by abel
+      rw [hdecomp]
+      change (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+        ((g b - g pres.z) - (g c - g pres.z)) = 0
+      rw [map_sub, hquotient, sub_self]
+    have heq := validTuple_offCycle_quotient_injective_of_mersenne
+      g hg y leaf hleafInj R hcycle hRne a hdouble hspan horder
+        hbOutside hcOutside hdiff
+    exact hbc heq
+
 /-- Close the critical fifth-stratum one-retained terminal.  Canonical unit
 rows force two of the four off-cycle owners to collide in the quotient, while
 the balanced Mersenne orbit cover proves that the quotient map is injective on
@@ -5034,7 +5233,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
   · rcases hgeometry with hpureX | hpureZ
     · have hcollision :=
         hpres.fifthStratum_xPrimitive_offCycle_collision_of_canonicalRows
-          g y B pres hyq hfullOdd leaf hoffCycleCard
+          g y B pres hyq hfullOdd leaf (by omega)
             (fun b hbOutside ↦ (hpureX.2.2 b hbOutside).1)
       obtain ⟨b, hbS, c, hcS, hbc, hquotient⟩ := hcollision
       have hbOutside : b ∉ Set.range leaf := by
@@ -5062,7 +5261,7 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       exact (hbc heq).elim
     · have hcollision :=
         hpres.fifthStratum_zPrimitive_offCycle_collision_of_canonicalRows
-          g y B pres hyq hfullOdd leaf hoffCycleCard
+          g y B pres hyq hfullOdd leaf (by omega)
             (fun b hbOutside ↦ (hpureZ.2.2 b hbOutside).1)
       obtain ⟨b, hbS, c, hcS, hbc, hquotient⟩ := hcollision
       have hbOutside : b ∉ Set.range leaf := by
