@@ -728,6 +728,59 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_
       rw [hbeta]
       module
 
+/-- In the only live three- and four-cycle Mersenne cases, fifth-stratum
+criticality locks the ambient dimension to five more than the cycle length.
+This is a cardinality consequence of validity and the strict endpoint, not a
+tuple census. -/
+theorem criticalFifthStratum_mersenne_threeOrFour_dimension_eq_add_five
+    {q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    (hd : d = 3 ∨ d = 4) (hq : q = 2 ^ d - 1) :
+    n = d + 5 := by
+  have hqSmall : q = 3 ∨ q = 5 ∨ q = 7 ∨ q = 15 := by
+    rcases hd with rfl | rfl <;> norm_num at hq ⊢ <;> omega
+  have hpairs := criticalFifthStratum_smallOddFactor_finitePairs
+    g hg hcritical hqSmall
+  rcases hpairs with ⟨hn, hq'⟩ | ⟨hn, hq'⟩ |
+      ⟨hn, hq'⟩ | ⟨hn, hq'⟩
+  all_goals rcases hd with rfl | rfl <;> norm_num at hq ⊢ <;> omega
+
+/-- A two-retained transversal containing exactly all but one member of an
+injective `d`-coordinate family has exactly four owners outside that family
+when the ambient dimension is `d+5`. -/
+theorem card_offCycleOwners_eq_four_of_oneRetained_dimension
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (B : Finset (Fin n)) (p : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hn : n = d + 5) (hretained : n - B.card = 2) :
+    (B \ (Finset.univ.image leaf)).card = 4 := by
+  let L : Finset (Fin n) := Finset.univ.image leaf
+  have hLinter : (B ∩ L).card = d - 1 := by
+    rw [← card_cycleIndicesInTransversal_eq_card_inter_cycleRange
+      leaf hleafInj]
+    have hfilter :
+        Finset.univ.filter (fun i ↦ leaf i ∈ B) =
+          (Finset.univ : Finset (Fin d)).erase p := by
+      ext i
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_erase]
+      rw [hleafB]
+      tauto
+    rw [hfilter, Finset.card_erase_of_mem (Finset.mem_univ p),
+      Finset.card_univ, Fintype.card_fin]
+  have hBcardLe : B.card ≤ n := by
+    simpa using Finset.card_le_univ B
+  have hBcard : B.card = d + 3 := by omega
+  have hdecomp := Finset.card_sdiff_add_card_inter B L
+  rw [hLinter, hBcard] at hdecomp
+  have hdpos : 0 < d := by
+    exact Nat.pos_of_ne_zero (by
+      intro hd0
+      subst d
+      exact Fin.elim0 p)
+  simpa only [L] using (show (B \ L).card = 4 by omega)
+
 /-- Full quotient order makes the five-weight labels of a fully deleted
 doubling cycle constant in the *given* row presentation.  This is the
 presentation-preserving version of the generic cycle split: the alternative
@@ -3642,6 +3695,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
           Witness g h (pureEdgeCoeffs x z anchor) ∧
             z ∉ Set.range leaf) ∨
       ∃ pres : TwoRetainedFiveWeightPresentation g y B,
+        n = d + 5 ∧
+        (B \ (Finset.univ.image leaf)).card = 4 ∧
         PrimitiveTwoRetainedPositiveStratumPresentation g y B pres ∧
           ((leaf p = pres.x ∧
               (∀ i (hi : leaf i ∈ B),
@@ -3677,14 +3732,21 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
                      (pres.weight b = 2 ∧
                         (betaQ = -deltaQ ∨
                           betaQ = (15 : ℕ) • deltaQ))))) := by
+  have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+    g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+      intro i
+      simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
   have horder : addOrderOf y = 2 ^ d - 1 := by
-    have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
-      g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
-        intro i
-        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
     calc
       addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
       _ = 2 ^ d - 1 := hqMersenne
+  have hn : n = d + 5 :=
+    criticalFifthStratum_mersenne_threeOrFour_dimension_eq_add_five
+      g hg hcritical hd hqMersenne
+  have hoffCycleCard :
+      (B \ (Finset.univ.image leaf)).card = 4 :=
+    card_offCycleOwners_eq_four_of_oneRetained_dimension
+      leaf hleafInj B p hleafB hn hrows.1
   rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness
       hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
         hminimal hd leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
@@ -3710,7 +3772,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
         · exact Or.inr (Or.inl hfresh)
       · right
         right
-        refine ⟨pres, hpres, Or.inl ⟨hpureX.1, hpureX.2, ?_⟩⟩
+        refine ⟨pres, hn, hoffCycleCard, hpres,
+          Or.inl ⟨hpureX.1, hpureX.2, ?_⟩⟩
         intro b hbOutside
         rcases hpres.owner_primitive_at_one_retained g y B pres b with
           hbFixed | hbMissing
@@ -3742,7 +3805,8 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
         · exact Or.inr (Or.inl hfresh)
       · right
         right
-        refine ⟨pres, hpres, Or.inr ⟨hpureZ.1, hpureZ.2, ?_⟩⟩
+        refine ⟨pres, hn, hoffCycleCard, hpres,
+          Or.inr ⟨hpureZ.1, hpureZ.2, ?_⟩⟩
         intro b hbOutside
         rcases hpres.owner_primitive_at_one_retained g y B pres b with
           hbMissing | hbFixed
