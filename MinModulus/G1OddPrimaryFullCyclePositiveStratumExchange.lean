@@ -337,6 +337,180 @@ theorem PrimitiveTwoRetainedPositiveStratumRows.exists_fullOrderPresentation_wit
   rw [hpx, hpz]
   simpa only [pi, H, Q] using hxzOrder
 
+/-- A canonical private presentation removes the half-period ambiguity from
+every positive-stratum full-order row.  Its owner coefficient is a unit, and
+the raw witness equation selects the first quotient lift. -/
+theorem TwoRetainedCanonicalPrivatePresentation.fullOrder_unitRowNormalForm
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q))
+    (y : ZMod (2 ^ t * q)) (B : Finset (Fin n))
+    (p : TwoRetainedCanonicalPrivatePresentation g y B)
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hfull :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g p.x - g p.z)) = 2 ^ t) :
+    ∀ b : ↥B,
+      (p.coeff b (b : Fin n) = -1 ∨ p.coeff b (b : Fin n) = 1) ∧
+      ∃ k : ℤ, k ∈ ({-2, -1, 0, 1} : Finset ℤ) ∧
+        p.weight b = 2 * k ∧
+        g (b : Fin n) - g p.z + k • (g p.x - g p.z) ∈
+          AddSubgroup.zmultiples y ∧
+        let H := AddSubgroup.zmultiples y
+        let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+          QuotientAddGroup.mk' H
+        pi (g (b : Fin n) - g p.z) =
+          -(k • pi (g p.x - g p.z)) := by
+  classical
+  intro b
+  let pFive := p.toFiveWeightPresentation g y B
+  have hfullFive :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g pFive.x - g pFive.z)) = 2 ^ t := by
+    simpa only [pFive,
+      TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation]
+      using hfull
+  have hnotWeight : p.weight b ≠ -1 := by
+    have hnot := pFive.weight_ne_neg_one_of_fullOrder
+      ht g y B hyq hfullOdd hfullFive b
+    simpa only [pFive,
+      TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation]
+      using hnot
+  have hnotHeavy : p.coeff b (b : Fin n) ≠ 2 := by
+    intro hheavy
+    exact hnotWeight ((p.weight_eq_neg_one_iff b).2 hheavy)
+  have hownerUnit :
+      p.coeff b (b : Fin n) = -1 ∨ p.coeff b (b : Fin n) = 1 := by
+    have hlevels := p.owner_mem b
+    simp only [twoRetainedExternalCoefficientLevels, Finset.mem_insert,
+      Finset.mem_singleton] at hlevels
+    rcases hlevels with hminus | hone | htwo
+    · exact Or.inl hminus
+    · exact Or.inr hone
+    · exact (hnotHeavy htwo).elim
+  refine ⟨hownerUnit, ?_⟩
+  have hshape := privateWitness_twoRetained_exactShape
+    g (p.isWitness b) B (b : Fin n) b.property (p.zero_other b)
+      p.x p.z p.x_not_mem p.z_not_mem p.x_ne_z p.complement_eq
+  rcases hownerUnit with hminus | hone
+  · let k : ℤ := -(p.coeff b p.x)
+    have hweight : p.weight b = 2 * k := by
+      rw [p.weight_eq b, hminus]
+      simp only [twoRetainedOwnerNormalization, if_pos, k]
+      ring
+    have hkMem : k ∈ ({-2, -1, 0, 1} : Finset ℤ) := by
+      have hw := p.weight_mem b
+      simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+        Finset.mem_singleton] at hw
+      rw [hweight] at hw
+      simp only [Finset.mem_insert, Finset.mem_singleton]
+      omega
+    have hcorrected :
+        g (b : Fin n) - g p.z + k • (g p.x - g p.z) =
+          -(p.scalar b • y) := by
+      rw [hshape.2.2, hshape.1, hminus]
+      dsimp only [k]
+      module
+    have hcorrectedMem :
+        g (b : Fin n) - g p.z + k • (g p.x - g p.z) ∈
+          AddSubgroup.zmultiples y := by
+      rw [hcorrected]
+      exact AddSubgroup.neg_mem _
+        (AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _)
+    refine ⟨k, hkMem, hweight, hcorrectedMem, ?_⟩
+    let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    have hzero : pi
+        (g (b : Fin n) - g p.z + k • (g p.x - g p.z)) = 0 :=
+      (QuotientAddGroup.eq_zero_iff _).2 hcorrectedMem
+    change pi (g (b : Fin n) - g p.z) =
+      -(k • pi (g p.x - g p.z))
+    rw [map_add, map_zsmul] at hzero
+    exact eq_neg_of_add_eq_zero_left hzero
+  · let k : ℤ := p.coeff b p.x
+    have hweight : p.weight b = 2 * k := by
+      rw [p.weight_eq b, hone]
+      norm_num [twoRetainedOwnerNormalization, k]
+    have hkMem : k ∈ ({-2, -1, 0, 1} : Finset ℤ) := by
+      have hw := p.weight_mem b
+      simp only [twoRetainedNormalizedWeightLevels, Finset.mem_insert,
+        Finset.mem_singleton] at hw
+      rw [hweight] at hw
+      simp only [Finset.mem_insert, Finset.mem_singleton]
+      omega
+    have hcorrected :
+        g (b : Fin n) - g p.z + k • (g p.x - g p.z) =
+          p.scalar b • y := by
+      rw [hshape.2.2, hshape.1, hone]
+      dsimp only [k]
+      module
+    have hcorrectedMem :
+        g (b : Fin n) - g p.z + k • (g p.x - g p.z) ∈
+          AddSubgroup.zmultiples y := by
+      rw [hcorrected]
+      exact AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _
+    refine ⟨k, hkMem, hweight, hcorrectedMem, ?_⟩
+    let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+    let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+      QuotientAddGroup.mk' H
+    have hzero : pi
+        (g (b : Fin n) - g p.z + k • (g p.x - g p.z)) = 0 :=
+      (QuotientAddGroup.eq_zero_iff _).2 hcorrectedMem
+    change pi (g (b : Fin n) - g p.z) =
+      -(k • pi (g p.x - g p.z))
+    rw [map_add, map_zsmul] at hzero
+    exact eq_neg_of_add_eq_zero_left hzero
+
+/-- Reconstruct canonical private witnesses in the exact orientation of a
+positive-stratum carrier.  The reconstructed five-weight presentation remains
+a full-order carrier and every canonical row uses its unique first lift. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exists_alignedCanonicalUnitRows
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (y : ZMod (2 ^ t * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1) :
+    ∃ pc : TwoRetainedCanonicalPrivatePresentation g y B,
+      pc.x = p.x ∧ pc.z = p.z ∧
+        PrimitiveTwoRetainedPositiveStratumPresentation
+          g y B (pc.toFiveWeightPresentation g y B) ∧
+        ∀ b : ↥B,
+          (pc.coeff b (b : Fin n) = -1 ∨
+            pc.coeff b (b : Fin n) = 1) ∧
+          ∃ k : ℤ, k ∈ ({-2, -1, 0, 1} : Finset ℤ) ∧
+            pc.weight b = 2 * k ∧
+            g (b : Fin n) - g pc.z + k • (g pc.x - g pc.z) ∈
+              AddSubgroup.zmultiples y ∧
+            let H := AddSubgroup.zmultiples y
+            let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+              QuotientAddGroup.mk' H
+            pi (g (b : Fin n) - g pc.z) =
+              -(k • pi (g pc.x - g pc.z)) := by
+  classical
+  obtain ⟨pc, hpcx, hpcz⟩ :=
+    exists_twoRetainedCanonicalPrivatePresentation
+      g y hpres.1 hpres.2.1 p.x p.z p.x_not_mem p.z_not_mem p.x_ne_z
+        p.complement_eq
+  have hfull :
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g pc.x - g pc.z)) = 2 ^ t := by
+    simpa only [hpcx, hpcz] using hpres.2.2.2.1
+  have hunit := pc.fullOrder_unitRowNormalForm
+    ht g y B hyq hfullOdd hfull
+  let pcFive := pc.toFiveWeightPresentation g y B
+  have hcarrier :
+      PrimitiveTwoRetainedPositiveStratumPresentation g y B pcFive := by
+    refine ⟨hpres.1, hpres.2.1, hpres.2.2.1, hfull, ?_⟩
+    intro b
+    obtain ⟨_howner, k, _hk, hweight, _hcorrected, hquotient⟩ := hunit b
+    exact ⟨k, hweight, Or.inl hquotient⟩
+  exact ⟨pc, hpcx, hpcz, hcarrier, hunit⟩
+
 /-- An odd integer multiple of an element of order `2^t` has the same order.
 This is the parity fact that makes the positive-stratum exchange orientation
 uniform. -/
@@ -1053,6 +1227,177 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_
     exact hcard
   exact finiteMap_collision_or_fullImage_of_equal_card
     S (fifthStratumZOwnerQuotientPositions deltaQ) f hcardEq hsubset
+
+/-- Four source points mapping into a set of at most two values necessarily
+contain a collision. -/
+theorem finiteMap_collision_of_card_four_image_subset_pair
+    {α β : Type*} [DecidableEq α] [DecidableEq β]
+    (S : Finset α) (f : α → β) (u v : β)
+    (hcard : S.card = 4) (hsubset : S.image f ⊆ {u, v}) :
+    ∃ a ∈ S, ∃ b ∈ S, a ≠ b ∧ f a = f b := by
+  by_contra hcollision
+  push Not at hcollision
+  have hinj : Set.InjOn f S := by
+    intro a ha b hb hab
+    by_contra hne
+    exact hcollision a ha b hb hne hab
+  have himageCard : (S.image f).card = 4 := by
+    rw [Finset.card_image_iff.mpr hinj, hcard]
+  have hle := Finset.card_le_card hsubset
+  have hpairCard : ({u, v} : Finset β).card ≤ 2 := by
+    calc
+      ({u, v} : Finset β).card ≤ ({v} : Finset β).card + 1 :=
+        Finset.card_insert_le u {v}
+      _ = 2 := by simp
+  omega
+
+/-- Canonical private rows collapse the four HAK positions in the
+first-retained primitive orientation to the two first-lift positions.
+Consequently four off-cycle owners must collide in the quotient; the HAM
+full-occupancy arm cannot occur. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_xPrimitive_offCycle_collision_of_canonicalRows
+    {q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (leaf : Fin d → Fin n)
+    (hcard : (B \ (Finset.univ.image leaf)).card = 4)
+    (hall : ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (b : Fin n) - g p.x)) = 32) :
+    let S := B \ (Finset.univ.image leaf)
+    let pi := QuotientAddGroup.mk' (AddSubgroup.zmultiples y)
+    ∃ b ∈ S, ∃ c ∈ S, b ≠ c ∧
+      pi (g b - g p.z) = pi (g c - g p.z) := by
+  classical
+  obtain ⟨pc, hpcx, hpcz, hpc, hunit⟩ :=
+    hpres.exists_alignedCanonicalUnitRows (by norm_num)
+      g y B p hyq hfullOdd
+  let pcFive := pc.toFiveWeightPresentation g y B
+  let S := B \ (Finset.univ.image leaf)
+  let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 5 * q) ⧸ H
+  let pi : ZMod (2 ^ 5 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g pc.x - g pc.z)
+  let f : Fin n → Q := fun b ↦ pi (g b - g pc.z)
+  have hsubset : S.image f ⊆ {(2 : ℕ) • deltaQ, 0} := by
+    rw [Finset.image_subset_iff]
+    intro b hbS
+    have hbB : b ∈ B := (Finset.mem_sdiff.mp hbS).1
+    have hbOutside : b ∉ Set.range leaf := by
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      exact (Finset.mem_sdiff.mp hbS).2
+        (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, hi⟩)
+    have hprimitive :
+        addOrderOf (pi (g b - g pc.x)) = 32 := by
+      have hraw := hall ⟨b, hbB⟩ hbOutside
+      simpa only [pi, H, Q, hpcx] using hraw
+    have hprimitiveFive :
+        addOrderOf (pi (g b - g pcFive.x)) = 32 := by
+      simpa only [pcFive,
+        TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation]
+        using hprimitive
+    have hpos := hpc.fifthStratum_xPrimitive_ownerPosition
+      g y B pcFive ⟨b, hbB⟩ hprimitiveFive
+    have hpos' : pc.weight ⟨b, hbB⟩ = -4 ∨
+        pc.weight ⟨b, hbB⟩ = 0 := by
+      simpa only [pcFive,
+        TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation]
+        using hpos.imp (fun h ↦ h.1) (fun h ↦ h.1)
+    obtain ⟨_howner, k, _hk, hweight, _hcorrected, hquotient⟩ :=
+      hunit ⟨b, hbB⟩
+    change f b = -(k • deltaQ) at hquotient
+    simp only [Finset.mem_insert, Finset.mem_singleton]
+    rcases hpos' with hweightNeg | hweightZero
+    · left
+      have hk : k = -2 := by omega
+      rw [hquotient, hk]
+      module
+    · right
+      have hk : k = 0 := by omega
+      rw [hquotient, hk]
+      simp
+  have hcollision :=
+    finiteMap_collision_of_card_four_image_subset_pair
+      S f ((2 : ℕ) • deltaQ) 0 hcard hsubset
+  simpa only [S, f, pi, H, Q, hpcz] using hcollision
+
+/-- Canonical private rows collapse the four HAK positions in the
+second-retained primitive orientation to the two first-lift positions.
+Consequently four off-cycle owners must collide in the quotient; the HAM
+full-occupancy arm cannot occur. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.fifthStratum_zPrimitive_offCycle_collision_of_canonicalRows
+    {q d : ℕ} [NeZero (2 ^ 5 * q)]
+    (g : Fin n → ZMod (2 ^ 5 * q)) (y : ZMod (2 ^ 5 * q))
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (leaf : Fin d → Fin n)
+    (hcard : (B \ (Finset.univ.image leaf)).card = 4)
+    (hall : ∀ b : ↥B, (b : Fin n) ∉ Set.range leaf →
+      addOrderOf
+        ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (b : Fin n) - g p.z)) = 32) :
+    let S := B \ (Finset.univ.image leaf)
+    let pi := QuotientAddGroup.mk' (AddSubgroup.zmultiples y)
+    ∃ b ∈ S, ∃ c ∈ S, b ≠ c ∧
+      pi (g b - g p.z) = pi (g c - g p.z) := by
+  classical
+  obtain ⟨pc, hpcx, hpcz, hpc, hunit⟩ :=
+    hpres.exists_alignedCanonicalUnitRows (by norm_num)
+      g y B p hyq hfullOdd
+  let pcFive := pc.toFiveWeightPresentation g y B
+  let S := B \ (Finset.univ.image leaf)
+  let H : AddSubgroup (ZMod (2 ^ 5 * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ 5 * q) ⧸ H
+  let pi : ZMod (2 ^ 5 * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g pc.x - g pc.z)
+  let f : Fin n → Q := fun b ↦ pi (g b - g pc.z)
+  have hsubset : S.image f ⊆ {deltaQ, -deltaQ} := by
+    rw [Finset.image_subset_iff]
+    intro b hbS
+    have hbB : b ∈ B := (Finset.mem_sdiff.mp hbS).1
+    have hbOutside : b ∉ Set.range leaf := by
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      exact (Finset.mem_sdiff.mp hbS).2
+        (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, hi⟩)
+    have hprimitive :
+        addOrderOf (pi (g b - g pc.z)) = 32 := by
+      have hraw := hall ⟨b, hbB⟩ hbOutside
+      simpa only [pi, H, Q, hpcz] using hraw
+    have hprimitiveFive :
+        addOrderOf (pi (g b - g pcFive.z)) = 32 := by
+      simpa only [pcFive,
+        TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation]
+        using hprimitive
+    have hpos := hpc.fifthStratum_zPrimitive_ownerPosition
+      g y B pcFive ⟨b, hbB⟩ hprimitiveFive
+    have hpos' : pc.weight ⟨b, hbB⟩ = -2 ∨
+        pc.weight ⟨b, hbB⟩ = 2 := by
+      simpa only [pcFive,
+        TwoRetainedCanonicalPrivatePresentation.toFiveWeightPresentation]
+        using hpos.imp (fun h ↦ h.1) (fun h ↦ h.1)
+    obtain ⟨_howner, k, _hk, hweight, _hcorrected, hquotient⟩ :=
+      hunit ⟨b, hbB⟩
+    change f b = -(k • deltaQ) at hquotient
+    simp only [Finset.mem_insert, Finset.mem_singleton]
+    rcases hpos' with hweightNeg | hweightPos
+    · left
+      have hk : k = -1 := by omega
+      rw [hquotient, hk]
+      module
+    · right
+      have hk : k = 1 := by omega
+      rw [hquotient, hk]
+      simp
+  have hcollision :=
+    finiteMap_collision_of_card_four_image_subset_pair
+      S f deltaQ (-deltaQ) hcard hsubset
+  simpa only [S, f, pi, H, Q, hpcz] using hcollision
 
 /-- Full quotient order makes the five-weight labels of a fully deleted
 doubling cycle constant in the *given* row presentation.  This is the
