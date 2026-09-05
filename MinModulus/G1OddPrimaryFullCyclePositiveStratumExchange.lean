@@ -3048,4 +3048,75 @@ theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFi
       · refine ⟨B, pres, ?_, Or.inr ⟨rfl, hpure⟩⟩
         exact ⟨hmin, hrows.1, hrows, by simpa using hfull⟩
 
+/-- Rejoin the critical fifth-stratum cycle at the first presentation-level
+caller that still carries the original affine base.  Exact Mersenne order is
+derived from the full doubling span.  The fully deleted branch is consumed by
+HAF, so the only non-C2, non-half-witness output is the already-full
+one-retained pure presentation on the original transversal. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : d = 3 ∨ d = 4)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (anchor : Fin n) (hbase : a = h + g anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      (∃ x z : Fin n, Witness g h (pureEdgeCoeffs x z anchor)) ∨
+      ∃ pres : TwoRetainedFiveWeightPresentation g y B,
+        PrimitiveTwoRetainedPositiveStratumPresentation g y B pres ∧
+          ((leaf p = pres.x ∧ ∀ i (hi : leaf i ∈ B),
+              pres.weight ⟨leaf i, hi⟩ = -2) ∨
+            (leaf p = pres.z ∧ ∀ i (hi : leaf i ∈ B),
+              pres.weight ⟨leaf i, hi⟩ = 0)) := by
+  have horder : addOrderOf y = 2 ^ d - 1 := by
+    have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+      g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+        intro i
+        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+    calc
+      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+      _ = 2 ^ d - 1 := hqMersenne
+  rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
+          hdouble hspan with
+    hthree | ⟨B₀, pres, hpres, hgeometry⟩
+  · exact Or.inl hthree
+  · rcases hgeometry with ⟨hleafB₀, _hconstant⟩ | ⟨hB₀, hpure⟩
+    · rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three
+        (by omega) g hg hh hne hunique hno y hyq hfullOdd B₀ pres hminimal
+          hd leaf hleafInj R hcycle hRne a hleafB₀ hdouble hspan
+            (by norm_num) horder anchor hbase with
+      hthree | hwitnessX | hwitnessZ
+      · exact Or.inl hthree
+      · exact Or.inr (Or.inl ⟨pres.z, pres.x, hwitnessX⟩)
+      · exact Or.inr (Or.inl ⟨pres.x, pres.z, hwitnessZ⟩)
+    · subst B₀
+      exact Or.inr (Or.inr ⟨pres, hpres, hpure⟩)
+
 end MinModulus
