@@ -1026,6 +1026,151 @@ def PrimitivePuncturedCyclePrivateMatrix.commonTarget
       g y set leaf inserted fixed) (r : Fin d) : ZMod (2 ^ t * q) :=
   M.commonScalar r • y
 
+/-- Two elements of the same positive power-of-two order cannot be related by
+doubling. -/
+theorem ne_two_nsmul_of_addOrderOf_eq_same_twoPower
+    {Q : Type*} [AddCommGroup Q] [Finite Q]
+    {t : ℕ} (ht : 1 ≤ t) (delta beta : Q)
+    (hdelta : addOrderOf delta = 2 ^ t)
+    (hbeta : addOrderOf beta = 2 ^ t) :
+    delta ≠ (2 : ℕ) • beta := by
+  intro heq
+  have hpowEq : 2 ^ (t - 1) * 2 = 2 ^ t := by
+    calc
+      2 ^ (t - 1) * 2 = 2 ^ ((t - 1) + 1) := (pow_succ 2 (t - 1)).symm
+      _ = 2 ^ t := by congr 1; omega
+  have hzero : (2 ^ (t - 1)) • delta = 0 := by
+    rw [heq, ← mul_nsmul beta 2 (2 ^ (t - 1)), Nat.mul_comm, hpowEq]
+    simpa only [hbeta] using addOrderOf_nsmul_eq_zero beta
+  have hdvd : 2 ^ t ∣ 2 ^ (t - 1) := by
+    rw [← hdelta]
+    exact addOrderOf_dvd_of_nsmul_eq_zero hzero
+  have hle : 2 ^ t ≤ 2 ^ (t - 1) :=
+    Nat.le_of_dvd (by positivity) hdvd
+  have hlt : 2 ^ (t - 1) < 2 ^ t :=
+    Nat.pow_lt_pow_right (by omega) (by omega)
+  omega
+
+/-- The raw three-supported witness gives a two-generator relation in the
+quotient: `mu * delta + lambda * beta = 0`. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_quotientRelation
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (r : Fin d) :
+    M.commonCoeff r inserted •
+        (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g inserted - g fixed) +
+      M.commonCoeff r (leaf r) •
+        (QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+          (g (leaf r) - g fixed) = 0 := by
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  have hsum := (M.commonCoeff_threeSupport_sevenProfiles r).2.1
+  have hvalue := (M.commonCoeff_threeSupport_sevenProfiles r).2.2.2
+  have hfixedCoeff :
+      M.commonCoeff r fixed =
+        -(M.commonCoeff r inserted + M.commonCoeff r (leaf r)) := by
+    omega
+  have htargetMem : M.commonTarget r ∈ H := by
+    exact AddSubgroup.zsmul_mem _ (AddSubgroup.mem_zmultiples y) _
+  have hmem :
+      M.commonCoeff r inserted • (g inserted - g fixed) +
+        M.commonCoeff r (leaf r) • (g (leaf r) - g fixed) ∈ H := by
+    change M.commonScalar r • y ∈ H at htargetMem
+    rw [← hvalue] at htargetMem
+    rw [hfixedCoeff] at htargetMem
+    convert htargetMem using 1
+    module
+  apply (QuotientAddGroup.eq_zero_iff
+    (M.commonCoeff r inserted • (g inserted - g fixed) +
+      M.commonCoeff r (leaf r) • (g (leaf r) - g fixed))).2
+  exact hmem
+
+/-- Only three of the seven sparse profiles are compatible with full order
+for both the common inserted difference and the missing-leaf difference. -/
+def puncturedCycleFullOrderPrivateProfiles : Finset (ℤ × ℤ) :=
+  {(-1, -1), (-1, 1), (1, -1)}
+
+theorem card_puncturedCycleFullOrderPrivateProfiles :
+    puncturedCycleFullOrderPrivateProfiles.card = 3 := by
+  norm_num [puncturedCycleFullOrderPrivateProfiles]
+
+theorem PrimitivePuncturedCyclePrivateMatrix.commonProfile_mem_fullOrderProfiles
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (ht : 1 ≤ t) (r : Fin d) :
+    M.commonProfile r ∈ puncturedCycleFullOrderPrivateProfiles := by
+  let H : AddSubgroup (ZMod (2 ^ t * q)) := AddSubgroup.zmultiples y
+  let Q := ZMod (2 ^ t * q) ⧸ H
+  let pi : ZMod (2 ^ t * q) →+ Q := QuotientAddGroup.mk' H
+  let deltaQ : Q := pi (g inserted - g fixed)
+  let betaQ : Q := pi (g (leaf r) - g fixed)
+  have hdelta : addOrderOf deltaQ = 2 ^ t := by
+    simpa only [deltaQ, pi, H, Q] using M.common_full_order
+  have hbeta : addOrderOf betaQ = 2 ^ t := by
+    have horder := M.retained_full_order r
+    simpa only [deltaQ, betaQ, pi, H, Q, M.missing_first r,
+      M.fixed_second r] using horder
+  have hrelation : M.commonCoeff r inserted • deltaQ +
+      M.commonCoeff r (leaf r) • betaQ = 0 := by
+    simpa only [deltaQ, betaQ, pi, H, Q] using
+      M.commonProfile_quotientRelation r
+  have hprofile := M.commonProfile_mem r
+  simp only [puncturedCyclePrivateProfiles,
+    PrimitivePuncturedCyclePrivateMatrix.commonProfile,
+    Finset.mem_insert, Finset.mem_singleton, Prod.mk.injEq] at hprofile
+  rcases hprofile with h₁ | h₂ | h₃ | h₄ | h₅ | h₆ | h₇
+  · simp only [puncturedCycleFullOrderPrivateProfiles,
+      PrimitivePuncturedCyclePrivateMatrix.commonProfile,
+      Finset.mem_insert, Finset.mem_singleton, Prod.mk.injEq]
+    exact Or.inl h₁
+  · have hzero : deltaQ = 0 := by
+      rw [h₂.1, h₂.2] at hrelation
+      simpa only [neg_one_zsmul, zero_zsmul, add_zero, neg_eq_zero] using
+        hrelation
+    rw [hzero] at hdelta
+    norm_num at hdelta
+    have : 1 < 2 ^ t := one_lt_pow₀ (by omega) (by omega)
+    omega
+  · simp only [puncturedCycleFullOrderPrivateProfiles,
+      PrimitivePuncturedCyclePrivateMatrix.commonProfile,
+      Finset.mem_insert, Finset.mem_singleton, Prod.mk.injEq]
+    exact Or.inr (Or.inl h₃)
+  · have heq : deltaQ = (2 : ℕ) • betaQ := by
+      rw [h₄.1, h₄.2] at hrelation
+      have hsub : (2 : ℤ) • betaQ - deltaQ = 0 := by
+        simpa only [neg_one_zsmul, sub_eq_add_neg, add_comm] using hrelation
+      have heqZ : deltaQ = (2 : ℤ) • betaQ :=
+        (sub_eq_zero.mp hsub).symm
+      simpa only [two_nsmul, two_zsmul] using heqZ
+    exact (ne_two_nsmul_of_addOrderOf_eq_same_twoPower
+      ht deltaQ betaQ hdelta hbeta heq).elim
+  · simp only [puncturedCycleFullOrderPrivateProfiles,
+      PrimitivePuncturedCyclePrivateMatrix.commonProfile,
+      Finset.mem_insert, Finset.mem_singleton, Prod.mk.injEq]
+    exact Or.inr (Or.inr h₅)
+  · have hzero : deltaQ = 0 := by
+      rw [h₆.1, h₆.2] at hrelation
+      simpa only [one_zsmul, zero_zsmul, add_zero] using hrelation
+    rw [hzero] at hdelta
+    norm_num at hdelta
+    have : 1 < 2 ^ t := one_lt_pow₀ (by omega) (by omega)
+    omega
+  · have heq : betaQ = (2 : ℕ) • deltaQ := by
+      rw [h₇.1, h₇.2] at hrelation
+      have hsub : (2 : ℤ) • deltaQ - betaQ = 0 := by
+        simpa only [neg_one_zsmul, sub_eq_add_neg] using hrelation
+      have heqZ : betaQ = (2 : ℤ) • deltaQ :=
+        (sub_eq_zero.mp hsub).symm
+      simpa only [two_nsmul, two_zsmul] using heqZ
+    exact (ne_two_nsmul_of_addOrderOf_eq_same_twoPower
+      ht betaQ deltaQ hbeta hdelta heq).elim
+
 /-- Rows in one exact profile differ only through their missing-leaf term. -/
 theorem PrimitivePuncturedCyclePrivateMatrix.commonTarget_sub_eq_zsmul_leaf_sub_of_profile_eq
     {t q : ℕ} [NeZero (2 ^ t * q)]
