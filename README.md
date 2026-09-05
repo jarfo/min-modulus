@@ -57,6 +57,20 @@ super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
 results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
+## Conjecture 1: current proof frontier (2026-09-05)
+
+Conjecture 1 remains open. `G1PureStarElimination.lean` proves a
+dimension-free simplification: a nonempty global pure-edge omission star
+under failure of common touch forces a three-omission witness. It does not
+assume G2 or criticality. The star arm has been removed from the existing
+protected private-heavy endpoint. Its historical leaf-cycle and odd-kernel
+continuations are no longer required on that proof path, although their
+standalone conditional theorems remain available.
+
+The surviving private-heavy, crossing, and non-profile deletion obligations,
+the finite G1 interface, full G2, and uniform G3 remain open. Completed local
+lemma counts do not measure the fraction of the global proof completed.
+
 ## Layout
 
 A single Lake package rooted at the repository root:

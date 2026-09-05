@@ -3,6 +3,7 @@ import MinModulus.ElemAbelian2
 import MinModulus.AbelianMin
 import MinModulus.Descent
 import MinModulus.G1Triangle
+import MinModulus.G1PureStarElimination
 import MinModulus.G1CriticalRange
 import MinModulus.G1OverlapOrbits
 import MinModulus.G1OverlapSupports

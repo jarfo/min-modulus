@@ -1,10 +1,10 @@
 /-
-# Lossless protected residual with the global star/quarter split
+# Protected residual after eliminating the global pure-edge star
 
-The pure-center transition has now been classified globally.  Either the
-complete pure-edge omission family contains an exact triangle, or it is a
-star whose center has the protected internal/external relationship with the
-payload owner, pure center, and quarter escape.
+The global-star arm now forces three omissions directly.  The public
+protected carrier therefore keeps only the existing equal-private-heavy,
+three-omission, and exact-triangle outcomes.  Historical star-location
+carriers remain available below for their standalone conditional lemmas.
 
 This file installs that classification in the full operational residual.  No
 capacity bound, recursive tuple, quarter witness, owner comparison, or source
@@ -12,6 +12,7 @@ provenance is discarded.
 -/
 import MinModulus.G1PrivateHeavyTargetPureStarQuarter
 import MinModulus.G1PrivateHeavyTargetPureTransitionResidual
+import MinModulus.G1PureStarElimination
 
 namespace MinModulus
 
@@ -36,9 +37,9 @@ def MinimalSupportTransversalShiftTargetPureStarQuarterOutcome
         k.succ ∉ B ∧ i ∉ B ∧ i ≠ r) ∨
       (r ∉ B ∧ i ≠ r ∧ (i = owner ∨ i ∉ B)))
 
-/-- The complete protected private-heavy residual after classifying the
-center-changing pure arm into the established exact-triangle frontier or the
-global star/quarter outcome. -/
+/-- The complete protected private-heavy residual after eliminating the
+global star.  Only the established equal-private-heavy, three-omission, and
+exact-triangle outputs remain; the old name is retained for compatibility. -/
 def ProfilePrivateHeavyTargetPureStarQuarterProtectedResidual
     {n N M K : ℕ}
     (g : Fin (n + 1) → ZMod N) (hg : ValidTuple g)
@@ -76,14 +77,10 @@ def ProfilePrivateHeavyTargetPureStarQuarterProtectedResidual
                       (MinimalSupportTransversalShiftTargetPurePairEqualPrivateHeavyOutcome
                           g (M : ZMod N) hno hmin b z qv c owner k i ∨
                         WitnessThreeDistinctOmissions g (M : ZMod N) ∨
-                        WitnessExactOmissionTriangle g (M : ZMod N) ∨
-                        (MinimalSupportTransversalShiftTargetPureCenterChangeAt
-                            g (M : ZMod N) hno hmin b z c k ∧
-                          MinimalSupportTransversalShiftTargetPureStarQuarterOutcome
-                            g hno hmin b owner k i)))
+                        WitnessExactOmissionTriangle g (M : ZMod N)))
 
-/-- Losslessly install the exact-triangle/global-star classification on a
-protected transition residual. -/
+/-- Install star elimination directly on the existing protected endpoint,
+without introducing a new unresolved alternative. -/
 theorem ProfilePrivateHeavyTargetPureTransitionProtectedResidual.starQuarter
     {n N M K : ℕ}
     {g : Fin (n + 1) → ZMod N} (hg : ValidTuple g)
@@ -113,12 +110,15 @@ theorem ProfilePrivateHeavyTargetPureTransitionProtectedResidual.starQuarter
           minimalSupportTransversalShiftTargetPureCenterChange_exactTriangle_or_globalStar
             g hg hh hne hunique hno hmin b c k (by simpa [z] using hchange)
         with htriangle | ⟨r, hstar, _hlocation, _htransition⟩
-      · exact Or.inr (Or.inr (Or.inl htriangle))
-      · have hsplit :=
-          minimalSupportTransversalShiftTargetPureCenterChange_globalStar_quarterSplit
-            g hg hh hne hunique hno hmin b qv hqv owner c hprivate k hk
-              hkLocation i hi hiLocation (by simpa [z] using hchange) r hstar
-        exact Or.inr (Or.inr (Or.inr ⟨hchange, r, hstar, hsplit⟩))
+      · exact Or.inr (Or.inr htriangle)
+      · right
+        left
+        by_cases hthree : WitnessThreeDistinctOmissions g (M : ZMod N)
+        · exact hthree
+        · exact globalPureEdgeStar_threeDistinctOmissions_of_no_common_touched
+            g hg hh hno r hstar
+              (witnessPureEdgeOmissionPairs_nonempty_of_heavy_of_no_three
+                g hthree hc hk)
 
 /-- Critical private-heavy split with the global star/quarter classification
 installed on the full protected residual. -/
