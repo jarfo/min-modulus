@@ -7,6 +7,7 @@ import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
 import MinModulus.G1CriticalThreeOmissions
 import MinModulus.G1OverlapCriticality
+import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1CriticalRange
 import MinModulus.G1OverlapOrbits
 import MinModulus.G1OverlapSupports

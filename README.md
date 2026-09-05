@@ -57,7 +57,7 @@ super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
 results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
-## Conjecture 1: current proof frontier (2026-09-05)
+## Conjecture 1: current proof frontier (2026-09-06)
 
 Conjecture 1 remains open. `G1PureStarElimination.lean` proves a
 dimension-free simplification: a nonempty global pure-edge omission star
@@ -124,6 +124,29 @@ All six declarations are audited. The full 15,076-job build passes, and all
 2,737 printed axiom lists use only the standard Lean axioms. The finite
 overlap counts use ordinary kernel `decide`, with no proof placeholders or
 `native_decide`.
+
+### Proved constraints on the remaining counting argument
+
+`G1CollisionSupportRigidity.lean` proves that a reduced half-collision is
+determined by its tail support up to swapping sides. Consequently canonical
+collisions have distinct supports, and overlap greater than two forces a
+free tail coordinate. In every nontrivial critical tuple, at every anchor,
+there is a half-witness light off that anchor and zero at another coordinate.
+This excludes the all-full-support case in every dimension and even stratum.
+The witness need not be the separately supplied three-omission witness;
+a zero coefficient is not an omission.
+
+The same file proves a strict descent rule: adding a second copy of a
+coordinate already in a subset can return to the cube only as a smaller
+subset that omits that coordinate. These are unconditional constraints,
+not a deletion theorem. Returns outside the overlap can still lie in one
+cube; reaching enough residues outside both cubes, with multiplicities
+controlled, remains unproved. The three global inputs above remain open.
+No new conjectural interface or roadmap package is introduced.
+
+Verification: the full 15,077-job build passes. All six new declarations
+are audited; all 2,743 printed axiom lists use only the standard Lean
+axioms. No proof placeholders or `native_decide` were introduced.
 
 ## Layout
 
