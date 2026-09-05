@@ -148,6 +148,27 @@ Verification: the full 15,077-job build passes. All six new declarations
 are audited; all 2,743 printed axiom lists use only the standard Lean
 axioms. No proof placeholders or `native_decide` were introduced.
 
+`G1FirstEvenDuplicateEscape.lean` now rules out a closed duplicate-coordinate
+family in the first even stratum, `N=2*q` with `q` odd. For a fixed free
+coordinate, the collision face is invariant under half translation and
+disjoint from its one-step coordinate translate. Oddness makes closure
+under the two-step translate impossible. Subset-sum injectivity then turns
+that face exit into an actual exit from the overlap. A critical-range
+consumer supplies the initial free collision automatically, without G2 or
+failure of common touch.
+
+The distinction from uncovered residues is essential: in the existing valid
+tuple modulo 1006, one fixed free coordinate has a nonempty collision face
+but **all** of its direct duplicate exits lie in exactly one cube. This
+regression is kernel-checked. The example is noncritical; it does not refute
+G1. The next count must couple different coordinates, use actual criticality
+to exclude these one-cube exits, or construct the deleted tuple directly.
+No global input is closed and no new conjectural interface is introduced.
+
+Verification: the full 15,078-job build passes; all four new declarations
+are audited, and all 2,747 printed axiom lists use only the standard Lean
+axioms. The regression uses ordinary kernel `decide`.
+
 ## Layout
 
 A single Lake package rooted at the repository root:
