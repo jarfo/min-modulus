@@ -5075,6 +5075,807 @@ theorem validTuple_offCycle_quotient_injective_of_mersenne_threeOrFour
   rw [← hST]
   exact Finset.mem_insert_self b (D.image orbitLeaf)
 
+private theorem sum_pureEdgeCoeffs_apply
+    {d : ℕ} (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (fixed inserted : Fin n) (hfi : fixed ≠ inserted)
+    (hfixed : fixed ∉ Set.range leaf)
+    (hinserted : inserted ∉ Set.range leaf)
+    (A : Finset (Fin d)) (x : Fin n) :
+    (∑ r ∈ A, pureEdgeCoeffs fixed inserted (leaf r)) x =
+      if x = fixed then (2 : ℤ) * A.card
+      else if x = inserted then -(A.card : ℤ)
+      else if x ∈ A.image leaf then -1 else 0 := by
+  classical
+  simp only [Finset.sum_apply]
+  have hfixedLeaf : ∀ r, fixed ≠ leaf r := by
+    intro r h
+    exact hfixed ⟨r, h.symm⟩
+  have hinsertedLeaf : ∀ r, inserted ≠ leaf r := by
+    intro r h
+    exact hinserted ⟨r, h.symm⟩
+  by_cases hxf : x = fixed
+  · subst x
+    simp [pureEdgeCoeffs, hfi, hfixedLeaf, mul_comm]
+  by_cases hxi : x = inserted
+  · subst x
+    simp [pureEdgeCoeffs, hxf, hinsertedLeaf]
+  simp only [hxf, hxi, if_false]
+  by_cases hxA : x ∈ A.image leaf
+  · obtain ⟨r, hrA, hrx⟩ := Finset.mem_image.mp hxA
+    rw [Finset.sum_eq_single r]
+    · simp [pureEdgeCoeffs, hxf, hxi, hrx, hxA]
+    · intro s hsA hsr
+      have hsx : leaf s ≠ x := by
+        intro hsx
+        apply hsr
+        apply hleafInj
+        exact hsx.trans hrx.symm
+      simp [pureEdgeCoeffs, hxf, hxi, Ne.symm hsx]
+    · exact fun hrNotA ↦ (hrNotA hrA).elim
+  · have hnone : ∀ r ∈ A, leaf r ≠ x := by
+      intro r hrA hrx
+      exact hxA (Finset.mem_image.mpr ⟨r, hrA, hrx⟩)
+    simp only [hxA, if_false]
+    apply Finset.sum_eq_zero
+    intro r hrA
+    simp [pureEdgeCoeffs, hxf, hxi, Ne.symm (hnone r hrA)]
+
+/-- All-negative private rows cannot realize their common center as a
+disjoint signed leaf sum with one more positive than negative leaf.  Summing
+the positive rows and subtracting the negative rows gives a legal nonzero
+witness at zero. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCenter_ne_signedLeafDifference_of_negativeProfiles
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (a : ZMod (2 ^ t * q))
+    (hnegative : ∀ r, M.commonProfile r = (-1, -1))
+    (A D : Finset (Fin d)) (hAD : Disjoint A D)
+    (hcard : A.card = D.card + 1) :
+    (2 : ℤ) • g fixed - g inserted - a ≠
+      (∑ i ∈ A, (g (leaf i) - a)) -
+        ∑ i ∈ D, (g (leaf i) - a) := by
+  classical
+  intro hcenter
+  have hAnonempty : A.Nonempty := Finset.card_pos.mp (by omega)
+  obtain ⟨r₀, hr₀A⟩ := hAnonempty
+  have hinsertedNeFixed : inserted ≠ fixed := by
+    intro hif
+    apply (M.presentation r₀).z_not_mem
+    rw [M.fixed_second r₀, ← hif]
+    exact M.common_mem r₀
+  have hleafNeInserted : ∀ r, leaf r ≠ inserted := by
+    intro r hli
+    have hmem : leaf r ∈ set r := by
+      simpa only [hli] using M.common_mem r
+    exact ((M.leaf_mem_iff r r).1 hmem) rfl
+  have hleafNeFixed : ∀ r, leaf r ≠ fixed := by
+    intro r hlf
+    apply (M.presentation r).x_ne_z
+    rw [M.missing_first r, M.fixed_second r, hlf]
+  have hfixedOutside : fixed ∉ Set.range leaf := by
+    rintro ⟨r, hr⟩
+    exact hleafNeFixed r hr
+  have hinsertedOutside : inserted ∉ Set.range leaf := by
+    rintro ⟨r, hr⟩
+    exact hleafNeInserted r hr
+  have himageDisjoint : Disjoint (A.image leaf) (D.image leaf) := by
+    rw [Finset.disjoint_left]
+    intro x hxA hxD
+    obtain ⟨i, hiA, hix⟩ := Finset.mem_image.mp hxA
+    obtain ⟨j, hjD, hjx⟩ := Finset.mem_image.mp hxD
+    have hij : i = j := M.leaf_injective (hix.trans hjx.symm)
+    subst j
+    exact (Finset.disjoint_left.mp hAD hiA hjD)
+  let c : Fin n → ℤ :=
+    (∑ r ∈ A, M.commonCoeff r) - ∑ r ∈ D, M.commonCoeff r
+  apply (validTuple_iff_no_zero_witness g).mp hg c
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro hc
+    have hcfixed := congrFun hc fixed
+    simp only [c, Pi.sub_apply, Pi.zero_apply] at hcfixed
+    simp_rw [M.commonCoeff_eq_pureEdgeCoeffs_of_negativeProfile _
+      (hnegative _)] at hcfixed
+    rw [sum_pureEdgeCoeffs_apply leaf M.leaf_injective fixed inserted
+        hinsertedNeFixed.symm hfixedOutside hinsertedOutside A fixed,
+      sum_pureEdgeCoeffs_apply leaf M.leaf_injective fixed inserted
+        hinsertedNeFixed.symm hfixedOutside hinsertedOutside D fixed] at hcfixed
+    simp [hcard] at hcfixed
+    omega
+  · intro x
+    simp only [c, Pi.sub_apply]
+    simp_rw [M.commonCoeff_eq_pureEdgeCoeffs_of_negativeProfile _
+      (hnegative _)]
+    rw [sum_pureEdgeCoeffs_apply leaf M.leaf_injective fixed inserted
+        hinsertedNeFixed.symm hfixedOutside hinsertedOutside A x,
+      sum_pureEdgeCoeffs_apply leaf M.leaf_injective fixed inserted
+        hinsertedNeFixed.symm hfixedOutside hinsertedOutside D x]
+    have hnotBoth : ¬(x ∈ A.image leaf ∧ x ∈ D.image leaf) := by
+      exact fun h ↦ Finset.disjoint_left.mp himageDisjoint h.1 h.2
+    split_ifs <;> omega
+  · have hsumCoeff (S : Finset (Fin d)) :
+        (∑ x, ∑ r ∈ S, M.commonCoeff r x) = 0 := by
+      rw [Finset.sum_comm]
+      simp_rw [(M.common_private_row _).2.1.2.2.1]
+      simp
+    simp only [c, Pi.sub_apply, Finset.sum_sub_distrib, Finset.sum_apply]
+    rw [hsumCoeff A, hsumCoeff D, sub_self]
+  · have hsumValue (S : Finset (Fin d)) :
+        (∑ x, (∑ r ∈ S, M.commonCoeff r x) • g x) =
+          ∑ r ∈ S, M.commonTarget r := by
+      simp_rw [Finset.sum_smul]
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro r _hr
+      exact (M.common_private_row r).2.1.2.2.2
+    simp only [c, Pi.sub_apply, sub_smul, Finset.sum_sub_distrib,
+      Finset.sum_apply]
+    rw [hsumValue A, hsumValue D]
+    let C := (2 : ℤ) • g fixed - g inserted - a
+    have htargetEq : ∀ r,
+        M.commonTarget r = C - (g (leaf r) - a) := by
+      intro r
+      apply eq_sub_of_add_eq
+      exact M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a r (hnegative r)
+    have hsumTarget (S : Finset (Fin d)) :
+        (∑ r ∈ S, M.commonTarget r) =
+          S.card • C - ∑ r ∈ S, (g (leaf r) - a) := by
+      calc
+        (∑ r ∈ S, M.commonTarget r) =
+            ∑ r ∈ S, (C - (g (leaf r) - a)) := by
+              apply Finset.sum_congr rfl
+              intro r _hr
+              exact htargetEq r
+        _ = S.card • C - ∑ r ∈ S, (g (leaf r) - a) := by
+          rw [Finset.sum_sub_distrib, Finset.sum_const]
+    have htarget :
+        (∑ r ∈ A, M.commonTarget r) - ∑ r ∈ D, M.commonTarget r = 0 := by
+      calc
+        (∑ r ∈ A, M.commonTarget r) - ∑ r ∈ D, M.commonTarget r =
+            (A.card • C - ∑ r ∈ A, (g (leaf r) - a)) -
+              (D.card • C - ∑ r ∈ D, (g (leaf r) - a)) := by
+                rw [hsumTarget A, hsumTarget D]
+        _ = C - ((∑ r ∈ A, (g (leaf r) - a)) -
+              ∑ r ∈ D, (g (leaf r) - a)) := by
+                rw [hcard, add_nsmul, one_nsmul]
+                abel
+        _ = 0 := by
+          change ((2 : ℤ) • g fixed - g inserted - a) - _ = 0
+          rw [hcenter, sub_self]
+    exact htarget
+
+private theorem exists_mem_not_mem_image_of_isCycle
+    {d : ℕ} (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (S : Finset (Fin d))
+    (hSnonempty : S.Nonempty) (hSne : S ≠ Finset.univ) :
+    ∃ i ∈ S, i ∉ S.image R := by
+  classical
+  by_contra hnone
+  push Not at hnone
+  have hsubset : S ⊆ S.image R := by
+    intro i hi
+    exact hnone i hi
+  have hcardImage : (S.image R).card = S.card :=
+    Finset.card_image_iff.mpr R.injective.injOn
+  have hSimage : S = S.image R := by
+    apply Finset.eq_of_subset_of_card_le hsubset
+    rw [hcardImage]
+  have hclosed : ∀ i, i ∈ S → R i ∈ S := by
+    intro i hi
+    rw [hSimage]
+    exact Finset.mem_image.mpr ⟨i, hi, rfl⟩
+  obtain ⟨root, hroot⟩ := hSnonempty
+  have hiter : ∀ k : ℕ, R^[k] root ∈ S := by
+    intro k
+    induction k with
+    | zero => simpa using hroot
+    | succ k ih =>
+        rw [Function.iterate_succ_apply']
+        exact hclosed _ ih
+  have hSuniv : S = Finset.univ := by
+    apply Finset.eq_univ_of_forall
+    intro i
+    let e : Fin d ≃ Fin d := fullCycleOrbitEquiv R hcycle hRne root
+    obtain ⟨k, hk⟩ := e.surjective i
+    rw [← hk]
+    simpa only [e, fullCycleOrbitEquiv_apply] using hiter k.val
+  exact hSne hSuniv
+
+private theorem exists_card_succCycleDifference_of_subset
+    {G : Type*} [AddCommGroup G] {d : ℕ}
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (disp : Fin d → G) (hdouble : ∀ i, disp (R i) = (2 : ℕ) • disp i)
+    (S : Finset (Fin d)) (hSnonempty : S.Nonempty)
+    (hSne : S ≠ Finset.univ) :
+    ∃ A D : Finset (Fin d), Disjoint A D ∧ A.card = D.card + 1 ∧
+      (∑ i ∈ A, disp i) - ∑ i ∈ D, disp i = ∑ i ∈ S, disp i := by
+  classical
+  let U : Finset (Fin d) := S.image R
+  let A₀ : Finset (Fin d) := U \ S
+  let D₀ : Finset (Fin d) := S \ U
+  have hUcard : U.card = S.card := by
+    simp only [U]
+    exact Finset.card_image_iff.mpr R.injective.injOn
+  have hcard₀ : A₀.card = D₀.card := by
+    have hUdecomp := Finset.card_sdiff_add_card_inter U S
+    have hSdecomp := Finset.card_sdiff_add_card_inter S U
+    rw [Finset.inter_comm S U] at hSdecomp
+    change (U \ S).card = (S \ U).card
+    omega
+  have hdisjoint₀ : Disjoint A₀ D₀ := by
+    rw [Finset.disjoint_left]
+    intro x hxA hxD
+    exact (Finset.mem_sdiff.mp hxA).2 (Finset.mem_sdiff.mp hxD).1
+  have hsumU : (∑ i ∈ U, disp i) =
+      (2 : ℕ) • ∑ i ∈ S, disp i := by
+    calc
+      (∑ i ∈ U, disp i) = ∑ i ∈ S, disp (R i) := by
+        simp only [U]
+        rw [Finset.sum_image]
+        exact R.injective.injOn
+      _ = ∑ i ∈ S, (2 : ℕ) • disp i := by
+        apply Finset.sum_congr rfl
+        intro i _hi
+        exact hdouble i
+      _ = (2 : ℕ) • ∑ i ∈ S, disp i := by
+        simp only [two_nsmul, Finset.sum_add_distrib]
+  have hbase : (∑ i ∈ A₀, disp i) - ∑ i ∈ D₀, disp i =
+      ∑ i ∈ S, disp i := by
+    have hUdecomp := Finset.sum_inter_add_sum_sdiff U S disp
+    have hSdecomp := Finset.sum_inter_add_sum_sdiff S U disp
+    rw [Finset.inter_comm S U] at hSdecomp
+    change (∑ i ∈ U \ S, disp i) - ∑ i ∈ S \ U, disp i = _
+    rw [hsumU] at hUdecomp
+    simp only [two_nsmul] at hUdecomp
+    calc
+      (∑ i ∈ U \ S, disp i) - ∑ i ∈ S \ U, disp i =
+          ((∑ i ∈ U ∩ S, disp i) + ∑ i ∈ U \ S, disp i) -
+            ((∑ i ∈ U ∩ S, disp i) + ∑ i ∈ S \ U, disp i) := by
+              abel
+      _ = ((∑ i ∈ S, disp i) + ∑ i ∈ S, disp i) -
+            ∑ i ∈ S, disp i := by rw [hUdecomp, hSdecomp]
+      _ = ∑ i ∈ S, disp i := by abel
+  obtain ⟨i, hiS, hiU⟩ :=
+    exists_mem_not_mem_image_of_isCycle R hcycle hRne S hSnonempty hSne
+  have hiD₀ : i ∈ D₀ := Finset.mem_sdiff.mpr ⟨hiS, hiU⟩
+  have hiA₀ : i ∉ A₀ := fun h ↦ hiU (Finset.mem_sdiff.mp h).1
+  let j : Fin d := R i
+  have hij : i ≠ j := by
+    intro hij
+    exact hRne i hij.symm
+  have hjU : j ∈ U := by
+    exact Finset.mem_image.mpr ⟨i, hiS, rfl⟩
+  have hjD₀ : j ∉ D₀ := fun h ↦ (Finset.mem_sdiff.mp h).2 hjU
+  have hjdouble : disp j = (2 : ℕ) • disp i := hdouble i
+  by_cases hjS : j ∈ S
+  · let A : Finset (Fin d) := insert i A₀
+    let D : Finset (Fin d) := insert j (D₀.erase i)
+    have hjA₀ : j ∉ A₀ := fun h ↦ (Finset.mem_sdiff.mp h).2 hjS
+    have hjErase : j ∉ D₀.erase i := by simp [hjD₀]
+    have hdisjoint : Disjoint A D := by
+      rw [Finset.disjoint_left]
+      intro x hxA hxD
+      simp only [A, D, Finset.mem_insert, Finset.mem_erase] at hxA hxD
+      rcases hxA with rfl | hxA
+      · rcases hxD with hEq | hxD
+        · exact hij hEq
+        · exact hxD.1 rfl
+      · rcases hxD with rfl | hxD
+        · exact hjA₀ hxA
+        · exact Finset.disjoint_left.mp hdisjoint₀ hxA hxD.2
+    have hcardA : A.card = A₀.card + 1 := by
+      simp [A, Finset.card_insert_of_notMem hiA₀]
+    have hcardD : D.card = D₀.card := by
+      rw [show D.card = (D₀.erase i).card + 1 by
+        simp [D, Finset.card_insert_of_notMem hjErase],
+        Finset.card_erase_of_mem hiD₀]
+      have hpos : 0 < D₀.card := Finset.card_pos.mpr ⟨i, hiD₀⟩
+      omega
+    have hsumErase : (∑ r ∈ D₀.erase i, disp r) =
+        (∑ r ∈ D₀, disp r) - disp i := by
+      apply eq_sub_of_add_eq
+      simpa only [add_comm] using Finset.sum_erase_add D₀ disp hiD₀
+    refine ⟨A, D, hdisjoint, by omega, ?_⟩
+    rw [show (∑ r ∈ A, disp r) = disp i + ∑ r ∈ A₀, disp r by
+        simp [A, Finset.sum_insert hiA₀],
+      show (∑ r ∈ D, disp r) = disp j + ∑ r ∈ D₀.erase i, disp r by
+        simp [D, Finset.sum_insert hjErase], hsumErase, hjdouble]
+    simp only [two_nsmul]
+    rw [← hbase]
+    abel
+  · have hjA₀ : j ∈ A₀ := Finset.mem_sdiff.mpr ⟨hjU, hjS⟩
+    let A : Finset (Fin d) := insert i (A₀.erase j)
+    let D : Finset (Fin d) := D₀.erase i
+    have hiErase : i ∉ A₀.erase j := by simp [hiA₀]
+    have hdisjoint : Disjoint A D := by
+      rw [Finset.disjoint_left]
+      intro x hxA hxD
+      simp only [A, D, Finset.mem_insert, Finset.mem_erase] at hxA hxD
+      rcases hxA with rfl | hxA
+      · exact hxD.1 rfl
+      · exact Finset.disjoint_left.mp hdisjoint₀ hxA.2 hxD.2
+    have hcardA : A.card = A₀.card := by
+      rw [show A.card = (A₀.erase j).card + 1 by
+        simp [A, Finset.card_insert_of_notMem hiErase],
+        Finset.card_erase_of_mem hjA₀]
+      have hpos : 0 < A₀.card := Finset.card_pos.mpr ⟨j, hjA₀⟩
+      omega
+    have hcardD : D.card + 1 = D₀.card := by
+      simp [D, Finset.card_erase_of_mem hiD₀]
+      have hpos : 0 < D₀.card := Finset.card_pos.mpr ⟨i, hiD₀⟩
+      omega
+    have hsumEraseA : (∑ r ∈ A₀.erase j, disp r) =
+        (∑ r ∈ A₀, disp r) - disp j := by
+      apply eq_sub_of_add_eq
+      simpa only [add_comm] using Finset.sum_erase_add A₀ disp hjA₀
+    have hsumEraseD : (∑ r ∈ D₀.erase i, disp r) =
+        (∑ r ∈ D₀, disp r) - disp i := by
+      apply eq_sub_of_add_eq
+      simpa only [add_comm] using Finset.sum_erase_add D₀ disp hiD₀
+    refine ⟨A, D, hdisjoint, by omega, ?_⟩
+    rw [show (∑ r ∈ A, disp r) = disp i + ∑ r ∈ A₀.erase j, disp r by
+        simp [A, Finset.sum_insert hiErase], hsumEraseA, hsumEraseD,
+      hjdouble]
+    simp only [two_nsmul]
+    rw [← hbase]
+    abel
+
+/-- Every nonzero element of a full Mersenne doubling cycle has a disjoint
+signed leaf representation with exactly one more positive than negative
+leaf.  Starting from its binary subset, a boundary bit absorbs the zero
+relation `2*v_i-v_(R i)` and changes the coefficient sum from zero to one. -/
+theorem exists_card_succCycleDifference_of_mersenne
+    {G : Type*} [AddCommGroup G] [Fintype G] {d : ℕ}
+    (R : Equiv.Perm (Fin d)) (hRcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (disp : Fin d → G) (hdouble : ∀ i, disp (R i) = (2 : ℕ) • disp i)
+    (v C : G) (hv : addOrderOf v = 2 ^ d - 1)
+    (hspan : AddSubgroup.closure (Set.range disp) = AddSubgroup.zmultiples v)
+    (hCmem : C ∈ AddSubgroup.zmultiples v) (hC0 : C ≠ 0) :
+    ∃ A D : Finset (Fin d), Disjoint A D ∧ A.card = D.card + 1 ∧
+      C = (∑ i ∈ A, disp i) - ∑ i ∈ D, disp i := by
+  classical
+  have hdpos : 0 < d := by
+    by_contra hd0
+    have hd : d = 0 := by omega
+    subst d
+    exact Fin.elim0 (Classical.choose hRcycle)
+  let root : Fin d := ⟨0, hdpos⟩
+  let e : Fin d ≃ Fin d := fullCycleOrbitEquiv R hRcycle hRne root
+  have hdispE : ∀ r : Fin d, disp (e r) = (2 ^ r.val) • disp root := by
+    intro r
+    exact fullCycleOrbitEquiv_doubling_eq_pow_two
+      R hRcycle hRne root disp hdouble r
+  have hrootOrder : addOrderOf (disp root) = 2 ^ d - 1 := by
+    calc
+      addOrderOf (disp root) = addOrderOf v :=
+        addOrderOf_eq_of_isCycle_doubling_span
+          R hRcycle hRne disp hdouble v hspan root
+      _ = 2 ^ d - 1 := hv
+  have hrootSpan :
+      AddSubgroup.zmultiples (disp root) = AddSubgroup.zmultiples v :=
+    zmultiples_eq_of_isCycle_doubling_span
+      R hRcycle hRne disp hdouble v hspan root
+  have hCroot : C ∈ AddSubgroup.zmultiples (disp root) := by
+    rw [hrootSpan]
+    exact hCmem
+  have hqpos : 0 < 2 ^ d - 1 := by
+    have : 1 < 2 ^ d := one_lt_pow₀ (by omega) (by omega)
+    omega
+  obtain ⟨s, hs0, hslt, hC⟩ :=
+    exists_positive_nsmul_eq_of_mem_zmultiples
+      (v := disp root) (t := C) (q := 2 ^ d - 1)
+        hqpos hrootOrder hCroot hC0
+  obtain ⟨S, hS⟩ := exists_finset_fin_sum_two_pow_eq
+    (show s < 2 ^ d by omega)
+  let T : Finset (Fin d) := S.image e
+  have hsumT : (∑ i ∈ T, disp i) = C := by
+    calc
+      (∑ i ∈ T, disp i) = ∑ i ∈ S, disp (e i) := by
+        simp only [T]
+        rw [Finset.sum_image]
+        exact e.injective.injOn
+      _ = ∑ i ∈ S, (2 ^ i.val) • disp root := by
+        apply Finset.sum_congr rfl
+        intro i _hi
+        exact hdispE i
+      _ = (∑ i ∈ S, 2 ^ i.val) • disp root :=
+        sum_nsmul_coeff S (fun i : Fin d ↦ 2 ^ i.val) (disp root)
+      _ = s • disp root := by rw [hS]
+      _ = C := hC.symm
+  have hTnonempty : T.Nonempty := by
+    by_contra hTempty
+    rw [Finset.not_nonempty_iff_eq_empty.mp hTempty] at hsumT
+    simp only [Finset.sum_empty] at hsumT
+    exact hC0 hsumT.symm
+  have hsumCycleZero : (∑ i : Fin d, disp i) = 0 := by
+    have hsumDouble : (∑ i : Fin d, disp i) =
+        (2 : ℕ) • ∑ i : Fin d, disp i := by
+      calc
+        (∑ i : Fin d, disp i) = ∑ i : Fin d, disp (R i) :=
+          (Equiv.sum_comp R disp).symm
+        _ = ∑ i : Fin d, (2 : ℕ) • disp i := by
+          apply Finset.sum_congr rfl
+          intro i _hi
+          exact hdouble i
+        _ = (2 : ℕ) • ∑ i : Fin d, disp i := by
+          simp only [two_nsmul, Finset.sum_add_distrib]
+    simp only [two_nsmul] at hsumDouble
+    have hcancel : 0 + (∑ i : Fin d, disp i) =
+        (∑ i : Fin d, disp i) + ∑ i : Fin d, disp i := by
+      simpa only [zero_add] using hsumDouble
+    exact (add_right_cancel hcancel).symm
+  have hTne : T ≠ Finset.univ := by
+    intro hTuniv
+    rw [hTuniv] at hsumT
+    rw [hsumCycleZero] at hsumT
+    exact hC0 hsumT.symm
+  obtain ⟨A, D, hAD, hcard, hvalue⟩ :=
+    exists_card_succCycleDifference_of_subset
+      R hRcycle hRne disp hdouble T hTnonempty hTne
+  exact ⟨A, D, hAD, hcard, hsumT ▸ hvalue.symm⟩
+
+/-- On a full Mersenne cycle of any length, the all-negative private-row
+recurrence forces its common center to vanish.  The cardinality-one signed
+cycle cover supplies exactly the row combination forbidden by validity. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.commonCenter_eq_zero_of_negativeProfiles_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ t * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (horder : addOrderOf y = 2 ^ d - 1)
+    (hnegative : ∀ r, M.commonProfile r = (-1, -1)) :
+    (2 : ℤ) • g fixed - g inserted - a = 0 := by
+  let disp : Fin d → ZMod (2 ^ t * q) := fun r ↦ g (leaf r) - a
+  have hdoubleN : ∀ i, disp (R i) = (2 : ℕ) • disp i := by
+    intro i
+    simpa only [disp, two_nsmul, two_zsmul] using hdouble i
+  let C : ZMod (2 ^ t * q) :=
+    (2 : ℤ) • g fixed - g inserted - a
+  have hCmem : C ∈ AddSubgroup.zmultiples y := by
+    have hdpos : 0 < d := by
+      by_contra hd0
+      have hd : d = 0 := by omega
+      subst d
+      exact Fin.elim0 (Classical.choose hcycle)
+    let root : Fin d := ⟨0, hdpos⟩
+    have htarget : M.commonTarget root ∈ AddSubgroup.zmultiples y :=
+      (AddSubgroup.zmultiples y).zsmul_mem
+        (AddSubgroup.mem_zmultiples y) (M.commonScalar root)
+    have hdisp : disp root ∈ AddSubgroup.zmultiples y := by
+      rw [← hspan]
+      exact AddSubgroup.subset_closure ⟨root, rfl⟩
+    have hadd := (AddSubgroup.zmultiples y).add_mem htarget hdisp
+    have hrec :=
+      M.commonTarget_add_leaf_sub_base_eq_of_negativeProfile
+        a root (hnegative root)
+    change M.commonTarget root + disp root = C at hrec
+    rwa [hrec] at hadd
+  change C = 0
+  by_contra hC0
+  obtain ⟨A, D, hAD, hcard, hC⟩ :=
+    exists_card_succCycleDifference_of_mersenne
+      R hcycle hRne disp hdoubleN y C horder hspan hCmem hC0
+  apply M.commonCenter_ne_signedLeafDifference_of_negativeProfiles
+    hg a hnegative A D hAD hcard
+  exact hC
+
+/-- Restore the affine half-target after the dimension-free Mersenne center
+obstruction.  No finite cycle-length hypothesis remains. -/
+theorem PrimitivePuncturedCyclePrivateMatrix.pureEdgeWitness_of_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)]
+    {g : Fin n → ZMod (2 ^ t * q)} {y : ZMod (2 ^ t * q)}
+    {d : ℕ} {set : Fin d → Finset (Fin n)} {leaf : Fin d → Fin n}
+    {inserted fixed : Fin n}
+    (M : PrimitivePuncturedCyclePrivateMatrix
+      g y set leaf inserted fixed) (hg : ValidTuple g)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i) (a : ZMod (2 ^ t * q))
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 2 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
+    (h : ZMod (2 ^ t * q)) (anchor : Fin n)
+    (hbase : a = h + g anchor)
+    (hfixedAnchor : fixed ≠ anchor)
+    (hinsertedAnchor : inserted ≠ anchor) :
+    Witness g h (pureEdgeCoeffs fixed inserted anchor) := by
+  have hnegative :=
+    M.all_negativeProfile_of_mersenne hg hpow a hspan horder
+  have hcenter :=
+    M.commonCenter_eq_zero_of_negativeProfiles_mersenne
+      hg R hcycle hRne a hdouble hspan horder hnegative
+  have hdpos : 0 < d := by
+    by_contra hd0
+    have hd : d = 0 := by omega
+    subst d
+    exact Fin.elim0 (Classical.choose hcycle)
+  let r : Fin d := ⟨0, hdpos⟩
+  have hinsertedNeFixed : inserted ≠ fixed := by
+    intro hif
+    apply (M.presentation r).z_not_mem
+    rw [M.fixed_second r, ← hif]
+    exact M.common_mem r
+  have hvalue :
+      (2 : ℤ) • g fixed - g inserted - g anchor = h := by
+    rw [hbase] at hcenter
+    calc
+      (2 : ℤ) • g fixed - g inserted - g anchor =
+          ((2 : ℤ) • g fixed - g inserted - (h + g anchor)) + h := by
+            abel
+      _ = 0 + h := by rw [hcenter]
+      _ = h := zero_add h
+  exact pureEdgeCoeffs_witness_of_value
+    g h fixed inserted anchor hinsertedNeFixed.symm hfixedAnchor
+      hinsertedAnchor hvalue
+
+/-- Simultaneous exchange of a fully deleted full Mersenne cycle in arbitrary
+dimension returns C2 or one of the two explicit pure-edge half-witnesses. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (p : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B p)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d) (leaf : Fin d → Fin n)
+    (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ t * q)) (hleafB : ∀ i, leaf i ∈ B)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 4 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
+    (anchor : Fin n) (hbase : a = h + g anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      Witness g h (pureEdgeCoeffs p.z p.x anchor) ∨
+      Witness g h (pureEdgeCoeffs p.x p.z anchor) := by
+  rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_injectivePrivateMatrix_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd B p hminimal hd leaf
+        hleafInj a hleafB hspan hpow with
+    hthree | hmatrixX | hmatrixZ
+  · exact Or.inl hthree
+  · rcases hmatrixX with ⟨M, _hcoeffInjective⟩
+    have hnegative :=
+      M.all_negativeProfile_of_mersenne hg (by omega) a hspan horder
+    have hcenter :=
+      M.commonCenter_eq_zero_of_negativeProfiles_mersenne
+        hg R hcycle hRne a hdouble hspan horder hnegative
+    have hquotientOrder :
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.x - g p.z)) = 2 ^ t := by
+      simpa using hpres.2.2.2.1
+    have hanchors := fullOrder_pureEdgeCenter_endpoints_ne_anchor
+      g y hh p.x p.z anchor hquotientOrder hpow hbase hcenter
+    right
+    left
+    exact M.pureEdgeWitness_of_mersenne
+      hg R hcycle hRne a hdouble hspan (by omega) horder h anchor hbase
+        hanchors.2 hanchors.1
+  · rcases hmatrixZ with ⟨M, _hcoeffInjective⟩
+    have hnegative :=
+      M.all_negativeProfile_of_mersenne hg (by omega) a hspan horder
+    have hcenter :=
+      M.commonCenter_eq_zero_of_negativeProfiles_mersenne
+        hg R hcycle hRne a hdouble hspan horder hnegative
+    have hquotientOrder :
+        addOrderOf
+          ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+            (g p.z - g p.x)) = 2 ^ t := by
+      have hneg : g p.z - g p.x = -(g p.x - g p.z) := by abel
+      rw [hneg, map_neg, addOrderOf_neg]
+      simpa using hpres.2.2.2.1
+    have hanchors := fullOrder_pureEdgeCenter_endpoints_ne_anchor
+      g y hh p.z p.x anchor hquotientOrder hpow hbase hcenter
+    right
+    right
+    exact M.pureEdgeWitness_of_mersenne
+      hg R hcycle hRne a hdouble hspan (by omega) horder h anchor hbase
+        hanchors.2 hanchors.1
+
+/-- Exchange a good off-cycle owner in an arbitrary full Mersenne cycle.
+The returned pure edge retains an endpoint outside the original leaf range. -/
+theorem PrimitiveTwoRetainedPositiveStratumPresentation.exchange_offCycleOwner_to_freshPureEdgeWitness_or_three_mersenne
+    {t q : ℕ} [NeZero (2 ^ t * q)] (ht : 1 ≤ t)
+    (g : Fin n → ZMod (2 ^ t * q)) (hg : ValidTuple g)
+    {h : ZMod (2 ^ t * q)} (hh : h + h = 0) (hne : h ≠ 0)
+    (hunique : ∀ u : ZMod (2 ^ t * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ t * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (B : Finset (Fin n)) (pres : TwoRetainedFiveWeightPresentation g y B)
+    (hpres : PrimitiveTwoRetainedPositiveStratumPresentation g y B pres)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ t * q → M ∣ 2 ^ t * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d)) (hcycle : R.IsCycle)
+    (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ t * q)) (p : Fin d)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (hpow : 18 < 2 ^ t) (horder : addOrderOf y = 2 ^ d - 1)
+    (anchor : Fin n) (hbase : a = h + g anchor)
+    (missing fixed : Fin n) (hmissing : leaf p = missing)
+    (hmissingB : missing ∉ B) (hfixedB : fixed ∉ B)
+    (hmissingFixed : missing ≠ fixed)
+    (hcomplement : Finset.univ \ B = {missing, fixed})
+    (b : ↥B) (hbOutside : (b : Fin n) ∉ Set.range leaf)
+    (hprimitive :
+      let H := AddSubgroup.zmultiples y
+      let pi : ZMod (2 ^ t * q) →+ ZMod (2 ^ t * q) ⧸ H :=
+        QuotientAddGroup.mk' H
+      addOrderOf (pi (g (b : Fin n) - g fixed)) = 2 ^ t) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ∃ x z : Fin n,
+        Witness g h (pureEdgeCoeffs x z anchor) ∧
+          z ∉ Set.range leaf := by
+  classical
+  rcases exists_minimalCyclicKernelTransversal_exchange_fixed_fullOrder_or_three
+      ht g hg hh hne hunique hno y hyq hfullOdd hpres.1 hpres.2.1
+        b.property hmissingB hfixedB hmissingFixed hcomplement hprimitive
+          hminimal with
+    hthree | hstate
+  · exact Or.inl hthree
+  · have hleafExchange :
+        ∀ i, leaf i ∈ insert missing (B.erase (b : Fin n)) := by
+      intro i
+      by_cases hip : i = p
+      · subst i
+        rw [hmissing]
+        exact Finset.mem_insert_self _ _
+      · apply Finset.mem_insert_of_mem
+        apply Finset.mem_erase.mpr
+        refine ⟨?_, (hleafB i).2 hip⟩
+        intro hleafEq
+        apply hbOutside
+        exact ⟨i, hleafEq⟩
+    obtain ⟨pres₀, hpres₀, _hconstant⟩ :=
+      hstate.fullDeletedCycle_exactPresentation
+        g y (insert missing (B.erase (b : Fin n))) hpow hd
+          leaf R a hleafExchange hdouble
+    rcases hpres₀.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three_mersenne
+        ht g hg hh hne hunique hno y hyq hfullOdd
+          (insert missing (B.erase (b : Fin n))) pres₀ hminimal hd
+            leaf hleafInj R hcycle hRne a hleafExchange hdouble hspan
+              (by omega) horder anchor hbase with
+      hthree | hwitnessX | hwitnessZ
+    · exact Or.inl hthree
+    · right
+      refine ⟨pres₀.z, pres₀.x, hwitnessX, ?_⟩
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      apply pres₀.x_not_mem
+      rw [← hi]
+      exact hleafExchange i
+    · right
+      refine ⟨pres₀.x, pres₀.z, hwitnessZ, ?_⟩
+      intro hrange
+      obtain ⟨i, hi⟩ := hrange
+      apply pres₀.z_not_mem
+      rw [← hi]
+      exact hleafExchange i
+
+/-- The critical fifth-stratum presentation-level connector is
+dimension-free once the signed Mersenne center obstruction replaces the
+order-seven/order-fifteen table. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness_mersenne
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 0 < d)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (anchor : Fin n) (hbase : a = h + g anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      (∃ x z : Fin n,
+          Witness g h (pureEdgeCoeffs x z anchor) ∧
+            z ∉ Set.range leaf) ∨
+      ∃ pres : TwoRetainedFiveWeightPresentation g y B,
+        PrimitiveTwoRetainedPositiveStratumPresentation g y B pres ∧
+          ((leaf p = pres.x ∧ ∀ i (hi : leaf i ∈ B),
+              pres.weight ⟨leaf i, hi⟩ = -2) ∨
+            (leaf p = pres.z ∧ ∀ i (hi : leaf i ∈ B),
+              pres.weight ⟨leaf i, hi⟩ = 0)) := by
+  have horder : addOrderOf y = 2 ^ d - 1 := by
+    have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+      g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+        intro i
+        simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+    calc
+      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+      _ = 2 ^ d - 1 := hqMersenne
+  rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀ hleafB
+          hdouble hspan with
+    hthree | ⟨B₀, pres, hpres, hgeometry⟩
+  · exact Or.inl hthree
+  · rcases hgeometry with ⟨hleafB₀, _hconstant⟩ | ⟨hB₀, hpure⟩
+    · rcases hpres.exchange_all_fullDeleted_cycleLeaves_to_pureEdgeWitness_or_three_mersenne
+        (by omega) g hg hh hne hunique hno y hyq hfullOdd B₀ pres hminimal
+          hd leaf hleafInj R hcycle hRne a hleafB₀ hdouble hspan
+            (by norm_num) horder anchor hbase with
+      hthree | hwitnessX | hwitnessZ
+      · exact Or.inl hthree
+      · right
+        left
+        refine ⟨pres.z, pres.x, hwitnessX, ?_⟩
+        intro hrange
+        obtain ⟨i, hi⟩ := hrange
+        apply pres.x_not_mem
+        rw [← hi]
+        exact hleafB₀ i
+      · right
+        left
+        refine ⟨pres.x, pres.z, hwitnessZ, ?_⟩
+        intro hrange
+        obtain ⟨i, hi⟩ := hrange
+        apply pres.z_not_mem
+        rw [← hi]
+        exact hleafB₀ i
+    · subst B₀
+      exact Or.inr (Or.inr ⟨pres, hpres, hpure⟩)
+
 /-- A critical fifth-stratum one-retained Mersenne cycle cannot have every
 off-cycle owner primitive toward the same retained endpoint.  Criticality
 provides at least four owners in every cycle dimension, canonical unit rows
@@ -5173,6 +5974,116 @@ theorem PrimitiveTwoRetainedPositiveStratumPresentation.not_uniformPrimitiveOffC
       g hg y leaf hleafInj R hcycle hRne a hdouble hspan horder
         hbOutside hcOutside hdiff
     exact hbc heq
+
+/-- Close the critical fifth-stratum one-retained terminal in every Mersenne
+cycle dimension.  A good primitive owner is exchanged through the
+dimension-free fully deleted terminal; otherwise all owners have the opposite
+orientation, which the critical owner floor and quotient injectivity forbid. -/
+theorem TwoRetainedMinimalCyclicKernelFiveWeightRows.oneRetainedCycle_criticalFifthStratum_offCycleOwnerClosure_mersenne
+    {q : ℕ} [NeZero (2 ^ 5 * q)] (hq : Odd q)
+    (g : Fin n → ZMod (2 ^ 5 * q)) (hg : ValidTuple g)
+    (hcritical : 2 ^ 5 * q < stratumBound n 5)
+    {h : ZMod (2 ^ 5 * q)} (hh : h + h = 0)
+    (hunique : ∀ u : ZMod (2 ^ 5 * q),
+      u + u = 0 → u = 0 ∨ u = h)
+    (hne : h ≠ 0)
+    (hno : ¬ ∃ j : Fin n, ∀ c : Fin n → ℤ,
+      Witness g h c → c j ≠ 0)
+    (y : ZMod (2 ^ 5 * q))
+    (hyq : addOrderOf y ∣ q) (hfullOdd : q / addOrderOf y = 1)
+    (hrTwo : 2 ≤ addOrderOf y) (B : Finset (Fin n))
+    (hmin : MinimalCyclicKernelSupportTransversal g y B)
+    (hrows : TwoRetainedMinimalCyclicKernelFiveWeightRows g y B)
+    (hminimal : ∀ M : ℕ,
+      0 < M → M < 2 ^ 5 * q → M ∣ 2 ^ 5 * q →
+        ¬ AdmitsValidTuple n M)
+    {d : ℕ} (hd : 2 ≤ d)
+    (leaf : Fin d → Fin n) (hleafInj : Function.Injective leaf)
+    (R : Equiv.Perm (Fin d))
+    (hcycle : R.IsCycle) (hRne : ∀ i, R i ≠ i)
+    (a : ZMod (2 ^ 5 * q))
+    (p i₀ : Fin d) (hi₀ : i₀ ≠ p) (hRi₀ : R i₀ ≠ p)
+    (hleafB : ∀ i, leaf i ∈ B ↔ i ≠ p)
+    (hdouble : ∀ i,
+      g (leaf (R i)) - a = (2 : ℤ) • (g (leaf i) - a))
+    (hspan : AddSubgroup.closure
+      (Set.range (fun i ↦ g (leaf i) - a)) = AddSubgroup.zmultiples y)
+    (anchor : Fin n) (hbase : a = h + g anchor) :
+    (∃ B₀ : Finset (Fin n),
+        MinimalCyclicKernelSupportTransversal g y B₀ ∧
+          3 ≤ n - B₀.card) ∨
+      ∃ x z : Fin n,
+        Witness g h (pureEdgeCoeffs x z anchor) ∧
+          z ∉ Set.range leaf := by
+  have hqMersenne := oddFactor_eq_mersenne_of_valid_fullCycle_doubling_span
+    g hg y hyq hfullOdd leaf hleafInj R hcycle hRne a (by
+      intro i
+      simpa only [two_nsmul, two_zsmul] using hdouble i) hspan
+  have horder : addOrderOf y = 2 ^ d - 1 := by
+    calc
+      addOrderOf y = q := Nat.eq_of_dvd_of_div_eq_one hyq hfullOdd
+      _ = 2 ^ d - 1 := hqMersenne
+  rcases hrows.oneRetainedCycle_criticalFifthStratum_alignedExchangeRejoin_to_pureEdgeWitness_mersenne
+      hq g hg hcritical hh hunique hne hno y hyq hfullOdd hrTwo B hmin
+        hminimal (by omega) leaf hleafInj R hcycle hRne a p i₀ hi₀ hRi₀
+          hleafB hdouble hspan anchor hbase with
+    hthree | hfresh | ⟨pres, hpres, hpure⟩
+  · exact Or.inl hthree
+  · exact Or.inr hfresh
+  · rcases hpure with hpureX | hpureZ
+    · by_cases hgood : ∃ b : ↥B,
+          (b : Fin n) ∉ Set.range leaf ∧
+            addOrderOf
+              ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                (g (b : Fin n) - g pres.z)) = 32
+      · obtain ⟨b, hbOutside, hbprimitive⟩ := hgood
+        rcases hpres.exchange_offCycleOwner_to_freshPureEdgeWitness_or_three_mersenne
+            (by omega) g hg hh hne hunique hno y hyq hfullOdd B pres
+              hminimal (by omega) leaf hleafInj R hcycle hRne a p hleafB
+                hdouble hspan (by norm_num) horder anchor hbase pres.x
+                  pres.z hpureX.1 pres.x_not_mem pres.z_not_mem pres.x_ne_z
+                    pres.complement_eq b hbOutside hbprimitive with
+          hthree | hfresh
+        · exact Or.inl hthree
+        · exact Or.inr hfresh
+      · exfalso
+        apply hpres.not_uniformPrimitiveOffCycleOwners_of_criticalFifthStratum_mersenne
+          g hg hcritical y hyq hfullOdd B pres hd leaf hleafInj R hcycle
+            hRne a p hleafB hdouble hspan
+        left
+        intro b hbOutside
+        rcases hpres.owner_primitive_at_one_retained g y B pres b with
+          hbFixed | hbMissing
+        · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
+        · simpa using hbMissing
+    · by_cases hgood : ∃ b : ↥B,
+          (b : Fin n) ∉ Set.range leaf ∧
+            addOrderOf
+              ((QuotientAddGroup.mk' (AddSubgroup.zmultiples y))
+                (g (b : Fin n) - g pres.x)) = 32
+      · obtain ⟨b, hbOutside, hbprimitive⟩ := hgood
+        have hcomplementReverse : Finset.univ \ B = {pres.z, pres.x} := by
+          simpa only [pair_comm] using pres.complement_eq
+        rcases hpres.exchange_offCycleOwner_to_freshPureEdgeWitness_or_three_mersenne
+            (by omega) g hg hh hne hunique hno y hyq hfullOdd B pres
+              hminimal (by omega) leaf hleafInj R hcycle hRne a p hleafB
+                hdouble hspan (by norm_num) horder anchor hbase pres.z
+                  pres.x hpureZ.1 pres.z_not_mem pres.x_not_mem
+                    pres.x_ne_z.symm hcomplementReverse b hbOutside
+                      hbprimitive with
+          hthree | hfresh
+        · exact Or.inl hthree
+        · exact Or.inr hfresh
+      · exfalso
+        apply hpres.not_uniformPrimitiveOffCycleOwners_of_criticalFifthStratum_mersenne
+          g hg hcritical y hyq hfullOdd B pres hd leaf hleafInj R hcycle
+            hRne a p hleafB hdouble hspan
+        right
+        intro b hbOutside
+        rcases hpres.owner_primitive_at_one_retained g y B pres b with
+          hbMissing | hbFixed
+        · simpa using hbMissing
+        · exact False.elim (hgood ⟨b, hbOutside, by simpa using hbFixed⟩)
 
 /-- Close the critical fifth-stratum one-retained terminal.  Canonical unit
 rows force two of the four off-cycle owners to collide in the quotient, while
