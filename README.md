@@ -391,6 +391,19 @@ higher-even control is preserved, while an opposite-carry pair excludes
 all lifts of a quotient at an exceptional modulus. Critical/exceptional
 certificate extraction remains unproved; no unrestricted gate is closed.
 
+`CyclicLiftCertificate.lean` now proves finite certificate COMPLETENESS.
+An arbitrary binary equation family has either one solution to ALL rows
+or a finite subset summing to zero on the left and one on the right.
+Linear separation proves this even for an infinite row index type.
+Consequently every arbitrary quotient, at every positive half-modulus,
+has an actual valid cyclic lift OR a finite inconsistent carry certificate.
+Such certificates are necessary and sufficient for excluding all lifts.
+The existing G3 gate is EXACTLY equivalent to supplying them for every
+exceptional quotient; it is not replaced by an extra global assumption.
+Six declarations; full 15,128-job build; all 3,230 axiom lists standard-
+only; 213 tests pass. Critical/exceptional certificate extraction remains
+unproved, as does unrestricted G2. All three global gates remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
