@@ -761,6 +761,43 @@ in the axiom audit; all 2,977 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. The existing 14 regression tests pass.
 No proof placeholders or `native_decide` are introduced.
 
+### Actual SI half deletion closes all even-modulus thresholds
+
+`SIHalfDeletionStrata.lean` extends the formerly G3-only actual-deletion
+and quotient-collision results to every positive even modulus `N=2*M`,
+for every `n>=5`. If a specified actual half-deleted quotient is valid
+and contains a coherent SI prefix of length `n-2` under ANY multiplier,
+then `globalBound n<=N` and the exact bound for the actual valuation hold
+upstairs. Original lift bits remain arbitrary; nonunit quotient scaling
+is permitted. Common touch outside the prefix constructs that specific
+quotient, as does a quotient collision involving an outside coordinate.
+Direct numerical and critical-G1 collision consumers are included.
+
+The mechanism is a general transfer of modulus rigidity. A subbinary
+valid coherent SI-prefix extension has a power-gap modulus at which the
+full fixed set is also valid. If doubling that modulus violated the next
+global bound, it would have to be exactly the previous endpoint in a
+non-power dimension. Actual retained-quotient endpoint extraction and
+the proved SI lift cover exclude that case. Consequently, throughout
+the original subbinary range, the full fixed SI set is valid at the
+ORIGINAL modulus too. Its exact-stratum theorem supplies the stronger
+threshold. This does not classify the original tuple as fixed or affine SI.
+
+For a UNIT-scaled shorter quotient prefix, the entire remaining quotient
+must now be injective at EVERY critical even stratum, not just G3.
+The general abelian binary floor makes the prefix itself injective;
+the new collision theorem excludes any collision involving its extras.
+Thus this removes a full family from the global/G1 residual, with no new
+assumed gate. It does not infer retained-quotient validity, common touch,
+or prefix structure from arbitrary upstairs validity. Arbitrary odd G2,
+other independent lifts, and unrestricted G1/G2/G3 remain open (0/3).
+No finite census is an input to these proofs.
+
+Verification: full build 15,102 jobs; all twelve new declarations registered
+in the axiom audit; all 2,989 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. All 14 existing regression tests pass.
+No proof placeholders or `native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:

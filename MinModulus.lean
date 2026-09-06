@@ -24,6 +24,7 @@ import MinModulus.SIQuarterBinary
 import MinModulus.SIQuarterMinusOne
 import MinModulus.SIQuarterMinusOneComplete
 import MinModulus.SILiftMidpoint
+import MinModulus.SIHalfDeletionStrata
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
