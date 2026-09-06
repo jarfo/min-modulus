@@ -238,6 +238,20 @@ and cyclic-packing lemmas and the final numerical consumers. The full
 subcase remains open in this range;
 arbitrary extraction and unrestricted G1/G2/G3 remain open, 0/3.
 
+`SIThreeIndexFive.lean` closes ALL index-five three-extra patterns for
+every n>=8, proving the binary bound for arbitrary extras and original-
+modulus unit-affine transport/reindexing, including odd moduli. The global
+and all stratum thresholds follow. A subgroup extra yields an actual
+one-extra child with too large a proved lower bound; an opposite pair
+has a prefix-only rival. Equal residues are excluded using the m-coin
+cover in both directions: S+w and S-w cannot both lie above S for
+M<=2S+1. This works even when the prefix does not cover the whole
+subgroup. Elementary quotient arithmetic consumes every pattern. Seven
+new declarations include the complete binary and all-stratum consumers.
+The full 15,118-job build and all 3,138 standard-only axiom lists pass.
+No tuple census or unrestricted global
+gate is assumed; no index-five subcase remains open in this range.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
