@@ -266,13 +266,48 @@ Scope remains explicit: arbitrary nonunit multipliers are covered for
 **coherent full-modulus** prefixes. The independent-lift theorem separately
 handles affine SI prefixes in the quotient, with unit scaling there. No
 theorem here combines arbitrary nonunits with independent lift bits or
-extracts either prefix from arbitrary tuples. The stronger exact-stratum
-theorem above retains its stated unit-prefix scope. All three unrestricted
-global obligations remain open.
+extracts either prefix from arbitrary tuples. The next theorem also removes
+the unit restriction from the stronger exact-stratum bound. All three
+unrestricted global obligations remain open.
 
 Verification for the arbitrary-multiplier milestone: full build 15,085 jobs;
 all eighteen declarations audited; all 2,823 printed axiom lists use only
 the standard axioms, with no proof placeholders or `native_decide`.
+
+### Power-gap rigidity and exact strata for arbitrary SI multipliers
+
+`SIMultiplierStrata.lean` proves
+`exists_power_gap_of_valid_scaled_fixed_prefix_lt_two_pow`: for every
+`n>=3`, a valid tuple containing a coherent prefix `c*(2^i-1)+b`, `i<n-1`,
+with any multiplier and arbitrary extra entry can occur below `2^n` only
+at a modulus `N=2^n-2^t`, `t<n`. Reindexing is allowed. This necessary
+condition is stronger than just the preceding global numerical bound;
+it does not assert that the extra entry completes the scaled SI set.
+
+Normalize the multiplier to a divisor `d` of `N=d*M`. Reflected validity
+forces `M>=globalBound(n-1)`. For `n>=4`, three times that bound reaches
+`2^n`, so `N<2^n` forces `d<=2`. At index one the prefix-completion cover
+gives the fixed-set classification, except at the top two moduli, already
+power gaps. At index two, the fixed set downstairs has a power-gap modulus,
+which doubles to a power gap upstairs. Dimension three follows directly
+from the preceding global bound.
+
+`stratum_lower_bound_of_valid_scaled_fixed_prefix` combines this rigidity
+with the global bound and odd-factor divisibility. These independently
+bound `t` by `floor(log2 n)` and the actual valuation `s`. Explicit
+consumers prove critical-G1 exclusion and the exact odd-G2 threshold for
+**all** coherent SI multipliers. Together with the earlier G3 consumer,
+this class is now excluded from all three residuals, without a unit
+restriction or a new conjectural input.
+
+The restriction still concerns an actual coherent prefix in the original
+tuple. It does not classify arbitrary endpoints, extract a prefix from
+arbitrary tuples, or combine arbitrary nonunits with independent lift bits.
+Conjecture 1 and all three unrestricted gates remain open.
+
+Verification for power-gap rigidity: full build 15,086 jobs; all nine new
+declarations audited; all 2,832 printed axiom lists are standard-only, with
+no proof placeholders or `native_decide`.
 
 ### Guardrail for the remaining G1 proof
 
