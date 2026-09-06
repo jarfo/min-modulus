@@ -505,6 +505,20 @@ bits and subgroup indices remain arbitrary. Four declarations; full
 This complete family exclusion does not classify arbitrary one-escape
 endpoints or close unrestricted G3; the three global gates remain 0/3.
 
+`TightQuotientCube.lean` now extracts the FULL outside dyadic geometry
+at exact cyclic capacity. Character factorization forces an ACTUAL
+half coordinate in a bijective even quotient cube. Removing that
+coordinate and reducing the actual remainder preserves cube bijectivity.
+Iteration constructs a permutation with q(E i).val mod 2^(i+1)=2^i:
+one coordinate at every two-adic level. Both half-coset and full-basis
+consumers apply to ANY actual full-cover fibre at tight power-of-two
+quotient capacity, including non-SI fibres. No quotient ValidTuple
+premise is assumed, and cube descent is not mislabeled G1 tuple
+descent. Eight declarations; full 15,136-job build; all 3,291 axiom
+lists standard-only; 405 tests pass. Tests retain actual indices,
+non-SI fibres, and a tight cube which is not a valid tuple. Critical
+coverage/tightness is not yet extracted; unrestricted G1/G2/G3 stay 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
