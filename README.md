@@ -345,6 +345,34 @@ Verification for endpoint extraction: full build 15,087 jobs; all seven
 new declarations audited; all 2,839 printed axiom lists are standard-only,
 with no proof placeholders or `native_decide`.
 
+### Actual-deletion integration of the shorter-prefix consumer
+
+`SIActualDeletion.lean` makes the remaining quotient-validity hypothesis
+exact. `validTuple_deleted_half_iff_commonTouched` proves that, for a valid
+tuple modulo `2M`, deleting a specified coordinate and reducing the actual
+remaining entries modulo `M` gives a valid tuple **if and only if** every
+half-witness touches that coordinate. The quotient equivalence is also
+shown to compute the concrete reduction map.
+
+`not_validTuple_exceptional_of_commonTouched_quotient_scaled_short_prefix`
+therefore constructs the retained quotient directly from common touch in
+the original tuple, then invokes endpoint extraction and the uniform G3
+lift obstruction. For non-power-of-two `n>=5`, it needs `n-2` coherent SI
+entries in the quotient, under any multiplier, with the commonly touched
+coordinate outside that prefix. Reindexing and all upstairs lift bits are
+allowed. No separate retained-quotient validity assumption is needed.
+
+This is integration with the already-proved common-touch deletion branch,
+not a larger class exclusion or a proof of the no-common-touch residual.
+The equivalence confirms that replacing actual quotient validity by common
+touch does not eliminate an open structural requirement. An abstract
+`AdmitsValidTuple` assertion still does not identify the retained entries.
+The same three unrestricted global inputs remain open; no new gate is added.
+
+Verification for actual-deletion integration: full build 15,088 jobs;
+all three new declarations audited; all 2,842 printed axiom lists are
+standard-only, with no proof placeholders or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
