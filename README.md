@@ -536,32 +536,37 @@ Verification for arbitrary-multiplier two-extra exact strata: full build
 lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
 
-### Quarter-offset extras among independent shorter-prefix lifts
+### Quarter offsets from every independent shorter-prefix SI entry
 
-`SIQuarterExtra.lean` excludes another actual G3 class without assuming
-upstairs coherence. Write `m=n-2`, `M=B(n-1)`, and `H=M/2`. For `n>=5`
-not a power of two, if the half quotient contains the first `m` SI entries
-and one extra reduces to `H+1`, the full tuple is invalid, regardless of
-every prefix lift bit, either lift of that extra, and the other extra.
+`SIQuarterPrefix.lean` extends the `H+1` obstruction in `SIQuarterExtra.lean`
+to `H+a_j` for **every** prefix index `j<m`, without assuming upstairs
+coherence. Write `m=n-2`, `M=B(n-1)`, and `H=M/2`. For `n>=5` not a power
+of two, if the half quotient contains the first `m` SI entries and one
+extra reduces to any `H+a_j`, the full tuple is invalid. Every prefix
+lift bit, either lift of that extra, and the other extra are arbitrary.
 Reindexing, quotient additive automorphisms, and translation are allowed.
 
-The argument is uniform. For any positive `M=2H` with `H<=2^m-2`, the
-`m`-term quotient sumset of `{a_0,...,a_(m-1),H+1}` covers all but at most
-`H+1+(2^m-m)`. Two copies of the quarter-offset extra and two copies of the
-lifted one differ by the half modulus. Adding either pair lifts this cover
-to a full-length rival omitting the other extra, unless its quotient is
-exactly `3`. At G3 that exception is a genuine outside-coordinate quotient
-collision, already excluded by `SIQuotientCollision.lean`.
+The Mersenne-coin interval theorem is now uniform in every excess budget
+`d`: with coins through `2^k-1`, at most `k+d` terms cover the interval
+below `(d+2)*(2^k-1)` except its first greedy gap. Applied at budgets one
+and zero, it gives an `m`-term quotient cover with at most two possible
+holes for the enlarged prefix. Two copies of the quarter-offset extra
+and two copies of its matched prefix entry form an antipodal pair.
+The translated hole forces the other extra to reduce to `a_(j+1)`, an
+actual collision or a full SI prefix. The low hole lies outside its
+relevant interval unless `j=m-1`; in that boundary case it forces the
+other extra to reduce to `a_(floor(log2(m+1))-1)`, another actual collision.
+Existing proved G3 consumers exclude all these exceptions.
 
-This closes the quarter-offset case of the existing noncoherent G3
+This closes all prefix-quarter-offset cases of the existing noncoherent G3
 residual, not that entire residual or any unrestricted global gate. It
 does not assert a full sumset cover with no exception, and does not prove
 the finite cap-two observation: its constructed rival may use three copies
 of the quarter-offset extra. No finite enumeration or new assumed gate is
 used. Prefix extraction from arbitrary tuples remains open.
 
-Verification for the independent-lift quarter-offset milestone: full build
-15,094 jobs; all five new declarations audited; all 2,924 printed axiom
+Verification for the all-index independent-lift quarter-offset milestone:
+full build 15,095 jobs; all six new declarations audited; all 2,930 printed axiom
 lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
 

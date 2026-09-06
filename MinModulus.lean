@@ -17,6 +17,7 @@ import MinModulus.SITwoExtensionStrata
 import MinModulus.SITwoMultiplierBound
 import MinModulus.SITwoMultiplierStrata
 import MinModulus.SIQuarterExtra
+import MinModulus.SIQuarterPrefix
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
