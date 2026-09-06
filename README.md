@@ -161,9 +161,24 @@ the earlier n>=13 cutoff. For N<=2^n-3, the entire ACTUAL SI tuple is
 recovered with the same affine map after reindexing, including at the
 global endpoint. All nineteen declarations are in the axiom audit; the
 full 15,112-job build and all 3,085 standard-only axiom lists pass.
-Nonunit three-extra scaling
+General nonunit three-extra scaling
 and arbitrary-prefix extraction are not asserted. This closes a broader
 structured class, not an unrestricted gate: G1/G2/G3 remain open, 0/3.
+
+`SIOneExtraFibreCover.lean` now proves a stronger binary bound for one
+nonunit three-extra class in G1's two-large-parity-fibre residual. For
+every n>=7 and N=2M>0, a doubled coherent SI prefix of length n-3 with
+extra parities even/odd/odd implies `2^n<=N`. Reindexing and translation
+are allowed; all three extra values are otherwise arbitrary. The actual
+n-2 entry large fibre gives a valid one-extra SI tuple modulo M. Below
+twice its binary threshold, that tuple covers every residue with n coins.
+Mapping the cover back gives a rival omitting both minority coordinates.
+The global and every exact-stratum bound follow without any global gate.
+Eight declarations, including the uniform cover and translated binary
+consumer, are in the axiom audit; the full 15,113-job build and all 3,093
+standard-only axiom lists pass.
+This does not classify arbitrary two-large-fibre tuples or prove arbitrary
+three-extra scaling. The same unrestricted G1/G2/G3 gates remain open.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
