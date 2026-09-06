@@ -57,7 +57,7 @@ super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
 results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
-## Conjecture 1: current proof frontier (2026-09-06)
+## Conjecture 1: current proof frontier (2026-09-07)
 
 Conjecture 1 remains open. `G1PureStarElimination.lean` proves a
 dimension-free simplification: a nonempty global pure-edge omission star
@@ -444,6 +444,22 @@ only; 280 tests pass. Actual omitted-fibre rivals and tight valid controls
 are tested, including a valid arbitrary-outsider guard showing that
 the chain assumption cannot be dropped from size extraction. Arbitrary
 cycle/chain extraction and the three unrestricted gates remain OPEN.
+
+`AlmostDoubling.lean` now EXTRACTS the actual cycle-chain geometry
+from a permutation following doubling except at one coordinate. The
+complement can be empty, when the entire chain reflects to fixed-set
+validity at the SAME modulus. Finite completion supplies the permutation
+from one-escape affine doubling closure with doubling injective away
+from the exception. At ODD modulus validity makes that injectivity
+automatic: the FULL odd threshold holds for every one-escape tuple,
+without assumed cycle, chain, prefix, or component sizes. At even
+moduli the global, every exact-stratum, and direct G3 consumers retain
+off-exception injectivity; an antipodal pair through the exception is
+allowed. Ten declarations; full 15,132-job build; all 3,264 axiom lists
+standard-only; 309 tests pass. Actual completion, affine reindexing,
+and the even collision restriction are tested. A valid odd control
+requires three escapes for every affine shift, so general closure
+extraction is not asserted. Conjecture 1 and G1/G2/G3 remain OPEN, 0/3.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
