@@ -193,6 +193,22 @@ and the concrete global/even-stratum consumers. The full 15,114-job build
 and all 3,104 standard-only axiom lists pass. No finite census or unproved cover is assumed. Arbitrary prefix
 extraction and unrestricted G1/G2/G3 remain the same three open gates.
 
+`SIThreeDoubleBound.lean` now closes ALL parity patterns for the index-two
+three-extra class, every n>=8. A coherent doubled n-3 prefix, up to an
+additive automorphism and translation in the original modulus, implies
+the global and every exact even-stratum bound with three ARBITRARY extras.
+Subbinary validity implies fixed validity at the SAME modulus. Two even
+extras give an actual two-extra child: below its last two binary residues,
+whole-child extraction yields an actual longer prefix upstairs; the top
+two residues have admissible doubled small gaps. The other patterns use
+the preceding cover and packing theorems. Six new declarations include
+actual-child construction, all-parity combination, affine transport, and
+the final global/stratum consumers. The full 15,115-job build and all
+3,110 standard-only axiom lists pass.
+No index-two parity case remains open in this range. Other subgroup
+indices and arbitrary extraction are not asserted; the same unrestricted
+G1/G2/G3 gates remain open, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
