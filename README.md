@@ -128,6 +128,16 @@ proved for every subbinary full unit-affine SI quotient-prefix lift in
 EVERY even stratum. Arbitrary-prefix extraction, shorter independent
 prefixes, and unrestricted G1/G2/G3 remain open; no new gate is added.
 
+`SILiftFullBound.lean` now proves the full numerical global bound AND
+every exact even-stratum bound for this full unit-affine half-quotient
+prefix class, in every dimension `n>=3`. Below `2^n`, validity implies
+fixed-set validity at the SAME modulus. Actual odd-coset halving preserves
+the required next quotient prefix, closing the structured induction;
+the proved uniform lift cover excludes an oversized doubled child gap.
+All lift bits and extras remain arbitrary. Only the fixed n=3,4 induction
+bases use kernel-checked finite enumeration. Arbitrary-prefix extraction
+and unrestricted G1/G2/G3 are still open, 0/3.
+
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
@@ -1052,9 +1062,9 @@ touch, criticality, half-witness, or unrestricted global gate is assumed
 by this final subbinary descent theorem. This is not a claim that its
 smaller tuple is a canonical deleted quotient.
 
-The next global-bound work is to propagate the actual structured smaller
-tuple where needed, and to extract useful structure from arbitrary
-critical tuples. Shorter independent prefixes and unrestricted G1/G2/G3
+The structured propagation target is now closed by the full-bound theorem
+below. The remaining work is extraction from arbitrary critical tuples.
+Shorter independent prefixes and unrestricted G1/G2/G3
 remain open, 0/3; no new gate is added. Historical residuals above are
 superseded for this full-prefix class, not additional open milestones.
 
@@ -1063,6 +1073,47 @@ all 3,041 axiom lists standard-only; all 32 regressions pass. Five new scope
 checks exercise the final uniform rival with unit/nonunit multipliers and
 verify a valid n=5 control ABOVE criticality, where the n>=6 rival is not
 available. No proof placeholders or `native_decide` are introduced.
+
+### Full global and exact-stratum bounds for independent full quotient prefixes
+
+`SILiftSmallBases.lean`, `SILiftStructuredDescent.lean`, and
+`SILiftFullBound.lean` close the numerical bound for this entire class:
+
+    n>=3 + N=2*M>0 + valid full unit-affine SI half-quotient prefix
+      -> globalBound n <= N
+      -> separately, stratumBound n s <= N whenever N=2^s*q, q odd.
+
+The second bound is proved directly, not inferred from the weaker global
+bound. The main APIs are
+`global_lower_bound_of_valid_quotient_affine_si_prefix` and
+`stratum_lower_bound_of_valid_quotient_affine_si_prefix`. Reindexing,
+quotient affine transport, all original lift bits, and the extra are
+unrestricted within the prefix hypothesis. No G1/G2/G3 premise is used.
+
+The stronger subbinary conclusion is fixed-set validity at the original
+modulus, `valid_fixed_of_valid_quotient_affine_si_prefix_lt_two_pow`.
+Consequently `N=2^n-2^t`, with `t<n` and `2^t<=n`. This is a theorem
+about the modulus, not an affine classification of the original tuple.
+
+The proof is a dimension induction. In the higher-even odd-extra branch,
+the actual retained odd coset, translated and halved, is valid and retains
+a full SI prefix in its NEXT half quotient. The even-extra branch has an
+actual coherent shorter prefix. The first-even branch has its proved
+Mersenne endpoint. If doubling the child's admissible gap exceeds the
+parent budget, the already proved uniform independent-lift cover produces
+a contradiction. Fixed n=3,4 bases use kernel-checked `decide` on bounded
+rival certificates (moduli 4,8,10); no external census is a proof input.
+
+Thus this full unit-affine half-quotient prefix class has no remaining
+global-bound, exact-even-stratum, or structured propagation obligation for
+n>=3. An arbitrary even counterexample must lack such a prefix. Shorter
+independent prefixes, nonunit quotient-prefix scales, arbitrary extraction,
+and unrestricted G1/G2/G3 remain open; no fourth gate has been added.
+
+Verification: full build 15,110 jobs; all eighteen new declarations audited;
+all 3,059 axiom lists standard-only; all 34 regressions pass. The regressions
+also check the actual child's next quotient prefix and the fixed n=4 bases.
+No proof placeholders or `native_decide` were introduced.
 
 ### Guardrail for the remaining G1 proof
 

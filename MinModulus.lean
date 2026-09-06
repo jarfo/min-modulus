@@ -34,6 +34,9 @@ import MinModulus.SILiftParityDescent
 import MinModulus.SILiftOddDefects
 import MinModulus.SILiftOddNormalForm
 import MinModulus.SILiftOddComplete
+import MinModulus.SILiftSmallBases
+import MinModulus.SILiftStructuredDescent
+import MinModulus.SILiftFullBound
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
