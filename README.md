@@ -570,6 +570,37 @@ full build 15,095 jobs; all six new declarations audited; all 2,930 printed axio
 lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
 
+### Coherent-prefix extraction from a negative-one quotient extra
+
+`SILiftMinusOne.lean` derives, rather than assumes, upstairs coherence.
+For a valid tuple of length `m+2` in `ZMod (2*M)`, with `m>=2` and any
+positive `M`, suppose its actual quotient has the first `m` SI entries
+and the last extra reduces to `-1`. After translating by the actual
+lifted zero, the lifted negative one and lifted one must sum to `M`:
+otherwise they sum to twice the lifted zero, a forbidden two-entry rival.
+Any wrong lift at a later prefix coordinate would likewise sum with that
+extra to twice its predecessor. Validity therefore forces the whole
+prefix to use the multiplier given by the actual lifted one. No lift
+coherence, unit multiplier, or endpoint classification is assumed.
+
+The canonical affine-prefix extraction gives the full numerical
+`globalBound (m+2) <= 2*M` for `m>=3` at every positive `M`, using the
+already proved arbitrary-multiplier two-extra bound. The direct G3
+consumer also permits quotient affine transport and reindexing. The
+other extra and every initial lift bit are arbitrary; there is no finite
+enumeration or unrestricted G1/G2/G3 input.
+
+This excludes the negative-one case of the shorter-prefix residual and
+provides a genuine structural extraction theorem. It does not extract a
+prefix from arbitrary tuples or exclude arbitrary shorter-prefix lifts.
+The unrestricted global lower bound and all three global inputs remain
+open; no additional global gate is introduced.
+
+Verification for negative-one coherence extraction: full build 15,096
+jobs; all six new declarations audited; all 2,936 printed axiom lists
+use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
+placeholders or `native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
