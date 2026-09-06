@@ -329,6 +329,21 @@ Even exact sumset packing is only necessary: a verified invalid parent
 can satisfy equality. Arbitrary critical cover growth or actual deletion
 is still missing; no global gate is added or closed, 0/3.
 
+`ActualFibreMixedRivals.lean` now gives a COMPLETE criterion for an
+arbitrary actual fibre and two extras: parent validity is equivalent to
+fibre validity plus exclusion of every nonstandard outside-multiplicity
+residual. With two odd outsiders x,y, write alpha=x mod M and extract
+the actual divided difference tau(w)=y-x. The explicit target grid is
+T(q,B)=sum(u)+alpha+w-q*alpha-B*w with prefix budget m+2-2q,
+for 2q<=m+2, B<=2q, excluding only (q,B)=(1,1). This captures mixed
+rivals with both outside entries present, not just omission rivals.
+Eight declarations include both directions of the equivalence and actual
+difference extraction, with no SI, criticality, or normal-form premise.
+Full 15,124-job build; all 3,195 axiom lists standard-only. The packing-
+equality counterexample is detected by a mixed grid point; fibre validity
+cannot be omitted from the criterion. Proving a covered grid point from
+arbitrary criticality remains OPEN; no unrestricted G1/G2/G3 gate is closed.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
