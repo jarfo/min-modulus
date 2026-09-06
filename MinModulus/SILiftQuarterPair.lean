@@ -39,7 +39,7 @@ theorem not_validTuple_of_antipodal_double_pair_and_quotient_cover
 one extra and m-1 prefix coins, only the translated greedy holes can fail. -/
 theorem exists_multiset_sum_of_fixed_prefix_antipodal_extras_except_holes
     {m M H : ℕ} [NeZero M] (hm : 3 ≤ m) (hM : M = 2 * H)
-    (hH : H ≤ 2 ^ m - 2) (g : Fin (m + 2) → ZMod M)
+    (hH : H ≤ 2 ^ m - 1) (g : Fin (m + 2) → ZMod M)
     (hprefix : ∀ i : Fin m, g i.castSucc.castSucc = (a i.val : ZMod M))
     (hpair : g (Fin.last m).castSucc = g (Fin.last (m + 1)) + H)
     (z : ZMod M)
@@ -68,7 +68,7 @@ theorem exists_multiset_sum_of_fixed_prefix_antipodal_extras_except_holes
       exact hnat
   obtain ⟨k, hk, hkval⟩ := hchoice
   let r := (z - g k).val
-  have hr : r < 2 * (2 ^ (m - 1) - 1) := by
+  have hr : r ≤ 2 * (2 ^ (m - 1) - 1) := by
     have hp := Nat.lt_two_pow_self (n := m - 1)
     have hpow : 2 ^ m = 2 * 2 ^ (m - 1) := by rw [← pow_succ']; congr 1; omega
     dsimp only [r]
@@ -86,11 +86,22 @@ theorem exists_multiset_sum_of_fixed_prefix_antipodal_extras_except_holes
     rcases hk with rfl | rfl
     · exact hx hsum.symm
     · exact hy hsum.symm
-  obtain ⟨s, hs, hmem, hval⟩ := exists_mersenne_coin_multiset_of_lt_two_mul
-    (by omega : 1 ≤ m - 1) r hr hrne
-  obtain ⟨v, hv, hvsum⟩ := exists_fixed_multiset_sum_of_nat_coin_representation_card
-    (m := m) (N := M) (K := m - 1) (by omega) s hs
-    (fun i hi ↦ by have := hmem i hi; omega) hval
+  have hrep : ∃ v : Multiset (Fin m), v.card = m - 1 ∧
+      (v.map (fun i ↦ (a i.val : ZMod M))).sum = (r : ZMod M) := by
+    by_cases hend : r = 2 * (2 ^ (m - 1) - 1)
+    · apply exists_fixed_multiset_sum_of_nat_coin_representation_card (by omega)
+        (Multiset.replicate 2 (m - 1))
+      · simp; omega
+      · intro i hi
+        have := (Multiset.mem_replicate.mp hi).2
+        omega
+      · simp [a, hend]; omega
+    · obtain ⟨s, hs, hmem, hval⟩ := exists_mersenne_coin_multiset_of_lt_two_mul
+        (by omega : 1 ≤ m - 1) r (by omega) hrne
+      exact exists_fixed_multiset_sum_of_nat_coin_representation_card
+        (m := m) (N := M) (K := m - 1) (by omega) s hs
+        (fun i hi ↦ by have := hmem i hi; omega) hval
+  obtain ⟨v, hv, hvsum⟩ := hrep
   refine ⟨k ::ₘ v.map (fun i : Fin m ↦ i.castSucc.castSucc), ?_, ?_⟩
   · simp only [Multiset.card_cons, Multiset.card_map, hv]; omega
   · rw [Multiset.map_cons, Multiset.sum_cons, Multiset.map_map]
@@ -178,7 +189,7 @@ theorem global_lower_bound_of_valid_si_lifts_quarter_pair
     simp only [nsmul_eq_mul] at hp ⊢
     linear_combination hp
   obtain ⟨s, hs, hproj⟩ := exists_multiset_sum_of_fixed_prefix_antipodal_extras_except_holes
-    hm hM hH (fun i ↦ π (g i)) hprefix hq z hne_x hne_y
+    hm hM (by omega) (fun i ↦ π (g i)) hprefix hq z hne_x hne_y
   apply not_validTuple_of_antipodal_double_pair_and_quotient_cover g y x hpair s
     (by omega : s.card + 2 = m + 2) ?_ hg
   change π _ = π X

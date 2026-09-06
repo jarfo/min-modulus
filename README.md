@@ -631,6 +631,42 @@ Verification for the two-extra quarter-separation milestone: full build
 lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
 
+### Binary threshold for the quarter-separated two-extra class
+
+`SIQuarterBinary.lean` strengthens the preceding numerical bound to
+`2^(m+2) <= 2*M`, for every `m>=3` and positive even half modulus `M=2H`.
+The hypotheses are unchanged: an actual length-`m` unit-affine SI prefix
+in the half quotient, two extras differing by `H` in that quotient, and
+arbitrary independent lifts. Reindexing and quotient affine transport
+are included. The explicit stratum consumer consequently proves every
+`stratumBound (m+2) t <= 2*M`, excluding this class at the critical G1
+threshold as well as at G3. This is a theorem for the even-modulus class,
+not a new proof of arbitrary odd G2.
+
+The one-hole quotient cover now includes the full `H<2^m` range: at its
+last boundary point, two copies of the largest Mersenne coin suffice.
+At the remaining negative-one hole, actual coherence is already proved.
+Translate by the lifted zero and let `c` be the lifted one. Since the half
+modulus is even, `c*c=1` and `c*M=M`; multiplying by `c` and adding one
+turns the prefix into `1,2,...,2^(m-1)` and the negative-one extra into
+`M`. The partner projects to `H`. A binary subset represents
+`2^m-H-1`, copies of the order-two extra pad the length, and two copies
+of either extra select the correct sheet. The resulting repeated
+coordinate contradicts validity. Thus the former hole cannot survive
+anywhere below the binary threshold.
+
+This closes the stronger threshold for an existing class; it adds no
+assumed global input or finite-instance requirement. The stronger binary
+bound concerns separation of the TWO EXTRAS, not an extra separated from
+a prefix entry. The latter all-prefix theorem retains its G3-only scope.
+Other independent lifts and arbitrary prefix extraction remain open;
+Conjecture 1 still has 0/3 unrestricted global gates closed.
+
+Verification: full build 15,098 jobs; all six new declarations registered
+in the axiom audit; all 2,948 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. No proof placeholders or
+`native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
