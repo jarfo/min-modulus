@@ -113,9 +113,14 @@ prefix forces exactly ONE noncoherent entry among the first `n-2` lifts,
 relative to the actual lifted-one difference and lifted zero. Two defects
 would force equal even dyadic sums below `2*M`; oddness removes wraparound
 and gives a forbidden quotient collision. Zero defects already violate
-the coherent class bound. The single-defect case, terminal prefix lift,
-and extra remain open. This is actual structure extraction, not a new
-assumed gate or a proof of unrestricted G1/G2/G3.
+the coherent class bound. `SILiftOddNormalForm.lean` now also proves the
+terminal lift coherent and determines the extra upstairs as
+`c*(1+2^j-2^l)`, with `3<=l<=n-2`, `l!=j`, and actual lifted-one multiplier
+`c`. General pair-sum rigidity supplies this further extraction. If the
+original lifted zero and one share parity, actual coset halving now gives
+G1 descent in this first-even class, with quotient affine transport.
+The opposite-parity normal-form branch and arbitrary tuples remain open.
+No new global gate or unrestricted G1/G2/G3 proof is claimed.
 
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
@@ -954,6 +959,52 @@ parity fibre alone therefore does not imply common touch.
 Verification: full build 15,105 jobs; all nine new declarations registered
 in the audit; all 3,015 axiom lists standard-only; all 26 exact regressions
 pass. No proof placeholders or `native_decide` are introduced.
+
+### First-even normal form and actual same-parity G1 descent
+
+`SILiftOddNormalForm.lean` strengthens the preceding unique-defect result.
+For odd positive `M`, `2*M<2^n-2`, `n=m+2>=5`, and a full SI quotient
+prefix, normalize the actual lifted zero to zero and let `c` be the actual
+lifted one. Validity extracts indices `2<=j<m`, `3<=l<=m`, `l!=j`, with
+
+    g_i = c*(2^i-1) + (if i=j then M else 0),  0<=i<=m
+    g_extra = c*(1+2^j-2^l)                    in ZMod (2*M).
+
+The terminal lift is now proved coherent, and the extra is determined
+UPSTAIRS, not merely in the quotient. The multiplier may be a nonunit.
+No independent lift choices or coherence assumptions are hidden here.
+
+The general mechanism is pair-sum rigidity. A forbidden pair equality
+in a two-sheet quotient must lie on opposite sheets upstairs. Two such
+identities with a common entry and target force a forbidden actual third
+pair identity. These lemmas do not assume SI structure or criticality.
+They also strengthen the near-power exclusions to every positive modulus.
+Complement four propagates a defect to the lifted entry three, so cannot
+be an isolated defect elsewhere. A terminal defect would have its own
+dyadic complement. Odd-period non-wraparound leaves only the terminal
+power for the extra; the pair triangle excludes it, including a terminal
+complement index. Finally another forced pair sum determines the extra
+on its actual sheet.
+
+`admitsValidTuple_half_of_critical_odd_quotient_affine_si_prefix_same_parity`
+then constructs a valid `(n-1)`-tuple modulo `M` whenever the original
+lifted zero and one share parity. In the normal form every entry except
+the unique defect is even, so retained-coset halving applies. Quotient
+affine transport, reindexing, and arbitrary original lift bits are allowed.
+This closes that first-even G1 branch, not merely an interface for it.
+The opposite-parity normal-form branch, arbitrary-prefix extraction, and
+unrestricted G1/G2/G3 remain open, 0/3; no new gate is introduced.
+
+An exact regression rejects a proposed unrestricted shortcut: the valid
+tuple `(0,146,221,289,451,301,321)` modulo 502 has two even entries, but
+every merge `even_a+even_b-odd_anchor`, followed by retained-coset halving,
+is invalid. This is above criticality and does not refute G1 or other
+descent constructions. The regression checks every candidate and its
+rival-count obstruction; it is not a Lean proof input.
+
+Verification: full build 15,106 jobs; all fourteen new declarations
+registered in the audit; all 3,029 axiom lists standard-only; all 27
+regressions pass. No proof placeholders or `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 
