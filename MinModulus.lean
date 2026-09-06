@@ -11,6 +11,7 @@ import MinModulus.SIMultiplierBound
 import MinModulus.SIMultiplierStrata
 import MinModulus.SIEndpointRigidity
 import MinModulus.SIActualDeletion
+import MinModulus.SIQuotientCollision
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination

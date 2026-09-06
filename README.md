@@ -373,6 +373,43 @@ Verification for actual-deletion integration: full build 15,088 jobs;
 all three new declarations audited; all 2,842 printed axiom lists are
 standard-only, with no proof placeholders or `native_decide`.
 
+### G3 quotient-collision branch excluded from actual tuple data
+
+`SIQuotientCollision.lean` derives common touch from a collision of distinct
+coordinates under half reduction: the original entries form an antipodal
+pair. For non-power-of-two `n>=5`, a quotient collision involving either
+coordinate outside a coherent `n-2`-entry SI prefix therefore excludes the
+original tuple. The prefix multiplier may be a nonunit; the other endpoint
+may lie inside or outside the prefix. The proof preserves the prefix while
+moving the collision endpoint to the deleted position, constructs the
+actual valid quotient, and applies endpoint extraction and the lift cover.
+No common-touch or retained-quotient validity assumption is supplied.
+
+`injective_quotient_of_valid_exceptional_unit_short_prefix` makes the new
+residual precise. With a **unit** prefix multiplier, the shorter prefix is
+itself injective in the quotient, so any hypothetical valid exceptional
+tuple in this class has an injective full quotient. For nonunits, the
+collision theorem still excludes all collisions involving an outside
+coordinate; it does not exclude collisions entirely inside the prefix.
+All independent upstairs lift bits are allowed. The injective-quotient
+residual and the three unrestricted global inputs remain open.
+
+An exploratory probe in the companion `unique` repository,
+`scripts/g3-short-prefix-census.cpp`, tests a possible next uniform pattern.
+After the proved unit-prefix quotient-collision exclusions and the existing
+full-SI-prefix exclusion, all 7,080 remaining candidate pairs in non-power
+dimensions `5,6,7,9,10,11,12` have a competing multiset using at most two
+copies of each extra entry (prefix multiplicities are unrestricted).
+Fourteen tests include independent direct multiset enumeration at `n=5`
+and power-of-two controls at `n=8`, where four actual valid tuples survive.
+This is finite evidence, not a proof of the uniform two-extra claim and not
+an additional assumed roadmap gate. Such a uniform proof would address the
+shorter unit-prefix residual without assuming common touch.
+
+Verification for quotient-collision elimination: full build 15,089 jobs;
+all four new declarations audited; all 2,846 printed axiom lists are
+standard-only, with no proof placeholders or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
