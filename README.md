@@ -314,6 +314,21 @@ This is a quantitative restriction on the same G1 residual, not a new
 open gate or a sufficient validity test. Deriving enough cover growth
 from arbitrary criticality, or actual deletion, remains unproved; 0/3.
 
+`ActualFibreSumsetPacking.lean` strengthens this GENERAL fibre restriction.
+For any nonempty outside quotient-zero subset of size r, the ACTUAL
+coin sumsets satisfy |C_m|+|C_r|<=M. Validity dissociation gives the
+arbitrary-budget bound |C_r|>=sum_{j<=r} binom(m-1,j). Thus an even
+m-entry fibre with two odd outsiders must miss at least binom(m,2)+1
+own-size sums (and at least m by a direct translate argument). These
+are genuine disjoint reflected sumsets, with no SI, zero-entry, complete-
+cover, or criticality premise. The one-hole saturation case proposed
+above is therefore excluded outright for m>=2, not left as a deletion
+obligation. Eleven declarations include all budgets and all subgroup
+indices. Full 15,123-job build; all 3,187 axiom lists standard-only.
+Even exact sumset packing is only necessary: a verified invalid parent
+can satisfy equality. Arbitrary critical cover growth or actual deletion
+is still missing; no global gate is added or closed, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
