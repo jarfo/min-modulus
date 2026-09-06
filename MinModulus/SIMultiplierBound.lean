@@ -207,34 +207,23 @@ theorem doubled_fixed_prefix_closed_of_extra_projection_neg_one
       rw [Nat.cast_add (2 * a t), ZMod.natCast_self, add_zero] at hc
       simpa only [j, Fin.val_mk, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, nsmul_eq_mul] using hc.symm
 
-/-- Uniform G3 exclusion for an SI prefix in the index-two subgroup,
-with an arbitrary extra residue in the ambient cyclic group. -/
-theorem not_validTuple_exceptional_of_doubled_fixed_prefix
-    {m : ℕ} (hm : 2 ≤ m) (hnpow : 2 ^ Nat.log 2 (m + 1) ≠ m + 1)
-    (g : Fin (m + 1) → ZMod (2 * globalBound m))
-    (hprefix : ∀ i : Fin m,
-      g i.castSucc = ((2 * a i.val : ℕ) : ZMod (2 * globalBound m))) : ¬ ValidTuple g := by
+/-- At an even half modulus below the binary range, validity forces the
+arbitrary extra entry of a doubled SI prefix to project to -1. -/
+theorem extra_projection_eq_neg_one_of_valid_doubled_fixed_prefix
+    {m M : ℕ} [NeZero M] (hm : 2 ≤ m) (hMeven : Even M) (hMlt : M < 2 ^ m)
+    (g : Fin (m + 1) → ZMod (2 * M)) (hg : ValidTuple g)
+    (hprefix : ∀ i : Fin m, g i.castSucc = ((2 * a i.val : ℕ) : ZMod (2 * M))) :
+    ZMod.castHom (dvd_mul_left M 2) (ZMod M) (g (Fin.last m)) = -1 := by
   classical
-  intro hg
-  let M := globalBound m
-  have hMpos : 0 < M := lt_of_lt_of_le (by omega : 0 < 2) (nmin_eq hm).1.1
-  letI : NeZero M := ⟨ne_of_gt hMpos⟩
+  have hMpos := Nat.pos_of_ne_zero (NeZero.ne M)
   letI : NeZero (2 * M) := ⟨by omega⟩
-  have ht : 1 ≤ Nat.log 2 m := by
-    apply (Nat.le_log_iff_pow_le (by norm_num) (by omega)).mpr
-    simpa using hm
-  have hlog := Nat.pow_log_le_self 2 (by omega : m ≠ 0)
-  have htm : Nat.log 2 m < m := lt_of_lt_of_le Nat.lt_two_pow_self hlog
-  have hM : M = 2 ^ m - 2 ^ Nat.log 2 m := rfl
-  have htwo : 2 ≤ 2 ^ Nat.log 2 m := by
-    simpa using Nat.pow_le_pow_right (by omega : 1 ≤ (2 : ℕ)) ht
-  have hMbound : M ≤ 2 ^ m - 2 := by omega
+  have hMtwo : 2 ∣ M := hMeven.two_dvd
   have hpowm := Nat.lt_two_pow_self (n := m)
-  have hMlt : M < 2 ^ m := by omega
-  have hMtwo : 2 ∣ M := by
-    rw [hM]
-    exact Nat.dvd_sub (by simpa only [pow_one] using pow_dvd_pow 2 (by omega : 1 ≤ m))
-      (by simpa only [pow_one] using pow_dvd_pow 2 ht)
+  have hp : 2 ^ m = 2 * 2 ^ (m - 1) := by
+    rw [← pow_succ']; congr 1; omega
+  have hMbound : M ≤ 2 ^ m - 2 := by
+    obtain ⟨r, hr⟩ := hMeven
+    omega
   let x := g (Fin.last m)
   have hxodd : Odd x.val := by
     rcases Nat.even_or_odd x.val with he | ho
@@ -265,8 +254,6 @@ theorem not_validTuple_exceptional_of_doubled_fixed_prefix
     have hmodtwo := hmod.of_dvd hMtwo
     change (y.val + x.val) % 2 = (2 ^ m - m - 1) % 2 at hmodtwo
     have hxmod : x.val % 2 = 1 := by obtain ⟨r, hr⟩ := hxodd; omega
-    have hpow : 2 ^ m = 2 * 2 ^ (m - 1) := by
-      rw [← pow_succ']; congr 1; omega
     omega
   by_cases hyhole : y.val = 2 ^ m - m
   · have hycast : y = ((2 ^ m - m : ℕ) : ZMod M) := by
@@ -276,15 +263,10 @@ theorem not_validTuple_exceptional_of_doubled_fixed_prefix
       have hn : 2 ^ m - m - 1 + 1 = 2 ^ m - m := by omega
       simpa only [Nat.cast_add, Nat.cast_one] using
         congrArg (fun z : ℕ ↦ (z : ZMod M)) hn
-    have hxneg : π x = -1 := by
-      change σ - π x = _ at hycast
-      rw [← hσadd] at hycast
-      linear_combination -hycast
-    have hclosed := doubled_fixed_prefix_closed_of_extra_projection_neg_one
-      (M := M) hm htm hM g hprefix hxneg
-    have hn := not_validTuple_exceptional_of_affine_doubling_closed
-      (n := m + 1) (by omega) hnpow
-    exact hn g 2 hclosed hg
+    change π x = -1
+    change σ - π x = _ at hycast
+    rw [← hσadd] at hycast
+    linear_combination -hycast
   · obtain ⟨s, hs, hsum⟩ := exists_fixed_multiset_sum_of_parity_except_hole
       (M := M) hm hMbound y hyhole hypar
     let v := s.map Fin.castSucc + Multiset.replicate 3 (Fin.last m)
@@ -321,6 +303,44 @@ theorem not_validTuple_exceptional_of_doubled_fixed_prefix
       simp
     have ho := multiset_count_eq_one_of_validTuple g hg v hvcard hvsum (Fin.last m)
     omega
+
+/-- A doubled SI extension at an even power-gap half modulus is forced
+by validity to have full affine doubling closure. -/
+theorem affine_doubling_closed_of_valid_doubled_fixed_prefix
+    {m t M : ℕ} [NeZero M] (hm : 2 ≤ m) (ht : 1 ≤ t) (htm : t < m)
+    (hM : M = 2 ^ m - 2 ^ t) (g : Fin (m + 1) → ZMod (2 * M)) (hg : ValidTuple g)
+    (hprefix : ∀ i : Fin m, g i.castSucc = ((2 * a i.val : ℕ) : ZMod (2 * M))) :
+    ∀ i, ∃ j, g j = 2 • g i + 2 := by
+  have hMeven : Even M := by
+    apply even_iff_two_dvd.mpr
+    rw [hM]
+    exact Nat.dvd_sub (by simpa only [pow_one] using pow_dvd_pow 2 (by omega : 1 ≤ m))
+      (by simpa only [pow_one] using pow_dvd_pow 2 ht)
+  have hMlt : M < 2 ^ m := by
+    have hpos : 0 < 2 ^ t := by positivity
+    have hp : 0 < 2 ^ m := by positivity
+    omega
+  exact doubled_fixed_prefix_closed_of_extra_projection_neg_one hm htm hM g hprefix
+    (extra_projection_eq_neg_one_of_valid_doubled_fixed_prefix hm hMeven hMlt g hg hprefix)
+
+/-- Uniform G3 exclusion for an SI prefix in the index-two subgroup,
+with an arbitrary extra residue in the ambient cyclic group. -/
+theorem not_validTuple_exceptional_of_doubled_fixed_prefix
+    {m : ℕ} (hm : 2 ≤ m) (hnpow : 2 ^ Nat.log 2 (m + 1) ≠ m + 1)
+    (g : Fin (m + 1) → ZMod (2 * globalBound m))
+    (hprefix : ∀ i : Fin m,
+      g i.castSucc = ((2 * a i.val : ℕ) : ZMod (2 * globalBound m))) : ¬ ValidTuple g := by
+  intro hg
+  have hB : 2 ≤ globalBound m := (nmin_eq hm).1.1
+  letI : NeZero (globalBound m) := ⟨by omega⟩
+  have ht : 1 ≤ Nat.log 2 m := by
+    apply (Nat.le_log_iff_pow_le (by norm_num) (by omega)).mpr
+    simpa using hm
+  have hlog := Nat.pow_log_le_self 2 (by omega : m ≠ 0)
+  have htm : Nat.log 2 m < m := lt_of_lt_of_le Nat.lt_two_pow_self hlog
+  have hclosed := affine_doubling_closed_of_valid_doubled_fixed_prefix
+    hm ht htm (show globalBound m = 2 ^ m - 2 ^ Nat.log 2 m from rfl) g hg hprefix
+  exact not_validTuple_exceptional_of_affine_doubling_closed (by omega) hnpow g 2 hclosed hg
 
 /-- The global envelope grows by at most a factor of three. -/
 theorem globalBound_succ_le_three_mul {m : ℕ} (hm : 2 ≤ m) :

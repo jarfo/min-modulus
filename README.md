@@ -309,6 +309,42 @@ Verification for power-gap rigidity: full build 15,086 jobs; all nine new
 declarations audited; all 2,832 printed axiom lists are standard-only, with
 no proof placeholders or `native_decide`.
 
+### Endpoint structure extraction and a shorter-prefix G3 consumer
+
+`SIEndpointRigidity.lean` proves an actual normal-form conclusion:
+`exists_unit_affine_fixed_of_valid_scaled_prefix_at_endpoint`. At `B(n)`,
+`n>=4`, if a valid tuple contains a coherent SI prefix of length `n-1`
+with any multiplier, then the whole tuple is **unit-affine SI**, after
+reindexing. The remaining entry is not assumed to complete the prefix.
+This class-level endpoint classification is uniform, not a finite census
+or classification of arbitrary endpoint tuples.
+
+The structural ingredient is now generalized in `SIMultiplierBound.lean`:
+at an even half modulus `M<2^m`, validity of a doubled SI prefix plus an
+extra entry forces that entry to reduce to `-1` modulo `M`. A power-gap
+half modulus then gives full affine doubling closure. Below the binary
+range, a full affine doubling orbit must have a unit generator, since a
+proper cyclic subgroup would violate the binary bound. At the endpoint,
+the previous index bound leaves only this doubled case or the unit case,
+where prefix completion applies. The old doubled-prefix G3 exclusion now
+uses the general extraction proof rather than duplicating its argument.
+
+`not_validTuple_exceptional_of_valid_quotient_scaled_short_prefix` applies
+this classification directly to G3. For non-power-of-two `n>=5`, it is
+enough that the actual retained quotient of length `n-1` is valid and
+contains **n-2** coherent SI entries under any multiplier. Classification
+extracts its full unit-affine SI structure, and the existing uniform lift
+cover excludes every independent upstairs lift and every extra entry.
+
+Retained-quotient validity is an explicit hypothesis, not inferred from
+upstairs validity. An abstract existence assertion for some smaller tuple
+does not supply it, and arbitrary tuples need not have the shorter prefix.
+The original three unrestricted gates remain open; no new gate is added.
+
+Verification for endpoint extraction: full build 15,087 jobs; all seven
+new declarations audited; all 2,839 printed axiom lists are standard-only,
+with no proof placeholders or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
