@@ -375,6 +375,22 @@ so this goes beyond pair counting. The criterion is closed, but extracting
 a dependence or a valid deletion from arbitrary criticality is still open.
 This is a general tool inside the existing G1/G3 work, not a fourth gate.
 
+`CyclicLiftCarry.lean` now completes the lift equations at EVERY positive
+half-modulus, including all higher-even and exceptional G3 moduli. For
+any base lift v, each quotient rival has an actual base carry kappa in
+ZMod 2; every cyclic lift is v plus actual kernel bits b. Validity is
+equivalent to kappa(c)+sum(c_i*b_i)=1 for EVERY quotient rival, and the
+all-lifts existence equivalence is proved in both directions. A finite
+zero-parity dependence excludes every lift when its carry sum differs
+from the family size modulo two, for ODD OR EVEN families. In particular,
+two identical-parity rivals with opposite carries suffice. Re-basing
+changes carries by the exact parity dot product; nothing depends on a
+silently chosen canonical lift. Thirteen declarations; full 15,127-job
+build; all 3,224 axiom lists standard-only; 197 tests pass. The valid
+higher-even control is preserved, while an opposite-carry pair excludes
+all lifts of a quotient at an exceptional modulus. Critical/exceptional
+certificate extraction remains unproved; no unrestricted gate is closed.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

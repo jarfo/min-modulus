@@ -53,6 +53,7 @@ import MinModulus.ActualFibreSumsetPacking
 import MinModulus.ActualFibreMixedRivals
 import MinModulus.ActualFibreSidon
 import MinModulus.QuotientRivalParity
+import MinModulus.CyclicLiftCarry
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
