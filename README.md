@@ -180,6 +180,19 @@ standard-only axiom lists pass.
 This does not classify arbitrary two-large-fibre tuples or prove arbitrary
 three-extra scaling. The same unrestricted G1/G2/G3 gates remain open.
 
+`SIThreeOddTargetPacking.lean` proves the global and every positive-
+stratum bound for the three-opposite-parity pattern, every n>=8, with
+translation/reindexing. Its stronger numeric conclusion is `2^n-2<=N`;
+for n>=9 the binary bound also follows. Three actual removed-coordinate
+targets modulo M=N/2 avoid an initial prefix cover and must be pairwise
+farther apart than the prefix sum. Packing their representatives gives
+M>=C+2S+3, where m=n-3, C=5*(2^(m-1)-1)-(m-2), S=2^m-m-1. The
+packing theorem holds m>=4; the numeric cutoffs are not silently lowered.
+Eleven declarations include a general actual-mapped-fibre rival lemma
+and the concrete global/even-stratum consumers. The full 15,114-job build
+and all 3,104 standard-only axiom lists pass. No finite census or unproved cover is assumed. Arbitrary prefix
+extraction and unrestricted G1/G2/G3 remain the same three open gates.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
