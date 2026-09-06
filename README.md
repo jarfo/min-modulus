@@ -145,6 +145,33 @@ closure for arbitrary tuples or discharge an unrestricted global gate.
 Full build: 15,081 jobs. All six declarations are audited; all 2,770 printed
 axiom lists are standard-only, with no proof placeholders or `native_decide`.
 
+### Full global bound for an SI block plus an arbitrary entry
+
+`SIExtensionBound.lean` proves
+`global_lower_bound_of_valid_affine_fixed_prefix`: if `n-1` entries form a
+coherent affine copy of the fixed super-increasing prefix in the full
+modulus, any valid `n`-tuple containing them satisfies `globalBound n`.
+The additional entry is arbitrary; the full tuple is not assumed to be
+affine-doubling-closed. Reindexing, translation, and unit scaling are allowed.
+
+A constructive Mersenne-coin lemma covers an initial interval with bounded
+multisets. A descending geometric tail fills the short upper interval.
+Below `globalBound n`, `n` terms from the retained prefix therefore cover
+every residue except possibly `2^n-n-1`. A covered full-tuple sum gives a
+competing multiset omitting the extra coordinate. The only other case
+forces that coordinate to complete the fixed SI set, so `nmin_eq` applies.
+The initial interval also directly proves
+`not_validTuple_exceptional_of_affine_fixed_prefix`, a uniform G3 consumer.
+
+The prefix hypothesis is in the **full modulus**. Arbitrary independent
+half-modulus shifts of the prefix entries need not preserve it and remain
+outside this theorem. This does not settle the unrestricted G1/G2/G3 gates;
+no new conjectural input is introduced.
+
+Verification: full build 15,082 jobs; all thirteen declarations audited;
+all 2,783 printed axiom lists are standard-only, with no proof placeholders
+or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:

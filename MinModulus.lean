@@ -4,6 +4,7 @@ import MinModulus.AbelianMin
 import MinModulus.DoublingValidity
 import MinModulus.DoublingClosure
 import MinModulus.DoublingClosureStrata
+import MinModulus.SIExtensionBound
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
