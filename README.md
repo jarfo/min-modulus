@@ -224,6 +224,20 @@ lists pass. No finite tuple census or
 unrestricted G1/G2/G3 premise is used. Arbitrary extraction and other
 subgroup indices are not claimed; no index-three subcase remains queued.
 
+`SIThreeIndexFour.lean` closes ALL index-four three-extra patterns for
+every n>=8. A coherent quadrupled n-3 prefix with arbitrary extras and
+original-modulus unit-affine transport/reindexing implies subbinary fixed
+validity at the same modulus, hence global and every exact even-stratum
+bounds. Three same-coset extras force three actual cyclic gaps of length
+at least S+1, where S=2^m-m-1; the wrapping gap is essential. Subgroup
+entries give actual next-entry extraction, or admissible gaps four/eight
+at the top two child residues. Subgroup-sum rivals consume the other
+quotient patterns. Ten declarations include general actual-difference
+and cyclic-packing lemmas and the final numerical consumers. The full
+15,117-job build and all 3,131 standard-only axiom lists pass. No index-four
+subcase remains open in this range;
+arbitrary extraction and unrestricted G1/G2/G3 remain open, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
