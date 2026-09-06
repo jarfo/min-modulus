@@ -150,14 +150,18 @@ does not extract prefixes from arbitrary tuples or close a global gate.
 A shorter coherent prefix now suffices in a uniform dimension range:
 `SIThreeExtensionBound.lean` proves the global and EVERY exact-stratum
 bound for a coherent unit-affine SI prefix of length n-3, with three
-arbitrary extras, for all n>=13 and positive moduli. Below 2^n, an actual
+arbitrary extras, now for all n>=7 and positive moduli. Below 2^n, an actual
 extra extends the prefix; one swap invokes the proved two-extra theorem,
 giving fixed validity at the SAME modulus and an admissible power gap.
-Twelve bounded-multiplicity rivals yield a symbolic interval contradiction
+Fifteen bounded-multiplicity rivals yield a symbolic interval contradiction
 in all dimensions in this range. The five-outside-coin case uses one
 shorter Mersenne prefix. No finite census or global gate is assumed.
-All fifteen declarations are in the axiom audit; the full 15,112-job build
-and all 3,081 standard-only axiom lists pass. Nonunit three-extra scaling
+Three added rivals lower the requirements to m>=4,L>=2m-1, superseding
+the earlier n>=13 cutoff. For N<=2^n-3, the entire ACTUAL SI tuple is
+recovered with the same affine map after reindexing, including at the
+global endpoint. All nineteen declarations are in the axiom audit; the
+full 15,112-job build and all 3,085 standard-only axiom lists pass.
+Nonunit three-extra scaling
 and arbitrary-prefix extraction are not asserted. This closes a broader
 structured class, not an unrestricted gate: G1/G2/G3 remain open, 0/3.
 

@@ -1,12 +1,12 @@
 /-
 # Three-extra coherent SI prefixes
 
-For every n >= 13 and every positive modulus, validity and a coherent
+For every n >= 7 and every positive modulus, validity and a coherent
 unit-affine SI prefix of length n-3 imply the full global and exact-stratum
 bounds. Below 2^n, an actual extra completes the next prefix entry, and the
 proved two-extra theorem gives fixed-set validity at the same modulus.
 
-The dimension-free interval argument uses twelve bounded-multiplicity
+The dimension-free interval argument uses fifteen bounded-multiplicity
 rivals. Its five-extra-coin case uses one shorter Mersenne prefix. All
 arithmetic parameters remain symbolic; no finite solver or global gate
 is a proof input. Arbitrary-prefix extraction and nonunit three-extra
@@ -214,10 +214,52 @@ theorem eight_mul_le_mersenne_pred {m : ℕ} (hm : 10 ≤ m) :
     simp only [Nat.add_sub_cancel] at *
     omega
 
+set_option maxHeartbeats 20000000 in
+/-- Three additional rivals strengthen the interval argument to every
+prefix length at least four, with only linear growth required of L. -/
+theorem three_extra_interval_obstruction_strengthened
+    (m L N X Y Z : ℤ) (hm : 4 ≤ m) (hL : 2 * m - 1 ≤ L)
+    (hNlo : 8 * L + 8 ≤ N) (hNhi : N ≤ 16 * L + 15)
+    (hXlo : 2 * L + m ≤ X)
+    (hYgap : 2 * L - m + 1 + X < Y)
+    (hZgap : 2 * L - m + 1 + Y < Z)
+    (hZhi : 2 * L - m + 1 + Z < N)
+    (hno : ∀ a b c : ℤ, 0 ≤ a → 0 ≤ b → 0 ≤ c → a + b + c ≤ 5 →
+      (a ≠ 1 ∨ b ≠ 1 ∨ c ≠ 1) → ∀ q : ℤ,
+      2 * L - m + 1 + (1-a)*X + (1-b)*Y + (1-c)*Z < q*N ∨
+      q*N + (6-a-b-c)*L-m+2 ≤ 2*L-m+1+(1-a)*X+(1-b)*Y+(1-c)*Z) : False := by
+  have h₀ := hno 0 0 0 (by omega) (by omega) (by omega) (by omega) (by omega) 1
+  have h₁ := hno 0 0 0 (by omega) (by omega) (by omega) (by omega) (by omega) 2
+  have h₂ := hno 0 0 1 (by omega) (by omega) (by omega) (by omega) (by omega) 1
+  have h₃ := hno 0 0 2 (by omega) (by omega) (by omega) (by omega) (by omega) 0
+  have h₅ := hno 0 1 0 (by omega) (by omega) (by omega) (by omega) (by omega) 1
+  have h₇ := hno 0 3 0 (by omega) (by omega) (by omega) (by omega) (by omega) 0
+  have h₁₁ := hno 1 0 0 (by omega) (by omega) (by omega) (by omega) (by omega) 1
+  have h₁₄ := hno 1 3 1 (by omega) (by omega) (by omega) (by omega) (by omega) (-1)
+  have h₁₆ := hno 2 0 0 (by omega) (by omega) (by omega) (by omega) (by omega) 1
+  have h₁₉ := hno 3 0 1 (by omega) (by omega) (by omega) (by omega) (by omega) 0
+  have h₂₄ := hno 4 0 1 (by omega) (by omega) (by omega) (by omega) (by omega) 0
+  have h₂₅ := hno 4 1 0 (by omega) (by omega) (by omega) (by omega) (by omega) 0
+  have hnew₀ := hno 3 0 0 (by omega) (by omega) (by omega) (by omega) (by omega) 1
+  have hnew₁ := hno 0 3 1 (by omega) (by omega) (by omega) (by omega) (by omega) (-1)
+  have hnew₂ := hno 1 0 3 (by omega) (by omega) (by omega) (by omega) (by omega) (-1)
+  omega
+
+/-- The strengthened linear growth bound holds from prefix length four. -/
+theorem twice_mul_sub_one_le_mersenne_pred {m : ℕ} (hm : 4 ≤ m) :
+    2 * m - 1 ≤ 2 ^ (m - 1) - 1 := by
+  induction m, hm using Nat.le_induction with
+  | base => decide
+  | succ m hm ih =>
+    have hp : 2 ^ m = 2 * 2 ^ (m - 1) := by
+      rw [← pow_succ']; congr 1; omega
+    simp only [Nat.add_sub_cancel] at *
+    omega
+
 /-- Three ordered extras cannot all miss the next SI entry below the
 binary threshold. The rival argument is uniform in both dimension and modulus. -/
 theorem not_validTuple_of_ordered_three_extra_prefix
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m) (hupper : N < 2 ^ (m + 3))
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m) (hupper : N < 2 ^ (m + 3))
     (g : Fin (m + 3) → ZMod N) (f : Fin m ↪ Fin (m + 3))
     (hprefix : ∀ i, g (f i) = (a i.val : ZMod N))
     (x y z : Fin (m + 3)) (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z)
@@ -266,8 +308,11 @@ theorem not_validTuple_of_ordered_three_extra_prefix
     q*N+(6-A-B-C)*L-m+2 ≤ 2*L-m+1+(1-A)*(g x).val+(1-B)*(g y).val+(1-C)*(g z).val at hno
   have hgapxy := hno 0 2 1 (by omega) (by omega) (by omega) (by omega) (by omega) 0
   have hgapyz := hno 1 0 2 (by omega) (by omega) (by omega) (by omega) (by omega) 0
-  have hLbound : 8 * (m : ℤ) ≤ L := by
-    rw [← hLcast]; exact_mod_cast eight_mul_le_mersenne_pred hm
+  have hLbound : 2 * (m : ℤ) - 1 ≤ L := by
+    have h := twice_mul_sub_one_le_mersenne_pred hm
+    have h' : (((2 * m - 1 : ℕ) : ℤ)) ≤ ((2 ^ (m - 1) - 1 : ℕ) : ℤ) := by exact_mod_cast h
+    have hcast : ((2 * m - 1 : ℕ) : ℤ) = 2 * m - 1 := by omega
+    rwa [hcast, hLcast] at h'
   have hlocxz : 4 * L + 1 ≤ 2 * L - m + 1 + (g x).val := by
     have h := hlocx.1
     have h' : (4 : ℤ) * ((2 ^ (m - 1) - 1 : ℕ) : ℤ) + 1 ≤
@@ -282,13 +327,13 @@ theorem not_validTuple_of_ordered_three_extra_prefix
   have hNu : (N : ℤ) ≤ 16 * L + 15 := by
     have h' : (N : ℤ) < 16 * (2 : ℤ) ^ (m - 1) := by exact_mod_cast (hpow3 ▸ hupper)
     dsimp [L]; omega
-  exact three_extra_interval_obstruction m L N (g x).val (g y).val (g z).val
+  exact three_extra_interval_obstruction_strengthened m L N (g x).val (g y).val (g z).val
     (by exact_mod_cast hm) hLbound hNl hNu (by omega) (by omega) (by omega) hloczz hno
 
 /-- A coherent prefix with three arbitrary extras extends by one entry
-at every subbinary modulus, uniformly for prefix length at least ten. -/
+at every subbinary modulus, uniformly for prefix length at least four. -/
 theorem exists_tail_eq_next_of_valid_fixed_three_extra_prefix
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m) (hupper : N < 2 ^ (m + 3))
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m) (hupper : N < 2 ^ (m + 3))
     (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
     (hprefix : ∀ i : Fin m, g i.castSucc.castSucc.castSucc = (a i.val : ZMod N)) :
     ∃ j : Fin (m + 3), m ≤ j.val ∧ g j = (a m : ZMod N) := by
@@ -339,7 +384,7 @@ theorem exists_tail_eq_next_of_valid_fixed_three_extra_prefix
 /-- The actual extracted coordinate extends the coherent prefix after
 one swap, leaving exactly two unrestricted coordinates. -/
 theorem exists_perm_short_prefix_of_valid_fixed_three_extra_prefix
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m) (hupper : N < 2 ^ (m + 3))
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m) (hupper : N < 2 ^ (m + 3))
     (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
     (hprefix : ∀ i : Fin m, g i.castSucc.castSucc.castSucc = (a i.val : ZMod N)) :
     ∃ p : Equiv.Perm (Fin (m + 3)),
@@ -367,7 +412,7 @@ theorem exists_perm_short_prefix_of_valid_fixed_three_extra_prefix
 /-- Three-extra coherent prefixes have fixed-set validity at the same
 subbinary modulus, with no conjectural descent input. -/
 theorem valid_fixed_of_valid_fixed_three_extra_prefix_lt_two_pow
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m)
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m)
     (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
     (hprefix : ∀ i : Fin m, g i.castSucc.castSucc.castSucc = (a i.val : ZMod N))
     (hupper : N < 2 ^ (m + 3)) : Valid (m + 3) N := by
@@ -377,7 +422,7 @@ theorem valid_fixed_of_valid_fixed_three_extra_prefix_lt_two_pow
 
 /-- Unit-affine normalization preserves the three-extra same-modulus theorem. -/
 theorem valid_fixed_of_valid_affine_three_extra_prefix_lt_two_pow
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m)
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m)
     (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
     (e : Equiv.Perm (Fin (m + 3))) (φ : ZMod N ≃+ ZMod N) (b : ZMod N)
     (hprefix : ∀ i : Fin m, g (e i.castSucc.castSucc.castSucc) = φ (a i.val) + b)
@@ -389,9 +434,9 @@ theorem valid_fixed_of_valid_affine_three_extra_prefix_lt_two_pow
     (fun i ↦ φ.symm (g (e i) - b)) hw (by intro i; simp [hprefix]) hupper
 
 /-- Full global lower bound for coherent unit-affine SI prefixes of
-length n-3 and three arbitrary extras, every n>=13 and positive modulus. -/
+length n-3 and three arbitrary extras, every n>=7 and positive modulus. -/
 theorem global_lower_bound_of_valid_affine_three_extra_prefix
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m)
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m)
     (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
     (e : Equiv.Perm (Fin (m + 3))) (φ : ZMod N ≃+ ZMod N) (b : ZMod N)
     (hprefix : ∀ i : Fin m, g (e i.castSucc.castSucc.castSucc) = φ (a i.val) + b) :
@@ -408,7 +453,7 @@ theorem global_lower_bound_of_valid_affine_three_extra_prefix
 /-- The same three-extra class satisfies every exact stratum, including
 the odd stratum. No unrestricted G1, G2, or G3 premise is used. -/
 theorem stratum_lower_bound_of_valid_affine_three_extra_prefix
-    {m s q : ℕ} (hm : 10 ≤ m) (hq : Odd q)
+    {m s q : ℕ} (hm : 4 ≤ m) (hq : Odd q)
     (g : Fin (m + 3) → ZMod (2 ^ s * q)) (hg : ValidTuple g)
     (e : Equiv.Perm (Fin (m + 3)))
     (φ : ZMod (2 ^ s * q) ≃+ ZMod (2 ^ s * q)) (b : ZMod (2 ^ s * q))
@@ -424,7 +469,7 @@ theorem stratum_lower_bound_of_valid_affine_three_extra_prefix
 /-- Subbinary moduli in the three-extra coherent class are exactly
 admissible fixed-set power gaps; this does not classify arbitrary tuples. -/
 theorem exists_admissible_power_gap_of_valid_affine_three_extra_prefix
-    {m N : ℕ} [NeZero N] (hm : 10 ≤ m)
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m)
     (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
     (e : Equiv.Perm (Fin (m + 3))) (φ : ZMod N ≃+ ZMod N) (b : ZMod N)
     (hprefix : ∀ i : Fin m, g (e i.castSucc.castSucc.castSucc) = φ (a i.val) + b)
@@ -442,9 +487,9 @@ theorem exists_admissible_power_gap_of_valid_affine_three_extra_prefix
   omega
 
 /-- Critical tuples in any exact stratum cannot contain the specified
-coherent unit-affine prefix of length n-3, for n>=13. -/
+coherent unit-affine prefix of length n-3, for n>=7. -/
 theorem not_validTuple_of_critical_affine_three_extra_prefix
-    {m s q : ℕ} (hm : 10 ≤ m) (hq : Odd q)
+    {m s q : ℕ} (hm : 4 ≤ m) (hq : Odd q)
     (hcritical : 2 ^ s * q < stratumBound (m + 3) s)
     (g : Fin (m + 3) → ZMod (2 ^ s * q))
     (e : Equiv.Perm (Fin (m + 3)))
@@ -454,5 +499,39 @@ theorem not_validTuple_of_critical_affine_three_extra_prefix
   intro hg
   exact (not_lt_of_ge (stratum_lower_bound_of_valid_affine_three_extra_prefix
     hm hq g hg e φ b hprefix)) hcritical
+
+/-- Below the last two binary residues, extending the three-extra prefix
+and consuming two-extra extraction recovers the entire actual fixed tuple. -/
+theorem exists_perm_fixed_of_valid_three_extra_prefix_of_modulus_le
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m) (hN : N ≤ 2 ^ (m + 3) - 3)
+    (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
+    (hprefix : ∀ i : Fin m, g i.castSucc.castSucc.castSucc = (a i.val : ZMod N)) :
+    ∃ p : Equiv.Perm (Fin (m + 3)), ∀ i, g (p i) = (a i.val : ZMod N) := by
+  have hupper : N < 2 ^ (m + 3) :=
+    lt_of_le_of_lt hN (Nat.sub_lt (by positivity) (by omega))
+  obtain ⟨p, hp⟩ := exists_perm_short_prefix_of_valid_fixed_three_extra_prefix hm hupper g hg hprefix
+  obtain ⟨q, hq⟩ := exists_perm_fixed_of_valid_fixed_short_prefix_of_modulus_le
+    (by omega : 5 ≤ m + 1) hN (fun i ↦ g (p i)) (validTuple_embedding p.toEmbedding g hg) hp
+  exact ⟨q.trans p, hq⟩
+
+/-- Whole-tuple extraction retains the original unit-affine map. It
+applies in every n>=7 with N<=2^n-3, not to arbitrary tuples without a prefix. -/
+theorem exists_perm_affine_fixed_of_valid_three_extra_prefix_of_modulus_le
+    {m N : ℕ} [NeZero N] (hm : 4 ≤ m) (hN : N ≤ 2 ^ (m + 3) - 3)
+    (g : Fin (m + 3) → ZMod N) (hg : ValidTuple g)
+    (e : Equiv.Perm (Fin (m + 3))) (φ : ZMod N ≃+ ZMod N) (b : ZMod N)
+    (hprefix : ∀ i : Fin m, g (e i.castSucc.castSucc.castSucc) = φ (a i.val) + b) :
+    ∃ p : Equiv.Perm (Fin (m + 3)), ∀ i, g (p i) = φ (a i.val) + b := by
+  have hv := validTuple_sub_const (fun i ↦ g (e i))
+    (validTuple_embedding e.toEmbedding g hg) b
+  have hw := validTuple_comp hv φ.symm.toAddMonoidHom φ.symm.injective
+  obtain ⟨p, hp⟩ := exists_perm_fixed_of_valid_three_extra_prefix_of_modulus_le hm hN
+    (fun i ↦ φ.symm (g (e i) - b)) hw (by intro i; simp [hprefix])
+  refine ⟨p.trans e, ?_⟩
+  intro i
+  have h := congrArg φ (hp i)
+  rw [φ.apply_symm_apply] at h
+  change g (e (p i)) = _
+  exact (sub_eq_iff_eq_add).mp h
 
 end MinModulus
