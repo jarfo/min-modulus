@@ -667,6 +667,41 @@ in the axiom audit; all 2,948 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. No proof placeholders or
 `native_decide` are introduced.
 
+### Quarter-minus-one extra: a new uniform independent-lift exclusion
+
+`SIQuarterMinusOne.lean` excludes an extra at normalized quotient value
+`M/2-1`, for `M=globalBound(n-1)` and every `n>=9`. The `n-2` SI quotient
+prefix has arbitrary independent lift bits; the other extra is arbitrary.
+The direct G3 consumer includes reindexing and quotient affine transport,
+and does not require the full dimension to be a non-power of two.
+
+The extracted general pattern is a one-fewer-coin Mersenne cover: with
+`k-1` coins through `2^k-1`, a target `x<2*(2^k-1)` can fail only when
+`x+k=2^(k+1)` or `x+k+2^j=2^(k+1)` for some `0<=j<=k`.
+For `m=n-2`, `P=2^m`, and `M=2*(P-d)`, four-term antipodal blocks then
+cover all quotient targets except at most
+`P-m-3`, `2*P-m-3-d`, and `2*P-m-3-2*d`.
+Any noncoherent prefix lift supplies a three-term antipodal block whose
+remaining coin budget repairs all three targets. Thus the shorter prefix
+and the quarter-minus-one extra have the FULL `(m+2)`-fold upstairs sumset,
+which gives a rival omitting the other extra. The coherent alternative is
+excluded using the already proved full-SI extraction, not an assumed
+classification. Actual lifted zero/one normalization and both sheets are
+checked.
+
+The generic theorem works for `m>=7`, dyadic `d>=4`, `2*d<=m+1`, and
+`8*(m+d+1)<=2^m`; the exceptional modulus meets these inequalities by a
+proved arithmetic lemma. This is a new excluded family within G3, not a
+new assumed gate or a theorem for arbitrary shorter-prefix lifts. Its G3
+consumer has the explicit `n>=9` scope; this milestone does not settle
+the remaining `n=7` case of this family or unrestricted G1/G2/G3.
+The exploratory finite searches are not proof inputs.
+
+Verification: full build 15,099 jobs; all 17 new declarations registered
+in the axiom audit; all 2,965 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. No proof placeholders or
+`native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
