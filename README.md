@@ -430,8 +430,9 @@ G3 consequence in every relevant non-power dimension `n>=5`.
 
 Scope: coherence is required in the **full** modulus, and the affine map
 is an additive automorphism (unit scaling). This does not prove the
-independent-lift cap-two pattern above, the shorter-prefix nonunit case,
-or extraction of such a prefix from arbitrary tuples. The numerical bound
+independent-lift cap-two pattern above or extraction of such a prefix from
+arbitrary tuples. The later arbitrary-multiplier theorem below removes the
+unit restriction for the numerical global bound and G3. The numerical bound
 alone does not prove the stronger G1/G2 thresholds; the following milestone
 now supplies that strengthening. All three unrestricted global inputs
 remain open; no additional gate is introduced.
@@ -463,8 +464,9 @@ five and six reuse the existing proved odd base theorems. No new finite
 enumeration or unrestricted G2 assumption is used. The global envelope
 and the actual valuation bound `t` separately, giving the exact strata.
 
-Independent lift bits, nonunit scaling of the shorter prefix, and
-extraction of a useful prefix from arbitrary tuples remain unresolved.
+Independent lift bits, exact G1/G2 strata for shorter nonunit prefixes,
+and extraction of a useful prefix from arbitrary tuples remain unresolved.
+The next theorem removes the unit restriction for the numerical bound/G3.
 This closes the exact-threshold gap for the existing two-extra class,
 not an unrestricted G1/G2/G3 gate or a new roadmap package.
 
@@ -472,6 +474,37 @@ Verification for the two-extra exact-stratum milestone: full build 15,091
 jobs; all eleven new declarations audited; all 2,875 printed axiom lists
 use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
+
+### Full two-extra global bound for arbitrary multipliers
+
+`SITwoMultiplierBound.lean` proves
+`global_lower_bound_of_valid_scaled_fixed_short_prefix`: for every `n>=5`,
+a coherent prefix `c*(2^i-1)+b`, `i<n-2`, with two arbitrary extras satisfies
+`globalBound n <= N`, for **every multiplier c**, including nonunits.
+Its direct G3 consumer excludes the exceptional modulus for this broader
+class in every relevant dimension. No unrestricted global gate is assumed.
+
+Factoring the multiplier as a unit times a divisor `d` of `N=d*M` and
+reflecting prefix validity force `d<=4` in a global counterexample. Index
+two either completes the longer scaled prefix or gives a prefix-only rival.
+Index three is excluded by subgroup reflection and coset-based covers.
+At index four, the only remaining residue types are an even extra `x`
+and an odd extra `y`. Two single-hole cover arguments force `x=2*y+4` and
+`y mod M=-3`, respectively. These relations and the prefix power gap close
+the whole tuple under `u -> 2*u+4`, giving the existing affine-doubling bound.
+The proof is uniform; a small arithmetic exception reuses the proved odd
+five-tuple bound. The residue splits modulo 2, 3, and 4 are kernel-checked.
+
+This broadens the actual global/G3 exclusion class, not only an interface.
+It does not establish exact G1/G2 strata for shorter nonunit prefixes,
+combine arbitrary multipliers with independent lift bits, or extract a
+prefix from arbitrary tuples. Those gaps and the three unrestricted global
+inputs remain open; no new global gate is introduced.
+
+Verification for the arbitrary two-extra multiplier milestone: full build
+15,092 jobs; all thirty-two new declarations audited; all 2,907 printed
+axiom lists use only `propext`, `Classical.choice`, and `Quot.sound`.
+No proof placeholders or `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 
