@@ -172,6 +172,32 @@ Verification: full build 15,082 jobs; all thirteen declarations audited;
 all 2,783 printed axiom lists are standard-only, with no proof placeholders
 or `native_decide`.
 
+### Exact strata for SI-prefix extensions
+
+`SIExtensionStrata.lean` strengthens the preceding class theorem to
+`stratum_lower_bound_of_valid_affine_fixed_prefix`, in every dimension
+`n>=3` and every valuation. Its explicit consumers rule out critical G1
+tuples in this class and prove the full odd G2 threshold `2^n-1` for it.
+Together with the previous G3 consumer, this removes coherent SI-prefix
+extensions from all three residuals, without assuming full-tuple doubling
+closure or introducing another global gate.
+
+The proof extracts structure from validity: when `N<=2^n-3`, the arbitrary
+extra entry must complete the fixed SI set. The extended cover includes
+its upper boundary using four copies of the largest retained coin.
+A second theorem shows that a valid fixed set below `2^n` requires
+`N=2^n-2^t`; positive-multiple witnesses exclude every non-power gap.
+The proved fixed-set minimum gives `t<=floor(log2 n)`, and odd-factor
+divisibility gives `t<=s`, hence the exact stratum threshold.
+
+The coherent full-modulus prefix restriction is unchanged. Independent
+half-modulus shifts and arbitrary non-SI tuples remain unresolved; all
+three unrestricted global obligations stay open.
+
+Verification: full build 15,083 jobs; all eight declarations audited;
+all 2,791 printed axiom lists are standard-only, with no proof placeholders
+or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
