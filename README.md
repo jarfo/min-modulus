@@ -107,6 +107,16 @@ from higher-even G1, without assuming common touch, criticality, G2, or
 G3. It does not cover the first even stratum or arbitrary tuples, and
 does not assert a general singleton-parity classification.
 
+`SILiftOddDefects.lean` now narrows the corresponding FIRST-even critical
+class: for odd `M`, `N=2*M<2^n-2`, `n>=5`, a full unit-affine SI quotient
+prefix forces exactly ONE noncoherent entry among the first `n-2` lifts,
+relative to the actual lifted-one difference and lifted zero. Two defects
+would force equal even dyadic sums below `2*M`; oddness removes wraparound
+and gives a forbidden quotient collision. Zero defects already violate
+the coherent class bound. The single-defect case, terminal prefix lift,
+and extra remain open. This is actual structure extraction, not a new
+assumed gate or a proof of unrestricted G1/G2/G3.
+
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
@@ -906,6 +916,44 @@ in the axiom audit; all 3,006 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. All 22 regression tests pass,
 including four new lift/parity scope checks. No proof placeholders or
 `native_decide` are introduced.
+
+### First-even full-prefix lifts have a unique interior defect
+
+`SILiftOddDefects.lean` proves
+`exists_unique_short_prefix_defect_of_critical_odd_quotient_affine_si_prefix`.
+For `n=m+2>=5`, odd positive `M`, and `2*M<2^n-2`, a hypothetical valid
+full SI quotient-prefix extension has exactly one defect among indices
+`0..m-1` relative to its own actual affine multiplier. Indices zero and
+one are automatically coherent, so the defect lies in `2..m-1`.
+Reindexing, quotient affine transport, and all original lift bits are
+allowed. The terminal prefix index `m` and extra index `m+1` are not
+claimed coherent or determined.
+
+Each interior defect gives an extra quotient value `1+2^j-2^l`,
+`1<=l<=m`: the zero and unit complement cases are excluded by the proved
+midpoint bound. Two defects would equate two even sums of powers of two.
+The universal subgroup bound puts each sum below `2*M`. Since `M` is odd,
+their congruence is an equality of natural numbers, with no one-period
+wraparound. Binary uniqueness forces the extra quotient to equal one.
+The existing actual quotient-collision threshold excludes that value.
+No defect is also impossible by the coherent `n-2` prefix threshold.
+Thus validity EXTRACTS the unique defect; no census or open gate is used.
+
+This does not yet close the first-even full-prefix class, arbitrary-prefix
+extraction, or any unrestricted global gate. The immediate structural
+target within this class is its single interior defect, with arbitrary
+terminal lift and extra. The larger queue remains G1, G2, G3, 0/3 closed.
+
+Exact regressions at n=6,7,8 show that multiple defects ARE allowed at
+`N=2^n-2`; the strict critical bound cannot be dropped. Another exact
+guardrail checks `(0,484,65,301,209,373,431)` modulo 502: it is valid, has
+two even entries, and has no common-touch coordinate. It is above the
+binary range, not a critical G1 counterexample. A two-entry minority
+parity fibre alone therefore does not imply common touch.
+
+Verification: full build 15,105 jobs; all nine new declarations registered
+in the audit; all 3,015 axiom lists standard-only; all 26 exact regressions
+pass. No proof placeholders or `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 
