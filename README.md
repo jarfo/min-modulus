@@ -416,6 +416,21 @@ pass. The bound is sharp for generic balanced binary systems, not
 claimed sharp for realizable quotient rivals. Uniform critical or
 exceptional extraction remains unproved; all three gates stay OPEN.
 
+`CycleFibreCapacity.lean` now extracts exponential outside capacity
+from an ACTUAL affine doubling cycle of m coordinates. The cycle fills
+its subgroup of exact order 2^m-1 with exactly m coins. Any k outsiders
+therefore force (2^m-1)|N and 2^k*(2^m-1)<=N. At odd N, m>=k gives
+the FULL odd threshold: a cycle containing at least HALF the tuple
+suffices, with arbitrary other entries. At any positive N, at most
+floor(log2 n) outsiders give the FULL global and EVERY exact-stratum
+bound and direct G3 exclusion. The subbinary majority-cycle modulus
+is exactly 2^n-2^k or 2^n-1. Affine translation and reindexing are
+included; no outside prefix, parity, or lift-bit pattern is assumed.
+Ten declarations; full 15,130-job build; all 3,245 axiom lists standard-
+only; 253 tests pass. A valid majority-cycle control lies outside the
+old coherent n-3 prefix class. General cycle/certificate extraction
+remains unproved; unrestricted G1/G2/G3 stay OPEN, not 1/3 closed.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
