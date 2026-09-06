@@ -431,14 +431,47 @@ G3 consequence in every relevant non-power dimension `n>=5`.
 Scope: coherence is required in the **full** modulus, and the affine map
 is an additive automorphism (unit scaling). This does not prove the
 independent-lift cap-two pattern above, the shorter-prefix nonunit case,
-or extraction of such a prefix from arbitrary tuples. It does not by
-itself prove the stronger G1/G2 stratum thresholds. All three unrestricted
-global inputs remain open; no additional gate is introduced.
+or extraction of such a prefix from arbitrary tuples. The numerical bound
+alone does not prove the stronger G1/G2 thresholds; the following milestone
+now supplies that strengthening. All three unrestricted global inputs
+remain open; no additional gate is introduced.
 
 Verification for the two-extra milestone: full build 15,090 jobs; all
 eighteen new declarations audited; all 2,864 printed axiom lists use only
 `propext`, `Classical.choice`, and `Quot.sound`. No proof placeholders or
 `native_decide` are used.
+
+### Exact strata and full tuple extraction for the two-extra class
+
+`SITwoExtensionStrata.lean` proves the actual `stratumBound`, not only
+`globalBound`, for the coherent unit-affine `n-2`-entry prefix class in
+every `n>=5`. Direct consumers exclude critical G1 tuples in this class
+and give the odd G2 bound `2^n-1 <= N`. Together with the preceding G3
+consumer, all three thresholds are now proved for this broader class.
+
+The new uniform extraction theorem applies for `n>=7`, `N<=2^n-3`:
+one of the two arbitrary extras must be the next SI entry, after which
+the one-extra completion theorem extracts the full SI tuple. Affine
+transport retains the original affine map and changes only the order;
+an explicit endpoint corollary applies at `B(n)`. The interval argument's
+near-wrap case is repaired by tripling the smaller extra. This is an
+actual structural conclusion from validity, not an assumed classifier.
+
+Consequently every valid member of this class below `2^n` has modulus
+`2^n-2^t`. The last two binary residues already have that form; dimensions
+five and six reuse the existing proved odd base theorems. No new finite
+enumeration or unrestricted G2 assumption is used. The global envelope
+and the actual valuation bound `t` separately, giving the exact strata.
+
+Independent lift bits, nonunit scaling of the shorter prefix, and
+extraction of a useful prefix from arbitrary tuples remain unresolved.
+This closes the exact-threshold gap for the existing two-extra class,
+not an unrestricted G1/G2/G3 gate or a new roadmap package.
+
+Verification for the two-extra exact-stratum milestone: full build 15,091
+jobs; all eleven new declarations audited; all 2,875 printed axiom lists
+use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
+placeholders or `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 

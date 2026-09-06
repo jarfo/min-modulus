@@ -13,6 +13,7 @@ import MinModulus.SIEndpointRigidity
 import MinModulus.SIActualDeletion
 import MinModulus.SIQuotientCollision
 import MinModulus.SITwoExtensionBound
+import MinModulus.SITwoExtensionStrata
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
