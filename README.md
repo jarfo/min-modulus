@@ -431,6 +431,20 @@ only; 253 tests pass. A valid majority-cycle control lies outside the
 old coherent n-3 prefix class. General cycle/certificate extraction
 remains unproved; unrestricted G1/G2/G3 stay OPEN, not 1/3 closed.
 
+`CycleChainRigidity.lean` now EXTRACTS the logarithmic size restriction
+when the outsiders form one actual doubling chain. In ANY abelian
+group, a disjoint nonempty zero-sum m-fibre and k-chain force 2^k<=m+k:
+binary coin splitting otherwise gives a full-length rival omitting the
+entire fibre. The zero-sum fibre need not itself be a cycle. For an
+actual affine cycle plus one chain, this supplies the size input to
+cycle-fibre capacity and proves the FULL global, odd, every exact-
+stratum, and G3 class bounds without assumed component-size cutoffs.
+Nine declarations; full 15,131-job build; all 3,254 axiom lists standard-
+only; 280 tests pass. Actual omitted-fibre rivals and tight valid controls
+are tested, including a valid arbitrary-outsider guard showing that
+the chain assumption cannot be dropped from size extraction. Arbitrary
+cycle/chain extraction and the three unrestricted gates remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
