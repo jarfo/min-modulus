@@ -7,6 +7,7 @@ import MinModulus.DoublingClosureStrata
 import MinModulus.SIExtensionBound
 import MinModulus.SIExtensionStrata
 import MinModulus.SILiftCover
+import MinModulus.SIMultiplierBound
 import MinModulus.Descent
 import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination

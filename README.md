@@ -236,6 +236,44 @@ all 2,805 printed axiom lists are standard-only, with no proof placeholders
 or `native_decide`. The unchanged finite census also passes through `n=13`,
 including its non-covering power-of-two boundary controls.
 
+### Full global bound for arbitrary coherent SI multipliers
+
+`SIMultiplierBound.lean` proves
+`global_lower_bound_of_valid_scaled_fixed_prefix`: a valid `n`-tuple
+containing `c*(2^i-1)+b` for `i<n-1` satisfies `globalBound n`, for every
+`n>=3`, positive modulus, and multiplier `c`, **including nonunits**.
+The remaining entry is arbitrary, and reindexing is allowed. This removes
+the unit restriction from the earlier coherent-prefix global theorem.
+An explicit consumer also rules out this entire class at the G3 modulus.
+
+The new ingredient is an index-two obstruction. Removing zero coins makes
+value parity equal to coin-count parity, saving a term in the single-hole
+cover. For a doubled SI prefix modulo `2M`, an even extra entry puts the
+whole tuple in the order-`M` subgroup and contradicts its binary bound.
+For an odd extra entry, the parity cover supplies a competing multiset
+with three copies of that entry. Its sole exceptional target instead
+forces affine doubling closure, already excluded at the G3 modulus.
+
+To obtain the full numerical bound, factor any multiplier as a unit times
+a divisor `d` of the modulus `d*M`. Validity of the retained prefix reflects
+to the fixed set modulo `M`, forcing `M>=globalBound(n-1)`. A putative global
+counterexample has `d<=2`. The unit case is proved already; the index-two
+case's fixed-set power-gap classification forces exactly the exceptional
+modulus just excluded. This is an unconditional global-bound consumer,
+not an assumed structural extraction interface.
+
+Scope remains explicit: arbitrary nonunit multipliers are covered for
+**coherent full-modulus** prefixes. The independent-lift theorem separately
+handles affine SI prefixes in the quotient, with unit scaling there. No
+theorem here combines arbitrary nonunits with independent lift bits or
+extracts either prefix from arbitrary tuples. The stronger exact-stratum
+theorem above retains its stated unit-prefix scope. All three unrestricted
+global obligations remain open.
+
+Verification for the arbitrary-multiplier milestone: full build 15,085 jobs;
+all eighteen declarations audited; all 2,823 printed axiom lists use only
+the standard axioms, with no proof placeholders or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
