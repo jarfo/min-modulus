@@ -519,6 +519,20 @@ lists standard-only; 405 tests pass. Tests retain actual indices,
 non-SI fibres, and a tight cube which is not a valid tuple. Critical
 coverage/tightness is not yet extracted; unrestricted G1/G2/G3 stay 0/3.
 
+`CycleThinCover.lean` now connects quotient relations to ACTUAL
+outside equalities. Uniform binary supports plus cyclic predecessor
+splitting cover every nonzero Mersenne residue with m-1 coins, and
+every residue outside zero and the negative cycle entries with m-2.
+Beside any actual mapped Mersenne cycle, an outside double in the
+cycle subgroup must be zero or an actual cycle entry. A quotient
+doubling relation between two outsiders must hold upstairs exactly;
+otherwise three copies of one outsider and a thin cover form an
+actual omitted-coordinate rival. The mapping need not be assumed
+injective. Seven declarations; full 15,137-job build; all 3,298 axiom
+lists standard-only; 441 tests pass. Next extract quotient doubling
+closure from tight actual-fibre capacity. Arbitrary critical structure
+and the same unrestricted G1/G2/G3 gates remain open, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
