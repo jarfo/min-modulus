@@ -55,6 +55,7 @@ import MinModulus.ActualFibreSidon
 import MinModulus.QuotientRivalParity
 import MinModulus.CyclicLiftCarry
 import MinModulus.CyclicLiftCertificate
+import MinModulus.SmallLiftCertificate
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

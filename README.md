@@ -404,6 +404,18 @@ Six declarations; full 15,128-job build; all 3,230 axiom lists standard-
 only; 213 tests pass. Critical/exceptional certificate extraction remains
 unproved, as does unrestricted G2. All three global gates remain OPEN.
 
+`SmallLiftCertificate.lean` sharpens completeness to a dimension-sized
+certificate: a nonempty n-coordinate quotient has no valid cyclic lift
+iff at most n ACTUAL rivals have zero total parity and inconsistent
+carry. A span-support argument first gives n+1 rows for arbitrary binary
+systems; balance removes one coordinate and improves this to n. Thus
+the SAME unrestricted G3 gate is exactly universal extraction of these
+at-most-n certificates at exceptional quotients. Five declarations;
+full 15,129-job build; all 3,235 axiom lists standard-only; 231 tests
+pass. The bound is sharp for generic balanced binary systems, not
+claimed sharp for realizable quotient rivals. Uniform critical or
+exceptional extraction remains unproved; all three gates stay OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
