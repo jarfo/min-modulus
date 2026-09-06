@@ -359,6 +359,22 @@ Ten declarations; full 15,125-job build; all 3,205 axiom lists standard-
 only; 161 regression tests pass. Exact Sidon counting plus packing still
 does not force a critical grid hit. The same three gates remain OPEN.
 
+`QuotientRivalParity.lean` now gives a COMPLETE first-even lift criterion
+for an arbitrary quotient, without any prefix hypothesis. Every nonzero
+balanced quotient rival c must have parity dot product one with the
+actual lift's parity vector. Conversely any vector separating ALL rivals
+constructs an actual valid cyclic lift by CRT. An odd family of rivals
+with coordinatewise even total rules out every first-even lift. The
+general higher-even obstruction retains the carry condition: if the
+coefficient sum is 2*d, then sum(d_i*q_i)=0 in the actual quotient.
+Odd half-modulus makes this automatic; an explicit valid higher-even
+control shows why it cannot simply be dropped. Six declarations; full
+15,126-job build; all 3,211 axiom lists standard-only; 177 tests pass.
+A parity certificate excludes every lift of an injective Sidon quotient,
+so this goes beyond pair counting. The criterion is closed, but extracting
+a dependence or a valid deletion from arbitrary criticality is still open.
+This is a general tool inside the existing G1/G3 work, not a fourth gate.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
