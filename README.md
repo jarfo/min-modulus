@@ -410,6 +410,36 @@ Verification for quotient-collision elimination: full build 15,089 jobs;
 all four new declarations audited; all 2,846 printed axiom lists are
 standard-only, with no proof placeholders or `native_decide`.
 
+### Full global bound for an SI prefix with two arbitrary extras
+
+`SITwoExtensionBound.lean` proves
+`global_lower_bound_of_valid_affine_fixed_short_prefix`: for every `n>=5`
+and every positive modulus, a valid tuple containing a coherent unit-affine
+copy of the first **n-2** SI entries satisfies `globalBound n <= N`.
+Both remaining entries are arbitrary. This is a full numerical global
+bound for a broader class than the preceding `n-1`-prefix result, without
+common touch, quotient validity, doubling closure, or a G1/G2/G3 input.
+
+The proof localizes each extra using the one-extra multiset cover. If the
+extras are close, doubling one supplies a rival; if they are far apart,
+their full sum wraps into a prefix-only cover. The interval estimate is
+uniform for `n>=7`, and explicit coin/triple-extra repairs handle `n=5,6`.
+The finite short-prefix census is not used as a certificate or assumption.
+`not_validTuple_exceptional_of_affine_fixed_short_prefix` gives the direct
+G3 consequence in every relevant non-power dimension `n>=5`.
+
+Scope: coherence is required in the **full** modulus, and the affine map
+is an additive automorphism (unit scaling). This does not prove the
+independent-lift cap-two pattern above, the shorter-prefix nonunit case,
+or extraction of such a prefix from arbitrary tuples. It does not by
+itself prove the stronger G1/G2 stratum thresholds. All three unrestricted
+global inputs remain open; no additional gate is introduced.
+
+Verification for the two-extra milestone: full build 15,090 jobs; all
+eighteen new declarations audited; all 2,864 printed axiom lists use only
+`propext`, `Classical.choice`, and `Quot.sound`. No proof placeholders or
+`native_decide` are used.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
