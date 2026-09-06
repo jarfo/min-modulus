@@ -536,6 +536,35 @@ Verification for arbitrary-multiplier two-extra exact strata: full build
 lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
 
+### Quarter-offset extras among independent shorter-prefix lifts
+
+`SIQuarterExtra.lean` excludes another actual G3 class without assuming
+upstairs coherence. Write `m=n-2`, `M=B(n-1)`, and `H=M/2`. For `n>=5`
+not a power of two, if the half quotient contains the first `m` SI entries
+and one extra reduces to `H+1`, the full tuple is invalid, regardless of
+every prefix lift bit, either lift of that extra, and the other extra.
+Reindexing, quotient additive automorphisms, and translation are allowed.
+
+The argument is uniform. For any positive `M=2H` with `H<=2^m-2`, the
+`m`-term quotient sumset of `{a_0,...,a_(m-1),H+1}` covers all but at most
+`H+1+(2^m-m)`. Two copies of the quarter-offset extra and two copies of the
+lifted one differ by the half modulus. Adding either pair lifts this cover
+to a full-length rival omitting the other extra, unless its quotient is
+exactly `3`. At G3 that exception is a genuine outside-coordinate quotient
+collision, already excluded by `SIQuotientCollision.lean`.
+
+This closes the quarter-offset case of the existing noncoherent G3
+residual, not that entire residual or any unrestricted global gate. It
+does not assert a full sumset cover with no exception, and does not prove
+the finite cap-two observation: its constructed rival may use three copies
+of the quarter-offset extra. No finite enumeration or new assumed gate is
+used. Prefix extraction from arbitrary tuples remains open.
+
+Verification for the independent-lift quarter-offset milestone: full build
+15,094 jobs; all five new declarations audited; all 2,924 printed axiom
+lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
+placeholders or `native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
