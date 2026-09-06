@@ -601,6 +601,36 @@ jobs; all six new declarations audited; all 2,936 printed axiom lists
 use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
 placeholders or `native_decide` are introduced.
 
+### Quarter separation between the two independently lifted extras
+
+`SILiftQuarterPair.lean` closes the two-extra quarter-separation application.
+For any positive even half modulus `M=2H`, a valid length-`m+2` tuple with
+an independently lifted length-`m` SI quotient prefix and extras differing
+by `H` in that quotient satisfies `globalBound (m+2) <= 2*M`, for `m>=3`.
+This is the full numerical global bound, not only an exceptional-modulus
+exclusion. Quotient affine transport and reindexing are allowed, and all
+lift bits are arbitrary. Direct G3 consumers are included.
+
+Below the global threshold, `H<=2^m-2`. The two quotient extras select a
+remainder in the lower half; `m-1` prefix coins represent it except at
+`F=2^m-m`. Two copies of either extra differ by `M` upstairs, so either
+sheet yields a full-length rival with a repeated coordinate. At the hole,
+one extra has quotient `H-1` and the other `-1`; the already proved
+negative-one extraction gives the global bound instead. Both holes,
+either choice of extra, and the multiplicity contradiction are proved.
+No finite enumeration, coherence hypothesis, or unrestricted gate is used.
+
+Together with the earlier all-prefix quarter-offset exclusion, this
+removes the remaining quarter-separation case involving the two extras
+from the existing G3 shorter-prefix residual. It does not settle arbitrary
+independent lifts, extract a prefix from arbitrary tuples, or close an
+unrestricted global gate. No new roadmap gate is introduced.
+
+Verification for the two-extra quarter-separation milestone: full build
+15,097 jobs; all six new declarations audited; all 2,942 printed axiom
+lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
+placeholders or `native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
