@@ -33,6 +33,7 @@ import MinModulus.G1ParityFibreDescent
 import MinModulus.SILiftParityDescent
 import MinModulus.SILiftOddDefects
 import MinModulus.SILiftOddNormalForm
+import MinModulus.SILiftOddComplete
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

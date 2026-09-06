@@ -119,8 +119,14 @@ terminal lift coherent and determines the extra upstairs as
 `c`. General pair-sum rigidity supplies this further extraction. If the
 original lifted zero and one share parity, actual coset halving now gives
 G1 descent in this first-even class, with quotient affine transport.
-The opposite-parity normal-form branch and arbitrary tuples remain open.
-No new global gate or unrestricted G1/G2/G3 proof is claimed.
+`SILiftOddComplete.lean` now excludes the opposite-parity branch as well:
+the full first-even threshold `2^n-2<=N` is proved for this entire class,
+all original lift bits and extras, `n>=5`. Below the binary bound the
+half modulus must be the Mersenne endpoint, giving a smaller fixed valid
+tuple. Together with higher-even descent, actual G1 half descent is now
+proved for every subbinary full unit-affine SI quotient-prefix lift in
+EVERY even stratum. Arbitrary-prefix extraction, shorter independent
+prefixes, and unrestricted G1/G2/G3 remain open; no new gate is added.
 
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
@@ -1005,6 +1011,58 @@ rival-count obstruction; it is not a Lean proof input.
 Verification: full build 15,106 jobs; all fourteen new declarations
 registered in the audit; all 3,029 axiom lists standard-only; all 27
 regressions pass. No proof placeholders or `native_decide` are introduced.
+
+### Complete first-even class and all-stratum full-prefix G1 descent
+
+`SILiftOddComplete.lean` proves
+`first_even_lower_bound_of_valid_quotient_affine_si_prefix`:
+
+    n>=5 + M odd + valid full unit-affine SI half-quotient prefix
+      -> 2^n-2 <= 2*M.
+
+This closes the ENTIRE first-even critical full-prefix class, including
+the opposite-parity normal forms left above. There is no remaining
+single-defect, terminal-lift, extra, or lifted-one parity obligation for
+this class. Quotient affine transport and reindexing are included, and
+all original independent lift bits and extra values are allowed.
+
+The final argument extracts uniform small rivals from the normal form,
+with no parity or modulus restriction in its n>=6 algebraic part:
+
+- If j>=3, `g_extra+g_l+g_1 = 2*g_(j-1)+g_2` is a three-term rival,
+  so the defect must be at j=2.
+- If l>=4, `g_extra+g_l+g_3+g_1 = 4*g_2` is a four-term rival,
+  so the complement must be l=3.
+- The resulting extra is `-3*c`. For n>=6,
+  `g_extra+g_4+g_1 = 2*g_2+g_3` is a three-term rival.
+
+Each removed side has distinct coordinates, and the replacement contains
+an outside coordinate. A general multiset-replacement theorem turns each
+identity into an actual full-length rival. For n=5, the critical range
+and binary floor leave only M=9,11,13 and two possible lifted-one values;
+six explicit pair identities close that base. These are exact kernel-
+checked identities, not a finite census input to the general proof.
+
+Below `2^n`, the threshold forces `M=2^(n-1)-1`. The proved fixed tuple
+at this Mersenne endpoint gives actual half descent, including the valid
+boundary. `admitsValidTuple_half_of_subbinary_quotient_affine_si_prefix`
+combines this with higher-even descent: the full unit-affine half-quotient
+prefix class now leaves G1 in ALL even strata, for every n>=5. No common
+touch, criticality, half-witness, or unrestricted global gate is assumed
+by this final subbinary descent theorem. This is not a claim that its
+smaller tuple is a canonical deleted quotient.
+
+The next global-bound work is to propagate the actual structured smaller
+tuple where needed, and to extract useful structure from arbitrary
+critical tuples. Shorter independent prefixes and unrestricted G1/G2/G3
+remain open, 0/3; no new gate is added. Historical residuals above are
+superseded for this full-prefix class, not additional open milestones.
+
+Verification: full build 15,107 jobs; all twelve new declarations audited;
+all 3,041 axiom lists standard-only; all 32 regressions pass. Five new scope
+checks exercise the final uniform rival with unit/nonunit multipliers and
+verify a valid n=5 control ABOVE criticality, where the n>=6 rival is not
+available. No proof placeholders or `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 
