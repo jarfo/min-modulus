@@ -730,6 +730,37 @@ in the axiom audit; all 2,970 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. No proof placeholders or
 `native_decide` are introduced.
 
+### Independent-lift midpoint extensions satisfy the binary bound
+
+`SILiftMidpoint.lean` proves `2^n<=N` for every `n>=5` and positive
+even modulus `N=2*M` when the actual half quotient contains a unit-affine
+SI prefix of length `n-1` and the remaining entry is a midpoint of two
+DISTINCT prefix entries. All upstairs lift bits are arbitrary. The half
+modulus may be odd or even; quotient affine transport and reindexing are
+included. Exact-stratum bounds and a direct critical-G1 exclusion follow.
+
+Validity forces the downstairs midpoint relation onto opposite sheets
+upstairs. The `n-2`-term quotient cover, now extended through its final
+subbinary boundary, gives a full-length rival with either zero or two
+copies of the extra. Its only possible hole forces the extra to -1.
+The proved negative-one coherence extraction supplies `globalBound n<=N`,
+whereas the midpoint equation forces `M` to divide a sum of two distinct
+powers of two and hence `N<=3*2^(n-2)`. These bounds contradict each other
+for every `n>=5`, closing the hole uniformly.
+
+This is a new all-modulus binary/G1 result for a structural family, not
+another isolated exceptional residue or an assumed interface. Full
+`n-1`-entry SI quotient prefixes were already excluded at G3; that gate's
+scope is not enlarged here. Do not shorten this theorem's prefix to
+`n-2`, drop distinctness, or infer a midpoint in arbitrary tuples.
+Unrestricted G1/G2/G3 and Conjecture 1 remain open (0/3); no new gate is
+introduced. No finite census is a proof input.
+
+Verification: full build 15,101 jobs; all seven new declarations registered
+in the axiom audit; all 2,977 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. The existing 14 regression tests pass.
+No proof placeholders or `native_decide` are introduced.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
