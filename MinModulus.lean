@@ -59,6 +59,7 @@ import MinModulus.SmallLiftCertificate
 import MinModulus.CycleFibreCapacity
 import MinModulus.CycleChainRigidity
 import MinModulus.AlmostDoubling
+import MinModulus.OneEscapeDescent
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

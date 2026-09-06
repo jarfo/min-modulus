@@ -461,6 +461,21 @@ and the even collision restriction are tested. A valid odd control
 requires three escapes for every affine shift, so general closure
 extraction is not asserted. Conjecture 1 and G1/G2/G3 remain OPEN, 0/3.
 
+`OneEscapeDescent.lean` now removes even injectivity from ACTUAL
+one-escape half descent. An antipodal pair can be deleted while retaining
+the exception, and the specified half quotient still has one-escape
+closure. Induction proves 2^n-2^s<=2^s*q in every stratum, giving the
+FULL global and exact-stratum thresholds whenever s<=floor(log2 n),
+including all odd and first-even cases. At EVERY critical even stratum
+the class now has the G1 half-deletion conclusion: a collision gives
+actual descent, while injective doubling contradicts the proved bound.
+Seven declarations; full 15,133-job build; all 3,271 axiom lists
+standard-only; 329 tests pass. Valid branched examples have a collision
+disjoint from the actual escape, testing the newly covered case.
+Above the logarithmic cutoff the uncapped inequality is weaker and
+still admits the exceptional modulus; G3 is not silently closed.
+Unrestricted G1/G2/G3 and Conjecture 1 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
