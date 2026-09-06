@@ -344,6 +344,21 @@ equality counterexample is detected by a mixed grid point; fibre validity
 cannot be omitted from the criterion. Proving a covered grid point from
 arbitrary criticality remains OPEN; no unrestricted G1/G2/G3 gate is closed.
 
+`ActualFibreSidon.lean` connects general coin counting to ACTUAL descent.
+In a valid tuple, a squarefree pair sum has no other two-coin
+representation. The only possible unordered-pair collisions are between
+two repeated coordinates. In any actual cyclic fibre of an even parent,
+such a collision gives an antipodal parent pair and the required valid
+tuple with one fewer coordinate at half the modulus. Otherwise the
+fibre has exactly binom(m+1,2) two-coin sums. Thus two odd outsiders
+give actual half deletion OR at least binom(m+1,2) missing own-size
+sums, improving binom(m,2)+1. At odd fibre order the sharp count and
+deficit hold outright. All subgroup indices and arbitrary actual fibre
+shapes are allowed; no SI, primitive, zero-entry, or criticality premise.
+Ten declarations; full 15,125-job build; all 3,205 axiom lists standard-
+only; 161 regression tests pass. Exact Sidon counting plus packing still
+does not force a critical grid hit. The same three gates remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
