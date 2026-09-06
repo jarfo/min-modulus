@@ -252,6 +252,24 @@ The full 15,118-job build and all 3,138 standard-only axiom lists pass.
 No tuple census or unrestricted global
 gate is assumed; no index-five subcase remains open in this range.
 
+`ActualFibreQuotientCube.lean` proves a general counting constraint with
+NO SI hypothesis: if an actual m-entry cyclic fibre covers its subgroup
+using exactly m coins, then every outside-coordinate subset sum is
+distinct in the quotient. Thus k outside entries force index at least
+2^k. More generally an (m+r)-coin cover excludes subset collisions whose
+cardinalities differ by at least r. Padding uses an actual fibre entry,
+which need not be zero. For even fibres this excludes full own-size
+covers with at least two outside coordinates, and an (m+2)-coin cover
+already excludes two odd extras. These are general G1 restrictions;
+full coverage is not proved for arbitrary critical fibres.
+The same counting theorem closes ALL index-six/seven coherent three-extra
+classes for n>=8, with the binary bound and hence every global/stratum
+threshold, including odd moduli at index seven. No quotient enumeration
+is used. The full 15,119-job build and all 3,146 standard-only axiom lists
+pass. Eight declarations are new. An injective index-eight quotient cube
+alone does not ensure validity; index eight and arbitrary extraction
+remain unresolved. Unrestricted G1/G2/G3 stay open, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
