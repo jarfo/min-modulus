@@ -129,6 +129,22 @@ Verification: full build 15,080 jobs; all twelve new declarations audited;
 all 2,764 printed axiom lists are standard-only, with no proof placeholders
 or `native_decide`.
 
+`DoublingClosureStrata.lean` strengthens the class result to exact order
+and the full stratified threshold. The full-orbit generator has order
+`2^n-2^t`, with `t < n`. That power gap divides `N`. Transporting the tuple
+to the generated subgroup gives `t <= floor(log2 n)`; divisibility gives
+`t <= s` when `N=2^s*q`, `q` odd. Therefore
+`stratum_lower_bound_of_valid_affine_doubling_closed` proves the full
+`stratumBound n s`, without any global conjectural input.
+
+The six new declarations include direct consumers: no critical G1 tuple
+in this class, the exact odd G2 threshold in every dimension, and no G3
+exceptional lift in this class. Thus the remaining G1/G2/G3 counterexamples
+would all have to fail affine doubling closure. This does not establish
+closure for arbitrary tuples or discharge an unrestricted global gate.
+Full build: 15,081 jobs. All six declarations are audited; all 2,770 printed
+axiom lists are standard-only, with no proof placeholders or `native_decide`.
+
 ### Guardrail for the remaining G1 proof
 
 `G1OverlapCriticality.lean` retains the exact quantitative hypothesis:
