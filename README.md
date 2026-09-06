@@ -138,6 +138,15 @@ All lift bits and extras remain arbitrary. Only the fixed n=3,4 induction
 bases use kernel-checked finite enumeration. Arbitrary-prefix extraction
 and unrestricted G1/G2/G3 are still open, 0/3.
 
+`SILiftMultiplier.lean` now removes the unit restriction for every n>=5:
+the full global and exact even-stratum bounds hold for ANY quotient
+multiplier together with arbitrary independent lift bits. Dividing the
+actual prefix by the multiplier's subgroup index leaves only indices
+one or two below the binary bound. Index two forces a child power gap
+and an actual terminal-prefix quotient collision, consumed by the proved
+half-deletion theorem. This closes the nonunit full-prefix residual; it
+does not extract prefixes from arbitrary tuples or close a global gate.
+
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
@@ -1106,13 +1115,51 @@ rival certificates (moduli 4,8,10); no external census is a proof input.
 
 Thus this full unit-affine half-quotient prefix class has no remaining
 global-bound, exact-even-stratum, or structured propagation obligation for
-n>=3. An arbitrary even counterexample must lack such a prefix. Shorter
-independent prefixes, nonunit quotient-prefix scales, arbitrary extraction,
-and unrestricted G1/G2/G3 remain open; no fourth gate has been added.
+n>=3. An arbitrary even counterexample must lack such a prefix. The
+nonunit quotient-prefix restriction is removed for n>=5 below. Shorter
+independent prefixes, arbitrary extraction, and unrestricted G1/G2/G3
+remain open; no fourth gate has been added.
 
 Verification: full build 15,110 jobs; all eighteen new declarations audited;
 all 3,059 axiom lists standard-only; all 34 regressions pass. The regressions
 also check the actual child's next quotient prefix and the fixed n=4 bases.
+No proof placeholders or `native_decide` were introduced.
+
+### Full independent quotient-prefix bounds with arbitrary multipliers
+
+`SILiftMultiplier.lean` proves the global and every exact even-stratum
+bound for a full `n-1` SI half-quotient prefix under ANY multiplier,
+every n>=5. Nonunit scales and arbitrary original lift bits are now
+allowed simultaneously. The extra, translation, and reindexing are free.
+Below `2^n`, fixed-set validity holds at the SAME modulus, hence an
+admissible power gap. The main APIs are
+`global_lower_bound_of_valid_quotient_scaled_si_prefix` and
+`stratum_lower_bound_of_valid_quotient_scaled_si_prefix`.
+
+The proof normalizes the quotient multiplier to a divisor d of the half
+modulus `d*L`. The actual retained prefix divides to a valid tuple modulo
+`2*L` whose full half quotient is the unit SI set. Its proved numerical
+bound forces `d<=2` below the parent binary bound. Index one uses the unit
+theorem. At index two, the child modulus is `2^r-2^t`, with `t>=1`.
+The parent's terminal prefix coordinate and coordinate `t-1` then have
+the SAME actual half-quotient value. This collision constructs a valid
+half deletion preserving a coherent shorter quotient prefix; the existing
+consumer gives original-modulus fixed validity and all stratum bounds.
+
+No affine classification of the original lifts, independent finite census,
+or unrestricted G1/G2/G3 premise is used. The nonunit full-prefix residual
+is CLOSED for n>=5, not another open gate. Shorter independent prefixes
+and arbitrary structural extraction remain open; Conjecture 1 and all
+three unrestricted obligations stay open, 0/3.
+
+Verification: full build 15,111 jobs; all seven new declarations audited;
+all 3,066 axiom lists standard-only; all 39 regressions pass. Four new
+noncoherent, nonunit endpoint controls exercise the divided prefix and
+the actual terminal collision. A separate exact above-binary control
+`(0,644,727,217,739,737,443,597)` modulo 1006 has no common touch and all
+six proposed two-even-entry pair compressions fail. Thus adding no common
+touch does not rescue that unrestricted parity-only shortcut; the critical
+range remains essential. It is not a counterexample to G1 or a proof input.
 No proof placeholders or `native_decide` were introduced.
 
 ### Guardrail for the remaining G1 proof
