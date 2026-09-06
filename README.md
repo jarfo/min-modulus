@@ -693,12 +693,40 @@ The generic theorem works for `m>=7`, dyadic `d>=4`, `2*d<=m+1`, and
 `8*(m+d+1)<=2^m`; the exceptional modulus meets these inequalities by a
 proved arithmetic lemma. This is a new excluded family within G3, not a
 new assumed gate or a theorem for arbitrary shorter-prefix lifts. Its G3
-consumer has the explicit `n>=9` scope; this milestone does not settle
-the remaining `n=7` case of this family or unrestricted G1/G2/G3.
-The exploratory finite searches are not proof inputs.
+consumer has the explicit `n>=9` scope. The following completion removes
+the small-dimensional gap for this family; unrestricted G1/G2/G3 remain
+open. The exploratory finite searches are not proof inputs.
 
 Verification: full build 15,099 jobs; all 17 new declarations registered
 in the axiom audit; all 2,965 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. No proof placeholders or
+`native_decide` are introduced.
+
+### Quarter-minus-one family complete in every relevant dimension
+
+`SIQuarterMinusOneComplete.lean` extends the G3 exclusion to every
+non-power full dimension `n>=5`, including the formerly open `n=7` case.
+The direct consumer includes quotient affine transport, an arbitrary
+other extra, and arbitrary independent prefix lifts. The `n>=9` theorem
+without a non-power premise remains available as well.
+
+The small logarithmic block is not enumerated. A new structural theorem
+holds for EVERY `m>=3` at half modulus `M=2*(2^m-2)`: if the first extra
+projects to `M/2-1`, validity forces the other extra to project to the
+next SI entry `2^m-1`. Normalize the actual lifted zero and one. A lower-
+sheet first extra would make a double equal two distinct tuple entries,
+so validity selects the upper sheet. The extra and the lifted one then
+form an antipodal pair with two copies of the top prefix coin. The
+remaining `m`-term quotient cover misses at most `2^(m+1)-m-3`; at that
+hole, equality of the full target forces the next SI entry. Reindexing
+therefore exposes the already excluded full SI quotient prefix.
+
+This closes the outstanding base of an existing G3 family using a new
+general extraction pattern. It adds no assumed global gate, and does
+not settle arbitrary independent lifts or Conjecture 1 (still 0/3).
+
+Verification: full build 15,100 jobs; all five new declarations registered
+in the axiom audit; all 2,970 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. No proof placeholders or
 `native_decide` are introduced.
 
