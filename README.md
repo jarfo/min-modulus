@@ -190,13 +190,51 @@ A second theorem shows that a valid fixed set below `2^n` requires
 The proved fixed-set minimum gives `t<=floor(log2 n)`, and odd-factor
 divisibility gives `t<=s`, hence the exact stratum threshold.
 
-The coherent full-modulus prefix restriction is unchanged. Independent
-half-modulus shifts and arbitrary non-SI tuples remain unresolved; all
-three unrestricted global obligations stay open.
+This exact-stratum theorem retains its coherent full-modulus prefix
+restriction. For G3, the independent half-modulus shifts are now handled
+by the separate uniform theorem below. All three unrestricted global
+obligations stay open.
 
 Verification: full build 15,083 jobs; all eight declarations audited;
 all 2,791 printed axiom lists are standard-only, with no proof placeholders
 or `native_decide`.
+
+### Uniform G3 exclusion for all independent SI lifts
+
+`SILiftCover.lean` removes the independent-lift restriction for G3.
+`exists_multiset_sum_of_si_lifts` proves that **every** lift of the retained
+SI endpoint has a full `n`-fold sumset at `N=2*globalBound(n-1)`, uniformly
+over all non-power-of-two `n>=3`. The explicit consumer
+`not_validTuple_exceptional_of_si_lift_prefix` therefore excludes every
+extra entry. An affine consumer permits reindexing, translation, unit
+scaling, and arbitrary independent half-modulus shifts, including the
+zero entry. No lift normalization or finite search is assumed.
+
+The natural quotient-level consumer is
+`not_validTuple_exceptional_of_quotient_affine_fixed_prefix`: the actual
+retained prefix need only be affine SI **downstairs**. Every quotient
+additive automorphism lifts upstairs by surjectivity of reduction on units,
+so this statement imposes no additional compatibility on the lift bits.
+
+Write `m=n-1`, `t=floor(log2 m)`, and `M=2^m-2^t`. In the quotient,
+`m-1` terms cover every residue except possibly `2^m-m`. Two repeated
+endpoint coins differ by `M` upstairs for every lift choice; this covers
+both sheets except possibly `R=2^(t+1)-m-2`. A second pair, with
+`2^j` repeated coins and `j=ceil(log2(m-2^t+2))`, covers that target.
+Its even multiplicity cancels every lift bit, and the non-power-of-two
+dimension condition supplies enough terms for ones and zero padding.
+
+This is a uniform proof of the pattern previously observed by the Python
+lift census, not another finite-instance claim. G3 remains open for
+arbitrary tuples without such a lifted SI prefix. Neither the existence
+of an SI endpoint tuple elsewhere nor the abstract G1 deletion output
+establishes that the original tuple contains this prefix. The unrestricted
+global count remains 0/3 closed.
+
+Verification: full build 15,084 jobs; all fourteen declarations audited;
+all 2,805 printed axiom lists are standard-only, with no proof placeholders
+or `native_decide`. The unchanged finite census also passes through `n=13`,
+including its non-covering power-of-two boundary controls.
 
 ### Guardrail for the remaining G1 proof
 
