@@ -209,6 +209,21 @@ No index-two parity case remains open in this range. Other subgroup
 indices and arbitrary extraction are not asserted; the same unrestricted
 G1/G2/G3 gates remain open, 0/3.
 
+`SIThreeIndexThree.lean` closes ALL index-three three-extra patterns for
+every n>=9. A coherent tripled n-3 prefix, with arbitrary extras and
+original-modulus unit-affine transport/reindexing, forces `2^n<=N` for
+every positive modulus divisible by three, including odd moduli. Global
+and all stratum thresholds follow. Validity gives unconditional extra
+localization and a tight full-group cover using the actual one-extra
+fibre's own coin budget. Actual child validity, prefix-only rivals and
+two-target separation complete the mechanisms at arbitrary subgroup
+index; elementary ZMod 3 arithmetic then consumes every index-three
+pattern. Eleven new declarations include the final binary and all-stratum
+consumers. The full 15,116-job build and all 3,121 standard-only axiom
+lists pass. No finite tuple census or
+unrestricted G1/G2/G3 premise is used. Arbitrary extraction and other
+subgroup indices are not claimed; no index-three subcase remains queued.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
