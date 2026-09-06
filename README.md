@@ -267,8 +267,22 @@ classes for n>=8, with the binary bound and hence every global/stratum
 threshold, including odd moduli at index seven. No quotient enumeration
 is used. The full 15,119-job build and all 3,146 standard-only axiom lists
 pass. Eight declarations are new. An injective index-eight quotient cube
-alone does not ensure validity; index eight and arbitrary extraction
-remain unresolved. Unrestricted G1/G2/G3 stay open, 0/3.
+alone does not ensure validity. Its index-eight equality case is now
+closed below; arbitrary extraction and unrestricted G1/G2/G3 stay open, 0/3.
+
+`SIThreeIndexEight.lean` closes ALL index-eight three-extra patterns for
+n>=8, with original-modulus affine transport, same-modulus subbinary
+fixed validity, and all global/exact even-stratum bounds. The full actual-
+fibre cover also excludes tripled outside totals. Elementary arithmetic
+modulo eight then orders the quotient extras into a dyadic chain. Actual
+two-extra children and one-hole covers force Y=2X+8 and Z=2Y+8; the
+parity-saving cover forces X mod M=-7 when M is even. These relations
+close the entire actual tuple under v -> 2v+8, including its prefix wrap.
+The odd-M endpoint has admissible original gap eight. Twelve declarations
+include general arbitrary-index doubling extraction and arbitrary-fibre
+repeated-total exclusion. Full 15,120-job build; all 3,158 axiom lists
+standard-only. The next assembly combines these closed index classes
+under arbitrary coherent multipliers; no new global gate is introduced.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

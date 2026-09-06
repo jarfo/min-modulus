@@ -46,6 +46,7 @@ import MinModulus.SIThreeIndexThree
 import MinModulus.SIThreeIndexFour
 import MinModulus.SIThreeIndexFive
 import MinModulus.ActualFibreQuotientCube
+import MinModulus.SIThreeIndexEight
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
