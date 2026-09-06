@@ -299,6 +299,21 @@ job build; all 3,168 axiom lists standard-only. The index-one-through-eight
 queue is closed in this range. Arbitrary prefix extraction, shorter
 independent lifts, and unrestricted G1/G2/G3 remain OPEN, 0/3.
 
+`ActualFibreCoverDeficit.lean` returns to ARBITRARY actual fibres and
+removes the full-cover assumption. If C is the exact-m-coin sumset of an
+actual m-entry fibre, d its subgroup index, and k the number of outside
+coordinates, validity forces d*|C|+2^k<=d*(M+1). Equivalently, h missing
+residues allow at most d*(h+1) outside subsets. For an even fibre,
+|C|+2^(k-1)<=M+1. Minimum-cardinality representatives in quotient buckets
+charge every other subset to a DISTINCT genuinely uncovered residue;
+actual nonzero padding is explicitly compensated. No SI structure,
+criticality, zero-entry, or complete-cover premise is required. Eight
+declarations include the exact sumset and the direct arbitrary-even-fibre
+consumer. Full 15,122-job build; all 3,176 axiom lists standard-only.
+This is a quantitative restriction on the same G1 residual, not a new
+open gate or a sufficient validity test. Deriving enough cover growth
+from arbitrary criticality, or actual deletion, remains unproved; 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
