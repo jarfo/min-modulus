@@ -30,6 +30,7 @@ import MinModulus.G1Triangle
 import MinModulus.G1PureStarElimination
 import MinModulus.G1CriticalThreeOmissions
 import MinModulus.G1ParityFibreDescent
+import MinModulus.SILiftParityDescent
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

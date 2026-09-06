@@ -96,6 +96,17 @@ conditional global assembly uses exactly that restricted G1 premise, G2,
 and G3. All three remain open; no additional gate or parity classification
 is assumed.
 
+`SILiftParityDescent.lean` now proves actual half-modulus descent for every
+`n>=5`, `4 | N`, `N<2^n` whose actual half quotient contains a unit-affine
+SI prefix of length `n-1`. All independent lift bits and the extra entry
+are allowed. A three-term defect forces a dyadic complement; an even
+extra then forces coherent interior lifts, while an odd extra supplies
+the large parity coset directly. The coherent branch constructs a smaller
+valid fixed tuple from power-gap rigidity. This removes this whole class
+from higher-even G1, without assuming common touch, criticality, G2, or
+G3. It does not cover the first even stratum or arbitrary tuples, and
+does not assert a general singleton-parity classification.
+
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
@@ -848,6 +859,52 @@ Verification: full build 15,103 jobs; all nine new declarations registered
 in the axiom audit; all 2,998 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. All 18 regression tests pass, including
 the four new exact parity/descent guardrails. No proof placeholders or
+`native_decide` are introduced.
+
+### Independent SI lifts now give actual higher-even G1 descent
+
+`SILiftParityDescent.lean` proves
+`admitsValidTuple_half_of_subbinary_even_quotient_affine_si_prefix`:
+for every `n>=5`, positive `N` divisible by four, and `N<2^n`, a valid
+tuple with an actual unit-affine SI half-quotient prefix of length `n-1`
+implies `AdmitsValidTuple (n-1) (N/2)`. The original lift bits, extra entry,
+reindexing, and quotient translation/automorphism are arbitrary. This is
+the actual deletion conclusion throughout the subbinary range, including
+all higher critical even strata, not another assumed roadmap interface.
+
+The uniform mechanism has two branches after normalization:
+
+- A three-term recurrence defect at prefix index `j` forces the extra
+  quotient value to be `1+2^j-p`, where `p=0` or `p=2^l`, `l<=n-2`.
+  One-fewer-coin covering and two antipodal prefix blocks produce an
+  actual full-length rival at every other value; BOTH blocks omit the extra.
+- If the extra is even, parity leaves only `p=1`. For an interior defect,
+  the resulting value `2^j` is a midpoint of two distinct prefix entries,
+  contradicting the proved binary bound. All interior recurrences therefore
+  hold, extracting a coherent actual `n-2` prefix. Its power-gap modulus
+  gives a smaller valid fixed tuple at `N/2`, with arbitrary multiplier.
+- If the extra is odd, all normalized entries except zero are odd.
+  Deleting zero and halving that translated coset gives the smaller tuple.
+
+The defect-localization lemma itself works for arbitrary positive half
+moduli within its explicit cover bound. Evenness of the half modulus is
+needed for the subsequent parity argument. The proof does not assert
+that all lift bits are coherent or identify coset halving with canonical
+half reduction. Exact endpoint regressions at n=5,6,7 exercise a valid
+noncoherent odd-extra branch; their analogous n=8 tuple is explicitly
+checked to be INVALID, preventing a spurious all-dimensional example.
+These checks are not proof inputs.
+
+The remaining G1 residual has two large parity fibres and, in strata
+`v2(N)>=2`, lacks this extracted full unit-affine quotient prefix (or is
+handled by another proved branch). The first even stratum, arbitrary
+prefix extraction, shorter independent prefixes, G2, and G3 remain open.
+No new global gate is introduced; Conjecture 1 remains open, 0/3.
+
+Verification: full build 15,104 jobs; all eight new declarations registered
+in the axiom audit; all 3,006 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. All 22 regression tests pass,
+including four new lift/parity scope checks. No proof placeholders or
 `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
