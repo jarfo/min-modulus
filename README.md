@@ -492,6 +492,19 @@ non-SI valid power-gap controls rule out a blanket SI endpoint shortcut.
 The uniform obstruction rules are closed; forcing a pattern from
 arbitrary criticality remains open. Conjecture 1 and G1/G2/G3 stay 0/3.
 
+`CycleInvolutionLift.lean` now closes EVERY duplicate branch of the
+cycle-plus-involution next-lift family. A quotient doubling block of
+m>=3 entries, a nonzero quotient involution, and a duplicate of ANY
+retained coordinate admit no valid cyclic lift. Repeating the
+involution gives opposite actual lifts. Repeating a cycle entry
+extracts ACTUAL quotient-block validity, which forces three distinct
+successive coordinates and hence the local carry obstruction. Neither
+validity nor local geometry is an extra premise. Independent lift
+bits and subgroup indices remain arbitrary. Four declarations; full
+15,135-job build; all 3,283 axiom lists standard-only; 380 tests pass.
+This complete family exclusion does not classify arbitrary one-escape
+endpoints or close unrestricted G3; the three global gates remain 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
