@@ -24,7 +24,7 @@ tuple under u -> 2*u+4, so the affine-doubling global theorem applies.
 Affine normalization gives the arbitrary-multiplier theorem and a direct
 uniform G3 consumer. These require coherence in the full modulus; they
 do not combine nonunits with arbitrary independent half-modulus shifts.
-Exact G1/G2 strata for shorter nonunit prefixes remain a separate gap.
+Exact G1/G2 strata for this class are proved separately in SITwoMultiplierStrata.
 -/
 import MinModulus.SITwoExtensionStrata
 

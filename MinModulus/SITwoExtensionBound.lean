@@ -16,8 +16,9 @@ The m=3,4 endpoints have explicit coin and triple-extra repairs.
 
 The affine theorem gives a direct G3 consumer in every relevant n>=5.
 These results require a coherent prefix in the FULL modulus and unit
-scaling. Arbitrary independent half-modulus shifts, nonunit scaling of
-this shorter prefix, and the three unrestricted global inputs stay open.
+scaling. SITwoMultiplierBound and SITwoMultiplierStrata separately remove
+the unit restriction. Arbitrary independent half-modulus shifts and the
+three unrestricted global inputs stay open.
 No finite census, proof placeholder, or additional axiom is used.
 -/
 import MinModulus.SIMultiplierBound

@@ -464,9 +464,9 @@ five and six reuse the existing proved odd base theorems. No new finite
 enumeration or unrestricted G2 assumption is used. The global envelope
 and the actual valuation bound `t` separately, giving the exact strata.
 
-Independent lift bits, exact G1/G2 strata for shorter nonunit prefixes,
-and extraction of a useful prefix from arbitrary tuples remain unresolved.
-The next theorem removes the unit restriction for the numerical bound/G3.
+Independent lift bits and extraction of a useful prefix from arbitrary
+tuples remain unresolved. The following multiplier theorems remove the
+unit restriction first for the numerical bound/G3 and then for exact strata.
 This closes the exact-threshold gap for the existing two-extra class,
 not an unrestricted G1/G2/G3 gate or a new roadmap package.
 
@@ -496,8 +496,8 @@ The proof is uniform; a small arithmetic exception reuses the proved odd
 five-tuple bound. The residue splits modulo 2, 3, and 4 are kernel-checked.
 
 This broadens the actual global/G3 exclusion class, not only an interface.
-It does not establish exact G1/G2 strata for shorter nonunit prefixes,
-combine arbitrary multipliers with independent lift bits, or extract a
+The following theorem supplies its exact G1/G2 strata. Neither theorem
+combines arbitrary multipliers with independent lift bits or extracts a
 prefix from arbitrary tuples. Those gaps and the three unrestricted global
 inputs remain open; no new global gate is introduced.
 
@@ -505,6 +505,36 @@ Verification for the arbitrary two-extra multiplier milestone: full build
 15,092 jobs; all thirty-two new declarations audited; all 2,907 printed
 axiom lists use only `propext`, `Classical.choice`, and `Quot.sound`.
 No proof placeholders or `native_decide` are introduced.
+
+### Exact two-extra strata for arbitrary multipliers
+
+`SITwoMultiplierStrata.lean` closes the remaining threshold gap for this
+class: for every `n>=5`, a coherent prefix `c*(2^i-1)+b`, `i<n-2`, under
+**any multiplier** satisfies the full `stratumBound`. Its direct consumers
+exclude critical G1 tuples and give the exact odd G2 bound `2^n-1 <= N`.
+Together with the preceding G3 consumer, all three thresholds now hold
+for this class; at `n>=5` it also contains the earlier one-extra class.
+
+The proof works in the full subbinary range `N<2^n`. For retained length
+`m>=5`, a new `2^(m+2)<=5B(m)` bound justifies subgroup index at most four
+in that larger range. The doubled case completes a longer scaled prefix
+or has an explicit top-boundary power gap; the tripled case is excluded
+by the coset covers. At index four, reflected fixed-prefix validity gives
+a power gap directly, shifted by two when multiplied by four. Dimensions
+five and six reuse the proved arbitrary-multiplier global bound and odd
+base bounds, with no new tuple enumeration. The resulting power gap and
+the global/valuation exponent bounds prove exact strata.
+
+This is not arbitrary-tuple prefix extraction or a theorem for arbitrary
+independent lifts of a quotient prefix. The full-tuple SI extraction
+theorem previously proved for unit-affine shorter prefixes keeps its
+stated hypotheses; it is not silently extended to every multiplier.
+All three unrestricted global gates remain open. No new gate is added.
+
+Verification for arbitrary-multiplier two-extra exact strata: full build
+15,093 jobs; all twelve new declarations audited; all 2,919 printed axiom
+lists use only `propext`, `Classical.choice`, and `Quot.sound`. No proof
+placeholders or `native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 
