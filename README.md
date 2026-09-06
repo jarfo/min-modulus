@@ -476,6 +476,22 @@ Above the logarithmic cutoff the uncapped inequality is weaker and
 still admits the exceptional modulus; G3 is not silently closed.
 Unrestricted G1/G2/G3 and Conjecture 1 remain OPEN, 0/3.
 
+`DoubleDefectGrowth.lean` now extracts uniform cyclic-lift obstructions.
+Two cancelling doubling defects construct an actual two-extra-coin
+multiset with unchanged total, in ANY abelian group. Among m>=3 binary
+involutive defects such a pair always exists. A half-quotient doubling
+block therefore cannot coexist with an upstairs zero-sum pair. Two
+copies of the quotient involution force that zero sum under validity,
+excluding EVERY lift with arbitrary independent bits. Separately,
+two actual rivals with nonzero weighted half-difference exclude all
+lifts; `(x,2x,4x,h,x)` with nonzero quotient involution h supplies
+explicit two-row obstructions anywhere in a larger tuple. Other
+coordinates remain arbitrary. Eight declarations; full 15,134-job
+build; all 3,279 axiom lists standard-only; 358 tests pass. Genuine
+non-SI valid power-gap controls rule out a blanket SI endpoint shortcut.
+The uniform obstruction rules are closed; forcing a pattern from
+arbitrary criticality remains open. Conjecture 1 and G1/G2/G3 stay 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
