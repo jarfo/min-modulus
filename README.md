@@ -86,6 +86,16 @@ their separate obligations have been bypassed by the new general frontier.
 Conjecture 1 and all three global obligations remain open. Historical local
 lemma counts do not measure the fraction of the global proof completed.
 
+`G1ParityFibreDescent.lean` now removes another part of the SAME G1 input:
+if all but one entry have the same parity, deleting the exceptional entry,
+translating the retained coset, and halving its even representatives gives
+the required valid smaller tuple. No SI structure or common touch is needed.
+The original three-omission deletion obligation is proved equivalent to
+its restriction to tuples with at least TWO entries of each parity. A new
+conditional global assembly uses exactly that restricted G1 premise, G2,
+and G3. All three remain open; no additional gate or parity classification
+is assumed.
+
 There is also a new unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
@@ -797,6 +807,48 @@ Verification: full build 15,102 jobs; all twelve new declarations registered
 in the axiom audit; all 2,989 printed axiom lists use only `propext`,
 `Classical.choice`, and `Quot.sound`. All 14 existing regression tests pass.
 No proof placeholders or `native_decide` are introduced.
+
+### Direct G1 descent through a large parity fibre
+
+`G1ParityFibreDescent.lean` proves actual half-size descent for any valid
+cyclic `(n+1)`-tuple whose entries, apart from one coordinate, have the same
+parity. More generally any `k` same-parity embedded coordinates give a
+valid `k`-tuple modulo half the original modulus: translate by a lift of
+the common parity, divide even representatives by two, and reflect validity
+through the doubling embedding. This works in all dimensions and positive
+even moduli. It needs no SI prefix, common touch, half-witness, or criticality.
+
+Consequently, a parity fibre with at least `n` entries already proves the
+required `AdmitsValidTuple n M` conclusion. Every valid `(n+1)`-tuple at
+`2*M` therefore either admits that smaller tuple or has at least two entries
+in EACH parity fibre. The equivalence
+`criticalThreeOmissionDeleteStep_iff_two_large_parity_fibres` restricts the
+same outstanding G1 obligation to those two-large-fibre tuples.
+`global_lower_bound_of_two_large_parity_threeOmissionDeleteStep` connects
+this narrower residual directly to the existing global induction, still
+with the same explicit G2 and G3 inputs. This is an actual deleted-coset
+construction followed by a proved residual restriction, not a new gate.
+
+Coset halving is NOT canonical reduction modulo `M`. A companion exact
+regression enumerates all 6,435 length-eight compositions for
+`(0,351,89,1323,1729,1209,579,1757)` modulo 2012: it is valid with one even
+entry, but four explicit half-witnesses leave no common-touch coordinate,
+and every canonically deleted half quotient is invalid. Deleting zero,
+subtracting one, and halving instead gives a valid seven-tuple modulo 1006.
+This computational guardrail is above the binary range, is not a critical
+G1 counterexample, and is NOT an input to the uniform Lean proof.
+
+No theorem here claims every subbinary valid tuple has a singleton parity
+class. The unresolved G1 work remains deletion (or contradiction) for
+critical three-omission tuples with both parity fibres of size at least two,
+together with the previously retained restrictions. Arbitrary G2/G3 and
+Conjecture 1 remain open (0/3).
+
+Verification: full build 15,103 jobs; all nine new declarations registered
+in the axiom audit; all 2,998 printed axiom lists use only `propext`,
+`Classical.choice`, and `Quot.sound`. All 18 regression tests pass, including
+the four new exact parity/descent guardrails. No proof placeholders or
+`native_decide` are introduced.
 
 ### Guardrail for the remaining G1 proof
 
