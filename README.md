@@ -281,8 +281,23 @@ close the entire actual tuple under v -> 2v+8, including its prefix wrap.
 The odd-M endpoint has admissible original gap eight. Twelve declarations
 include general arbitrary-index doubling extraction and arbitrary-fibre
 repeated-total exclusion. Full 15,120-job build; all 3,158 axiom lists
-standard-only. The next assembly combines these closed index classes
-under arbitrary coherent multipliers; no new global gate is introduced.
+standard-only. The arbitrary-multiplier assembly is now complete below;
+no new global gate is introduced.
+
+`SIThreeMultiplierBound.lean` closes the ENTIRE arbitrary-multiplier
+coherent three-extra class for every n>=9. A prefix c*(2^i-1)+b of length
+n-3, with ANY multiplier c (including nonunits) and three unrestricted
+extras, forces the full global and all exact-stratum lower bounds. Below
+2^n it forces fixed validity at the SAME modulus. A uniform endpoint
+ratio and actual reflected prefix validity bound the normalized subgroup
+index by eight; the completed index results consume all cases. Original-
+modulus unit-times-divisor normalization removes the multiplier restriction.
+Ten declarations include direct critical-G1, odd-G2, and exceptional-G3
+exclusions for this full class. No new census, global premise, or unproved
+structure assumption is inserted into the global induction. Full 15,121-
+job build; all 3,168 axiom lists standard-only. The index-one-through-eight
+queue is closed in this range. Arbitrary prefix extraction, shorter
+independent lifts, and unrestricted G1/G2/G3 remain OPEN, 0/3.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
