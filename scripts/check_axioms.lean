@@ -4004,3 +4004,9 @@ import MinModulus
 #print axioms MinModulus.axis_base_strip_family_four_point_gap_and_global_bound
 #print axioms MinModulus.forestCollisionProfiles_eq_of_same_overflow
 #print axioms MinModulus.compatible_axis_base_overflow_family_global_bound
+
+-- Parity-derived full compatibility for even axis bases.
+#print axioms MinModulus.even_companion_coefficients_of_even_axis_target
+#print axioms MinModulus.all_profiles_compatible_of_even_axis_base_and_length_one_arm
+#print axioms MinModulus.even_axis_base_length_one_overflow_global_bound
+#print axioms MinModulus.even_axis_base_compatible_overflow_global_bound

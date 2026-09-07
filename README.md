@@ -1952,6 +1952,46 @@ use only standard axioms or none. All 1,793 forest tests pass, including
 46 new height-budget checks, explicit affine rivals, sharp large examples,
 and exact family volumes. Unrestricted G1/G2/G3 remain OPEN; no new gate.
 
+### 2026-09-08: even axis-base closure without assuming full compatibility
+
+`ChainForestProfileEvenAxis.lean` removes the all-profiles-compatible
+premise from an even-dominant axis-base class. With an even dominant seed
+and odd companions, the target of an axis base is even. If one companion
+coefficient of any profile is even, its other companion coefficient must
+also be even, by reducing the actual profile relation modulo two.
+
+A length-one companion makes its coefficient even in EVERY actual
+profile. The no-overflow profile is the axis base by pattern uniqueness.
+On an overflow at the length-one arm its coefficient is exactly two;
+on an overflow at the other arm, reflection forces it strictly below
+its top, hence zero. Parity then forces the remaining companion
+coefficient even. Thus the entire actual family is compatible. This
+compatibility theorem needs no genuine-endpoint premise or length-24
+cutoff beyond its explicit wide-box and dominant-width hypotheses.
+
+For k>=24 and K_j>=2k in a genuine forest over an even cyclic group,
+this gives two sharp GLOBAL closures with an even dominant seed and odd
+companions. An axis base plus a length-one companion and ANY overflow
+satisfies 2^k<=N+4 and globalBound k<=N. An axis base plus just ONE
+COMPATIBLE overflow also satisfies both bounds: the earlier theorem
+forces that strip's arm to have length one, and full compatibility now
+follows. No hypothesis on the remaining profiles or family exhaustion
+is supplied in either closure.
+
+Length one is essential for the compatibility lemma. The genuine valid
+forest with lengths (4,2,2), seeds (2,299,31), modulus 506 has exactly
+profiles (4,0,0) and (0,5,1); the latter is incompatible. Further examples
+at moduli 514 and 518 have the same incompatible profile. All are ABOVE
+binary. The remaining even-axis overflow case can therefore involve
+only incompatible overflows with BOTH companion lengths at least two.
+Axis-only families, non-axis bases, odd dominant seeds, and the sharp
+general deficit still require further work.
+
+Four theorems. Full 15,199-job build passed; all 3,918 audited declarations
+use only standard axioms or none. All 1,838 forest tests pass, including
+45 new permuted affine validity checks, genuine scope counterexamples,
+and explicit reflected rivals. Unrestricted G1/G2/G3 remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
