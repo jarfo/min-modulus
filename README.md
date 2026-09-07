@@ -685,6 +685,22 @@ exact controls. Next broaden actual quotient relation lifting beyond
 doubling forests and continue critical extraction. Conjecture 1 and
 the SAME unrestricted G1/G2/G3 gates remain OPEN, 0/3.
 
+`ThinExpansionLifting.lean` now goes beyond doubling forests. Every
+positive r-coin outside expansion gives a forbidden (m-r)-coin target
+in an ARBITRARY actual m-fibre; the omitted coordinate is inside the
+fibre, with no outside-omission or full-cover premise. If its (m-1)-coin
+cover contains every value except possibly its own total, ALL one-coin
+quotient expansions lift to exact original-group equalities. This does
+not require a cycle or a zero-sum fibre. Actual mapped cycles supply
+the thin cover, and any m successive squarefree-target quotient rewrites
+would omit the entire cycle. Target sizes, replacement multiplicities,
+and sequential target reuse are unrestricted. Ten declarations; full
+15,147-job build; all 3,387 axiom lists standard-only; 734 tests pass.
+Controls include noncycle/nonzero-sum thin fibres and multi-target
+patterns with NO doubling edges. Next extract useful targets or rewrite
+patterns from arbitrary critical tuples; their existence is not assumed
+proved. Conjecture 1 and the SAME global G1/G2/G3 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
