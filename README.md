@@ -1141,6 +1141,24 @@ silently included in the shape theorem. Next primitive relation order
 and cyclic divisibility to consume these sparse shapes. SAME three
 unrestricted OPEN global gates, 0/3; no extra global input.
 
+`TwoChainRelationOrder.lean` EXTRACTS exact order from the unique
+actual rectangle relation. Dividing by ANY common coefficient factor D
+produces an element of order exactly D, in any abelian group: a smaller
+order would yield a second nonzero rectangle relation. The gcd primitive
+direction therefore has full gcd order. In cyclic groups D divides N.
+For two odd seeds, an even divided coefficient sum forces D|N/2;
+an odd sum forces N/D odd. Thus at N=2^(s+1)*q, q odd, a dyadic factor
+2^t has t<=s in the even-direction case and t=s+1 EXACTLY in the odd
+case. Capped valuations are retained, not assumed absent. No individual
+unit or supplied order/calibration premise is used. Eight declarations;
+full 15,171-job build; all 3,602 axiom lists standard-only; 1,775 tests
+pass. Actual valid twisted-seed families exercise every common factor,
+nonunit odd embeddings and BOTH parity branches. Growing exact orders
+and validity/oddness guards pass. Next packing-slack divisibility and
+actual boundary extraction from tight corner packing, followed by the
+completed one-escape consumer. That closure is not yet proved. SAME
+three unrestricted OPEN global gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
