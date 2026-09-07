@@ -1228,6 +1228,28 @@ guards are not Lean proof inputs. ALL two-escape G1 work is DONE. Next
 unrestricted three-or-more-escape actual growth and extraction. SAME
 three global gates OPEN, 0/3; no fourth gate or child premise is added.
 
+`G1ThreeEscapeCycle.lean` CLOSES EVERY critical three-escape actual-cycle
+G1 case, with no cycle-size or outsider-count exceptions. Injective actual
+doubling removes the artificial collision-deletion loss: all-depth growth
+is `2^t*k < m+k+e*(t*2^t-(2^t-1))` for ANY actual escape count e. The
+condition 5e<=2m+6 extracts the completed cutoff k<=m+1; FULL global,
+every-stratum and original-G1 consumers are proved for this growing-arity
+class. A stronger even-index parity argument handles k=m+2 uniformly:
+N+4>=2^n. A hypothetical larger deficit leaves half-index 2^(k-1) or
+2^(k-1)+1; the first has zero even holes plus one deletion endpoint, the
+second is odd and pays one even hole with NO extra endpoint. Both violate
+the strict first-layer bound. Thus FULL global and every positive exact
+stratum are proved for ANY even-modulus actual cycle with k<=m+2,
+without an escape-count or tuple-injectivity premise. Failed G1 half
+descent supplies injective doubling; three escapes force this cutoff.
+Singleton cycles are consumed by the completed four-coordinate base.
+The original no-half three-escape data are therefore injective and
+ACYCLIC. Fifteen theorems; full 15,175-job build; all 3,664 axiom lists
+standard-only; 1,965 tests pass. Forty-eight new actual-family, uniform
+endpoint, rank-budget and essential-hypothesis checks are not Lean proof
+inputs. No finite cycle exception remains queued. Next actual acyclic
+three-chain extraction and arithmetic; SAME three global OPEN gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
