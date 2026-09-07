@@ -1159,6 +1159,26 @@ actual boundary extraction from tight corner packing, followed by the
 completed one-escape consumer. That closure is not yet proved. SAME
 three unrestricted OPEN global gates, 0/3.
 
+`TwoChainTightCorner.lean` CLOSES tight interior corner packing, with
+DIRECT G1 half descent and FULL global/every-stratum class bounds.
+Equality in packing gives an ACTUAL full cover by the retained rectangle.
+Positive-relation and odd-axis exclusions force a boundary representation
+with zero first coefficient. Full coverage makes the relation determinant
+a modulus multiple, and its range fixes it to N; the boundary coefficient
+is exactly the opposite corner side. Automatic capacity extracts one
+escape, so the completed class bounds apply. Any critical tight two-chain
+tuple admits actual half descent: even seeds already give parity deletion,
+and odd seeds contradict the new bound. No G2/G3, child induction, unit
+or primitive-span premise is supplied. The primitive gcd divides packing
+slack; after eliminating zero slack, the remaining ORIGINAL two-escape
+G1 corner satisfies `2^k+gcd(2^A-a,2^L-b)<=N+a*b`, retaining all odd-
+seed, strict-interior, parity and sparse-side data. Twelve declarations;
+full 15,172-job build; all 3,614 axiom lists standard-only; 1,818 tests
+pass. Actual valid covers, determinant ranges, positive-slack families
+and coverage/criticality guards pass. Tight-case propagation is DONE.
+Next extract full seed span and control positive-slack boundary images;
+SAME three unrestricted OPEN global gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
