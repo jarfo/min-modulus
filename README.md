@@ -1768,6 +1768,45 @@ and profile (0,4,0): its width-four strip has zero mass modulo d=4. These
 examples are above binary and are not evidence of global closure.
 The sharp unrestricted estimate and G1/G2/G3 remain OPEN.
 
+### 2026-09-07: sparse no-overflow sides from reflected coin savings
+
+`ChainForestProfileSparseSides.lean` proves a uniform complement
+representation saving FOUR coins whenever a positive side is not a sum
+of one, two, or three binary powers. Adding the two top coins then makes
+its reflected coordinate cost at most L_i-2. The other two coordinates
+cost at most L_i+1 each, so an actual three-chain profile with such a
+side would produce a full-length rival. No finite census is assumed.
+
+The joint saving is stronger: if a strict-underflow side needs three
+binary powers, BOTH other coordinates must be strict dyadic underflows.
+Otherwise one additional saving again fits a reflected rival. Combining
+this with the earlier overflow rigidity gives, for EVERY actual
+three-chain profile in EVERY dimension, one of two patterns for w_i+1:
+
+    one single power + two sums of at most two powers;
+    one sum of three powers + two single powers.
+
+Thus the three shifted coordinates use at most FIVE binary powers in
+total. For a NO-OVERFLOW profile, w_i+1 are exactly its rectangle sides,
+so this is a sparse classification of the remaining no-overflow shape.
+For an overflow profile, the overflowing rectangle side is K_a-2^e,
+which can have many binary digits: do not apply the five-power claim to
+that rectangle side. The claim concerns the shifted coefficients.
+
+Three powers on one side cannot be removed from the general theorem.
+The actual tuple (1,2,4,8,16,2000,997975) modulo 1000000 is valid, has
+three genuine chains, and has only profile (6,0,0), with sides (7,1,1).
+The valid genuine profiles (2,2,0) at moduli 92 and 96 realize the other
+maximal pattern, sides (3,3,1). These examples are ABOVE binary and do
+not settle stronger subbinary restrictions. A four-digit side is also
+checked against an explicit full-length reflected rival.
+
+Eight theorems. Full 15,195-job build passed; all 3,887 audited declarations
+use only standard axioms or none, including all eight new exports. All
+1,546 targeted forest tests pass, with 25 new actual-validity, sparse-side,
+complement-saving, and explicit-rival checks. The sharp general deficit
+and unrestricted G1/G2/G3 remain OPEN; no additional gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

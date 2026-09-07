@@ -3959,3 +3959,13 @@ import MinModulus
 #print axioms MinModulus.dyadic_strip_rounding
 #print axioms MinModulus.singleton_compatible_overflow_index_charge_bound
 #print axioms MinModulus.compatible_overflow_family_index_charge_bound
+
+-- Sparse binary coordinates of actual three-chain profiles.
+#print axioms MinModulus.four_le_width_of_not_three_binary_powers
+#print axioms MinModulus.exists_rep_compl_not_three_binary_powers
+#print axioms MinModulus.exists_reflected_rep_not_three_binary_powers
+#print axioms MinModulus.three_chain_underflow_side_eq_at_most_three_powers
+#print axioms MinModulus.exists_reflected_rep_not_two_binary_powers
+#print axioms MinModulus.exists_reflected_rep_of_not_dyadic_underflow
+#print axioms MinModulus.three_chain_other_sides_dyadic_of_not_two_powers
+#print axioms MinModulus.three_chain_profile_sparse_side_classification
