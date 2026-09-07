@@ -701,6 +701,23 @@ patterns with NO doubling edges. Next extract useful targets or rewrite
 patterns from arbitrary critical tuples; their existence is not assumed
 proved. Conjecture 1 and the SAME global G1/G2/G3 remain OPEN, 0/3.
 
+`FullCoverExpansionExtraction.lean` now starts extraction itself. A full
+actual fibre cover forces EVERY squarefree outside quotient sum to be
+uniquely shortest among arbitrary multisets. Failure of validity after
+adjoining zero therefore constructs a one-coin expansion. A thin cover
+lifts it exactly. For mapped cycles with m>=2 and K>=2, subbinary
+validity automatically gives d<globalBound(K+1), so a strictly smaller-
+dimensional induction hypothesis extracts an actual first expansion
+with a coordinate used at least THREE times. The induction hypothesis
+is explicit, not a claim that the global bound has been proved.
+Ten declarations; full 15,148-job build; all 3,397 axiom lists standard-
+only; 762 tests pass. The valid parent (10,20,5,16,2) modulo 30 has an
+extracted first expansion but NO second step: first-step existence is
+not enough to omit a two-cycle. Next use genuine counterexample
+criticality to obtain compatible further growth or actual descent,
+and extract useful fibres from arbitrary tuples. Same three OPEN
+global G1/G2/G3 gates, 0/3; no additional conjectural gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
