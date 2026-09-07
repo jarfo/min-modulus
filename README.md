@@ -1050,6 +1050,24 @@ unrestricted primitive G1 extraction remains the priority; distinct
 escaping endpoint images and general multi-escape geometry are not
 classified. SAME three OPEN global gates, 0/3; no extra gate.
 
+`G1TwoEscapeCycle.lean` gives DIRECT G1 half descent for ALL critical
+tuples with at most two affine escapes and an actual nonempty cycle.
+No common touch forces injectivity of doubling on the whole tuple.
+This removes the collision loss: in ANY abelian group, actual m-cycle
+data with k outsiders and escape set A satisfy `k<m+|A|` when doubling
+is injective. Two escapes and total size at least four extract `m>=2`
+and `k<=m+1`, so the exact-stratum cycle bound contradicts criticality.
+Otherwise common touch constructs the actual half child. No G2, G3,
+primitivity, supplied geometric cutoff or child-bound premise is used.
+The final theorem extracts injectivity AND acyclicity for any remaining
+two-escape G1 counterexample. Nine declarations; full 15,166-job build;
+all 3,560 axiom lists standard-only; 1,563 tests pass. The valid tuple
+`(2000,4000,1,3001,2,100)` modulo 6000 guards injectivity: two escapes
+and a two-cycle allow four outsiders when doubling collides. Its actual
+half deletion is retained. Next extract the actual two-chain geometry
+of the injective acyclic residual and consume the corner/packing bounds.
+General multi-escape extraction remains open. SAME three OPEN gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
