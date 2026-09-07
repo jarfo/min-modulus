@@ -72,11 +72,11 @@ frontier: every valid even-modulus tuple with `N < 2^n` has common touch or
 a three-omission half-witness. The proof changes the subset-sum anchor and
 excludes the complete pure-edge triangle; it assumes no G2.
 
-The conditional theorem `global_lower_bound_of_threeOmissionDeleteStep`
+The conditional theorem `global_lower_bound_of_primitive_threeOmissionDeleteStep`
 requires exactly these three still-open inputs:
 
-- `CriticalThreeOmissionDeleteStep`: deletion in critical cases carrying a
-  three-omission witness;
+- `PrimitiveThreeOmissionDeleteStep`: deletion in critical three-omission
+  cases whose EVERY deleted subtuple affinely generates the ambient group;
 - `OddStratumLowerBound` (G2): the all-dimensional odd threshold;
 - `ExceptionalLiftObstruction` (G3): the uniform exceptional-lift exclusion.
 
@@ -85,6 +85,15 @@ inputs on this route. Their old deletion theorems have not been proved;
 their separate obligations have been bypassed by the new general frontier.
 Conjecture 1 and all three global obligations remain open. Historical local
 lemma counts do not measure the fraction of the global proof completed.
+
+`PrimitiveCriticalInduction.lean` proves this strengthened sufficient route
+by strong induction on tuple dimension. The child bound used by affine
+compression is derived INTERNALLY, not supplied as a fourth assumption.
+Proper retained cosets already give half children or smaller-counterexample
+contradictions; tuples of length at most three have direct parity children.
+The original `CriticalThreeOmissionDeleteStep` implies the new restricted
+input, and the old global theorem remains available. This is a proved
+restriction of G1, not a claim that either version of G1 has been solved.
 
 `G1ParityFibreDescent.lean` now removes another part of the SAME G1 input:
 if all but one entry have the same parity, deleting the exceptional entry,
@@ -767,9 +776,23 @@ Eight declarations; full 15,151-job build, all 3,420 standard-only axiom
 lists, and 870 tests pass. The strict
 factor-three boundary is guarded by actual valid tuples. Even full
 deleted affine generation plus validity does NOT imply a unit pair.
-Next incorporate this induction-ready restriction into the global
-assembly and attack its primitive residual. The current theorem keeps
-the child bound explicit; no unrestricted G1/G2/G3 gate closes, 0/3.
+Its standalone theorem keeps the child bound explicit; the next module
+now discharges that bound inside the global assembly. No unrestricted
+G1/G2/G3 gate closes, 0/3.
+
+`PrimitiveCriticalInduction.lean` closes that integration step. Strong
+dimension induction derives the child global bound from previously
+proved child strata, uses affine compression and common touch, and asks
+G1 ONLY for the primitive three-omission residual. The same exceptional
+arithmetic consumes G3; the odd base consumes G2. Both the full stratum
+theorem and `global_lower_bound_of_primitive_threeOmissionDeleteStep`
+have exactly these THREE explicit inputs and NO child-bound premise.
+Seven audited declarations (six theorems and the restricted G1 definition);
+full 15,152-job build; all 3,427 axiom lists standard-only; 913 tests pass.
+Small actual half children, all power/non-power arithmetic branches, and
+the essential exact G3 boundary are checked. Next prove primitive G1
+deletion or force an actual contradiction there, alongside the same G2
+and G3 obligations. No new structural-extraction gate is introduced.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
