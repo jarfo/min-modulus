@@ -718,6 +718,24 @@ criticality to obtain compatible further growth or actual descent,
 and extract useful fibres from arbitrary tuples. Same three OPEN
 global G1/G2/G3 gates, 0/3; no additional conjectural gate is introduced.
 
+`InductiveOutsideSpan.lean` extracts genuine quotient structure. Short-
+sum rigidity plus a constant nonzero character constructs a valid tuple
+consisting of zero and all outsiders. Beside a subbinary mapped cycle
+(m>=2, K>=2), its dimension is strictly smaller and its modulus is
+strictly below globalBound(K+1). This ACTUAL smaller-counterexample
+construction assumes no global bound. Alternatively, one-coin growth
+makes the affine difference span equal the linear span; strict cube
+density makes the latter the entire quotient. Under the explicit lower-
+dimensional induction hypothesis, outside differences therefore span
+the whole quotient from every anchor. Seven declarations; full 15,149-
+job build; all 3,404 axiom lists standard-only; 797 tests pass. The dense,
+short-sum-rigid tuple (1,7,11,16) modulo 30 has a one-coin expansion and
+full affine span, but NO unit pair difference. Affine generation is not
+a unit-pair normalization or a repeated-expansion certificate. Next use
+this extracted structure and genuine criticality for compatible growth
+or actual deletion; arbitrary useful-fibre extraction and G1/G2/G3
+remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
