@@ -955,6 +955,24 @@ Next address actual acyclic multi-escape data and unrestricted critical
 extraction. The entire one-escape branch and all two-escape cycle G3 cases
 are CLOSED. The SAME unrestricted G1/G2/G3 remain OPEN, 0/3.
 
+`TwoChainRelations.lean` extracts general restrictions for ACTUAL two
+chains of lengths A,L and arbitrary seeds x,y in any abelian group.
+Writing K=2^A and H=2^L, validity forbids EVERY positive interior relation
+`d*x=u*y` with d<K and u<H. Both opposite weight shifts fit the full
+coin budget, and at least one has enough weight for refinement. Hence
+fibres of the K-by-H binary weight rectangle are coordinatewise ordered.
+An interior zero relation `d*x+u*y=0` forces corner deficits a=K-d,b=H-u
+to satisfy `a+b<=A+L+1`, with at least ONE of a,b a power of two.
+The proofs assume no merge, unit, cyclic normalization or arm-size
+cutoff, and retain arbitrary affine/reindexed chain data. Nine theorems;
+full 15,161-job build; all 3,515 axiom lists standard-only; 1,335 regression
+tests pass. Strict endpoints and the distinction between one
+power deficit and both are guarded by genuinely valid examples.
+These are necessary restrictions, NOT full two-chain G3 or an extraction
+of acyclic multi-escape geometry. Next force/use actual cyclic packing
+relations and handle the surviving power-deficit cases. The SAME three
+global gates remain OPEN, 0/3; the completed one-escape branch stays closed.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
