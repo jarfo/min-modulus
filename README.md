@@ -669,6 +669,22 @@ values at even indices and continue unrestricted critical extraction.
 The cycle premise is still not automatic; Conjecture 1 and the SAME
 three global gates remain OPEN, 0/3.
 
+`EvenHoleParityBudget.lean` now resolves original cube holes by parity
+at EVERY dense even index 2D. Character factorization and density
+extract an odd coordinate and exactly D-2^(K-1) even holes. Only these
+can terminate doubled coordinates. One actual deletion adds at most
+one endpoint; at odd D an odd deletion makes the extra cost ZERO.
+Mapped and arbitrary affine-cycle consumers, automatic dense-index
+extraction from even subbinary validity, and direct binary bounds are
+proved. In particular K=m+c, c>=2, m>=3*2^(c-1) implies N>=2^(m+K)
+at EVERY even modulus, halving the previous sufficient cycle-size scale.
+No fixed hole count, stratum cap, or lift pattern is assumed. Seven new
+declarations; full 15,146-job build; all 3,377 axiom lists standard-only;
+708 tests pass. Strict density and the higher-even extra endpoint have
+exact controls. Next broaden actual quotient relation lifting beyond
+doubling forests and continue critical extraction. Conjecture 1 and
+the SAME unrestricted G1/G2/G3 gates remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
