@@ -4016,3 +4016,13 @@ import MinModulus
 #print axioms MinModulus.binary_bound_of_even_axis_base_without_overflows
 #print axioms MinModulus.even_axis_base_all_compatible_global_bound
 #print axioms MinModulus.even_axis_base_length_one_global_bound
+
+-- Comparable profiles, repeated positive zero relations, and zero targets.
+#print axioms MinModulus.length_le_dsum_of_mersenne_value
+#print axioms MinModulus.not_validTuple_of_chain_forest_strict_coin_budget
+#print axioms MinModulus.not_validTuple_of_small_target_and_doublable_positive_zero
+#print axioms MinModulus.exists_length_one_changed_arm_of_comparable_profiles
+#print axioms MinModulus.profile_below_axis_profile_of_all_arms_length_two
+#print axioms MinModulus.profile_eq_zero_profile_of_all_arms_length_two
+#print axioms MinModulus.binary_bound_of_zero_profile_and_all_arms_length_two
+#print axioms MinModulus.binary_bound_of_zero_target_forest_length_two

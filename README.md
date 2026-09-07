@@ -2027,6 +2027,46 @@ use only standard axioms or none. All 1,871 forest tests pass, including
 33 new all-arity odd-class injection checks, large genuine axis-only
 examples, and sharp odd-axis controls. Unrestricted G1/G2/G3 remain OPEN.
 
+### 2026-09-08: comparable-profile rigidity and a uniform zero-target bound
+
+`ChainForestProfileOrder.lean` proves a uniform restriction on ANY two
+actual small profiles: if v_i<=w_i for every i and v!=w, then at least
+one changed arm has length ONE. The result holds in every arity and
+abelian group, with no dimension, dominant-width, wide-box, parity, or
+genuine-endpoint hypothesis.
+
+The positive difference z=w-v is a zero relation. Put V=sum v_i,
+Z=sum z_i>0, and q=floor((k-V-1)/Z). Since V+Z<k,
+
+    q>=1,    V+q*Z<k<=V+2*q*Z.
+
+If every changed arm has a second entry, the weights v_i+2*q*z_i
+are represented by v_i seed coins and q*z_i actual doubled-seed coins.
+Their total coin cost is STRICTLY below k but their total weight is at
+least k. Binary refinement gives a full-length rival. A Mersenne weight
+needs one coin per original chain entry, so the strict saving also
+excludes the all-ones weight without a separate inequality premise.
+
+Consequently, if EVERY arm has length at least two and v is an axis
+profile at j, every other profile w satisfies w_j<v_j. This gives the
+correct strict order for the remaining incompatible-overflow case,
+without a length cutoff. The genuine examples (0,5,1) below the axis
+profiles (4,0,0), (2,0,0), and (1,0,0) realize this order. Comparable
+profiles with a length-one changed arm exist, so that exception matters.
+
+A zero profile is then the ENTIRE family. Its rectangle has volume one
+and parity bias one. At even modulus, if any seed is odd, parity packing
+cancels that one-point correction and gives the BINARY bound 2^k<=N.
+Thus every zero-target forest with all arm lengths at least two satisfies
+this bound, in every arity. No even seed, genuine endpoint, wide box, or
+length cutoff is required; two-chain examples with all seeds odd are
+included. Other axis heights and the general deficit remain open.
+
+Eight theorems. Full 15,201-job build passed; all 3,930 audited declarations
+use only standard axioms or none. All 1,927 forest tests pass, including
+56 new explicit affine rivals, genuine ordering and length-one controls,
+and all-arity zero-target checks. Unrestricted G1/G2/G3 remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
