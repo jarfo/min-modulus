@@ -102,6 +102,7 @@ import MinModulus.TwoChainTightCorner
 import MinModulus.TwoChainSlackClosure
 import MinModulus.G1TwoEscapeClosure
 import MinModulus.G1ThreeEscapeCycle
+import MinModulus.AffineChainForest
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

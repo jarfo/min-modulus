@@ -1250,6 +1250,21 @@ endpoint, rank-budget and essential-hypothesis checks are not Lean proof
 inputs. No finite cycle exception remains queued. Next actual acyclic
 three-chain extraction and arithmetic; SAME three global OPEN gates, 0/3.
 
+`AffineChainForest.lean` now EXTRACTS the complete acyclic forest for ANY
+finite escape set, retaining every actual coordinate, arrow and original
+endpoint. The geometry is valid in any abelian group and does not assume
+validity, a normal form, unit seeds, or fixed arity. The original critical
+three-escape G1 residual supplies EXACTLY three genuine full chains and
+at least TWO odd seeds. Independently, a general cube-index argument
+shows that EVERY translate of ANY positive-length subbinary valid tuple
+generates the whole ambient finite group. Thus every actual forest has
+full JOINT seed span in this regime. Whole-tuple span is not the EVERY-
+deleted-subtuple span condition in primitive G1. Ten theorems; full
+15,176-job build; all 3,674 axiom lists standard-only; 2,062 tests pass,
+including 97 new all-arity, actual-family and essential-hypothesis checks.
+Actual three-chain arithmetic is next; its geometry is no longer an
+assumption. All three unrestricted G1/G2/G3 gates remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
