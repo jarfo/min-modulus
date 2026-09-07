@@ -1846,6 +1846,46 @@ small-face exclusions, equality examples, affine full-length rivals, and
 the necessary smallness restriction. The sharp general deficit and
 unrestricted G1/G2/G3 remain OPEN; no additional gate is introduced.
 
+### 2026-09-08: repeated boundary rivals exclude two strips with a base
+
+`ChainForestProfileStrict.lean` closes the strictly lower AXIS-base case
+for k>=24 and dominant width K_j>=2k. If the base height is h and the
+strip height is H>h, their actual profile relations give
+
+    K_a*x_a + (H-h)*x_j = 0,    S=(h-1)*x_j.
+
+Set c=H-h, D=K_a+c>=3, and m=floor(k/D)+1. Repeating that zero
+relation gives weights X_a=m*K_a, X_j=m*c+h-1, all others zero.
+Their total lies in [k,2k), and their evaluation is S. The short-arm
+representation costs 2m coins. Uniformly for k>=24,
+2k<2^(floor(k/3)-2), so the dominant weight costs at most
+floor(k/3)-2 coins. The combined cost is at most k; binary refinement
+constructs a full-length rival. This argument is uniform, not a census.
+
+Consequently an axis base and a compatible strip in a genuine wide
+forest have EQUAL heights and zero strip boundary. Two distinct
+compatible strips already force any no-overflow profile onto the axis.
+If both strips coexist with a base, both boundaries must therefore
+vanish. In a group with at most one nonzero element of order two, a
+genuine valid forest has at most one zero boundary: two would identify
+their last actual entries. Thus in an EVEN CYCLIC group, TWO distinct
+compatible strips CANNOT coexist with a no-overflow profile under the
+stated length and width bounds. The previously extracted dominant-chain
+inequality k*(2^(k-L_j)+1)<=K_j implies K_j>=2k.
+
+A single zero-boundary strip with an equal base remains possible, even
+at large lengths. Exact coin-interval checks verify genuine valid examples
+at lengths 25 and 67, above binary. The unique-nonzero-two-torsion
+restriction also matters: two genuine length-one chains in C2 x C2
+can both have zero boundary. A non-axis base strictly below ONE strip,
+incompatible profiles, and the sharp general deficit remain open.
+
+Eight theorems. Full 15,197-job build passed; all 3,905 audited declarations
+use only standard axioms or none, including all eight new exports. All
+1,693 targeted forest tests pass, including 112 new uniform-budget checks,
+affine full-length rivals, large genuine equality examples, and cyclic
+endpoint checks. Unrestricted G1/G2/G3 remain OPEN; no new gate is added.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -123,6 +123,7 @@ import MinModulus.ChainForestProfileQuotientMass
 import MinModulus.ChainForestProfileStripMass
 import MinModulus.ChainForestProfileSparseSides
 import MinModulus.ChainForestProfileEndpoints
+import MinModulus.ChainForestProfileStrict
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

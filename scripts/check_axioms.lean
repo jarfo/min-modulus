@@ -3981,3 +3981,13 @@ import MinModulus
 #print axioms MinModulus.support_card_le_one_of_small_forest_boundary
 #print axioms MinModulus.genuine_forest_boundary_not_small_other_box
 #print axioms MinModulus.no_overflow_profile_below_strip_or_equal_zero_boundary
+
+-- Repeated boundary rivals and cyclic strip coexistence.
+#print axioms MinModulus.exists_rep_with_smaller_coin_budget
+#print axioms MinModulus.twice_length_lt_third_budget_pow
+#print axioms MinModulus.exists_rep_boundary_multiple
+#print axioms MinModulus.not_validTuple_of_small_axis_target_and_negative_boundary
+#print axioms MinModulus.not_lower_axis_profile_of_compatible_strip
+#print axioms MinModulus.axis_profile_and_compatible_strip_equal_zero_boundary
+#print axioms MinModulus.genuine_forest_zero_boundary_unique
+#print axioms MinModulus.no_base_with_two_compatible_strips_in_even_cyclic_forest
