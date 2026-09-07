@@ -826,6 +826,28 @@ the cycle and stop the actual walk. Next attack the exceptional-image
 and quotient-cycle-extraction cases, not a fixed-depth lifting queue.
 The same primitive G1, G2, and G3 remain OPEN, 0/3.
 
+`OneEscapeCycleSize.lean` now EXTRACTS the size cutoff needed by those
+consumers. In any group with at most one nonzero involution, validity
+permits only one unordered equal-double pair, without assuming closure.
+Protect an actual cycle and discard one OUTSIDE collision coordinate.
+All outsiders except this deletion and the escape then have distinct
+outside doubling targets. Simultaneous splitting beside the zero-sum
+cycle forces k-2<m, hence k<=m+1. No criticality or valuation premise
+is used. EVERY nontrivial actual affine cycle in a cyclic one-escape
+tuple therefore gives the full global and all exact-stratum bounds,
+and direct G3 exclusion. Arbitrary-depth quotient-cycle consumers no
+longer assume a half-size cutoff either; exceptional-image avoidance
+is still necessary. A singleton cycle forces the whole length <=3.
+Eight theorems; full 15,155-job build; all 3,447 axiom lists standard-
+only; 1,019 tests pass. A valid five-tuple modulo 30 makes the +1 sharp;
+valid two-escape and noncyclic-two-torsion examples guard both hypotheses.
+Deep exceptional families whose cycles FAIL the old size premise now
+have explicit simultaneous-splitting rivals. The remaining one-escape
+exceptional target in dimensions >=4 is acyclic merging-chain geometry,
+not useful-cycle size or lifting depth. Its classification and rival
+extraction are not yet proved. Arbitrary primitive G1, G2, and G3 remain
+OPEN, 0/3; no additional global gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -81,6 +81,7 @@ import MinModulus.CriticalAffineCompression
 import MinModulus.PrimitiveCriticalInduction
 import MinModulus.OneEscapeCycleLift
 import MinModulus.DyadicCycleLift
+import MinModulus.OneEscapeCycleSize
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
