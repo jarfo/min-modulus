@@ -862,10 +862,34 @@ reindexing and a DIRECT G3 consumer at A=floor(log2(A+L))+1 are proved.
 There is no unit, exact-order, calibration, or finite-census premise in
 the final fork theorem. Ten theorems; full 15,156-job build; all 3,457
 axiom lists standard-only; 1,087 tests pass. The strict budget is guarded
-by a genuine valid n=8/N=248 endpoint. Fork extraction from arbitrary
-one-escape tuples and the SHALLower-arm case A<dyadic depth remain
-unproved. The two-chain integer-weight/refinement lemma is reusable there;
-the same primitive G1, G2, and G3 remain OPEN, 0/3.
+by a genuine valid n=8/N=248 endpoint. Its initially remaining shallower-
+arm arithmetic is now closed by the next module; actual fork extraction
+from arbitrary one-escape tuples remains unproved. The same primitive
+G1, G2, and G3 remain OPEN, 0/3.
+
+`ShallowForkWeights.lean` now closes G3 for EVERY actual two-chain
+merging fork, with no arm-depth restriction. In the shallower case,
+failure of the first calibrated weight pair forces at least three
+common-tail coordinates. This pays for four top coins in the second
+pair; the alternative case saves one coin below the all-ones endpoint.
+Both actual sum identities and ALL coin budgets are proved uniformly.
+An even calibration coefficient would put the entire tuple in the even
+subgroup, whose subset-cube lower bound contradicts subbinary size.
+Thus oddness is extracted from actual validity, with NO unit assumption.
+The final theorem `not_validTuple_exceptional_of_actual_fork` combines
+arms of length one/two via existing prefix bounds, the full-depth rival,
+the shallower rival, and extracted exact order to rule out overdeep arms.
+It takes ONLY actual two-chain data, their merge, and the exceptional
+non-power dimension. No order, calibration, depth, coin-pattern, or
+finite-census premise remains. Eighteen theorems; full 15,157-job build;
+all 3,475 axiom lists standard-only; 1,157 tests pass. Nonunit seeds,
+both complementary branches, actual even-coset rivals, overdeep and
+lower-order duplicate predecessors, and affine transport are guarded.
+The former inverse-weight diagnostic has become a uniform proof for
+the shallower arithmetic; it was never used as a proof premise. The
+remaining one-escape G3 task is STRUCTURAL extraction of a single chain
+or merging fork from acyclic data. Actual-cycle cases are already closed.
+Arbitrary primitive G1, G2, G3 remain OPEN, 0/3; no new global gate.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
