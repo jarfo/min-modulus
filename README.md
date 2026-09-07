@@ -1992,6 +1992,41 @@ use only standard axioms or none. All 1,838 forest tests pass, including
 45 new permuted affine validity checks, genuine scope counterexamples,
 and explicit reflected rivals. Unrestricted G1/G2/G3 remain OPEN.
 
+### 2026-09-08: even-axis-only binary bound and full length-one closure
+
+`ChainForestProfileAxisOnly.lean` closes the even-axis-only case by
+packing the odd residue class. If every actual profile is concentrated
+on an even seed's axis, every point of every removed lower rectangle
+has even residue. The odd removed mass is zero. As soon as one seed is
+odd, the odd half of the original binary box has size 2^(k-1), and its
+packing gives the full BINARY bound 2^k<=N.
+
+This theorem holds in EVERY arity, with no dominant-width, wide-box,
+genuine-endpoint, or length-cutoff hypothesis. The profile family may
+also be empty. In a wide forest with an actual axis base and no
+overflows, pattern uniqueness derives the required axis-only family.
+No height bound is imposed: genuine even-axis-only examples of height
+seven are checked at lengths 7, 25, and 67. Odd-axis-only examples at
+sharp subbinary moduli show why the even-seed premise matters.
+
+Combining this with the overflow closure gives, at k>=24 and K_j>=2k
+in genuine even cyclic three-chain forests with odd companions:
+
+    an entirely compatible family with an even axis base satisfies
+    2^k<=N+4 and globalBound k<=N, whether or not an overflow exists;
+    an even axis base with ANY length-one companion satisfies both
+    bounds, with no overflow-existence or compatibility premise.
+
+Thus a remaining subglobal even-axis case must have an incompatible
+overflow and BOTH companions of length at least two. An even-axis-only
+case is closed outright. Odd dominant axes, non-axis bases, and the
+remaining incompatible-profile geometry are still open.
+
+Four theorems. Full 15,200-job build passed; all 3,922 audited declarations
+use only standard axioms or none. All 1,871 forest tests pass, including
+33 new all-arity odd-class injection checks, large genuine axis-only
+examples, and sharp odd-axis controls. Unrestricted G1/G2/G3 remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

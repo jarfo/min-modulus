@@ -4010,3 +4010,9 @@ import MinModulus
 #print axioms MinModulus.all_profiles_compatible_of_even_axis_base_and_length_one_arm
 #print axioms MinModulus.even_axis_base_length_one_overflow_global_bound
 #print axioms MinModulus.even_axis_base_compatible_overflow_global_bound
+
+-- Odd-class exclusion for even-axis-only profile families.
+#print axioms MinModulus.binary_bound_of_even_axis_profile_family
+#print axioms MinModulus.binary_bound_of_even_axis_base_without_overflows
+#print axioms MinModulus.even_axis_base_all_compatible_global_bound
+#print axioms MinModulus.even_axis_base_length_one_global_bound
