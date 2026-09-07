@@ -848,6 +848,25 @@ not useful-cycle size or lifting depth. Its classification and rival
 extraction are not yet proved. Arbitrary primitive G1, G2, and G3 remain
 OPEN, 0/3; no additional global gate is introduced.
 
+`FullDepthFork.lean` now closes the FULL-DYADIC-DEPTH fork endpoint.
+Suppose an actual A-chain seeded by x merges into an actual L-chain
+seeded by y at position B, with A<=B<L and 2^A*x=2^B*y. At
+N=(2^L-1)*2^A and A+L<2^A, the tuple is invalid. Validity extracts
+exact order 2^A for z=x-2^(B-A)*y from the distinct predecessors.
+Cyclicity extracts t<2^A with t*z=(2^L-1)*y, for ARBITRARY seeds.
+If t>0, the nonstandard weights X=t-1 and Y=2^(B-A)*(2^A-t)
+lie in their two binary ranges and have X+Y>=A+L. Binary refinement
+therefore supplies an actual full-length rival. If t=0, the L-chain
+is a zero-sum fibre and the A-chain alone supplies that rival. Affine
+reindexing and a DIRECT G3 consumer at A=floor(log2(A+L))+1 are proved.
+There is no unit, exact-order, calibration, or finite-census premise in
+the final fork theorem. Ten theorems; full 15,156-job build; all 3,457
+axiom lists standard-only; 1,087 tests pass. The strict budget is guarded
+by a genuine valid n=8/N=248 endpoint. Fork extraction from arbitrary
+one-escape tuples and the SHALLower-arm case A<dyadic depth remain
+unproved. The two-chain integer-weight/refinement lemma is reusable there;
+the same primitive G1, G2, and G3 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
