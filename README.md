@@ -565,6 +565,23 @@ only where proved. Next address near-tight quotient holes and
 extract usable structure from arbitrary criticality; the same
 unrestricted global gates remain OPEN, 0/3, with no new gate added.
 
+`OneHoleFibreChain.lean` now extracts a full outside quotient chain
+at index 2^k+1 for ANY actual full-cover fibre. There is one missing
+cube value, so odd doubling permits at most one escape; the actual
+full-cover rival rule handles represented doubles. Arbitrary subgroup
+embeddings and all outside lifts are allowed. For cycle fibres, thin
+covers lift the chain and force 2^k<=m+k at this one-hole capacity.
+If k=m+1, subbinary capacity permits three indices: tight and one-hole
+are impossible, leaving N=2^(m+k)-2. Combined with majority-cycle
+rigidity, the FULL global/all-stratum/G3 class now includes every
+affine doubling cycle of at least floor(n/2) entries (m>=2, k<=m+1).
+Ten declarations; full 15,140-job build; all 3,324 axiom lists
+standard-only; 523 tests pass. Nonchain one-hole cubes and genuine
+valid non-SI full-cover and almost-half endpoint controls guard scope.
+The quotient chain is necessary, not sufficient for parent validity.
+General near-capacity/critical extraction remains inside the same
+three unrestricted open gates, 0/3; no new global premise is added.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
