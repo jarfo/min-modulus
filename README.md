@@ -1349,6 +1349,113 @@ translation and scope guards. Next interior exterior-face counting,
 short arms and lower-stratum dyadic axes. Global axes are CLOSED;
 unrestricted G1/G2/G3 remain the SAME three OPEN gates, 0/3.
 
+`ChainForestExteriorPacking.lean` now proves the BINARY bound
+`2^n<=card G` for every genuine long three-chain forest with n>=67,
+in any finite abelian group. Its arbitrary-arity column theorem charges
+`min(d_j,2^(L_j-4)+1)` distinct residues missing from the whole binary
+box. A putative column collision has zero pivot and a strict shifted
+coordinate deficit; that small shift saves two coins, producing an
+actual full-length rival. For three chains, a proved exponential-versus-
+cubic inequality makes the charge exceed the entire corner volume in
+the stated dimension range. No unit, parity, cyclicity, or supplied
+relation is assumed in the final theorem.
+
+Direct original G1 half descent now handles this entire class in EVERY
+even stratum. Original no-half three-escape data at length at least 67
+extract an actual SHORT arm, retaining genuine endpoints, two odd seeds
+and joint span. All long positive-slack cases in that range are closed.
+Twelve theorems; full 15,182-job build; all 3,755 audited declarations
+have only standard axioms or none; 588 targeted forest tests pass, including 223 new independent rival, column and scope checks. Smaller
+long forests, short arms, higher escapes and unrestricted G1/G2/G3 remain
+open. The conjecture is not proved; no new global premise is introduced.
+
+`ChainForestTrimmedPacking.lean` includes ALL short arms in a uniform
+near-binary bound for every actual r-chain forest in every finite abelian
+group: `2^n<=card G+binomial(n+r-1,r)`. The signed coin-budget theorem
+puts one endpoint of every box collision into the upper simplex of
+points whose total distance from the top is below n. Its complement is
+injective, and adding a slack coordinate gives the stars-and-bars count.
+An additional bound uses `product min(n,2^L_i)` to retain actual short
+widths. An avoided-set variant and an actual acyclic-map extraction
+consumer apply at arbitrary arity, with no unit, parity, all-long,
+genuine-endpoint or supplied-relation premise in the forest bound.
+
+For original THREE-escape G1 data, failure of half descent now implies
+`2^n<=N+binomial(n+2,3)` even with short arms. Direct half descent closes
+all moduli below this window. Every stratum with
+`2^v₂(N)>binomial(n+2,3)` also closes for this class in every dimension.
+The remaining near-endpoint window has an actual short arm at n>=67;
+smaller dimensions can still have long forests. Thirteen new theorems;
+full 15,183-job build; all 3,768 audited declarations use only standard
+axioms or none; 692 targeted forest tests pass, including 104 new short-arm,
+incomparable-fibre, simplex-count and arithmetic checks. The sharp
+linear deficit, higher-escape extraction and unrestricted G1/G2/G3
+remain open. No additional global premise is introduced.
+
+`ChainForestCollisionProfiles.lean` now bounds the number of actual
+small collision profiles. The exact joint law is
+`dist_top(p)+weight(q)<n` or its reversal. High-weight points are
+injective; if the box diameter is at least 2n-1, low points are injective
+too and every fibre has at most two points. Every three-chain forest
+satisfies this diameter condition at n>=7.
+
+With K_i=2^L_i, the profile family P consists of all w with
+`0<=w_i<=2*(K_i-1)`, `sum w_i<n` and
+`sum w_i*x_i=sum (K_i-1)*x_i`. The actual lower collision endpoints for w
+form the rectangle `max(0,w_i-(K_i-1))<=q_i<=min(K_i-1,w_i)`. Different
+profiles have disjoint rectangles. A profile is uniquely determined by
+its overflow set `{i : K_i-1<w_i}`, since equal overflow sets share a
+canonical lower point and would have equal high endpoints. Only short
+arms can overflow. Thus there are at most `2^(number of short arms)`
+profiles; for three chains of length n>=10 there are at most FOUR.
+
+Removing the profile rectangles gives the explicit relation-sensitive
+bound
+
+    2^n <= card G + sum_{w in P} product_i min(w_i+1,2*(K_i-1)+1-w_i).
+
+The family is nonempty in every subbinary forest. An original G1
+consumer extracts one to four profiles from three-escape no-half data,
+retaining genuine endpoints, at least two odd seeds and full joint span.
+The profile volumes still require the sharp estimate; this theorem
+classifies the residual rather than closing it. Nineteen new theorems,
+including the strengthened joint law in `ChainForestTrimmedPacking.lean`.
+No additional assumed gate; unrestricted G1/G2/G3 remain open.
+Full 15,184-job build passed. All 3,787 audited declarations use only
+standard axioms or none, including all nineteen new theorem names.
+796 targeted forest tests pass, with 104 new independent checks of
+actual profile geometry, mixed collisions, nonunits and thresholds.
+
+`ChainForestTwoLongArms.lean` extends the missing-column argument to
+forests with arbitrary companion arms. Joint-distance collisions force
+the exterior representation's own-axis coefficient to vanish if
+K_a>n and K_j>n+t. At a subbinary modulus, an actual small profile rules
+out a zero boundary in every arm with K_a>=2n+1: that period would
+create distinct high-box points with equal value. A nonzero represented
+genuine boundary would be an actual dyadic rejoin. The remaining tiny
+shift therefore constructs a full-length rival, making the entire
+column of `2^(L_j-4)+1` distinct residues unavailable to the box.
+
+The binomial packing charges this column with no width condition on
+other arms. For THREE chains of length n>=67, the longest arm supplies
+the exponential charge automatically. Thus TWO genuine arms of width
+GREATER THAN 2n force the BINARY bound, even if the third is short.
+Original G1 half descent closes this class in every even stratum.
+
+Every remaining original three-escape no-half case in that range now
+has two companions of width at most 2n and a dominant chain of length
+at least `n-2*floor(log_2(2n))`. An explicit embedding extracts its
+coherent SI prefix `g(e i)=(2^i-1)*c+d` in the ORIGINAL modulus, allowing
+nonunit c. The preceding forest consumer preserves genuine endpoints,
+at least two odd seeds and joint span. Thirteen new theorems. Bounding
+the logarithmic extras together with the actual one-to-four-profile
+family is still required; this does not imply the completed three-extra
+hypothesis. The sharp conjecture and unrestricted G1/G2/G3 remain open.
+Full 15,185-job build passed. All 3,800 audited declarations use only
+standard axioms or none, with every new theorem name audited. All 924
+targeted forest tests pass, including 128 new independent checks of
+short-arm geometry, nonunits, prefix identities and theorem scope.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
