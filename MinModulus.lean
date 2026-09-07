@@ -85,6 +85,7 @@ import MinModulus.OneEscapeCycleSize
 import MinModulus.FullDepthFork
 import MinModulus.ShallowForkWeights
 import MinModulus.OneEscapeGeometry
+import MinModulus.OneEscapeGlobalBound
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

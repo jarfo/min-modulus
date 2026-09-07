@@ -905,10 +905,29 @@ theorems; full 15,158-job build; all 3,487 axiom lists standard-only;
 1,192 tests pass. Finite-graph controls check every labelled absorbing-root
 map through seven coordinates with at most one off-root collision, plus
 long arms, reversed labels, arbitrary affine shifts and hypothesis guards.
-Next integrate this class-specific G3 with its actual closure-preserving
-half deletions to obtain the full global/every-stratum one-escape bound.
+That class-specific G3 is now integrated with its actual closure-preserving
+half deletions by `OneEscapeGlobalBound.lean`, as detailed below.
 One-escape closure is NOT extracted for arbitrary tuples: unrestricted
 G1/G2/G3 and Conjecture 1 remain OPEN, 0/3.
+
+`OneEscapeGlobalBound.lean` proves the FULL global and EVERY exact-stratum
+bound for ALL one-escape affine-doubling tuples at every positive cyclic
+modulus. Induction uses the actual half-deleted tuple, retaining both its
+exception and affine closure. Above the logarithmic cutoff, the child
+bound lifts numerically unless the parent is the non-power exceptional
+endpoint, excluded by the completed class-specific G3 theorem. No
+unrestricted G1/G2/G3 input, doubling injectivity, rank, geometry, unit or
+depth hypothesis remains. Seven theorems; full 15,159-job build; all 3,494
+axiom lists standard-only; 1,254 tests pass. Actual high-stratum branched
+parents/children, affine transport, sharp fixed endpoints, power/non-power
+arithmetic and the indispensable exceptional-boundary guard are checked.
+The resulting general residual restriction is proved too: any hypothetical
+global or exact-stratum counterexample must have at least TWO escaping
+doubles at EVERY affine offset. This is not an additional global gate or
+a proof that the residual is empty. Next target structural extraction or
+actual descent for this genuinely multi-escape residual. The one-escape
+branch is now CLOSED, including all valuations; unrestricted G1/G2/G3 and
+Conjecture 1 remain OPEN, 0/3.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
