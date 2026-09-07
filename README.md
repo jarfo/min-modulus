@@ -634,6 +634,24 @@ unrestricted critical-tuple extraction; the cycle premise has NOT been
 extracted from arbitrary validity. Conjecture 1 and G1/G2/G3 remain OPEN,
 0/3 global gates closed.
 
+`AggregateDoublingGrowth.lean` now charges ALL outside doubling chains
+to one replacement budget. Beside any nonempty zero-sum m-fibre in any
+abelian group, distinct actual doubling targets can be split together;
+their number is strictly less than m. More generally a ranked doubling
+forest realizes every coin count through its full binary weight, so
+`sum_i 2^(rank i) < m+K`. No cycle or full-cover premise is needed for
+these actual-group results. Two individually permitted short chains
+can jointly violate this stronger constraint. Beside mapped cycles,
+thin covers lift quotient forest edges at every positive index, and
+inverse-permutation first-hit ranks EXTRACT the forest from the existing
+partial permutation and injective cube. Seven new declarations; full
+15,144-job build; all 3,357 axiom lists standard-only; 642 tests pass.
+Tests preserve genuine valid endpoints and exhibit actual aggregate
+rivals for every tested independent lift. The zero-sum premise is
+essential. Next use depth-layer occupancy to strengthen the uniform
+hole count; arbitrary critical extraction remains open in the SAME
+G1/G2/G3 gates. Conjecture 1 remains OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
