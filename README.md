@@ -1284,6 +1284,24 @@ Next consume exact boundary coverage, positive slack and short arms.
 The product bound alone is NOT the sharp conjecture; unrestricted
 G1/G2/G3 remain OPEN, 0/3.
 
+`ChainForestBoundary.lean` CLOSES the ENTIRE tight long-forest G1 branch,
+including all axis corners. Arbitrary-arity complement savings force a
+nonzero capacious positive boundary representation to have exactly one
+coefficient, a power of two. Exact packing EXTRACTS full box coverage.
+The unique relation then forces a represented boundary to have zero
+pivot coefficient and be nonzero, yielding an ACTUAL endpoint rejoin.
+Any nonzero relation in at least three long chains automatically has
+two supported coordinates and enough width; no interiority is assumed.
+The direct ORIGINAL-G1 consumer proves half descent for every tight
+long three-chain forest. Genuine terminal forests at arbitrary arity
+>=3 have STRICT packing slack. Original no-half three-escape data now
+supply a short arm or a small dyadic-sided corner with positive slack.
+Fourteen theorems; full 15,178-job build; all 3,704 axiom lists
+standard-only; 2,210 tests pass, including
+65 new actual rival/rejoin, axis-corner and essential-hypothesis guards.
+Next positive slack and short arms; tight coverage is no longer queued.
+The unrestricted G1/G2/G3 gates remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
