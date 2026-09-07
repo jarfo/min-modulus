@@ -549,6 +549,22 @@ Next combine cycle thin covers with this chain to extract the missing
 size cutoff for tight cycle fibres. Arbitrary critical extraction and
 the same unrestricted global gates remain open, 0/3.
 
+`CycleTightRigidity.lean` now closes the FULL majority-cycle class:
+an actual affine doubling cycle of m>=2 entries with k<=m arbitrary
+outsiders satisfies the global and EVERY exact-stratum bound, plus
+direct G3 exclusion. The logarithmic outside restriction is REMOVED.
+In the tight-capacity case, arbitrary subgroup embeddings normalize
+through an actual bijective scale factor. The extracted quotient
+chain lifts upstairs by thin covers; actual chain rigidity forces
+2^k<=m+k. Existing subbinary capacity classification leaves only this
+case or the harmless Mersenne endpoint, completing the class.
+Nine declarations; full 15,139-job build; all 3,314 axiom lists
+standard-only; 489 tests pass. Genuine valid above-tight controls
+have many unstructured outsiders, so the size cutoff is asserted
+only where proved. Next address near-tight quotient holes and
+extract usable structure from arbitrary criticality; the same
+unrestricted global gates remain OPEN, 0/3, with no new gate added.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

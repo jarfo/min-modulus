@@ -65,6 +65,7 @@ import MinModulus.CycleInvolutionLift
 import MinModulus.TightQuotientCube
 import MinModulus.CycleThinCover
 import MinModulus.TightFibreDoubling
+import MinModulus.CycleTightRigidity
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
