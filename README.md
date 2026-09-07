@@ -929,6 +929,32 @@ actual descent for this genuinely multi-escape residual. The one-escape
 branch is now CLOSED, including all valuations; unrestricted G1/G2/G3 and
 Conjecture 1 remain OPEN, 0/3.
 
+`FewEscapeCycleBudget.lean` now moves beyond the closed one-escape branch.
+For an actual m-cycle and k outsiders with q affine escapes, it EXTRACTS
+`k <= m+q` and, at every depth t,
+`2^t*k < m+k+(q+1)*(t*2^t-(2^t-1))`. Protecting the cycle costs at most
+one collision deletion; all remaining actual nonescaping arrows extend
+to a permutation. The outside subset cube forces every orbit to hit an
+exception. Collective growth and bounded depth-layer occupancy give the
+inequality, without quotient-hole or outsider-size inputs. If
+`5*(q+1) <= 2*m+6`, depth two extracts the half-sized cutoff and gives the
+FULL global and every exact-stratum bound.
+For q<=2, EVERY actual nonempty cycle is now excluded at G3, with NO cycle-
+size restriction. Outside the half-sized cutoff, the derived cases are
+only (m,k)=(2,4),(3,5),(4,6): exact Mersenne divisibility excludes the first
+and last exceptional moduli, and the middle dimension is a power of two.
+Singleton cycles and n=3 are consumed too. Twelve theorems; full 15,160-job
+build; all 3,506 axiom lists standard-only; 1,294 tests pass. This is a
+uniform escape-count argument, not finite tuple enumeration. The valid
+subbinary tuple (0,1,4,16,24) modulo 30 has minimum escape count two at all
+offsets and is guarded: deleting its lone odd entry leaves an index-two
+coset, so it is not in the primitive residual. Unrestricted one-escape
+extraction from all subbinary tuples would be FALSE. Bounded searches of
+the primitive residual did not settle it; CP runs returned UNKNOWN.
+Next address actual acyclic multi-escape data and unrestricted critical
+extraction. The entire one-escape branch and all two-escape cycle G3 cases
+are CLOSED. The SAME unrestricted G1/G2/G3 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
