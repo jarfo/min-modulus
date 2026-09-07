@@ -1696,6 +1696,40 @@ profile/coset checks and scope guards. Actual examples confirm that
 removing dominance or the subbinary premise can lose a quotient class;
 even companion seeds can make a narrow strip hit zero.
 
+### 2026-09-07: quantitative mass in every dominant quotient class
+
+`ChainForestProfileQuotientMass.lean` strengthens coset coverage to a
+separate numerical deficit bound in EACH class. Under the existing
+threshold k*(2^(k-L_j)+1)<=2^L_j, let H contain x_j, let d=|G/H|,
+and let M_r count actual profile lower points whose values lie in r+H.
+Lean proves, for ANY number of arms and EVERY r,
+
+    2^k <= |G|+d*M_r.
+
+The full ordinary-box fibre has exactly 2^k/d points below binary: it
+splits into the entire dominant axis and the exactly balanced companion
+fibre. Packing that fibre outside the actual profile rectangles gives
+the bound. It also descends through any surjective homomorphism killing
+x_j. No wide-box, all-long, parity, or genuine-endpoint premise is added.
+
+For a cyclic modulus, d=gcd(N,x_j.val), and `forestProfileResidueMass`
+counts each class directly by reduction of the actual evaluated residue.
+The gcd-scaled bound uses that actual d, without supplying its dyadic
+form. At N=2^t*q with q odd and N<2^k, Lean extracts
+
+    d=2^e,  e<=min(t,k-L_j),  M_z>=2^(t-e) for EVERY z modulo d.
+
+Thus nonempty coverage alone can be insufficient: the sharp forest with
+lengths (1,1,10), seeds (1,2,4), and N=4088 has d=4 and exactly TWO
+profile points in every class. One point per class cannot pay its gap.
+
+Eight theorems and one definition. Full 15,193-job build passed; all
+3,871 audited declarations use only standard axioms or none, including
+all nine new declarations. All 1,493 targeted forest tests pass, with
+12 new exact full-box/profile counts, saturation checks, and a dominance
+scope guard. The sharp general profile/carry estimate and unrestricted
+G1/G2/G3 remain OPEN; no new gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

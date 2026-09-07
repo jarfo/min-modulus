@@ -3938,3 +3938,14 @@ import MinModulus
 #print axioms MinModulus.binary_bound_of_profiles_avoiding_dominant_coset
 #print axioms MinModulus.profiles_meet_every_dominant_coset
 #print axioms MinModulus.binary_bound_of_compatible_strips_width_le_dominant_index
+
+-- Exact dominant quotient-class profile mass constraints.
+#print axioms MinModulus.forest_coset_fibre_card_eq_axis_mul_companion
+#print axioms MinModulus.forest_target_coset_card
+#print axioms MinModulus.dominant_index_mul_box_coset_card_eq_two_pow
+#print axioms MinModulus.dominant_coset_profile_mass_card_bound
+#print axioms MinModulus.dominant_projection_profile_mass_card_bound
+#print axioms MinModulus.forestProfileResidueMass
+#print axioms MinModulus.dominant_gcd_profile_residue_mass_card_bound
+#print axioms MinModulus.two_power_le_each_dominant_profile_residue_mass
+#print axioms MinModulus.exists_dominant_index_with_residue_mass
