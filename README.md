@@ -1334,6 +1334,21 @@ all-odd/nonunit and essential-hypothesis guards. Larger slack, short
 arms and the unrestricted G1/G2/G3 gates remain OPEN, 0/3. Next examine
 axis-corner global volume bounds and interior exterior-face counting.
 
+`ChainForestAxis.lean` closes ALL long-forest axes for the SHARP GLOBAL
+lower bound, at arbitrary arity in every finite abelian group. The small
+side sum forces the axis width and entire corner volume to equal dyadic
+tuple length k. Actual packing gives globalBound k<=card G; genuine
+endpoints make it strict. Non-dyadic lengths have no axis at any modulus.
+Original subglobal three-escape data now extract an INTERIOR corner or
+short arm, with prior charges retained. High exact-stratum axis G1 half
+descent is proved; low exact strata at dyadic lengths remain open and
+are not implied by the global envelope. Eight theorems; full 15,181-job
+build; all 3,740 axiom lists standard-only; 2,427 tests pass, including
+71 new growing-arity actual equality, exact retained-box, nonunit/
+translation and scope guards. Next interior exterior-face counting,
+short arms and lower-stratum dyadic axes. Global axes are CLOSED;
+unrestricted G1/G2/G3 remain the SAME three OPEN gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
