@@ -794,6 +794,22 @@ the essential exact G3 boundary are checked. Next prove primitive G1
 deletion or force an actual contradiction there, alongside the same G2
 and G3 obligations. No new structural-extraction gate is introduced.
 
+`OneEscapeCycleLift.lean` now recovers ACTUAL cycles from half-quotient
+data. If an injective quotient affine cycle's selected original
+predecessors have actual doubling targets, choosing those targets
+recovers a cycle among the original coordinates. The selected lift
+may change; doubling kills the two-element kernel and makes the cycle
+law exact. Parent validity is not needed for the extraction. One-escape
+closure supplies the local targets automatically away from its exception.
+Consequently actual Mersenne capacity, the full global bound for a
+half-sized cycle, and its G3 exclusion now consume quotient cycle data,
+not an assumed original cycle or assumed quotient validity. Six theorems;
+full 15,153-job build; all 3,433 axiom lists standard-only; 941 tests pass.
+Guards show that a bare quotient cycle, an index-three kernel, or repeated
+quotient coordinates cannot justify this construction. General quotient-
+cycle extraction and the exceptional-on-cycle case remain missing; the
+unrestricted G1/G2/G3 gates stay OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

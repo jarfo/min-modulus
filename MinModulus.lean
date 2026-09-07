@@ -79,6 +79,7 @@ import MinModulus.InductiveOutsideSpan
 import MinModulus.DeletedOutsideSpan
 import MinModulus.CriticalAffineCompression
 import MinModulus.PrimitiveCriticalInduction
+import MinModulus.OneEscapeCycleLift
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
