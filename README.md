@@ -1456,6 +1456,29 @@ standard axioms or none, with every new theorem name audited. All 924
 targeted forest tests pass, including 128 new independent checks of
 short-arm geometry, nonunits, prefix identities and theorem scope.
 
+`ChainForestDominantQuotient.lean` now proves exact companion-fibre
+balance. Write K=2^L_j and B=2^(n-L_j). For ANY subgroup H containing
+the dominant seed, a quotient fibre with m companion points supplies
+(K-n)*m distinct residues through the high-coordinate interval [n,K).
+At subbinary group size and K>=n*(B+1), one extra unit of quotient
+rounding would exceed 2^n. Every quotient fibre must have the same size,
+so `|G/H|` divides B. In particular the dominant seed subgroup has a
+power-of-two index bounded by the number of companion coordinates.
+
+For the remaining genuine three-chain class at n>=67 the threshold is
+automatic: the companion widths give B<=4n^2 and the largest arm gives
+K>=16n^3. In the original cyclic group the dominant multiplier satisfies
+`gcd(N,x_j.val)=2^e`. If it is odd, it is a UNIT; for N=2^s*q with q odd,
+it is coprime to q and its additive order contains q, even when it is
+not a unit. The original three-escape no-half consumer preserves all
+this data with genuine endpoints, two odd seeds, full joint span and
+logarithmic companions. Nine new theorems. The sharp bound for these
+dyadic-index profiles and extras remains open, as do unrestricted
+G1/G2/G3; no new assumed gate is introduced.
+Full 15,186-job build passed. All 3,809 audited declarations use only
+standard axioms or none, with every new theorem audited. All 1,121
+targeted forest tests pass, including 197 new independent checks.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
