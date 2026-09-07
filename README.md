@@ -810,6 +810,22 @@ quotient coordinates cannot justify this construction. General quotient-
 cycle extraction and the exceptional-on-cycle case remain missing; the
 unrestricted G1/G2/G3 gates stay OPEN, 0/3.
 
+`DyadicCycleLift.lean` removes the single-half-step restriction. A
+quotient cycle avoiding the exceptional IMAGE stays among actual
+coordinates during doubling; after r steps a kernel killed by 2^r
+vanishes from the cycle relation. The resulting original cycle is
+constructed uniformly in ANY abelian groups, including noncyclic
+two-primary kernels. Affine translation and every cyclic quotient
+of index 2^r are included. No validity or induction hypothesis is
+needed for extraction. Valid parents inherit actual Mersenne capacity
+and, for k<=m+1, the full global bound. Six theorems; full 15,154-job
+build; all 3,439 axiom lists standard-only; 974 tests pass. The genuine
+valid (1,2,4,8) modulo 28 shows that avoiding the exception INDEX
+does not suffice at depth two: its quotient image can still lie on
+the cycle and stop the actual walk. Next attack the exceptional-image
+and quotient-cycle-extraction cases, not a fixed-depth lifting queue.
+The same primitive G1, G2, and G3 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
