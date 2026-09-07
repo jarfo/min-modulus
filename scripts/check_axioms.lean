@@ -3933,3 +3933,8 @@ import MinModulus
 #print axioms MinModulus.compatible_overflow_profile_bias_eq_neg_height
 #print axioms MinModulus.singleton_compatible_overflow_gap_bound
 #print axioms MinModulus.binary_bound_of_singleton_length_one_compatible_overflow
+
+-- Every dominant quotient class must contain an actual profile point.
+#print axioms MinModulus.binary_bound_of_profiles_avoiding_dominant_coset
+#print axioms MinModulus.profiles_meet_every_dominant_coset
+#print axioms MinModulus.binary_bound_of_compatible_strips_width_le_dominant_index

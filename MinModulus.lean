@@ -118,6 +118,7 @@ import MinModulus.ChainForestProfileFibres
 import MinModulus.ChainForestProfileBias
 import MinModulus.ChainForestProfileReflection
 import MinModulus.ChainForestProfileStrips
+import MinModulus.ChainForestProfileQuotient
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

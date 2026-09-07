@@ -1657,6 +1657,45 @@ pass, including 17 new actual-validity, strip, coexistence, permutation,
 and scope checks. The sharp general profile/carry estimate and
 unrestricted G1/G2/G3 remain OPEN; no new gate is introduced.
 
+### 2026-09-07: every dominant quotient class needs an actual profile point
+
+`ChainForestProfileQuotient.lean` combines exact companion balance with
+injectivity outside the actual profile rectangles. For ANY number of
+arms, assume the existing dominance threshold
+
+    k*(2^(k-L_j)+1) <= 2^L_j.
+
+Below binary, the profile lower rectangles must meet EVERY coset of
+EVERY subgroup H containing x_j. If one coset has no removed profile
+point, its whole balanced box fibre injects into that coset. Multiplying
+this capacity by the subgroup index gives 2^k<=|G|, a contradiction.
+This uses actual tuple validity and needs no all-long, wide-box, cyclic,
+or parity hypothesis. At k>=67 the threshold is already available for
+the surviving genuine three-chain residual.
+
+The cyclic consumer strengthens the preceding strip exclusion. With
+odd companions and dominant index d=gcd(N,x_j.val), any compatible
+overflow strip with K_a<=d misses the ZERO quotient class: its only
+nonzero companion coordinate ranges from 1 to K_a-1 and its seed is a
+unit modulo the dyadic index d. Consequently, if EVERY actual profile
+is such a strip, the BINARY bound holds. Several strips cannot repair
+the missing class. No singleton or length-one assumption is needed.
+
+Thus a remaining subbinary three-chain forest with odd companions must
+have a no-overflow profile, an incompatible profile, or a compatible
+overflow on an arm WIDER than the dominant index. This disjunction is a
+consequence of the actual-forest consumer, not an additional global gate.
+The sharper quantitative mass in each quotient class and endpoint/carry
+restrictions remain to be used. The global conjecture and unrestricted
+G1/G2/G3 remain OPEN.
+
+Three public theorems. Full 15,192-job build passed; all 3,862 audited
+declarations use only standard axioms or none, including all three new
+exports. All 1,481 targeted forest tests pass, including 16 new actual
+profile/coset checks and scope guards. Actual examples confirm that
+removing dominance or the subbinary premise can lose a quotient class;
+even companion seeds can make a narrow strip hit zero.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
