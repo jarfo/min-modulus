@@ -752,6 +752,25 @@ solution of the two-large-parity-fibre G1 residual. General useful-fibre
 extraction and compatible further growth remain open; G1/G2/G3 stay
 OPEN, 0/3. No new global gate is introduced.
 
+`CriticalAffineCompression.lean` now reaches ARBITRARY tuples, with
+no cycle, SI prefix, full-cover fibre, or unit-pair assumption. In the
+strict three-times-child-bound window, a proper affine coset containing
+all but one coordinate constructs either an ACTUAL half-modulus child
+or an ACTUAL strict smaller-dimensional global counterexample. The
+construction assumes no induction hypothesis. The window is automatic
+for every global counterexample of length >=3 and every subbinary tuple
+of length >=4. Under the explicit child bound, half descent therefore
+holds unless every deleted subtuple affinely generates the whole cyclic
+group, from every retained anchor. At odd modulus only full generation
+remains. The exact-stratum consumer covers the entire critical G1 range.
+Eight declarations; full 15,151-job build, all 3,420 standard-only axiom
+lists, and 870 tests pass. The strict
+factor-three boundary is guarded by actual valid tuples. Even full
+deleted affine generation plus validity does NOT imply a unit pair.
+Next incorporate this induction-ready restriction into the global
+assembly and attack its primitive residual. The current theorem keeps
+the child bound explicit; no unrestricted G1/G2/G3 gate closes, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
