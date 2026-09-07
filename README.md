@@ -887,9 +887,28 @@ both complementary branches, actual even-coset rivals, overdeep and
 lower-order duplicate predecessors, and affine transport are guarded.
 The former inverse-weight diagnostic has become a uniform proof for
 the shallower arithmetic; it was never used as a proof premise. The
-remaining one-escape G3 task is STRUCTURAL extraction of a single chain
-or merging fork from acyclic data. Actual-cycle cases are already closed.
+then-remaining one-escape G3 task was structural extraction. It is now
+closed by `OneEscapeGeometry.lean`, as detailed below.
 Arbitrary primitive G1, G2, G3 remain OPEN, 0/3; no new global gate.
+
+`OneEscapeGeometry.lean` now proves G3 for **ALL one-escape affine-doubling
+tuples**. Every finite map either has a first-hit rank to its escape or
+an actual nonempty cycle avoiding it. In the ranked case a longest chain
+has an injective complement and a unique boundary predecessor, because
+validity in cyclic groups permits only one equal-double pair. The
+complement is extracted as a second chain; maximality also extracts
+`A <= B < L`. Thus the actual parent yields a cycle, full chain, or merging
+fork, and all three are excluded by the proved consumers. The n=3 base
+uses the general equality-order theorem, not a tuple census. No acyclicity,
+rank, permutation, chain/fork, unit, or depth premise remains. Twelve
+theorems; full 15,158-job build; all 3,487 axiom lists standard-only;
+1,192 tests pass. Finite-graph controls check every labelled absorbing-root
+map through seven coordinates with at most one off-root collision, plus
+long arms, reversed labels, arbitrary affine shifts and hypothesis guards.
+Next integrate this class-specific G3 with its actual closure-preserving
+half deletions to obtain the full global/every-stratum one-escape bound.
+One-escape closure is NOT extracted for arbitrary tuples: unrestricted
+G1/G2/G3 and Conjecture 1 remain OPEN, 0/3.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
