@@ -1578,6 +1578,49 @@ standard axioms or none, including all fourteen new declarations. All
 1,411 targeted forest tests pass, with 41 new exact-count checks of
 shifted rectangles, signed heights, actual cancellation and scope guards.
 
+`ChainForestProfileReflection.lean` reflects an actual small profile w
+about the all-ones weights T_i=2^L_i-1. The vector X_i=2*T_i-w_i represents
+the SAME distinguished sum and has total weight greater than k. Validity
+therefore forces EVERY representation of X to use more than k coins.
+This needs neither an all-long nor a box-diameter hypothesis.
+
+A reflected coordinate saves a coin at overflow, costs at most one extra
+coin strictly below its top, and saves that extra coin unless w_i+1 is a
+power of two. Writing O for overflow coordinates and D for strict
+underflow coordinates with a dyadic side, Lean proves the all-arity law
+
+    |O| < |D|.
+
+Consequently a THREE-chain profile overflows AT MOST ONE arm, in EVERY
+dimension. If it overflows arm a, the complete shape is rigid:
+
+    w_a+1 = K_a+2^e_a,
+    w_i+1 = 2^e_i < K_i       for both i!=a.
+
+A non-power overflow excess would save a second coin and produce an
+actual full-length rival. Thus an overflowing rectangle has one side
+K_a-2^e_a and two power-of-two sides.
+
+For a wide three-chain box, profiles number at most one plus the number
+of short arms. At k>=10 this improves FOUR to THREE profiles. Original
+three-escape no-half data now extract ONE to THREE profiles with the
+entire dyadic overflow shape, genuine endpoints, two odd seeds, joint
+span, both parity lower bounds, and the existing volume/dyadic gap bounds.
+In the even-dominant bias formula there is no double-overflow positive
+term: only the no-overflow contribution and up to two negative compatible
+heights remain. The sharp volume/carry estimate and unrestricted G1/G2/G3
+are still OPEN; no new gate is introduced.
+
+Eleven new theorems and one definition. The three-chain restriction is
+essential: the actual valid six-chain tuple (4,5,7,11,19,35) modulo 60 has
+profile (2,0,0,0,2,1), with two overflows and three dyadic underflows.
+
+Full 15,190-job build passed. All 3,852 audited declarations use only
+standard axioms or none, including all twelve new declarations. All
+1,448 targeted forest tests pass, including 37 new reflection, dyadic-shape,
+explicit-rival and higher-arity scope checks. The existing 104 profile
+tests also pass with their three-profile assertion tightened.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
