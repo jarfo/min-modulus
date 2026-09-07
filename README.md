@@ -617,6 +617,23 @@ declarations; full 15,142-job build; all 3,343 axiom lists standard-only;
 extend the budget to even indices and extract arbitrary critical
 structure. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 
+`AllIndexHoleBudget.lean` now extends the uniform budget to EVERY positive
+subgroup index, including arbitrary higher-even strata. One actual outside
+deletion makes retained doubling nonzero and injective. Its exceptions
+are charged to the ORIGINAL cube holes plus the deleted target, giving
+`K-1 <= (d-2^K+1)*floor(log2(2*m))`. The deleted-target term is essential,
+even for a genuine valid parent. Actual same-modulus cycle subtuples
+carry the path bound; no quotient validity or G1 half deletion is assumed.
+A direct consumer gives `N>=2^(m+K)` when
+`(floor((2^(m+K)-1)/(2^m-1))-2^K+1)*floor(log2(2*m)) < K-1`.
+It excludes ALL subbinary indices simultaneously; arithmetic examples
+(m,K)=(25,27),(53,56),(117,121) extend below half-sized cycles. Seven new
+declarations; full 15,143-job build; all 3,350 axiom lists standard-only;
+610 tests pass. General index propagation is complete. Next return to
+unrestricted critical-tuple extraction; the cycle premise has NOT been
+extracted from arbitrary validity. Conjecture 1 and G1/G2/G3 remain OPEN,
+0/3 global gates closed.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

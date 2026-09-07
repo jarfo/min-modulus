@@ -69,6 +69,7 @@ import MinModulus.CycleTightRigidity
 import MinModulus.OneHoleFibreChain
 import MinModulus.TwoHoleFibreChain
 import MinModulus.PartialDoublingChains
+import MinModulus.AllIndexHoleBudget
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
