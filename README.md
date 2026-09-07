@@ -969,9 +969,29 @@ full 15,161-job build; all 3,515 axiom lists standard-only; 1,335 regression
 tests pass. Strict endpoints and the distinction between one
 power deficit and both are guarded by genuinely valid examples.
 These are necessary restrictions, NOT full two-chain G3 or an extraction
-of acyclic multi-escape geometry. Next force/use actual cyclic packing
-relations and handle the surviving power-deficit cases. The SAME three
+of acyclic multi-escape geometry. The existence/packing step has now been
+completed below; the surviving cyclic deficit arithmetic remains. The SAME three
 global gates remain OPEN, 0/3; the completed one-escape branch stays closed.
+
+`TwoChainPacking.lean` now EXTRACTS a nonzero nonnegative rectangle
+relation from subbinary group cardinality itself; no collision witness
+is assumed. For n=A+L>=5 it is UNIQUE, since two ordered large relations
+and their nonzero difference cannot fit in one rectangle. Removing its
+translated upper corner leaves an ACTUAL injection into the group.
+Consequently there are positive a<=2^A,b<=2^L with
+`a+b<=n+1`, `2^n<=card(G)+a*b`, at least one dyadic side, and the actual
+relation `(2^A-a)*x+(2^L-b)*y=0`. Axis relations are included.
+In particular every actual affine/reindexed two-chain tuple in ANY finite
+abelian group satisfies `4*2^n<=4*card(G)+(n+1)^2`. This is a uniform
+near-binary lower bound, with quadratic rather than exponential deficit.
+Ten theorems; full 15,162-job build; all 3,525 axiom lists standard-only;
+1,369 tests pass. These necessary
+conditions still do NOT close the sharp cyclic G3 bound: the INVALID
+n=10/N=1008 two-chain seeds x=1,y=760 with lengths 4,6 satisfy all corner
+conditions with (a,b)=(8,3). Its actual rival is regression-checked.
+Next use cyclic arithmetic/full-length rivals to exclude surviving
+corners, and extract actual acyclic multi-escape geometry. Do NOT reopen
+corner existence/uniqueness/packing. SAME three OPEN global gates, 0/3.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
