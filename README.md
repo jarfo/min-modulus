@@ -1203,6 +1203,31 @@ A remaining k>=9 G1 counterexample needs at least THREE actual escapes at
 EVERY offset. Next consume bounded two-escape parents below nine, then
 the unrestricted multi-escape residual. SAME three global OPEN gates, 0/3.
 
+`G1TwoEscapeClosure.lean` completes ACTUAL two-escape G1 in EVERY
+dimension, removing all bounded cases left by the tail theorem.
+For dimensions 6--8, parity bounds the small corner's excess over a
+relation side by four, while exact even-stratum criticality forces
+binary deficit strictly greater than four. Exterior-column counting
+consumes the slack. Injectivity only on the ACTUAL tuple doubles gives
+an m-element layer outside the anchored `2^m` cube in ANY finite abelian
+group; this closes the four-coordinate G1 base without an escape-count
+assumption. At five, an extracted actual three-term chain is consumed
+by the completed two-extra multiplier theorem, including nonunits and
+arbitrary reindexing. The original critical tuple with at most two
+affine escapes now admits half descent with no size, corner, span,
+seed, child-bound or G2/G3 premise. `PrimitiveThreeEscapeDeleteStep`
+is proved EQUIVALENT to the existing primitive G1 gate: only parents
+k>=5 with at least THREE genuine escapes at EVERY affine offset remain.
+Both `stratum_lower_bound_of_primitive_threeEscapeDeleteStep` and
+`global_lower_bound_of_primitive_threeEscapeDeleteStep` feed this input
+into the existing strong-dimension induction with exactly the SAME
+G2/G3 assumptions. Fifteen declarations (fourteen theorems, one equivalent
+G1 definition); full 15,174-job build; all 3,649 axiom lists standard-only;
+1,917 tests pass. Fifty-two new arithmetic, actual-family and hypothesis
+guards are not Lean proof inputs. ALL two-escape G1 work is DONE. Next
+unrestricted three-or-more-escape actual growth and extraction. SAME
+three global gates OPEN, 0/3; no fourth gate or child premise is added.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
