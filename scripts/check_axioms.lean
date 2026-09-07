@@ -3894,3 +3894,19 @@ import MinModulus
 #print axioms MinModulus.profile_parity_imbalance_card_bound
 #print axioms MinModulus.two_power_le_each_profile_parity_mass
 #print axioms MinModulus.exists_parity_profile_forest_of_critical_three_escape_without_half
+
+-- Explicit overflow signs and alternating profile-height charges.
+#print axioms MinModulus.sign_of_cyclic_forest_sum
+#print axioms MinModulus.forestProfileParityBias
+#print axioms MinModulus.profile_sign_sum_eq_parity_bias
+#print axioms MinModulus.even_profile_side_iff_odd_coordinate
+#print axioms MinModulus.profile_parity_bias_eq_zero_of_odd_coordinate
+#print axioms MinModulus.profile_even_card_sub_odd_card_eq_bias
+#print axioms MinModulus.profile_parity_mass_sub_eq_sum_bias
+#print axioms MinModulus.profile_parity_bias_eq_zero_of_odd_odd_seed_card
+#print axioms MinModulus.profile_parity_masses_eq_of_odd_odd_seed_card
+#print axioms MinModulus.explicit_profile_bias_card_bound
+#print axioms MinModulus.profile_bias_eq_signed_height_of_unique_even_seed
+#print axioms MinModulus.three_chain_profile_bias_eq_signed_height
+#print axioms MinModulus.profile_bias_eq_odd_overflow_sign_mul_even_sides
+#print axioms MinModulus.signed_profile_height_card_bound_of_three_chains

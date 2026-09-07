@@ -1536,6 +1536,48 @@ standard axioms or none, including all nine new declarations. All 1,370
 targeted forest tests pass, including 38 new actual-fibre, short-arm,
 parity-imbalance, and hypothesis-counterexample checks.
 
+`ChainForestProfileBias.lean` computes the previously abstract E-O
+correction from the actual profile coordinates. For a profile w, write
+S_i=min(w_i+1,2*(K_i-1)+1-w_i) and lo_i=max(0,w_i-(K_i-1)). Its bias is
+
+    B_w = (-1)^sum(lo_i*x_i.val)
+          * product_i (S_i if x_i is even; 0 if S_i is even; 1 otherwise).
+
+Lean proves that B_w is exactly the even lower-point count minus the odd
+lower-point count. The complete-family bound becomes
+
+    2^k + |sum_w B_w| <= N + sum_w product_i S_i.
+
+One odd coordinate at an odd seed makes B_w zero. If the NUMBER of odd
+seeds is odd, the actual profile relation forces this case for EVERY
+profile, including overflow in short arms: E=O exactly. Thus the all-three-
+odd branch gets no extra charge from this parity correction and still
+needs the sharp profile/carry estimate.
+
+With exactly two odd seeds and an EVEN dominant seed j, the remaining
+profiles have even coordinates on both companions. They contribute
+B_w=(-1)^(number of overflow coordinates)*(w_j+1); all other profiles
+contribute zero. The dominant axis cannot overflow. Its gap charge is
+therefore the absolute alternating sum of at most FOUR compatible heights.
+More generally, only overflow at ODD seeds changes the sign, while every
+even seed retains its full rectangle side. Overflow at a short even seed
+must NOT be counted as a sign change.
+
+Thirteen new theorems and one definition. These are identities and a
+stronger explicit necessary bound on the same extracted forests, not a
+proof of the sharp global deficit. Unrestricted G1/G2/G3 remain OPEN.
+
+Scope guard: (1,2,4,13,20) modulo 40 is valid, with three genuine chains
+of lengths (3,1,1), but it has profiles (0,0,0) and (0,0,2), each of bias
++1, and the last short-arm boundary is zero. Genuine endpoints alone do
+not imply a unique profile or nonzero short boundaries. This example is
+ABOVE binary (40>32), so it does not refute a subbinary refinement.
+
+Full 15,189-job build passed. All 3,840 audited declarations use only
+standard axioms or none, including all fourteen new declarations. All
+1,411 targeted forest tests pass, with 41 new exact-count checks of
+shifted rectangles, signed heights, actual cancellation and scope guards.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
