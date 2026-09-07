@@ -652,6 +652,23 @@ essential. Next use depth-layer occupancy to strengthen the uniform
 hole count; arbitrary critical extraction remains open in the SAME
 G1/G2/G3 gates. Conjecture 1 remains OPEN, 0/3.
 
+`RankLayerBudget.lean` now bounds EVERY depth layer by the actual
+exception count B. Collective growth then gives, for every t,
+`2^t*K < m+K+B*(t*2^t-(2^t-1))`, without the prior logarithmic loss.
+Odd and all-index actual-cycle consumers, affine normalization, and
+direct binary-bound tests are complete. At t=2 the odd test already
+handles (m,K)=(5,7),(13,16),(32,36); the all-index test handles
+(11,13),(20,23),(38,42), all missed by the earlier log test.
+More importantly, a single uniform theorem proves `N>=2^(m+K)` for
+EVERY actual affine cycle with K=m+c outsiders, c>=2, m>=3*2^c,
+at arbitrary positive moduli and with all original lifts. This is an
+unbounded below-half-sized cycle family, not a fixed-deficit census.
+Thirteen new declarations; full 15,145-job build; all 3,370 axiom lists
+standard-only; 679 tests pass. Next exploit the parity of missing
+values at even indices and continue unrestricted critical extraction.
+The cycle premise is still not automatic; Conjecture 1 and the SAME
+three global gates remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
