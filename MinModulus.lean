@@ -96,6 +96,7 @@ import MinModulus.G1TwoEscapeCycle
 import MinModulus.TwoEscapeGeometry
 import MinModulus.G1TwoChainParity
 import MinModulus.TwoChainAxis
+import MinModulus.TwoChainSparseCorner
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

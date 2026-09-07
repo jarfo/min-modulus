@@ -1123,6 +1123,24 @@ balance, unit, G2/G3 or search premise is used. Axis extraction is DONE
 in this range; next joint binary-weight savings for the interior cyclic
 relation. SAME three unrestricted OPEN global gates, 0/3.
 
+`TwoChainSparseCorner.lean` strengthens interior corner arithmetic:
+each side is a power of two or a sum of two powers, and at least one
+is a single power. Hence at most THREE binary digits remain in total.
+A three-coin complementary saving pays for the opposite side's extra
+coin and produces a full-length rival. This is uniform in ANY abelian
+group, with no popcount implementation or census premise. Unique odd
+dyadic factors combine with the preceding parity theorem: in the stated
+uncapped range the corner is square or (a,a*(1+2^r)), r>0. The final
+original critical G1 consumer extracts the strict sparse interior corner,
+retaining actual chains, both odd seeds, parity and full deficit payment.
+Eight declarations; full 15,170-job build; all 3,594 axiom lists standard-
+only; 1,742 tests pass. Explicit full-length rivals, growing complement
+ranges and valid affine/nonunit square and three-digit controls pass.
+Sparsity is not itself a contradiction, and capped valuations are not
+silently included in the shape theorem. Next primitive relation order
+and cyclic divisibility to consume these sparse shapes. SAME three
+unrestricted OPEN global gates, 0/3; no extra global input.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
