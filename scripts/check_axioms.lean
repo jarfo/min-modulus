@@ -3924,3 +3924,12 @@ import MinModulus
 #print axioms MinModulus.forestCollisionProfiles_card_le_short_add_one_of_three_chains
 #print axioms MinModulus.forestCollisionProfiles_card_le_three_of_three_chains
 #print axioms MinModulus.exists_three_dyadic_profile_forest_of_critical_three_escape_without_half
+
+-- Compatible overflow strips and their exact parity charge.
+#print axioms MinModulus.compatible_overflow_profile_strip_shape
+#print axioms MinModulus.forestProfileLowerBox_eq_strip
+#print axioms MinModulus.forestProfileLowerBox_card_of_strip
+#print axioms MinModulus.no_overflow_profile_zero_on_strip_arm
+#print axioms MinModulus.compatible_overflow_profile_bias_eq_neg_height
+#print axioms MinModulus.singleton_compatible_overflow_gap_bound
+#print axioms MinModulus.binary_bound_of_singleton_length_one_compatible_overflow

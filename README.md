@@ -1621,6 +1621,42 @@ standard axioms or none, including all twelve new declarations. All
 explicit-rival and higher-arity scope checks. The existing 104 profile
 tests also pass with their three-profile assertion tightened.
 
+### 2026-09-07: compatible overflow strips and a singleton binary bound
+
+`ChainForestProfileStrips.lean` makes the even-dominant overflow geometry
+explicit. Write K_i=2^L_i and suppose K_j>=k. If an actual three-chain
+profile w has even coefficients on the two companions and overflows a,
+reflection forces
+
+    a!=j,  w_a=K_a,  w_b=0,  w_j+1=h=2^e,  K_a+h<=k.
+
+Its lower rectangle is exactly the strip 0<=q_j<h, 1<=q_a<K_a, q_b=0,
+of volume (K_a-1)*h. In an even modulus, with an even dominant seed and
+two odd companions, its parity bias is -h. A coexisting no-overflow
+profile v must have v_a=0, by disjointness of the actual lower rectangles
+(the coexistence statement requires the already-proved wide-box bound).
+
+If the entire actual profile family is this ONE strip, the explicit
+parity packing theorem gives
+
+    2^k <= N+(K_a-2)*h.
+
+In particular, a length-one overflowing companion forces the BINARY
+bound 2^k<=N. This closes that singleton-profile subclass, without an
+all-long, genuine-endpoint, or box-diameter premise. It does not assert
+that every residual profile is compatible, or that a no-overflow profile
+exists. The valid genuine forest (2,4,8,33,45) modulo 50 has only profile
+(1,0,2): a height-two strip, bias -2, and no no-overflow profile. Its
+modulus is above binary. An odd dominant seed need not have negative
+strip bias, as the checked modulus-32 mixed-parity example shows.
+
+Seven public theorems, plus a private arithmetic helper. Full 15,191-job
+build passed; all 3,859 audited declarations use only standard axioms or
+none, including all seven new exports. All 1,465 targeted forest tests
+pass, including 17 new actual-validity, strip, coexistence, permutation,
+and scope checks. The sharp general profile/carry estimate and
+unrestricted G1/G2/G3 remain OPEN; no new gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
