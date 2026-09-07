@@ -1030,6 +1030,26 @@ lift this class to the full global/every-stratum bounds, then return
 to distinct escaping endpoint images and unrestricted acyclic extraction.
 Do not reopen common-endpoint G3 arithmetic. SAME three OPEN gates, 0/3.
 
+`TwoChainJoinBound.lean` completes the common-endpoint branch: FULL
+global and EVERY exact-stratum bounds now hold, not only G3. An actual
+half deletion identifies the two terminal exceptions, retaining one
+exception and all its affine targets. The child lies in the completed
+one-escape class. Its exact low-stratum bounds lift directly; the new
+common-endpoint G3 excludes the sole high-stratum equality. No induction
+or unrestricted conjectural premise is left to supply. All depths,
+orientations, affine offsets, permutations and nonunit seeds are allowed.
+The generic two-exception deletion also applies beyond chain geometry.
+Nine theorems; full 15,165-job build; all 3,551 axiom lists standard-only;
+1,516 tests pass. Controls include
+genuinely valid large-modulus parents at many valuations and their ACTUAL
+half children; the valid n=5/N=30 cycle-plus-outsiders example exercises
+the generic affine two-exception deletion. Satisfying the numerical
+bound and endpoint relation alone is not asserted to imply validity.
+The common-endpoint global/every-stratum branch is now CLOSED. The
+unrestricted primitive G1 extraction remains the priority; distinct
+escaping endpoint images and general multi-escape geometry are not
+classified. SAME three OPEN global gates, 0/3; no extra gate.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
