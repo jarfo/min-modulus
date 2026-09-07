@@ -1106,6 +1106,23 @@ pass. No search result is a proof premise. Next eliminate axis corners
 and consume the interior cyclic relation. The sharp residual band is
 not closed; SAME three unrestricted OPEN global gates, 0/3.
 
+`TwoChainAxis.lean` eliminates ALL odd-seed axis corners in dimensions
+k>=6. An actual nonzero axis relation inside the rectangle is the seed's
+EXACT additive order, by uniqueness. Odd canonical seeds have odd index
+over that order, including nonunits. Packing forces index >=2^A, hence
+>=2^A+1. The uniform all-arm inequality
+`(2^A+1)*(A+L+1-2^A)<=2^L` for A,L>0 and A+L>=6 then forces the
+FULL binary bound `2^(A+L)<=N`. Both axis orientations are therefore
+excluded below binary size. The final original critical G1 consumer
+extracts a STRICTLY INTERIOR odd-seed corner, retaining its same-parity,
+dyadic-side and deficit-payment constraints. Seven declarations; full
+15,169-job build; all 3,586 axiom lists standard-only; 1,696 tests pass.
+Actual valid odd/even-modulus axis families, nonunit seeds, growing
+all-split inequalities and the auxiliary k=5 cutoff guard pass. No
+balance, unit, G2/G3 or search premise is used. Axis extraction is DONE
+in this range; next joint binary-weight savings for the interior cyclic
+relation. SAME three unrestricted OPEN global gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
