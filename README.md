@@ -599,6 +599,24 @@ declarations; full 15,141-job build; all 3,333 axiom lists standard-only;
 descent. General critical structure and the same three unrestricted
 gates remain OPEN, 0/3; tight, one-hole, and two-hole extraction are closed.
 
+`PartialDoublingChains.lean` replaces a prescribed small hole count by
+a uniform arbitrary-hole inequality. Partial doubling injections extend
+to actual permutations; subset-sum injectivity forces every orbit to
+reach an exception. Actual cycle thin covers bound every first-hit path
+by `L=floor(log2(2*m))`, giving `k <= |B|*L`. At ANY odd subgroup index d,
+the actual full-cover rival rule charges exceptions to missing values
+of the original quotient cube. Thus `k <= (d-2^k)*L` for every actual
+affine cycle of size m>=2, with k arbitrary outsiders. No majority or
+fixed-hole-count premise is used. A direct binary-bound consumer excludes
+all subbinary odd indices whenever `(D_odd-2^k)*L < k`, where D_odd is
+the largest odd integer at most `(2^(m+k)-1)/(2^m-1)` rounded down.
+Arithmetic applicability includes (m,k)=(11,13),(41,44),(105,109), beyond
+the half-sized class; these checks are not proof premises. Ten new
+declarations; full 15,142-job build; all 3,343 axiom lists standard-only;
+572 tests pass. Odd index and strict inequality are essential. Next:
+extend the budget to even indices and extract arbitrary critical
+structure. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
