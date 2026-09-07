@@ -1089,6 +1089,23 @@ the extracted corner's cyclic arithmetic in the quadratic-width band;
 this bound is not the sharp conjecture. Unrestricted multi-escape
 extraction and the SAME three global gates remain OPEN, 0/3.
 
+`G1TwoChainParity.lean` EXTRACTS the parity information missing from
+unrestricted two-chain arithmetic. If either affine seed is even,
+deleting the other seed leaves a same-parity subtuple and constructs an
+actual half child, without criticality. Thus the G1 residual has BOTH
+seeds odd; full cyclic units are not required. Its corner sides have
+the same parity. If a side is `2^t`, t is below both arm lengths and
+`2^(t+1)|N`, the other side is `2^t*v` with v ODD: exact matched dyadic
+valuation, not only evenness. A common-divisor corner theorem supplies
+this uniformly. The final critical G1 consumer retains the original
+tuple, actual chains, both odd seeds and the small same-parity corner.
+Ten declarations; full 15,168-job build; all 3,579 axiom lists standard-
+only; 1,658 tests pass. Actual valid half children, nonunit odd seeds,
+growing-depth congruences and essential depth/divisibility/oddness guards
+pass. No search result is a proof premise. Next eliminate axis corners
+and consume the interior cyclic relation. The sharp residual band is
+not closed; SAME three unrestricted OPEN global gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
