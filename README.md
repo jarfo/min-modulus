@@ -1265,6 +1265,25 @@ including 97 new all-arity, actual-family and essential-hypothesis checks.
 Actual three-chain arithmetic is next; its geometry is no longer an
 assumption. All three unrestricted G1/G2/G3 gates remain OPEN, 0/3.
 
+`ChainForestRelations.lean` proves arbitrary-arity coin refinement and
+actual integer-weight rivals. Balanced-support mixed relations are
+impossible at ANY arm lengths; other signed relations can increase only
+arms with binary width below the original length k. If all arms have
+width at least k, box fibres are ordered. Subbinary cardinality EXTRACTS
+a nonnegative zero relation with corner-side sum <=k+r-1 and at least one
+power-of-two side. If 2k<=sum(2^L_i-1), the relation is UNIQUE and removing
+its one upper corner leaves an injective box: `2^k<=N+product a_i`.
+For three long arms that extra width condition is automatic. The
+ORIGINAL critical three-escape G1 consumer retains genuine endpoints,
+seed parity and full span and supplies either a short arm or this actual
+small dyadic-sided corner paying for the whole binary deficit. Sixteen
+theorems; full 15,177-job build; all 3,690 axiom lists standard-only;
+2,145 tests pass, including 83 new
+refinement, signed-budget, actual packing and essential-hypothesis guards.
+Next consume exact boundary coverage, positive slack and short arms.
+The product bound alone is NOT the sharp conjecture; unrestricted
+G1/G2/G3 remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
