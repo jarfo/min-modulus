@@ -25,7 +25,7 @@ open Finset
 validity or injectivity assumption. -/
 theorem sum_addChar_all_subsets_eq_prod
     {k : ℕ} {G : Type*} [AddCommGroup G]
-    (q : Fin k → G) (χ : AddChar G ℂ) :
+    {R : Type*} [CommSemiring R] (q : Fin k → G) (χ : AddChar G R) :
     (∑ S : Finset (Fin k), χ (∑ i ∈ S, q i))=∏ i, (1+χ (q i)) := by
   classical
   have hmap (S : Finset (Fin k)) : χ (∑ i ∈ S, q i)=∏ i ∈ S, χ (q i) := by

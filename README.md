@@ -582,6 +582,23 @@ The quotient chain is necessary, not sufficient for parent validity.
 General near-capacity/critical extraction remains inside the same
 three unrestricted open gates, 0/3; no new global premise is added.
 
+`TwoHoleFibreChain.lean` now handles two missing quotient values.
+Character factorization (generalized to any commutative semiring)
+shows that the holes have opposite parity and an actual odd entry
+exists. With odd half index, one actual odd deletion removes a half
+entry or the unique antipodal collision. Retained doubles are nonzero
+and injective, so the single even hole allows one escape and forces
+a full retained quotient chain. This extraction applies to ANY actual
+full-cover fibre, with arbitrary embeddings and lifts. For cycle
+fibres, actual subtuple restriction and thin-cover lifting give
+2^(k-1)<=m+k-1. Thus the almost-half class k=m+1, m>=3 satisfies the
+STRONGER binary bound N>=2^n: its apparent first-even endpoint is
+excluded, while the genuine m=2 endpoint is retained. Nine new
+declarations; full 15,141-job build; all 3,333 axiom lists standard-only;
+544 tests pass. Cube deletion is not claimed as G1 half-modulus tuple
+descent. General critical structure and the same three unrestricted
+gates remain OPEN, 0/3; tight, one-hole, and two-hole extraction are closed.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
