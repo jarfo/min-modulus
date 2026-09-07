@@ -76,6 +76,7 @@ import MinModulus.EvenHoleParityBudget
 import MinModulus.ThinExpansionLifting
 import MinModulus.FullCoverExpansionExtraction
 import MinModulus.InductiveOutsideSpan
+import MinModulus.DeletedOutsideSpan
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

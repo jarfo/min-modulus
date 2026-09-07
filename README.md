@@ -736,6 +736,22 @@ this extracted structure and genuine criticality for compatible growth
 or actual deletion; arbitrary useful-fibre extraction and G1/G2/G3
 remain OPEN, 0/3.
 
+`DeletedOutsideSpan.lean` now constructs an ACTUAL half-modulus child
+from any proper one-outsider-deleted quotient span beside an arbitrary
+full-cover fibre, provided d<3*2^(K-1). The injective deleted cube forces
+the subgroup index to equal TWO; pulling it back and restricting the
+original coordinates gives the child, with no induction hypothesis.
+For every subbinary mapped cycle with m>=2 and K>=1, both coverage and
+the density window are automatic. Thus either the actual half child
+exists or EVERY deleted outside span is the whole quotient. At odd
+quotient order, full deleted span follows directly from cube density.
+Eight declarations; full 15,150-job build, all 3,412 standard-only axiom
+lists, and 831 tests pass. This is a
+structural extraction of a familiar same-parity deletion branch, not a
+solution of the two-large-parity-fibre G1 residual. General useful-fibre
+extraction and compatible further growth remain open; G1/G2/G3 stay
+OPEN, 0/3. No new global gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
