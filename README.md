@@ -1012,6 +1012,24 @@ relation from surviving cyclic corners or construct a rival directly;
 common outside endpoints and unrestricted acyclic extraction remain.
 The SAME three global gates stay OPEN, 0/3. No new global gate.
 
+`TwoChainJoin.lean` now closes ALL G3 cases for two actual chains whose
+doubled endpoints agree, including a common value OUTSIDE the tuple.
+Distinct terminal predecessors extract the full dyadic discrepancy order.
+At shallow depth the first calibrated weight pair ALWAYS has enough
+weight: failure would require three coordinates after the endpoint
+itself. The full-depth calibration also works without an internal merge.
+Short arms, overdeep arms, both orientations and arbitrary affine/
+reindexed nonunit seeds are consumed. No arm-order, depth, calibration,
+oddness or capacity assumption remains in the final class G3 theorem.
+Eight theorems; full 15,164-job build; all 3,542 axiom lists standard-only;
+1,459 tests pass. The n=7/N=120
+tuple (17,34,68,1,2,4,8) guards the genuinely outside common target 16
+and two actual escapes; a valid n=4/N=12 control guards non-power
+dimension. Next use the ACTUAL identified-endpoint half deletion to
+lift this class to the full global/every-stratum bounds, then return
+to distinct escaping endpoint images and unrestricted acyclic extraction.
+Do not reopen common-endpoint G3 arithmetic. SAME three OPEN gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
