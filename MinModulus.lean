@@ -89,6 +89,7 @@ import MinModulus.OneEscapeGlobalBound
 import MinModulus.FewEscapeCycleBudget
 import MinModulus.TwoChainRelations
 import MinModulus.TwoChainPacking
+import MinModulus.TwoChainBoundary
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

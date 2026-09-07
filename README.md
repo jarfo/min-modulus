@@ -993,6 +993,25 @@ Next use cyclic arithmetic/full-length rivals to exclude surviving
 corners, and extract actual acyclic multi-escape geometry. Do NOT reopen
 corner existence/uniqueness/packing. SAME three OPEN global gates, 0/3.
 
+`TwoChainBoundary.lean` now closes a surviving relation class completely.
+If `2^A*x=c*y`, `0<c<2^L`, and
+`A+L<=(2^(A+1)-1)+(2^L-1-c)`, validity forces c to be a POWER OF TWO:
+a non-power complement pays for two extra top coins and an actual rival.
+The dyadic coefficient then EXTRACTS a one-escape map. Full global and
+EVERY exact-stratum bounds follow, with all affine/reindexed data and
+arbitrary nonunit seeds retained. Capacity is automatic when A+L<=2^A.
+Any such boundary relation in a remaining global counterexample must
+therefore have strictly insufficient capacity and 2^A<A+L; this residual
+restriction is proved. The preceding invalid (1,760) G3 corner control
+is consumed by its actual 2^4*x=4*y connection.
+Nine theorems; full 15,163-job build; 3,534 standard-only axiom lists;
+1,408 tests pass. Capacity cannot be dropped: the genuinely valid n=11/
+N=20000 tuple with A=1,L=10,x=10510,y=1 has c=1020, a non-power, and
+only six units of complementary weight. Next force a usable boundary
+relation from surviving cyclic corners or construct a rival directly;
+common outside endpoints and unrestricted acyclic extraction remain.
+The SAME three global gates stay OPEN, 0/3. No new global gate.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
