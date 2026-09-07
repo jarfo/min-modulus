@@ -93,6 +93,7 @@ import MinModulus.TwoChainBoundary
 import MinModulus.TwoChainJoin
 import MinModulus.TwoChainJoinBound
 import MinModulus.G1TwoEscapeCycle
+import MinModulus.TwoEscapeGeometry
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

@@ -1068,6 +1068,27 @@ half deletion is retained. Next extract the actual two-chain geometry
 of the injective acyclic residual and consume the corner/packing bounds.
 General multi-escape extraction remains open. SAME three OPEN gates, 0/3.
 
+`TwoEscapeGeometry.lean` now EXTRACTS the actual two-chain geometry of
+the remaining critical two-escape G1 residual. A generic finite map
+either has first-hit ranks to an arbitrary terminal set or has an actual
+cycle avoiding it. Two terminal basins are complete disjoint chains when
+nonterminal arrows are injective. The original critical tuple without
+a half child supplies these hypotheses, and its two allowed exceptions
+are proved genuine escaping endpoints. Both original chains, the affine
+offset and all coordinates are retained. Rank, acyclicity, injectivity
+and decomposition are no longer assumptions. The completed corner and
+packing results now give the ORIGINAL tuple a small dyadic-sided corner
+paying for its binary deficit and `4*2^k<=4*N+(k+1)^2`, k>=5. Thus
+`4*N+(k+1)^2<4*2^k` implies actual G1 half descent. No G2/G3, child
+bound or unit normalization is supplied. Nine declarations; full
+15,167-job build; all 3,569 axiom lists standard-only; 1,605 tests pass.
+Small labelled maps, growing terminal basins, valid affine/nonunit
+families, and essential cycle/collision/actual-escape guards pass.
+Two-escape geometry and its large-deficit region are DONE. Next consume
+the extracted corner's cyclic arithmetic in the quadratic-width band;
+this bound is not the sharp conjecture. Unrestricted multi-escape
+extraction and the SAME three global gates remain OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
