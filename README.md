@@ -533,6 +533,22 @@ lists standard-only; 441 tests pass. Next extract quotient doubling
 closure from tight actual-fibre capacity. Arbitrary critical structure
 and the same unrestricted G1/G2/G3 gates remain open, 0/3.
 
+`TightFibreDoubling.lean` now completes the outside quotient geometry:
+ANY actual full-cover fibre at index 2^k forces its k outsiders to
+form ONE complete quotient doubling chain under an actual permutation.
+Subset-sum injectivity makes a subset representing 2*q_i disjoint
+from i; a full-cover actual rival excludes two or more removed entries.
+Thus quotient doubling is closed up to zero. The actual half entry
+and almost-doubling decomposition then give a chain: every nonempty
+cycle remainder would be a zero-sum subset, contradicting the cube.
+No SI, cycle fibre, quotient-validity, or outside-size premise is used.
+Seven declarations; full 15,138-job build; all 3,305 axiom lists
+standard-only; 467 tests pass. A valid non-SI control has quotient
+doubling but NOT upstairs doubling, so the distinction is explicit.
+Next combine cycle thin covers with this chain to extract the missing
+size cutoff for tight cycle fibres. Arbitrary critical extraction and
+the same unrestricted global gates remain open, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
