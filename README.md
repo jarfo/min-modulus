@@ -1886,6 +1886,34 @@ use only standard axioms or none, including all eight new exports. All
 affine full-length rivals, large genuine equality examples, and cyclic
 endpoint checks. Unrestricted G1/G2/G3 remain OPEN; no new gate is added.
 
+### 2026-09-08: a coexisting axis base forces a length-one strip arm
+
+The repeated-boundary construction in `ChainForestProfileStrict.lean`
+now permits zero dominant increment. It needs only K_a+c>=3, with
+c>=0, rather than c>0. The previous positive-increment theorem remains
+available with its original statement.
+
+Apply the stronger construction to the zero boundary already forced by
+an axis base and compatible strip. If L_a>=2, then K_a>=4, and repeating
+that boundary alone gives weights X_a=(floor(k/K_a)+1)*K_a,
+X_j=h-1, all others zero. Their coin cost is at most k and their total
+weight is at least k, producing an actual full-length rival. Therefore,
+under the existing k>=24, K_j>=2k and genuine wide-forest hypotheses,
+
+    an axis base plus a compatible strip forces L_a=1,
+    equal heights, and zero strip boundary.
+
+This restriction holds in arbitrary abelian groups. Length-one examples
+above binary at lengths 25 and 67 remain valid. The height of the
+surviving strip, non-axis bases below one strip, incompatible profiles,
+and the sharp general deficit still require further work.
+
+Two new theorems; the existing positive-increment result is retained.
+Full 15,197-job build passed; all 3,907 audited declarations use only
+standard axioms or none. All 1,747 forest tests pass, including 54 new
+explicit affine rivals for wider zero-boundary arms. Unrestricted
+G1/G2/G3 remain OPEN; no additional gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -3991,3 +3991,7 @@ import MinModulus
 #print axioms MinModulus.axis_profile_and_compatible_strip_equal_zero_boundary
 #print axioms MinModulus.genuine_forest_zero_boundary_unique
 #print axioms MinModulus.no_base_with_two_compatible_strips_in_even_cyclic_forest
+
+-- Zero-increment boundary repetition and the surviving strip arm.
+#print axioms MinModulus.not_validTuple_of_small_axis_target_and_boundary_step
+#print axioms MinModulus.axis_base_compatible_strip_arm_length_one

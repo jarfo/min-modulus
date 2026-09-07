@@ -1,7 +1,8 @@
 import MinModulus.ChainForestProfileEndpoints
 
 /-! Repeated small boundary relations exclude strictly lower axis bases
-above length 24. In even cyclic groups, two compatible strips cannot
+above length 24. A coexisting strip must have zero boundary and a
+length-one arm. In even cyclic groups, two compatible strips cannot
 coexist with a no-overflow profile. The global conjecture remains open. -/
 
 namespace MinModulus
@@ -52,16 +53,16 @@ theorem exists_rep_boundary_multiple {L : ℕ} (hL : 0 < L) (m : ℕ) :
     ring
   · simp only [dsum,u,Finset.sum_ite_eq',Finset.mem_range,show L-1<L by omega,if_true]
 
-/-- A small axis target and a positive two-chain zero relation force
-an actual rival once the axis can represent twice the tuple length. -/
-theorem not_validTuple_of_small_axis_target_and_negative_boundary
+/-- A small axis target and a zero relation of weight at least three
+force a rival, allowing the dominant coefficient to be zero. -/
+theorem not_validTuple_of_small_axis_target_and_boundary_step
     {n : ℕ} (hn : 24 ≤ n) {β : Type*} [Fintype β]
     (L : β → ℕ) (hL : ∀ i, 0 < L i)
     {G : Type*} [AddCommGroup G] (g : Fin n → G)
     (E : (Σ i : β, Fin (L i)) ≃ Fin n) (x : β → G) (b : G)
     (hchain : ∀ a (i : Fin (L a)), g (E ⟨a,i⟩)+b=2^i.val • x a)
     (j a : β) (haj : a ≠ j) (hwidth : 2*n ≤ 2^(L j))
-    (c h : ℕ) (hc : 0 < c) (hh : 0 < h) (hsmall : 2^(L a)+c+h ≤ n)
+    (c h : ℕ) (hstep : 3 ≤ 2^(L a)+c) (hh : 0 < h) (hsmall : 2^(L a)+c+h ≤ n)
     (hzero : 2^(L a) • x a+c • x j=0)
     (htarget : (∑ i, (2^(L i)-1) • x i)=(h-1) • x j) :
     ¬ ValidTuple g := by
@@ -142,6 +143,23 @@ theorem not_validTuple_of_small_axis_target_and_negative_boundary
         simp only [t,add_nsmul,smul_add,smul_smul]; abel
       _=_ := by rw [he,zero_add]
   exact not_validTuple_of_chain_forest_integer_weights L X g E x b hchain u hu hcost hhigh hneq hsum
+
+/-- The positive dominant-coefficient case of the repeated boundary step. -/
+theorem not_validTuple_of_small_axis_target_and_negative_boundary
+    {n : ℕ} (hn : 24 ≤ n) {β : Type*} [Fintype β]
+    (L : β → ℕ) (hL : ∀ i, 0 < L i)
+    {G : Type*} [AddCommGroup G] (g : Fin n → G)
+    (E : (Σ i : β, Fin (L i)) ≃ Fin n) (x : β → G) (b : G)
+    (hchain : ∀ a (i : Fin (L a)), g (E ⟨a,i⟩)+b=2^i.val • x a)
+    (j a : β) (haj : a ≠ j) (hwidth : 2*n ≤ 2^(L j))
+    (c h : ℕ) (hc : 0 < c) (hh : 0 < h) (hsmall : 2^(L a)+c+h ≤ n)
+    (hzero : 2^(L a) • x a+c • x j=0)
+    (htarget : (∑ i, (2^(L i)-1) • x i)=(h-1) • x j) :
+    ¬ ValidTuple g := by
+  have hKa : 2 ≤ 2^(L a) := by
+    simpa only [pow_one] using Nat.pow_le_pow_right (by decide : 0 < 2) (hL a)
+  exact not_validTuple_of_small_axis_target_and_boundary_step hn L hL g E x b hchain j a haj hwidth c h
+    (by omega) hh hsmall hzero htarget
 
 /-- At length at least 24, an actual axis profile cannot lie strictly
 below a compatible strip when the dominant width is at least twice n. -/
@@ -263,5 +281,41 @@ theorem no_base_with_two_compatible_strips_in_even_cyclic_forest
   apply hac
   exact genuine_forest_zero_boundary_unique L hL g hg E x b hchain hgen (M : ZMod N)
     (fun z hz ↦ zmod_eq_zero_or_half_of_add_self_eq_zero hN z (by simpa only [two_nsmul] using hz)) a c haz hcz
+
+/-- In the remaining axis-base/strip case, the zero-boundary strip
+must be on a length-one arm. Larger boundaries repeat cheaply enough
+to give a full-length rival even with zero dominant increment. -/
+theorem axis_base_compatible_strip_arm_length_one
+    {n : ℕ} (hn : 24 ≤ n) {β : Type*} [Fintype β] (hr : Fintype.card β=3)
+    (L : β → ℕ) (hL : ∀ i, 0 < L i)
+    (hwide : 2*n-1 ≤ ∑ i, (2^(L i)-1))
+    {G : Type*} [AddCommGroup G] (g : Fin n → G) (hg : ValidTuple g)
+    (E : (Σ i : β, Fin (L i)) ≃ Fin n) (x : β → G) (b : G)
+    (hchain : ∀ a (i : Fin (L a)), g (E ⟨a,i⟩)+b=2^i.val • x a)
+    (hgen : ∀ a, ∀ t, g t ≠ 2 • g (E ⟨a,⟨L a-1,by have := hL a; omega⟩⟩)+b)
+    (j : β) (hwidth : 2*n ≤ 2^(L j))
+    (w v : ∀ i, Fin (2*(2^(L i)-1)+1))
+    (hw : w ∈ forestCollisionProfiles n L x) (hv : v ∈ forestCollisionProfiles n L x)
+    (hcompat : ∀ i, i ≠ j → Even (w i).val)
+    (a : β) (ha : 2^(L a)-1 < (w a).val)
+    (hvz : ∀ i, i ≠ j → (v i).val=0) : L a=1 := by
+  classical
+  by_contra hnL
+  have hLa : 2 ≤ L a := by have := hL a; omega
+  have hKa : 4 ≤ 2^(L a) := by
+    simpa using Nat.pow_le_pow_right (by decide : 0 < 2) hLa
+  obtain ⟨heq,hzero⟩ := axis_profile_and_compatible_strip_equal_zero_boundary hn hr L hL hwide g hg E x b hchain hgen j hwidth w v hw hv hcompat a ha hvz
+  obtain ⟨haj,_,_,e,he,hbudget⟩ := compatible_overflow_profile_strip_shape hr L hL g hg E x b hchain j (by omega) w hw hcompat a ha
+  have hvm : (∑ i, (v i).val)<n ∧
+      (∑ i, (v i).val • x i)=∑ i, (2^(L i)-1) • x i := by
+    simpa only [forestCollisionProfiles,Finset.mem_filter,Finset.mem_univ,true_and] using hv
+  have htarget : (∑ i, (2^(L i)-1) • x i)=(v j).val • x j := by
+    rw [← hvm.2]
+    apply Finset.sum_eq_single j
+    · intro i _ hij; rw [hvz i hij,zero_nsmul]
+    · simp
+  exact not_validTuple_of_small_axis_target_and_boundary_step hn L hL g E x b hchain j a haj hwidth
+    0 ((v j).val+1) (by omega) (Nat.zero_lt_succ _) (by omega)
+    (by simpa using hzero) (by simpa using htarget) hg
 
 end MinModulus
