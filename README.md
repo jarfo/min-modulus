@@ -1507,6 +1507,35 @@ standard axioms or none, including all eight new theorem names. All 1,332
 targeted forest tests pass, including 211 new exact-count checks and
 counterexamples guarding uniformity, positive widths, and odd-seed scope.
 
+`ChainForestProfileFibres.lean` removes all actual profile rectangles
+and proves injectivity of the remaining box. Packing now works inside
+ANY finite target set, with any avoided residues charged there. This
+uses the arbitrary-arm joint collision law and has no all-long premise.
+
+At even modulus with at least one odd seed, the ordinary binary box is
+exactly balanced between parity classes. Write E and O for the sums of
+even and odd lower-point counts across the actual profile rectangles,
+and V for their total volume. Lean proves
+
+    2^k <= N+2E,                 2^k <= N+2O,
+    E+O=V,                      2^k+|E-O| <= N+V.
+
+Thus parity imbalance is an additional exact charge on the deficit;
+a profile family concentrated in one parity class cannot pay the other
+class's deficit. For N=2^(s+1)*q<2^k, E and O must EACH be at least 2^s.
+An original three-escape no-half consumer extracts both bounds at k>=10,
+retaining one to four profiles, the actual forest, genuine endpoints,
+two odd seeds, joint span, and the existing volume/dyadic gap bounds.
+
+Eight new theorems and one definition. This strengthens the short-arm
+profile constraints; it does not yet provide the sharp linear deficit
+or close unrestricted G1/G2/G3. No new assumed gate is introduced.
+
+Full 15,188-job build passed. All 3,826 audited declarations use only
+standard axioms or none, including all nine new declarations. All 1,370
+targeted forest tests pass, including 38 new actual-fibre, short-arm,
+parity-imbalance, and hypothesis-counterexample checks.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

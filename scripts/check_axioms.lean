@@ -3883,3 +3883,14 @@ import MinModulus
 #print axioms MinModulus.odd_companions_of_three_seeds
 #print axioms MinModulus.dominant_index_exponent_le_one_companion_of_three_chains
 #print axioms MinModulus.exists_dominant_small_index_of_critical_three_escape_without_half
+
+-- Arbitrary-arm profile fibres and the parity imbalance charge.
+#print axioms MinModulus.box_injective_outside_profile_rectangles
+#print axioms MinModulus.profile_fibre_card_bound_with_avoided_set
+#print axioms MinModulus.twice_parity_box_card_eq_two_pow
+#print axioms MinModulus.parity_profile_card_bound_of_valid_chain_forest
+#print axioms MinModulus.forestProfileParityMass
+#print axioms MinModulus.forestProfileParityMass_add
+#print axioms MinModulus.profile_parity_imbalance_card_bound
+#print axioms MinModulus.two_power_le_each_profile_parity_mass
+#print axioms MinModulus.exists_parity_profile_forest_of_critical_three_escape_without_half
