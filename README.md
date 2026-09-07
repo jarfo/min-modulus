@@ -1479,6 +1479,34 @@ Full 15,186-job build passed. All 3,809 audited declarations use only
 standard axioms or none, with every new theorem audited. All 1,121
 targeted forest tests pass, including 197 new independent checks.
 
+`ChainForestBalancedAxis.lean` proves that a uniformly distributed box
+in a nontrivial cyclic group has an actual nonzero seed annihilated by
+its axis width. The proof factors the standard complex character sum;
+exact balance makes the total zero, so one geometric-sum factor vanishes.
+This works for arbitrary positive widths and any number of axes, without
+finite computation as a premise. Exact dominant companion balance also
+passes through any surjective homomorphism killing the dominant seed.
+
+For the actual three-chain forest, an even dominant seed leaves TWO ODD
+companions. Reduction modulo its already-proved index d=2^e makes both
+companion seeds units. A wrapping axis therefore gives d | 2^L_a for
+some actual companion a. An odd dominant seed already has d=1. Thus the
+original k>=67 three-escape no-half consumer now extracts
+
+    gcd(N,x_j.val)=2^e <= 2k,       e <= floor(log_2(2k)),
+    e=0 OR e<=L_a for some a!=j.
+
+This improves the previous bound by the product of companion widths to
+one companion width, while retaining the SAME original forest, genuine
+endpoints, two odd seeds, full joint span, logarithmic extras, and odd-part
+coprimality/order information. Eight new theorems. The sharp profile/extra
+estimate and unrestricted G1/G2/G3 remain OPEN; no new gate is introduced.
+
+Full 15,187-job build passed. All 3,817 audited declarations use only
+standard axioms or none, including all eight new theorem names. All 1,332
+targeted forest tests pass, including 211 new exact-count checks and
+counterexamples guarding uniformity, positive widths, and odd-seed scope.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -3873,3 +3873,13 @@ import MinModulus
 #print axioms MinModulus.odd_part_of_subbinary_dominant_seed
 #print axioms MinModulus.exists_dominant_two_primary_seed_of_subbinary_genuine_three_chains
 #print axioms MinModulus.exists_dominant_dyadic_multiplier_of_critical_three_escape_without_half
+
+-- Balanced cyclic axes and the linear dominant-index bound.
+#print axioms MinModulus.sum_comp_of_balanced_fibres
+#print axioms MinModulus.forest_character_sum_to_prod
+#print axioms MinModulus.exists_zero_boundary_of_balanced_cyclic_box
+#print axioms MinModulus.balanced_companion_projection_of_subbinary_dominant_chain
+#print axioms MinModulus.dominant_index_divides_companion_width_of_odd_companions
+#print axioms MinModulus.odd_companions_of_three_seeds
+#print axioms MinModulus.dominant_index_exponent_le_one_companion_of_three_chains
+#print axioms MinModulus.exists_dominant_small_index_of_critical_three_escape_without_half
