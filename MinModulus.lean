@@ -106,6 +106,7 @@ import MinModulus.AffineChainForest
 import MinModulus.ChainForestRelations
 import MinModulus.ChainForestBoundary
 import MinModulus.ChainForestSlack
+import MinModulus.ChainForestParity
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

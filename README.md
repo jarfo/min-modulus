@@ -1318,6 +1318,22 @@ including 67 new growing-arity genuine nonunit, missing-boundary,
 exact-order and essential-hypothesis guards. Larger charged slack and
 short arms remain; unrestricted G1/G2/G3 are still OPEN, 0/3.
 
+`ChainForestParity.lean` gives exact parity-resolved forest packing.
+All supported genuine boundaries are EVEN, so actual slack S and the
+corner bias B satisfy `S+B>=2m`, where B is the product of even-seed
+corner sides and odd-seed side parities. An odd number of odd seeds
+forces B=0 at arbitrary arity. In particular every all-odd three-chain
+forest has S>=2m; the exactly-two-odd-seed correction is retained.
+Generic target-fibre packing and exact zero-corner transport supply
+the counts without unit, all-odd, interior or census assumptions.
+Direct original G1 half descent consumes insufficient parity slack;
+the actual residual retains every prior support/divisor/order charge.
+Eighteen theorems; full 15,180-job build; all 3,732 axiom lists standard-
+only; 2,356 tests pass, including 79 new exact-count, growing genuine
+all-odd/nonunit and essential-hypothesis guards. Larger slack, short
+arms and the unrestricted G1/G2/G3 gates remain OPEN, 0/3. Next examine
+axis-corner global volume bounds and interior exterior-face counting.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
