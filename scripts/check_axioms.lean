@@ -3949,3 +3949,13 @@ import MinModulus
 #print axioms MinModulus.dominant_gcd_profile_residue_mass_card_bound
 #print axioms MinModulus.two_power_le_each_dominant_profile_residue_mass
 #print axioms MinModulus.exists_dominant_index_with_residue_mass
+
+-- Exact strip masses and full dominant-index deficit charges.
+#print axioms MinModulus.card_positive_divisible_fin
+#print axioms MinModulus.forest_strip_divisible_axis_card
+#print axioms MinModulus.forest_strip_zero_projection_card
+#print axioms MinModulus.compatible_overflow_zero_residue_card
+#print axioms MinModulus.singleton_compatible_overflow_quotient_gap_bound
+#print axioms MinModulus.dyadic_strip_rounding
+#print axioms MinModulus.singleton_compatible_overflow_index_charge_bound
+#print axioms MinModulus.compatible_overflow_family_index_charge_bound

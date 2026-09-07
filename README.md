@@ -1730,6 +1730,44 @@ all nine new declarations. All 1,493 targeted forest tests pass, with
 scope guard. The sharp general profile/carry estimate and unrestricted
 G1/G2/G3 remain OPEN; no new gate is introduced.
 
+### 2026-09-07: exact strip masses and the full dominant-index charge
+
+`ChainForestProfileStripMass.lean` computes the zero-class contribution
+of a compatible overflow strip. If its height is h and overflow width
+K_a, projection kills the dominant seed and makes the odd companion a
+unit modulo d. Thus its zero-class points are exactly the positive
+multiples of d along that arm:
+
+    M_0(strip)=h*floor((K_a-1)/d).
+
+For dyadic d and K_a, d*floor((K_a-1)/d)=K_a-d, with NATURAL subtraction.
+Under the existing dominance threshold, actual validity supplies the
+dyadic dominant gcd d=gcd(N,x_j.val). A singleton compatible overflow
+profile therefore gives the full quotient correction
+
+    2^k <= N+(K_a-d)*h.
+
+This extends the parity-based (K_a-2)*h charge to the entire actual gcd.
+More generally, if EVERY actual profile is a compatible overflow strip,
+
+    2^k <= N+sum_profiles (K_a-d)*h.
+
+The formal statement sums over each profile's actual overflowing arm;
+reflection proves that arm is unique. Several strips are included, and
+an arm with K_a<=d contributes zero. The index-based binary exclusion
+from the preceding milestone is now the zero-charge case of a numerical
+bound. Profiles with no overflow, incompatible coefficients, or three
+odd seeds still need the remaining structural analysis; no global gate
+is closed by this calculation.
+
+Eight theorems. Full 15,194-job build passed; all 3,879 audited declarations
+use only standard axioms or none, including all eight new exports. All
+1,521 targeted forest tests pass, with 28 new exact-count and scope checks.
+Actual genuine examples include lengths (3,2,1), seeds (4,23,115), N=120,
+and profile (0,4,0): its width-four strip has zero mass modulo d=4. These
+examples are above binary and are not evidence of global closure.
+The sharp unrestricted estimate and G1/G2/G3 remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
