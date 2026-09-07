@@ -3995,3 +3995,12 @@ import MinModulus
 -- Zero-increment boundary repetition and the surviving strip arm.
 #print axioms MinModulus.not_validTuple_of_small_axis_target_and_boundary_step
 #print axioms MinModulus.axis_base_compatible_strip_arm_length_one
+
+-- Small strip heights and complete axis-base family bounds.
+#print axioms MinModulus.not_validTuple_of_two_axis_representations
+#print axioms MinModulus.dyadic_axis_height_le_two_of_length_one_zero_boundary
+#print axioms MinModulus.axis_base_compatible_strip_height_le_two
+#print axioms MinModulus.forestProfileLowerBox_card_of_axis
+#print axioms MinModulus.axis_base_strip_family_four_point_gap_and_global_bound
+#print axioms MinModulus.forestCollisionProfiles_eq_of_same_overflow
+#print axioms MinModulus.compatible_axis_base_overflow_family_global_bound

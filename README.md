@@ -1914,6 +1914,44 @@ standard axioms or none. All 1,747 forest tests pass, including 54 new
 explicit affine rivals for wider zero-boundary arms. Unrestricted
 G1/G2/G3 remain OPEN; no additional gate is introduced.
 
+### 2026-09-08: strip height at most two and four-point family closure
+
+`ChainForestProfileHeights.lean` bounds the height left by the length-one
+zero-boundary reduction. For an axis base and compatible strip under the
+existing k>=24, K_j>=2k and genuine wide-forest hypotheses, both heights
+are at most TWO. If h=2^e with e>=2, use m=floor((k-e)/2) copies of the
+zero boundary and the dominant weight 2^e-1. Their coin cost is at most
+k, while their total weight is at least k because 2^e>=e+2. Joint binary
+refinement supplies the full-length rival, including the parity remainder.
+The underlying height exclusion needs no dimension cutoff beyond its
+explicit width and small-target budget.
+
+Each of the two profile rectangles consequently has at most two points.
+If the entire actual family consists of that axis base and strip,
+
+    2^k <= card G + 4,    globalBound k <= card G.
+
+This is a sharp GLOBAL bound for this profile-family class, in arbitrary
+finite abelian groups. In an even cyclic group the family-exhaustion
+premise can also be derived: if all actual profiles are compatible, an
+axis base and any overflow leave exactly that base and one strip. Another
+no-overflow profile has the same pattern and coincides with the base;
+another strip is either identical or gives the excluded two-strip/base
+configuration. Thus the compatible axis-base/overflow class is closed.
+
+Both possible heights occur in genuine valid examples above binary,
+including height one at length 67 and height two at length 68. Exact
+coin-interval checks exhaust all full-length rivals and enumerate their
+complete small-profile families. These examples show the height bound is
+sharp in the general theorem; they are not subbinary counterexamples.
+An axis-only family, incompatible profiles, non-axis bases below one
+strip, and the sharp general deficit remain open.
+
+Seven theorems. Full 15,198-job build passed; all 3,914 audited declarations
+use only standard axioms or none. All 1,793 forest tests pass, including
+46 new height-budget checks, explicit affine rivals, sharp large examples,
+and exact family volumes. Unrestricted G1/G2/G3 remain OPEN; no new gate.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
