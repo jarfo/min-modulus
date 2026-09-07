@@ -3969,3 +3969,15 @@ import MinModulus
 #print axioms MinModulus.exists_reflected_rep_of_not_dyadic_underflow
 #print axioms MinModulus.three_chain_other_sides_dyadic_of_not_two_powers
 #print axioms MinModulus.three_chain_profile_sparse_side_classification
+
+-- Genuine endpoint exclusions and profile coexistence.
+#print axioms MinModulus.two_nsmul_ne_sum_distinct_of_validTuple
+#print axioms MinModulus.genuine_forest_boundary_not_one_or_two_powers
+#print axioms MinModulus.axis_profile_strip_boundary_relation
+#print axioms MinModulus.genuine_forest_boundary_not_small_axis_weight
+#print axioms MinModulus.axis_profile_height_le_compatible_strip_height
+#print axioms MinModulus.two_compatible_strips_force_lower_axis_profile
+#print axioms MinModulus.not_validTuple_of_boundary_savings_with_joint_capacity
+#print axioms MinModulus.support_card_le_one_of_small_forest_boundary
+#print axioms MinModulus.genuine_forest_boundary_not_small_other_box
+#print axioms MinModulus.no_overflow_profile_below_strip_or_equal_zero_boundary

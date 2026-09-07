@@ -1807,6 +1807,45 @@ use only standard axioms or none, including all eight new exports. All
 complement-saving, and explicit-rival checks. The sharp general deficit
 and unrestricted G1/G2/G3 remain OPEN; no additional gate is introduced.
 
+### 2026-09-08: genuine short boundaries order coexisting profiles
+
+`ChainForestProfileEndpoints.lean` excludes every nonzero small point on
+another box face from a genuine escaping boundary. For any number of
+chains, put K_i=2^L_i. If sum(K_i-1)>=2k-1, 0<=c_i<K_i,
+c_a=0, and 0<sum c_i<k, then
+
+    K_a*x_a != sum c_i*x_i.
+
+No lower bound on the escaping arm's length is needed. Two positive
+coefficients save the two coins needed to add its boundary; a sole
+nonpower coefficient also saves two. Joint box capacity permits binary
+refinement to a full k-term rival. The remaining single-power case would
+rejoin an actual chain, contradicting the genuine endpoint. This extends
+the older boundary exclusions that required k<=2*K_a-1.
+
+In a valid genuine three-chain forest with this wide box and K_j>=k,
+let w be an actual compatible overflow strip on arm a, and let v be an
+actual no-overflow profile. The new consumer proves exactly
+
+    v_j+1 < w_j+1, OR
+    v_j=w_j, all v_i=0 for i!=j, and K_a*x_a=0.
+
+The axis conclusion in the equality case is derived. If two compatible
+strips on distinct short arms coexist with a no-overflow profile, that
+profile is on the dominant axis and lies below both strip heights; both
+boundary/height identities hold. Strictly lower profiles are not yet
+excluded. Equality with zero boundary is necessary: the genuine valid
+tuple (2,4,8,7,21) modulo 42 has profiles (0,0,0) and (0,0,2).
+Smallness is also essential: the valid genuine forest (1,2,4,54) modulo
+101 has short boundary 2*54=7, with represented weight 7>=k=4.
+
+Ten theorems. Full 15,196-job build passed; all 3,897 audited declarations
+use only standard axioms or none, including all ten new exports. All
+1,581 targeted forest tests pass, including 35 new checks of genuine
+small-face exclusions, equality examples, affine full-length rivals, and
+the necessary smallness restriction. The sharp general deficit and
+unrestricted G1/G2/G3 remain OPEN; no additional gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
