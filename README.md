@@ -1302,6 +1302,22 @@ standard-only; 2,210 tests pass, including
 Next positive slack and short arms; tight coverage is no longer queued.
 The unrestricted G1/G2/G3 gates remain OPEN, 0/3.
 
+`ChainForestSlack.lean` charges every supported genuine endpoint as a
+DISTINCT residue missing from the ENTIRE binary box. General avoided-set
+packing therefore gives `S>=m`, where S=N+product a_i-2^k and m is the
+number of supported relation coordinates. The direct original G1
+consumer closes insufficient support slack, including all one-unit
+cases and interior two-unit cases, uniformly in dimension. Every common
+relation factor D has EXACT divided-direction order, divides N and S,
+and gives `S>=max(D,m)`. These mechanisms have arbitrary arity and do not
+assume units, all-odd seeds, a supplied gcd, order or determinant. The
+original three-escape no-half data extract either a short arm or the
+support- and divisor-charged actual corner data. Ten theorems; full
+15,179-job build; all 3,714 axiom lists standard-only; 2,277 tests pass,
+including 67 new growing-arity genuine nonunit, missing-boundary,
+exact-order and essential-hypothesis guards. Larger charged slack and
+short arms remain; unrestricted G1/G2/G3 are still OPEN, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
