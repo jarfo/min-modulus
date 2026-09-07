@@ -1179,6 +1179,30 @@ and coverage/criticality guards pass. Tight-case propagation is DONE.
 Next extract full seed span and control positive-slack boundary images;
 SAME three unrestricted OPEN global gates, 0/3.
 
+`TwoChainSlackClosure.lean` CLOSES the ENTIRE actual two-escape G1
+branch for parent dimension k>=9, including ALL positive packing slack.
+Near-binary packing inside a proper subgroup is impossible, so full
+JOINT seed span is extracted from validity, not supplied as a premise.
+Every represented boundary has determinant exactly N and slack
+`(2^A-a)*(c-b)`; the binary axis inequality makes its capacity automatic.
+A short exterior column has distinct residues and must meet the retained
+rectangle when its height exceeds slack. Negative boundary coefficients
+would yield a nonzero determinant below N. Thus actual counting extracts
+one-escape closure in either orientation. For k>=9, small dyadic-sided
+corners satisfy `a*b<=max(2^A-a,2^L-b)`, while subbinary slack is below
+`a*b`; the only dimension-ten quadratic exceptions (5,6)/(6,5) have no
+dyadic side. FULL global and EVERY exact-stratum bounds now hold for ALL
+interior two-chain corners in this range, without odd-seed or slack
+premises. The original critical tuple with at most two affine escapes
+admits actual half descent, without corner/span/unit/G2/G3/child-bound
+inputs. Twenty declarations; full 15,173-job build; all 3,634 axiom lists
+standard-only; 1,865 tests pass. Forty-seven new regression checks cover
+general arithmetic, positive-slack identities, actual valid full-span
+families and essential hypothesis guards; no census is a proof input.
+A remaining k>=9 G1 counterexample needs at least THREE actual escapes at
+EVERY offset. Next consume bounded two-escape parents below nine, then
+the unrestricted multi-escape residual. SAME three global OPEN gates, 0/3.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -99,6 +99,7 @@ import MinModulus.TwoChainAxis
 import MinModulus.TwoChainSparseCorner
 import MinModulus.TwoChainRelationOrder
 import MinModulus.TwoChainTightCorner
+import MinModulus.TwoChainSlackClosure
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape
