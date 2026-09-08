@@ -4249,3 +4249,11 @@ import MinModulus
 #print axioms MinModulus.exists_three_five_short_primitive_rep
 #print axioms MinModulus.exists_three_five_long_nonintegral_parameters
 #print axioms MinModulus.exists_three_five_long_primitive_rep
+
+-- Genuine three-five closure and all companion length sums at most eight.
+#print axioms MinModulus.three_five_short_primitive_phase_link
+#print axioms MinModulus.three_five_long_primitive_phase_link
+#print axioms MinModulus.exists_three_five_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_three_five_axis_representation
+#print axioms MinModulus.even_axis_three_five_companions_global_bound
+#print axioms MinModulus.even_axis_companion_length_sum_le_eight_global_bound

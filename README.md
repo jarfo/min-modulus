@@ -2788,6 +2788,29 @@ and error boundaries. Deriving these phase equations from the genuine
 companion-sum-eight pair; its genuine closure, larger pairs, other
 families and axes, unrestricted G1/G2/G3 and the conjecture remain open.
 
+**Companion length sum at most eight closed (2026-09-08).**
+`even_axis_three_five_companions_global_bound` in
+`ChainForestProfileThreeFive.lean` closes the genuine even-axis `(3,5)`
+class for `n >= 67` in every even stratum. Both possible indices,
+half-profile orientations and compatible primitive phases are derived
+from the original forest and actual axis-base data. Actual affordable
+representations refine to full-length rivals.
+
+`even_axis_companion_length_sum_le_eight_global_bound` now combines
+all established cases and proves the sharp global bound whenever the two
+positive companion lengths sum to at most eight. The caller supplies no
+extra dominance, index, phase or coin-budget premise; length-one arms
+are also handled internally.
+
+Verification: six new audited exports, 15,230 Lean build jobs, 4,103
+standard-only or axiom-free declaration audits, and 24,674 forest tests.
+The 72 additional checks certify genuine valid forests above the bound
+at both indices, with every possible n-coin multiset checked through its
+bounded companion weights. Larger companion sums remain open; the next
+unordered pairs are `(2,7)`, `(3,6)` and `(4,5)`. General primitive relations
+and uniform budgets for larger widths, other profile families and axes,
+unrestricted G1/G2/G3 and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
