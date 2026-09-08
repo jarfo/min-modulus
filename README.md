@@ -3244,6 +3244,40 @@ axes, unrestricted G1/G2/G3, and the global conjecture remain open.
 Continue through milestones and commit and push each verified milestone
 to both repositories.
 
+**Uniform primitive reduction from genuine equal-companion forests (2026-09-08).**
+`ChainForestProfileEqualForest.lean` derives complete reduced primitive
+data from an original subglobal genuine forest with a maximal even axis
+and arbitrary equal companion lengths, for every `n >= 67` and every
+even stratum. The forest supplies the index exponent, dyadic height and
+drop, original half-profile cost, gap, strict charge, actual bounded
+coefficients and compatible phases in either overflow orientation.
+
+`EqualCompanionReducedPrimitiveData` retains the alternative `F=1` or an
+odd primitive phase. Here `F=1` is the maximal companion index; every
+smaller index has odd phase because the uniform even-phase rival would
+contradict validity. No phase, coin-budget or extra numerical dominance
+premises are supplied to the genuine-forest theorem. The maximal-axis
+hypothesis remains explicit.
+
+A new general estimate obtains the bounded phases from only the ordinary
+width `2*n <= K` and equal-companion gap. It does not require the earlier
+large numerical threshold or coprimality between the axis period and
+primitive denominator.
+
+Verification: four new audited exports, 15,252 Lean build jobs, 4,197
+standard-only or axiom-free declaration audits, and 61,935 forest tests.
+The 1,723 new tests construct actual cyclic-group phases exactly at
+`K=2*n`, for widths through 1,024, including periods sharing the full
+primitive denominator. No placeholders, extra axioms or `native_decide`
+are used.
+
+The original equal-companion residual is now maximal index or odd phase
+at every companion length. Eliminating those cases, arbitrary larger
+unequal companions, other profile families and axes, unrestricted
+G1/G2/G3, and the global conjecture remain open. The genuine companion
+sum-through-ten bound remains proved. Continue after each milestone,
+committing and pushing verified work to both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

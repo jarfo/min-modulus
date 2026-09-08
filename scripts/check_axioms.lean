@@ -4376,3 +4376,8 @@ import MinModulus
 #print axioms MinModulus.equal_even_primitive_rival_twice
 #print axioms MinModulus.exists_equal_even_primitive_rival
 #print axioms MinModulus.odd_primitive_phase_of_valid_equal_companion_forest
+
+#print axioms MinModulus.equal_companion_phase_base_bounds_of_gap
+#print axioms MinModulus.exists_equal_companion_primitive_phases_of_gap
+#print axioms MinModulus.equal_companion_reduced_primitive_data_of_valid_forest_half
+#print axioms MinModulus.even_axis_subglobal_maximal_equal_companion_reduced_primitive_data
