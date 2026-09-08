@@ -4388,3 +4388,16 @@ import MinModulus
 #print axioms MinModulus.modulus_stratum_of_dyadic_profile
 #print axioms MinModulus.equal_reduced_data_modulus_dyadic_profile
 #print axioms MinModulus.even_axis_subglobal_maximal_equal_companion_modulus_profile
+
+-- Uniform maximal-index equal companions.
+#print axioms MinModulus.gmin_le_of_lt_binary_width
+#print axioms MinModulus.gmin_le_of_lt_binary_ones
+#print axioms MinModulus.twelve_equal_length_le_of_half_cost
+#print axioms MinModulus.equal_maximal_index_error_lt_binary_tail
+#print axioms MinModulus.exists_equal_maximal_index_small_phase_multiplier
+#print axioms MinModulus.equal_maximal_index_nonintegral_certificate
+#print axioms MinModulus.exists_equal_maximal_index_exceptional_rival
+#print axioms MinModulus.exists_equal_maximal_index_rival
+#print axioms MinModulus.exists_equal_maximal_index_reduced_data_rival
+#print axioms MinModulus.even_axis_maximal_index_equal_companions_global_bound
+#print axioms MinModulus.even_axis_subglobal_equal_companion_strict_index_modulus_profile

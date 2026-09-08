@@ -564,3 +564,5 @@ import MinModulus.ChainForestProfileFiveFive
 import MinModulus.ChainForestProfileEqualEven
 import MinModulus.ChainForestProfileEqualForest
 import MinModulus.ChainForestProfileEqualStratum
+import MinModulus.ChainForestProfileEqualMaximalArithmetic
+import MinModulus.ChainForestProfileEqualMaximal

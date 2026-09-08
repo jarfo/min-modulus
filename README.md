@@ -3305,6 +3305,40 @@ and axes, unrestricted G1/G2/G3, and the global conjecture remain open.
 Continue after verified milestones, committing and pushing both
 repositories.
 
+**2026-09-08 — maximal-index equal companions satisfy the global bound at arbitrary lengths.**
+`ChainForestProfileEqualMaximalArithmetic.lean` and
+`ChainForestProfileEqualMaximal.lean` close the entire maximal-index branch
+of the genuine maximal-even-axis equal-companion class at `n >= 67`, in
+every even modulus stratum. The companion length `a` is unrestricted.
+The genuine theorem derives all period and phase data internally from the
+forest, its actual index `2^a`, top/half profiles, and gap.
+
+Write `T=2^a-1`, `K=2^L`, `M+E=(T+1)K`, and
+`E <= 2^(a-2)H`. Equal companion weights `t` give the exact identity
+`T Z-(t+(T+1)j)K=(T-t)(H+c)-T-jE` when `tq=T nu+j`.
+For `q != T-1`, a common divisor gives an annihilator with `j=0`,
+or a modular inverse gives `j=1` and `t<T-1`. The variable `a`-bit
+prefix and both companions cost at most `3a`. Actual half-profile cost
+implies `12a<=n` and `2Tn<2^(n-3a)`, so the full axis tail is affordable.
+For `q=T-1`, `t=T-1` gives an integral boundary at `2K`. Below it,
+three upper coins plus the full lower block meet the budget exactly;
+at or above it, four upper coins plus a short binary tail suffice.
+Every branch produces an actual distinct full-length tuple rival.
+
+The new genuine residual theorem has **strictly smaller index** `e<a`,
+retains all reduced primitive data (whose phases are therefore odd), and
+proves `2^(e+t)|N iff t<=h` for every `t<=a-e`. The maximal-axis hypothesis
+remains explicit. Smaller-index odd phases, unrestricted G1/G2/G3, and
+the unrestricted conjecture remain open.
+
+Verification: 11 new theorem exports; full Lean build **15,255 jobs**;
+axiom audit **4,214 declarations** (4,211 standard-only and three
+axiom-free); full forest suite **70,624 passed**. The 8,253 new regressions
+cover all modular phases through companion length 12, selected widths
+through 128, and actual cyclic-group tuple collisions through length 12
+with both multiplier branches, all integral error signs, odd companions,
+dyadic height/drop, every coordinate order, and an affine transform.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
