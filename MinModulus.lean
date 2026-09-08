@@ -608,3 +608,5 @@ import MinModulus.LongChainCycle
 import MinModulus.PartialChainForest
 
 import MinModulus.TwoChainCoverCycle
+
+import MinModulus.MaximalChainFamily

@@ -68,13 +68,13 @@ still give the stronger binary bound at the earlier cutoff
 `n+floor(log_2(n))+4 <= 2*m`. The unrestricted conjecture remains open
 for arbitrary high-escape tuples whose actual chains are shorter.
 
-Two disjoint actual affine chains of length `m >= 4` now give every
-original global and exact-stratum bound when
-`n+2*floor(log_2(n))+5 <= 3*m`. `TwoChainCoverCycle.lean` permits
-arbitrary endpoints and other coordinates: a maximal two-chain family
-rejoins internally and yields a majority cycle. The earlier partial
-family charge remains available for arbitrary arity. The unrestricted
-high-escape, short-chain residual is still open.
+Any `r >= 2` disjoint actual affine chains of length `m >= 4` now
+give every original global and exact-stratum bound when
+`n+r*floor(log_2(n))+r+3 <= (r+1)*m`. `MaximalChainFamily.lean`
+retains arbitrary endpoints and remaining coordinates, and arbitrary
+arity through extension, suffix splicing and actual majority-cycle
+extraction. Unequal families have explicit combined-cover thresholds.
+The unrestricted high-escape, short-chain residual remains open.
 
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
@@ -4205,6 +4205,42 @@ majority cycles under all allowed strata, signs and tested shifts.
 No tuple census enters the Lean proof. The next direction is to retain
 arbitrary numbers of shorter chains in a maximal family. Arbitrary
 high-escape tuples still need not supply sufficient combined coverage.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3; continue and
+push both repositories after every verified milestone.
+
+**2026-09-09 — arbitrary-arity actual chain families with unrestricted endpoints.**
+`MaximalChainFamily.lean` proves the original global and every
+exact-stratum lower bound from ANY `r >= 2` disjoint actual affine
+chains of equal length `m >= 4` when
+`n+r*floor(log_2(n))+r+3 <= (r+1)*m`. Original G3 is directly excluded
+in the same class. The number of selected chains is unbounded; every
+seed, endpoint and remaining coordinate is arbitrary, at a common
+affine shift. No small escape count or injective-doubling premise occurs.
+
+The general unequal-length family has total cover `S` and selected
+arm length `m`. It suffices that `n^r*2^(n-S) <= 2^(m-3)` and
+`n+2*r*floor(log_2(n)) <= 2*S`. Empty members are allowed internally.
+The proof maximizes a designated chain while preserving the initial
+coverage and all seeds. New targets extend it; a target in another
+member transfers that member's suffix, retaining its possibly empty
+prefix and every unaffected member. Explicit maps to the old indices
+prove disjointness and exact coverage preservation. Maximality therefore
+forces an internal rejoin. Each remaining chain and the incoming tail
+are logarithmic, leaving an actual majority cycle. The final theorems
+accept ordinary embeddings of the selected disjoint family.
+
+For example, three length-31 chains suffice at `n=100`, four length-47
+chains at `n=200`, and five length-75 chains at `n=400`; the previous
+cutoffs fail for every smaller subfamily of those lengths.
+Verification: one definition and sixteen theorems; 15,296 full build
+jobs; 4,571 complete audits (4,567 standard-only and four axiom-free);
+128,398 passing forest tests, including 1,319 new cases. Actual fork
+splices retain arbitrary additional members and empty prefixes. Valid
+gap models exercise arbitrary selected positions, several arities,
+all allowed strata, signs and tested shifts through actual rejoin.
+The next direction is to charge all remaining chains jointly rather
+than use a separate logarithmic bound for each. Sufficient combined
+coverage is still not extracted from arbitrary high-escape tuples.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3; continue and
 push both repositories after every verified milestone.
 
