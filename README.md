@@ -2659,6 +2659,37 @@ for `(4,4)` or larger equal pairs. Those cases, the other sum-eight pairs,
 other profile families and axes, unrestricted G1/G2/G3 and the global
 conjecture remain OPEN.
 
+**Complete axis basis and primitive phases (2026-09-08).**
+`ChainForestProfileAxisBasis.lean` retains the actual dominant subgroup
+index `D` in the rival construction. Besides the one-each coefficient
+`z*x+a+b=V*x`, every companion has a bounded coefficient
+`alpha*x=D*a`. A signed identity then evaluates every pair of nonnegative
+companion weights `ta=tb+D*k`, with `k` an integer. When the companion is
+a unit modulo `D`, this congruence is also necessary: it exactly
+characterizes which pairs admit a bounded axis coefficient.
+
+For equal companion half-width `s` and `D*F=2s`, the top and half-profile
+relations give `(F*(2s-1)*alpha)*x=B*x`, where
+`B+(s-1)*H=(s-1)*K+s*c`. This primitive relation retains phases lost by
+restricting companion-weight differences to the full companion width.
+The lemmas are group algebra and impose no normalization or validity
+premise beyond their stated relations and index conditions.
+
+The `(4,4)` probe now covers all 225 primitive index/residue cases and
+produces actual full-length rivals, including permutations, unit scaling
+and translations. The 210 nonintegral choices use 32-bit prefixes with
+cost at most 30 against 40 available; the remaining 15 branches use
+explicitly checked candidates. Two genuine-endpoint regression fixtures
+show why the larger basis matters: a width-difference candidate costs
+`n+1=68`, while index-congruent weights give a 9-coin representation that
+refines to an actual 67-term rival. These tuples are invalid, as the
+constructed rivals certify.
+
+Uniform Lean coin budgets for the primitive phases and the genuine
+`(4,4)` consumer remain OPEN. The other sum-eight pairs, larger companions,
+other profile families and axes, unrestricted G1/G2/G3 and the global
+conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

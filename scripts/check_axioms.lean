@@ -4198,3 +4198,9 @@ import MinModulus
 #print axioms MinModulus.equal_companion_integral_corner_denominator_dvd_seven
 #print axioms MinModulus.equal_dyadic_companion_integral_corner_length_eq_one_or_three
 #print axioms MinModulus.equal_dyadic_companion_nonexceptional_integral_not_corner
+
+-- Complete axis basis and primitive equal-companion phase.
+#print axioms MinModulus.exists_companion_multiple_axis_coefficient
+#print axioms MinModulus.signed_axis_basis_rival_eq
+#print axioms MinModulus.exists_axis_rival_coefficient_iff_companion_congruence
+#print axioms MinModulus.equal_companion_axis_multiple_relation
