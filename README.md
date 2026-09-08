@@ -2936,6 +2936,31 @@ All genuine even-axis companion sums through eight remain closed at
 `n >= 67`. Larger uniform coin choices, other families and axes, and the
 unrestricted global conjecture remain open.
 
+**Complementary rival representation budgets (2026-09-08).**
+`ChainForestProfileComplementary.lean` proves exact combined greedy costs
+for complementary binary blocks. When two positive rational numerators
+sum to `m*T` and their prefixes are nonintegral, the prefix costs add to
+`2*m+bits-2`. Bounds on the two companions' combined weights then ensure
+that one prefix pays for both companions and its tail whenever
+`6*m <= bits+6`.
+
+The final theorem consumes both signed rational windows and produces an
+actual affordable representation for at least one coefficient, without
+assuming either individual prefix-popcount budget. Constructing suitable
+complementary pairs uniformly is the next obligation. Integral prefixes
+remain a separate case; omitting nonintegrality can make both budgets fail.
+
+Verification: seven new audited exports, 15,236 Lean build jobs, 4,134
+standard-only or axiom-free declaration audits, and 29,204 forest tests.
+The 481 new tests cover exact complementary costs, combined companion
+weights, actual representations for one of two windows, and controls for
+the top-multiple and nonintegrality assumptions.
+
+All genuine even-axis companion sums through eight remain closed at
+`n >= 67`. Larger uniform rival selection, integral phases, other profile
+families and axes, and unrestricted G1/G2/G3 remain open; the global
+conjecture is not yet proved.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

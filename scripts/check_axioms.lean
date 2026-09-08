@@ -4291,3 +4291,12 @@ import MinModulus
 #print axioms MinModulus.exists_rep_near_binary_prefix_fraction
 #print axioms MinModulus.exists_rep_of_int_binary_prefix_fraction
 #print axioms MinModulus.exists_rep_of_signed_rival_error_certificate
+
+-- Complementary prefix costs and one actual budgeted rival representation.
+#print axioms MinModulus.gmin_pair_of_sum_add_one_eq_top_multiple
+#print axioms MinModulus.gmin_le_top_quotient_add_width
+#print axioms MinModulus.gmin_pair_le_of_sum_le_top_multiple
+#print axioms MinModulus.gmin_pair_le_of_sum_eq_ones_multiple
+#print axioms MinModulus.one_complementary_prefix_fits_forest_budget
+#print axioms MinModulus.quotient_pair_of_nonintegral_sum_eq_multiple
+#print axioms MinModulus.exists_one_complementary_rival_representation
