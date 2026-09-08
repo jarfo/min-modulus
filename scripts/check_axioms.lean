@@ -4073,3 +4073,14 @@ import MinModulus
 -- Dominant-index-four closure with two length-two companions.
 #print axioms MinModulus.not_validTuple_of_axis_target_near_four_widths
 #print axioms MinModulus.even_axis_two_length_two_companions_index_four_global_bound
+
+-- Index-two one-each rivals and all-stratum short-companion closure.
+#print axioms MinModulus.exists_rep_gmin
+#print axioms MinModulus.exists_rep_shift_block
+#print axioms MinModulus.exists_rep_sixteen_bit_block_tail
+#print axioms MinModulus.exists_rep_near_third_binary_width
+#print axioms MinModulus.exists_axis_coefficient_of_even_val_index_two
+#print axioms MinModulus.exists_rep_of_two_short_companion_congruence
+#print axioms MinModulus.not_validTuple_of_two_short_companions_index_two_small_gap
+#print axioms MinModulus.even_axis_two_length_two_companions_index_two_global_bound
+#print axioms MinModulus.even_axis_two_length_two_companions_global_bound

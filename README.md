@@ -2270,6 +2270,42 @@ an even half modulus; the odd-half and index-four cases are now closed.
 Other companion lengths, odd-axis/non-axis families, higher escapes and
 unrestricted G1/G2/G3 remain OPEN. The global conjecture is not complete.
 
+**Two length-two companions are closed in every even stratum (2026-09-08).**
+`ChainForestProfileIndexTwo.lean` closes the remaining dominant-index-two
+case and combines it with index four. The final theorem proves the sharp
+GLOBAL bound for EVERY genuine even-axis forest with two length-two odd
+companions at n>=67. It derives dominance, joint wide capacity, and the
+possible subgroup indices internally. No numerical width, profile-family,
+midpoint-phase, index, or seed-normalization premise is supplied by the
+caller. An actual axis base and the stated forest/parity hypotheses remain
+necessary; other profile families are not claimed closed.
+
+For index two, the sum of the odd companion seeds lies in the dominant
+subgroup. Choose 0<=z<M=N/2 so that z*x_j+x_a+x_k equals the original target.
+With K=2^(L_j) and base coefficient V, the original forest relation gives
+
+```
+3*z = K+2*V-1+q*M,    q in {0,1,2}.
+```
+
+The complete-pair gap and strict ordering give 8K<=M+2V, while M<8K and
+V<n. For q=1, the weight lies just above 3K and has a short tail. For q=0
+or q=2, three times the weight lies within 2n of K or 17K. Splitting off
+sixteen high binary positions fixes their coefficients at 21845 or 371370;
+these have actual coin costs eight or eighteen. The lower tail costs at
+most L_j-16, so adding ONE seed coin from EACH companion fits n=L_j+4.
+The total weight is large enough to refine to an actual n-term rival.
+All fixed arithmetic and representation witnesses are kernel checked.
+
+The new tests construct full-length rivals through n=2048, with all odd
+roots of the tested profile equations, nontrivial unit multiples,
+coordinate permutations and affine shifts. They also check both fixed
+binary windows at their error boundaries. The combined theorem removes
+the entire two-length-two-companion even-axis branch in the established
+large range. Remaining even-axis cases have at least one longer companion;
+odd-axis/non-axis families, higher escapes, unrestricted G1/G2/G3 and the
+global conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
