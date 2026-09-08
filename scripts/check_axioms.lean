@@ -4286,3 +4286,8 @@ import MinModulus
 #print axioms MinModulus.unequal_companion_long_primitive_basis_sum
 #print axioms MinModulus.unequal_companion_long_signed_rival_error
 #print axioms MinModulus.signed_rival_linear_error_window
+
+-- Arbitrary binary-prefix budgets and signed-error certificate consumer.
+#print axioms MinModulus.exists_rep_near_binary_prefix_fraction
+#print axioms MinModulus.exists_rep_of_int_binary_prefix_fraction
+#print axioms MinModulus.exists_rep_of_signed_rival_error_certificate

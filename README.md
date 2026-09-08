@@ -2912,6 +2912,30 @@ open, as do other profile families and axes and unrestricted G1/G2/G3.
 All genuine even-axis companion sums through eight remain closed at
 `n >= 67`; the global conjecture is not yet proved.
 
+**Arbitrary binary-prefix representation budgets (2026-09-08).**
+`ChainForestProfileBinaryPrefix.lean` removes the fixed 32-bit prefix,
+eight companion positions and `2000*n` error from the representation
+helper. For `L=e+(w+1)`, a nonintegral rational window with error below
+`2^e` fixes the exact prefix. Its explicit cost plus the tail and companion
+cost gives an actual `L`-coin representation, including nonnegativity
+and a coefficient at least `n`. Prefix and tail lengths, denominator,
+error allowance and companion budget are parameters.
+
+A third theorem consumes the uniform signed-rival coefficient certificate
+directly, producing the actual representation once its prefix budget and
+tail-size conditions hold. This connects the common error arithmetic to
+coin representations for arbitrary companion length sums; selecting
+suitable rival coins and proving their budgets uniformly remains open.
+
+Verification: three new audited exports, 15,235 Lean build jobs, 4,127
+standard-only or axiom-free declaration audits, and 28,723 forest tests.
+The 250 new tests exercise prefixes from two to forty bits, varied tails,
+companion-length sums including nine, thirteen and twenty-five, exact
+coin representations and boundary controls for the window hypotheses.
+All genuine even-axis companion sums through eight remain closed at
+`n >= 67`. Larger uniform coin choices, other families and axes, and the
+unrestricted global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

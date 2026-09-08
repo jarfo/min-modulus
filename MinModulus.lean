@@ -545,3 +545,4 @@ import MinModulus.ChainForestProfileUnequalBasis
 import MinModulus.ChainForestProfileUnequalPhases
 import MinModulus.ChainForestProfileUnequalForest
 import MinModulus.ChainForestProfileUnequalRival
+import MinModulus.ChainForestProfileBinaryPrefix
