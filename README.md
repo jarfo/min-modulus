@@ -59,11 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
-Both original critical G1 no-half tuples and original odd-modulus G2
-counterexamples now satisfy the same explicit escape-count obstruction
-and quadratic-logarithmic bound at every shift. `G2QuantitativeEscape.lean`
-combines the exactly equivalent quantitative G1/G2 inputs with the same
-original G3 gate. All three unrestricted obligations remain open.
+Every hypothetical global counterexample now has an actual opposite
+pair OR satisfies quantitative escape-count bounds at every shift.
+`GlobalEscapeThreshold.lean` proves this without global-gate assumptions,
+and excludes the injective G3 branch whenever the scalar threshold holds.
+`G3QuantitativeEscape.lean` combines exactly equivalent quantitative
+forms of all three original inputs. The opposite-pair branch and all
+three unrestricted obligations remain open.
 
 The original critical closure gives half descent at any actual
 escape count satisfying the explicit binomial threshold. Every critical
@@ -3925,6 +3927,36 @@ G3 branch with actual injective doubling, retaining doubled collisions
 explicitly. No small escape count is extracted from arbitrary tuples.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
+
+**2026-09-08 — global counterexamples retain an actual opposite pair or quantitative escapes.**
+`GlobalEscapeThreshold.lean` proves the global lower bound directly for
+actual injective doubling when one shift satisfies
+`binomial(n+r-1,r) <= 2^max(0,floor(n/r)-3)`, for `n >= 4`.
+No G1/G2/G3 input is assumed. Every hypothetical global counterexample
+therefore has an actual opposite pair at an even modulus, OR satisfies
+both `2^max(0,floor(n/r)-3) < binomial(n+r-1,r)` and
+`n < r^2*(floor(log_2(n))+1)+3*r` at every shift's actual escape count.
+
+At the original exceptional G3 modulus `2*globalBound(n-1)`, the same
+scalar condition excludes the actual injective-doubling branch. Without
+injectivity, every hypothetical valid G3 tuple retains an actual
+opposite pair at `globalBound(n-1)` OR the all-shift quantitative bounds.
+The opposite-pair branch remains OPEN. No no-half-child assumption is
+inserted: the exceptional half modulus already admits a valid child.
+
+`G3QuantitativeEscape.lean` proves this restricted obstruction EXACTLY
+equivalent to original G3, retaining all small dimensions. Both global
+and exact-stratum assemblies now accept precisely three proved
+equivalent quantitative G1/G2/G3 inputs. All three remain unproved.
+
+Verification: ten new theorems and one audited definition in two
+modules; 15,286 full build jobs; 4,470 complete declaration audits
+(4,467 standard-only and three axiom-free). These proof-only consumers
+add no Python tests; the preceding complete forest run passed 123,413
+tests. Next, retain the actual extremal half child through opposite-pair
+deletion and investigate its structure without assuming a canonical
+endpoint classification. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

@@ -595,3 +595,5 @@ import MinModulus.ChainForestEscapeThreshold
 import MinModulus.G1QuantitativeEscape
 import MinModulus.OddEscapeThreshold
 import MinModulus.G2QuantitativeEscape
+import MinModulus.GlobalEscapeThreshold
+import MinModulus.G3QuantitativeEscape
