@@ -2961,6 +2961,32 @@ All genuine even-axis companion sums through eight remain closed at
 families and axes, and unrestricted G1/G2/G3 remain open; the global
 conjecture is not yet proved.
 
+**Actual complementary construction and bounded approximation (2026-09-08).**
+`ChainForestProfileComplementaryConstruction.lean` proves that a signed
+primitive multiple, shifted by the top relation, evaluates to the actual
+target with nonnegative companion weights. Both signs share one exact
+height/drop/deficit error formula. A cancellation identity bounds the
+deficit coefficient using the leading error, avoiding a large raw phase
+bound.
+
+An integer form of Dirichlet approximation supplies a positive bounded
+multiple and a signed period multiple. It deliberately makes no
+nonintegrality claim: an approximation can become integral even when the
+original fraction is not. A sharper complementary-budget consumer uses
+the exact combined companion cost and produces an actual representation
+without assuming either individual prefix budget.
+
+Verification: six new audited exports, 15,237 Lean build jobs, 4,140
+standard-only or axiom-free declaration audits, and 29,473 forest tests.
+The 269 new tests check actual cyclic-group rivals and their errors,
+signed integer approximations, the integral-approximation control, and
+representations beyond the earlier crude top-multiple bound.
+
+Uniform geometric bounds, integral boundaries, and the remaining profile
+families and axes still need proof. All genuine even-axis companion sums
+through eight remain closed at `n >= 67`; unrestricted G1/G2/G3 and the
+global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

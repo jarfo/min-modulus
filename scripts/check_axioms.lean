@@ -4300,3 +4300,11 @@ import MinModulus
 #print axioms MinModulus.one_complementary_prefix_fits_forest_budget
 #print axioms MinModulus.quotient_pair_of_nonintegral_sum_eq_multiple
 #print axioms MinModulus.exists_one_complementary_rival_representation
+
+-- Actual signed complementary construction and bounded primitive approximation.
+#print axioms MinModulus.signed_axis_multiple_top_shift_rival_eq
+#print axioms MinModulus.signed_axis_multiple_top_shift_error
+#print axioms MinModulus.top_shift_deficit_coefficient_identity
+#print axioms MinModulus.exists_bounded_integer_primitive_approximation
+#print axioms MinModulus.one_complementary_prefix_fits_combined_budget
+#print axioms MinModulus.exists_one_complementary_representation_of_combined_cost
