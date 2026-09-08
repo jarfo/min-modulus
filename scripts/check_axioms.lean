@@ -4069,3 +4069,7 @@ import MinModulus
 #print axioms MinModulus.half_profile_midpoint_half_modulus_parity
 #print axioms MinModulus.even_axis_incompatible_overflow_half_modulus_parity
 #print axioms MinModulus.even_axis_two_length_two_companions_odd_half_global_bound
+
+-- Dominant-index-four closure with two length-two companions.
+#print axioms MinModulus.not_validTuple_of_axis_target_near_four_widths
+#print axioms MinModulus.even_axis_two_length_two_companions_index_four_global_bound

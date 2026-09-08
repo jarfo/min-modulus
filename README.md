@@ -2238,6 +2238,38 @@ and the integrality cutoff. Even half moduli, other companion lengths,
 other profile families, higher escapes and unrestricted G1/G2/G3 remain
 OPEN; the global conjecture is not complete.
 
+**Dominant index four with two short companions is closed (2026-09-08).**
+`ChainForestProfileIndexFour.lean` closes the genuine even-axis GLOBAL
+case with two length-two companions and gcd(N,x_j.val)=4, at n>=24,
+wide capacity and K_j>=2n. All even-modulus strata are included; no odd
+half-modulus premise is needed. The exact gcd is used in the original
+modulus, without replacing the dominant seed by a normalized value.
+
+Below the global bound, complete-pair exhaustion gives a base coefficient
+V and overflow height H. Their charge is 4H and strict ordering gives H<=V.
+The dominant period P=N/4 annihilates x_j. Since n=L_j+4, the gap becomes
+16*K_j<=4*P+4*H, so
+
+```
+4*K_j <= P+V < 4*K_j+n.
+```
+
+The weight P+V represents the original target on the dominant axis alone.
+Four binary boundaries cost eight coins, and the remaining tail is less
+than n. The proved exponential estimate supplies that tail in at most
+n/3-2 coins. This fits n, and the weight is large enough to refine to an
+actual full-length rival. The window obstruction is generic in the
+abelian group and arity; the direct cyclic consumer derives the complete
+pair, gap, ordering and period from the original forest and its index.
+
+The 72 new tests check explicit full-length rivals through n=67,68,128,256,
+with actual small target relations, permutations and affine shifts. In
+the extracted two-length-two-companion case, the even dominant index is
+at most four and dyadic. The remaining case therefore has index TWO and
+an even half modulus; the odd-half and index-four cases are now closed.
+Other companion lengths, odd-axis/non-axis families, higher escapes and
+unrestricted G1/G2/G3 remain OPEN. The global conjecture is not complete.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
