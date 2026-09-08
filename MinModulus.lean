@@ -566,3 +566,4 @@ import MinModulus.ChainForestProfileEqualForest
 import MinModulus.ChainForestProfileEqualStratum
 import MinModulus.ChainForestProfileEqualMaximalArithmetic
 import MinModulus.ChainForestProfileEqualMaximal
+import MinModulus.ChainForestProfileEqualCoprime

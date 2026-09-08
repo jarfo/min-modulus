@@ -4401,3 +4401,11 @@ import MinModulus
 #print axioms MinModulus.exists_equal_maximal_index_reduced_data_rival
 #print axioms MinModulus.even_axis_maximal_index_equal_companions_global_bound
 #print axioms MinModulus.even_axis_subglobal_equal_companion_strict_index_modulus_profile
+
+-- Uniform coprime equal-companion phases.
+#print axioms MinModulus.exists_strict_annihilator_of_not_coprime
+#print axioms MinModulus.exists_equal_annihilator_rival
+#print axioms MinModulus.coprime_one_each_phase_of_valid_equal_companion_forest
+#print axioms MinModulus.equal_odd_coprime_primitive_data_of_valid_forest
+#print axioms MinModulus.even_axis_subglobal_equal_companion_odd_coprime_data
+#print axioms MinModulus.coprime_primitive_phase_of_equal_unit_phase

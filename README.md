@@ -3339,6 +3339,37 @@ through 128, and actual cyclic-group tuple collisions through length 12
 with both multiplier branches, all integral error signs, odd companions,
 dyadic height/drop, every coordinate order, and an affine transform.
 
+**2026-09-08 — every remaining equal-companion phase is a unit.**
+`ChainForestProfileEqualCoprime.lean` excludes noncoprime one-each phases
+uniformly at every equal-companion index. With `T=2^a-1`, a nontrivial
+`gcd(q,T)` supplies `1<=t<T` and `tq=T*nu`. The equal-weight rival has
+`T Z=tK+(T-t)(H+c)-T`: the period cancels completely. The actual
+half-profile cost gives `2Tn<K`, placing `n<=Z<K`. Its complete axis and
+companion representations use at most `n-2` coins and refine to a distinct
+size-`n` tuple collision.
+
+The original genuine maximal-even-axis forest now supplies strictly
+smaller index `e<a` and `EqualCompanionOddCoprimePrimitiveData`: all bounded
+basis coefficients and phases, odd `r`, `Coprime q T`, both scalar and
+group relations, the actual half-profile cost, gap, charge, dyadic height
+and drop, and the modulus profile through companion width. No phase or
+period coprimality premise is supplied. Moreover, `T | 2r+q` and odd `r`
+imply `Coprime r (2^(a-e)*T)`, so the primitive phase is a unit modulo its
+entire denominator.
+
+Verification: six new audited theorem exports, full Lean build **15,256
+jobs**, **4,220** standard-only or axiom-free declaration audits, and
+**70,743** forest tests. The 119 new regressions cover every smaller index
+through equal companion length 12, both zero and nonzero nonunit phases,
+actual odd companion seeds, odd primitive phases, dyadic half parameters,
+gap and cost constraints, and full affine tuple collisions.
+
+Unit primitive phases at smaller indices remain open; so do larger
+unequal companions, other profile families and axes, unrestricted
+G1/G2/G3, and the global conjecture. The uniform maximal-index closure and
+genuine companion-sum-through-ten bound remain proved. Continue after
+verified milestones, committing and pushing both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
