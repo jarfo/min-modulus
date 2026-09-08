@@ -4153,3 +4153,10 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_of_three_three_axis_representation
 #print axioms MinModulus.even_axis_two_length_three_companions_global_bound
 #print axioms MinModulus.even_axis_companion_length_sum_le_six_global_bound
+
+-- Uniform companion projection and unequal-width obstruction.
+#print axioms MinModulus.exists_one_each_axis_coefficient_of_companion_widths
+#print axioms MinModulus.signed_top_companion_relation_rival_eq
+#print axioms MinModulus.unequal_half_relations_not_width_dvd
+#print axioms MinModulus.even_axis_subglobal_index_le_both_companion_lengths
+#print axioms MinModulus.even_axis_subglobal_one_each_axis_coefficient

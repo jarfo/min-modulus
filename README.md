@@ -2529,6 +2529,32 @@ also checked. The next length pairs are (2,5) and (3,4), alongside the
 other profile families and axes. Higher escapes, unrestricted G1/G2/G3
 and the global conjecture remain OPEN.
 
+**Uniform companion algebra (2026-09-08).**
+`ChainForestProfileCompanionAlgebra.lean` proves that every remaining
+subglobal genuine even-axis forest with a supplied dominant-width
+inequality has `1 <= e <= min(L_a,L_k)` and dominant gcd `2^e`.
+Thus the actual index divides BOTH companion widths, including the
+previously separate equal-length case. Projecting the top relation to
+that quotient gives a bounded coefficient `z < N/gcd(N,x_j.val)` with
+`z*x_j+x_a+x_k` equal to the distinguished sum. This is uniform in the
+companion lengths and uses the original forest and axis-base data.
+
+A second uniform obstruction treats widths `2s` and `2sr` with positive
+`s,r` and even `r`. If the dominant width times its seed and the overflow
+height times that seed vanish modulo `2s`, either half-profile orientation
+with an odd short companion rules out `2s | N`. The profile drop cancels;
+there is no divisibility assumption on it. A generic signed identity
+combines the top and companion relations without normalizing any seed.
+
+The regressions also produce actual full-length rivals for `(3,4)` at
+indices two and four, both half-profile orientations and all 29 phases,
+including both short integral alternatives. Fixed sixteen-bit prefixes
+cost at most 17 coins together with the companions, against 23 available.
+Permutations, unit scaling and translation are checked. This is
+computational evidence for the next arithmetic consumer: the uniform
+Lean coin-budget and genuine `(3,4)` closure remain OPEN, as do `(2,5)`,
+other profile families, unrestricted G1/G2/G3 and the global conjecture.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
