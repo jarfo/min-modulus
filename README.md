@@ -2472,6 +2472,31 @@ above the bound. Remaining even-axis cases include (2,k), k>=5, and
 pairs with both companions at least three. Other profile families,
 higher escapes, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
+**Equal length-three companion tools (2026-09-08).**
+`ChainForestProfileThreeThreeAlgebra.lean` rules out the remaining
+saturated corner by projection modulo sixteen. If the width, height and
+drop are multiples of eight, an even axis and an odd overflow seed cannot
+satisfy the top and half-profile equations at a modulus divisible by
+sixteen. This obstruction uses no tuple validity or genuine endpoints.
+The module also proves general dominant-gcd membership, extracts a
+one-each companion coefficient at indices two, four and eight, and gives
+a reusable signed coefficient identity for arbitrary companion relations.
+
+`ChainForestProfileThreeThreeArithmetic.lean` proves all corresponding
+coin budgets at n>=67. Eighteen nonintegral phases use sixteen-bit
+prefixes; the three integral phases use four sparse alternatives. The
+index-two low-drop alternative only needs the saturated corner excluded;
+its integer granularity removes any need for a dyadic-drop hypothesis.
+Every signed coefficient is proved positive and represented by actual
+binary coins. The 543 new tests cover all 21 phases, full-length rivals,
+unit multiples, permutations and shifts, plus exhaustive modulo-sixteen
+checks and controls when each obstruction hypothesis is removed.
+
+The next step is to consume the algebraic corner obstruction and derive
+all arithmetic data from the original genuine (3,3) forest. That consumer,
+longer companion pairs, other profile families, unrestricted G1/G2/G3 and
+the global conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

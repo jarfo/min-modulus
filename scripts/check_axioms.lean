@@ -4132,3 +4132,18 @@ import MinModulus
 #print axioms MinModulus.exists_two_four_half_relation_rival
 #print axioms MinModulus.not_validTuple_of_two_four_axis_representation
 #print axioms MinModulus.even_axis_two_four_companions_global_bound
+
+-- Equal length-three companion algebra tools.
+#print axioms MinModulus.three_three_half_relations_not_sixteen_dvd
+#print axioms MinModulus.exists_axis_coefficient_of_gcd_dvd_val
+#print axioms MinModulus.exists_three_three_one_each_axis_coefficient
+#print axioms MinModulus.signed_companion_relation_rival_eq
+
+-- Equal length-three companion arithmetic tools.
+#print axioms MinModulus.exists_rep_near_seventh_width
+#print axioms MinModulus.exists_rep_of_int_seventh_window
+#print axioms MinModulus.exists_three_three_nonintegral_parameters
+#print axioms MinModulus.exists_rep_three_three_index_two_integral_low_drop
+#print axioms MinModulus.exists_rep_three_three_index_two_integral_high_drop
+#print axioms MinModulus.exists_rep_three_three_index_four_integral
+#print axioms MinModulus.exists_rep_three_three_index_eight_integral
