@@ -2749,6 +2749,26 @@ and companion sums at most seven are closed; the genuine `(2,6)` and
 `(3,5)` consumers, larger pairs, other families and axes, unrestricted
 G1/G2/G3 and the global conjecture remain open.
 
+**Genuine `(2,6)` closure (2026-09-08).**
+`even_axis_two_six_companions_global_bound` in
+`ChainForestProfileTwoSix.lean` proves the sharp global bound for genuine
+three-chain forests with an even axis base and companion lengths two and
+six, for `n >= 67` in every even stratum. The original forest determines
+index two, both half-profile orientations, the bounded primitive phases
+and their compatibility. Both period shifts are handled explicitly;
+the link uses the actual half relation without assuming coprimality to
+111. Affordable representations refine to actual full-length rivals.
+The caller supplies no additional index, width, phase or budget premise.
+
+Verification: five new audited exports, 15,228 Lean build jobs, 4,087
+standard-only or axiom-free declaration audits, and 19,999 forest tests.
+The tests include controls showing that the scalar equations and top
+relation alone do not imply the phase link. Together with the established
+`(4,4)` closure and all companion sums at most seven, this leaves only
+`(3,5)` among unordered companion-sum-eight pairs. Larger pairs, other
+families and axes, unrestricted G1/G2/G3 and the global conjecture remain
+open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

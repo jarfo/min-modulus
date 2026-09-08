@@ -4230,3 +4230,10 @@ import MinModulus
 #print axioms MinModulus.exists_two_six_long_nonintegral_parameters
 #print axioms MinModulus.exists_rep_two_six_long_integral
 #print axioms MinModulus.exists_two_six_long_primitive_rep
+
+-- Genuine two-six closure from compatible primitive phases.
+#print axioms MinModulus.two_six_short_primitive_phase_link
+#print axioms MinModulus.two_six_long_primitive_phase_link
+#print axioms MinModulus.exists_two_six_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_two_six_axis_representation
+#print axioms MinModulus.even_axis_two_six_companions_global_bound
