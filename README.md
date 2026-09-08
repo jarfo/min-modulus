@@ -2413,6 +2413,35 @@ above the bound. Remaining even-axis cases include (2,k) with k>=4
 and pairs with both companions at least three. Other profile families,
 higher escapes, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
+**Uniform (2,4) companion arithmetic (2026-09-08).**
+`ChainForestProfileTwoFourArithmetic.lean` proves the complete coin
+arithmetic for both half-profile orientations with companion lengths
+two and four. With n=L+6, K=2^L, M=32K-d and V=H+c-1<n, the inputs
+include H>=8 and d+1<=8H. The one-each coefficient has 27 phases in each
+orientation. Fifty-two nonintegral phases select small companion weights
+and fixed SIXTEEN-bit prefixes. Prefix plus companion cost is at most
+22, so the remaining L-16 bits fit the original n-coin budget. The signed
+coefficient formulas have a proved error below 200n; the lower binary
+block dominates that error uniformly for all n>=67.
+
+The integral short-overflow phase uses companion weights (12,0) when
+c<=2H, with its coefficient just above two widths. For c>=2H it uses
+(3,1), just above eight widths. The integral long-overflow phase uses
+(2,2), below two widths plus a short tail. All signed formulas are proved
+positive before conversion to natural weights, and every coin budget
+has an actual binary representation. All finite choices are kernel
+checked, with no external census assumption.
+
+The 1,285 new regression cases cover every one of the 54 phases, both
+short-overflow drop choices, actual full-length n-term rivals, unit
+multiples, permutations and affine shifts. They include nonintegral
+phases where the naive one-each rival is too expensive. These fixtures
+satisfy the actual profile equations and are refuted by their rivals;
+they are not presented as valid tuples. The next step is to derive and
+consume these arithmetic inputs in the genuine (2,4) forest theorem.
+That consumer, longer companion pairs, other profile families,
+unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

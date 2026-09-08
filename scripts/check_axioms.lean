@@ -4113,3 +4113,15 @@ import MinModulus
 #print axioms MinModulus.exists_two_three_half_relation_rival
 #print axioms MinModulus.not_validTuple_of_two_three_axis_representation
 #print axioms MinModulus.even_axis_two_three_companions_global_bound
+
+-- Uniform (2,4) residue choices and signed coin representations.
+#print axioms MinModulus.two_hundred_length_lt_two_pow_sub_twenty_two
+#print axioms MinModulus.exists_rep_near_twenty_seventh_width
+#print axioms MinModulus.exists_rep_of_int_twenty_seventh_window
+#print axioms MinModulus.exists_short_four_nonintegral_parameters
+#print axioms MinModulus.exists_long_four_nonintegral_parameters
+#print axioms MinModulus.exists_rep_of_int_boundary_small_tail
+#print axioms MinModulus.exists_rep_below_two_widths_with_four_spare
+#print axioms MinModulus.exists_rep_short_four_integral_low_drop
+#print axioms MinModulus.exists_rep_short_four_integral_high_drop
+#print axioms MinModulus.exists_rep_long_four_integral
