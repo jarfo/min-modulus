@@ -3403,6 +3403,39 @@ Primitive factors at least four, larger unequal companions, other profile
 families and axes, unrestricted G1/G2/G3, and the global conjecture remain
 open. Continue after verified milestones and push both repositories.
 
+**2026-09-08 — primitive factor four closes at arbitrary equal-companion lengths.**
+`ChainForestProfileEqualFactorFourArithmetic.lean` and
+`ChainForestProfileEqualFactorFour.lean` prove the genuine global bound
+at actual equal-companion index `2^(a-2)`, for every `n>=67` and every
+even modulus stratum. The maximal-axis hypothesis remains explicit.
+
+The primitive unit phase selects one of two odd index steps, `1` or `3`.
+An exact binary-block formula bounds both companion costs uniformly in
+length. The lower range lies below `7K/4`; the upper quarter of step one
+lies below `2K` and saves an additional companion coin. In the upper range
+of step three, subtracting the actual half-profile lowers both companion
+weights and adds its charge to the axis. The shifted rival still lies
+below `7K/4`. Every case gives a full, affordable, distinct tuple rival.
+All phase, period-deficit and half-profile data come from the original
+forest; no phase, coin or period coprimality inputs are supplied.
+
+Every remaining genuine equal-companion counterexample now has `e+2<a`
+and primitive factor `2^(a-e)>=8`. Its bounded coefficients, odd/unit
+phases, dyadic parameters, original scalar/group relations and complete
+truncated modulus profile remain available.
+
+Verification: 17 new audited theorem exports; full Lean build **15,260
+jobs**; **4,251** standard-only or axiom-free declaration audits;
+**85,981** forest tests. The 10,157 new cases cover every unit phase through
+companion length 12, all three representation cases, and actual affine
+cyclic-group tuple collisions with odd companion seeds and dyadic half
+parameters. Generic binary-block, phase-selection, signed-error and
+profile-subtraction lemmas are available for the remaining factors.
+
+Primitive factors at least eight, larger unequal companions, other
+profile families and axes, unrestricted G1/G2/G3, and the global conjecture
+remain open. Continue after verified milestones and push both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

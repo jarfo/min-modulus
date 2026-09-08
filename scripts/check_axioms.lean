@@ -4425,3 +4425,22 @@ import MinModulus
 #print axioms MinModulus.exists_equal_factor_two_reduced_data_rival
 #print axioms MinModulus.even_axis_factor_two_equal_companions_global_bound
 #print axioms MinModulus.even_axis_subglobal_equal_companion_factor_ge_four_data
+
+-- Uniform primitive-factor-four equal companions.
+#print axioms MinModulus.gmin_binary_block
+#print axioms MinModulus.gmin_binary_low_lt_ones
+#print axioms MinModulus.gmin_binary_low_le
+#print axioms MinModulus.equal_factor_four_quarter_coin_bounds
+#print axioms MinModulus.equal_factor_four_half_shift_coin_bound
+#print axioms MinModulus.exists_unit_phase_index_step_weight
+#print axioms MinModulus.exists_equal_factor_four_phase_weight
+#print axioms MinModulus.equal_profile_linear_error_lt_axis_width
+#print axioms MinModulus.axis_interval_of_signed_error_window
+#print axioms MinModulus.unit_phase_index_step_rival_error
+#print axioms MinModulus.rival_eq_after_subtracting_companion_profile
+#print axioms MinModulus.equal_factor_four_axis_windows
+#print axioms MinModulus.exists_axis_rep_below_two_widths
+#print axioms MinModulus.exists_equal_factor_four_primitive_rival
+#print axioms MinModulus.exists_equal_factor_four_reduced_data_rival
+#print axioms MinModulus.even_axis_factor_four_equal_companions_global_bound
+#print axioms MinModulus.even_axis_subglobal_equal_companion_factor_ge_eight_data
