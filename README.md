@@ -3179,6 +3179,39 @@ available for that case and for uniform larger-companion work. Other
 profile families and axes, unrestricted G1/G2/G3, and the global conjecture
 remain open.
 
+**General equal-phase certificates and genuine companion sums through ten (2026-09-08).**
+`ChainForestProfileEqualBasisCertificates.lean` proves compatible bounded
+primitive phases for arbitrary equal companion widths, using the actual
+top and half relations without assuming that the axis period is coprime
+to the primitive denominator. Its new general certificate consumer handles
+rivals just below an integral binary boundary: the preceding prefix and
+the entire lower block are charged to the representation budget.
+
+`ChainForestProfileFiveFiveArithmetic.lean` kernel-checks all 961 equal-five
+phases. There are 897 nonintegral certificates, 31 positive integral
+certificates and 33 certificates below integral boundaries. All give
+actual affordable group rivals for every `n >= 67`, with no extra dyadic
+or starting-length requirements.
+
+`ChainForestProfileFiveFive.lean` derives those arithmetic inputs from the
+original genuine even-axis forest and proves the `(5,5)` bound in every
+even stratum. Its `even_axis_companion_length_sum_le_ten_global_bound`
+combines the established pairs to cover every positive companion-length
+sum at most ten. No extra dominance, phase or coin premises remain.
+
+Verification: eight new audited exports, 15,250 Lean build jobs, 4,188
+standard-only or axiom-free declaration audits, and 57,871 forest tests.
+The 3,845 new tests instantiate every equal-five phase at three lengths
+and refine every phase under all chain permutations and affine changes.
+No placeholders, extra axioms or `native_decide` are used.
+
+The next work is uniform larger-companion selection. The new boundary
+certificates suggest a construction for even primitive phases of equal
+companions at arbitrary lengths; this is a next proof obligation, not
+a completed uniform closure. Other profile families and axes,
+unrestricted G1/G2/G3, and the global conjecture remain open. Continue
+through verified milestones and commit and push each to both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
