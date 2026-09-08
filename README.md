@@ -3740,6 +3740,28 @@ three-escape shift from an arbitrary tuple. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, with the same three global inputs. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-08 — the large four-escape residual feeds the original G1 assembly.**
+`G1LargeFourEscape.lean` defines `PrimitiveLargeFourEscapeDeleteStep`
+and proves it equivalent to the existing primitive three-omission G1
+obligation. It retains the old three-escape condition at every shift;
+for parent length at least 67, it additionally retains four actual
+escapes at every shift. The smaller parents, lengths five through 66,
+remain inside the same obligation. The stronger condition is derived
+from failure of half descent using the proved boundary-interval theorem.
+
+Both the exact-stratum and global lower-bound assemblies now accept
+this equivalent residual with exactly the original G2/G3 inputs. No
+child-bound assumption or fourth gate is introduced. The definition is
+an unproved obligation, not an asserted deletion theorem.
+
+Verification: one audited definition and three new theorems; 15,277
+full build jobs; 4,412 complete declaration audits (4,409 standard-only
+and three axiom-free). The preceding full forest run passed 121,598
+tests; this proof-only assembly change adds no executable test cases.
+Continue with the four-escape residual and smaller-parent bounds.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

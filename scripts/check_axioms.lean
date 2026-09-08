@@ -4627,3 +4627,9 @@ import MinModulus
 #print axioms MinModulus.binary_card_bound_of_genuine_three_chain_forest
 #print axioms MinModulus.admitsValidTuple_half_of_critical_three_escape_large
 #print axioms MinModulus.four_le_affine_escape_card_of_large_critical_without_half
+
+-- Lossless large four-escape restriction of the original primitive G1 gate.
+#print axioms MinModulus.PrimitiveLargeFourEscapeDeleteStep
+#print axioms MinModulus.primitiveThreeOmissionDeleteStep_iff_largeFourEscape
+#print axioms MinModulus.stratum_lower_bound_of_primitive_largeFourEscapeDeleteStep
+#print axioms MinModulus.global_lower_bound_of_primitive_largeFourEscapeDeleteStep
