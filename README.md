@@ -59,7 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
-The latest original critical closure gives half descent at any actual
+Both original critical G1 no-half tuples and original odd-modulus G2
+counterexamples now satisfy the same explicit escape-count obstruction
+and quadratic-logarithmic bound at every shift. `G2QuantitativeEscape.lean`
+combines the exactly equivalent quantitative G1/G2 inputs with the same
+original G3 gate. All three unrestricted obligations remain open.
+
+The original critical closure gives half descent at any actual
 escape count satisfying the explicit binomial threshold. Every critical
 no-half parent of length `k >= 4` has, at each shift, an escape count `r`
 with `k < r^2*(floor(log_2(k))+1)+3*r`. `G1QuantitativeEscape.lean`
@@ -3884,6 +3890,41 @@ cycle/forest threshold to the odd-stratum input where doubling is
 automatically injective. No small escape count has been extracted from
 arbitrary critical tuples. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after every milestone.
+
+**2026-09-08 — the quantitative escape threshold now applies to original G2.**
+`OddEscapeThreshold.lean` first proves every exact-stratum bound under
+actual doubling injectivity and the single escape-count condition
+`binomial(n+r-1,r) <= 2^max(0,floor(n/r)-3)`. The zero-escape case is
+included through the proved one-escape theorem.
+
+At ODD moduli, valid-tuple injectivity makes doubling automatically
+injective. The same scalar condition therefore gives the original odd
+bound `2^n-1 <= N`, without a G1 premise, supplied cycle, forest, seed
+normal form or unit assumption. Every hypothetical original odd
+counterexample of length at least four now satisfies, at every shift,
+`2^max(0,floor(n/r)-3) < binomial(n+r-1,r)` and
+`n < r^2*(floor(log_2(n))+1)+3*r` at its ACTUAL escape count.
+
+`G2QuantitativeEscape.lean` proves this quantitative restriction EXACTLY
+equivalent to the existing odd-stratum G2 obligation. All smaller
+sizes remain in that same gate. The joint exact-stratum/global
+assemblies now use quantitative G1, quantitative G2, and precisely the
+original G3 input. None of the three unrestricted gates is closed.
+
+Verification: nine new theorems and one audited definition in two
+modules; 15,284 full build jobs; 4,459 complete declaration audits
+(4,456 standard-only and three axiom-free); 123,413 passing forest tests,
+including 107 new cases. Actual odd cycles check zero escapes and
+nonunit embeddings, odd genuine forests cover arbitrary tested ranks,
+and injective even models check the all-stratum core. The valid even
+four-entry tuple modulo 12 shows why the original odd conclusion must
+retain oddness (or an appropriate exact stratum).
+
+Continue with the unconditional global counterexample split and the
+G3 branch with actual injective doubling, retaining doubled collisions
+explicitly. No small escape count is extracted from arbitrary tuples.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

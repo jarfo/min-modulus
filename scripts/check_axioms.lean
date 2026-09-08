@@ -4680,3 +4680,17 @@ import MinModulus
 #print axioms MinModulus.primitiveThreeOmissionDeleteStep_iff_quantitativeEscape
 #print axioms MinModulus.stratum_lower_bound_of_primitive_quantitativeEscapeDeleteStep
 #print axioms MinModulus.global_lower_bound_of_primitive_quantitativeEscapeDeleteStep
+
+-- OddEscapeThreshold: original odd-modulus threshold and equivalent G2 input.
+#print axioms MinModulus.stratum_lower_bound_of_injective_cycle_escape_threshold
+#print axioms MinModulus.stratum_lower_bound_of_injective_embedded_cycle_escape_threshold
+#print axioms MinModulus.stratum_lower_bound_of_injective_escape_binomial_threshold
+#print axioms MinModulus.odd_lower_bound_of_escape_binomial_threshold
+#print axioms MinModulus.exponential_lt_escape_binomial_of_odd_counterexample
+#print axioms MinModulus.length_lt_escape_quadratic_log_of_odd_counterexample
+
+-- G2QuantitativeEscape: original odd-modulus threshold and equivalent G2 input.
+#print axioms MinModulus.OddQuantitativeEscapeLowerBound
+#print axioms MinModulus.oddStratumLowerBound_iff_quantitativeEscape
+#print axioms MinModulus.stratum_lower_bound_of_quantitative_escape_inputs
+#print axioms MinModulus.global_lower_bound_of_quantitative_escape_inputs
