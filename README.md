@@ -3578,6 +3578,35 @@ maximal-even-axis route. Other axes and profile families, unrestricted
 G1/G2/G3, and Conjecture 1 remain OPEN. Continue after every verified
 milestone and commit and push both repositories.
 
+**2026-09-08 — the complete maximal-even-axis companion family closes.**
+`ChainForestProfileUnequalIntegralArithmetic.lean` and
+`ChainForestProfileUnequalIntegral.lean` close every remaining integral
+unit phase. Normalized direct companions save one coin; top-reflected
+integral companions save two. A doubled dyadic boundary handles every
+actual index, including `F=1`, with enough room on both sides of the
+boundary. The reflected construction also covers a zero original
+numerator and retains the actual target offset.
+
+`even_axis_unequal_companions_global_bound` therefore proves the sharp
+bound for all unequal companions. The combined theorem
+`even_axis_maximal_companions_global_bound` covers both equal and unequal
+lengths, with no phase, index, height or deficit restriction. Its explicit
+hypotheses are a genuine rank-three forest at `n >= 67`, an even modulus,
+a maximal even seed, two odd companion seeds, and an actual collision
+profile supported on that even axis.
+
+Verification: twenty-six new theorem audits; 15,271 full build jobs;
+4,363 declaration audits (4,360 standard-only and three axiom-free);
+119,654 passing forest tests, including 4,557 new cases. The new cases
+cover 923 integral phase plans, 3,622 actual groups, dense tails on both
+sides of the boundary, full collisions under affine transformations,
+and both reflection and error signs.
+
+Continue by consuming this closed family in the original three-escape
+residual and treating the remaining axes and profile families. The
+unrestricted G1/G2/G3 and Conjecture 1 remain OPEN. Continue after every
+verified milestone and commit and push both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
