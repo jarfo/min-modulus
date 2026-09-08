@@ -3958,6 +3958,25 @@ deletion and investigate its structure without assuming a canonical
 endpoint classification. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-08 — actual half deletion preserves every affine escape count.**
+`ActualEscapeDescent.lean` proves that deleting a coordinate identified
+with a retained partner under an additive map preserves all existing
+targets. Child escapes embed into the parent's escape set with the
+deleted coordinate erased. The actual count never increases, and it
+strictly decreases if the deleted coordinate was an escape. Equal
+doubles have the same escape status at every shift.
+
+The cyclic opposite-pair theorem combines this count bound, at all
+projected shifts simultaneously, with validity of the ACTUAL half child.
+It applies at G3's exact half modulus `globalBound(n-1)`; it does not
+classify the child or exclude the opposite-pair branch by itself.
+Seven new theorems; full build: 15,287 jobs; complete audits: 4,477
+(4,473 standard-only and four axiom-free). No new Python tests for
+these proof-only structural consumers; preceding complete forest run:
+123,413 passing. Next: cut the unique collision away from a longest
+path and extract a widest genuine forest arm. Conjecture 1 and all
+three unrestricted gates remain OPEN, 0/3. Continue after each milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

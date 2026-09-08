@@ -4709,3 +4709,12 @@ import MinModulus
 #print axioms MinModulus.exceptionalLiftObstruction_iff_quantitativeEscape
 #print axioms MinModulus.stratum_lower_bound_of_three_quantitative_escape_inputs
 #print axioms MinModulus.global_lower_bound_of_three_quantitative_escape_inputs
+
+-- ActualEscapeDescent: retain actual half-child coordinates and escape counts.
+#print axioms MinModulus.affine_target_preserved_by_hom_deletion
+#print axioms MinModulus.affine_escape_image_subset_erase_of_hom_deletion
+#print axioms MinModulus.affine_escape_card_le_erase_of_hom_deletion
+#print axioms MinModulus.affine_escape_card_le_of_hom_deletion
+#print axioms MinModulus.affine_escape_card_lt_of_hom_deletion_of_escape
+#print axioms MinModulus.affine_escape_iff_of_equal_double
+#print axioms MinModulus.valid_actual_half_and_escape_card_le_of_doubled_collision
