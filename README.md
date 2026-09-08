@@ -2372,11 +2372,46 @@ cover all thirteen residues in both orientations, actual n-term rivals,
 unit multiples, permutations and affine shifts, and this dense boundary.
 The relation fixtures are obstruction data, not valid-tuple certificates.
 
-This milestone establishes the complete arithmetic ingredient. The next
-step is to derive its inputs from the genuine forest and install the
-(2,3) global-bound consumer. That consumer, longer companions, other
-profile families, unrestricted G1/G2/G3 and the global conjecture remain
-OPEN.
+These arithmetic exports are now consumed by the genuine-forest
+(2,3) global-bound theorem below. Longer companion pairs, other profile
+families, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+
+**Genuine (2,3) companion closure (2026-09-08).**
+`ChainForestProfileTwoThree.lean` proves
+`even_axis_two_three_companions_global_bound`: EVERY genuine even-axis
+forest with one length-two and one length-three odd companion satisfies
+the sharp GLOBAL bound at n>=67, in every even-modulus stratum. Its inputs
+are the original forest, validity, genuine endpoints, companion lengths,
+seed parities and an actual axis-base profile. It assumes no index,
+dominance, wide-capacity, profile-family, midpoint or deficit certificate.
+
+The proof derives n=L_j+5 and dominance, then uses the unequal-companion
+index theorem to force index two in a hypothetical subglobal case.
+The complete family consists of the axis base and one incompatible
+overflow. The half-shape theorem gives the two companion orientations
+(5,3) or (1,11), a dyadic height H, and a dyadic drop c. The charge is 8H;
+subglobality forces H>1, allowing the midpoint theorem to force an ODD
+half modulus M. With K=2^L_j and d=16K-M, the pair gap and this parity give
+d+1<=4H. These are exactly the arithmetic hypotheses proved previously.
+
+Index two produces a bounded coefficient for one coin on each companion
+without normalizing the dominant seed. The two group equations derive
+its thirteenths congruence. The twenty-four nonintegral cases and the two
+alternative coefficients yield actual binary representations within the
+original coin budget. Refinement gives an n-term rival whose short
+companion weight differs from its top weight three, contradicting validity.
+All steps are kernel checked; no external census premise is used.
+
+The existing 628 obstruction tests cover every residue in both
+orientations and full-length affine/permuted rivals. Another 36 controls
+certify actual VALID genuine (2,3) pairs above the bound at n=24,67,68,
+including the cutoff n=67. The certification exhausts all possible
+n-coin companion weights and their unique feasible dominant lifts,
+then checks the genuine endpoints and complete two-profile family.
+Thus the closure excludes subglobal pairs while genuine pairs survive
+above the bound. Remaining even-axis cases include (2,k) with k>=4
+and pairs with both companions at least three. Other profile families,
+higher escapes, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

@@ -4108,3 +4108,8 @@ import MinModulus
 #print axioms MinModulus.exists_rep_short_overflow_integral
 #print axioms MinModulus.exists_rep_long_overflow_integral
 #print axioms MinModulus.exists_thirteen_congruence_lift
+
+-- Genuine even-axis (2,3) companion global-bound closure.
+#print axioms MinModulus.exists_two_three_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_two_three_axis_representation
+#print axioms MinModulus.even_axis_two_three_companions_global_bound
