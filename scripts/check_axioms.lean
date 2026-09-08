@@ -4478,3 +4478,11 @@ import MinModulus
 #print axioms MinModulus.exists_unequal_even_primitive_rival
 #print axioms MinModulus.unequal_reduced_primitive_data_of_valid_forest
 #print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_reduced_primitive_data
+
+-- Actual unequal-companion modulus profiles.
+#print axioms MinModulus.unequal_long_primitive_factor_dvd_height_sub_phase_period
+#print axioms MinModulus.dyadic_dvd_height_iff_dvd_period_of_odd_sub_phase
+#print axioms MinModulus.unequal_long_odd_phase_modulus_dyadic_profile
+#print axioms MinModulus.unequal_reduced_data_modulus_dyadic_profile
+#print axioms MinModulus.unequal_reduced_data_modulus_stratum
+#print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_modulus_profile

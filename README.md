@@ -3462,6 +3462,17 @@ Verification: eight new theorem audits, 15,264 full build jobs,
 4,281 standard-only or axiom-free audits, and 112,532 forest tests,
 including 291 new cases. Largest unequal indices and odd phases remain open.
 
+`ChainForestProfileUnequalStratum.lean` additionally derives the actual
+modulus profile through the shorter companion half-width: for height `2^h`
+and index `2^e`, every `j<=a-1-e` satisfies `2^(e+j) | N` exactly when
+`j<=h`. Both orientations and the largest index are included, without
+odd-denominator or period coprimality. The valuation is exact below the
+terminal height; at or above it the theorem retains `2^(a-1) | N`.
+Verification: six new theorem audits, 15,265 full build jobs,
+4,287 standard-only or axiom-free audits and 112,763 forest tests,
+including 231 new actual-phase and boundary tests. Uniform unequal rival
+budgets and the unrestricted conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
