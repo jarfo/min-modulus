@@ -2987,6 +2987,29 @@ families and axes still need proof. All genuine even-axis companion sums
 through eight remain closed at `n >= 67`; unrestricted G1/G2/G3 and the
 global conjecture remain open.
 
+**Integral-phase obstruction and sparse-tail certificates (2026-09-08).**
+`ChainForestProfileIntegralCertificates.lean` derives a coprimality
+restriction from the actual integral primitive equation when widths and
+drop are dyadic. It imposes no coprimality assumption on the axis period.
+A general coefficient cone bounds the rival error above minus one
+denominator. At an integral boundary, integer granularity then forces a
+nonnegative tail. An arbitrary sparse binary block and bounded tail give
+an actual representation, with explicit length and companion-cost budgets.
+
+Verification: five new audited exports, 15,238 Lean build jobs, 4,145
+standard-only or axiom-free declaration audits, and 29,761 forest tests.
+The 288 new tests cover the coprimality obstruction, overlapping binary
+blocks, actual sparse representations, and the strict-positivity boundary.
+No placeholders or extra axioms are used.
+
+The certificates are conditional on choosing suitable rival coefficients;
+uniform selection still needs proof. A separate search found candidates
+for all 854 primitive phases of companion lengths `(4,5)`, including all
+14 integral phases. This is computational evidence awaiting Lean
+verification, not a new closed family. All genuine even-axis companion
+sums through eight remain closed at `n >= 67`; unrestricted G1/G2/G3 and
+the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

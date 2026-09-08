@@ -548,3 +548,4 @@ import MinModulus.ChainForestProfileUnequalRival
 import MinModulus.ChainForestProfileBinaryPrefix
 import MinModulus.ChainForestProfileComplementary
 import MinModulus.ChainForestProfileComplementaryConstruction
+import MinModulus.ChainForestProfileIntegralCertificates

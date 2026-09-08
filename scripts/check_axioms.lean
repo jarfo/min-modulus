@@ -4308,3 +4308,10 @@ import MinModulus
 #print axioms MinModulus.exists_bounded_integer_primitive_approximation
 #print axioms MinModulus.one_complementary_prefix_fits_combined_budget
 #print axioms MinModulus.exists_one_complementary_representation_of_combined_cost
+
+-- Integral primitive obstruction and sparse-tail representation certificates.
+#print axioms MinModulus.coprime_of_integral_primitive_phase
+#print axioms MinModulus.coprime_of_dyadic_integral_primitive_phase
+#print axioms MinModulus.exists_rep_binary_block_bounded_tail
+#print axioms MinModulus.integral_rival_coefficient_error_window
+#print axioms MinModulus.exists_rep_of_integral_rival_error_certificate
