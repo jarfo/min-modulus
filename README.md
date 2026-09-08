@@ -2641,6 +2641,24 @@ distinct entries and all genuine endpoints. The next unordered pairs are
 `(2,6)`, `(3,5)` and `(4,4)`. Larger pairs, other profile families and axes,
 unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
+**Uniform equal-companion integral corner (2026-09-08).**
+`ChainForestProfileEqualCorner.lean` classifies the saturated arithmetic
+corner uniformly in the equal companion length. If an integral phase
+has denominator `T` coprime to its height `H`, equal height and drop,
+and saturated deficit `4E=wH`, projecting its phase equation modulo `T`
+forces `T | 7`. For dyadic companion width and height, `T=2^a-1` and
+`H=2^h`, so the only possible lengths are `a=1` or `a=3`.
+
+Thus every equal companion length at least two other than three excludes
+this saturated corner in an integral phase. Both exceptional lengths
+have actual nonnegative phase controls; removing height coprimality,
+integrality or saturation also has explicit counterexamples. This is a
+uniform arithmetic classification, without a validity or seed premise.
+It does not supply the remaining coin budgets or genuine-forest closure
+for `(4,4)` or larger equal pairs. Those cases, the other sum-eight pairs,
+other profile families and axes, unrestricted G1/G2/G3 and the global
+conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

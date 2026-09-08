@@ -533,3 +533,4 @@ import MinModulus.ChainForestProfileThreeFourArithmetic
 import MinModulus.ChainForestProfileThreeFour
 import MinModulus.ChainForestProfileTwoFiveArithmetic
 import MinModulus.ChainForestProfileTwoFive
+import MinModulus.ChainForestProfileEqualCorner

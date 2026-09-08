@@ -4193,3 +4193,8 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_of_two_five_axis_representation
 #print axioms MinModulus.even_axis_two_five_companions_global_bound
 #print axioms MinModulus.even_axis_companion_length_sum_le_seven_global_bound
+
+-- Uniform equal-companion integral corner classification.
+#print axioms MinModulus.equal_companion_integral_corner_denominator_dvd_seven
+#print axioms MinModulus.equal_dyadic_companion_integral_corner_length_eq_one_or_three
+#print axioms MinModulus.equal_dyadic_companion_nonexceptional_integral_not_corner
