@@ -4222,3 +4222,11 @@ import MinModulus
 #print axioms MinModulus.exists_four_four_half_relation_rival
 #print axioms MinModulus.not_validTuple_of_four_four_axis_representation
 #print axioms MinModulus.even_axis_two_length_four_companions_global_bound
+
+-- Uniform primitive two-six coin budgets.
+#print axioms MinModulus.exists_two_six_short_nonintegral_parameters
+#print axioms MinModulus.exists_rep_two_six_short_integral
+#print axioms MinModulus.exists_two_six_short_primitive_rep
+#print axioms MinModulus.exists_two_six_long_nonintegral_parameters
+#print axioms MinModulus.exists_rep_two_six_long_integral
+#print axioms MinModulus.exists_two_six_long_primitive_rep

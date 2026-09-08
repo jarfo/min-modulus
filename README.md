@@ -2728,6 +2728,27 @@ only `(2,6)` and `(3,5)` remain among unordered companion-sum-eight pairs.
 Larger pairs, other families and axes, unrestricted G1/G2/G3 and the
 unrestricted global conjecture remain open.
 
+**Uniform primitive `(2,6)` coin budgets (2026-09-08).**
+`ChainForestProfileTwoSixArithmetic.lean` proves actual full-length
+representations for all 222 primitive phases of the two half-profile
+orientations at `n >= 67`, under their compatible phase equations.
+Fixed 32-bit prefixes handle 220 nonintegral phases; the two integral
+phases each use one dominant width plus a short nonnegative tail.
+The signed coefficient is nonnegative and at least `n`, the second
+companion differs from its original weight, and total coin cost is
+at most `n`. No extra dyadic or midpoint hypothesis is needed.
+
+Verification: six new audited exports, 15,227 Lean build jobs, 4,082
+standard-only or axiom-free declaration audits, and 19,997 forest tests.
+The 2,887 new tests include actual full-length rivals across all 222
+phases with all six coordinate orders and affine changes, plus nondyadic
+profiles and error boundaries. The full phase coverage uses dimensions
+67, 108 and 128. Deriving these primitive equations from the original
+`(2,6)` forest remains the next consumer step. The genuine `(4,4)` class
+and companion sums at most seven are closed; the genuine `(2,6)` and
+`(3,5)` consumers, larger pairs, other families and axes, unrestricted
+G1/G2/G3 and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

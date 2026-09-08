@@ -537,3 +537,4 @@ import MinModulus.ChainForestProfileEqualCorner
 import MinModulus.ChainForestProfileAxisBasis
 import MinModulus.ChainForestProfileFourFourArithmetic
 import MinModulus.ChainForestProfileFourFour
+import MinModulus.ChainForestProfileTwoSixArithmetic
