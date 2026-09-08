@@ -70,6 +70,11 @@ restriction, including actual opposite pairs. The earlier stronger
 injective bounds remain. Arbitrary escape extraction and all
 three unrestricted obligations remain open.
 
+`GlobalFewEscape.lean` now proves the complete global and exact-stratum
+bounds for at most two escapes from length 52 and at most three from
+length 101, including opposite pairs. Global and G3 counterexamples
+must have at least three/four escapes at every shift in these ranges.
+
 The original critical closure gives half descent at any actual
 escape count satisfying the explicit binomial threshold. Every critical
 no-half parent of length `k >= 4` has, at each shift, an escape count `r`
@@ -4042,6 +4047,30 @@ Next: package the whole two-/three-escape global/G3 classes from lengths
 52/101, then address the remaining arbitrary high-escape tuples.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
+
+**2026-09-09 — whole two-/three-escape global classes close from lengths 52/101.**
+`GlobalFewEscape.lean` proves the original global and EVERY exact-stratum
+bound for every valid tuple with at most TWO actual affine escapes at
+some shift when `n >= 52`, and at most THREE when `n >= 101`. These
+classes include opposite pairs and all actual cycle/forest geometries;
+no injectivity, failure of half descent, or normal form is supplied.
+
+Every hypothetical original global or exact-stratum counterexample
+therefore has at least three escapes at EVERY shift from length 52,
+and at least four from length 101. Original exceptional G3 tuples
+inherit the same lower counts, including the opposite-pair case. The
+earlier stronger G1 no-half counts (four from 52, five from 101), odd
+injective bounds, and arbitrary-count ceiling obstruction remain.
+
+Verification: twelve new proof-consumer theorems; 15,291 full build
+jobs; 4,511 complete declaration audits (4,507 standard-only and four
+axiom-free). No new Python tests: the preceding complete run passed
+123,865 tests, including the ceiling boundary and later-block checks
+used here. Next: sharpen the actual forest error using truncated
+corner side lengths, to handle one long genuine chain with arbitrary
+remaining coordinates. This is a new proposed direction, not a proved
+class. Arbitrary high-escape tuples and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after every milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
