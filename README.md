@@ -3033,6 +3033,32 @@ closed at this checkpoint. All positive companion sums through eight
 remain closed at `n >= 67`; unrestricted G1/G2/G3 and the conjecture
 remain open.
 
+**Genuine four-five forest closure (2026-09-08).**
+`ChainForestProfileFourFive.lean` proves the sharp global bound for
+original genuine even-axis forests with companion lengths `(4,5)` for
+every `n >= 67`, in every even stratum. The shared unequal-companion
+reduction derives the index, dyadic height and drop, gap, and compatible
+primitive phases internally. The complete arithmetic then gives an
+actual affordable rival; joint refinement preserves a distinction on
+either companion and contradicts tuple validity. No phase, numerical
+dominance or extra coin-budget premises remain in the forest theorem.
+
+Verification: three new audited exports, 15,240 Lean build jobs, 4,154
+standard-only or axiom-free declaration audits, and 33,180 forest tests.
+The 855 new tests refine every primitive phase to a full-length tuple
+rival under all chain permutations and affine changes, and check the
+first-companion distinction. No placeholders or extra axioms are used.
+
+All positive companion sums through eight and the sum-nine pair `(4,5)`
+are now closed in this genuine even-axis class. The remaining sum-nine
+pairs are `(2,7)` and `(3,6)`. A new complete search finds candidates for
+all 714 phases of `(3,6)`, using variable prefix widths and each
+orientation's original cost threshold; those candidates still need Lean
+verification. The current complementary search misses 108 short phases
+of `(2,7)`, which is not a counterexample. Larger uniform selection,
+other profile families and axes, unrestricted G1/G2/G3, and the global
+conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

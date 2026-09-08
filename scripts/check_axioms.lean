@@ -4322,3 +4322,7 @@ import MinModulus
 #print axioms MinModulus.exists_four_five_integral_certificate
 #print axioms MinModulus.exists_four_five_rival_of_integral_certificate
 #print axioms MinModulus.exists_four_five_primitive_rival
+
+#print axioms MinModulus.exists_four_five_rival_of_primitive_data
+#print axioms MinModulus.not_validTuple_of_three_axis_representations
+#print axioms MinModulus.even_axis_four_five_companions_global_bound
