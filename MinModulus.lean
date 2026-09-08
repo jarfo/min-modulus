@@ -587,4 +587,5 @@ import MinModulus.ChainForestProfileCompatibleSupport
 import MinModulus.ChainForestProfileTwoPositiveSingleton
 import MinModulus.ChainForestLongBoundary
 import MinModulus.ChainForestBoundaryInterval
+import MinModulus.ChainForestBoundaryIntervalSharp
 import MinModulus.G1LargeFourEscape

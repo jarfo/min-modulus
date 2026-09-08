@@ -59,8 +59,9 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
-The latest structural closure is `binary_card_bound_of_genuine_three_chain_forest`:
-all genuine three-chain forests of length at least 67 satisfy `2^n <= |G|`.
+The latest structural closure is
+`binary_card_bound_of_genuine_three_chain_forest_of_length_ge_52`:
+all genuine three-chain forests of length at least 52 satisfy `2^n <= |G|`.
 Its original critical consumer proves half descent whenever some affine
 shift has at most three escapes, in every stratum. Large no-half tuples
 therefore have at least four escapes at every shift. Earlier profile
@@ -3759,6 +3760,39 @@ full build jobs; 4,412 complete declaration audits (4,409 standard-only
 and three axiom-free). The preceding full forest run passed 121,598
 tests; this proof-only assembly change adds no executable test cases.
 Continue with the four-escape residual and smaller-parent bounds.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
+**2026-09-08 — the genuine three-chain threshold is now 52.**
+`ChainForestBoundaryIntervalSharp.lean` nearly doubles the missing
+same-axis interval: every `(2^(L_a)+t)*x_a` with
+`0 <= t < 2^(L_a-3)` lies outside the ordinary box. The all-ones tail
+is excluded by this strict endpoint, saving the fourth top coin within
+the chain's original budget. The interval has exactly `2^(L_a-3)`
+distinct residues and pays the same arbitrary-rank binomial error.
+
+The exact estimate `binomial(3*L+2,3) <= 2^(L-3)` holds from `L=18`.
+Consequently every genuine three-chain forest of parent length at
+least 52 satisfies `2^n <= |G|` in any finite abelian group. Original
+critical data with at most three affine escapes now give half descent
+in every stratum from that parent length. The existing equivalent
+`PrimitiveLargeFourEscapeDeleteStep` has been updated accordingly:
+its four-escape condition starts at parent length 52, and the smaller
+three-escape range is now lengths five through 51. No new gate is added.
+
+Verification: nine new theorems; 15,278 full build jobs; 4,421 complete
+declaration audits (4,418 standard-only and three axiom-free); 122,426
+passing forest tests, including 828 new cases. Tests exercise actual
+rivals beyond the previous interval cutoff, all arm permutations and
+affine translations, genuine nonunit forests, all positive length
+triples from 52 through 180, and the strict tail endpoint. A valid
+five-entry forest at modulus 28 supplies a guard against dropping the
+length hypothesis entirely. The threshold 52 is a proved sufficient
+bound; no optimality claim is made.
+
+Continue with the original four-escape residual, its cycle/forest
+structure and parent lengths below 52. All previously separated
+three-chain profile cases from length 52 are consumed by this bound.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
 

@@ -1,7 +1,7 @@
-import MinModulus.ChainForestBoundaryInterval
+import MinModulus.ChainForestBoundaryIntervalSharp
 
 /-! The existing primitive G1 obligation may be restricted to four
-actual affine escapes at every offset in parent lengths at least 67.
+actual affine escapes at every offset in parent lengths at least 52.
 Smaller parent lengths keep the previous three-escape premise. This is
 an equivalent residual, with the same G2/G3 inputs, not a new gate. -/
 
@@ -10,7 +10,7 @@ open Finset
 
 /-- An equivalent residual form of the existing primitive G1 gate.
 Large parents have four escapes at every shift; dimensions five through
-66 retain the existing three-escape condition. -/
+51 retain the existing three-escape condition. -/
 def PrimitiveLargeFourEscapeDeleteStep : Prop :=
   ∀ {n s q : ℕ}, 4 ≤ n → Odd q →
     ∀ g : Fin (n+1) → ZMod (2^(s+1)*q), ValidTuple g →
@@ -20,7 +20,7 @@ def PrimitiveLargeFourEscapeDeleteStep : Prop :=
         (Set.range (fun i : Fin n ↦ g (j.succAbove i)-g (j.succAbove a)))=⊤) →
       (∀ b : ZMod (2^(s+1)*q),
         3 ≤ (Finset.univ.filter (fun i ↦ ∀ j, g j ≠ 2 • g i+b)).card) →
-      (66 ≤ n → ∀ b : ZMod (2^(s+1)*q),
+      (51 ≤ n → ∀ b : ZMod (2^(s+1)*q),
         4 ≤ (Finset.univ.filter (fun i ↦ ∀ j, g j ≠ 2 • g i+b)).card) →
       AdmitsValidTuple n (2^s*q)
 
@@ -38,7 +38,7 @@ theorem primitiveThreeOmissionDeleteStep_iff_largeFourEscape :
     apply h hn hq g hg hc hthree hfull hescape
     intro hnlarge b
     simpa only [not_exists] using
-      four_le_affine_escape_card_of_large_critical_without_half hq hnlarge g hg hc hnohalf b
+      four_le_affine_escape_card_of_critical_without_half_of_length_ge_52 hq hnlarge g hg hc hnohalf b
 
 /-- All exact strata use the same strong-dimension induction and the
 same two remaining G2/G3 assumptions with the narrower G1 residual. -/
