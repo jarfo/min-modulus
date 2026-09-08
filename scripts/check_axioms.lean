@@ -4214,3 +4214,11 @@ import MinModulus
 #print axioms MinModulus.exists_four_four_nonintegral_parameters
 #print axioms MinModulus.exists_four_four_integral_rep
 #print axioms MinModulus.exists_four_four_primitive_rep
+
+-- Genuine four-four closure through compatible primitive phases.
+#print axioms MinModulus.four_four_primitive_phase_link
+#print axioms MinModulus.exists_bounded_axis_multiple_phase
+#print axioms MinModulus.exists_four_four_primitive_phases
+#print axioms MinModulus.exists_four_four_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_four_four_axis_representation
+#print axioms MinModulus.even_axis_two_length_four_companions_global_bound
