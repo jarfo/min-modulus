@@ -4265,3 +4265,10 @@ import MinModulus
 #print axioms MinModulus.unequal_companion_long_one_each_relation
 #print axioms MinModulus.unequal_companion_short_primitive_phase_coupling
 #print axioms MinModulus.unequal_companion_long_primitive_phase_coupling
+
+-- Uniform bounded phases from actual unequal-companion relations and forest gap.
+#print axioms MinModulus.exists_bounded_signed_axis_phase
+#print axioms MinModulus.unequal_companion_signed_target_bounds
+#print axioms MinModulus.unequal_companion_gap_period_bound
+#print axioms MinModulus.exists_unequal_companion_short_bounded_primitive_phases
+#print axioms MinModulus.exists_unequal_companion_long_bounded_primitive_phases

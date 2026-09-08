@@ -2832,6 +2832,33 @@ at `n >= 67`. These uniform identities remove repeated pair-specific
 algebra; larger coin budgets, other profile families and axes,
 unrestricted G1/G2/G3 and the global conjecture remain open.
 
+**Uniform bounded unequal-companion phases (2026-09-08).**
+`ChainForestProfileUnequalPhases.lean` derives bounded primitive phases
+from actual top and half-profile relations, the actual axis index, the
+dominant width and the forest gap. A general signed-target lemma replaces
+manual period shifts. The gap implies `M >= 3*t*K`, and all four target
+coefficients lie strictly between `-M` and `M`.
+
+For widths `2*s`, `2*t`, ratio `u >= 2`, `D*F=s` and
+`T+u+1=4*t`, short profiles give `0 <= r < F*T`; long profiles give
+`1 <= r <= F*T`. The one-each phase has `0 <= q <= T`; positive targets
+exclude `q=T`, and negative targets exclude `q=0`. In the short orientation
+the target is positive for `u <= 3` and negative for `u >= 4`; the long
+one-each target is positive. Both consumers derive the full link
+`T | 4*r+q`, with no supplied phases or coprimality assumptions.
+
+Verification: five new audited exports, 15,232 Lean build jobs, 4,114
+standard-only or axiom-free declaration audits, and 27,219 forest tests.
+The 274 new tests cover 21,782 actual group-and-gap fixtures, both phase
+endpoints, shared factors, nonbinary widths and general signed-target
+windows, with controls for missing window or canonical-coefficient bounds.
+
+All genuine even-axis companion length sums at most eight remain closed
+at `n >= 67`. Consume this uniform phase extraction in arbitrary-length
+genuine forests and extend the actual coin budgets. Larger companion
+sums, other profile families and axes, unrestricted G1/G2/G3 and the
+global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
