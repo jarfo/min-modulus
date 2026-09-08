@@ -4343,3 +4343,7 @@ import MinModulus
 #print axioms MinModulus.exists_two_seven_integral_certificate
 #print axioms MinModulus.exists_two_seven_rival_of_integral_certificate
 #print axioms MinModulus.exists_two_seven_primitive_rival
+
+#print axioms MinModulus.exists_two_seven_rival_of_primitive_data
+#print axioms MinModulus.even_axis_two_seven_companions_global_bound
+#print axioms MinModulus.even_axis_companion_length_sum_le_nine_global_bound

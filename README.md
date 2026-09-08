@@ -3127,6 +3127,30 @@ companion sums through eight, plus `(4,5)` and `(3,6)`. Larger uniform
 selection, other profiles and axes, unrestricted G1/G2/G3 and the global
 conjecture remain open.
 
+**Complete genuine even-axis companion sums through nine (2026-09-08).**
+`ChainForestProfileTwoSeven.lean` closes the original genuine `(2,7)`
+even-axis forest bound and combines all established cases in
+`even_axis_companion_length_sum_le_nine_global_bound`. Every positive
+companion-length sum at most nine is now covered at `n >= 67`, in every
+even stratum, including both orders of `(2,7)`, `(3,6)` and `(4,5)` and
+the previously established short-arm cases. The original forest and its
+actual axis profile derive every index, dyadic, phase and coin input;
+no numerical dominance or extra budget premises remain.
+
+Verification: three new audited exports, 15,244 Lean build jobs, 4,171
+standard-only or axiom-free declaration audits, and 37,825 forest tests.
+The 447 new tests refine every two-seven phase to a full-length tuple
+rival under all chain permutations and affine changes, and check the
+first-companion distinction. No placeholders, extra axioms or
+`native_decide` are used.
+
+The sum-nine frontier is closed in this genuine even-axis class. The
+next work is uniform larger companion selection using the full primitive
+basis and the shared error/representation certificates. The new sum-ten
+pairs are `(2,8)`, `(3,7)`, `(4,6)` and `(5,5)`; none is claimed closed
+here. Other profile families and axes, unrestricted G1/G2/G3, and the
+global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
