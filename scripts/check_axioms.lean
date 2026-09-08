@@ -4032,3 +4032,9 @@ import MinModulus
 #print axioms MinModulus.odd_profile_lower_point_below_even_axis_base
 #print axioms MinModulus.even_axis_base_companion_volume_gap
 #print axioms MinModulus.even_axis_base_global_bound_of_companion_volume
+
+-- Upper-corner packing above arbitrary actual profiles.
+#print axioms MinModulus.forestCollisionProfiles_eq_of_le_of_all_arms_length_two
+#print axioms MinModulus.profile_upper_corner_injective_off_zero
+#print axioms MinModulus.profile_upper_corner_volume_le_card_add_one
+#print axioms MinModulus.profile_upper_corner_volume_le_even_modulus

@@ -2088,6 +2088,29 @@ allowance. This does not bound that charge in every remaining family;
 positive bases with larger charge, odd axes, non-axis bases, higher escapes,
 and unrestricted G2/G3 remain OPEN. No new gate is introduced.
 
+**Upper corners above arbitrary profiles (2026-09-08).**
+`ChainForestProfileUpperCorner.lean` extends the antichain law beyond axis
+bases. If every arm has at least two entries, the translated upper corner
+above ANY actual profile v is injective away from zero. A point in that
+corner and a lower collision rectangle would force comparable profiles,
+hence equality; the only possible intersection is the base v itself.
+Consequently, in any finite abelian group,
+
+```
+product_i (2^(L_i)-v_i) <= card G + 1.
+```
+
+The differences are truncated natural differences, so an overflowing
+profile gives an empty corner. At an even cyclic modulus, if some ODD seed
+has an EVEN profile coefficient, the translated corner has balanced
+parity. Its odd points avoid zero, improving the right side to N. This
+includes non-axis profiles and all-odd seed families; it needs no width,
+wide-box, dominance, or genuine-endpoint hypothesis. Genuine non-axis
+examples verify both balanced and unbalanced cases. Odd Mersenne cycles
+show that the general extra point and exclusion of the base are sharp.
+The individual corner bound still needs a sharp joint charge to close all
+remaining profiles. The unrestricted conjecture and G1/G2/G3 remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
