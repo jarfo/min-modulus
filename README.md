@@ -2342,6 +2342,42 @@ not claimed as validity certificates. Longer-companion charge bounds,
 other profile families, unrestricted G1/G2/G3 and the global conjecture
 remain OPEN.
 
+**Uniform (2,3) companion arithmetic (2026-09-08).**
+`ChainForestProfileTwoThreeArithmetic.lean` proves the coin representations
+needed for both half-profile orientations with companion lengths two and
+three. Write n=L+5, K=2^L, N/2=M=16K-d, and V=H+c-1<n. The hypotheses
+include positive H,c, d+1<=4H, and the dyadic-height bound obtained from
+H+7<n. For the bounded one-each-companion coefficient z, the short and
+long overflow equations respectively lift to one of thirteen cases:
+
+```
+13z+qd+13 = (1+16q)K+12H+10c,
+13z+qd+13 = (5+16q)K+ 8H+10c,    0 <= q < 13.
+```
+
+Except for short q=4 and long q=7, z has a fixed fifty-two-bit upper
+prefix. Its greedy cost is at most 55; the arbitrary lower L-52 bits
+and two companion coins therefore fit n. The proof checks every fixed
+prefix in Lean and derives the error bounds uniformly for all n>=67.
+It supplies actual binary representations, with coefficient at least n.
+A generic binary-block/tail representation lemma and a congruence-lifting
+lemma are also exported.
+
+The integral cases use different companion weights. Short q=4 uses
+weights (2,0) and Z=M+4V-c-3z, with K<=Z<K+2n. Long q=7 uses (2,2)
+and Z=2z-V-M, with n<=Z<2K+n. Both have proved coin budgets. In particular,
+the dense expansion immediately BELOW two widths still fits: its axis
+cost is L+2, leaving room for the two companion coins. The 628 new tests
+cover all thirteen residues in both orientations, actual n-term rivals,
+unit multiples, permutations and affine shifts, and this dense boundary.
+The relation fixtures are obstruction data, not valid-tuple certificates.
+
+This milestone establishes the complete arithmetic ingredient. The next
+step is to derive its inputs from the genuine forest and install the
+(2,3) global-bound consumer. That consumer, longer companions, other
+profile families, unrestricted G1/G2/G3 and the global conjecture remain
+OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

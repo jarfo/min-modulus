@@ -4090,3 +4090,21 @@ import MinModulus
 #print axioms MinModulus.half_profile_unequal_companions_not_min_power_dvd_gcd
 #print axioms MinModulus.even_axis_subglobal_unequal_companions_index_exponent
 #print axioms MinModulus.even_axis_subglobal_length_two_companion_index_two
+
+-- Uniform thirteenths prefixes and the two (2,3) exceptional rivals.
+#print axioms MinModulus.exists_rep_binary_block_tail
+#print axioms MinModulus.twelve_length_lt_two_pow_sub_fifty_seven
+#print axioms MinModulus.half_profile_height_thirty_two_le_lower_block
+#print axioms MinModulus.thirteen_prefix_greedy_cost
+#print axioms MinModulus.short_overflow_thirteen_prefix
+#print axioms MinModulus.long_overflow_thirteen_prefix
+#print axioms MinModulus.exists_rep_of_fifty_two_bit_prefix
+#print axioms MinModulus.exists_rep_short_overflow_nonintegral
+#print axioms MinModulus.exists_rep_long_overflow_nonintegral
+#print axioms MinModulus.short_overflow_integral_rival_window
+#print axioms MinModulus.long_overflow_integral_rival_window
+#print axioms MinModulus.exists_rep_boundary_multiple_small_tail
+#print axioms MinModulus.exists_rep_below_two_widths_add_length
+#print axioms MinModulus.exists_rep_short_overflow_integral
+#print axioms MinModulus.exists_rep_long_overflow_integral
+#print axioms MinModulus.exists_thirteen_congruence_lift

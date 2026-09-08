@@ -521,3 +521,4 @@ import MinModulus.G1ProfileLocalHeavyFrontier
 import MinModulus.G1CriticalLocalHeavyFrontier
 import MinModulus.G1CriticalResidualDeleteSteps
 import MinModulus.G1Counterexample
+import MinModulus.ChainForestProfileTwoThreeArithmetic
