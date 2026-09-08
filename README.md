@@ -3516,6 +3516,36 @@ The unequal global closure, other axes and profile families,
 unrestricted G1/G2/G3, and Conjecture 1 remain OPEN. Continue after
 each verified milestone and commit and push both repositories.
 
+**2026-09-08 — nonintegral unequal unit phases close uniformly.**
+`ChainForestProfileUnequalUnit.lean` consumes the normalized arithmetic
+in actual valid forests. Both half orientations, all remaining unequal
+length pairs, and every admissible actual dyadic index are covered,
+including the largest index `F=1`. A signed primitive step or its actual
+top reflection gives an affordable full tuple rival. Its group identity
+and representation contradict validity.
+
+The genuine extractor now returns
+`UnequalCompanionUnitReducedPrimitiveData`: all previous bounded
+coefficients, phase links, half-profile costs, group/scalar equations,
+index alternatives and modulus profiles/strata are retained. In either
+orientation its phase must be nonunit modulo `T`, or satisfy the integral
+condition `T | P+4*F*t*r`. Here `P=t-1` in the short orientation and
+`P=1-3*t` in the long orientation. No fixed width, fixed index or finite
+phase census is used. Integral unit phases are explicitly retained.
+
+Verification: six new theorem audits; 15,268 full build jobs;
+4,324 declaration audits (4,321 standard-only and three axiom-free);
+114,855 passing forest tests, including 705 new cases. Concrete groups
+satisfy the actual period gap; representative rivals refine to full
+collisions under chain reordering, multiplication by a unit and affine
+translation. Even unit phases at the largest index are included.
+
+Continue with nonunit odd-denominator annihilator multipliers and
+integral unit boundaries. The unequal maximal-even-axis family is not
+yet fully closed. Other axes and profile families, unrestricted G1/G2/G3,
+and Conjecture 1 remain OPEN. Continue after every verified milestone
+and commit and push both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

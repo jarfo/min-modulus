@@ -4521,3 +4521,11 @@ import MinModulus
 #print axioms MinModulus.unequal_reflected_error_coefficient_bound
 #print axioms MinModulus.unequal_uniform_signed_error_window
 #print axioms MinModulus.exists_rep_of_unequal_uniform_nonintegral_window
+
+-- Uniform genuine exclusion of unequal nonintegral unit phases.
+#print axioms MinModulus.unequal_normalized_signed_rival_error
+#print axioms MinModulus.exists_unequal_uniform_signed_nonintegral_rival
+#print axioms MinModulus.exists_unequal_normalized_nonintegral_unit_rival
+#print axioms MinModulus.unequal_unit_reduced_primitive_data_of_valid_forest
+#print axioms MinModulus.UnequalCompanionUnitReducedPrimitiveData.to_reduced
+#print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_unit_residual_data
