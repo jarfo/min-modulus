@@ -2306,6 +2306,42 @@ large range. Remaining even-axis cases have at least one longer companion;
 odd-axis/non-axis families, higher escapes, unrestricted G1/G2/G3 and the
 global conjecture remain OPEN.
 
+**Unequal companions sharpen the dominant index (2026-09-08).**
+`ChainForestProfileUnequalIndex.lean` proves that an actual half-shaped
+profile with unequal odd companion lengths cannot have the smaller full
+companion width dividing the dominant gcd. Projecting the profile equation
+through a divisor that kills the dominant seed and both companion widths
+gives a zero sum of the two weighted HALF-widths. If the smaller full width
+also vanished, the larger half-width would vanish while the smaller
+half-width times an odd seed would remain nonzero. This is impossible.
+The algebraic obstruction needs no tuple validity, axis base, genuine
+endpoints or numerical cutoff once the actual half profile is supplied.
+
+For a genuine subglobal even-axis forest in the established dominant
+range, the family and dyadic index are extracted internally. With
+unequal companion lengths L_a,L_k, the resulting gcd is 2^e with
+
+```
+1 <= e < min(L_a,L_k).
+```
+
+This strengthens the prior bound by the width of just one companion.
+Together with the all-stratum closure for two length-two companions, it
+forces gcd(N,x_j.val)=2 in EVERY remaining subglobal even-axis case with
+a length-two companion at n>=67. The other companion is unrestricted
+in that consumer; the supplied dominance is the one already extracted
+from original three-escape data. This sharpens the residual structure,
+but does not yet prove the global bound for the longer-companion cases.
+
+The 167 new tests check the exact quotient equations across unequal
+lengths and dyadic indices, with equal-length controls. A genuine valid
+pair at N=520, lengths (4,2,2), and seeds (4,49,279) has index four;
+permutations and affine shifts verify that the strict inequality cannot
+be extended to equal lengths. The quotient checks are algebraic tests,
+not claimed as validity certificates. Longer-companion charge bounds,
+other profile families, unrestricted G1/G2/G3 and the global conjecture
+remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

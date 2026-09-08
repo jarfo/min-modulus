@@ -4084,3 +4084,9 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_of_two_short_companions_index_two_small_gap
 #print axioms MinModulus.even_axis_two_length_two_companions_index_two_global_bound
 #print axioms MinModulus.even_axis_two_length_two_companions_global_bound
+
+-- Unequal companion lengths sharpen the original dominant index.
+#print axioms MinModulus.half_profile_companion_half_widths_divisible
+#print axioms MinModulus.half_profile_unequal_companions_not_min_power_dvd_gcd
+#print axioms MinModulus.even_axis_subglobal_unequal_companions_index_exponent
+#print axioms MinModulus.even_axis_subglobal_length_two_companion_index_two
