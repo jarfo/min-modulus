@@ -579,3 +579,4 @@ import MinModulus.ChainForestProfileUnequalStratum
 import MinModulus.ChainForestProfileUnequalTerminal
 import MinModulus.ChainForestProfileUnequalUniformArithmetic
 import MinModulus.ChainForestProfileUnequalUnit
+import MinModulus.ChainForestProfileUnequalNonunit

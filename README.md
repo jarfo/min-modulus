@@ -3546,6 +3546,38 @@ yet fully closed. Other axes and profile families, unrestricted G1/G2/G3,
 and Conjecture 1 remain OPEN. Continue after every verified milestone
 and commit and push both repositories.
 
+**2026-09-08 — all nonunit unequal phases close uniformly.**
+`ChainForestProfileUnequalNonunit.lean` supplies a bounded annihilator
+multiplier for every nonunit phase in both orientations. A suitable
+proper multiple of the odd denominator's annihilator puts the short
+weight inside the actual half profile. The actual scalar equation,
+together with the dyadic drop, forces its leading numerator to be
+nonintegral. A direct rival or actual half-profile reflection then
+fits the four-block budget and contradicts validity.
+
+The genuine extractor now returns
+`UnequalCompanionIntegralPrimitiveData`: every remaining unequal phase
+is a unit modulo `T` and satisfies `T | P+4*F*t*r`. All earlier bounded
+coefficients, index alternatives, actual orientation costs and equations,
+and the complete modulus profiles/strata remain available. Both
+orientations and all admissible indices are covered, including `F=1`.
+No fixed-width or finite-phase premise is used.
+
+Verification: thirteen new theorem audits; 15,269 full build jobs;
+4,337 declaration audits (4,334 standard-only and three axiom-free);
+115,097 passing forest tests, including 242 new cases. Actual groups
+cover larger annihilator multiples, both index regimes, even nonunit
+phases at the largest index, and full translated tuple collisions.
+A long half-reflection example checks that branch explicitly. A
+non-dyadic-drop guard demonstrates why automatic nonintegrality needs
+the actual dyadic drop hypothesis.
+
+Continue with integral unit boundaries and sharper normalized companion
+coin bounds. This is the remaining unequal phase family for the current
+maximal-even-axis route. Other axes and profile families, unrestricted
+G1/G2/G3, and Conjecture 1 remain OPEN. Continue after every verified
+milestone and commit and push both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
