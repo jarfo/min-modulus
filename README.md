@@ -2690,6 +2690,24 @@ Uniform Lean coin budgets for the primitive phases and the genuine
 other profile families and axes, unrestricted G1/G2/G3 and the global
 conjecture remain OPEN.
 
+**Uniform primitive `(4,4)` coin budgets (2026-09-08).**
+`ChainForestProfileFourFourArithmetic.lean` proves actual full-length
+representations for all 225 primitive phases at `n >= 67`, under the
+index, period and phase equations. The 210 nonintegral phases use fixed
+32-bit prefixes with uniform error below `2000*n`; the fifteen integral
+phases use fixed sparse boundaries with tails below `3*n`. The resulting
+signed coefficient is nonnegative and at least `n`, the total coin cost
+is at most `n`, and the second companion differs from its original weight.
+No additional dyadic, midpoint or saturated-corner premise is needed.
+
+All eight exports are audited. Verification: 15,225 Lean build jobs,
+4,070 standard-only or axiom-free declaration audits, and 17,106 forest
+tests. The tests now use the fixed integral choices and include nondyadic
+profiles and error boundaries. The genuine `(4,4)` consumer still needs
+to derive the compatible primitive phases from the original forest.
+The remaining companion-sum-eight closures, other families and axes,
+unrestricted G1/G2/G3 and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

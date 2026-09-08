@@ -4204,3 +4204,13 @@ import MinModulus
 #print axioms MinModulus.signed_axis_basis_rival_eq
 #print axioms MinModulus.exists_axis_rival_coefficient_iff_companion_congruence
 #print axioms MinModulus.equal_companion_axis_multiple_relation
+
+-- Uniform primitive four-four coin budgets.
+#print axioms MinModulus.two_thousand_length_lt_two_pow_sub_forty
+#print axioms MinModulus.exists_rep_near_thirty_two_bit_fraction
+#print axioms MinModulus.exists_rep_of_int_thirty_two_bit_fraction
+#print axioms MinModulus.exists_rep_binary_block_short_tail
+#print axioms MinModulus.exists_rep_of_int_sparse_block_small_tail
+#print axioms MinModulus.exists_four_four_nonintegral_parameters
+#print axioms MinModulus.exists_four_four_integral_rep
+#print axioms MinModulus.exists_four_four_primitive_rep
