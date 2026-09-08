@@ -4173,3 +4173,8 @@ import MinModulus
 #print axioms MinModulus.exists_rep_three_four_index_four_short_low_integral
 #print axioms MinModulus.exists_rep_three_four_index_four_short_high_integral
 #print axioms MinModulus.exists_rep_three_four_index_four_long_integral
+
+-- Genuine three-four companion closure.
+#print axioms MinModulus.exists_three_four_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_three_four_axis_representation
+#print axioms MinModulus.even_axis_three_four_companions_global_bound

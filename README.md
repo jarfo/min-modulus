@@ -2552,7 +2552,7 @@ including both short integral alternatives. Fixed sixteen-bit prefixes
 cost at most 17 coins together with the companions, against 23 available.
 Permutations, unit scaling and translation are checked. This is
 computational evidence is now supported by the uniform Lean arithmetic
-below. The genuine `(3,4)` consumer, `(2,5)`, other profile families,
+below. The genuine `(3,4)` consumer is now closed below. `(2,5)`, other profile families,
 unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
 **Uniform (3,4) coin budgets (2026-09-08).**
@@ -2567,11 +2567,31 @@ represented by actual dominant-chain coins within the full budget.
 
 The uniform assumptions are `L+7=n`, `H>=4`, `c>0`, `V<n`, `H+c=V+1`,
 `m+E=w*2^L`, `4E<=wH`, and the appropriate twenty-ninth phase equation,
-where `w=64` or `32`. These are arithmetic lemmas. The next step is to
-derive these data from the original genuine `(3,4)` forest and consume
-the signed identities and full-length rival construction. That consumer,
-`(2,5)`, other profile families, unrestricted G1/G2/G3 and the global
-conjecture remain OPEN.
+where `w=64` or `32`. The genuine `(3,4)` theorem below now derives
+these arithmetic data and consumes the signed identities and full-length
+rivals internally. `(2,5)`, larger companion pairs, other profile families,
+unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+
+**Genuine (3,4) closure (2026-09-08).**
+`even_axis_three_four_companions_global_bound` proves the sharp global
+bound for EVERY genuine even-axis forest with companion lengths three
+and four at `n >= 67`, in every even stratum. The original forest supplies
+all inputs: dominance and wide capacity, index two or four, the complete
+axis-base/half-profile pair, height at least four, both half-profile
+orientations, and all twenty-ninth phase equations. The uniform arithmetic
+then yields actual full-length rivals. No index, normalization, midpoint,
+residue, corner or coin-budget certificate is supplied externally.
+
+The new valid-example controls exhaust all `n`-coin multisets for genuine
+`(3,4)` forests at `n=24,67,68` and both indices above the bound. Their
+complete profile family is `{(1,0,0),(0,11,7)}`; the only surviving full
+multiset is the original all-ones tuple. Permutations and translations
+preserve validity, distinct entries and every genuine endpoint.
+
+Together with the companion-sum-six theorem, this leaves `(2,5)` as the
+only unordered pair of companion sum seven in the even-axis branch.
+Larger companion sums, other profile families and axes, unrestricted
+G1/G2/G3 and the global conjecture remain OPEN.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
