@@ -130,6 +130,7 @@ import MinModulus.ChainForestProfileAxisOnly
 import MinModulus.ChainForestProfileOrder
 import MinModulus.ChainForestProfileSlab
 import MinModulus.ChainForestProfileUpperCorner
+import MinModulus.ChainForestProfileHalfSides
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

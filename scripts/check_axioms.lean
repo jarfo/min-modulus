@@ -4038,3 +4038,10 @@ import MinModulus
 #print axioms MinModulus.profile_upper_corner_injective_off_zero
 #print axioms MinModulus.profile_upper_corner_volume_le_card_add_one
 #print axioms MinModulus.profile_upper_corner_volume_le_even_modulus
+
+-- Shifted-profile rivals force half-width incompatible sides.
+#print axioms MinModulus.shifted_profile_coin_budget_gt_length
+#print axioms MinModulus.exists_rep_dyadic_minus_two_add_boundaries
+#print axioms MinModulus.axis_base_overflow_shift_coin_cost
+#print axioms MinModulus.axis_base_overflow_half_exponents_and_dyadic_drop
+#print axioms MinModulus.even_axis_incompatible_overflow_half_shape

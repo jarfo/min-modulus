@@ -2111,6 +2111,35 @@ show that the general extra point and exclusion of the base are sharp.
 The individual corner bound still needs a sharp joint charge to close all
 remaining profiles. The unrestricted conjecture and G1/G2/G3 remain OPEN.
 
+**Half-width rigidity for incompatible overflows (2026-09-08).**
+`ChainForestProfileHalfSides.lean` sharpens the remaining even-axis case.
+Let v be an actual axis base and w an incompatible overflow on companion a,
+with k the other companion. Write K_i=2^(L_i). When all arms have second
+entries, the box is wide, and n<=K_j, actual validity forces
+
+```
+w_a+1 = K_a + K_a/2,     w_k+1 = K_k/2,
+v_j-w_j = 2^r,          w_j+1 = 2^s,
+v_j+1 = 2^r + 2^s.
+```
+
+The proof shifts the original weights by w-v. These still represent the
+original target and have enough total weight to refine to n coins. Their
+companion costs are e+3 and f+1 when the original dyadic sides are 2^e and
+2^f. Any side smaller than half its width saves a coin and constructs a
+forbidden rival. A dominant drop needing two binary digits also saves a
+coin and is impossible. The generic shift obstruction holds in every
+abelian group and arity; the direct consumer derives all powers and their
+positivity from actual even-axis data with odd companions. No genuine
+endpoints or numerical length cutoff are required.
+
+Genuine surviving examples have exactly n+1 coins in the shifted weights,
+so the last coin cannot simply be discarded. The 90 new tests include
+explicit full-length rivals at n=12,24,67 for both excluded mechanisms,
+with coordinate permutations and affine shifts. The surviving half-width
+families still need a sharp joint bound. The global conjecture and
+unrestricted G1/G2/G3 remain OPEN; no new gate is added.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
