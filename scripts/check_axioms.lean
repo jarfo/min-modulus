@@ -4147,3 +4147,9 @@ import MinModulus
 #print axioms MinModulus.exists_rep_three_three_index_two_integral_high_drop
 #print axioms MinModulus.exists_rep_three_three_index_four_integral
 #print axioms MinModulus.exists_rep_three_three_index_eight_integral
+
+-- Genuine (3,3) and all companion length sums at most six.
+#print axioms MinModulus.exists_three_three_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_three_three_axis_representation
+#print axioms MinModulus.even_axis_two_length_three_companions_global_bound
+#print axioms MinModulus.even_axis_companion_length_sum_le_six_global_bound

@@ -2492,10 +2492,42 @@ binary coins. The 543 new tests cover all 21 phases, full-length rivals,
 unit multiples, permutations and shifts, plus exhaustive modulo-sixteen
 checks and controls when each obstruction hypothesis is removed.
 
-The next step is to consume the algebraic corner obstruction and derive
-all arithmetic data from the original genuine (3,3) forest. That consumer,
-longer companion pairs, other profile families, unrestricted G1/G2/G3 and
-the global conjecture remain OPEN.
+The genuine (3,3) theorem below now derives all arithmetic data and
+consumes the corner obstruction internally. Longer companion pairs,
+other profile families, unrestricted G1/G2/G3 and the global conjecture
+remain OPEN.
+
+**Genuine (3,3) and companion-sum-six closure (2026-09-08).**
+`ChainForestProfileThreeThree.lean` proves the sharp GLOBAL bound for
+EVERY genuine even-axis forest with two length-three odd companions
+at n>=67, in every even-modulus stratum. Its original forest inputs
+internally determine dominance, the complete profile pair, dyadic height
+at least eight and the dominant index in {2,4,8}. The top equation gives
+a bounded one-each coefficient at every index. All seven residue phases
+then admit actual coin representations. The modulo-sixteen obstruction
+excludes the saturated corner directly from the original equations;
+no external corner, phase or arithmetic certificate is assumed.
+Signed identities evaluate the alternatives, and refinement gives a
+full-length rival distinguished on the second companion.
+
+The combined theorem
+`even_axis_companion_length_sum_le_six_global_bound` closes EVERY
+genuine even-axis forest whose two positive companion lengths sum to
+at most SIX, at n>=67. The family theorem excludes length-one arms in a
+hypothetical subglobal case; the six ordered remaining pairs reduce to
+the proved (2,2), (2,3), (2,4) and (3,3) cases. Width and wide capacity
+are derived from the supplied length sum, so no dominance certificate
+is required. Every remaining subglobal even-axis pair must therefore
+have companion length sum at least seven.
+
+The earlier 543 obstruction checks are supplemented by 108 genuine
+VALID controls above the bound, at n=24,67,68 and each index two, four
+and eight, including all permutations and affine shifts. Full validity
+is certified by exhausting n-coin companion weights and unique feasible
+dominant lifts; genuine endpoints and the complete profile pair are
+also checked. The next length pairs are (2,5) and (3,4), alongside the
+other profile families and axes. Higher escapes, unrestricted G1/G2/G3
+and the global conjecture remain OPEN.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

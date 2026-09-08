@@ -527,3 +527,4 @@ import MinModulus.ChainForestProfileTwoFourArithmetic
 import MinModulus.ChainForestProfileTwoFour
 import MinModulus.ChainForestProfileThreeThreeAlgebra
 import MinModulus.ChainForestProfileThreeThreeArithmetic
+import MinModulus.ChainForestProfileThreeThree
