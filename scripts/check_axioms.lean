@@ -4468,3 +4468,13 @@ import MinModulus
 #print axioms MinModulus.exists_equal_uniform_primitive_rival
 #print axioms MinModulus.exists_equal_uniform_reduced_data_rival
 #print axioms MinModulus.even_axis_equal_companions_global_bound
+
+-- Uniform even-phase exclusion for unequal companions.
+#print axioms MinModulus.primitive_midpoint_rival_twice
+#print axioms MinModulus.unequal_short_even_midpoint_twice
+#print axioms MinModulus.unequal_long_even_midpoint_twice
+#print axioms MinModulus.exists_axis_rep_of_top_half_midpoint
+#print axioms MinModulus.exists_rival_of_affordable_midpoint
+#print axioms MinModulus.exists_unequal_even_primitive_rival
+#print axioms MinModulus.unequal_reduced_primitive_data_of_valid_forest
+#print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_reduced_primitive_data

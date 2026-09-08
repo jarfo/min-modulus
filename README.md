@@ -3452,6 +3452,16 @@ tests in the companion `unique` repository, including 26,260 new cases.
 Larger unequal companions, other axes and profile families, unrestricted
 G1/G2/G3, and the global conjecture remain open.
 
+For unequal companions, `ChainForestProfileUnequalEvenArithmetic.lean`
+and `ChainForestProfileUnequalEven.lean` now exclude every even primitive
+phase below the largest possible unequal index `2^(a-1)`. The top/half
+midpoint has exact axis coefficient `(K+H-2)/2`; its companions save one
+coin in either orientation. The genuine forest therefore supplies `F=1`
+or an odd phase, preserving all previous bounded phase and profile data.
+Verification: eight new theorem audits, 15,264 full build jobs,
+4,281 standard-only or axiom-free audits, and 112,532 forest tests,
+including 291 new cases. Largest unequal indices and odd phases remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
