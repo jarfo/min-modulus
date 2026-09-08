@@ -4370,3 +4370,9 @@ import MinModulus
 #print axioms MinModulus.exists_five_five_half_relation_rival
 #print axioms MinModulus.even_axis_two_length_five_companions_global_bound
 #print axioms MinModulus.even_axis_companion_length_sum_le_ten_global_bound
+
+#print axioms MinModulus.equal_even_phase_companion_coin_cost
+#print axioms MinModulus.twice_equal_denominator_dvd_of_even_phase
+#print axioms MinModulus.equal_even_primitive_rival_twice
+#print axioms MinModulus.exists_equal_even_primitive_rival
+#print axioms MinModulus.odd_primitive_phase_of_valid_equal_companion_forest

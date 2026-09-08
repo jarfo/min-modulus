@@ -561,3 +561,4 @@ import MinModulus.ChainForestProfileSumTen
 import MinModulus.ChainForestProfileEqualBasisCertificates
 import MinModulus.ChainForestProfileFiveFiveArithmetic
 import MinModulus.ChainForestProfileFiveFive
+import MinModulus.ChainForestProfileEqualEven

@@ -3212,6 +3212,38 @@ a completed uniform closure. Other profile families and axes,
 unrestricted G1/G2/G3, and the global conjecture remain open. Continue
 through verified milestones and commit and push each to both repositories.
 
+**Uniform even primitive phases for arbitrary equal companions (2026-09-08).**
+`ChainForestProfileEqualEven.lean` supplies an explicit rival for equal
+companion lengths `a = k+2` with no upper bound on `a`. Below the maximal
+index, write the primitive factor as `2*G` and the index relation as
+`D*G = 2^(a-1)`. Every compatible even primitive phase has companion
+weights `3*2^(a-2)-1` and `5*2^(a-2)-1`, with combined coin cost `2*a-1`.
+The exact axis coefficient satisfies `2*Z = 3*2^L-H-2`; the drop and
+period terms cancel. The ordinary width bound `2*n <= 2^L` gives a
+full-length representation with total cost at most `n`.
+
+`odd_primitive_phase_of_valid_equal_companion_forest` consumes the rival
+in an actual valid chain forest and forces its compatible primitive phase
+to be odd. This is a uniform residual reduction at every equal companion
+length, using actual primitive basis/phase data and the axis width bound.
+It does not yet derive all those phase inputs from an arbitrary original
+genuine forest, or eliminate the remaining odd phases or maximal index.
+
+Verification: five new audited exports, 15,251 Lean build jobs, 4,193
+standard-only or axiom-free declaration audits, and 60,212 forest tests.
+The 2,341 new tests construct actual groups across equal lengths two
+through forty and every nonmaximal index, verify the exact axis
+coefficient, and refine full tuple rivals under permutations and affine
+changes. No finite certificate table, fixed prefix width, placeholders,
+extra axioms or `native_decide` are used in the uniform proof.
+
+The genuine companion-sum-through-ten bound remains proved. Next derive
+the uniform phase reduction directly from genuine forest data and address
+the remaining odd phases and maximal indices. Other profile families and
+axes, unrestricted G1/G2/G3, and the global conjecture remain open.
+Continue through milestones and commit and push each verified milestone
+to both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
