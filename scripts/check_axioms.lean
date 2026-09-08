@@ -4045,3 +4045,9 @@ import MinModulus
 #print axioms MinModulus.axis_base_overflow_shift_coin_cost
 #print axioms MinModulus.axis_base_overflow_half_exponents_and_dyadic_drop
 #print axioms MinModulus.even_axis_incompatible_overflow_half_shape
+
+-- Two incompatible overflows force a dominant-only rival.
+#print axioms MinModulus.two_half_overflow_profiles_dominant_relation
+#print axioms MinModulus.exists_rep_lt_three_width
+#print axioms MinModulus.not_two_half_overflows_with_axis_base
+#print axioms MinModulus.no_two_incompatible_overflows_with_even_axis_base

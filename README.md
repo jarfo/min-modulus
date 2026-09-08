@@ -2140,6 +2140,35 @@ with coordinate permutations and affine shifts. The surviving half-width
 families still need a sharp joint bound. The global conjecture and
 unrestricted G1/G2/G3 remain OPEN; no new gate is added.
 
+**Two incompatible overflows are excluded (2026-09-08).**
+`ChainForestProfileDoubleOverflow.lean` proves that an actual even axis base
+cannot coexist with incompatible overflows on both companion arms. The
+half-width theorem supplies their shapes. Adding the two profile equations
+then cancels the companion terms and gives
+
+```
+(2*K_j-H_a-H_k) * x_j = 0.
+```
+
+Here H_a,H_k are the overflow heights. If the base coefficient is V, strict
+profile ordering gives H_a,H_k<=V<K_j. Adding V to this positive period
+produces a weight z with K_j<=z<3*K_j representing the original target.
+It costs at most L_j+4 dominant-chain coins. Both companions have at least
+two entries, so this fits the original n-coin budget and refines to a
+forbidden full-length rival supported on the dominant chain alone.
+
+The generic half-shaped exclusion works in any abelian group. The direct
+even-axis consumer derives the shapes from the actual profiles and needs
+only all-arm length>=2, joint wide capacity, n<=K_j, and odd companions.
+It has no subbinary, dominant-index, genuine-endpoint, or numerical length
+cutoff premise. The 80 new tests check explicit full-length rivals at
+n=11,12,24,67, with permutations and affine shifts, and sharpness of the
+scalar coin bound. Combined with overflow-pattern uniqueness and the prior
+compatible/length-one closures, the remaining subglobal even-axis family
+is the base plus at most ONE incompatible half-width overflow. Closing
+that pair, odd-axis and non-axis families, higher escapes and G2/G3 remains
+OPEN; the unrestricted conjecture is not complete.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
