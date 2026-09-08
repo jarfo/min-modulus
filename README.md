@@ -59,7 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
-The latest original critical closure gives half descent with at most
+The latest original critical closure gives half descent at any actual
+escape count satisfying the explicit binomial threshold. Every critical
+no-half parent of length `k >= 4` has, at each shift, an escape count `r`
+with `k < r^2*(floor(log_2(k))+1)+3*r`. `G1QuantitativeEscape.lean`
+feeds the exactly equivalent residual into the same three-gate assembly.
+
+The preceding fixed-count closure gives half descent with at most
 four affine escapes from parent length 101. `ChainForestFourEscape.lean`
 consumes both cycles and genuine four-chain forests;
 `G1LargeFiveEscape.lean` feeds the equivalent five-escape residual to
@@ -3839,6 +3845,45 @@ five-escape residual, preserving the smaller-parent cases. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. No bounded escape count has
 been extracted from arbitrary critical tuples. Continue and push both
 repositories after every verified milestone.
+
+**2026-09-08 — original G1 half descent has a uniform escape-count threshold.**
+`ChainForestEscapeThreshold.lean` works at ANY actual escape count `r`.
+For a critical parent of length `k >= 4`, a shift satisfying
+`binomial(k+r-1,r) <= 2^max(0,floor(k/r)-3)` gives half descent in every
+stratum. No cycle, forest, seed normal form, supported profile or fixed
+rank bound is supplied. The binomial inequality itself provides the
+required cycle-size and boundary-width conditions; these are derived
+inside the proof rather than added to the original input.
+
+Consequently, at EVERY affine shift of an original critical no-half
+tuple, its actual escape count satisfies both
+`2^max(0,floor(k/r)-3) < binomial(k+r-1,r)` and the explicit estimate
+`k < r^2*(floor(log_2(k))+1)+3*r`.
+The latter uses the exact multichoose bound `binomial(k+r-1,r) <= k^r`,
+so it needs no separate upper bound on `r` in the arithmetic lemma.
+
+`G1QuantitativeEscape.lean` proves the quantitative primitive G1 input
+EXACTLY equivalent to the existing primitive three-omission obligation.
+It keeps the earlier three-/four-/five-escape restrictions in their
+proved ranges; the average-length floor can be weaker than the earlier
+widest-arm ceiling near lengths 52 and 101. Both assemblies retain
+exactly the original G2/G3 inputs. This is a restriction of the same
+open G1 gate, not an asserted deletion theorem or an additional gate.
+
+Verification: fifteen new theorems and one audited definition in two
+modules; 15,282 full build jobs; 4,449 complete declaration audits
+(4,446 standard-only and three axiom-free); 123,306 passing forest tests,
+including 540 new cases. Tests cover every positive rank up to each
+parent length from four through 400, remainder-sensitive threshold
+blocks through rank 24, actual genuine nonunit forests through rank 12,
+general cycle budgets, large-parent arithmetic through one million,
+and guards retaining the sharper earlier fixed-count ranges.
+
+Continue with the quantitative original residual and transfer the
+cycle/forest threshold to the odd-stratum input where doubling is
+automatically injective. No small escape count has been extracted from
+arbitrary critical tuples. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after every milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
