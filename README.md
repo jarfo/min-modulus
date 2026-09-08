@@ -3607,6 +3607,31 @@ residual and treating the remaining axes and profile families. The
 unrestricted G1/G2/G3 and Conjecture 1 remain OPEN. Continue after every
 verified milestone and commit and push both repositories.
 
+**2026-09-08 — maximal even-axis closure reaches original three-escape descent.**
+`ChainForestProfileDominantResidual.lean` consumes the complete companion
+closure using only the original two-odd-seed count. It constructs a
+half-modulus child for original subglobal three-escape data with a
+maximal even-axis profile, deriving companion parity and genuine
+endpoints internally. The corresponding critical consumer retains the
+explicit high-stratum premise `log2(n+1) <= s+1`.
+
+The new original no-half extractor retains the entire one-to-three
+profile family, all dyadic overflow shapes, parity and volume charges,
+genuine endpoints, joint span, logarithmic companion bounds and actual
+small dyadic index. Its uniquely longest chain is either an odd unit,
+or even with a positive companion coefficient in EVERY actual profile.
+Thus the closed maximal even-axis family is absent from this residual.
+
+Verification: six new theorems, 15,272 full build jobs, and 4,369
+complete declaration audits (4,366 standard-only and three axiom-free).
+The preceding arithmetic milestone passed all 119,654 forest tests;
+this milestone changes only Lean consumers and proof-status documents.
+
+Continue with the positive-companion profile forms and the odd-unit
+branch. Lower critical strata and unrestricted G1/G2/G3 and Conjecture 1
+remain OPEN. Continue and push both repositories after every verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

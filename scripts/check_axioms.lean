@@ -4572,3 +4572,11 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_of_unequal_integral_primitive_data
 #print axioms MinModulus.even_axis_unequal_companions_global_bound
 #print axioms MinModulus.even_axis_maximal_companions_global_bound
+
+-- Original three-escape descent after maximal even-axis closure.
+#print axioms MinModulus.strictly_longest_of_dominant_width
+#print axioms MinModulus.maximal_even_axis_global_bound_of_two_odd_seeds
+#print axioms MinModulus.positive_companion_of_subglobal_maximal_even_seed
+#print axioms MinModulus.admitsValidTuple_half_of_subglobal_three_escape_maximal_even_axis
+#print axioms MinModulus.admitsValidTuple_half_of_critical_high_stratum_maximal_even_axis
+#print axioms MinModulus.exists_dominant_profile_residual_of_subglobal_three_escape_without_half
