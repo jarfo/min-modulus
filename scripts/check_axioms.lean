@@ -4444,3 +4444,27 @@ import MinModulus
 #print axioms MinModulus.exists_equal_factor_four_reduced_data_rival
 #print axioms MinModulus.even_axis_factor_four_equal_companions_global_bound
 #print axioms MinModulus.even_axis_subglobal_equal_companion_factor_ge_eight_data
+
+-- Uniform closure of all equal companions with a maximal even axis.
+#print axioms MinModulus.sixteen_equal_length_le_of_half_cost
+#print axioms MinModulus.rational_binary_block_lt_ones
+#print axioms MinModulus.mul_div_block_decomposition
+#print axioms MinModulus.rational_first_binary_block_coin_bound
+#print axioms MinModulus.rational_three_binary_blocks_coin_bound
+#print axioms MinModulus.equal_uniform_three_block_error_bound
+#print axioms MinModulus.exists_strict_unit_index_step
+#print axioms MinModulus.exists_equal_uniform_unit_step
+#print axioms MinModulus.equal_unit_step_numerator_bounds
+#print axioms MinModulus.equal_unit_step_companion_coin_bound
+#print axioms MinModulus.equal_uniform_nonintegral_certificate
+#print axioms MinModulus.exists_equal_uniform_nonintegral_rival
+#print axioms MinModulus.equal_unit_step_integral_classification
+#print axioms MinModulus.equal_integral_symmetric_companion_coin_bound
+#print axioms MinModulus.odd_dyadic_boundary_prefix_coin_bounds
+#print axioms MinModulus.equal_unit_step_signed_error_window
+#print axioms MinModulus.equal_uniform_integral_block_budget
+#print axioms MinModulus.exists_rep_near_equal_integral_boundary
+#print axioms MinModulus.exists_equal_uniform_integral_rival
+#print axioms MinModulus.exists_equal_uniform_primitive_rival
+#print axioms MinModulus.exists_equal_uniform_reduced_data_rival
+#print axioms MinModulus.even_axis_equal_companions_global_bound

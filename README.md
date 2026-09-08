@@ -3436,6 +3436,22 @@ Primitive factors at least eight, larger unequal companions, other
 profile families and axes, unrestricted G1/G2/G3, and the global conjecture
 remain open. Continue after verified milestones and push both repositories.
 
+The equal-companion family now closes uniformly. In dimensions `n >= 67`,
+`ChainForestProfileEqualUniform.lean` proves the sharp global bound for every
+genuine three-chain forest with a maximal even axis, odd companion seeds,
+an axis-supported collision profile, and equal companion lengths. The
+actual index is unrestricted. `ChainForestProfileEqualUniformArithmetic.lean`
+uses three rational binary blocks for nonintegral phases and symmetric
+companion weights around an odd dyadic boundary for integral phases.
+All phases, period deficits and coin budgets come from the original forest;
+there is no finite phase census or remaining equal primitive factor.
+
+This milestone adds 22 audited theorems. Verification: 15,262 build jobs,
+4,273 standard-only or axiom-free declaration audits, and 112,241 forest
+tests in the companion `unique` repository, including 26,260 new cases.
+Larger unequal companions, other axes and profile families, unrestricted
+G1/G2/G3, and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
