@@ -551,3 +551,4 @@ import MinModulus.ChainForestProfileComplementaryConstruction
 import MinModulus.ChainForestProfileIntegralCertificates
 import MinModulus.ChainForestProfileFourFiveArithmetic
 import MinModulus.ChainForestProfileFourFive
+import MinModulus.ChainForestProfileThreeSixArithmetic

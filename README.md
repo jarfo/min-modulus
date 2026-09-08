@@ -3059,6 +3059,29 @@ of `(2,7)`, which is not a counterexample. Larger uniform selection,
 other profile families and axes, unrestricted G1/G2/G3, and the global
 conjecture remain open.
 
+**Complete three-six primitive arithmetic (2026-09-08).**
+`ChainForestProfileThreeSixArithmetic.lean` checks all 714 primitive
+phases: 708 complementary pairs with individually certified prefix widths
+and error constants, plus six integral sparse boundaries. A general
+base-length lemma propagates each error bound to every larger length.
+The short orientation starts at 67 and the long at its original cost
+threshold 99. The unified consumer produces actual affordable group
+rivals and full-length coin representations. The positive short-phase
+endpoint is retained, and no coprimality of the period with 119 is assumed.
+
+Verification: seven new audited exports, 15,241 Lean build jobs, 4,161
+standard-only or axiom-free declaration audits, and 35,324 forest tests.
+The 2,144 new tests instantiate every phase at three lengths and check
+actual cyclic-group rivals, complete coin representations, coverage,
+integral boundaries and the first-companion distinction. The finite
+certificates use kernel reduction; no placeholders or extra axioms occur.
+
+The next step is to derive the orientation threshold and all inputs from
+the original genuine forest, closing `(3,6)` at `n >= 67`. That forest
+closure is not yet claimed here. The verified even-axis frontier remains
+all positive companion sums through eight and the pair `(4,5)`. The
+remaining `(2,7)` work and all unrestricted global gates remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

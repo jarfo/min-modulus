@@ -4326,3 +4326,11 @@ import MinModulus
 #print axioms MinModulus.exists_four_five_rival_of_primitive_data
 #print axioms MinModulus.not_validTuple_of_three_axis_representations
 #print axioms MinModulus.even_axis_four_five_companions_global_bound
+
+#print axioms MinModulus.linear_error_lt_two_pow_sub_of_base
+#print axioms MinModulus.exists_one_complementary_representation_of_base_bound
+#print axioms MinModulus.exists_three_six_nonintegral_pair_certificate
+#print axioms MinModulus.exists_three_six_rival_of_pair_certificate
+#print axioms MinModulus.exists_three_six_integral_certificate
+#print axioms MinModulus.exists_three_six_rival_of_integral_certificate
+#print axioms MinModulus.exists_three_six_primitive_rival
