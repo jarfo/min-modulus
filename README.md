@@ -76,6 +76,13 @@ arity through extension, suffix splicing and actual majority-cycle
 extraction. Unequal families have explicit combined-cover thresholds.
 The unrestricted high-escape, short-chain residual remains open.
 
+`FamilyAggregateCycle.lean` now sharpens unequal-family coverage by
+charging the incoming prefix and all surviving chains jointly. At any
+depth, `B=2^t` and `D=t*B-(B-1)`, the condition
+`B*n+2*r*D <= 2*(B-1)*S` gives the original bounds together with the
+continuation charge. This reaches families below both the prior
+single-chain and separate-logarithm coverage cutoffs.
+
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
 actual opposite pairs. `CollisionForest.lean` preserves a widest genuine
@@ -4243,6 +4250,39 @@ than use a separate logarithmic bound for each. Sufficient combined
 coverage is still not extracted from arbitrary high-escape tuples.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3; continue and
 push both repositories after every verified milestone.
+
+**2026-09-09 — joint cycle growth sharpens actual family coverage.**
+`FamilyAggregateCycle.lean` charges the incoming prefix and EVERY
+surviving chain to one strict binary-growth budget. A nonempty actual
+cycle of length `c` disjoint from family lengths `L_i` forces
+`sum_i(2^L_i-1) < c+sum_i L_i`. The argument retains empty members,
+arbitrary affine seeds, and all original coordinate indices.
+
+At maximal rejoin, let `P` be the extended covered length, `K=P-c`
+the total outside length, and `r` the number of selected members.
+For EVERY depth `t`, put `B=2^t` and `D=t*B-(B-1)`. Joint growth gives
+`B*K < P+r*D`. Consequently, initial covered length `S` suffices for
+a majority cycle whenever `B*n+2*r*D <= 2*(B-1)*S` for some depth.
+Together with the existing continuation charge
+`n^r*2^(n-S) <= 2^(m-3)`, for a selected arm `m >= 4`, this proves the
+original global, every exact-stratum and direct G3 bounds. Endpoints
+and all unselected coordinates remain unrestricted.
+
+This improves the separate logarithmic allowance per member. At
+`n=128`, lengths `(68,9)` satisfy the depth-four criterion although
+both the earlier single-chain and separate-logarithm coverage cutoffs
+fail. Further checked separations include `(132,11)` at `n=256`,
+`(68,8,8)` at `n=128`, and `(260,11,10,10)` at `n=512`.
+Verification: ten new theorems; 15,297 full build jobs; 4,581 complete
+audits (4,577 standard-only and four axiom-free); 128,861 passing
+forest tests, including 463 new cases. Tagged coin splitting checks
+the joint interval independently; actual valid gap models retain the
+incoming prefix and every other surviving member in the same budget.
+Next retain the ACTUAL truncated product through maximal continuation,
+so short members need not pay a full factor of `n`. Arbitrary tuples
+still need not supply sufficient selected structure. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3; continue and push both
+repositories after every verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
