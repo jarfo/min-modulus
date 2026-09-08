@@ -4337,3 +4337,9 @@ import MinModulus
 
 #print axioms MinModulus.exists_three_six_rival_of_primitive_data
 #print axioms MinModulus.even_axis_three_six_companions_global_bound
+
+#print axioms MinModulus.exists_two_seven_nonintegral_basis_certificate
+#print axioms MinModulus.exists_two_seven_rival_of_basis_certificate
+#print axioms MinModulus.exists_two_seven_integral_certificate
+#print axioms MinModulus.exists_two_seven_rival_of_integral_certificate
+#print axioms MinModulus.exists_two_seven_primitive_rival

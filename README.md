@@ -3104,6 +3104,29 @@ basis to address phases missed by the complementary top-shift search.
 Larger uniform selection, other profiles and axes, unrestricted G1/G2/G3,
 and the global conjecture remain open.
 
+**Complete two-seven primitive arithmetic (2026-09-08).**
+`ChainForestProfileTwoSevenArithmetic.lean` checks all 446 primitive
+phases. The full signed primitive basis supplies individually affordable
+rivals for all 444 nonintegral phases, including those missed by the
+complementary top-shift search. The two integral phases use positive
+sparse-boundary certificates. The unified consumer produces actual group
+rivals and full-length coin representations for every `n >= 67`, retaining
+the exact second-phase endpoint and link.
+
+Verification: five new audited exports, 15,243 Lean build jobs, 4,168
+standard-only or axiom-free declaration audits, and 37,378 forest tests.
+The 1,339 new tests instantiate every phase at three lengths, checking
+actual group evaluations, complete representations, integral boundaries
+and phase coverage. The finite certificates use kernel reduction; no
+placeholders or extra axioms occur.
+
+All sum-nine pairs now have complete arithmetic, but the original
+`(2,7)` genuine-forest consumer and the combined sum-nine closure are
+still being checked. The verified forest frontier remains all positive
+companion sums through eight, plus `(4,5)` and `(3,6)`. Larger uniform
+selection, other profiles and axes, unrestricted G1/G2/G3 and the global
+conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
