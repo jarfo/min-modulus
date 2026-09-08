@@ -4051,3 +4051,12 @@ import MinModulus
 #print axioms MinModulus.exists_rep_lt_three_width
 #print axioms MinModulus.not_two_half_overflows_with_axis_base
 #print axioms MinModulus.no_two_incompatible_overflows_with_even_axis_base
+
+-- Complete even-axis pairs and their quarter-companion deficit charge.
+#print axioms MinModulus.forestCollisionProfiles_eq_of_overflow_on_same_arm
+#print axioms MinModulus.profile_eq_axis_base_or_companion_overflow
+#print axioms MinModulus.even_axis_subglobal_profile_pair
+#print axioms MinModulus.half_profile_lowerBox_card
+#print axioms MinModulus.even_axis_half_profile_pair_gap
+#print axioms MinModulus.even_axis_subglobal_profile_pair_large_charge
+#print axioms MinModulus.even_axis_global_bound_of_small_half_profile_charges

@@ -2169,6 +2169,40 @@ is the base plus at most ONE incompatible half-width overflow. Closing
 that pair, odd-axis and non-axis families, higher escapes and G2/G3 remains
 OPEN; the unrestricted conjecture is not complete.
 
+**Complete even-axis pairs and their quarter-box charge (2026-09-08).**
+`ChainForestProfilePair.lean` now derives the complete remaining family.
+For a genuine three-chain forest with n>=24, joint wide capacity,
+K_j>=2n, an even dominant seed, odd companions and an actual axis base,
+any modulus below the sharp global bound forces every arm to have length
+at least two and the profile family to be exactly that base and ONE
+incompatible overflow. No family-exhaustion or compatibility premise is
+left to the caller. Same-arm overflow uniqueness and the opposite-arm
+exclusion supply the final exhaustion step.
+
+Writing H=w_j+1 for the overflow height, its half-width companion sides
+have exact rectangle volume H*2^(n-L_j-2). The base removes only even
+points, while the incompatible rectangle has equal even and odd masses.
+The separate parity packing bound therefore gives
+
+```
+2^n <= N + H*2^(n-L_j-2).
+```
+
+This improves the earlier base-height slab charge by at least a factor
+of four. The sharp global bound follows whenever this actual overflow
+charge is at most 2^floor(log_2 n); a subglobal case extracts the complete
+pair with a charge strictly greater than that threshold. The direct
+conditional consumer handles short arms, compatible profiles and family
+exhaustion internally. Larger charges are still OPEN.
+
+The 54 new tests check exact odd masses and complete genuine families
+under permutations and affine shifts. Genuine surviving pairs are
+certified through n=67 and n=68 by checking ALL possible n-term multiset
+representations via bounded companion weights and unique dominant lifts.
+These above-binary examples show that the pair cannot simply be excluded
+without an additional hypothesis. Odd-axis/non-axis families, higher
+escapes, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
