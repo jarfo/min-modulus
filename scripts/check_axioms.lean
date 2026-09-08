@@ -4787,3 +4787,11 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_exceptional_of_logarithmically_long_affine_chain
 #print axioms MinModulus.chain_length_lt_of_global_counterexample
 #print axioms MinModulus.chain_length_lt_of_stratum_counterexample
+
+-- Actual partial chain families and their combined-cover charge.
+#print axioms MinModulus.exists_partial_chain_forest_completion
+#print axioms MinModulus.partial_chain_forest_complement_card
+#print axioms MinModulus.binary_card_bound_of_partial_genuine_chain_forest
+#print axioms MinModulus.binary_card_bound_of_partial_genuine_chain_forest_by_covered_length
+#print axioms MinModulus.partial_chain_forest_charge_of_logarithmic_cover
+#print axioms MinModulus.exists_target_of_partial_chain_forest_below_binary

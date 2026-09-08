@@ -68,6 +68,12 @@ still give the stronger binary bound at the earlier cutoff
 `n+floor(log_2(n))+4 <= 2*m`. The unrestricted conjecture remains open
 for arbitrary high-escape tuples whose actual chains are shorter.
 
+Several shorter disjoint chains can now force continuation jointly:
+`PartialChainForest.lean` charges their total cover `S` and arm count `r`
+by `n^r*2^(n-S)`. A genuine selected arm pays this error once it is at
+most `2^(m-3)`. The arbitrary-endpoint maximal-family cycle argument is
+the next step; the unrestricted short-chain residual remains open.
+
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
 actual opposite pairs. `CollisionForest.lean` preserves a widest genuine
@@ -4138,6 +4144,33 @@ majority cutoff, with guards for uncontrolled tails and invalid tuples.
 The arbitrary high-escape, short-chain residual remains open. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3; continue and push both
 repositories after each verified milestone.
+
+**2026-09-09 — combined coverage by arbitrary partial chain families.**
+`PartialChainForest.lean` completes any actual disjoint family of `r`
+affine chains, with total covered length `S`, by singleton arms on
+exactly the remaining `n-S` coordinates. Every selected arm and
+endpoint is retained. The truncated error is at most
+`(product_i min(n,2^L_i))*2^(n-S)`, hence at most `n^r*2^(n-S)`.
+
+A selected genuine arm of length `m >= 4` therefore gives `2^n <= |G|`
+whenever `n^r*2^(n-S) <= 2^(m-3)`. The sharper product criterion is also
+available with the explicit wide-arm hypothesis. A sufficient scalar
+condition is `n-S+r*(floor(log_2(n))+1)+3 <= m`. All remaining
+coordinates are arbitrary, and no bound on their actual escapes is
+assumed. At subbinary cyclic modulus the selected endpoint must have
+an actual continuation, possibly into another selected arm or itself.
+For equal two-arm families this reaches roughly one-third length,
+beyond the preceding single-arm cutoff.
+
+Verification: six new theorems; 15,294 full build jobs; 4,540 complete
+audits (4,536 standard-only and four axiom-free); 125,729 passing forest
+tests, including 626 new cases. Tests retain original arm indices,
+check exact completion and charge inequalities, separate combined
+coverage from individual-chain bounds, and guard against overlapping
+chains. The arbitrary-endpoint maximal-family cycle extraction is
+still pending. The earlier whole long-chain class remains proved;
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
