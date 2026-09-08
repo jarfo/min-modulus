@@ -3278,6 +3278,33 @@ G1/G2/G3, and the global conjecture remain open. The genuine companion
 sum-through-ten bound remains proved. Continue after each milestone,
 committing and pushing verified work to both repositories.
 
+**Odd equal phases determine the truncated modulus stratum (2026-09-08).**
+`ChainForestProfileEqualStratum.lean` connects the genuine equal-companion
+height `H=2^h` to the actual modulus. For companion length `a` and
+nonmaximal index `2^e`, every `t <= a-e` satisfies
+`2^(e+t) | N` if and only if `t <= h`. This follows from the primitive
+factor dividing `H+r*M` and the internally derived oddness of `r`.
+
+When `h < a-e`, the exact modulus stratum is `N=2^(e+h)*q` with `q` odd.
+When `h >= a-e`, the conclusion is `2^a | N`; no exact valuation beyond
+that cutoff is claimed. The original genuine-forest theorem derives the
+profile together with all prior reduced phase data, retaining the
+maximal-index alternative and the explicit maximal-axis hypothesis.
+
+Verification: six new audited exports, 15,253 Lean build jobs, 4,203
+standard-only or axiom-free declaration audits, and 62,371 forest tests.
+The 436 new tests construct actual odd primitive phases with exact and
+truncated period valuations and verify every relevant dyadic divisibility
+test, both scalar equations and the original top and half group relations.
+No placeholders, extra axioms or `native_decide` are used.
+
+The genuine companion-sum-through-ten bound remains proved. Odd phases
+and maximal indices have not been eliminated; the new result restricts
+their possible strata. Larger unequal companions, other profile families
+and axes, unrestricted G1/G2/G3, and the global conjecture remain open.
+Continue after verified milestones, committing and pushing both
+repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
