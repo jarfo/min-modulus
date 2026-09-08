@@ -59,6 +59,14 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
+The latest structural closure is `binary_card_bound_of_genuine_three_chain_forest`:
+all genuine three-chain forests of length at least 67 satisfy `2^n <= |G|`.
+Its original critical consumer proves half descent whenever some affine
+shift has at most three escapes, in every stratum. Large no-half tuples
+therefore have at least four escapes at every shift. Earlier profile
+queues below are historical within this now-closed large forest class;
+the unrestricted conjecture and G1/G2/G3 remain open.
+
 Conjecture 1 remains open. `G1PureStarElimination.lean` proves a
 dimension-free simplification: a nonempty global pure-edge omission star
 under failure of common touch forces a three-omission witness. It does not
@@ -3689,6 +3697,48 @@ Continue with the remaining singleton rectangle and genuine boundary
 packing, while retaining the one-positive, incompatible-only and
 odd-unit branches. Unrestricted G1/G2/G3 and Conjecture 1 remain OPEN.
 Continue and push both repositories after every verified milestone.
+
+**2026-09-08 — all genuine three-chain forests close from length 67.**
+`ChainForestLongBoundary.lean` removes the zero-pivot restriction from
+boundary representations when `n <= 2^(L_a)`. Any nonzero boundary
+represented in the ordinary box must be an actual dyadic tuple entry,
+possibly in its own arm. A genuine endpoint therefore lies outside the
+entire box. Short exterior columns no longer need a second wide arm.
+
+`ChainForestBoundaryInterval.lean` extends the missing boundary along
+its OWN seed: every `(2^(L_a)+t)*x_a`, with `0 <= t <= 2^(L_a-4)`,
+is outside the box. A hypothetical representation either subtracts to
+represent the forbidden boundary, or produces an actual rival using
+four top coins and a small binary tail. High-box injectivity makes these
+residues distinct. In a subbinary valid forest with `2*n+1 <= 2^(L_a)`,
+the resulting count is
+`2^n + 2^(L_a-4)+1 <= |G| + binomial(n+rank-1,rank)`.
+
+For rank three and `n >= 67`, the largest arm alone pays this entire
+binomial error. Thus EVERY genuine three-chain forest in ANY finite
+abelian group satisfies `2^n <= |G|` in this range. No seed parity,
+unit, supported profile, companion width, or index assumption remains.
+The original critical three-escape consumer now gives half descent
+in EVERY stratum for parent length at least 67, without a subglobal
+premise or a supplied forest. All earlier singleton, one-positive,
+incompatible-only and odd-unit profile branches in that class are
+consumed by this stronger endpoint argument.
+
+Verification: eighteen new theorems in two modules; 15,276 full build
+jobs; 4,408 complete declaration audits (4,405 standard-only and three
+axiom-free); 121,598 passing forest tests, including 809 new cases.
+Tests check actual nonzero-pivot and same-axis group collisions through
+parent length 65, all arm permutations and affine translations,
+nonunit genuine forests with only one wide arm, wrapped valid examples,
+all positive length triples from 67 through 300, and necessary endpoint,
+nonzero-boundary and shift-size guards.
+
+A large critical tuple without a half child now has at least FOUR
+actual affine-doubling escapes at EVERY shift. Continue with that
+original residual and parent lengths below 67. This does not extract a
+three-escape shift from an arbitrary tuple. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, with the same three global inputs. Continue and
+push both repositories after each verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

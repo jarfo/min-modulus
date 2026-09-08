@@ -585,3 +585,5 @@ import MinModulus.ChainForestProfileUnequalIntegral
 import MinModulus.ChainForestProfileDominantResidual
 import MinModulus.ChainForestProfileCompatibleSupport
 import MinModulus.ChainForestProfileTwoPositiveSingleton
+import MinModulus.ChainForestLongBoundary
+import MinModulus.ChainForestBoundaryInterval
