@@ -4026,3 +4026,9 @@ import MinModulus
 #print axioms MinModulus.profile_eq_zero_profile_of_all_arms_length_two
 #print axioms MinModulus.binary_bound_of_zero_profile_and_all_arms_length_two
 #print axioms MinModulus.binary_bound_of_zero_target_forest_length_two
+
+-- Even-axis high odd-slab packing.
+#print axioms MinModulus.box_volume_le_even_modulus_of_odd_injective
+#print axioms MinModulus.odd_profile_lower_point_below_even_axis_base
+#print axioms MinModulus.even_axis_base_companion_volume_gap
+#print axioms MinModulus.even_axis_base_global_bound_of_companion_volume

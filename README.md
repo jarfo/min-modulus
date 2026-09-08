@@ -2067,6 +2067,27 @@ use only standard axioms or none. All 1,927 forest tests pass, including
 56 new explicit affine rivals, genuine ordering and length-one controls,
 and all-arity zero-target checks. Unrestricted G1/G2/G3 remain OPEN.
 
+**Even-axis high odd-slab packing (2026-09-08).**
+`ChainForestProfileSlab.lean` proves that, when every arm has at least two
+entries, every removed ODD box point lies strictly below an actual base
+profile supported on an EVEN seed axis j. The other profiles are strictly
+lower on j; the base itself removes only even points. Thus all odd points
+with p_j>=v_j remain injective. Exact parity counting of this truncated box
+gives
+
+```
+2^n <= N + v_j * 2^(n-L_j).
+```
+
+This holds in every arity for an even modulus and at least one odd seed,
+with no dominance, width, wide-box, or genuine-endpoint premise. If v_j is
+outside the ordinary axis box, the inequality is automatic. The sharp
+GLOBAL bound follows whenever v_j*2^(n-L_j)<=2^floor(log_2 n). In particular,
+a coefficient-one base is closed when the companion volume fits this
+allowance. This does not bound that charge in every remaining family;
+positive bases with larger charge, odd axes, non-axis bases, higher escapes,
+and unrestricted G2/G3 remain OPEN. No new gate is introduced.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
