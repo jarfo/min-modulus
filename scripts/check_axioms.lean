@@ -4409,3 +4409,19 @@ import MinModulus
 #print axioms MinModulus.equal_odd_coprime_primitive_data_of_valid_forest
 #print axioms MinModulus.even_axis_subglobal_equal_companion_odd_coprime_data
 #print axioms MinModulus.coprime_primitive_phase_of_equal_unit_phase
+
+-- Uniform primitive-factor-two equal companions.
+#print axioms MinModulus.gmin_succ_le
+#print axioms MinModulus.equal_factor_two_companion_coin_bound
+#print axioms MinModulus.equal_factor_two_exceptional_coin_bound
+#print axioms MinModulus.exists_axis_rep_below_seven_quarters
+#print axioms MinModulus.equal_factor_two_error_lt_axis_width
+#print axioms MinModulus.exists_equal_factor_two_phase_weight
+#print axioms MinModulus.equal_factor_two_exceptional_phase_inverse
+#print axioms MinModulus.equal_factor_two_main_axis_window
+#print axioms MinModulus.exists_equal_factor_two_main_rival
+#print axioms MinModulus.exists_equal_factor_two_exceptional_rival
+#print axioms MinModulus.exists_equal_factor_two_primitive_rival
+#print axioms MinModulus.exists_equal_factor_two_reduced_data_rival
+#print axioms MinModulus.even_axis_factor_two_equal_companions_global_bound
+#print axioms MinModulus.even_axis_subglobal_equal_companion_factor_ge_four_data
