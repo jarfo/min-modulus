@@ -2611,9 +2611,34 @@ Regressions produce actual full-length rivals in all permitted phases,
 including both integral alternatives, permutations, unit scaling and
 translation; explicit controls check the divisibility obstruction.
 
-The genuine `(2,5)` consumer must still derive these arithmetic data and
-the exclusion of the short integral phase from the original forest.
-That consumer, larger companion sums, other profile families and axes,
+The genuine `(2,5)` theorem below now derives these arithmetic data and
+the short integral exclusion from the original forest. Larger companion
+sums, other profile families and axes, unrestricted G1/G2/G3 and the
+global conjecture remain OPEN.
+
+**Genuine (2,5) and companion-sum-seven closure (2026-09-08).**
+`even_axis_two_five_companions_global_bound` proves the sharp global
+bound for EVERY genuine even-axis `(2,5)` forest at `n >= 67`, in every
+even stratum. The original data give dominance, wide capacity, index
+two, the complete profile pair, height at least four and both fifty-fifth
+phase equations. The actual dyadic drop excludes the short integral
+phase. A shifted representative handles the negative short leading
+coefficient, and signed coin representations refine to full-length rivals.
+No arithmetic or normalization certificate is supplied externally.
+
+`even_axis_companion_length_sum_le_seven_global_bound` combines this
+with all earlier cases. It proves the sharp global bound for every
+positive companion length pair with sum at most SEVEN at `n >= 67`,
+from original genuine even-axis forest and axis-base data alone. Width,
+wide capacity and exclusion of length-one residual arms are internal.
+Remaining subglobal even-axis pairs have companion sum at least eight.
+
+The valid-example controls exhaust every `n`-coin multiset at
+`n=24,67,68` above the bound. Their complete profile family is
+`{(1,0,0),(0,5,15)}`, and their only surviving full multiset is the
+original all-ones tuple. Permutations and translations preserve validity,
+distinct entries and all genuine endpoints. The next unordered pairs are
+`(2,6)`, `(3,5)` and `(4,4)`. Larger pairs, other profile families and axes,
 unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
 There is also an unconditional structural result in every dimension:

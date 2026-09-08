@@ -4187,3 +4187,9 @@ import MinModulus
 #print axioms MinModulus.exists_two_five_long_nonintegral_parameters
 #print axioms MinModulus.exists_rep_two_five_long_integral_low_drop
 #print axioms MinModulus.exists_rep_two_five_long_integral_high_drop
+
+-- Genuine two-five closure and companion length sum at most seven.
+#print axioms MinModulus.exists_two_five_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_two_five_axis_representation
+#print axioms MinModulus.even_axis_two_five_companions_global_bound
+#print axioms MinModulus.even_axis_companion_length_sum_le_seven_global_bound

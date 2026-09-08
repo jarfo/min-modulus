@@ -5,7 +5,8 @@ Both possible dominant indices and both half-profile orientations are
 covered. The 112 nonintegral phases use fixed sixteen-bit prefixes;
 the four integral phases use six sparse alternatives. Every signed
 coefficient is proved nonnegative before conversion to an actual binary
-representation. The genuine-forest consumer and global conjecture remain open. -/
+representation. The genuine-forest consumer is in ChainForestProfileThreeFour.
+The unrestricted conjecture remains open. -/
 
 namespace MinModulus
 open Finset

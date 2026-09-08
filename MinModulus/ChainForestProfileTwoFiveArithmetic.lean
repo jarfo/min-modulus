@@ -5,7 +5,8 @@ The short integral phase is incompatible with a dyadic profile drop.
 All 108 nonintegral phases use fixed sixteen-bit prefixes, and two sparse
 alternatives close the long integral phase. Every signed coefficient is
 proved nonnegative and represented by actual dominant-chain coins.
-The genuine-forest consumer and unrestricted conjecture remain open. -/
+The genuine-forest consumer is in ChainForestProfileTwoFive.
+The unrestricted conjecture remains open. -/
 
 namespace MinModulus
 open Finset
