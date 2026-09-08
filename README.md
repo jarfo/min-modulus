@@ -59,6 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
+A single genuine affine chain of length `m >= 4` now forces `2^n <= |G|`
+when `n+floor(log_2(n))+4 <= 2*m`, with arbitrary remaining coordinates
+in any finite abelian group. `ChainForestTruncatedInterval.lean` retains
+the actual short-arm corner error. Below binary modulus every such
+chain must have an actual continuation; the unrestricted conjecture
+and the rejoining-chain residual remain open.
+
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
 actual opposite pairs. `CollisionForest.lean` preserves a widest genuine
@@ -4071,6 +4078,38 @@ corner side lengths, to handle one long genuine chain with arbitrary
 remaining coordinates. This is a new proposed direction, not a proved
 class. Arbitrary high-escape tuples and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after every milestone.
+
+**2026-09-09 — one long genuine chain controls arbitrary remaining coordinates.**
+`ChainForestTruncatedInterval.lean` charges the proved exterior interval
+against the actual rectangular error `product_i min(n,2^L_i)`. For a
+selected arm of length `m`, this error is at most `n*2^(n-m)`, regardless
+of the number or lengths of the other arms.
+
+The module constructs an actual forest from ANY embedded affine
+chain and arbitrary remaining coordinates, treating those coordinates
+as singleton arms. If `m >= 4`, the chain's next affine double is absent
+from the entire tuple, and `n*2^(n-m) <= 2^(m-3)`, then `2^n <= |G|` in
+EVERY finite abelian group. The explicit sufficient length condition is
+`n+floor(log_2(n))+4 <= 2*m`. No total escape-count bound, cyclicity,
+doubling injectivity, or normal form for the other coordinates is used.
+
+At a cyclic modulus below `2^n`, any actual chain passing that cutoff
+therefore has an ACTUAL continuation somewhere in the original tuple.
+Its target may rejoin the chain; genuine termination is essential to
+the binary bound. This is a new high-escape class, beyond the preceding
+binomial threshold, and does not close arbitrary G1/G2/G3.
+
+Verification: twelve new theorems; 15,292 full build jobs; 4,523 complete
+audits (4,519 standard-only and four axiom-free); 124,616 passing forest
+tests, including 751 new tests. Independent convolution counts check
+the truncated error, high-escape models separate this bound from the
+binomial charge, and actual valid subbinary chains show why the genuine
+endpoint hypothesis cannot be dropped. Next: follow the mandatory
+continuation to an internal rejoin, extract an actual cycle, and control
+its incoming chain using the existing zero-sum-fibre bound. These next
+steps are not yet claimed as completed. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3; continue and push both repositories after
+each verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
