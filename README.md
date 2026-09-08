@@ -2888,6 +2888,30 @@ All genuine even-axis companion sums at most eight remain closed at
 `n >= 67`. Larger uniform coin budgets, other profile families and axes,
 unrestricted G1/G2/G3 and the global conjecture remain open.
 
+**Uniform signed-rival arithmetic (2026-09-08).**
+`ChainForestProfileUnequalRival.lean` reduces the two compatible basis
+coefficients to one primitive coefficient and an exact period multiple.
+In the short orientation `4*F*alpha+z=K+2*c-1+p*M`; in the long
+orientation it equals `-3*K+4*H+2*c-1+p*M`, where `T*p=4*r+q`.
+
+Every signed rival `Z=tb*z-kappa*alpha+(1-tb)*V-nu*M` now has a
+uniform exact error formula `F*T*Z-R*K=A*H+B*c-F*T+J*E`, with
+`M+E=4*F*t*K`. Both orientations have explicit coefficients. A general
+certificate turns bounds on `A`, `B` and `J` into a strict linear window
+throughout `H+c <= n` and `E <= W*H`. This separates the common scalar
+arithmetic from the remaining choice of affordable coins.
+
+Verification: five new audited exports, 15,234 Lean build jobs, 4,124
+standard-only or axiom-free declaration audits, and 28,473 forest tests.
+The 293 new tests check the exact formulas on actual larger-width group
+data, several signed rival choices, whole height/drop/deficit regions,
+and controls for the positive-height, denominator and gap hypotheses.
+
+Uniform binary-prefix budgets and coin choices for larger widths remain
+open, as do other profile families and axes and unrestricted G1/G2/G3.
+All genuine even-axis companion sums through eight remain closed at
+`n >= 67`; the global conjecture is not yet proved.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

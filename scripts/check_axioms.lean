@@ -4279,3 +4279,10 @@ import MinModulus
 #print axioms MinModulus.dominant_width_bound_of_maximal_genuine_three_chain
 #print axioms MinModulus.even_axis_subglobal_unequal_companion_primitive_data
 #print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_primitive_data
+
+-- Uniform signed rival errors and linear coefficient certificates.
+#print axioms MinModulus.unequal_companion_short_primitive_basis_sum
+#print axioms MinModulus.unequal_companion_short_signed_rival_error
+#print axioms MinModulus.unequal_companion_long_primitive_basis_sum
+#print axioms MinModulus.unequal_companion_long_signed_rival_error
+#print axioms MinModulus.signed_rival_linear_error_window

@@ -544,3 +544,4 @@ import MinModulus.ChainForestProfileThreeFive
 import MinModulus.ChainForestProfileUnequalBasis
 import MinModulus.ChainForestProfileUnequalPhases
 import MinModulus.ChainForestProfileUnequalForest
+import MinModulus.ChainForestProfileUnequalRival
