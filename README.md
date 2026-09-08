@@ -3660,6 +3660,36 @@ quotient masses. Incompatible profiles, odd dominant units, lower
 critical strata and unrestricted G1/G2/G3 and Conjecture 1 remain OPEN.
 Continue and push both repositories after every verified milestone.
 
+**2026-09-08 — a two-positive companion base is the entire profile family.**
+`ChainForestProfileTwoPositiveSingleton.lean` eliminates every profile
+coexisting with a base whose two companion coefficients are positive and
+even. Rectangle disjointness first puts an overflow's dyadic excess
+strictly beyond the old companion power. Shifting the original weights
+by the profile difference then fits the original coin budget: the
+overflowing companion costs at most one extra coin and the other saves
+one, while the axis stays within its own length.
+
+The singleton theorem holds in ANY abelian group with a valid
+tuple, rank-three chain representation, a sufficiently wide joint box
+and `n <= 2^(L_j)`. It requires no seed parity, finite-group, subglobal,
+or terminal-endpoint assumption. In the even-cyclic setting with an even axis and odd companion seeds,
+the surviving rectangle is explicit: `H=2^h`, `A=2^r`, `B=2^t`,
+`H+A+B <= n`, and `2^n+H <= N+H*(A+1)*(B+1)`.
+
+Verification: fourteen new theorems; 15,274 full build jobs; 4,390
+complete declaration audits (4,387 standard-only and three axiom-free);
+120,789 passing forest tests, including 925 new cases. Actual group
+pairs across dimensions 13 through 67, several modulus scales and
+offsets all give full shifted collisions. The arithmetic covers either
+height ordering and the zero exponent on the new companion side;
+a guard shows why the old companion must be even. Genuine examples
+above binary retain exactly one profile and its exact height bias.
+
+Continue with the remaining singleton rectangle and genuine boundary
+packing, while retaining the one-positive, incompatible-only and
+odd-unit branches. Unrestricted G1/G2/G3 and Conjecture 1 remain OPEN.
+Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
