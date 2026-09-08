@@ -4060,3 +4060,12 @@ import MinModulus
 #print axioms MinModulus.even_axis_half_profile_pair_gap
 #print axioms MinModulus.even_axis_subglobal_profile_pair_large_charge
 #print axioms MinModulus.even_axis_global_bound_of_small_half_profile_charges
+
+-- Half-profile midpoint phases and an odd-half-modulus closure.
+#print axioms MinModulus.exists_rep_boundary_add_quarter_tail
+#print axioms MinModulus.half_profile_midpoint_ne_target
+#print axioms MinModulus.half_profile_midpoint_eq_target_add_half
+#print axioms MinModulus.even_axis_incompatible_overflow_midpoint
+#print axioms MinModulus.half_profile_midpoint_half_modulus_parity
+#print axioms MinModulus.even_axis_incompatible_overflow_half_modulus_parity
+#print axioms MinModulus.even_axis_two_length_two_companions_odd_half_global_bound

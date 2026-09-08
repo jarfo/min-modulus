@@ -133,6 +133,7 @@ import MinModulus.ChainForestProfileUpperCorner
 import MinModulus.ChainForestProfileHalfSides
 import MinModulus.ChainForestProfileDoubleOverflow
 import MinModulus.ChainForestProfilePair
+import MinModulus.ChainForestProfileMidpoint
 import MinModulus.G1OverlapCriticality
 import MinModulus.G1CollisionSupportRigidity
 import MinModulus.G1FirstEvenDuplicateEscape

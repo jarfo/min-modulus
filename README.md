@@ -2203,6 +2203,41 @@ These above-binary examples show that the pair cannot simply be excluded
 without an additional hypothesis. Odd-axis/non-axis families, higher
 escapes, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
+**Half-profile midpoint phases and an odd-half closure (2026-09-08).**
+`ChainForestProfileMidpoint.lean` proves a new obstruction for the surviving
+pair. If the overflow height is at least two, every profile coefficient
+is odd, so Y_i=(2^(L_i)-1+w_i)/2 is an integer. With K_j>=2n, this midpoint
+has enough total weight to refine to n coins. Its overflowing companion
+costs at most L_a coins and its other companion at most L_k-1; the dominant
+coordinate costs at most L_j. Thus its total coin cost is STRICTLY below n.
+If it represented the original target, it would give a forbidden rival.
+The generic obstruction works in any abelian group, without an axis base
+or genuine endpoints once the half shape and integral midpoint are supplied.
+
+For an actual profile at N=2M, doubling the midpoint sum doubles the target.
+Validity therefore forces the midpoint sum to be the target PLUS M. With
+an even dominant seed and two odd companions, its parity gives
+
+```
+M % 2 = (2^(L_a-2) + 2^(L_k-2)) % 2.
+```
+
+Thus M is odd exactly when ONE companion has length two and the other is
+longer. If both have length two, or both are longer, M must be even.
+The direct even-axis consumer derives the half shape, integrality and
+phase from actual profiles. There is no supplied midpoint-phase premise.
+
+Combining this with complete-pair exhaustion closes a new sharp GLOBAL
+case: genuine even-axis forests with n>=24, wide capacity, K_j>=2n,
+odd companions of length TWO each, and an ODD half modulus M. Any residual
+overflow must have height one, whose quarter-companion charge is four.
+The 192 new tests construct explicit full-length midpoint rivals through
+n=67,68, including two length-three companions, permutations and affine
+shifts. Genuine height-two and height-one controls verify the nonzero phase
+and the integrality cutoff. Even half moduli, other companion lengths,
+other profile families, higher escapes and unrestricted G1/G2/G3 remain
+OPEN; the global conjecture is not complete.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
