@@ -555,3 +555,6 @@ import MinModulus.ChainForestProfileThreeSixArithmetic
 import MinModulus.ChainForestProfileThreeSix
 import MinModulus.ChainForestProfileTwoSevenArithmetic
 import MinModulus.ChainForestProfileTwoSeven
+import MinModulus.ChainForestProfileBasisCertificates
+import MinModulus.ChainForestProfileSumTenArithmetic
+import MinModulus.ChainForestProfileSumTen

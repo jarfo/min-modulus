@@ -3151,6 +3151,34 @@ pairs are `(2,8)`, `(3,7)`, `(4,6)` and `(5,5)`; none is claimed closed
 here. Other profile families and axes, unrestricted G1/G2/G3, and the
 global conjecture remain open.
 
+**Uniform basis certificates and genuine unequal sum-ten pairs (2026-09-08).**
+`ChainForestProfileBasisCertificates.lean` supplies a shared signed-basis
+error identity, nonintegral-prefix and integral-boundary consumers for
+arbitrary companion lengths, and exact normalization of compatible phases.
+`ChainForestProfileSumTenArithmetic.lean` uses this layer to kernel-check
+all 4,050 phases of `(2,8)`, `(3,7)` and `(4,6)`, including all 22 integral
+phases. Every certificate gives an actual affordable group rival for
+all `n >= 67`.
+
+`ChainForestProfileSumTen.lean` derives every required index, phase and
+period-deficit input from the original genuine even-axis forest.
+`even_axis_sum_ten_unequal_companions_global_bound` proves the sharp global
+bound for these three ordered unequal pairs in every even stratum, with
+no extra numerical dominance, phase or coin premises. Swapping the two
+companion labels covers the reverse orders.
+
+Verification: nine new audited exports, 15,247 Lean build jobs, 4,180
+standard-only or axiom-free declaration audits, and 54,026 forest tests.
+The 16,201 new tests cover every phase at three lengths and refine every
+phase to a full-length tuple collision under all chain permutations and
+affine changes. No placeholders, extra axioms or `native_decide` are used.
+
+Every positive companion sum through nine remains closed. The equal pair
+`(5,5)` is the remaining sum-ten case; the shared certificate layer is
+available for that case and for uniform larger-companion work. Other
+profile families and axes, unrestricted G1/G2/G3, and the global conjecture
+remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

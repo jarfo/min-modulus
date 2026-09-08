@@ -4347,3 +4347,15 @@ import MinModulus
 #print axioms MinModulus.exists_two_seven_rival_of_primitive_data
 #print axioms MinModulus.even_axis_two_seven_companions_global_bound
 #print axioms MinModulus.even_axis_companion_length_sum_le_nine_global_bound
+
+#print axioms MinModulus.bounded_primitive_phase_eq_of_link
+#print axioms MinModulus.positive_primitive_phase_eq_of_link
+#print axioms MinModulus.primitive_basis_rival_error
+#print axioms MinModulus.exists_rival_of_primitive_basis_nonintegral_certificate
+#print axioms MinModulus.exists_rival_of_primitive_basis_integral_certificate
+
+#print axioms MinModulus.exists_sum_ten_unequal_basis_certificate
+#print axioms MinModulus.exists_sum_ten_unequal_primitive_rival
+
+#print axioms MinModulus.exists_sum_ten_unequal_rival_of_primitive_data
+#print axioms MinModulus.even_axis_sum_ten_unequal_companions_global_bound
