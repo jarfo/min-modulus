@@ -4315,3 +4315,10 @@ import MinModulus
 #print axioms MinModulus.exists_rep_binary_block_bounded_tail
 #print axioms MinModulus.integral_rival_coefficient_error_window
 #print axioms MinModulus.exists_rep_of_integral_rival_error_certificate
+
+#print axioms MinModulus.exists_four_five_nonintegral_pair_certificate
+#print axioms MinModulus.hundred_thousand_length_lt_two_pow_sub_forty_one
+#print axioms MinModulus.exists_four_five_rival_of_pair_certificate
+#print axioms MinModulus.exists_four_five_integral_certificate
+#print axioms MinModulus.exists_four_five_rival_of_integral_certificate
+#print axioms MinModulus.exists_four_five_primitive_rival

@@ -3010,6 +3010,29 @@ verification, not a new closed family. All genuine even-axis companion
 sums through eight remain closed at `n >= 67`; unrestricted G1/G2/G3 and
 the global conjecture remain open.
 
+**Complete four-five primitive arithmetic (2026-09-08).**
+`ChainForestProfileFourFiveArithmetic.lean` checks all 854 primitive
+phases at the three possible indices. The 840 nonintegral phases have
+complementary top-shift certificates; the fourteen integral phases have
+sparse-boundary certificates with positive error cones. Finite checks use
+Lean kernel reduction. A unified consumer produces an actual group rival
+and an affordable full-length coin representation for every `n >= 67`.
+Either companion may distinguish the rival from the original tuple.
+
+Verification: six new audited exports, 15,239 Lean build jobs, 4,151
+standard-only or axiom-free declaration audits, and 32,325 forest tests.
+The 2,564 new tests include actual cyclic-group instances and complete
+coin representations for every phase at three lengths, complete phase
+coverage, and the first-companion distinction required by a top shift.
+No placeholders, extra axioms or `native_decide` are used.
+
+The candidate search is now replaced by a complete arithmetic proof.
+The next step is to supply its inputs from the original genuine forest
+and derive the sharp `(4,5)` bound. That forest family is not yet claimed
+closed at this checkpoint. All positive companion sums through eight
+remain closed at `n >= 67`; unrestricted G1/G2/G3 and the conjecture
+remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
