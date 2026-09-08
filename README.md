@@ -59,12 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
-Every hypothetical global counterexample now has an actual opposite
-pair OR satisfies quantitative escape-count bounds at every shift.
-`GlobalEscapeThreshold.lean` proves this without global-gate assumptions,
-and excludes the injective G3 branch whenever the scalar threshold holds.
-`G3QuantitativeEscape.lean` combines exactly equivalent quantitative
-forms of all three original inputs. The opposite-pair branch and all
+Every hypothetical global or exact-stratum counterexample now obeys
+quantitative escape-count bounds at every shift, including tuples with
+actual opposite pairs. `CollisionForest.lean` preserves a widest genuine
+arm while cutting the unique collision; `CollisionEscapeThreshold.lean`
+pays for that cut with `r+1` in the scalar threshold. This includes the
+original G3 modulus without assuming doubling injectivity. The earlier
+stronger injective bounds remain. Arbitrary escape extraction and all
 three unrestricted obligations remain open.
 
 The original critical closure gives half descent at any actual
@@ -3976,6 +3977,41 @@ these proof-only structural consumers; preceding complete forest run:
 123,413 passing. Next: cut the unique collision away from a longest
 path and extract a widest genuine forest arm. Conjecture 1 and all
 three unrestricted gates remain OPEN, 0/3. Continue after each milestone.
+
+**2026-09-08 — the scalar escape threshold now includes opposite pairs.**
+`CollisionForest.lean` extracts an actual forest from every acyclic
+valid tuple in a group with at most one nonzero involution. Protect a
+longest path to a genuine escape, then cut the unique doubled collision
+outside that path. The forest has at most `r+1` arms, and a widest arm
+still ends at a genuine escape. Its proved exterior interval pays the
+binomial packing error; no forest, rank, or injectivity is supplied.
+
+`CollisionEscapeThreshold.lean` combines this extraction with the
+existing cycle budget. For every cyclic valid tuple of length `n >= 4`,
+one shift satisfying `binomial(n+r,r+1) <= 2^max(0,floor(n/(r+1))-3)`
+now forces BOTH the original exact-stratum and global lower bounds.
+No G1/G2/G3, no-half-child, or doubling-injectivity premise is assumed.
+The earlier stronger `r` threshold remains available when doubling is
+injective, including original odd G2 and G1 no-half data.
+
+Consequently EVERY hypothetical global or exact-stratum counterexample,
+including every original G3 tuple with an actual opposite pair, satisfies
+at EVERY shift both `2^max(0,floor(n/(r+1))-3) < binomial(n+r,r+1)` and
+`n < (r+1)^2*(floor(log_2(n))+1)+3*(r+1)` at its actual escape count.
+The opposite pair is no longer an alternative to this quantitative
+restriction. The unrestricted G3 obstruction is still OPEN: no suitably
+small escape count is extracted from arbitrary tuples.
+
+Verification: fourteen new theorems in two modules; 15,289 full build
+jobs; 4,491 complete audits (4,487 standard-only and four axiom-free);
+123,459 passing forest tests, including 46 new tests. Independent scans
+check every cut of small acyclic maps with at most one collision;
+actual valid even tuples check all affine shifts, and counterexamples
+show why an arbitrary cut or multiple collisions would invalidate the
+argument. Next: sharpen the rounded-up threshold and update the exact
+G3 residual using the unconditional all-shift bound. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after every verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
