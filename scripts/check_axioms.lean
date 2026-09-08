@@ -4486,3 +4486,10 @@ import MinModulus
 #print axioms MinModulus.unequal_reduced_data_modulus_dyadic_profile
 #print axioms MinModulus.unequal_reduced_data_modulus_stratum
 #print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_modulus_profile
+
+-- Sharper actual unequal terminal modulus strata.
+#print axioms MinModulus.odd_axis_coefficient_of_double_index_dvd_modulus
+#print axioms MinModulus.odd_height_add_period_quotients_of_primitive_phase
+#print axioms MinModulus.unequal_reduced_data_terminal_modulus_strata
+#print axioms MinModulus.unequal_reduced_data_modulus_trichotomy
+#print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_modulus_trichotomy

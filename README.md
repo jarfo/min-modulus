@@ -3473,6 +3473,16 @@ Verification: six new theorem audits, 15,265 full build jobs,
 including 231 new actual-phase and boundary tests. Uniform unequal rival
 budgets and the unrestricted conjecture remain open.
 
+The terminal unequal strata are sharper when the actual odd companion
+seed is retained. `ChainForestProfileUnequalTerminal.lean` proves, for
+`f=a-1-e>=1`, exact valuation `e+h` when `h<f`, divisibility by `2^a`
+when `h=f`, and exact valuation `a-1` when `h>f`. The original genuine
+forest supplies the primitive coefficient parity. The largest unequal
+index stays explicit. Verification: five new theorem audits, 15,266
+build jobs, 4,292 standard-only or axiom-free audits, and 112,987
+forest tests including 224 new parity, stratum and hypothesis guards.
+Uniform unequal rivals and the unrestricted conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
