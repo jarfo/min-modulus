@@ -3082,6 +3082,28 @@ closure is not yet claimed here. The verified even-axis frontier remains
 all positive companion sums through eight and the pair `(4,5)`. The
 remaining `(2,7)` work and all unrestricted global gates remain open.
 
+**Genuine three-six forest closure (2026-09-08).**
+`ChainForestProfileThreeSix.lean` proves the sharp global bound for
+original genuine even-axis forests with companion lengths `(3,6)` for
+every `n >= 67`, in every even stratum. The original long half-profile
+cost forces `n >= 99` internally, so the complete arithmetic covers both
+orientations without an additional length premise. The shared forest
+reduction supplies all index, dyadic, gap and phase data, and joint
+refinement produces an actual full-length rival contradicting validity.
+
+Verification: two new audited exports, 15,242 Lean build jobs, 4,163
+standard-only or axiom-free declaration audits, and 36,039 forest tests.
+The 715 new tests cover every phase under affine changes and all chain
+permutations, checking actual full-tuple collisions after joint coin
+refinement. No placeholders or extra axioms are used.
+
+All positive companion sums through eight and the sum-nine pairs `(4,5)`
+and `(3,6)` are now closed in this genuine even-axis class. Only `(2,7)`
+remains at sum nine; the next attempt uses the full signed primitive
+basis to address phases missed by the complementary top-shift search.
+Larger uniform selection, other profiles and axes, unrestricted G1/G2/G3,
+and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

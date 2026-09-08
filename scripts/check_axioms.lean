@@ -4334,3 +4334,6 @@ import MinModulus
 #print axioms MinModulus.exists_three_six_integral_certificate
 #print axioms MinModulus.exists_three_six_rival_of_integral_certificate
 #print axioms MinModulus.exists_three_six_primitive_rival
+
+#print axioms MinModulus.exists_three_six_rival_of_primitive_data
+#print axioms MinModulus.even_axis_three_six_companions_global_bound
