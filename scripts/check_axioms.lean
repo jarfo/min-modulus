@@ -4272,3 +4272,10 @@ import MinModulus
 #print axioms MinModulus.unequal_companion_gap_period_bound
 #print axioms MinModulus.exists_unequal_companion_short_bounded_primitive_phases
 #print axioms MinModulus.exists_unequal_companion_long_bounded_primitive_phases
+
+-- Uniform primitive reduction from original genuine unequal-companion forests.
+#print axioms MinModulus.UnequalCompanionPrimitiveData
+#print axioms MinModulus.unequal_companion_primitive_data_of_half_relation
+#print axioms MinModulus.dominant_width_bound_of_maximal_genuine_three_chain
+#print axioms MinModulus.even_axis_subglobal_unequal_companion_primitive_data
+#print axioms MinModulus.even_axis_subglobal_maximal_unequal_companion_primitive_data

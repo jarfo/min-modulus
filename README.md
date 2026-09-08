@@ -2859,6 +2859,35 @@ genuine forests and extend the actual coin budgets. Larger companion
 sums, other profile families and axes, unrestricted G1/G2/G3 and the
 global conjecture remain open.
 
+**Uniform genuine unequal-companion reduction (2026-09-08).**
+`ChainForestProfileUnequalForest.lean` connects the bounded primitive
+algebra to every ordered unequal companion length pair. Original
+genuine forest data and the actual even-axis profile supply the actual
+index `D=2^e`, with `1 <= e < L_a`, dyadic height `H` and drop `c`, both
+basis coefficients, the bounded natural phases and the full phase link.
+The data retain the original top and half relations, `H+c=V+1 <= n`,
+the gap and its strictly excessive charge.
+
+The profile orientation also retains its actual coin cost:
+`H+3*s+t <= n+2` for the short half or `H+s+3*t <= n+2` for the long
+half. At `n >= 24` the reduction accepts the standard dominant-width
+hypothesis. At `n >= 67`, a maximal axis derives that threshold internally
+from validity and genuineness, so no numerical dominance or phase input
+is required. Companion lengths are arbitrary; this is a structural
+reduction, not a proof of their remaining uniform coin budgets.
+
+Verification: five new audited declarations, including the primitive-data
+definition, 15,233 Lean build jobs, 4,119 standard-only or axiom-free
+declaration audits, and 28,180 forest tests. The 961 new tests exercise
+80 actual genuine-chain obstruction cases, both orientations and indices
+through sixteen, under permutations and affine changes. Every case has
+an explicit full-size rival, refuting its validity; the fixtures do not
+assume validity or certify a uniform budget theorem.
+
+All genuine even-axis companion sums at most eight remain closed at
+`n >= 67`. Larger uniform coin budgets, other profile families and axes,
+unrestricted G1/G2/G3 and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
