@@ -4580,3 +4580,12 @@ import MinModulus
 #print axioms MinModulus.admitsValidTuple_half_of_subglobal_three_escape_maximal_even_axis
 #print axioms MinModulus.admitsValidTuple_half_of_critical_high_stratum_maximal_even_axis
 #print axioms MinModulus.exists_dominant_profile_residual_of_subglobal_three_escape_without_half
+
+-- Positive compatible companion support in actual residual profiles.
+#print axioms MinModulus.positive_even_weight_not_dyadic_shift
+#print axioms MinModulus.even_weight_of_two_power_shift
+#print axioms MinModulus.even_weight_of_three_power_shift
+#print axioms MinModulus.two_positive_even_companions_dyadic_profile
+#print axioms MinModulus.positive_even_companion_sparse_profile
+#print axioms MinModulus.two_positive_even_companions_interior_power_budget
+#print axioms MinModulus.even_dominant_subglobal_compatible_profile_sparse_support

@@ -583,3 +583,4 @@ import MinModulus.ChainForestProfileUnequalNonunit
 import MinModulus.ChainForestProfileUnequalIntegralArithmetic
 import MinModulus.ChainForestProfileUnequalIntegral
 import MinModulus.ChainForestProfileDominantResidual
+import MinModulus.ChainForestProfileCompatibleSupport

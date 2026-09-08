@@ -3632,6 +3632,34 @@ branch. Lower critical strata and unrestricted G1/G2/G3 and Conjecture 1
 remain OPEN. Continue and push both repositories after every verified
 milestone.
 
+**2026-09-08 — positive compatible profiles have coupled power forms.**
+`ChainForestProfileCompatibleSupport.lean` sharpens the remaining
+compatible support using validity, uniformly over all lengths and seeds.
+A positive even coefficient is a single positive binary power with every
+other shifted side using at most two powers, or a sum of two positive
+powers with every other shifted side dyadic. If both companion
+coefficients are positive and even, they are actual interior chain
+entries: `v_j+1=2^h`, `v_a=2^r`, `v_k=2^t`, with
+`0<r<L_a`, `0<t<L_k`, and `2^h+2^r+2^t <= n`. No coordinate overflows.
+
+The subglobal maximal-even-seed consumer derives a positive companion
+from the completed axis closure and returns these coupled forms for
+every compatible profile. These are constraints on the remaining
+family, not a proof that it is empty.
+
+Verification: seven new theorems; 15,273 full build jobs; 4,376 complete
+declaration audits (4,373 standard-only and three axiom-free); 119,864
+passing forest tests, including 210 new cases. The new tests exhaust
+reflection survivors for 125 length triples, retain genuine examples
+above binary for both support sizes, a two-power coefficient and a
+single-arm overflow, and construct full collisions for forbidden forms
+under coordinate permutations, unit multiplication and translation.
+
+Continue by coupling these forms to the other profiles and their
+quotient masses. Incompatible profiles, odd dominant units, lower
+critical strata and unrestricted G1/G2/G3 and Conjecture 1 remain OPEN.
+Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
