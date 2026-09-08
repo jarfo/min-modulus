@@ -4160,3 +4160,16 @@ import MinModulus
 #print axioms MinModulus.unequal_half_relations_not_width_dvd
 #print axioms MinModulus.even_axis_subglobal_index_le_both_companion_lengths
 #print axioms MinModulus.even_axis_subglobal_one_each_axis_coefficient
+
+-- Uniform three-four coin budgets.
+#print axioms MinModulus.two_thousand_length_lt_two_pow_sub_twenty_three
+#print axioms MinModulus.exists_rep_near_twenty_ninth_width
+#print axioms MinModulus.exists_rep_of_int_twenty_ninth_window
+#print axioms MinModulus.exists_three_four_short_nonintegral_parameters
+#print axioms MinModulus.exists_three_four_long_nonintegral_parameters
+#print axioms MinModulus.exists_rep_three_four_index_two_short_low_integral
+#print axioms MinModulus.exists_rep_three_four_index_two_short_high_integral
+#print axioms MinModulus.exists_rep_three_four_index_two_long_integral
+#print axioms MinModulus.exists_rep_three_four_index_four_short_low_integral
+#print axioms MinModulus.exists_rep_three_four_index_four_short_high_integral
+#print axioms MinModulus.exists_rep_three_four_index_four_long_integral

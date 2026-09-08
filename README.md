@@ -2551,9 +2551,27 @@ indices two and four, both half-profile orientations and all 29 phases,
 including both short integral alternatives. Fixed sixteen-bit prefixes
 cost at most 17 coins together with the companions, against 23 available.
 Permutations, unit scaling and translation are checked. This is
-computational evidence for the next arithmetic consumer: the uniform
-Lean coin-budget and genuine `(3,4)` closure remain OPEN, as do `(2,5)`,
-other profile families, unrestricted G1/G2/G3 and the global conjecture.
+computational evidence is now supported by the uniform Lean arithmetic
+below. The genuine `(3,4)` consumer, `(2,5)`, other profile families,
+unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+
+**Uniform (3,4) coin budgets (2026-09-08).**
+`ChainForestProfileThreeFourArithmetic.lean` now proves the arithmetic
+for every length `n >= 67`, both possible dominant indices two and four,
+and both half-profile orientations. All 112 nonintegral phases have
+kernel-checked signed choices with a fixed sixteen-bit prefix; the four
+integral phases use six sparse alternatives. The short integral branch
+splits at `2c <= 3H`, without requiring a dyadic drop or a corner exclusion.
+Every signed coefficient is proved nonnegative and at least `n`, then
+represented by actual dominant-chain coins within the full budget.
+
+The uniform assumptions are `L+7=n`, `H>=4`, `c>0`, `V<n`, `H+c=V+1`,
+`m+E=w*2^L`, `4E<=wH`, and the appropriate twenty-ninth phase equation,
+where `w=64` or `32`. These are arithmetic lemmas. The next step is to
+derive these data from the original genuine `(3,4)` forest and consume
+the signed identities and full-length rival construction. That consumer,
+`(2,5)`, other profile families, unrestricted G1/G2/G3 and the global
+conjecture remain OPEN.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
