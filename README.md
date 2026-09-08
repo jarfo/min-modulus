@@ -68,11 +68,13 @@ still give the stronger binary bound at the earlier cutoff
 `n+floor(log_2(n))+4 <= 2*m`. The unrestricted conjecture remains open
 for arbitrary high-escape tuples whose actual chains are shorter.
 
-Several shorter disjoint chains can now force continuation jointly:
-`PartialChainForest.lean` charges their total cover `S` and arm count `r`
-by `n^r*2^(n-S)`. A genuine selected arm pays this error once it is at
-most `2^(m-3)`. The arbitrary-endpoint maximal-family cycle argument is
-the next step; the unrestricted short-chain residual remains open.
+Two disjoint actual affine chains of length `m >= 4` now give every
+original global and exact-stratum bound when
+`n+2*floor(log_2(n))+5 <= 3*m`. `TwoChainCoverCycle.lean` permits
+arbitrary endpoints and other coordinates: a maximal two-chain family
+rejoins internally and yields a majority cycle. The earlier partial
+family charge remains available for arbitrary arity. The unrestricted
+high-escape, short-chain residual is still open.
 
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
@@ -4170,6 +4172,40 @@ coverage from individual-chain bounds, and guard against overlapping
 chains. The arbitrary-endpoint maximal-family cycle extraction is
 still pending. The earlier whole long-chain class remains proved;
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
+**2026-09-09 — arbitrary endpoints for two chains beyond a one-third cutoff.**
+`TwoChainCoverCycle.lean` proves the original global and every
+exact-stratum lower bound from ANY two disjoint actual affine chains
+of equal length `m >= 4` satisfying
+`n+2*floor(log_2(n))+5 <= 3*m`. Their endpoints and all remaining
+coordinates are arbitrary. The direct original G3 exclusion is also
+proved. No genuine endpoint, small escape count, doubling injectivity,
+no-half-child hypothesis or unit seed is assumed.
+
+The more general unequal-length result uses
+`n^2*2^(n-(p+q)) <= 2^(p-3)` and
+`n+4*floor(log_2(n)) <= 2*(p+q)`, with `p >= 4`.
+Maximize the first chain while preserving total covered length and a
+disjoint second chain. A new target extends the first; a target in the
+second transfers its entire suffix while retaining the disjoint prefix.
+Both operations strictly increase the first length, so its final target
+must rejoin itself. Validity bounds both the incoming tail and the
+disjoint second chain logarithmically. The extracted cycle therefore
+contains at least half the original tuple, and existing majority-cycle
+bounds finish. For example, two disjoint length-39 chains suffice at
+`n=100`, where either chain alone is below the earlier cutoff.
+
+Verification: fourteen new theorems; 15,295 full build jobs; 4,554
+complete audits (4,550 standard-only and four axiom-free); 127,079
+passing forest tests, including 1,350 new cases. Actual even-modulus
+forks check every suffix splice in the tested ranges; valid gap tuples
+check coverage-preserving extensions, splices, internal rejoins and
+majority cycles under all allowed strata, signs and tested shifts.
+No tuple census enters the Lean proof. The next direction is to retain
+arbitrary numbers of shorter chains in a maximal family. Arbitrary
+high-escape tuples still need not supply sufficient combined coverage.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3; continue and
 push both repositories after every verified milestone.
 
 There is also an unconditional structural result in every dimension:

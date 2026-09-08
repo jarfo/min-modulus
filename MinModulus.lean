@@ -606,3 +606,5 @@ import MinModulus.ChainForestTruncatedInterval
 import MinModulus.LongChainCycle
 
 import MinModulus.PartialChainForest
+
+import MinModulus.TwoChainCoverCycle
