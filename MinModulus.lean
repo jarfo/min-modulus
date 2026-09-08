@@ -524,3 +524,4 @@ import MinModulus.G1Counterexample
 import MinModulus.ChainForestProfileTwoThreeArithmetic
 import MinModulus.ChainForestProfileTwoThree
 import MinModulus.ChainForestProfileTwoFourArithmetic
+import MinModulus.ChainForestProfileTwoFour

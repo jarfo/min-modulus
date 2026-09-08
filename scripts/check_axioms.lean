@@ -4125,3 +4125,10 @@ import MinModulus
 #print axioms MinModulus.exists_rep_short_four_integral_low_drop
 #print axioms MinModulus.exists_rep_short_four_integral_high_drop
 #print axioms MinModulus.exists_rep_long_four_integral
+
+-- Genuine even-axis (2,4) companion global-bound closure.
+#print axioms MinModulus.short_four_signed_rival_eq
+#print axioms MinModulus.long_four_signed_rival_eq
+#print axioms MinModulus.exists_two_four_half_relation_rival
+#print axioms MinModulus.not_validTuple_of_two_four_axis_representation
+#print axioms MinModulus.even_axis_two_four_companions_global_bound

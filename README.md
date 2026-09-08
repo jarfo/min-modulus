@@ -2437,10 +2437,40 @@ short-overflow drop choices, actual full-length n-term rivals, unit
 multiples, permutations and affine shifts. They include nonintegral
 phases where the naive one-each rival is too expensive. These fixtures
 satisfy the actual profile equations and are refuted by their rivals;
-they are not presented as valid tuples. The next step is to derive and
-consume these arithmetic inputs in the genuine (2,4) forest theorem.
-That consumer, longer companion pairs, other profile families,
-unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+they are not presented as valid tuples. The genuine (2,4) forest theorem
+below now derives and consumes these arithmetic inputs. Longer companion
+pairs, other profile families, unrestricted G1/G2/G3 and the global
+conjecture remain OPEN.
+
+**Genuine (2,4) companion closure (2026-09-08).**
+`ChainForestProfileTwoFour.lean` proves
+`even_axis_two_four_companions_global_bound`: EVERY genuine even-axis
+forest with one length-two and one length-four odd companion satisfies
+the sharp GLOBAL bound at n>=67, in every even-modulus stratum. The
+original forest data suffice; dominance, index, profile family, midpoint
+parity, height and deficit conditions are all derived internally.
+
+A hypothetical subglobal pair has dominant index two and a complete
+axis-base/overflow family. Its charge is 16H. The dyadic half-shape and
+subglobal charge force H>=8, so midpoint parity forces an odd half
+modulus. With K=2^L_j and d=32K-M, the gap sharpens to d+1<=8H.
+The actual cyclic equations yield all 27 phases in either orientation.
+Signed group identities then evaluate the small companion choices and
+the three integral-phase alternatives. Their proved positive coefficients
+have actual binary representations, which refine to n terms. In every
+case the long companion weight differs from its top weight fifteen,
+so the resulting rival contradicts validity. No seed normalization or
+external census premise is used.
+
+The 1,285 earlier obstruction checks are supplemented by 36 genuine
+VALID controls above the bound at n=24,67,68, with permutations and
+affine shifts. Exhaustion of all possible n-coin companion weights and
+their unique feasible dominant lifts certifies full multiset validity;
+the endpoints and complete profile pair are also checked. The closure
+therefore removes subglobal (2,4) pairs while genuine pairs survive
+above the bound. Remaining even-axis cases include (2,k), k>=5, and
+pairs with both companions at least three. Other profile families,
+higher escapes, unrestricted G1/G2/G3 and the global conjecture remain OPEN.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
