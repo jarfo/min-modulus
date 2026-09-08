@@ -589,3 +589,5 @@ import MinModulus.ChainForestLongBoundary
 import MinModulus.ChainForestBoundaryInterval
 import MinModulus.ChainForestBoundaryIntervalSharp
 import MinModulus.G1LargeFourEscape
+import MinModulus.ChainForestFourEscape
+import MinModulus.G1LargeFiveEscape

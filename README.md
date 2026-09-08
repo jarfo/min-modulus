@@ -59,7 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-07)
 
-The latest structural closure is
+The latest original critical closure gives half descent with at most
+four affine escapes from parent length 101. `ChainForestFourEscape.lean`
+consumes both cycles and genuine four-chain forests;
+`G1LargeFiveEscape.lean` feeds the equivalent five-escape residual to
+the same G1/G2/G3 assembly. The unrestricted conjecture remains open.
+
+The earlier three-chain closure is
 `binary_card_bound_of_genuine_three_chain_forest_of_length_ge_52`:
 all genuine three-chain forests of length at least 52 satisfy `2^n <= |G|`.
 Its original critical consumer proves half descent whenever some affine
@@ -3795,6 +3801,44 @@ structure and parent lengths below 52. All previously separated
 three-chain profile cases from length 52 are consumed by this bound.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
+
+**2026-09-08 — original four-escape half descent closes from parent length 101.**
+`ChainForestFourEscape.lean` proves that every genuine four-chain forest
+of length at least 101 satisfies the binary bound in any finite abelian
+group. The widest arm has length at least 26, where the exact quartic
+binomial error fits its strict eighth-width missing interval.
+
+The original four-escape data also have a complete cycle treatment from
+parent length sixteen. Under failed half descent, actual doubling is
+injective. The loss-free outside budget forces any cycle to have at
+least seven vertices, so the existing exact-stratum cycle bound applies.
+The remaining data are acyclic. Their actual escape set has exactly four
+points; extracting its genuine forest and applying the binary bound gives
+half descent from parent length 101, in EVERY critical stratum. No cycle,
+forest, seed parity, modulus index or profile shape is supplied.
+
+`G1LargeFiveEscape.lean` proves an equivalent form of the same primitive
+G1 obligation and supplies its exact-stratum/global assemblies with the
+same G2/G3 inputs. The retained escape conditions are now: at least three
+at every shift for parents five through 51; at least four from 52; and
+at least FIVE from 101. These conditions are derived from failed half
+descent. The new residual definition is not an asserted deletion theorem
+or an additional global gate.
+
+Verification: eleven new theorems and one audited definition in two
+modules; 15,280 full build jobs; 4,433 complete declaration audits
+(4,430 standard-only and three axiom-free); 122,766 passing forest tests,
+including 340 new cases. Tests cover all four-arm length partitions at
+eight parent lengths from 101 through 200, the quartic recurrence,
+actual genuine nonunit forests with very short companions, actual valid
+four-escape cycles in smaller dimensions, the cycle/forest distinction
+and guards against dropping the stated thresholds.
+
+Continue with arbitrary escape-count thresholds and the original
+five-escape residual, preserving the smaller-parent cases. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. No bounded escape count has
+been extracted from arbitrary critical tuples. Continue and push both
+repositories after every verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
