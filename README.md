@@ -2811,6 +2811,27 @@ unordered pairs are `(2,7)`, `(3,6)` and `(4,5)`. General primitive relations
 and uniform budgets for larger widths, other profile families and axes,
 unrestricted G1/G2/G3 and the global conjecture remain open.
 
+**Uniform unequal-companion primitive algebra (2026-09-08).**
+`ChainForestProfileUnequalBasis.lean` proves the primitive and one-each
+signed relations for both half-profile orientations at arbitrary widths
+`2*s`, `2*t`, with `t=s*u`, `D*F=s` and `T+u+1=4*t`. Binary unequal
+companion widths are a specialization. Combining the original top and
+half relations gives the full phase coupling `T | 4*r+q`, even for signed
+phases. This needs no coprimality assumption on a companion weight, phase
+denominator or actual axis period.
+
+Verification: six new audited exports, 15,231 Lean build jobs, 4,109
+standard-only or axiom-free declaration audits, and 26,945 forest tests.
+The 2,271 new checks use actual cyclic-group relations with arbitrary
+ratios, nonbinary widths, signed phases and shared factors. Controls
+show that removing the top relation can preserve the weighted half-phase
+congruence while breaking the full link.
+
+All genuine even-axis companion length sums at most eight remain closed
+at `n >= 67`. These uniform identities remove repeated pair-specific
+algebra; larger coin budgets, other profile families and axes,
+unrestricted G1/G2/G3 and the global conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -4257,3 +4257,11 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_of_three_five_axis_representation
 #print axioms MinModulus.even_axis_three_five_companions_global_bound
 #print axioms MinModulus.even_axis_companion_length_sum_le_eight_global_bound
+
+-- Uniform unequal-companion primitive identities and full phase coupling.
+#print axioms MinModulus.unequal_companion_short_axis_multiple_relation
+#print axioms MinModulus.unequal_companion_short_one_each_relation
+#print axioms MinModulus.unequal_companion_long_axis_multiple_relation
+#print axioms MinModulus.unequal_companion_long_one_each_relation
+#print axioms MinModulus.unequal_companion_short_primitive_phase_coupling
+#print axioms MinModulus.unequal_companion_long_primitive_phase_coupling
