@@ -2769,6 +2769,25 @@ relation alone do not imply the phase link. Together with the established
 families and axes, unrestricted G1/G2/G3 and the global conjecture remain
 open.
 
+**Uniform primitive `(3,5)` coin budgets (2026-09-08).**
+`ChainForestProfileThreeFiveArithmetic.lean` proves actual full-length
+representations for all 354 primitive phases at `n >= 67`, under the
+compatible phase equations for both indices and half-profile orientations.
+Fixed 32-bit prefixes cover 348 nonintegral phases; six fixed sparse
+boundaries cover the integral cases. Each signed coefficient is
+nonnegative and at least `n`, the second companion differs from its
+original weight, and total coin cost is at most `n`. No additional
+dyadic, midpoint or saturated-corner hypothesis is needed.
+
+Verification: ten new audited exports, 15,229 Lean build jobs, 4,097
+standard-only or axiom-free declaration audits, and 24,602 forest tests.
+The 4,603 new tests cover actual full-length rivals across every phase,
+all coordinate permutations and affine changes, plus nondyadic profiles
+and error boundaries. Deriving these phase equations from the genuine
+`(3,5)` forest is the next consumer step. This is the last unordered
+companion-sum-eight pair; its genuine closure, larger pairs, other
+families and axes, unrestricted G1/G2/G3 and the conjecture remain open.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

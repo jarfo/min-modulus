@@ -4237,3 +4237,15 @@ import MinModulus
 #print axioms MinModulus.exists_two_six_half_relation_rival
 #print axioms MinModulus.not_validTuple_of_two_six_axis_representation
 #print axioms MinModulus.even_axis_two_six_companions_global_bound
+
+-- Uniform primitive three-five coin budgets.
+#print axioms MinModulus.exists_rep_three_five_index_2_short_integral_28
+#print axioms MinModulus.exists_rep_three_five_index_2_short_integral_87
+#print axioms MinModulus.exists_rep_three_five_index_2_long_integral_46
+#print axioms MinModulus.exists_rep_three_five_index_2_long_integral_105
+#print axioms MinModulus.exists_rep_three_five_index_4_short_integral_56
+#print axioms MinModulus.exists_rep_three_five_index_4_long_integral_33
+#print axioms MinModulus.exists_three_five_short_nonintegral_parameters
+#print axioms MinModulus.exists_three_five_short_primitive_rep
+#print axioms MinModulus.exists_three_five_long_nonintegral_parameters
+#print axioms MinModulus.exists_three_five_long_primitive_rep
