@@ -63,9 +63,11 @@ Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
 actual opposite pairs. `CollisionForest.lean` preserves a widest genuine
 arm while cutting the unique collision; `CollisionEscapeThreshold.lean`
-pays for that cut with `r+1` in the scalar threshold. This includes the
-original G3 modulus without assuming doubling injectivity. The earlier
-stronger injective bounds remain. Arbitrary escape extraction and all
+pays for that cut with `r+1` in the scalar threshold. The sharper
+`CollisionEscapeCeiling.lean` uses the rounded-up average, and the
+exactly equivalent G3 gate now retains its unconditional all-shift
+restriction, including actual opposite pairs. The earlier stronger
+injective bounds remain. Arbitrary escape extraction and all
 three unrestricted obligations remain open.
 
 The original critical closure gives half descent at any actual
@@ -4012,6 +4014,34 @@ argument. Next: sharpen the rounded-up threshold and update the exact
 G3 residual using the unconditional all-shift bound. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after every verified milestone.
+
+**2026-09-09 — rounded-up escape threshold and unconditional quantitative G3.**
+`CollisionEscapeCeiling.lean` sharpens the collision-inclusive scalar
+condition to `binomial(n+r,r+1) <= 2^max(0,ceil(n/(r+1))-3)`. It proves
+that this rounded-up charge still supplies the cycle cutoff and the
+wide exterior interval. Every original exact-stratum and global bound
+continues to follow without doubling injectivity, half descent, or a
+conjectural input. All actual opposite pairs are included.
+
+Every hypothetical original global, exact-stratum, or G3 counterexample
+therefore violates this stronger ceiling charge at every shift and
+retains `n < (r+1)^2*(floor(log_2(n))+1)+3*(r+1)`. The existing
+`G3QuantitativeEscape.lean` now uses this unconditional all-shift
+restriction: an opposite pair is no longer a separate alternative in
+its definition. Exact equivalence to original G3 and both assemblies
+with precisely three inputs are rechecked. All smaller dimensions and
+the stronger earlier injective `r` bounds remain available.
+
+Verification: eight new theorems and the revised existing G3 definition,
+equivalence and assembly; 15,290 full build jobs; 4,499 complete audits
+(4,495 standard-only and four axiom-free); 123,865 passing forest tests,
+including 406 new tests. Boundary checks include the ceiling-six case,
+small-dimension guard, rank monotonicity, and the improvements at
+`(n,r)=(52,2),(53,2),(101,3),(102,3),(103,3)` missed by the floor charge.
+Next: package the whole two-/three-escape global/G3 classes from lengths
+52/101, then address the remaining arbitrary high-escape tuples.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

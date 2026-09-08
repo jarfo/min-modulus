@@ -600,3 +600,4 @@ import MinModulus.G3QuantitativeEscape
 import MinModulus.ActualEscapeDescent
 import MinModulus.CollisionForest
 import MinModulus.CollisionEscapeThreshold
+import MinModulus.CollisionEscapeCeiling
