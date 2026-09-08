@@ -4178,3 +4178,12 @@ import MinModulus
 #print axioms MinModulus.exists_three_four_half_relation_rival
 #print axioms MinModulus.not_validTuple_of_three_four_axis_representation
 #print axioms MinModulus.even_axis_three_four_companions_global_bound
+
+-- Uniform two-five coin budgets and short integral exclusion.
+#print axioms MinModulus.exists_rep_near_fifty_fifth_width
+#print axioms MinModulus.exists_rep_of_int_fifty_fifth_window
+#print axioms MinModulus.two_five_short_integral_phase_impossible
+#print axioms MinModulus.exists_two_five_short_nonintegral_parameters
+#print axioms MinModulus.exists_two_five_long_nonintegral_parameters
+#print axioms MinModulus.exists_rep_two_five_long_integral_low_drop
+#print axioms MinModulus.exists_rep_two_five_long_integral_high_drop

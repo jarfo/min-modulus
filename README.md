@@ -2593,6 +2593,29 @@ only unordered pair of companion sum seven in the even-axis branch.
 Larger companion sums, other profile families and axes, unrestricted
 G1/G2/G3 and the global conjecture remain OPEN.
 
+**Uniform (2,5) coin budgets (2026-09-08).**
+`ChainForestProfileTwoFiveArithmetic.lean` proves the fifty-fifth residue
+arithmetic for every `n >= 67` at the forced dominant index two. The
+short integral phase would force `5 | c`, which a dyadic profile drop
+cannot satisfy. All 108 nonintegral phases have kernel-checked signed
+choices with fixed sixteen-bit prefixes; two sparse alternatives cover
+the long integral phase, split at `2c <= H`. The prefix and companions
+cost at most 22 coins against 23 available. Every selected coefficient
+is proved nonnegative and at least `n`, then represented by actual
+binary coins within the original budget.
+
+The hypotheses are `L+7=n`, `H>=4`, `c>0`, `V<n`, `H+c=V+1`,
+`m+E=64*2^L`, `E<=16H`, and the appropriate phase equation. The long
+integral alternatives need no dyadic or midpoint-parity assumption.
+Regressions produce actual full-length rivals in all permitted phases,
+including both integral alternatives, permutations, unit scaling and
+translation; explicit controls check the divisibility obstruction.
+
+The genuine `(2,5)` consumer must still derive these arithmetic data and
+the exclusion of the short integral phase from the original forest.
+That consumer, larger companion sums, other profile families and axes,
+unrestricted G1/G2/G3 and the global conjecture remain OPEN.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
