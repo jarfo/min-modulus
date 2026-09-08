@@ -3483,6 +3483,39 @@ build jobs, 4,292 standard-only or axiom-free audits, and 112,987
 forest tests including 224 new parity, stratum and hypothesis guards.
 Uniform unequal rivals and the unrestricted conjecture remain open.
 
+**2026-09-08 — uniform normalization and four-block arithmetic for unequal companions.**
+`ChainForestProfileUnequalUniformArithmetic.lean` proves 26 general
+arithmetic and signed-group lemmas. For short half-width `s`, long
+half-width `t`, actual index `D`, and `D*F=s`, division of `D*m` by
+`4*s-1` normalizes every `0<m<F*T` into companion weights with total
+coin cost at most `a+b`. Either signed unit phase has a bounded leading
+numerator; a nonpositive long numerator permits a top reflection.
+The correct reflected axis coefficient is `K-1+V-Z`, including the
+actual target offset. Both top and half reflections are proved as
+signed group identities before nonnegativity is needed.
+
+Four variable rational blocks handle any nonintegral numerator below
+three primitive denominators. The actual half-profile cost pays for
+an error constant `128*F*t^2` throughout the remaining range
+`a+b>10`, `n>=67`, and `f<=a-2`. A general representation theorem now
+turns that window into an affordable actual axis representation.
+The exact nonintegral unit-phase condition includes the period width:
+`T` must not divide `P+4*F*t*r`. Unit phases can be integral, and
+reflected integral numerators can exceed two denominators.
+
+Verification: 15,267 full build jobs; 4,318 declaration audits
+(4,315 standard-only and three axiom-free); 114,150 passing forest
+tests, including 1,163 new cases. Tests exercise arbitrary block
+counts, normalized multipliers, actual cyclic-group identities,
+target-offset reflection guards, and genuine integral unit phases.
+
+This milestone supplies the uniform arithmetic layer. Continue by
+consuming it in genuine forests for nonintegral unit phases, then
+handle nonunit odd-denominator annihilators and integral unit phases.
+The unequal global closure, other axes and profile families,
+unrestricted G1/G2/G3, and Conjecture 1 remain OPEN. Continue after
+each verified milestone and commit and push both repositories.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
