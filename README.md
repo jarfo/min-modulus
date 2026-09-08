@@ -57,14 +57,16 @@ super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
 results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
-## Conjecture 1: current proof frontier (2026-09-07)
+## Conjecture 1: current proof frontier (2026-09-09)
 
-A single genuine affine chain of length `m >= 4` now forces `2^n <= |G|`
-when `n+floor(log_2(n))+4 <= 2*m`, with arbitrary remaining coordinates
-in any finite abelian group. `ChainForestTruncatedInterval.lean` retains
-the actual short-arm corner error. Below binary modulus every such
-chain must have an actual continuation; the unrestricted conjecture
-and the rejoining-chain residual remain open.
+For `n >= 16`, any actual affine chain with
+`n+2*floor(log_2(n)) <= 2*m` now gives the original global and every
+exact-stratum lower bound. `LongChainCycle.lean` allows arbitrary
+endpoints and remaining coordinates: maximal continuation yields a
+majority cycle after bounding its incoming tail. Genuine endpoints
+still give the stronger binary bound at the earlier cutoff
+`n+floor(log_2(n))+4 <= 2*m`. The unrestricted conjecture remains open
+for arbitrary high-escape tuples whose actual chains are shorter.
 
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
@@ -4110,6 +4112,32 @@ its incoming chain using the existing zero-sum-fibre bound. These next
 steps are not yet claimed as completed. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3; continue and push both repositories after
 each verified milestone.
+
+**2026-09-09 — arbitrary endpoints in the whole long-chain class.**
+`LongChainCycle.lean` proves the original global and every exact-stratum
+lower bound for any valid cyclic tuple of length `n >= 16` containing an
+actual affine chain of length `m` with `n+2*floor(log_2(n)) <= 2*m`.
+The endpoint and remaining coordinates are arbitrary. No escape-count,
+doubling-injectivity, no-half-child, or unit-seed hypothesis is needed.
+The module also directly excludes every original G3 tuple in this class.
+
+At subbinary modulus, a maximal extension of the actual long chain must
+rejoin itself. The extracted cycle has an incoming tail of length `t`;
+validity and the zero-sum-fibre bound give `2^t <= p`, where `p` is the
+extended chain length. Thus `t <= floor(log_2(n))`, and the actual cycle
+contains at least half the original tuple. The existing majority-cycle
+lower bounds finish the proof. Every global or exact-stratum
+counterexample of length at least 16 therefore has EVERY actual affine
+chain satisfying `2*m < n+2*floor(log_2(n))`.
+
+Verification: eleven new theorems; 15,293 full build jobs; 4,534 complete
+audits (4,530 standard-only and four axiom-free); 125,103 passing forest
+tests, including 487 new tests. Actual endpoint models check all starting
+coordinates, tails, rejoins, shifts and signs; arithmetic tests check the
+majority cutoff, with guards for uncontrolled tails and invalid tuples.
+The arbitrary high-escape, short-chain residual remains open. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3; continue and push both
+repositories after each verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation

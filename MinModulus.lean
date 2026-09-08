@@ -603,3 +603,4 @@ import MinModulus.CollisionEscapeThreshold
 import MinModulus.CollisionEscapeCeiling
 import MinModulus.GlobalFewEscape
 import MinModulus.ChainForestTruncatedInterval
+import MinModulus.LongChainCycle
