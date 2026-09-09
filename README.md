@@ -5447,6 +5447,31 @@ overlaps at the midpoint value. Arbitrary charged-chain extraction remains
 unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — exact profile excess and midpoint overlap location.**
+`ProfileMidpointBoundary.lean` proves that one four-point fibre with all
+remaining fibres capped at two contributes exactly six to the doubled
+profile excess. For a valid actual forest, profile volume is therefore
+intrinsic loss plus three. Complete chain regrouping preserves the
+sharp-boundary fibre classification, so every valid actual forest at a
+large midpoint fibre on that boundary has this exact volume.
+
+Every intersection of distinct actual profile rectangles evaluates to
+the midpoint. This location statement needs no tuple validity; the
+volume formula and unavoidable overlap do. Tests include nontrivial
+chain regroupings and an irrelevant zero-length arm. The valid example
+modulo 40 at shift eight has one four-point fibre and four other triple
+fibres, giving excess seven; a unique four-point fibre alone is not
+enough. The invalid two-block example has profile excess two, confirming
+the separate role of validity in the exact volume statement.
+
+Verification: seven theorems; 15,342 full build jobs; 4,938 complete audits
+(4,934 standard-only, four axiom-free); 135,057 passing forest tests,
+including 60 new cases. Next count rectangle incidences at each actual
+box point via its heavier collision partners and finite weight rank.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
