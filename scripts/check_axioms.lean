@@ -5733,3 +5733,11 @@ import MinModulus
 #print axioms MinModulus.group_card_lower_bound_with_triple_fibre_correction
 #print axioms MinModulus.cyclic_intrinsic_loss_add_triple_count_eq_core_sum_of_half_escape_cost
 #print axioms MinModulus.cyclic_modulus_lower_bound_with_triple_fibre_correction
+
+-- Exact excess-pair correction applies at every fibre multiplicity.
+#print axioms MinModulus.tupleBinaryFibreOvercount
+#print axioms MinModulus.fibre_pair_moment_eq_twice_excess_and_choose
+#print axioms MinModulus.intrinsic_loss_add_fibre_overcount_eq_core_cube_sum
+#print axioms MinModulus.fibre_overcount_eq_triple_count_of_fibres_le_three
+#print axioms MinModulus.group_card_lower_bound_with_full_fibre_correction
+#print axioms MinModulus.cyclic_modulus_lower_bound_with_full_fibre_correction

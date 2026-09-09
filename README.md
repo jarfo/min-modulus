@@ -6918,6 +6918,31 @@ the three-point cap from the exact formula. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — fibre-overcount correction is exact at every multiplicity.**
+`GeneralFibreLossCorrection.lean` assigns a fibre of size m the excess
+pair count choose(m-1,2). Summing these contributions gives D, and
+intrinsic loss plus D equals the complementary-core cube sum exactly.
+The identity holds for every valid tuple at every affine shift, with
+no cap on fibre size or restriction on escapes.
+
+Consequently 2^n+D is at most the group cardinality plus the core-cube
+sum. Under a three-point cap, D reduces to the earlier triple-value
+count; that reduction itself needs no validity assumption.
+
+Verification: one definition and five theorems; 15,398 full build
+jobs; 5,276 complete audits (5,272 standard-only, four axiom-free);
+139,217 passing forest tests, including 111 new cases. A valid
+four-point-fibre example modulo 248 has loss 72 and correction 6,
+matching core sum 78. Actual five-point fibres are also tested: the
+shifted power tuples at n=9, modulus 511, shift 21 and n=10, modulus
+1016, shift 11 have correction totals 48 and 92 respectively.
+
+Next use complementation to pair triple-fibre values and constrain
+the possible correction totals. This exact accounting does not bound
+those totals sufficiently to close Conjecture 1: unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
