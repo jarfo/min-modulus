@@ -4501,6 +4501,34 @@ Arbitrary sufficiently charged-family extraction is still unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
 
+**2026-09-09 — sharper linear escape threshold for actual cycles.**
+`LinearCycleEscape.lean` proves the original global, every exact-stratum
+and direct G3 bounds whenever a valid tuple of dimension `n >= 3`
+contains an actual nonempty affine cycle and has at most `r` escapes
+at that shift, with `5*r+1 <= n`. This improves the earlier uniform
+cycle condition `6*(r+1) <= n`, without doubling injectivity or a
+failed half-descent premise.
+
+The first growth layer excludes a singleton cycle in this range.
+The second gives `4*k < n+5*(r+1)` for the outside count `k`.
+The new dimension condition directly forces `k <= m+1`, where `m`
+is the cycle length, so the original half-sized cycle bounds apply.
+Conversely, every original global, exact-stratum or exceptional
+counterexample with an actual cycle at a shift satisfies `n < 5*r+1`
+there. This is a cycle-conditioned restriction, not an improved bound
+for every tuple with `r` escapes.
+
+Verification: seven theorems; 15,305 full build jobs; 4,660 complete
+audits (4,656 standard-only, four axiom-free); 132,709 passing forest
+tests, including 690 new cases. Tests cover both layer inequalities,
+the newly admitted dimension range, boundary arithmetic and actual
+cycles at every edge-supporting shift in valid-gap models.
+Next combine this cycle restriction and bounded-corner charge failure
+in equivalent forms of the original three gates. Arbitrary sufficiently
+charged-family extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

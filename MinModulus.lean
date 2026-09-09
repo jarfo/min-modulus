@@ -626,3 +626,5 @@ import MinModulus.ChainRejoinDoubleCharge
 import MinModulus.BoundedChainCorner
 
 import MinModulus.BoundedFamilyContinuation
+
+import MinModulus.LinearCycleEscape
