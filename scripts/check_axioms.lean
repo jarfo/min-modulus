@@ -5154,3 +5154,10 @@ import MinModulus
 #print axioms MinModulus.intrinsic_loss_eq_sum_forest_fibre_excess
 #print axioms MinModulus.twice_profile_volume_le_fibre_cap_mul_intrinsic_loss
 #print axioms MinModulus.twice_profile_volume_le_intrinsic_quotient_mul_loss
+
+-- Exact profile overlap and the no-triple-fibre criterion.
+#print axioms MinModulus.twice_profile_volume_eq_twice_loss_add_triple_excess
+#print axioms MinModulus.profile_volume_eq_intrinsic_loss_iff_fibres_le_two
+#print axioms MinModulus.profile_rectangles_pairwise_disjoint_of_fibre_cap_two
+#print axioms MinModulus.profile_rectangles_pairwise_disjoint_iff_fibres_le_two
+#print axioms MinModulus.triple_fibre_card_le_profile_volume_excess

@@ -5077,6 +5077,33 @@ the excess caused by larger fibres. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — exact profile overlap criterion and excess.**
+`ExactProfileOverlap.lean` proves
+`2*volume = 2*intrinsic loss + sum (r-1)*(r-2)` over nonempty forest
+fibres. Thus summed profile volume equals intrinsic loss exactly when
+every fibre has at most two points. Actual profile rectangles are
+pairwise disjoint under precisely the same condition. These equivalences
+require validity, but no small-loss or wide-diameter assumption.
+
+The forward geometric implication needs only a two-point fibre cap and
+diameter at least dimension, without validity. Every fibre with at least
+three points contributes at least one to `volume - intrinsic loss`, so
+the number of such fibres is bounded by the exact overcounting. Together
+with the intrinsic moment formula, the criterion is preserved under
+regrouping of the original tuple.
+
+Verification: five theorems; 15,327 full build jobs; 4,838 complete audits
+(4,834 standard-only, four axiom-free); 134,007 passing forest tests,
+including 59 new cases. Tests check both directions on actual valid
+short forests, exact triple-fibre excess, disjoint gap families outside
+the old sufficient condition, the generic implication without validity,
+and an invalid tuple showing why validity is needed for the converse.
+Next cancel common coordinates and decompose binary collisions into
+dyadic contributions from their disjoint relation cores. Arbitrary
+charged-chain extraction remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
