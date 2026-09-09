@@ -6713,6 +6713,33 @@ pay another cut. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified
 milestone.
 
+**2026-09-09 — the last extinct target layer removes a cut charge.**
+`ExtinctTargetEscapeBudget.lean` proves that if the next iterated
+target set is empty, every current source is an original escape.
+Consequently, Pk=empty gives n <= k|A|+(k-1)|B|, including the
+empty tuple at depth zero. This graph count needs no tuple validity.
+
+Triple fibres force extinction at every depth with n <= 2^k, so the
+refined cost also bounds their dimension. Under the one-involution
+hypothesis, n+1 <= k(|A|+1). Cyclic groups inherit this strict density
+bound using only actual escapes and k=ceil(log2 n). If the refined
+cost is below n, every fibre has at most two members and intrinsic
+loss equals the full actual core-cube sum.
+
+Verification: nine public theorems; 15,390 full build jobs; 5,226
+complete audits (5,222 standard-only, four axiom-free); 138,293
+passing forest tests, including 71 new cases. Tests enumerate small
+extinct graphs without validity assumptions, sharp fork graphs,
+and all shifts of larger valid cyclic tuples. The valid tuple
+(1,2,4,10) modulo 16 has one escape and one cut: the previous cost
+is 4=n, while the refined cost is 3<n, certifying two-point fibres
+and exact loss two.
+
+Next make the triple-fibre graph restriction constructive by
+extracting an actual short route from each coordinate to an original
+escape. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -796,3 +796,5 @@ import MinModulus.CyclicIteratedTargetBounds
 import MinModulus.CanonicalCycleTargets
 
 import MinModulus.CycleOutsideWalkGrowth
+
+import MinModulus.ExtinctTargetEscapeBudget
