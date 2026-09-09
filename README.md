@@ -4551,6 +4551,33 @@ low-escape acyclic case. Arbitrary sufficiently charged-family extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — complete actual obstructing forests at low-escape shifts.**
+`ObstructingChainForest.lean` extracts a complete affine forest from an
+acyclic valid tuple below binary size in any finite abelian group with
+at most one nonzero involution. It retains all coordinates, positive
+chain lengths summing to `n`, the affine seeds, and a longest arm whose
+endpoint genuinely escapes. The forest endpoints contain all true
+escapes and add at most one collision cut. Its longest arm strictly
+fails the bounded-corner charge, including positive lengths below four.
+
+Every original global, exact-stratum, odd or exceptional counterexample
+supplies this forest at each shift with `5*r+1 <= n`, where `r` is its
+actual escape count. The sharper cycle theorem excludes cycles there.
+Thus every shift of a global counterexample either has `n < 5*r+1` or
+has this complete actual obstructing forest. This extracts geometric
+data from the original tuple; it does not prove that those data supply
+sufficient charge.
+
+Verification: one definition and seven theorems; 15,307 full build jobs;
+4,682 complete audits (4,678 standard-only, four axiom-free); 132,767
+passing forest tests, including 58 new cases over all candidate shifts
+in subbinary valid-gap models. The tests check complete coverage,
+affine seeds, collision cuts, genuine longest endpoints, strict charge
+failure and cycle rejection. Next retain exact endpoint sets when
+doubling is injective. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after every verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
