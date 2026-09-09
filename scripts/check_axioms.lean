@@ -5741,3 +5741,9 @@ import MinModulus
 #print axioms MinModulus.fibre_overcount_eq_triple_count_of_fibres_le_three
 #print axioms MinModulus.group_card_lower_bound_with_full_fibre_correction
 #print axioms MinModulus.cyclic_modulus_lower_bound_with_full_fibre_correction
+
+-- Complement pairing makes triple-fibre correction even.
+#print axioms MinModulus.tuple_binary_fibre_card_eq_complementary_value
+#print axioms MinModulus.even_tuple_triple_fibre_count
+#print axioms MinModulus.intrinsic_loss_add_two_le_core_sum_of_capped_triple
+#print axioms MinModulus.intrinsic_loss_mod_two_eq_core_sum_of_fibres_le_three

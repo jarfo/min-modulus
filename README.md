@@ -6943,6 +6943,29 @@ those totals sufficiently to close Conjecture 1: unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — complement pairing makes triple-fibre correction even.**
+`TripleFibreCorrectionParity.lean` proves that complementation preserves
+fibre cardinality at the complementary sum value. Exactly three-point
+values are paired without fixed points: midpoint fibres have even
+cardinality in positive dimension, and dimension zero has no triples.
+Thus the triple-value count is even for every tuple, without validity.
+
+For valid tuples under the three-point cap, actual intrinsic loss
+and the core-cube sum have the same parity. If any triple fibre
+exists, the core sum exceeds loss by at least two, improving the
+previous strict inequality.
+
+Verification: four theorems; 15,399 full build jobs; 5,280 complete
+audits (5,276 standard-only, four axiom-free); 139,314 passing forest
+tests, including 97 new cases. Tests check all small tuples without
+assuming validity, all shifts of valid larger examples, and the
+valid modulo-12 example that attains the two-unit correction.
+
+Next rule out a one-unit total correction without a fibre cap, then
+identify the midpoint obstruction to evenness of the full correction.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -814,3 +814,5 @@ import MinModulus.FibreMultiplicityEscapeDensity
 import MinModulus.TripleFibreLossCorrection
 
 import MinModulus.GeneralFibreLossCorrection
+
+import MinModulus.TripleFibreCorrectionParity
