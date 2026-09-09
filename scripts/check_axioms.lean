@@ -4900,3 +4900,20 @@ import MinModulus
 #print axioms MinModulus.global_lower_bound_of_rejoining_chain_with_double_charge
 #print axioms MinModulus.stratum_lower_bound_of_rejoining_chain_with_double_charge
 #print axioms MinModulus.not_validTuple_exceptional_of_rejoining_chain_with_double_charge
+
+-- Bounded coefficient corner counting and genuine partial-family bounds.
+#print axioms MinModulus.chainFamilyCornerCard
+#print axioms MinModulus.chainFamilyCornerError
+#print axioms MinModulus.chain_family_corner_card_le_product
+#print axioms MinModulus.chain_family_corner_card_le_binomial
+#print axioms MinModulus.chain_family_corner_card_mono_sides
+#print axioms MinModulus.chain_family_corner_error_mono
+#print axioms MinModulus.box_card_le_twice_small_sum_corner
+#print axioms MinModulus.selected_side_le_chain_family_corner_card
+#print axioms MinModulus.chain_family_width_of_corner_charge
+#print axioms MinModulus.truncated_error_le_twice_corner_error
+#print axioms MinModulus.bounded_corner_gap_with_avoided_set_of_valid_chain_forest
+#print axioms MinModulus.chain_family_corner_card_sum_le
+#print axioms MinModulus.wide_boundary_short_interval_bounded_corner_card_bound
+#print axioms MinModulus.binary_card_bound_of_genuine_arm_bounded_corner
+#print axioms MinModulus.binary_card_bound_of_partial_genuine_bounded_corner

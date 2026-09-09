@@ -4438,6 +4438,37 @@ That geometric integration remains unproved. Conjecture 1 and all
 unrestricted G1/G2/G3 gates remain OPEN, 0/3. Continue and push both
 repositories after every verified milestone.
 
+**2026-09-09 — bounded corner counting and genuine endpoints.**
+`BoundedChainCorner.lean` retains the total-weight cutoff in the actual
+coefficient corner: `C(n,L)` counts vectors with
+`0 <= z_i < min(n,2^L_i)` and `sum_i z_i < n`. The partial-family error
+is `C(n,L)*2^(n-sum_i L_i)`. This count is bounded by both the previous
+truncated product and the full stars-and-bars binomial.
+
+A saturated selected side, shortening other members and growing
+coverage preserve this smaller error. Its charge still forces the
+selected width automatically. The upper-simplex collision law now
+charges genuinely avoided residues to this exact corner. Consequently,
+a positive actual partial family with a genuine selected endpoint,
+selected length `m >= 4`, and error at most `2^(m-3)` satisfies the full
+binary bound. All other endpoints and unselected coordinates are
+arbitrary. Reflection also proves that a box with total side deficit
+below `2*n` has size at most twice its small-sum corner.
+
+Strict charge improvements include profiles `(40,36)` at `n=100`,
+`(70,4)` at `n=130`, `(135,4)` at `n=259`, and `(263,4)` at `n=514`.
+Verification: two definitions and thirteen theorems; 15,303 full build
+jobs; 4,642 complete audits (4,638 standard-only, four axiom-free);
+131,965 passing forest tests, including 281 new cases. The dynamic
+count agrees with exhaustive small-box enumeration; tests cover
+reflection, monotonicity, empty-member counts and genuine valid models.
+Next remove the genuine-endpoint premise via maximal continuation,
+retaining this smaller error and using the joint cycle weight budget
+with reflection to reach the doubled post-rejoin charge theorem.
+That arbitrary-endpoint integration is not yet proved. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
