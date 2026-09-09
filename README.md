@@ -6370,6 +6370,34 @@ their translated images. Their counts are not yet formalized here.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — exact ordered signed-layer counts.**
+`SeparatedPairLayerCounts.lean` proves that every support and every
+coordinate ordering have a unique separated initial block of a given
+size. Forgetting the two signs then bijects the gap-delta layer with
+supports S satisfying delta <= |S| and Even(|S|-delta).
+
+The layer cardinality is exactly the sum of binom(n,k) over admissible
+support sizes k. In every nonempty dimension, the balanced and unit-gap
+layers each have 2^(n-1) pairs, by toggling one coordinate to exchange
+even and odd supports. Validity transfers these counts to their concrete
+signed-value images in any additive commutative group. No finiteness
+assumption on that group is needed. At n=0 the balanced layer has one
+pair and the unit layer is empty, so the half-cube statement requires n>0.
+
+Verification: five public theorems; 15,378 full build jobs; 5,133
+complete audits (5,129 standard-only, four axiom-free); 137,275 passing
+forest tests, including 65 new cases. The support bijection is checked
+for all permutations through n=5 and selected orders through n=10;
+parity toggles through n=12; and actual valid value images through n=8.
+Empty dimensions, gaps above dimension, and tied-rank failures are covered.
+
+Next analyze intersections of the balanced and translated unit-gap
+images through their natural multiset relations. In particular, study
+when a one-coordinate length difference forces genuine affine escapes
+or excludes doubling predecessors. No global intersection bound is
+proved yet. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

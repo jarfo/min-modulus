@@ -5551,3 +5551,10 @@ import MinModulus
 #print axioms MinModulus.separated_pair_evaluation_image_card
 #print axioms MinModulus.separated_pair_evaluation_shift
 #print axioms MinModulus.separated_pair_evaluation_image_shift
+
+-- Exact support bijections and balanced/unit ordered signed-layer counts.
+#print axioms MinModulus.exists_unique_separating_subset
+#print axioms MinModulus.separated_pair_layer_card_eq_admissible_supports
+#print axioms MinModulus.separated_pair_layer_card_eq_binomial_sum
+#print axioms MinModulus.separated_pair_balanced_and_unit_card
+#print axioms MinModulus.separated_pair_balanced_and_unit_image_card

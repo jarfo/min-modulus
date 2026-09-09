@@ -772,3 +772,5 @@ import MinModulus.CollisionGapChargeEnvelope
 import MinModulus.CollisionGapLossCertificate
 
 import MinModulus.SeparatedPairEvaluations
+
+import MinModulus.SeparatedPairLayerCounts
