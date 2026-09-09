@@ -5425,6 +5425,28 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — unique four-point fibre at the midpoint boundary.**
+`LossOneFibres.lean` identifies exact finite-map loss with the sum of
+nonempty fibre excesses. Loss one gives exactly one double fibre and
+all remaining fibres have at most one point. Two such actual blocks
+whose image values add injectively consequently have one four-point
+union fibre, with all remaining fibres capped at two.
+
+At the sharp midpoint boundary, the large midpoint is that unique
+four-point fibre. No other fibre contains three or more points. This
+classification uses no validity or cyclicity. The valid six-coordinate
+boundary example has 36 singleton fibres, 12 double fibres, and one
+four-point fibre; its ordered cardinality-oriented collision count is
+18 while its image loss is 15.
+
+Verification: six theorems; 15,341 full build jobs; 4,931 complete audits
+(4,927 standard-only, four axiom-free); 134,997 passing forest tests,
+including 75 new cases. Next transfer the classification to every actual
+forest to prove exact profile volume `L+3` and locate all rectangle
+overlaps at the midpoint value. Arbitrary charged-chain extraction remains
+unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

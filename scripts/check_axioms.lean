@@ -5274,3 +5274,11 @@ import MinModulus
 #print axioms MinModulus.tuple_fibre_card_le_four_at_large_midpoint_boundary
 #print axioms MinModulus.midpoint_fibre_card_eq_four_at_balanced_boundary
 #print axioms MinModulus.deleted_midpoint_fibres_card_eq_two_at_balanced_boundary
+
+-- Loss-one blocks classify the unique four-point midpoint fibre.
+#print axioms MinModulus.finset_map_loss_eq_sum_fibre_excess
+#print axioms MinModulus.exists_double_fibre_and_other_fibres_le_one_of_loss_one
+#print axioms MinModulus.exists_double_subset_fibre_and_other_fibres_le_one_of_loss_one
+#print axioms MinModulus.exists_four_point_fibre_and_other_fibres_le_two_of_unit_block_loss
+#print axioms MinModulus.exists_four_point_fibre_and_other_fibres_le_two_of_minimum_loss
+#print axioms MinModulus.midpoint_boundary_fibre_four_and_other_fibres_le_two
