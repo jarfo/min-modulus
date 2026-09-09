@@ -5419,3 +5419,9 @@ import MinModulus
 #print axioms MinModulus.binary_core_negative_digits_mem_profile_lower_box
 #print axioms MinModulus.binary_core_whole_chains_of_singleton_profile
 #print axioms MinModulus.boundary_full_support_core_whole_chains
+
+-- Two full-support relations confine original chains to balanced blocks.
+#print axioms MinModulus.boundary_full_support_relation_whole_chains
+#print axioms MinModulus.whole_family_in_cell_of_two_union_partitions
+#print axioms MinModulus.complementary_collision_pair_across_disjoint_blocks
+#print axioms MinModulus.exists_boundary_balanced_blocks_containing_whole_chains

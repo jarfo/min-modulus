@@ -732,3 +732,5 @@ import MinModulus.BoundaryRectangleDistribution
 import MinModulus.ProfileRectangleInjectivity
 
 import MinModulus.BoundaryCoreChainSeparation
+
+import MinModulus.BoundaryChainBlocks

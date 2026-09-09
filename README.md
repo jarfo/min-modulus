@@ -5825,6 +5825,28 @@ inside one balanced collision block. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — boundary chains stay in balanced collision blocks.**
+`BoundaryChainBlocks.lean` extends full-support chain separation to either
+orientation of a complementary relation. Complementary pairs from the two
+balanced blocks give two transverse full-support relations. A finite-set
+argument confines any family lying on one side of each relation to a
+single one of their four common parts.
+
+Consequently, at the valid sharp large-midpoint boundary, the balanced
+loss-one blocks can be chosen so that every supplied original chain lies
+entirely inside one block. This conclusion retains the actual coordinate
+equivalence and does not impose a bound on the number of chains.
+
+Verification: four theorems; 15,358 full build jobs; 5,040 complete audits
+(5,036 standard-only, four axiom-free); 136,076 passing forest tests,
+including 60 new cases. Tests exhaust small transverse partitions and
+complementary relation constructions, and check reindexed actual boundary
+examples through dimension ten. Next strengthen block separation directly
+from independent subset-sum images, without tuple validity or a chosen
+forest. Arbitrary charged-chain extraction remains unproved. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
