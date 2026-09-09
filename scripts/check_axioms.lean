@@ -5715,3 +5715,13 @@ import MinModulus
 #print axioms MinModulus.subset_fibre_card_le_ranked_weight_quotient
 #print axioms MinModulus.fibre_card_sub_one_mul_growth_step_le_total_weight
 #print axioms MinModulus.fibre_card_sub_two_mul_growth_tax_bound
+
+-- Larger fibres force stronger actual forest and original-escape density.
+#print axioms MinModulus.exists_global_ranks_of_actual_forest
+#print axioms MinModulus.twice_total_length_le_binary_weight_add_arm_count
+#print axioms MinModulus.fibre_multiplicity_forest_arm_count_bound
+#print axioms MinModulus.dimension_add_three_le_twice_forest_arms_of_four_fibre
+#print axioms MinModulus.cyclic_escape_density_of_fibre_multiplicity
+#print axioms MinModulus.cyclic_half_escape_density_of_four_fibre
+#print axioms MinModulus.odd_cyclic_half_escape_density_of_four_fibre
+#print axioms MinModulus.cyclic_subset_fibre_card_le_three_of_half_escape_cost

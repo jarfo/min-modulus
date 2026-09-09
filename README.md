@@ -6867,6 +6867,32 @@ density, especially at fibres of size four or more. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — larger fibres force stronger original-escape density.**
+`FibreMultiplicityEscapeDensity.lean` transports the full multiplicity
+budget to complete actual forests. A fibre of size m>=3 forces
+(m-3)n+m-1 <= (m-2)r for the number r of arms. The cyclic extraction
+then gives (m-3)n+1 <= (m-2)|A| for original escapes A.
+
+In particular, four or more subsets in one fibre force n+3 <= 2r,
+n+1 <= 2|A| in cyclic groups, and n+3 <= 2|A| for odd moduli. Thus
+2|A| <= n ensures every cyclic fibre has size at most three. These
+bounds use only actual tuple data; no forest, cut, or acyclicity is
+supplied as a hypothesis.
+
+Verification: eight theorems; 15,396 full build jobs; 5,264 complete
+audits (5,260 standard-only, four axiom-free); 139,004 passing forest
+tests, including 123 new cases. Tests cover all small valid tuples,
+all affine shifts of larger power examples through n=10, and a valid
+four-point fibre modulo 248 with an actual doubling arrow. Numerical
+boundary tests check the arithmetic implication without claiming that
+valid tuples realize equality.
+
+Next use the three-point cap for exact intrinsic-loss correction:
+each triple-fibre value accounts for one unit of core-cube overcount.
+Then extend that correction to arbitrary multiplicity. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

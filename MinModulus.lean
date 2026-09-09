@@ -808,3 +808,5 @@ import MinModulus.TripleFibreAggregateGrowth
 import MinModulus.TripleFibreLinearEscapes
 
 import MinModulus.FibreMultiplicityGrowth
+
+import MinModulus.FibreMultiplicityEscapeDensity
