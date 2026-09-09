@@ -5599,3 +5599,12 @@ import MinModulus
 #print axioms MinModulus.binary_collision_cores_eq_singleton_of_affine_cycle
 #print axioms MinModulus.intrinsic_loss_eq_outside_cube_of_affine_cycle
 #print axioms MinModulus.affine_cycle_images_eq
+
+-- Large predecessor weights force collision orientation and bound intrinsic loss.
+#print axioms MinModulus.high_rank_coordinate_not_mem_negative_side
+#print axioms MinModulus.high_rank_coordinate_mem_positive_side
+#print axioms MinModulus.equal_sum_subsets_eq_of_high_rank_membership
+#print axioms MinModulus.subset_fibre_card_le_two_of_high_rank_coordinate
+#print axioms MinModulus.intrinsic_loss_eq_core_cube_sum_of_high_rank_coordinate
+#print axioms MinModulus.intrinsic_loss_le_complement_cube_of_negative_side_avoidance
+#print axioms MinModulus.intrinsic_loss_le_complement_cube_of_high_rank_set

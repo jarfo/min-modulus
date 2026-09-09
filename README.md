@@ -6544,6 +6544,34 @@ actual doubling graph. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified
 milestone.
 
+**2026-09-09 — high predecessor weights control fibres and intrinsic loss.**
+`HighRankCollisionFibres.lean` proves that a coordinate with actual
+predecessor weight at least n is absent from every smaller collision
+side and present in every larger side. Membership of one such
+coordinate distinguishes every subset in a fixed sum fibre. Thus
+each fibre has at most two members, and intrinsic loss equals the
+sum of complementary cubes of the actual binary cores.
+
+More generally, if all smaller collision sides avoid a set H, every
+subset meeting H has a distinct sum, giving loss <= 2^(n-|H|).
+Applying this to any supplied set of high-rank coordinates gives
+the same bound without a cycle or prior loss assumption. The result
+does not assert that the core family is a singleton.
+
+Verification: seven theorems; 15,384 full build jobs; 5,171 complete
+audits (5,167 standard-only, four axiom-free); 137,765 passing forest
+tests, including 92 new cases. Checks cover all small valid cyclic
+tuples, all shifts of larger examples, alternative ranks stopping
+inside cycles, and nonzero loss with high rank in an acyclic graph.
+Weight n-1 can occur on a smaller side; an invalid tuple can have an
+actual high-rank coordinate and a triple fibre.
+
+Next extract deep coordinates through iterated actual doubling
+targets, allowing repeated cycle vertices, and bound their complement
+using original escapes and a doubling cut. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
