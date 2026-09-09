@@ -730,3 +730,5 @@ import MinModulus.BoundaryCoreSupportCounts
 import MinModulus.BoundaryRectangleDistribution
 
 import MinModulus.ProfileRectangleInjectivity
+
+import MinModulus.BoundaryCoreChainSeparation

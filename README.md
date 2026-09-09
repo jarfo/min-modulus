@@ -5802,6 +5802,29 @@ chains in full-support binary cores. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — whole chains in full-support boundary cores.**
+`BoundaryCoreChainSeparation.lean` proves that a singleton rectangle lies
+at a box corner and that singleton profiles have only endpoint
+coordinates. Maximal explicit chain digits are equivalent to containing
+every original coordinate of the chain. The negative subset's digit point
+belongs to its actual core profile rectangle.
+
+Whenever an actual core rectangle is a singleton, the coordinate identity
+therefore puts each complete original chain on one side of that core.
+At the valid sharp large-midpoint boundary, this applies to both
+full-support cores: every chain is wholly positive or wholly negative
+in each such core. These are statements about the supplied original
+chain equivalence, including arbitrary reindexing.
+
+Verification: six theorems; 15,357 full build jobs; 5,036 complete audits
+(5,032 standard-only, four axiom-free); 136,016 passing forest tests,
+including 93 new cases. Tests exhaust small disjoint pairs and digit
+endpoints, valid long-chain examples, and actual boundary full-support
+cores. Next combine the two full-support relations to put every chain
+inside one balanced collision block. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

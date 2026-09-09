@@ -5411,3 +5411,11 @@ import MinModulus
 #print axioms MinModulus.singleton_profile_lower_box_unique_at_point
 #print axioms MinModulus.singleton_members_at_two_covering_points
 #print axioms MinModulus.exists_boundary_singleton_rectangle_locations
+
+-- Singleton endpoint geometry and whole chains in full-support boundary cores.
+#print axioms MinModulus.singleton_profile_lower_box_point_is_corner
+#print axioms MinModulus.profile_lower_box_card_eq_one_iff_endpoint_coordinates
+#print axioms MinModulus.forest_subset_digit_max_iff
+#print axioms MinModulus.binary_core_negative_digits_mem_profile_lower_box
+#print axioms MinModulus.binary_core_whole_chains_of_singleton_profile
+#print axioms MinModulus.boundary_full_support_core_whole_chains
