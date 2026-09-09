@@ -6841,6 +6841,32 @@ use larger fibres to force stronger escape density. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — arbitrary fibre multiplicity consumes predecessor growth.**
+`FibreMultiplicityGrowth.lean` extends the triple-fibre argument to
+all multiplicities. Let W be total coordinate predecessor weight and
+T=W-n its nonnegative excess. Every unequal collision has subset
+weights separated by at least T+1, in cardinality order.
+
+Dividing those weights by T+1 embeds every sum fibre into distinct
+integer bins. Its cardinality m satisfies m <= floor(W/(T+1))+1 and
+(m-1)(T+1) <= W. For m>=2 this gives (m-2)T+m-1 <= n. The m=3 case
+recovers the aggregate triple bound; larger fibres restrict growth
+more strongly. No forest, cycle exclusion, or maximal rank choice
+is required.
+
+Verification: five theorems; 15,395 full build jobs; 5,256 complete
+audits (5,252 standard-only, four axiom-free); 138,881 passing forest
+tests, including 110 new cases. Tests check all ordered pairs and
+weight bins in actual fibres. The valid tuple
+(3,4,6,10,18,34,66,130) modulo 248 has a four-point fibre and positive
+growth tax T=1, so larger multiplicity and actual arrows can coexist.
+Alternative finite ranks on cycles and both failed hypotheses are checked.
+
+Next turn the multiplicity restriction into stronger original-escape
+density, especially at fibres of size four or more. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

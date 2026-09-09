@@ -806,3 +806,5 @@ import MinModulus.TripleFibreShortForests
 import MinModulus.TripleFibreAggregateGrowth
 
 import MinModulus.TripleFibreLinearEscapes
+
+import MinModulus.FibreMultiplicityGrowth

@@ -5708,3 +5708,10 @@ import MinModulus
 #print axioms MinModulus.odd_cyclic_linear_escape_density_of_triple_fibre
 #print axioms MinModulus.cyclic_subset_fibre_card_le_two_of_linear_escape_cost
 #print axioms MinModulus.cyclic_intrinsic_loss_eq_core_cube_sum_of_linear_escape_cost
+
+-- Arbitrary fibre multiplicity is bounded by separated predecessor weights.
+#print axioms MinModulus.dimension_le_total_ranked_weight
+#print axioms MinModulus.ranked_weight_separation_of_unequal_collision
+#print axioms MinModulus.subset_fibre_card_le_ranked_weight_quotient
+#print axioms MinModulus.fibre_card_sub_one_mul_growth_step_le_total_weight
+#print axioms MinModulus.fibre_card_sub_two_mul_growth_tax_bound
