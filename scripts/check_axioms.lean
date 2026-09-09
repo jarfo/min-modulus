@@ -5189,3 +5189,12 @@ import MinModulus
 #print axioms MinModulus.exists_unique_full_support_binary_core_of_odd_loss
 #print axioms MinModulus.exists_unique_full_support_binary_core_of_odd_modulus_loss
 #print axioms MinModulus.exists_unique_full_support_binary_core_of_odd_modulus_small_loss
+
+-- Full-support uniqueness from odd loss at all cyclic moduli.
+#print axioms MinModulus.full_support_core_card_le_doubling_fibre_card
+#print axioms MinModulus.zmod_doubling_fibre_card_le_two
+#print axioms MinModulus.cyclic_full_support_core_card_le_two
+#print axioms MinModulus.binary_core_sum_mod_two_eq_full_core_count
+#print axioms MinModulus.intrinsic_loss_mod_two_eq_full_core_count
+#print axioms MinModulus.exists_unique_full_support_core_of_cyclic_odd_loss
+#print axioms MinModulus.exists_unique_full_support_core_of_cyclic_odd_small_loss

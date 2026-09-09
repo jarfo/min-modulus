@@ -678,3 +678,5 @@ import MinModulus.BinaryCollisionCores
 import MinModulus.BinaryCoreDivisibility
 
 import MinModulus.FullSupportBinaryCore
+
+import MinModulus.CyclicFullSupportCore

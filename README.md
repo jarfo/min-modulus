@@ -5182,6 +5182,29 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — unique full-support core at every cyclic modulus.**
+`CyclicFullSupportCore.lean` injects full-support cores into solutions
+of the doubled-sum equation. At any nonzero cyclic modulus, that equation
+has at most two solutions; their representatives are distinguished by
+the quotient of twice the representative by the modulus. Hence a
+two-point subset-fibre cap permits at most two full-support cores.
+
+Only full-support cores have odd dyadic charge. For valid tuples without
+triple fibres, their count therefore has the same parity as intrinsic
+loss. Odd loss forces exactly one full-support core at every nonzero
+cyclic modulus, including even modulus where doubling is not injective.
+The earlier small-loss criterion again supplies the fibre cap.
+
+Verification: seven theorems; 15,331 full build jobs; 4,867 complete audits
+(4,863 standard-only, four axiom-free); 134,299 passing forest tests,
+including 102 new cases. Tests exhaust doubling fibres and small core
+parities, check valid shifted odd/even modulus examples, include the
+even-modulus odd loss-9 case, and retain the even loss-2 example with two
+full cores. Next use subset complementation directly to extract full
+support from odd loss without any fibre cap. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
