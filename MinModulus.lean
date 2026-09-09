@@ -800,3 +800,5 @@ import MinModulus.CycleOutsideWalkGrowth
 import MinModulus.ExtinctTargetEscapeBudget
 
 import MinModulus.TripleFibreEscapeRoutes
+
+import MinModulus.TripleFibreShortForests

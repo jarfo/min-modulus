@@ -5683,3 +5683,10 @@ import MinModulus
 #print axioms MinModulus.exists_short_actual_escape_walk_of_triple_fibre
 #print axioms MinModulus.exists_logarithmic_escape_walk_of_triple_fibre
 #print axioms MinModulus.no_affine_cycle_of_triple_fibre
+
+-- Triple fibres extract complete short forests with a genuine longest arm.
+#print axioms MinModulus.doubling_chain_length_le_clog_of_triple_fibre
+#print axioms MinModulus.forest_arms_le_clog_of_triple_fibre
+#print axioms MinModulus.dimension_le_forest_arm_count_mul_clog_of_triple_fibre
+#print axioms MinModulus.exists_short_affine_forest_of_one_collision_triple_fibre
+#print axioms MinModulus.exists_short_affine_forest_of_cyclic_triple_fibre

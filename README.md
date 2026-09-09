@@ -6766,6 +6766,28 @@ original escape. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified
 milestone.
 
+**2026-09-09 — triple fibres extract complete logarithmically short forests.**
+`TripleFibreShortForests.lean` bounds every actual chain and every
+arm of any complete forest by ceil(log2 n) vertices. Thus the number
+of arms times that depth covers the dimension.
+
+For groups with at most one nonzero involution, a triple fibre now
+extracts the complete forest itself, with at most one additional
+terminal. A longest arm ends at an original escape. Cyclic groups
+satisfy the group hypothesis automatically; neither acyclicity nor
+a supplied forest is required.
+
+Verification: five theorems; 15,392 full build jobs; 5,237 complete
+audits (5,233 standard-only, four axiom-free); 138,513 passing forest
+tests, including 110 new cases. Tests construct complete forests,
+check every coordinate and doubling arrow, and preserve a genuine
+longest arm through an actual merge in (5,6,8,12,20,36,68) modulo 124.
+
+Next bound aggregate predecessor weight across all coordinates and
+use it to strengthen escape density beyond the maximum-arm bound.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
