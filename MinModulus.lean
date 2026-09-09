@@ -826,3 +826,5 @@ import MinModulus.OddFibreCorrectionLossBounds
 import MinModulus.SmallFibreOvercountClassification
 
 import MinModulus.OddCorrectionCoreBoundary
+
+import MinModulus.OddModulusCorrectionParity

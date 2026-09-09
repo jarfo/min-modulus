@@ -7084,6 +7084,28 @@ sharpen the alternatives immediately above this boundary. Conjecture
 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — odd cyclic moduli impose unrestricted correction and core parity.**
+OddModulusCorrectionParity.lean proves that odd correction at positive
+dimension has exactly one attained midpoint and odd intrinsic loss
+in every odd cyclic modulus. Neither conclusion requires validity.
+
+For valid tuples, odd correction therefore forces even core charge.
+Conversely odd core charge forces even correction and odd loss,
+without a loss, charge, multiplicity, or dimension-size bound.
+
+Verification: four theorems; 15,405 full build jobs; 5,313 complete
+audits (5,309 standard-only, four axiom-free); 139,905 passing forest
+tests, including 76 new cases. Valid examples have positive even
+correction at odd charge above the earlier small-charge threshold.
+The valid tuple (10,11,13,17,25) modulo 28 has loss 12, correction
+three and charge 15, showing that the odd-modulus hypothesis matters.
+
+Next combine this unrestricted parity with the balanced boundary
+classification, then use complement parity to exclude equality in
+the triple-fibre growth bound. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

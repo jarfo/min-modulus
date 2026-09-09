@@ -5786,3 +5786,9 @@ import MinModulus
 #print axioms MinModulus.binary_core_card_eq_four_at_odd_core_boundary
 #print axioms MinModulus.even_fibre_overcount_of_balanced_core_bound_and_card_ne_four
 #print axioms MinModulus.intrinsic_loss_mod_two_eq_core_sum_of_balanced_bound_and_card_ne_four
+
+-- Odd cyclic moduli force unrestricted correction and core parity.
+#print axioms MinModulus.odd_cyclic_attained_midpoint_card_eq_one_of_odd_overcount
+#print axioms MinModulus.odd_intrinsic_loss_of_odd_cyclic_overcount
+#print axioms MinModulus.even_core_sum_of_odd_cyclic_overcount
+#print axioms MinModulus.even_overcount_and_odd_loss_of_odd_cyclic_core_sum
