@@ -5215,3 +5215,12 @@ import MinModulus
 #print axioms MinModulus.exists_unique_tuple_binary_midpoint_of_cyclic_odd_loss
 #print axioms MinModulus.exists_common_full_core_sum_of_cyclic_odd_loss
 #print axioms MinModulus.even_tuple_binary_midpoint_fibre_card
+
+-- Complementary support sharpens midpoint fibre and full-core bounds.
+#print axioms MinModulus.complementary_subset_support_sum_eq_dimension
+#print axioms MinModulus.dimension_le_twice_log_loss_of_complementary_collision
+#print axioms MinModulus.midpoint_fibre_card_le_two_of_intrinsic_half_exponent
+#print axioms MinModulus.full_binary_core_negative_eq_complement
+#print axioms MinModulus.full_binary_core_eq_of_equal_sum_and_local_fibre_cap
+#print axioms MinModulus.exists_unique_full_core_of_injective_doubling_half_exponent
+#print axioms MinModulus.exists_unique_full_core_of_cyclic_odd_half_exponent_loss

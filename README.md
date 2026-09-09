@@ -5257,6 +5257,31 @@ charged-chain extraction remains unproved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — half-exponent midpoint support bound.**
+`MidpointFibreSupport.lean` proves that the distances from any subset to
+a complementary pair add to the dimension. A third subset in a midpoint
+fibre therefore forces `n ≤ 2 * Nat.log 2 L`. Consequently,
+`2 * Nat.log 2 L < n` caps midpoint fibres at two points, without validity
+or any restriction on other fibres. This improves the earlier general
+fibre threshold `3 * Nat.log 2 L < n` specifically at midpoints.
+
+Full-support cores are determined by their positive side and its
+complement. A cap only on their common midpoint fibre suffices to identify
+them. Hence valid tuples with odd loss and the half-exponent bound have a
+unique full-support core at every nonzero cyclic modulus, or in any
+additive group with injective doubling. The valid powers tuple modulo 30
+at shift one has dimension five and loss seven: it meets the new threshold
+and fails the old one. A separate unrestricted nine-coordinate example
+has a two-point midpoint fibre while other fibres have three points.
+
+Verification: seven theorems; 15,334 full build jobs; 4,887 complete audits
+(4,883 standard-only, four axiom-free); 134,496 passing forest tests,
+including 50 new cases. Next connect midpoint fibres to every actual
+coordinate deletion, its translated target, and its image overlap.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
