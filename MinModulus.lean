@@ -656,3 +656,5 @@ import MinModulus.IntrinsicFibreLoss
 import MinModulus.ZeroSumFaceLoss
 
 import MinModulus.EvenIntrinsicChainContinuation
+
+import MinModulus.ParityIntrinsicChainContinuation

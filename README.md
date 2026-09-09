@@ -4894,6 +4894,33 @@ the even class for arbitrary seeds. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — arbitrary-seed continuation from alternating parity charge.**
+`ParityIntrinsicChainContinuation.lean` finds a sixteenth-width arithmetic
+progression in each wide exterior interval: even coefficients give even
+residues for any seed; odd coefficients give odd residues for odd seeds.
+Actual axis injectivity makes these points distinct. Thus an actual chain
+at even modulus closes the original global bound, every positive
+exact-stratum bound and direct G3 obstruction when `m >= 4`,
+`2*n+1 <= 2^m`, and its chosen intrinsic parity loss is at most `2^(m-4)`.
+The chosen class may be even for any seed, or either class for an odd seed.
+
+Endpoints and remaining coordinates are arbitrary. Maximal continuation
+preserves the seed and intrinsic loss, then uses the generalized parity
+rejoin theorem and an actual cycle. The preceding eighth-width allowance
+for even seeds and even charge remains available. A valid dimension-4
+example at modulus 14 attains the new allowance in either parity class
+with odd seed 1 and chain length 4.
+
+Verification: nine theorems; 15,320 full build jobs; 4,782 complete audits
+(4,778 standard-only, four axiom-free); 133,585 passing forest tests,
+including 73 new cases. Tests check alternating actual progressions,
+parity conditions, genuine forests, arbitrary-start affine continuation
+and both minimum-length parity choices. Next derive exact intrinsic loss
+identities under coordinate insertion and deletion, retaining actual
+subset-image overlaps for descent. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
