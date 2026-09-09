@@ -642,3 +642,5 @@ import MinModulus.ParityCollisionLoss
 import MinModulus.ExactCollisionLoss
 
 import MinModulus.ForestFibreSpacing
+
+import MinModulus.ProfileCollisionPairs

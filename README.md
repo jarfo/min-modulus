@@ -4713,6 +4713,32 @@ extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after every
 verified milestone.
 
+**2026-09-09 — profile volumes count actual collision pairs.**
+`ProfileCollisionPairs.lean` proves a bijection between points in actual
+profile lower rectangles, counted with their profile labels, and pairs
+of equal-sum box points ordered from heavier to lighter. A profile and
+lower point determine a unique heavier partner; every ordered collision
+reconstructs its actual small profile. Thus summed profile volumes equal
+the number of ordered collision pairs, without a wide-forest premise.
+
+This explains the difference from exact union loss: an overlapping
+lower point contributes one pair for each heavier partner, while the
+removed union counts that point once. For the valid modulo-12 example,
+profile volume and pair count are 8, while union loss is 6. Both actual
+coordinates and all short-arm geometry are retained.
+
+Verification: one definition and three theorems; 15,313 full build jobs;
+4,725 complete audits (4,721 standard-only, four axiom-free); 132,994
+passing forest tests, including 38 new cases. Tests check both directions
+of the bijection, multiple-point fibres, overlap, translation, scaling
+and actual chain regrouping. Next identify complete forest boxes with
+the original shifted binary subset cube, so actual collision loss can
+be preserved exactly as chains change. Then charge that intrinsic loss
+using actual zero-sum cycles. Arbitrary sufficiently charged-family
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after every
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

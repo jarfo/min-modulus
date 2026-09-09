@@ -5014,3 +5014,9 @@ import MinModulus
 #print axioms MinModulus.box_fibre_card_pred_mul_spacing_le_diameter
 #print axioms MinModulus.box_fibre_card_le_of_spacing_multiple
 #print axioms MinModulus.large_box_fibre_forces_diameter_bound
+
+-- Actual profile rectangle points count ordered collision pairs.
+#print axioms MinModulus.exists_unique_heavier_partner_of_profile_lower_point
+#print axioms MinModulus.exists_profile_of_ordered_box_collision
+#print axioms MinModulus.forestOrderedCollisionPairs
+#print axioms MinModulus.profile_volume_eq_ordered_collision_pair_card
