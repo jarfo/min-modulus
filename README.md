@@ -5780,6 +5780,28 @@ triangle-plus-edge incidence pattern. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — rectangle injectivity and boundary singleton locations.**
+`ProfileRectangleInjectivity.lean` constructs the coordinate extrema of
+every bounded profile rectangle and proves that the rectangle uniquely
+determines its profile, without validity or profile smallness. A singleton
+profile is twice its sole box point in every coordinate. A finite-family
+lemma places two singleton members once at each of two covering points.
+
+At the valid sharp large-midpoint boundary, these results place exactly
+one singleton rectangle at the point of incidence three and exactly one
+at the distinct point of incidence two. The central profile contains both
+points and hence cannot be a singleton. Tests additionally confirm that
+the pair-only leaf is the singleton at the point of incidence two.
+
+Verification: six theorems; 15,356 full build jobs; 5,030 complete audits
+(5,026 standard-only, four axiom-free); 135,923 passing forest tests,
+including 43 new cases. Exhaustive bounded rectangles include zero-length
+chains; actual boundary examples cover dimensions five through ten.
+Next translate singleton geometry into restrictions on the original
+chains in full-support binary cores. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

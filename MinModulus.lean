@@ -728,3 +728,5 @@ import MinModulus.ProfileCoreCharges
 import MinModulus.BoundaryCoreSupportCounts
 
 import MinModulus.BoundaryRectangleDistribution
+
+import MinModulus.ProfileRectangleInjectivity

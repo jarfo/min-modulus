@@ -5403,3 +5403,11 @@ import MinModulus
 #print axioms MinModulus.boundary_profile_rectangle_card_count
 #print axioms MinModulus.boundary_singleton_profile_rectangle_card_eq_two
 #print axioms MinModulus.boundary_nonsingleton_profile_rectangle_card_eq_two
+
+-- Rectangle injectivity and locations of the two boundary singletons.
+#print axioms MinModulus.exists_profile_lower_box_extreme_points
+#print axioms MinModulus.forest_profile_lower_box_injective
+#print axioms MinModulus.singleton_profile_lower_box_coordinate_eq_double
+#print axioms MinModulus.singleton_profile_lower_box_unique_at_point
+#print axioms MinModulus.singleton_members_at_two_covering_points
+#print axioms MinModulus.exists_boundary_singleton_rectangle_locations
