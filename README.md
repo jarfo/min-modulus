@@ -6254,6 +6254,34 @@ The global extraction remains open. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
 each verified milestone.
 
+**2026-09-09 — exact support counts and collision set-pair packing.**
+`CollisionSeparatingPermutationCount.lean` proves that a disjoint pair
+(U,V) has exactly n!/binom(|U|+|V|,|U|) separating permutations.
+Relabeling preserves counts whenever both side cardinalities agree.
+For any support S and size k, the events for (T,S\T), |T|=k,
+partition all n! coordinate permutations by their unique initial block.
+The proof includes empty supports and either empty side.
+
+Combining the exact rational density with actual equal-gap event
+packing gives sum(1/binom(|U|+|V|,|U|)) <= 1 for every selected
+fixed-gap family of actual collision cores. This uses each core's
+own support and is stronger than the preceding original-dimension
+LYM bound. No forest, escape, or cyclic-group hypothesis is needed.
+
+Verification: five public theorems; 15,374 full build jobs; 5,112
+complete audits (5,108 standard-only, four axiom-free); 136,863
+passing forest tests, including 83 new cases. Exhaustive permutation
+checks cover every disjoint pair through n=5, arbitrary support
+bipartitions and larger full supports through n=8, relabeling,
+empty cases, and exact rational weights on verified actual families.
+Invalid fixed-gap families demonstrate the necessity of validity.
+
+Next convert this weighted packing into explicit bounds on the
+complementary cube charges, using support restrictions from original
+escapes. The global extraction remains open. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -5522,3 +5522,10 @@ import MinModulus
 #print axioms MinModulus.not_separates_both_crossing_pairs
 #print axioms MinModulus.equal_gap_collision_separating_permutations_disjoint
 #print axioms MinModulus.equal_gap_collision_separating_permutation_count_sum_le_factorial
+
+-- Exact support-sensitive permutation counts and collision set-pair packing.
+#print axioms MinModulus.collision_separating_permutation_card_eq_of_side_cards
+#print axioms MinModulus.separating_permutations_partition_by_support
+#print axioms MinModulus.collision_separating_permutation_card_mul_choose
+#print axioms MinModulus.collision_separating_permutation_density_eq_inv_choose
+#print axioms MinModulus.equal_gap_binary_collision_family_support_lym_bound

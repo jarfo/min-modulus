@@ -764,3 +764,5 @@ import MinModulus.EqualGapCollisionCrossing
 import MinModulus.EqualGapCollisionAntichains
 
 import MinModulus.CollisionSeparatingPermutations
+
+import MinModulus.CollisionSeparatingPermutationCount
