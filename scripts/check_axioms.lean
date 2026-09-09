@@ -5134,3 +5134,12 @@ import MinModulus
 #print axioms MinModulus.forest_profile_rectangles_pairwise_disjoint_of_small_intrinsic_loss
 #print axioms MinModulus.forest_collision_loss_eq_profile_volume_of_small_intrinsic_loss
 #print axioms MinModulus.intrinsic_loss_eq_profile_volume_of_small_loss
+
+-- Arbitrary fibre cardinality from intrinsic collision support.
+#print axioms MinModulus.twice_subset_family_support_sum_le
+#print axioms MinModulus.subset_family_card_support_bound
+#print axioms MinModulus.tuple_subset_fibre_card_intrinsic_loss_bound
+#print axioms MinModulus.forest_fibre_card_intrinsic_loss_bound
+#print axioms MinModulus.card_le_quotient_of_support_bound
+#print axioms MinModulus.tuple_subset_fibre_card_le_intrinsic_quotient
+#print axioms MinModulus.forest_fibre_card_le_intrinsic_quotient

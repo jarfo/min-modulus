@@ -5026,6 +5026,32 @@ to obtain a general quantitative size bound. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — arbitrary fibre cardinality from intrinsic loss.**
+`IntrinsicFibreCardBound.lean` counts coordinate disagreements across
+an arbitrary family of binary subsets. If its size is `m`, the ordered
+support sum is at most `n*m^2/2`. Combining this with each collision's
+support lower bound gives `(m-2)*n <= 2*(m-1)*k`, where
+`k = floor(log_2(intrinsic loss))`, for every shifted subset-sum fibre.
+Subtractions are natural. No tuple-validity assumption is needed.
+
+When `2*k < n`, solving the inequality gives the explicit bound
+`m <= floor(2*(n-k)/(n-2*k))`. Every complete actual forest encoding
+inherits the same bound without a wide-diameter premise. This covers
+a broader loss regime than the previous two-point theorem; actual
+three-point fibres can occur here. The stronger earlier conclusion
+under `3*k < n` remains available.
+
+Verification: seven theorems; 15,325 full build jobs; 4,824 complete audits
+(4,820 standard-only, four axiom-free); 133,888 passing forest tests,
+including 57 new cases. Tests exhaust small binary families and sum
+fibres, attain the coordinate bound with a balanced four-word family,
+construct actual triple fibres in the broader quotient regime, check
+valid gap families under regrouping, and retain the positive-denominator
+boundary. Next express summed profile volume by exact fibre moments and
+use the cardinality bound to control overlap. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

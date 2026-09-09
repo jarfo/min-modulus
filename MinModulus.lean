@@ -666,3 +666,5 @@ import MinModulus.SubsetFibreLossRecurrence
 import MinModulus.IntrinsicCollisionSupport
 
 import MinModulus.SmallIntrinsicLossFibres
+
+import MinModulus.IntrinsicFibreCardBound
