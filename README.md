@@ -5742,6 +5742,25 @@ balanced blocks and the resulting rectangle sizes. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — exact boundary core support counts.**
+`BoundaryCoreSupportCounts.lean` proves that a block with subset collision
+loss one contains exactly one oriented binary core under tuple validity.
+At the sharp large-midpoint boundary in dimension at least four, the
+balanced disjoint blocks support one core each; the other two cores have
+full support. These exhaust all four actual binary cores.
+
+The core-to-profile correspondence then shows that every actual rectangle
+has size one or one of the two balanced powers of two. The next step is
+the exact multiplicity formula, including the coinciding large sizes in
+even dimension. Tests verify valid boundary examples in dimensions five
+through ten as well as the underlying support classification.
+
+Verification: six theorems; 15,354 full build jobs; 5,017 complete audits
+(5,013 standard-only, four axiom-free); 135,828 passing forest tests,
+including 71 new cases. Arbitrary charged-chain extraction remains
+unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

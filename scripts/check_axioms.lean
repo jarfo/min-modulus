@@ -5386,3 +5386,11 @@ import MinModulus
 #print axioms MinModulus.profile_lower_box_card_eq_core_charge_sum
 #print axioms MinModulus.boundary_profile_lower_box_card_eq_core_charge
 #print axioms MinModulus.profile_lower_box_card_is_two_pow_at_midpoint_boundary
+
+-- Exact balanced-block and full-support core counts and possible rectangle sizes.
+#print axioms MinModulus.binary_core_contained_card_le_one_of_loss_one
+#print axioms MinModulus.exists_binary_core_with_support_of_loss_one
+#print axioms MinModulus.binary_core_support_card_eq_one_of_loss_one
+#print axioms MinModulus.disjoint_relation_support_eq_block_or_union_of_unit_loss
+#print axioms MinModulus.exists_boundary_binary_core_support_distribution
+#print axioms MinModulus.boundary_profile_lower_box_card_eq_one_or_balanced_powers

@@ -724,3 +724,5 @@ import MinModulus.ForestBinaryDigits
 import MinModulus.BinaryCoreProfileMap
 
 import MinModulus.ProfileCoreCharges
+
+import MinModulus.BoundaryCoreSupportCounts
