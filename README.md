@@ -4838,6 +4838,34 @@ extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after every
 verified milestone.
 
+**2026-09-09 — zero-sum faces charge both intrinsic parity losses.**
+`ZeroSumFaceLoss.lean` proves a general discarded-point inequality:
+if every domain point has a retained representative with the same image,
+removed points lower-bound collision loss inside every target predicate.
+Retained injectivity is unnecessary. For any tuple, subsets disjoint from
+a nonempty zero-sum coordinate set C can be removed, since adjoining C
+preserves their sum. A complement embedding identifies this lost face
+with the entire complementary subset cube. Thus loss is at least
+`2^(n-C.card)` without the validity premise used in the earlier profile proof.
+
+At even nonzero modulus, an odd coordinate outside C divides that face
+equally between parity classes: each intrinsic parity loss pays half
+its size. Every actual affine cycle in a subbinary valid tuple consists
+of even shifted values, so the automatically supplied odd coordinate
+lies outside the cycle. Consequently `2^(n-c) <= 2*parityLoss_v` in each
+class, and a parity budget `2^k` forces `n <= c+k+1`.
+
+Verification: seven theorems; 15,318 full build jobs; 4,762 complete
+audits (4,758 standard-only, four axiom-free); 133,374 passing forest
+tests, including 58 new cases. Tests exhaust small finite maps, invalid
+and valid zero-sum tuples, arbitrary target predicates, sharp actual
+affine cycle examples, and the need for an odd complementary coordinate.
+Next continue even-seed chains using intrinsic even loss alone; their
+genuine exterior intervals lie entirely in that class. Arbitrary
+sufficiently charged-chain extraction remains unproved. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

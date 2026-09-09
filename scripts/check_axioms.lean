@@ -5058,3 +5058,12 @@ import MinModulus
 #print axioms MinModulus.twice_subset_parity_card_eq_two_pow
 #print axioms MinModulus.twice_intrinsic_parity_image_add_loss_eq_two_pow
 #print axioms MinModulus.exists_odd_shifted_coordinate_of_subbinary_even_tuple
+
+-- Zero-sum faces charge each intrinsic parity loss.
+#print axioms MinModulus.image_filter_card_add_discarded_le
+#print axioms MinModulus.zero_sum_disjoint_face_card_le_intrinsic_fibre_loss
+#print axioms MinModulus.exists_complement_embedding_with_subset_face_card
+#print axioms MinModulus.two_pow_complement_le_intrinsic_loss_of_zero_sum_face
+#print axioms MinModulus.two_pow_complement_le_twice_intrinsic_parity_loss_of_zero_sum
+#print axioms MinModulus.two_pow_outside_le_twice_intrinsic_parity_loss_of_affine_cycle
+#print axioms MinModulus.dimension_le_cycle_add_parity_loss_exponent
