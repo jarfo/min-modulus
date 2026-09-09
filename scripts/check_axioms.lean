@@ -4999,3 +4999,11 @@ import MinModulus
 #print axioms MinModulus.binary_bound_of_genuine_exterior_union_parity_charge
 #print axioms MinModulus.exterior_parity_card_lt_collision_parity_loss_of_subbinary
 #print axioms MinModulus.two_power_add_exterior_parity_card_le_collision_loss
+
+-- Exact box-image and target-fibre collision loss.
+#print axioms MinModulus.heavier_box_point_of_mem_profile_removed_set
+#print axioms MinModulus.exists_retained_box_point_in_same_fibre
+#print axioms MinModulus.image_filter_card_add_removed_card
+#print axioms MinModulus.forest_box_image_filter_card_add_collision_loss
+#print axioms MinModulus.forest_box_image_card_add_collision_loss_eq_two_pow
+#print axioms MinModulus.twice_forest_parity_image_add_loss_eq_two_pow

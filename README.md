@@ -4661,6 +4661,32 @@ chosen target set. Arbitrary sufficiently charged-family extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN,
 0/3. Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — collision loss is the exact box-image deficit.**
+`ExactCollisionLoss.lean` proves `|box image| + loss = 2^n` for every
+complete actual valid forest with positive lengths, including short
+arms and overlapping profile rectangles. Every removed point has a
+strictly heavier point in the same sum fibre. A maximum-weight point
+therefore survives in each fibre, and the retained map is injective.
+It represents exactly the original box image.
+
+The same identity holds inside any target predicate: target image size
+plus removed points mapping there equals the original target-domain
+size. With an odd seed in an even modulus, each parity image plus its
+actual parity loss is exactly half the binary box. No wide-forest
+hypothesis is needed for these identities.
+
+Verification: six theorems; 15,311 full build jobs; 4,716 complete audits
+(4,712 standard-only, four axiom-free); 132,922 passing forest tests,
+including 37 new cases. The valid tuple `(2,3,5,9)` modulo 12 has
+three-point sum fibres: its profile volumes total 8, their overlapping
+union has size 6, and its box image has size 10, giving `10+6=16`.
+Tests also check exact counts in several target predicates and each
+parity, plus maximum-weight representatives in actual fibres.
+Next bound larger fibres through their forced total-weight spacing as
+box diameter grows. Arbitrary sufficiently charged-family extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN,
+0/3. Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
