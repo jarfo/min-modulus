@@ -5770,3 +5770,11 @@ import MinModulus
 #print axioms MinModulus.even_fibre_overcount_of_core_sum_lt_balanced_sum_add_two
 #print axioms MinModulus.intrinsic_loss_mod_two_eq_core_sum_of_balanced_core_bound
 #print axioms MinModulus.even_fibre_overcount_of_core_sum_le_twice_dimension_add_one
+
+-- Small full correction determines the exceptional fibre structure.
+#print axioms MinModulus.tupleFourFibreValues
+#print axioms MinModulus.subset_fibre_card_le_four_of_overcount_le_five
+#print axioms MinModulus.fibre_overcount_eq_triple_add_three_four_count_of_cap_four
+#print axioms MinModulus.triple_and_four_counts_of_overcount_eq_three
+#print axioms MinModulus.exists_unique_four_point_midpoint_of_overcount_eq_three
+#print axioms MinModulus.triple_and_four_counts_of_overcount_eq_four

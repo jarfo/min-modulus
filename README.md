@@ -7039,6 +7039,27 @@ tuple structure at the sharp core-charge boundary. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — small full correction determines exceptional fibres.**
+SmallFibreOvercountClassification.lean defines the number F4 of
+attained four-point fibres. Correction D<=5 caps all fibres at four;
+under that cap, D=T+3F4, where T counts three-point fibres.
+
+Correction three forces T=0 and F4=1. The unique four-point fibre
+is at a midpoint, and every other fibre has at most two points.
+Correction four instead forces exactly four three-point fibres and
+no four-point fibres. These conclusions require no tuple validity.
+
+Verification: one definition and five theorems; 15,403 full build
+jobs; 5,303 complete audits (5,299 standard-only, four axiom-free);
+139,717 passing forest tests, including 106 new cases. Valid examples
+realize correction three and four; correction six can have two
+four-point fibres.
+
+Next transfer the unique midpoint at correction three to the sharp
+core-charge boundary and extract balanced blocks and four cores.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

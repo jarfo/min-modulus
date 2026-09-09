@@ -822,3 +822,5 @@ import MinModulus.FibreOvercountGap
 import MinModulus.MidpointFibreOvercountParity
 
 import MinModulus.OddFibreCorrectionLossBounds
+
+import MinModulus.SmallFibreOvercountClassification
