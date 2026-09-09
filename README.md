@@ -5643,6 +5643,32 @@ the entire intersection pattern. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — complete boundary profile intersection pattern.**
+`BoundaryProfileIncidencePattern.lean` selects the two actual multiply
+covered box points, of incidences three and two. For a valid positive
+complete forest in dimension at least four at the sharp large-midpoint
+boundary, the two corresponding groups of profiles share exactly one
+profile and together exhaust all four profiles. There are two profiles
+only in the triple group and one only in the pair group.
+
+Every pairwise intersection is determined by these two points. Thus the
+profile intersection graph is a triangle with one attached edge. The
+proof uses the actual incidence sets, the four-profile count, and the
+singleton pair-intersection bound; it does not merely infer a graph from
+the number of edges. A five-profile triangle plus disjoint edge is excluded
+by the established total profile count.
+
+Verification: five theorems; 15,350 full build jobs; 4,990 complete audits
+(4,986 standard-only, four axiom-free); 135,530 passing forest tests,
+including 41 new cases. Tests exhaust small dual incidence bounds,
+labelled incidence patterns with private points, valid boundary examples,
+and counterexamples when hypotheses are omitted. Next expose the actual
+binary digits and compare box-weight order with original subset order
+to refine the link between individual profiles and their binary cores.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

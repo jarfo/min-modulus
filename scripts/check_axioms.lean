@@ -5352,3 +5352,10 @@ import MinModulus
 #print axioms MinModulus.profile_card_le_binary_core_card
 #print axioms MinModulus.profile_card_le_four_at_midpoint_boundary
 #print axioms MinModulus.profile_card_eq_four_at_midpoint_boundary
+
+-- Complete incidence and intersection pattern of the four boundary profiles.
+#print axioms MinModulus.incidence_family_intersection_card_le_one
+#print axioms MinModulus.four_label_incidence_partition
+#print axioms MinModulus.pair_intersection_nonempty_iff_of_two_multiple_points
+#print axioms MinModulus.exists_two_boundary_multiple_points
+#print axioms MinModulus.exists_boundary_profile_incidence_partition
