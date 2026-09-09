@@ -4634,6 +4634,33 @@ extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after every
 verified milestone.
 
+**2026-09-09 — separate parity charges against actual collision loss.**
+`ParityCollisionLoss.lean` partitions actual collision loss by the parity
+of each removed point's group value. Every subbinary valid forest in
+an even cyclic group has an odd seed, extracted from validity without
+a failed half-descent assumption. Its binary box therefore splits
+equally by parity. Each avoided set satisfies
+`2^n + 2*|F_v| <= N + 2*loss_v` separately for both parity classes.
+
+Selected genuine wide arms supply their actual exterior intervals in
+each class. Paying the loss in either parity already forces binary
+size, even if total exterior charge fails. Conversely, every subbinary
+forest has `|F_v| < loss_v` for both classes. At modulus `2^(s+1)*q`,
+`q > 0`, each class obeys the sharper rounded deficit
+`2^s + |F_v| <= loss_v`. All short companion arms and overlaps remain.
+
+Verification: one definition and seven theorems; 15,310 full build jobs;
+4,710 complete audits (4,706 standard-only, four axiom-free); 132,885
+passing forest tests, including 38 new cases. Actual valid models have
+an even exterior interval of size 4, total collision loss 8 and even
+loss 4: parity charge succeeds while total selected charge fails.
+Other tests check each rounded stratum deficit and all-even valid
+forests above binary size. Next prove the collision loss equals the
+exact number of box points lost when forming the image, in every
+chosen target set. Arbitrary sufficiently charged-family extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN,
+0/3. Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

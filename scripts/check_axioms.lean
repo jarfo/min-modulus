@@ -4989,3 +4989,13 @@ import MinModulus
 #print axioms MinModulus.forest_exterior_intervals_singleton_card
 #print axioms MinModulus.wide_boundary_interval_collision_loss_card_bound
 #print axioms MinModulus.binary_card_bound_of_genuine_arm_collision_loss
+
+-- Actual collision loss and exterior charges in each parity class.
+#print axioms MinModulus.forestCollisionParityLoss
+#print axioms MinModulus.forest_collision_parity_loss_add
+#print axioms MinModulus.exists_odd_seed_of_subbinary_even_chain_forest
+#print axioms MinModulus.parity_collision_loss_gap_with_avoided_set
+#print axioms MinModulus.genuine_exterior_union_parity_collision_loss_card_bound
+#print axioms MinModulus.binary_bound_of_genuine_exterior_union_parity_charge
+#print axioms MinModulus.exterior_parity_card_lt_collision_parity_loss_of_subbinary
+#print axioms MinModulus.two_power_add_exterior_parity_card_le_collision_loss

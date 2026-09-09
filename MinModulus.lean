@@ -636,3 +636,5 @@ import MinModulus.ObstructingChainForest
 import MinModulus.InjectiveObstructingForest
 
 import MinModulus.CollisionLossPacking
+
+import MinModulus.ParityCollisionLoss
