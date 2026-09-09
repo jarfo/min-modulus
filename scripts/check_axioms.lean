@@ -5394,3 +5394,12 @@ import MinModulus
 #print axioms MinModulus.disjoint_relation_support_eq_block_or_union_of_unit_loss
 #print axioms MinModulus.exists_boundary_binary_core_support_distribution
 #print axioms MinModulus.boundary_profile_lower_box_card_eq_one_or_balanced_powers
+
+-- Exact multiplicities of the four boundary rectangle sizes.
+#print axioms MinModulus.filter_card_eq_sum_level_counts
+#print axioms MinModulus.card_filter_eq_of_bijective_weight
+#print axioms MinModulus.boundary_rectangle_card_count_eq_core_charge_count
+#print axioms MinModulus.boundary_binary_core_charge_count
+#print axioms MinModulus.boundary_profile_rectangle_card_count
+#print axioms MinModulus.boundary_singleton_profile_rectangle_card_eq_two
+#print axioms MinModulus.boundary_nonsingleton_profile_rectangle_card_eq_two

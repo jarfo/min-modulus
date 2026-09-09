@@ -726,3 +726,5 @@ import MinModulus.BinaryCoreProfileMap
 import MinModulus.ProfileCoreCharges
 
 import MinModulus.BoundaryCoreSupportCounts
+
+import MinModulus.BoundaryRectangleDistribution

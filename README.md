@@ -5761,6 +5761,25 @@ including 71 new cases. Arbitrary charged-chain extraction remains
 unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — exact boundary rectangle size distribution.**
+`BoundaryRectangleDistribution.lean` transfers every weight multiplicity
+through a finite bijection and applies the core-to-profile map. At the
+valid sharp large-midpoint boundary in dimension at least four, the four
+rectangle sizes are exactly `1, 1, 2^(n/2), 2^(n-n/2)`. The explicit
+indicator formula counts coinciding large sizes twice in even dimension.
+Exactly two rectangles are singletons and two are not.
+
+Verification: seven theorems; 15,355 full build jobs; 5,024 complete audits
+(5,020 standard-only, four axiom-free); 135,880 passing forest tests,
+including 52 new cases. Reindexed valid examples in dimensions five
+through ten check every size multiplicity. Invalid boundary and valid
+nonboundary counterexamples test the need for the hypotheses.
+
+Next identify where the two singleton rectangles lie in the established
+triangle-plus-edge incidence pattern. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
