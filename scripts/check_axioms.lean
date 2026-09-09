@@ -5425,3 +5425,10 @@ import MinModulus
 #print axioms MinModulus.whole_family_in_cell_of_two_union_partitions
 #print axioms MinModulus.complementary_collision_pair_across_disjoint_blocks
 #print axioms MinModulus.exists_boundary_balanced_blocks_containing_whole_chains
+
+-- Independent loss-one blocks exclude all nonzero cross-block doubling.
+#print axioms MinModulus.double_coordinate_is_subset_sum_difference_of_loss_one
+#print axioms MinModulus.coordinate_eq_zero_of_subset_sum_difference_across_independent_blocks
+#print axioms MinModulus.double_coordinate_across_independent_loss_one_block_eq_zero
+#print axioms MinModulus.add_injective_on_swapped_finset_product
+#print axioms MinModulus.exists_boundary_balanced_blocks_without_cross_doubling

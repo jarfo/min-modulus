@@ -5847,6 +5847,30 @@ forest. Arbitrary charged-chain extraction remains unproved. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — boundary blocks exclude doubling without validity.**
+`BoundaryDoublingBlocks.lean` shows that twice each coordinate of a
+loss-one block is a difference of two actual subset sums from that block.
+Independent addition of two block sumsets then forces any doubling edge
+from that block into the other to end at zero. Reversing the product gives
+the same conclusion in the other direction.
+
+The sharp large-midpoint boundary in dimension at least four excludes
+zero coordinates. Its balanced loss-one blocks therefore have no doubling
+edge between them in either direction. This strengthens the previous
+chain containment result: it requires neither tuple validity nor a
+preselected forest and controls every actual shifted doubling edge.
+
+Verification: five theorems; 15,359 full build jobs; 5,045 complete audits
+(5,041 standard-only, four axiom-free); 136,143 passing forest tests,
+including 67 new cases. Tests exhaust small loss-one difference sets and
+independent sumsets. Explicitly invalid boundary examples in dimensions
+five through twelve have long doubling chains and still satisfy the
+conclusion; exact alternative coefficient vectors certify invalidity.
+Next refine each block into its complementary collision parts and control
+doubling there. Arbitrary charged-chain extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push
+both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
