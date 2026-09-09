@@ -6989,6 +6989,31 @@ the sharp balanced loss bound to constrain total core charge.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-09 — odd correction requires a large midpoint fibre.**
+MidpointFibreOvercountParity.lean lifts finite weights to copies and
+pairs them under an involution. Applying this to fibre excess pairs
+shows that total correction D is even whenever all midpoint fibres
+have size at most two; other fibres may have arbitrary multiplicity.
+
+In positive dimension, odd D therefore requires an attained midpoint
+with at least four subset representations. The intrinsic half-exponent
+condition 2*floor(log2 loss)<n excludes that obstruction, making D even
+and, for valid tuples, giving equal parity of core charge and loss.
+No global fibre cap or forest is assumed.
+
+Verification: five theorems; 15,401 full build jobs; 5,290 complete
+audits (5,286 standard-only, four axiom-free); 139,509 passing forest
+tests, including 99 new cases. A valid correction-three example has
+a four-point midpoint. Tuples with other triple fibres demonstrate
+that the evenness criterion does not require a global two-point cap.
+The repeated-zero example tests strictness of the exponent threshold.
+
+Next use the sharp balanced midpoint bound for quantitative
+odd-correction thresholds, then classify the smallest odd correction
+and the core-charge boundary. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

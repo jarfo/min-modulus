@@ -5754,3 +5754,10 @@ import MinModulus
 #print axioms MinModulus.tuple_binary_fibre_overcount_ne_one
 #print axioms MinModulus.intrinsic_loss_add_two_le_core_sum_of_any_triple
 #print axioms MinModulus.intrinsic_loss_add_one_ne_core_cube_sum
+
+-- Odd full correction requires a large midpoint fibre.
+#print axioms MinModulus.even_weighted_sum_of_involution_with_zero_fixed_weights
+#print axioms MinModulus.even_fibre_overcount_of_midpoint_fibres_le_two
+#print axioms MinModulus.exists_four_point_midpoint_of_odd_fibre_overcount
+#print axioms MinModulus.even_fibre_overcount_of_intrinsic_half_exponent
+#print axioms MinModulus.intrinsic_loss_mod_two_eq_core_sum_of_half_exponent

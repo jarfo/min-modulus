@@ -818,3 +818,5 @@ import MinModulus.GeneralFibreLossCorrection
 import MinModulus.TripleFibreCorrectionParity
 
 import MinModulus.FibreOvercountGap
+
+import MinModulus.MidpointFibreOvercountParity
