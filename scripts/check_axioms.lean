@@ -5180,3 +5180,12 @@ import MinModulus
 #print axioms MinModulus.two_pow_mul_binary_core_count_le_intrinsic_loss
 #print axioms MinModulus.binary_core_count_le_intrinsic_loss
 #print axioms MinModulus.exists_full_support_binary_core_of_odd_small_loss
+
+-- Unique full-support relation cores under injective doubling.
+#print axioms MinModulus.two_nsmul_full_binary_core_sum_eq_total
+#print axioms MinModulus.full_support_binary_core_eq_of_equal_sum
+#print axioms MinModulus.full_support_binary_core_eq_of_doubling_injective
+#print axioms MinModulus.full_support_binary_core_card_le_one
+#print axioms MinModulus.exists_unique_full_support_binary_core_of_odd_loss
+#print axioms MinModulus.exists_unique_full_support_binary_core_of_odd_modulus_loss
+#print axioms MinModulus.exists_unique_full_support_binary_core_of_odd_modulus_small_loss

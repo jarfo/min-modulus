@@ -676,3 +676,5 @@ import MinModulus.ExactProfileOverlap
 import MinModulus.BinaryCollisionCores
 
 import MinModulus.BinaryCoreDivisibility
+
+import MinModulus.FullSupportBinaryCore

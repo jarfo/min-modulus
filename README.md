@@ -5156,6 +5156,32 @@ including odd cyclic modulus. Arbitrary charged-chain extraction remains
 unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — uniqueness of full-support binary relation cores.**
+`FullSupportBinaryCore.lean` proves that twice either side's sum in a
+full-support core equals the total shifted tuple sum. Under a two-point
+fibre cap, the positive side's sum uniquely determines the entire core:
+the negative side is its complement, and strict cardinality fixes the
+orientation. This step requires no tuple validity or injective doubling.
+
+If doubling is injective, all full-support cores have the same positive
+sum and there is at most one. Combined with dyadic extraction, odd
+intrinsic loss in a valid tuple without triple fibres gives a unique
+full-support signed relation. The result specializes to every odd
+nonzero cyclic modulus, including the small-loss sufficient condition.
+The signed relation need not have an empty negative side.
+
+Verification: seven theorems; 15,330 full build jobs; 4,860 complete audits
+(4,856 standard-only, four axiom-free); 134,197 passing forest tests,
+including 80 new cases. Tests exhaust small core values in odd and even
+cyclic groups and integers, check actual valid shifted odd-modulus gap
+families, retain the unique signed loss-3 example, and exhibit both
+necessary boundaries: an even-modulus valid tuple with two full cores,
+and failure without the two-point fibre cap. Next bound full cores by
+the doubling fibre at even modulus and use parity of their count.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
