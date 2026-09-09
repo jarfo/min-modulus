@@ -5030,3 +5030,8 @@ import MinModulus
 #print axioms MinModulus.tuple_binary_image_card_add_loss_eq_two_pow
 #print axioms MinModulus.forest_box_image_eq_tuple_binary_image
 #print axioms MinModulus.forest_collision_loss_eq_tuple_binary_loss
+
+-- Actual zero-sum sets and affine cycles force intrinsic collision loss.
+#print axioms MinModulus.two_pow_complement_le_intrinsic_loss_of_zero_sum
+#print axioms MinModulus.two_pow_outside_le_intrinsic_loss_of_affine_cycle
+#print axioms MinModulus.dimension_le_cycle_add_loss_exponent

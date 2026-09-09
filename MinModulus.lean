@@ -646,3 +646,5 @@ import MinModulus.ForestFibreSpacing
 import MinModulus.ProfileCollisionPairs
 
 import MinModulus.ForestSubsetCube
+
+import MinModulus.CycleIntrinsicLoss

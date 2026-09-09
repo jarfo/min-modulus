@@ -4761,6 +4761,30 @@ charged-family extraction remains unproved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after every
 verified milestone.
 
+**2026-09-09 — actual cycles force intrinsic collision loss.**
+`CycleIntrinsicLoss.lean` proves that a nonempty zero-sum set C of
+shifted coordinates in a valid tuple forces intrinsic loss at least
+`2^(n-C.card)`. In the singleton forest, its indicator complement is
+an actual collision profile with precisely that lower-rectangle volume;
+the removed union contains that rectangle. The complete-forest invariance
+transfers this bound to the tuple's fixed intrinsic loss.
+
+Every embedded affine doubling cycle of size c supplies such a set.
+Consequently, intrinsic loss at most `2^k` forces `n <= c+k` for every
+actual cycle. This binds a continued chain's extracted cycle to the same
+loss budget, independently of how the remaining coordinates are grouped.
+
+Verification: three theorems; 15,315 full build jobs; 4,736 complete
+audits (4,732 standard-only, four axiom-free); 133,115 passing forest
+tests, including 60 new cases. Tests verify disjoint colliding subset
+faces for every nonempty zero-sum set in translated valid short examples,
+and sharp loss equality for actual affine gap cycles. Next combine
+intrinsic charge, genuine-endpoint packing and maximal chain continuation
+to close a larger arbitrary-endpoint chain class. Arbitrary sufficiently
+charged-chain extraction remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after every
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
