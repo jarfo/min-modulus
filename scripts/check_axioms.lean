@@ -5690,3 +5690,10 @@ import MinModulus
 #print axioms MinModulus.dimension_le_forest_arm_count_mul_clog_of_triple_fibre
 #print axioms MinModulus.exists_short_affine_forest_of_one_collision_triple_fibre
 #print axioms MinModulus.exists_short_affine_forest_of_cyclic_triple_fibre
+
+-- Triple fibres bound aggregate predecessor weight across all coordinates.
+#print axioms MinModulus.completed_collision_ranked_weight_lt_dimension
+#print axioms MinModulus.total_ranked_weight_bound_of_ordered_triple
+#print axioms MinModulus.total_ranked_weight_add_two_le_twice_dimension_of_triple_fibre
+#print axioms MinModulus.subset_fibre_card_le_two_of_total_ranked_weight
+#print axioms MinModulus.intrinsic_loss_eq_core_cube_sum_of_total_ranked_weight

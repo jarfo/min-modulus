@@ -6788,6 +6788,32 @@ use it to strengthen escape density beyond the maximum-arm bound.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-09 — triple fibres bound aggregate predecessor growth.**
+`TripleFibreAggregateGrowth.lean` upgrades completed collision
+counting to arbitrary actual predecessor weights. For a collision
+with smaller side V and larger side U, the weight on V plus the
+weight outside U is strictly below n; overlaps count twice.
+
+For three equal-sum subsets ordered by cardinality, the two adjacent
+collision inequalities include the middle subset and its complement.
+Thus their total coordinate weight W satisfies W+2 <= 2n. No forest,
+acyclicity, disjoint collision sides, or maximal rank choice is assumed.
+Conversely W+2 > 2n forces every fibre to have multiplicity at most two
+and gives exact complementary-core accounting for intrinsic loss.
+
+Verification: five theorems; 15,393 full build jobs; 5,242 complete
+audits (5,238 standard-only, four axiom-free); 138,620 passing forest
+tests, including 107 new cases. Two moderate three-vertex chains in
+the valid integer tuple (1,2,4,25,50,100) give W=14 at n=6, while every
+individual weight is below n: the aggregate criterion adds information.
+Tests also cover all small valid cyclic tuples, all shifts of larger
+examples, alternative ranks on cycles, and failed hypotheses.
+
+Next apply aggregate weight to complete forests to obtain a linear
+lower bound on original escapes at triple-fibre shifts. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
