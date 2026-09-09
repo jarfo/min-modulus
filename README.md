@@ -6683,6 +6683,36 @@ the aggregate weight. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified
 milestone.
 
+**2026-09-09 — aggregate outside-walk growth sharpens cycle recovery.**
+`CycleOutsideWalkGrowth.lean` proves that a walk disjoint from a
+nonempty zero-sum set C cannot repeat a coordinate: a repeated
+segment would form a predecessor-closed set outside C, contradicting
+validity. Refining all k+1 vertices together then gives
+2^(k+1) <= |C|+k+1.
+
+For an actual affine cycle, a walk ending outside the cycle stays
+outside throughout, because the valid tuple has unique coordinate
+values and hence unique actual successors. Target iteration therefore
+recovers the cycle whenever c+k+1 < 2^(k+1). At this sharper stopping
+depth, the core and intrinsic loss are exact, and original escapes
+give n <= c+k(|A|+|B|).
+
+Verification: eight theorems; 15,389 full build jobs; 5,217 complete
+audits (5,213 standard-only, four axiom-free); 138,222 passing forest
+tests, including 94 new cases. Checks cover all outside walks and
+zero-sum sets in small valid tuples and all shifts of larger examples.
+A four-cycle is recovered one step earlier than the endpoint-only
+test; a five-cycle attains equality and keeps an outside endpoint.
+The invalid seven-coordinate modulus-120 tuple passes the endpoint
+weight bound but fails aggregate growth, providing a stronger
+hypothesis regression case.
+
+Next sharpen the escape count when target iteration becomes empty:
+its last nonempty layer consists of original escapes and should not
+pay another cut. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
