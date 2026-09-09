@@ -708,3 +708,5 @@ import MinModulus.ProfileIncidenceRanks
 import MinModulus.ProfileIncidenceDistribution
 
 import MinModulus.ProfileBoundaryIntersections
+
+import MinModulus.ProfileIntersectionFamilies

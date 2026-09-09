@@ -5318,3 +5318,11 @@ import MinModulus
 #print axioms MinModulus.profile_pair_intersection_card_le_one_of_nonzero_seeds
 #print axioms MinModulus.forest_seeds_ne_zero_at_midpoint_boundary
 #print axioms MinModulus.profile_pair_intersection_card_le_one_at_midpoint_boundary
+
+-- Count actual intersecting profile subfamilies at the sharp midpoint boundary.
+#print axioms MinModulus.exists_unique_common_point_of_pair_intersection_cap
+#print axioms MinModulus.intersecting_subfamily_card_eq_sum_incidence_choose
+#print axioms MinModulus.sum_incidence_choose_of_two_and_three_levels
+#print axioms MinModulus.intersecting_profile_subfamily_card_at_midpoint_boundary
+#print axioms MinModulus.intersecting_profile_pair_card_eq_four_at_midpoint_boundary
+#print axioms MinModulus.exists_unique_intersecting_profile_triple_at_midpoint_boundary

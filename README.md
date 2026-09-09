@@ -5545,6 +5545,29 @@ charged-chain extraction remains unproved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — actual intersecting profile subfamilies.**
+`ProfileIntersectionFamilies.lean` counts intersecting subfamilies of
+at least two labelled finite sets by their unique common points when
+every distinct pair has at most one common point. The count is the sum
+of binomial coefficients of point incidences.
+
+For an actual valid forest at the sharp large-midpoint boundary in
+dimension at least four, this count is `choose(2,k)+choose(3,k)` for
+`k >= 2`: four intersecting unordered profile pairs, a unique intersecting
+triple, and no intersecting subfamily of four or more profiles. This
+does not yet bound the total number of profiles; additional profiles
+with no intersections are not excluded by incidence counting alone.
+
+Verification: six theorems; 15,346 full build jobs; 4,965 complete audits
+(4,961 standard-only, four axiom-free); 135,285 passing forest tests,
+including 53 new cases. Tests exhaust small labelled set families and
+check actual valid boundary examples and failures without the hypotheses.
+Next classify the complementary collision pairs inside the two blocks
+of loss one, then use them to constrain every boundary collision core.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
