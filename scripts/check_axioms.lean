@@ -5198,3 +5198,11 @@ import MinModulus
 #print axioms MinModulus.intrinsic_loss_mod_two_eq_full_core_count
 #print axioms MinModulus.exists_unique_full_support_core_of_cyclic_odd_loss
 #print axioms MinModulus.exists_unique_full_support_core_of_cyclic_odd_small_loss
+
+-- Odd loss forces full support without a fibre cap.
+#print axioms MinModulus.even_card_of_fixed_point_free_involution_on
+#print axioms MinModulus.total_sub_mem_tuple_binary_image
+#print axioms MinModulus.even_tuple_binary_image_card_of_no_midpoint
+#print axioms MinModulus.exists_tuple_binary_midpoint_of_odd_intrinsic_loss
+#print axioms MinModulus.exists_full_support_binary_core_of_midpoint
+#print axioms MinModulus.exists_full_support_binary_core_of_odd_loss

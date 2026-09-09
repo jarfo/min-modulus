@@ -5205,6 +5205,33 @@ support from odd loss without any fibre cap. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — odd loss forces full support without a fibre cap.**
+`OddLossFullSupport.lean` uses subset complementation to reflect the
+actual binary image by `z -> total - z`. If no attained value is a half
+of the total shifted sum, the reflection has no fixed points and the
+image cardinality is even. In positive dimension, odd intrinsic loss
+therefore forces an attained midpoint, without tuple validity or any
+bound on fibre size.
+
+For a valid tuple, a midpoint subset and its complement have equal sums
+and different cardinalities. Orienting the larger side produces an actual
+full-support binary relation core. Thus odd intrinsic loss forces full
+support in every positive-dimensional valid tuple over any additive
+abelian group. No cyclic or finite-group assumption is required, and no
+triple-fibre exclusion is needed. This proves existence; multiple full
+cores may remain in the same midpoint fibre.
+
+Verification: six theorems; 15,332 full build jobs; 4,873 complete audits
+(4,869 standard-only, four axiom-free); 134,372 passing forest tests,
+including 73 new cases. Tests exhaust small reflected images, check
+actual valid shifted tuples and infinite integer groups, and include a
+valid loss-15 tuple with a four-point midpoint fibre and two full cores.
+Next determine midpoint-count parity and uniqueness of the attained
+midpoint value at cyclic modulus, while retaining possible multiplicity
+of its relation cores. Arbitrary charged-chain extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push
+both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

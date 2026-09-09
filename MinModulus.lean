@@ -680,3 +680,5 @@ import MinModulus.BinaryCoreDivisibility
 import MinModulus.FullSupportBinaryCore
 
 import MinModulus.CyclicFullSupportCore
+
+import MinModulus.OddLossFullSupport
