@@ -5455,3 +5455,10 @@ import MinModulus
 #print axioms MinModulus.balanced_threshold_lt_loss_of_chain_divisor_obstruction
 #print axioms MinModulus.uniform_odd_chain_length_not_dvd_half
 #print axioms MinModulus.balanced_threshold_lt_loss_of_odd_uniform_chains
+
+-- Internal doubling predecessors force outside injectivity and exclude boundary cycles.
+#print axioms MinModulus.not_validTuple_of_outside_collision_and_doubling_predecessors
+#print axioms MinModulus.outside_subset_sum_injective_of_doubling_predecessors
+#print axioms MinModulus.disjoint_block_loss_eq_zero_of_doubling_predecessors
+#print axioms MinModulus.no_nonempty_doubling_predecessor_set_at_midpoint_boundary
+#print axioms MinModulus.not_affine_doubling_cycle_at_midpoint_boundary

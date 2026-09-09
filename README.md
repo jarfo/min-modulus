@@ -5947,6 +5947,32 @@ whether any valid boundary cycle can survive. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — outside injectivity and boundary cycle exclusion.**
+`PredecessorClosedOutsideLoss.lean` gives a direct multiset proof in every
+abelian group. A nonempty coordinate set with internal doubling
+predecessors can expand its multiset to absorb the term-count decrease
+of an equal-sum collision whose heavier side lies outside it. The result
+omits an original coordinate and contradicts validity. All outside subset
+sums are therefore distinct, and every disjoint block has loss zero.
+
+At a valid sharp large-midpoint boundary in dimension at least four,
+restricting such a predecessor set to either balanced block preserves
+its predecessors. The other block would simultaneously have loss one
+and loss zero. Thus no nonempty predecessor set survives, and no embedded
+affine doubling cycle can occur. No cyclic-group assumption is needed.
+
+Verification: five theorems; 15,363 full build jobs; 5,067 complete audits
+(5,063 standard-only, four axiom-free); 136,352 passing forest tests,
+including 41 new cases. Tests construct explicit omitted rivals, check
+valid tuples with cycles away from the boundary, verify valid boundary
+acyclicity, and give invalid cyclic boundary examples with actual cycles.
+
+Next feed this cycle exclusion into actual forest extraction and derive
+escape-count bounds at the boundary, retaining any necessary single
+collision cut. Arbitrary charged-chain extraction away from this boundary
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

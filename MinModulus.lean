@@ -742,3 +742,5 @@ import MinModulus.LossOneDoublingParts
 import MinModulus.BoundaryChainLengthPartition
 
 import MinModulus.BoundaryChainDivisibility
+
+import MinModulus.PredecessorClosedOutsideLoss
