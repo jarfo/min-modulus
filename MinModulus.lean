@@ -792,3 +792,5 @@ import MinModulus.IteratedDoublingTargets
 import MinModulus.IteratedTargetFibreBounds
 
 import MinModulus.CyclicIteratedTargetBounds
+
+import MinModulus.CanonicalCycleTargets

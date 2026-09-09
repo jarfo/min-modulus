@@ -6656,6 +6656,33 @@ outside zero-sum sets. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified
 milestone.
 
+**2026-09-09 — cycle-sized depth recovers exact targets, cores, and loss.**
+`CanonicalCycleTargets.lean` strengthens walk growth to the actual
+larger collision-side cardinality. Padding an outside endpoint onto
+a nonempty zero-sum set C proves that every length-k walk ending
+outside C has 2^k <= |C|. Hence |C|<2^k forces every iterated target
+into C; predecessor closure is not needed for this containment.
+
+An actual affine cycle persists through all target iterations, so
+the target set equals its image once 2^k exceeds the cycle's size c.
+The unique core, exact loss 2^(n-c), and stability of all later target
+sets follow. The automatic depth is ceil(log2(c+1)), and original
+escapes and a cut give n <= c+k(|A|+|B|) at that depth.
+
+Verification: ten theorems; 15,388 full build jobs; 5,209 complete
+audits (5,205 standard-only, four axiom-free); 138,128 passing forest
+tests, including 90 new cases. Tests cover every nonempty zero-sum
+set in small valid tuples, all shifts of larger examples, cycle
+recovery and stability, and the strict power-of-two cycle boundary.
+A zero-sum set without closure need only contain the iterated targets;
+it need not equal them.
+
+Next refine all vertices of a walk outside a zero-sum set together,
+prove such walks cannot repeat, and sharpen cycle recovery through
+the aggregate weight. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
