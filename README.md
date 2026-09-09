@@ -5232,6 +5232,31 @@ of its relation cores. Arbitrary charged-chain extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push
 both repositories after each verified milestone.
 
+**2026-09-09 — exact midpoint parity and common full-core value.**
+`IntrinsicMidpointParity.lean` proves that a finite involution-stable set
+has the same cardinality modulo two as its fixed-point set. Applied to
+subset complementation, binary image cardinality has the same parity as
+the number of attained midpoint values. In positive dimension, intrinsic
+loss has this same parity. No validity or fibre-size assumption is used.
+
+At any nonzero cyclic modulus there are at most two midpoint roots, so
+odd loss selects exactly one attained midpoint value. Every full-support
+core has that same positive-side sum, even if there are several cores.
+Complementation also proves that each midpoint fibre has even cardinality
+in positive dimension. Value uniqueness is distinct from uniqueness of
+a subset representation or a full-support relation.
+
+Verification: seven theorems; 15,333 full build jobs; 4,880 complete audits
+(4,876 standard-only, four axiom-free); 134,446 passing forest tests,
+including 74 new cases. Tests cover small cyclic and noncyclic images,
+valid shifted families, even midpoint fibres, the valid four-point fibre
+with two cores but one midpoint value, and a noncyclic odd-loss example
+with three attained midpoints. Next use complementary support distances
+to sharpen the loss threshold specifically for midpoint fibres. Arbitrary
+charged-chain extraction remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

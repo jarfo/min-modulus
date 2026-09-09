@@ -5206,3 +5206,12 @@ import MinModulus
 #print axioms MinModulus.exists_tuple_binary_midpoint_of_odd_intrinsic_loss
 #print axioms MinModulus.exists_full_support_binary_core_of_midpoint
 #print axioms MinModulus.exists_full_support_binary_core_of_odd_loss
+
+-- Exact midpoint parity and unique attained value at odd cyclic loss.
+#print axioms MinModulus.finite_involution_card_mod_two_eq_fixed_card
+#print axioms MinModulus.tuple_binary_image_mod_two_eq_midpoint_count
+#print axioms MinModulus.intrinsic_loss_mod_two_eq_midpoint_count
+#print axioms MinModulus.cyclic_attained_midpoint_card_le_two
+#print axioms MinModulus.exists_unique_tuple_binary_midpoint_of_cyclic_odd_loss
+#print axioms MinModulus.exists_common_full_core_sum_of_cyclic_odd_loss
+#print axioms MinModulus.even_tuple_binary_midpoint_fibre_card

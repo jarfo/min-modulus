@@ -682,3 +682,5 @@ import MinModulus.FullSupportBinaryCore
 import MinModulus.CyclicFullSupportCore
 
 import MinModulus.OddLossFullSupport
+
+import MinModulus.IntrinsicMidpointParity
