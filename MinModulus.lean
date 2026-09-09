@@ -720,3 +720,5 @@ import MinModulus.BoundaryProfileCount
 import MinModulus.BoundaryProfileIncidencePattern
 
 import MinModulus.ForestBinaryDigits
+
+import MinModulus.BinaryCoreProfileMap

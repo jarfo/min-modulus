@@ -5692,6 +5692,31 @@ surjectivity, and identify its boundary bijection. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — actual binary-core-to-profile correspondence.**
+`BinaryCoreProfileMap.lean` proves that each oriented binary core of a
+valid positive complete forest determines a unique actual small profile
+through its explicit digit differences. It defines that map, preserves
+its coordinate equations, and proves every actual profile is reached.
+The proof lifts a profile's canonical separated box pair back to disjoint
+original subsets and uses the agreement of fibre orientations.
+
+At the sharp large-midpoint boundary in dimension at least four, this
+map is a bijection between the four actual binary cores and four actual
+profiles. Surjectivity alone is the general statement: the valid forest
+with lengths `(2,1,1)`, seeds `(10,7,2)`, and modulus 12 has two cores
+mapping to one profile away from the boundary.
+
+Verification: one definition and six theorems; 15,352 full build jobs;
+5,005 complete audits (5,001 standard-only, four axiom-free); 135,657
+passing forest tests, including 59 new cases. Tests check actual zero
+digits, all available doubling edges in valid examples, long valid gap
+forests, boundary bijections, and necessary hypotheses. Next express
+each profile rectangle's cardinality as the sum of the dyadic charges
+of the cores mapping to it, then apply the boundary bijection. Arbitrary
+charged-chain extraction remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

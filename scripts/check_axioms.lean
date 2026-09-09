@@ -5369,3 +5369,12 @@ import MinModulus
 #print axioms MinModulus.forest_subset_digits_add_of_disjoint
 #print axioms MinModulus.forest_subset_digit_weight_bounds
 #print axioms MinModulus.forest_subset_digit_weight_lt_iff_card_lt_of_equal_sum
+
+-- Actual core-to-profile surjection and its bijection at the midpoint boundary.
+#print axioms MinModulus.forest_subset_digit_zero_iff
+#print axioms MinModulus.forest_subset_disjoint_of_separated_digits
+#print axioms MinModulus.exists_unique_profile_of_binary_core
+#print axioms MinModulus.binaryCoreForestProfile
+#print axioms MinModulus.binary_core_forest_profile_coordinate_eq
+#print axioms MinModulus.binary_core_forest_profile_surjective
+#print axioms MinModulus.binary_core_forest_profile_bijective_at_midpoint_boundary
