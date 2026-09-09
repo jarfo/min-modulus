@@ -690,3 +690,5 @@ import MinModulus.MidpointFibreSupport
 import MinModulus.MidpointDeletion
 
 import MinModulus.DisjointCollisionLoss
+
+import MinModulus.SharpMidpointLoss

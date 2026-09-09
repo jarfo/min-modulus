@@ -5241,3 +5241,12 @@ import MinModulus
 #print axioms MinModulus.two_colliding_disjoint_blocks_loss_bound
 #print axioms MinModulus.two_colliding_disjoint_blocks_ambient_loss_bound
 #print axioms MinModulus.subset_collision_loss_pos_of_collision
+
+-- Sharp balanced two-block threshold for midpoint fibres.
+#print axioms MinModulus.balanced_two_pow_sum_le
+#print axioms MinModulus.complementary_collision_two_block_loss_bound
+#print axioms MinModulus.balanced_loss_bound_of_complementary_collision
+#print axioms MinModulus.midpoint_fibre_card_le_two_of_balanced_loss_bound
+#print axioms MinModulus.midpoint_fibre_card_eq_two_of_attained_balanced_loss
+#print axioms MinModulus.exists_unique_full_core_of_cyclic_odd_balanced_loss
+#print axioms MinModulus.exists_unique_midpoint_with_unique_deletions_of_cyclic_odd_balanced_loss
