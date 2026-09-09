@@ -788,3 +788,5 @@ import MinModulus.AffineCycleCollisionClassification
 import MinModulus.HighRankCollisionFibres
 
 import MinModulus.IteratedDoublingTargets
+
+import MinModulus.IteratedTargetFibreBounds

@@ -5620,3 +5620,13 @@ import MinModulus
 #print axioms MinModulus.intrinsic_loss_le_pow_escape_cut_depth
 #print axioms MinModulus.intrinsic_loss_le_pow_escape_depth_of_injective_doubling
 #print axioms MinModulus.intrinsic_loss_le_pow_escape_depth_of_one_collision
+
+-- Surviving iterated targets provide fibre capacity and canonical ambient-order bounds.
+#print axioms MinModulus.iterated_affine_targets_subset_positive_collision_side
+#print axioms MinModulus.subset_fibre_card_le_two_of_iterated_affine_target
+#print axioms MinModulus.intrinsic_loss_eq_core_cube_sum_of_iterated_affine_target
+#print axioms MinModulus.iterated_affine_targets_nonempty_of_escape_depth
+#print axioms MinModulus.subset_fibre_card_le_two_of_escape_depth
+#print axioms MinModulus.intrinsic_loss_eq_core_cube_sum_of_escape_depth
+#print axioms MinModulus.intrinsic_loss_le_canonical_escape_cut_budget
+#print axioms MinModulus.group_card_lower_bound_of_canonical_escape_cut_budget

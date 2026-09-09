@@ -6600,6 +6600,34 @@ deep target, and select the ceiling logarithmic depth automatically.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — surviving targets give fibre capacity and canonical order bounds.**
+`IteratedTargetFibreBounds.lean` proves that every target surviving
+k actual doubling steps belongs to each larger collision side when
+n <= 2^k. A single surviving target distinguishes the members of
+each subset-sum fibre, so fibres have at most two members and the
+intrinsic loss is exactly the sum of complementary core cubes.
+
+The original escape-depth cost supplies such a target whenever
+k(|A|+|B|)<n. This requires no supplied cycle or rank function.
+Choosing k=ceil(log2 n), formalized by `Nat.clog 2 n`, gives
+loss <= 2^(k(|A|+|B|)) and the ambient-order bound
+2^n <= |G|+2^(k(|A|+|B|)) automatically, including n=0.
+
+Verification: eight theorems; 15,386 full build jobs; 5,189 complete
+audits (5,185 standard-only, four axiom-free); 137,909 passing forest
+tests, including 71 new cases. Checks include empty and singleton
+tuples, exact logarithmic depths at powers of two, all shifts of
+larger valid tuples, and an acyclic seven-coordinate example with
+one escape and one doubled collision. Its cost is 6<7, a target
+survives, and the exact loss is four. A surviving target can also
+exist when the scalar sufficient condition fails; multiple cores
+remain possible.
+
+Next specialize to actual escape sets in cyclic groups and quantify
+the target extinction and escape density forced by triple fibres.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
