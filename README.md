@@ -4578,6 +4578,34 @@ doubling is injective. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after every verified
 milestone.
 
+**2026-09-09 — exact genuine endpoint sets in obstructing forests.**
+`InjectiveObstructingForest.lean` strengthens acyclic subbinary forest
+extraction whenever doubling is injective on the tuple. The forest is
+indexed by precisely the true escapes: no extra collision cut is needed.
+It retains all coordinate and endpoint identities, all affine seeds,
+positive chain lengths summing to `n`, genuine endpoints at every arm,
+and strict bounded-corner charge failure at every arm, including short
+positive arms. This implies the previous longest-arm obstruction.
+
+Original global and exact-stratum counterexamples with injective
+doubling supply this exact forest at every shift with `5*r+1 <= n`.
+Odd moduli supply injectivity automatically. In the original G1 setting,
+failed half descent supplies injectivity, so parent dimension `n+1`
+and `5*r <= n` give the same exact forest without an added injectivity
+assumption. The general collision case from the preceding milestone
+remains available.
+
+Verification: one definition and seven theorems; 15,308 full build jobs;
+4,690 complete audits (4,686 standard-only, four axiom-free); 132,823
+passing forest tests, including 56 new cases over every candidate shift
+in odd subbinary valid-gap models. Tests check exact endpoint sets,
+coverage, affine identities and every-arm charge failure. Next compare
+the union of genuine exterior intervals with the actual set removed by
+collision profiles, rather than only its bounded-corner upper bound.
+Arbitrary sufficiently charged-family extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

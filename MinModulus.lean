@@ -632,3 +632,5 @@ import MinModulus.LinearCycleEscape
 import MinModulus.BoundedCornerGates
 
 import MinModulus.ObstructingChainForest
+
+import MinModulus.InjectiveObstructingForest
