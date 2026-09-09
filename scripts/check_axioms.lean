@@ -5102,3 +5102,18 @@ import MinModulus
 #print axioms MinModulus.subset_collision_loss_on_univ_eq_tuple_loss
 #print axioms MinModulus.tuple_binary_loss_eq_twice_deleted_loss_add_overlap
 #print axioms MinModulus.subset_collision_loss_growth_of_subset
+
+-- Exact coordinate deletion inside each intrinsic parity class.
+#print axioms MinModulus.subsetFibreLossOn
+#print axioms MinModulus.subset_fibre_image_card_add_loss
+#print axioms MinModulus.subset_filter_card_on_insert
+#print axioms MinModulus.subset_fibre_loss_on_insert
+#print axioms MinModulus.subset_fibre_loss_add_complement
+#print axioms MinModulus.subset_fibre_loss_on_univ_eq_tuple_fibre_loss
+#print axioms MinModulus.even_val_add_iff_of_even_left
+#print axioms MinModulus.even_val_add_iff_of_odd_left
+#print axioms MinModulus.subset_parity_fibre_loss_on_insert_of_even
+#print axioms MinModulus.subset_parity_fibre_loss_on_insert_of_odd
+#print axioms MinModulus.tuple_parity_loss_eq_deleted_loss_add_overlap_of_odd
+#print axioms MinModulus.tuple_parity_loss_eq_twice_deleted_parity_loss_add_overlap_of_even
+#print axioms MinModulus.deleted_loss_le_tuple_parity_loss_of_odd

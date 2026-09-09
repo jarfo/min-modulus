@@ -4948,6 +4948,33 @@ to descent. Arbitrary charged-chain extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
 
+**2026-09-09 — exact coordinate deletion inside intrinsic parity classes.**
+`SubsetFibreLossRecurrence.lean` refines insertion and deletion inside
+any target predicate. The new loss equals the old loss in the target,
+the old loss in its coordinate-shifted target, and the actual translated
+image overlap inside that target. Predicate and complement losses add
+to total loss; the finite-coordinate definitions agree with the intrinsic
+full-tuple definitions.
+
+At even nonzero modulus, an even inserted coordinate preserves parity:
+the new loss in each class is twice that class's old loss plus overlap.
+An odd coordinate exchanges classes, so each new parity loss equals
+the entire old collision loss plus its own overlap. The actual deletion
+identities retain each shifted coordinate. In particular, deleting any
+odd shifted coordinate leaves total loss bounded by either original
+parity loss. No tuple-validity assumption is needed for these identities.
+
+Verification: one definition and twelve theorems; 15,322 full build jobs;
+4,804 complete audits (4,800 standard-only, four axiom-free); 133,704
+passing forest tests, including 62 new cases. Tests exhaust small target
+recurrences, predicate complements, odd and even deletions from valid
+shifted tuples, invalid tuples with unbalanced old cubes, and the need
+for even modulus in parity exchange. Next use exact loss growth and odd
+deletion to bound binary collision support and force injective smaller
+coordinate faces. Arbitrary charged-chain extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

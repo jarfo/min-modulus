@@ -660,3 +660,5 @@ import MinModulus.EvenIntrinsicChainContinuation
 import MinModulus.ParityIntrinsicChainContinuation
 
 import MinModulus.SubsetLossRecurrence
+
+import MinModulus.SubsetFibreLossRecurrence
