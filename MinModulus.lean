@@ -704,3 +704,5 @@ import MinModulus.LossOneFibres
 import MinModulus.ProfileMidpointBoundary
 
 import MinModulus.ProfileIncidenceRanks
+
+import MinModulus.ProfileIncidenceDistribution

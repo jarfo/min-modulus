@@ -5497,6 +5497,30 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — global profile incidence distribution.**
+`ProfileIncidenceDistribution.lean` sums the exact fibre ranks across all
+actual box values. The number of points lying in at least `k` profile
+rectangles is `Σ_z max(r_z-k,0)`. The number lying in exactly `k`
+rectangles is the number of attained fibres of size greater than `k`.
+The first upper level therefore counts intrinsic collision loss exactly.
+These formulas hold for every valid actual forest, without a small-loss
+or midpoint assumption.
+
+At a large midpoint fibre on the sharp boundary, exactly two points
+are multiply covered: one lies in two rectangles and one in three.
+Exactly `L-2` points lie in one rectangle, and no point lies in four or
+more. Thus the previously proved excess three is resolved into its
+actual incidence levels. All counts are preserved under complete chain
+regrouping, although the individual box points depend on the regrouping.
+
+Verification: eight theorems; 15,344 full build jobs; 4,953 complete audits
+(4,949 standard-only, four axiom-free); 135,170 passing forest tests,
+including 60 new cases. Next use rectangle geometry and the boundary
+loss bound to determine whether a pair can share both overlap points.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

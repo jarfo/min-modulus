@@ -5300,3 +5300,13 @@ import MinModulus
 #print axioms MinModulus.card_strict_upper_weight_count_ge
 #print axioms MinModulus.profile_point_incidence_card_eq_heavier_partner_card
 #print axioms MinModulus.forest_fibre_profile_incidence_ge_card
+
+-- Exact global incidence levels and the midpoint-boundary coverage pattern.
+#print axioms MinModulus.finset_card_eq_level_add_card_ge_succ
+#print axioms MinModulus.forest_fibre_profile_incidence_eq_card
+#print axioms MinModulus.profile_incidence_ge_card_eq_sum_fibre_ranks
+#print axioms MinModulus.profile_incidence_eq_card_eq_large_fibre_count
+#print axioms MinModulus.profile_incidence_ge_one_card_eq_intrinsic_loss
+#print axioms MinModulus.profile_incidence_ge_card_at_midpoint_boundary
+#print axioms MinModulus.profile_incidence_eq_card_at_midpoint_boundary
+#print axioms MinModulus.profile_incidence_one_card_at_midpoint_boundary
