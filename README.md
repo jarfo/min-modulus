@@ -5282,6 +5282,29 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — exact midpoint fibre halving under coordinate deletion.**
+`MidpointDeletion.lean` proves reflection of subset fibres on every actual
+finite coordinate set. For any midpoint `z` of the full shifted tuple,
+deleting coordinate `a` gives equal fibre sizes at `z` and `z-(g a+b)`;
+each is exactly half the full midpoint fibre size. No validity, cyclicity,
+or loss bound is needed. Every attained midpoint consequently belongs to
+the actual overlap of the deleted image and its translate by `g a+b`.
+
+Under `2 * Nat.log 2 L < n`, every attained midpoint has exactly two subset
+representations, so both corresponding deleted-coordinate targets have
+exactly one representation, for every coordinate. At odd loss in a
+nonzero cyclic group, this holds at the unique attained midpoint. The
+four-point valid example outside this regime instead gives two child
+representations at every deletion; halving alone does not imply uniqueness.
+
+Verification: seven theorems; 15,335 full build jobs; 4,894 complete audits
+(4,890 standard-only, four axiom-free); 134,587 passing forest tests,
+including 91 new cases. Next combine losses on disjoint actual coordinate
+blocks, then use the two complementary collision supports to sharpen the
+midpoint threshold further. Arbitrary charged-chain extraction remains
+unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

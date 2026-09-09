@@ -686,3 +686,5 @@ import MinModulus.OddLossFullSupport
 import MinModulus.IntrinsicMidpointParity
 
 import MinModulus.MidpointFibreSupport
+
+import MinModulus.MidpointDeletion
