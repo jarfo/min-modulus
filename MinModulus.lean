@@ -744,3 +744,5 @@ import MinModulus.BoundaryChainLengthPartition
 import MinModulus.BoundaryChainDivisibility
 
 import MinModulus.PredecessorClosedOutsideLoss
+
+import MinModulus.BoundaryEscapeDensity

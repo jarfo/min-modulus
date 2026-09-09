@@ -5462,3 +5462,11 @@ import MinModulus
 #print axioms MinModulus.disjoint_block_loss_eq_zero_of_doubling_predecessors
 #print axioms MinModulus.no_nonempty_doubling_predecessor_set_at_midpoint_boundary
 #print axioms MinModulus.not_affine_doubling_cycle_at_midpoint_boundary
+
+-- Actual boundary forests and escape-count lower bounds.
+#print axioms MinModulus.four_mul_le_two_pow_add_four
+#print axioms MinModulus.boundary_forest_diameter_lt_twice_dimension
+#print axioms MinModulus.boundary_forest_chain_count_lower_bound
+#print axioms MinModulus.exists_actual_affine_forest_at_injective_midpoint_boundary
+#print axioms MinModulus.boundary_injective_escape_count_lower_bound
+#print axioms MinModulus.boundary_escape_count_lower_bound_of_one_collision

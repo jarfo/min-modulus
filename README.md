@@ -5973,6 +5973,34 @@ collision cut. Arbitrary charged-chain extraction away from this boundary
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — actual boundary forests and escape density.**
+`BoundaryEscapeDensity.lean` uses the boundary cycle exclusion to extract
+an actual forest on all original coordinates whenever doubling is
+injective. Any proposed escape set indexes the chains, and every chain
+ends at its designated original coordinate. No forest is supplied as a
+hypothesis in this extraction or its escape-count consequence.
+
+Every valid positive forest at the sharp large-midpoint boundary has
+binary diameter D < 2*n-1. Summing 4*L <= 2^L+4 over its chains gives
+2*n+2 <= 5*r. Thus injective doubling forces 2*n+2 <= 5*|A|.
+If the ambient group has at most one nonzero involution, an existing
+construction cuts at most one collision and gives
+2*n+2 <= 5*(|A|+1) for the exact escape set. The group hypothesis is
+explicit; a valid boundary can have a doubled collision.
+
+Verification: six theorems; 15,364 full build jobs; 5,073 complete audits
+(5,069 standard-only, four axiom-free); 136,404 passing forest tests,
+including 52 new cases. Tests reconstruct actual forests and endpoints,
+check nontrivial chains and extra cuts, verify valid boundary examples
+with doubled collisions, and exhibit invalid cyclic boundaries that
+violate the escape bound without validity.
+
+Next quantify finite ranked growth against outside collision gaps,
+so the argument also constrains valid tuples away from this boundary.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
