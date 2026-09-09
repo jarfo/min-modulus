@@ -5447,3 +5447,11 @@ import MinModulus
 #print axioms MinModulus.exists_balanced_chain_length_subfamily_at_midpoint_boundary
 #print axioms MinModulus.chain_length_le_balanced_half_at_midpoint_boundary
 #print axioms MinModulus.balanced_threshold_lt_loss_of_no_balanced_chain_subfamily
+
+-- Common chain-length divisors and odd uniform-chain loss obstructions.
+#print axioms MinModulus.common_chain_length_divisor_dvd_half_at_midpoint_boundary
+#print axioms MinModulus.twice_dvd_of_dvd_and_dvd_floor_half
+#print axioms MinModulus.twice_common_chain_length_divisor_dvd_dimension_at_boundary
+#print axioms MinModulus.balanced_threshold_lt_loss_of_chain_divisor_obstruction
+#print axioms MinModulus.uniform_odd_chain_length_not_dvd_half
+#print axioms MinModulus.balanced_threshold_lt_loss_of_odd_uniform_chains

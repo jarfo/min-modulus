@@ -5922,6 +5922,31 @@ the balanced subfamily condition. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — chain-length divisibility and odd uniform-chain obstruction.**
+`BoundaryChainDivisibility.lean` proves that every common divisor of the
+supplied chain lengths divides `n/2` at the sharp large-midpoint boundary.
+For a common divisor `d >= 2`, the dimension is in fact divisible by `2*d`.
+Failure of the half-dimension divisibility gives strict loss above the
+balanced threshold.
+
+In particular, an odd number of equal-length chains, each of length at
+least two, cannot attain boundary equality. A large midpoint fibre then
+forces strictly greater loss. Neither validity nor cyclicity is required.
+Tests with two equal chains in a product of cyclic groups attain equality,
+and valid odd-dimensional singleton-chain examples show why the lower
+bound on the common length is needed.
+
+Verification: six theorems; 15,362 full build jobs; 5,062 complete audits
+(5,058 standard-only, four axiom-free); 136,311 passing forest tests,
+including 37 new cases. Exhaustive small actual forests cover both uniform
+and nonuniform divisibility obstructions.
+
+Next connect the boundary blocks to cycle extraction: use internal
+doubling predecessors to force distinct outside subset sums, then test
+whether any valid boundary cycle can survive. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
