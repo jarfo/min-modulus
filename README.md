@@ -5617,6 +5617,32 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — exactly four actual boundary profiles.**
+`BoundaryProfileCount.lean` strengthens the actual subset-box equivalence
+to preserve disjointness when one of two digits is zero on each chain.
+Every profile selects a canonical equal-sum pair with that separation
+and strictly ordered box weights. The pairs from distinct profiles are
+distinct; their reversals and the empty pair give a general bound by
+the number of actual disjoint subset collisions, without tuple validity.
+
+For a valid tuple, every complete forest therefore has at most as many
+profiles as there are binary collision cores. At the sharp large-midpoint
+boundary every complete forest has at most four profiles even without
+validity. In dimension at least four, a valid positive complete forest
+has exactly four, because its four intersecting unordered pairs exclude
+three or fewer profiles. This establishes the total profile count,
+including profiles not detected by intersection counting alone.
+
+Verification: seven theorems; 15,349 full build jobs; 4,985 complete audits
+(4,981 standard-only, four axiom-free); 135,489 passing forest tests,
+including 83 new cases. Tests check arbitrary small forests, canonical
+pair injectivity, genuine doubling-edge regroupings, valid boundary
+families, and why sum preservation alone does not imply disjointness.
+Next classify the incidence-three and incidence-two profile groups and
+the entire intersection pattern. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

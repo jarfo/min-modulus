@@ -5343,3 +5343,12 @@ import MinModulus
 #print axioms MinModulus.twice_binary_core_card_add_one_eq_disjoint_pair_card
 #print axioms MinModulus.binary_core_card_eq_four_of_unit_loss_partition
 #print axioms MinModulus.binary_core_card_eq_four_at_midpoint_boundary
+
+-- Compare every actual profile with disjoint pairs and count four boundary profiles.
+#print axioms MinModulus.exists_subset_forest_box_equiv_preserving_chain_separation
+#print axioms MinModulus.twice_oriented_pair_card_add_one_le
+#print axioms MinModulus.exists_chain_separated_pair_of_profile
+#print axioms MinModulus.twice_profile_card_add_one_le_disjoint_pair_card
+#print axioms MinModulus.profile_card_le_binary_core_card
+#print axioms MinModulus.profile_card_le_four_at_midpoint_boundary
+#print axioms MinModulus.profile_card_eq_four_at_midpoint_boundary

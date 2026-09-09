@@ -714,3 +714,5 @@ import MinModulus.ProfileIntersectionFamilies
 import MinModulus.LossOneBlockSupport
 
 import MinModulus.BoundaryCollisionCores
+
+import MinModulus.BoundaryProfileCount
