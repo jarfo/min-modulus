@@ -780,3 +780,5 @@ import MinModulus.OneExtraMultisetRigidity
 import MinModulus.UnitGapEscapeDensity
 
 import MinModulus.NegativeCollisionGrowth
+
+import MinModulus.CompletedCollisionGrowth

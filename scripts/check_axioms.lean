@@ -5582,3 +5582,12 @@ import MinModulus
 #print axioms MinModulus.negative_side_disjoint_affine_cycle_image
 #print axioms MinModulus.predecessor_closed_set_subset_positive_side
 #print axioms MinModulus.affine_cycle_image_subset_positive_side
+
+-- Completed short representations bound target occurrences and every collision gap.
+#print axioms MinModulus.projected_multiset_ranked_growth_lt_subset_card
+#print axioms MinModulus.short_representation_target_count_lt_card_gap
+#print axioms MinModulus.completed_collision_target_count_lt_gap
+#print axioms MinModulus.collision_gap_dimension_bound_with_doubling_cut
+#print axioms MinModulus.collision_gap_dimension_bound_of_injective_doubling
+#print axioms MinModulus.collision_gap_dimension_bound_of_one_collision
+#print axioms MinModulus.unit_gap_binary_collision_cores_eq_empty_of_twice_escape_bound

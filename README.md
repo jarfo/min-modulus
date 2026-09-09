@@ -6488,6 +6488,35 @@ classification is not yet proved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
 each verified milestone.
 
+**2026-09-09 — completed representations bound every collision gap.**
+`CompletedCollisionGrowth.lean` allows ranked states to project
+noninjectively to tuple coordinates. Every short representation of a
+subset has predecessor weight strictly below that subset's size.
+A two-copy construction then counts every occurrence of an affine
+doubling target, including repetitions: the target count is strictly
+less than the number of missing terms.
+
+For a collision U,V with gap delta=|U|-|V|>0, complete the smaller
+side by adding the complement of U. The resulting representation
+counts targets on V and outside U. Bounding its remaining root
+occurrences by twice the original escape-plus-cut count proves
+n+1 <= 2(|A|+|B|)+2delta. Injective doubling removes B; at most one
+nonzero involution gives n <= 2|A|+2delta+1 with an internally chosen
+cut. In particular, 2|A|+3<n excludes all actual unit-gap cores.
+These bounds apply to every actual gap and to common-padded collisions.
+
+Verification: seven theorems; 15,382 full build jobs; 5,158 complete
+audits (5,154 standard-only, four axiom-free); 137,581 passing forest
+tests, including 72 new cases. The focused checks enumerate short
+multisets of all subsets, actual affine shifts, repeated target
+occurrences, many-involution cut costs, and an invalid tuple that
+passes the smaller-side test but fails the completed occurrence bound.
+
+Next classify the entire core family in the presence of an affine
+cycle, then connect these structural bounds to the remaining global
+cases. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
