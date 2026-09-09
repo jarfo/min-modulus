@@ -5401,6 +5401,30 @@ fibre sizes there. Arbitrary charged-chain extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push
 both repositories after each verified milestone.
 
+**2026-09-09 — balanced actual blocks at the midpoint boundary.**
+`MidpointBoundary.lean` extracts two disjoint colliding coordinate blocks
+covering the tuple from any midpoint fibre larger than two. If loss
+attains the sharp threshold `2^(n/2)+2^(n-n/2)-1`, their sizes differ by
+at most one, each block has loss exactly one, and addition of their block
+image values is injective. These are actual subsets of the original
+coordinates; no tuple validity or cyclicity is assumed.
+
+This structure caps every subset fibre at four. In positive dimension,
+the large midpoint fibre has exactly four representations, and every
+actual coordinate deletion leaves exactly two representations at both
+corresponding targets. Independent balanced zero-sum blocks attain the
+boundary. The valid six-coordinate example also attains it over the
+integers and modulo one billion; that cyclic example lies above the
+binary modulus and is not a counterexample to Conjecture 1.
+
+Verification: seven theorems; 15,340 full build jobs; 4,925 complete audits
+(4,921 standard-only, four axiom-free); 134,922 passing forest tests,
+including 82 new cases. Next classify loss-one block fibres to identify
+the unique four-point fibre and bound all remaining fibres at two.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

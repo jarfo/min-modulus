@@ -5265,3 +5265,12 @@ import MinModulus
 #print axioms MinModulus.disjoint_subset_fibre_card_le_four_of_minimum_loss
 #print axioms MinModulus.exists_subset_fibre_card_ge_two_of_positive_loss
 #print axioms MinModulus.exists_disjoint_subset_fibre_card_eq_four_of_minimum_loss
+
+-- Balanced actual block structure at the sharp midpoint boundary.
+#print axioms MinModulus.balanced_two_pow_equality_sizes
+#print axioms MinModulus.exists_colliding_block_partition_of_complementary_collision
+#print axioms MinModulus.exists_colliding_block_partition_of_large_midpoint_fibre
+#print axioms MinModulus.exists_balanced_unit_loss_blocks_at_midpoint_boundary
+#print axioms MinModulus.tuple_fibre_card_le_four_at_large_midpoint_boundary
+#print axioms MinModulus.midpoint_fibre_card_eq_four_at_balanced_boundary
+#print axioms MinModulus.deleted_midpoint_fibres_card_eq_two_at_balanced_boundary
