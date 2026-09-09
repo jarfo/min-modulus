@@ -5477,3 +5477,9 @@ import MinModulus
 #print axioms MinModulus.ranked_growth_lt_card_add_outside_collision_gap
 #print axioms MinModulus.disjoint_block_subset_sum_injective_of_ranked_growth
 #print axioms MinModulus.ranked_growth_lt_card_add_of_disjoint_positive_loss
+
+-- Ranked-growth spacing bounds actual outside fibres and images.
+#print axioms MinModulus.outside_subset_card_spacing_of_ranked_growth
+#print axioms MinModulus.disjoint_subset_fibre_card_le_of_ranked_growth
+#print axioms MinModulus.disjoint_subset_fibre_card_pred_mul_growth_le
+#print axioms MinModulus.disjoint_subset_image_card_lower_bound_of_ranked_growth

@@ -6028,6 +6028,33 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — outside fibre spacing and subset-image bounds.**
+`RankedOutsideFibreBounds.lean` turns finite ranked growth into bounds
+on actual outside subset fibres in every abelian group. If C has binary
+rank weight W, distinct equal-sum subsets outside C have cardinalities
+separated by d = W+1-|C|, the available growth plus one.
+
+For every disjoint coordinate block T, each actual subset fibre has at
+most floor(|T|/d)+1 members, and its number of gaps times d is at most
+|T|. Summing over the fibres gives
+2^|T| <= (floor(|T|/d)+1)*|subsetSumImageOn g T|.
+No cycle, boundary, full-cover, or cyclic-group assumption is used.
+
+Verification: four theorems; 15,366 full build jobs; 5,082 complete audits
+(5,078 standard-only, four axiom-free); 136,465 passing forest tests,
+including 27 new cases. Tests inspect every disjoint block of small
+valid examples, attain both fibre and image bounds, and check a valid
+ten-coordinate example with positive ranked growth and a four-member
+outside fibre. Counterexamples show why validity, disjointness, and
+actual predecessor relations are needed.
+
+Next extract predecessor ranks directly from an arbitrary unequal
+subset collision, using its heavier side to exclude remaining cycles.
+Then apply the growth budget without supplying ranks or a forest.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
