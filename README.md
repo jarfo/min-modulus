@@ -7014,6 +7014,31 @@ and the core-charge boundary. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — odd correction obeys sharp balanced loss and charge thresholds.**
+OddFibreCorrectionLossBounds.lean uses the balanced sum
+S=2^floor(n/2)+2^ceil(n/2). Odd full correction forces loss+1 >= S,
+and for valid tuples it forces core charge C >= S+2. These bounds
+hold without a global fibre cap or a supplied forest.
+
+Conversely loss+1<S forces even correction without validity, while
+C<S+2 forces even correction and equal core/loss parity for valid
+tuples. The simpler sufficient condition C<=2n+1 works in every
+dimension. The balanced condition strengthens the earlier intrinsic
+half-exponent condition.
+
+Verification: seven theorems; 15,402 full build jobs; 5,297 complete
+audits (5,293 standard-only, four axiom-free); 139,611 passing forest
+tests, including 102 new cases. Actual valid balanced-block examples
+in dimensions five through eight attain loss=S-1, correction three,
+and C=S+2, showing that the thresholds are sharp. The valid tuple
+(2,3,5,9,17) modulo 31 has loss 10 and even correction two: it meets
+the balanced condition although the earlier half-exponent test fails.
+
+Next classify correction three and use it to identify the actual
+tuple structure at the sharp core-charge boundary. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
