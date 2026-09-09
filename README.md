@@ -5897,6 +5897,31 @@ exists. Arbitrary charged-chain extraction remains unproved. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — balanced chain-length subfamily obstruction.**
+`BoundaryChainLengthPartition.lean` propagates doubling closure along
+every supplied positive chain without tuple validity. A block containing
+whole chains has cardinality equal to the sum of their lengths. At the
+sharp large-midpoint boundary in dimension at least four, some subfamily
+of actual chains therefore has total length `n/2`. Every individual chain
+has length at most `n-n/2`.
+
+If no chain subfamily has the smaller balanced length, a large midpoint
+fibre forces `2^(n/2)+2^(n-n/2) < loss+1`. This strict improvement requires
+neither tuple validity nor cyclicity. The subfamily condition is necessary
+for boundary equality; it is not sufficient by itself.
+
+Verification: seven theorems; 15,361 full build jobs; 5,056 complete audits
+(5,052 standard-only, four axiom-free); 136,274 passing forest tests,
+including 83 new cases. Tests cover arbitrary coordinate reindexing,
+zero-length coordinates in the general counting lemma, exhaustive small
+forests with no balanced subfamily, valid nontrivial boundary forests,
+and invalid boundary examples with long chains.
+
+Next derive common-divisor and uniform-chain arithmetic obstructions from
+the balanced subfamily condition. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

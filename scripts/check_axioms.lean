@@ -5438,3 +5438,12 @@ import MinModulus
 #print axioms MinModulus.doubling_preserves_loss_one_collision_part
 #print axioms MinModulus.exists_loss_one_collision_parts_closed_under_doubling
 #print axioms MinModulus.exists_boundary_four_collision_parts_closed_under_doubling
+
+-- Balanced chain-length subfamilies and strict loss when none exists.
+#print axioms MinModulus.whole_chain_mem_of_doubling_closed_set
+#print axioms MinModulus.whole_chain_block_card_eq_sum_lengths
+#print axioms MinModulus.exists_boundary_whole_chain_blocks_without_validity
+#print axioms MinModulus.exists_chain_subfamily_counting_whole_block
+#print axioms MinModulus.exists_balanced_chain_length_subfamily_at_midpoint_boundary
+#print axioms MinModulus.chain_length_le_balanced_half_at_midpoint_boundary
+#print axioms MinModulus.balanced_threshold_lt_loss_of_no_balanced_chain_subfamily
