@@ -6814,6 +6814,33 @@ lower bound on original escapes at triple-fibre shifts. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — triple fibres force linear original-escape density.**
+`TripleFibreLinearEscapes.lean` transports the aggregate rank budget
+to every complete actual forest: the sum of 2^L-1 over its arms is
+at most 2n-2. The elementary inequality 4L <= (2^L-1)+5 then gives
+2n+2 <= 5r for its number r of arms.
+
+Extracting the forest makes this a bound on original escapes A:
+2n <= 5|A|+3 in cyclic groups, and 2n+2 <= 5|A| for odd moduli or
+injective doubling. No midpoint, boundary-loss, supplied forest, or
+acyclicity assumption is needed. Below the cyclic linear threshold,
+all fibres have size at most two and intrinsic loss equals the sum
+of complementary core cubes. This extends the earlier boundary-only
+linear estimates to every triple-fibre shift.
+
+Verification: nine theorems; 15,394 full build jobs; 5,251 complete
+audits (5,247 standard-only, four axiom-free); 138,771 passing forest
+tests, including 151 new cases. Tests cover actual forests, original
+terminals, all small valid cyclic tuples, all shifts of larger examples,
+and a two-arm example where the earlier logarithmic count threshold
+is inconclusive. Equality for numerical arm lengths two and three
+checks the arithmetic constant; realizability at equality is not claimed.
+
+Next extend aggregate growth to arbitrary fibre multiplicities, then
+use larger fibres to force stronger escape density. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

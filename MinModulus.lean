@@ -804,3 +804,5 @@ import MinModulus.TripleFibreEscapeRoutes
 import MinModulus.TripleFibreShortForests
 
 import MinModulus.TripleFibreAggregateGrowth
+
+import MinModulus.TripleFibreLinearEscapes
