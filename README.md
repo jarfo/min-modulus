@@ -5353,6 +5353,30 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — equality structure in disjoint-block collision loss.**
+`DisjointCollisionRigidity.lean` characterizes equality in the product loss
+bound: it holds exactly when addition is injective on the product of the
+two actual block images. If both disjoint blocks have positive loss, their
+combined loss equals `2^|S|+2^|T|-1` exactly when each block has loss one
+and block-value addition is injective. Every attained union value then
+uniquely determines its pair of actual block image values.
+
+These statements distinguish unique block values from unique subset
+representations. Each block still has a collision. Positive loss in both
+blocks is needed for the minimum characterization: extra cross-block
+collisions can otherwise reach the same numerical value with one block
+injective. No tuple validity, finite ambient group, or cyclicity is used.
+
+Verification: four theorems; 15,338 full build jobs; 4,911 complete audits
+(4,907 standard-only, four axiom-free); 134,771 passing forest tests,
+including 62 new cases. Tests cover both equivalences on small actual
+blocks, noncontiguous coordinates, independent equality examples, and
+the necessity of the hypotheses. Next factor the actual subset fibres
+under unique block-value addition and bound them at the minimum.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

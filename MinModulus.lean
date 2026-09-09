@@ -692,3 +692,5 @@ import MinModulus.MidpointDeletion
 import MinModulus.DisjointCollisionLoss
 
 import MinModulus.SharpMidpointLoss
+
+import MinModulus.DisjointCollisionRigidity

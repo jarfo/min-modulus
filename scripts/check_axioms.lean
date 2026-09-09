@@ -5250,3 +5250,9 @@ import MinModulus
 #print axioms MinModulus.midpoint_fibre_card_eq_two_of_attained_balanced_loss
 #print axioms MinModulus.exists_unique_full_core_of_cyclic_odd_balanced_loss
 #print axioms MinModulus.exists_unique_midpoint_with_unique_deletions_of_cyclic_odd_balanced_loss
+
+-- Equality in the disjoint-block bound determines the actual image structure.
+#print axioms MinModulus.subset_sum_image_on_nonempty
+#print axioms MinModulus.disjoint_block_loss_product_eq_iff_add_injective
+#print axioms MinModulus.two_colliding_blocks_minimum_loss_iff
+#print axioms MinModulus.exists_unique_block_image_pair_of_minimum_loss
