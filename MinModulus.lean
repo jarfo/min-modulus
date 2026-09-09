@@ -756,3 +756,5 @@ import MinModulus.CollisionComplementRanks
 import MinModulus.CollisionComplementForests
 
 import MinModulus.CollisionComplementCutForest
+
+import MinModulus.CollisionHeavyEscapeBound

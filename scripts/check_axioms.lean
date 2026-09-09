@@ -5499,3 +5499,8 @@ import MinModulus
 -- One-cut actual complement forests and sharp escape-count bounds.
 #print axioms MinModulus.exists_actual_cut_forest_budget_disjoint_heavier_collision
 #print axioms MinModulus.complement_escape_count_lower_bound_of_one_collision
+
+-- Original escapes bound heavier collision sides with one global cut charge.
+#print axioms MinModulus.heavier_collision_card_lower_bound_with_doubling_cut
+#print axioms MinModulus.heavier_collision_card_lower_bound_of_injective_doubling
+#print axioms MinModulus.heavier_collision_card_lower_bound_of_one_collision

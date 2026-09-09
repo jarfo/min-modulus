@@ -6144,6 +6144,34 @@ collision side. The extraction needed for the global conjecture remains
 open. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — heavier collision sides bounded by original escapes.**
+`CollisionHeavyEscapeBound.lean` relates every actual unequal subset
+collision to the original tuple's escape set. If doubling is injective
+outside a chosen cut B, the heavier and lighter sides U,V satisfy
+n+|V|+1 <= 3*|U|+|A|+|B| for any proposed original escape set A.
+Actual successors of the remaining coordinates inject into U together
+with the internal targets of its complement. The doubled collision is
+charged only once across both kinds of targets.
+
+Injective doubling gives n+|V|+1 <= 3*|U|+|A|. Under the explicit
+hypothesis of at most one nonzero ambient involution, a single global
+cut gives n+|V| <= 3*|U|+|A|. No supplied forest, rank structure, boundary,
+or cyclic-group assumption is needed for the general cut theorem.
+
+Verification: three theorems; 15,370 full build jobs; 5,095 complete audits
+(5,091 standard-only, four axiom-free); 136,657 passing forest tests,
+including 44 new cases. Tests check original and enlarged escape sets,
+every valid injectivity cut, actual internal and returning forks, and
+valid tuples in elementary abelian groups with several involutions.
+The latter violate the single-cut bound and verify the necessity of
+its ambient hypothesis.
+
+Next study intersections between distinct collisions with the same
+term-count gap, then use their set-pair structure for family packing.
+The extraction needed for the global conjecture remains open.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
