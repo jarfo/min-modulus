@@ -4687,6 +4687,32 @@ box diameter grows. Arbitrary sufficiently charged-family extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN,
 0/3. Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — total-weight spacing bounds actual box fibres.**
+`ForestFibreSpacing.lean` proves that two colliding points in a complete
+actual valid forest have total weights separated by at least `D+1-n`,
+where `D = sum(2^L-1)` is the full box diameter. Complete coverage gives
+`D >= n`, so this spacing is positive. Every sum fibre has at most
+`D/(D+1-n)+1` points, and its actual cardinality `c` satisfies
+`(c-1)*(D+1-n) <= D`.
+
+If `n <= k*(D+1-n)`, every fibre has at most `k+1` points. Conversely,
+a fibre with at least `r >= 2` points forces
+`(r-2)*D+(r-1) <= (r-1)*n`. Four-point fibres therefore require
+`2*D+3 <= 3*n`. These bounds interpolate below the existing
+`D >= 2*n-1` threshold for two-point fibres and retain all short arms.
+
+Verification: five theorems; 15,312 full build jobs; 4,721 complete
+audits (4,717 standard-only, four axiom-free); 132,956 passing forest
+tests, including 34 new cases. Tests exhaust all valid normalized
+four-coordinate sets at moduli 12 through 20, their translations and
+available actual chains, plus the three-point-fibre example and varied
+valid-gap profiles. Next identify summed profile volumes with the
+number of collision pairs, explaining their excess over union loss
+when rectangles overlap. Arbitrary sufficiently charged-family
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after every
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

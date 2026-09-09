@@ -5007,3 +5007,10 @@ import MinModulus
 #print axioms MinModulus.forest_box_image_filter_card_add_collision_loss
 #print axioms MinModulus.forest_box_image_card_add_collision_loss_eq_two_pow
 #print axioms MinModulus.twice_forest_parity_image_add_loss_eq_two_pow
+
+-- Diameter-dependent spacing and size of actual box fibres.
+#print axioms MinModulus.box_weight_spacing_of_valid_chain_forest_collision
+#print axioms MinModulus.box_fibre_card_le_of_valid_chain_forest_diameter
+#print axioms MinModulus.box_fibre_card_pred_mul_spacing_le_diameter
+#print axioms MinModulus.box_fibre_card_le_of_spacing_multiple
+#print axioms MinModulus.large_box_fibre_forces_diameter_bound
