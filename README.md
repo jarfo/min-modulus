@@ -5305,6 +5305,29 @@ midpoint threshold further. Arbitrary charged-chain extraction remains
 unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — combined loss on disjoint coordinate blocks.**
+`DisjointCollisionLoss.lean` identifies the subset-sum image on disjoint
+actual blocks with the addition image of the product of their two images.
+Its cardinality is therefore at most the product of their cardinalities.
+Writing `p=2^|S|`, `q=2^|T|`, and the respective losses as `lS,lT`, this gives
+`q*lS+p*lT ≤ L(S∪T)+lS*lT`. No validity, finite ambient group, or cyclicity
+is assumed.
+
+If both blocks contain a collision, the combined loss is at least
+`2^|S|+2^|T|-1`. Every coordinate outside the blocks multiplies that lower
+bound by two. Independent zero-sum blocks attain the bound, including
+its outside-coordinate factor; extra cross-block collisions can make it
+strict. This counts both collision supports and improves on using their
+individual lower bounds separately.
+
+Verification: six theorems; 15,336 full build jobs; 4,900 complete audits
+(4,896 standard-only, four axiom-free); 134,642 passing forest tests,
+including 55 new cases. Next apply this product bound to the disjoint
+supports of complementary midpoint collisions and minimize over their
+sizes. Arbitrary charged-chain extraction remains unproved. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

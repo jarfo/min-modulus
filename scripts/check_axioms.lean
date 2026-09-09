@@ -5233,3 +5233,11 @@ import MinModulus
 #print axioms MinModulus.deleted_midpoint_fibres_card_eq_one_of_full_card_two
 #print axioms MinModulus.attained_midpoint_mem_every_deleted_overlap
 #print axioms MinModulus.exists_unique_midpoint_with_unique_deletions_of_cyclic_odd_half_exponent
+
+-- Multiplicative loss bounds on disjoint actual coordinate blocks.
+#print axioms MinModulus.subset_sum_image_disjoint_union_eq_product_image
+#print axioms MinModulus.subset_sum_image_disjoint_union_card_le_product
+#print axioms MinModulus.disjoint_block_loss_product_bound
+#print axioms MinModulus.two_colliding_disjoint_blocks_loss_bound
+#print axioms MinModulus.two_colliding_disjoint_blocks_ambient_loss_bound
+#print axioms MinModulus.subset_collision_loss_pos_of_collision
