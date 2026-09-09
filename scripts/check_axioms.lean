@@ -5747,3 +5747,10 @@ import MinModulus
 #print axioms MinModulus.even_tuple_triple_fibre_count
 #print axioms MinModulus.intrinsic_loss_add_two_le_core_sum_of_capped_triple
 #print axioms MinModulus.intrinsic_loss_mod_two_eq_core_sum_of_fibres_le_three
+
+-- Full fibre overcount skips one without validity or a fibre cap.
+#print axioms MinModulus.fibre_excess_pairs_le_total_overcount
+#print axioms MinModulus.subset_fibre_card_le_three_of_overcount_le_two
+#print axioms MinModulus.tuple_binary_fibre_overcount_ne_one
+#print axioms MinModulus.intrinsic_loss_add_two_le_core_sum_of_any_triple
+#print axioms MinModulus.intrinsic_loss_add_one_ne_core_cube_sum

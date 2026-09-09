@@ -6966,6 +6966,29 @@ identify the midpoint obstruction to evenness of the full correction.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-09 — full fibre overcount cannot equal one.**
+FibreOvercountGap.lean bounds each fibre's excess-pair contribution
+by the total correction D. If D<=2, every fibre has size at most
+three; the correction then equals the even triple-value count.
+Consequently D is never one, for any tuple without a validity
+assumption.
+
+For valid tuples, any fibre with at least three subsets now gives
+loss+2 <= C, where C is the complementary-core cube sum, without a
+cap on other fibres. In particular C can never equal loss+1.
+
+Verification: five theorems; 15,400 full build jobs; 5,285 complete
+audits (5,281 standard-only, four axiom-free); 139,410 passing forest
+tests, including 96 new cases. Checks cover all small tuples without
+validity, actual valid corrections two, three, and six, and repeated
+entries. The valid tuple (1,-1,10,100,-110) modulo 2003 has correction
+three, realized at a four-point midpoint fibre.
+
+Next relate odd total correction to large midpoint fibres and use
+the sharp balanced loss bound to constrain total core charge.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
