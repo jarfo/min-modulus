@@ -4866,6 +4866,34 @@ sufficiently charged-chain extraction remains unproved. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after every verified milestone.
 
+**2026-09-09 — even-seed continuation pays intrinsic even loss alone.**
+`EvenIntrinsicChainContinuation.lean` closes the original global bound,
+every positive exact-stratum bound and direct G3 obstruction for actual
+even-seed chains at even modulus satisfying `m >= 4`, `2*n+1 <= 2^m`,
+and `tupleBinaryParityLoss g b true <= 2^(m-3)`. Endpoints and remaining
+coordinates are arbitrary. The entire genuine exterior interval is even,
+so only intrinsic even loss must be paid. Maximal continuation preserves
+that loss and seed parity. The extracted cycle leaves at most m-2
+outsiders; sharper exponential-tail arithmetic still forces a half-sized
+cycle below binary modulus. The rejoin helper accepts either parity class.
+
+This improves the total-loss condition inside the subbinary regime.
+For the valid dimension-18 gap tuple at modulus `2^18-16`, the chain
+starting with seed 2 needs only length 6: even loss is 8 and fits its
+interval, while total loss is 16 and fails the preceding criterion.
+The even-modulus assumption is explicit; this is not a new odd-stratum
+claim or an extraction of charged chains from arbitrary critical tuples.
+
+Verification: eleven theorems; 15,319 full build jobs; 4,773 complete
+audits (4,769 standard-only, four axiom-free); 133,512 passing forest
+tests, including 138 new cases. Tests exhaust bounded sharper deficit
+arithmetic, verify even multiples and genuine intervals, continue actual
+affine gap chains, and check the strict dimension-18 gain. Next use
+alternating interval points to charge either parity for odd seeds and
+the even class for arbitrary seeds. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
