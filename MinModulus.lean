@@ -768,3 +768,5 @@ import MinModulus.CollisionSeparatingPermutations
 import MinModulus.CollisionSeparatingPermutationCount
 
 import MinModulus.CollisionGapChargeEnvelope
+
+import MinModulus.CollisionGapLossCertificate

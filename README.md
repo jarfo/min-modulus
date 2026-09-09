@@ -6311,6 +6311,36 @@ This does not yet supply the gap restrictions needed for the global
 conjecture. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — actual gap covers certify intrinsic loss.**
+`CollisionGapLossCertificate.lean` bounds intrinsic subset-sum loss
+by the total complementary cube charge of actual cores. It uses
+fibre excess <= the number of ordered distinct collisions, so triple
+and larger fibres are included; equality is not assumed.
+
+Any supplied finite set D covering all realized cardinality gaps
+partitions the total core charge. The fixed-gap support envelopes
+therefore sum to a bound on total volume. In a group with at most
+one nonzero involution, original escapes A give the loss certificate
+loss <= sum(delta in D, envelope(n,delta,n-2delta-|A|)). For any set
+Z avoided by all shifted subset sums, this yields
+2^n+|Z| <= |G|+sum(delta in D, envelope(n,delta,n-2delta-|A|)).
+No forest or two-point-fibre assumption is supplied.
+
+Verification: five theorems; 15,376 full build jobs; 5,122 complete
+audits (5,118 standard-only, four axiom-free); 137,037 passing forest
+tests, including 71 new cases. Tests include exact independent fibre
+counts, actual gap partitions, verified four-point boundary fibres,
+sharp full-support zero-sum certificates, avoided residue sets,
+empty tuples, and failures when the gap cover omits a realized gap
+or validity is dropped.
+
+The certificates require useful restrictions on the realized gaps;
+they do not prove such restrictions globally. Next study signed
+subset-pair evaluations in a fixed ordering, seeking additional
+structure across gaps and translations. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
+each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

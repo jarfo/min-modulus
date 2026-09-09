@@ -5536,3 +5536,10 @@ import MinModulus
 #print axioms MinModulus.equal_gap_binary_core_cube_sum_le_support_envelope
 #print axioms MinModulus.equal_gap_binary_core_cube_sum_le_envelope_with_doubling_cut
 #print axioms MinModulus.equal_gap_binary_core_cube_sum_le_envelope_of_one_collision
+
+-- Allowed actual gaps certify intrinsic loss and ambient group order.
+#print axioms MinModulus.intrinsic_loss_le_binary_core_cube_sum
+#print axioms MinModulus.binary_core_cube_sum_eq_sum_by_allowed_gap
+#print axioms MinModulus.binary_core_cube_sum_le_allowed_gap_envelopes
+#print axioms MinModulus.intrinsic_loss_le_allowed_gap_envelopes_of_one_collision
+#print axioms MinModulus.group_card_gap_certificate_of_one_collision
