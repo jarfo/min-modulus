@@ -4856,3 +4856,14 @@ import MinModulus
 #print axioms MinModulus.global_lower_bound_of_truncated_chain_family
 #print axioms MinModulus.stratum_lower_bound_of_truncated_chain_family
 #print axioms MinModulus.not_validTuple_exceptional_of_truncated_chain_family
+
+-- Single-chain charge without a separate coverage premise.
+#print axioms MinModulus.cycle_exponential_deficit_of_chain_charge
+#print axioms MinModulus.exists_half_sized_cycle_of_charged_singleton_rejoin
+#print axioms MinModulus.exists_half_sized_cycle_of_charged_affine_chain
+#print axioms MinModulus.global_lower_bound_of_charged_affine_chain
+#print axioms MinModulus.stratum_lower_bound_of_charged_affine_chain
+#print axioms MinModulus.not_validTuple_exceptional_of_charged_affine_chain
+#print axioms MinModulus.global_lower_bound_of_single_log_affine_chain
+#print axioms MinModulus.stratum_lower_bound_of_single_log_affine_chain
+#print axioms MinModulus.not_validTuple_exceptional_of_single_log_affine_chain

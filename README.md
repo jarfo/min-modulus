@@ -4324,6 +4324,35 @@ proved. Arbitrary tuples still need not provide a sufficiently charged
 family; Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — single-chain charge without separate coverage.**
+`ChainChargeWithoutCover.lean` proves the original global, every
+exact-stratum and direct G3 bounds from any actual affine chain of
+length `m >= 4` satisfying `n*2^(n-m) <= 2^(m-3)`. Its endpoint and
+all remaining coordinates are arbitrary. No separate majority-cover
+premise is needed. In particular, `n+floor(log_2 n)+4 <= 2*m`
+suffices, without the previous `n >= 16` assumption.
+
+Maximal singleton continuation yields a cycle of length `c` inside a
+chain of length `p`, with `2^(p-c) <= p`. If `n >= 2*c+2`, the scalar
+charge implies `3*2^(n-2*c) <= c`. The existing all-modulus exponential
+deficit theorem then forces the binary bound. Thus below binary
+modulus the actual cycle must satisfy `n <= 2*c+1`, and the existing
+half-sized cycle consumers give every original bound. The argument
+also covers the odd-dimensional one-extra case.
+
+The charge applies to lengths 69, 134 and 262 in dimensions 128, 256
+and 512, respectively, improving the prior two-logarithm single-chain
+cutoff. Verification: nine theorems; 15,299 full build jobs; 4,600
+complete audits (4,596 standard-only and four axiom-free); 130,702
+passing forest tests, including 1,186 new cases. Checks include actual
+valid-gap cycles at all starts, signs, shifts and admissible strata,
+and a nonvacuous below-half arithmetic example.
+Next remove the coverage premise for general exact-profile families
+by reducing their maximal-family error to the selected single-chain
+charge. Arbitrary charged-family extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

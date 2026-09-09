@@ -614,3 +614,5 @@ import MinModulus.MaximalChainFamily
 import MinModulus.FamilyAggregateCycle
 
 import MinModulus.ChainFamilyProfile
+
+import MinModulus.ChainChargeWithoutCover
