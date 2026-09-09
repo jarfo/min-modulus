@@ -5131,6 +5131,31 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — dyadic loss divisibility extracts actual relation support.**
+`BinaryCoreDivisibility.lean` shows that if every core leaves at least
+`k` free coordinates, its exact charge sum is divisible by `2^k`.
+For valid tuples without triple fibres, failure of `2^(k+1)` to divide
+intrinsic loss therefore extracts an actual core with support at least
+`n-k`. In particular, odd loss forces a core using every coordinate.
+Its two signed sides are retained; neither is assumed empty.
+
+The exact dyadic sum also bounds the number of cores at each support
+scale: `2^k` times the number leaving at least `k` free coordinates is
+at most intrinsic loss. Total core count is at most loss. The earlier
+small-loss criterion supplies the two-point fibre hypothesis when
+needed. Divisibility can extract strictly larger support than the
+logarithmic bound on every individual collision.
+
+Verification: six theorems; 15,329 full build jobs; 4,853 complete audits
+(4,849 standard-only, four axiom-free); 134,117 passing forest tests,
+including 52 new cases. Tests cover all small actual core sums, support
+scale counts, valid gap equality cases, a valid odd loss-3 example with
+full signed support, and a loss-9 example beyond the small-loss condition.
+Next determine uniqueness of full-support cores under injective doubling,
+including odd cyclic modulus. Arbitrary charged-chain extraction remains
+unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

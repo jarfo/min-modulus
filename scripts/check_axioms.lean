@@ -5172,3 +5172,11 @@ import MinModulus
 #print axioms MinModulus.profile_volume_eq_binary_core_cube_sum
 #print axioms MinModulus.intrinsic_loss_eq_binary_core_cube_sum_of_fibres_le_two
 #print axioms MinModulus.intrinsic_loss_eq_binary_core_cube_sum_of_small_loss
+
+-- Dyadic divisibility forces support and bounds relation core counts.
+#print axioms MinModulus.two_pow_dvd_binary_core_sum_of_support_bound
+#print axioms MinModulus.exists_binary_core_of_intrinsic_loss_not_dvd
+#print axioms MinModulus.exists_full_support_binary_core_of_odd_intrinsic_loss
+#print axioms MinModulus.two_pow_mul_binary_core_count_le_intrinsic_loss
+#print axioms MinModulus.binary_core_count_le_intrinsic_loss
+#print axioms MinModulus.exists_full_support_binary_core_of_odd_small_loss
