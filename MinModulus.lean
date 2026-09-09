@@ -664,3 +664,5 @@ import MinModulus.SubsetLossRecurrence
 import MinModulus.SubsetFibreLossRecurrence
 
 import MinModulus.IntrinsicCollisionSupport
+
+import MinModulus.SmallIntrinsicLossFibres

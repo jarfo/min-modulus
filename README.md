@@ -5000,6 +5000,32 @@ without a wide-diameter assumption. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN,
 0/3. Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — small intrinsic loss excludes triple fibres and profile overlap.**
+`SmallIntrinsicLossFibres.lean` sums three pairwise binary collision
+support bounds. Each coordinate contributes at most two to the three
+distances, so any three distinct subsets of equal shifted sum force
+`n <= 3*floor(log_2(loss))`. Consequently, when this inequality fails,
+every subset-sum fibre and every complete forest box fibre has at most
+two points.
+
+The same condition makes the actual profile lower rectangles pairwise
+disjoint: a shared lower point and its two distinct heavier partners
+would give a triple fibre. Their union cardinality therefore equals
+the sum of their volumes, without a wide-diameter assumption. For a
+valid positive-arm forest this sum equals intrinsic tuple loss. The
+fibre and disjointness results themselves need no tuple validity.
+
+Verification: seven theorems; 15,324 full build jobs; 4,817 complete audits
+(4,813 standard-only, four axiom-free); 133,831 passing forest tests,
+including 54 new cases. Tests exhaust small support triples and fibres,
+check actual valid gap families in several regroupings including all
+singleton arms, retain the valid triple-fibre overlap example modulo
+12, and show the strict small-loss condition is sufficient rather than
+necessary. Next count coordinate disagreements over arbitrary fibres
+to obtain a general quantitative size bound. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

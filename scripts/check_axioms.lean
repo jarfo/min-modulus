@@ -5125,3 +5125,12 @@ import MinModulus
 #print axioms MinModulus.two_pow_outside_collision_support_le_intrinsic_loss
 #print axioms MinModulus.dimension_le_collision_support_add_log_loss
 #print axioms MinModulus.subset_sum_injective_of_odd_deleted_parity_budget
+
+-- Intrinsic small loss excludes triple fibres and profile overlap.
+#print axioms MinModulus.three_subset_support_sum_le_twice_dimension
+#print axioms MinModulus.dimension_le_three_log_loss_of_triple_collision
+#print axioms MinModulus.tuple_subset_fibre_card_le_two_of_small_intrinsic_loss
+#print axioms MinModulus.forest_fibre_card_le_two_of_small_intrinsic_loss
+#print axioms MinModulus.forest_profile_rectangles_pairwise_disjoint_of_small_intrinsic_loss
+#print axioms MinModulus.forest_collision_loss_eq_profile_volume_of_small_intrinsic_loss
+#print axioms MinModulus.intrinsic_loss_eq_profile_volume_of_small_loss
