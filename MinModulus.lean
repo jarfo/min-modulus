@@ -778,3 +778,5 @@ import MinModulus.SeparatedPairLayerCounts
 import MinModulus.OneExtraMultisetRigidity
 
 import MinModulus.UnitGapEscapeDensity
+
+import MinModulus.NegativeCollisionGrowth

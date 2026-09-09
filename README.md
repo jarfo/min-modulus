@@ -6457,6 +6457,37 @@ yet close the unrestricted high-escape residual. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — smaller-side growth and compulsory cycle containment.**
+`NegativeCollisionGrowth.lean` bounds predecessor growth on the smaller
+side V of every unequal collision with larger side U. For any actual
+rank assignment on the full tuple, sum(V,2^rank) < |U|, equivalently
+the total excess predecessor weight is less than the cardinality gap.
+Each individual negative-side rank k therefore requires a gap at least
+2^k. Predecessor steps may enter U; no disjoint growth support is supplied.
+
+The smaller side avoids every affine predecessor-closed coordinate
+set. Padding a missing coordinate on both sides strengthens this:
+every larger side contains every such closed set. In particular, every
+heavier collision side contains the full image of every embedded
+affine doubling cycle. These statements include nonreduced collisions
+and arbitrary additive commutative groups, without a supplied forest.
+
+Verification: seven theorems; 15,381 full build jobs; 5,151 complete
+audits (5,147 standard-only, four axiom-free); 137,509 passing forest
+tests, including 111 new cases. Tests cover actual ranks, common
+paddings, all predecessor-closed sets in the fixtures, integer zero
+cycles, sharp positive growth taxes, and a reduced negative side whose
+predecessor lies in U. Invalid ranks, missing closure, and invalid
+tuples show the necessity of the respective hypotheses.
+
+Next complete each collision to a short representation of the whole
+tuple, count all expandable occurrences, and seek gap bounds from
+original escapes. Compulsory cycle containment also suggests a route
+to classifying all cores when an affine cycle is present; that
+classification is not yet proved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
+each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

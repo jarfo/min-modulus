@@ -5573,3 +5573,12 @@ import MinModulus
 #print axioms MinModulus.unit_gap_collision_dimension_le_three_escape_add_two_of_injective
 #print axioms MinModulus.unit_gap_collision_dimension_le_three_escape_add_five_of_one_collision
 #print axioms MinModulus.unit_gap_binary_collision_cores_eq_empty_of_few_escapes
+
+-- Global smaller-side growth budgets and containment of predecessor-closed cycles.
+#print axioms MinModulus.negative_side_ranked_growth_lt_positive_card
+#print axioms MinModulus.negative_side_ranked_growth_tax_lt_gap
+#print axioms MinModulus.negative_side_predecessor_rank_power_le_gap
+#print axioms MinModulus.negative_side_disjoint_predecessor_closed_set
+#print axioms MinModulus.negative_side_disjoint_affine_cycle_image
+#print axioms MinModulus.predecessor_closed_set_subset_positive_side
+#print axioms MinModulus.affine_cycle_image_subset_positive_side
