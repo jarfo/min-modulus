@@ -5630,3 +5630,15 @@ import MinModulus
 #print axioms MinModulus.intrinsic_loss_eq_core_cube_sum_of_escape_depth
 #print axioms MinModulus.intrinsic_loss_le_canonical_escape_cut_budget
 #print axioms MinModulus.group_card_lower_bound_of_canonical_escape_cut_budget
+
+-- Actual cyclic escapes determine canonical loss budgets and triple-fibre density.
+#print axioms MinModulus.affineDoublingEscapes
+#print axioms MinModulus.affine_double_closed_outside_actual_escapes
+#print axioms MinModulus.odd_cyclic_intrinsic_loss_le_actual_escape_budget
+#print axioms MinModulus.cyclic_intrinsic_loss_le_actual_escape_budget
+#print axioms MinModulus.cyclic_group_card_lower_bound_of_actual_escapes
+#print axioms MinModulus.odd_cyclic_group_card_lower_bound_of_actual_escapes
+#print axioms MinModulus.iterated_affine_targets_eq_empty_of_triple_fibre
+#print axioms MinModulus.dimension_le_canonical_escape_cut_cost_of_triple_fibre
+#print axioms MinModulus.cyclic_escape_density_of_triple_fibre
+#print axioms MinModulus.odd_cyclic_escape_density_of_triple_fibre

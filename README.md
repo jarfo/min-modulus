@@ -6628,6 +6628,34 @@ the target extinction and escape density forced by triple fibres.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — cyclic actual escapes bound loss and triple-fibre density.**
+`CyclicIteratedTargetBounds.lean` defines the actual affine escape set
+and specializes the canonical target budget to every nonzero cyclic
+modulus. With k=ceil(log2 n) and r actual escapes, intrinsic loss is
+at most 2^(k(r+1)); odd moduli have the sharper bound 2^(kr). The
+corresponding ambient-order inequalities use only the valid tuple
+and chosen shift, with no supplied cut, forest, rank, or collision family.
+The loss and order statements also cover the empty tuple.
+
+A triple subset-sum fibre forces the iterated target set to be empty
+at every depth k with n <= 2^k. Thus n <= ceil(log2 n)(r+1) in cyclic
+groups, and n <= ceil(log2 n)r for odd moduli. The general escape-plus-
+cut version is also proved. These are necessary restrictions on
+triple fibres, not a closure of the unrestricted global gates.
+
+Verification: one definition and nine theorems; 15,387 full build
+jobs; 5,199 complete audits (5,195 standard-only, four axiom-free);
+138,038 passing forest tests, including 129 new cases. Checks cover
+all small valid cyclic tuples, all shifts in odd and even ambient
+groups, sharp zero-escape Mersenne cycles, many-involution failures
+outside cyclic groups, and an invalid tuple with two cycles.
+
+Next recover an actual cycle exactly from target iteration at a depth
+controlled by the cycle's own size, and bound all predecessor walks
+outside zero-sum sets. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
