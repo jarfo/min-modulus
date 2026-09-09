@@ -5483,3 +5483,10 @@ import MinModulus
 #print axioms MinModulus.disjoint_subset_fibre_card_le_of_ranked_growth
 #print axioms MinModulus.disjoint_subset_fibre_card_pred_mul_growth_le
 #print axioms MinModulus.disjoint_subset_image_card_lower_bound_of_ranked_growth
+
+-- Extract actual predecessor ranks outside arbitrary heavier collision sides.
+#print axioms MinModulus.exists_doubling_predecessor_ranks_of_no_closed_set
+#print axioms MinModulus.exists_predecessor_rank_budget_disjoint_heavier_collision
+#print axioms MinModulus.internal_doubling_target_count_lt_heavier_collision_gap
+#print axioms MinModulus.predecessor_root_count_lower_bound_of_heavier_collision
+#print axioms MinModulus.no_internal_doubling_of_unit_gap_collision

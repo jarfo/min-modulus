@@ -6055,6 +6055,38 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — predecessor ranks extracted from unequal collisions.**
+`CollisionComplementRanks.lean` starts from an arbitrary actual
+unequal subset collision in a valid tuple, in any abelian group and
+at any affine shift. Every nonempty predecessor-closed set disjoint
+from the heavier side would expand to absorb the collision gap,
+contradicting validity. Choosing actual predecessors therefore terminates
+and extracts finite ranks on every such coordinate set C.
+
+Rank zero is exactly the absence of an internal doubling predecessor;
+each positive rank has an actual predecessor one rank lower. The
+extracted aggregate weight satisfies W < |C| + |U| - |V|. Consequently,
+the number of internal doubling targets in C is strictly below the
+collision gap. This forces many predecessor roots. In particular, a
+one-term gap leaves no internal doubling edge outside the heavier side.
+No forest, rank structure, boundary, or injective-doubling hypothesis
+is supplied.
+
+Verification: five theorems; 15,367 full build jobs; 5,087 complete audits
+(5,083 standard-only, four axiom-free); 136,524 passing forest tests,
+including 59 new cases. Tests extract actual ranks from collision
+complements and all their subblocks, retain shifted and noninjective
+examples, check unit-gap edge exclusion, and exhibit invalid cyclic
+complements. Some shifts remove all subset collisions while retaining
+doubled collisions; those cases are explicitly distinguished.
+
+Next extract entire affine forests on collision complements when
+doubling is injective there, retaining actual endpoints and the strict
+aggregate growth budget. Arbitrary charged-chain extraction sufficient
+for the global conjecture remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -750,3 +750,5 @@ import MinModulus.BoundaryEscapeDensity
 import MinModulus.RankedOutsideCollisionGap
 
 import MinModulus.RankedOutsideFibreBounds
+
+import MinModulus.CollisionComplementRanks
