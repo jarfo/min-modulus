@@ -760,3 +760,5 @@ import MinModulus.CollisionComplementCutForest
 import MinModulus.CollisionHeavyEscapeBound
 
 import MinModulus.EqualGapCollisionCrossing
+
+import MinModulus.EqualGapCollisionAntichains

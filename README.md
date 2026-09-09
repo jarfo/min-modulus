@@ -6199,6 +6199,33 @@ The extraction needed for the global conjecture remains open.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-09 — fixed-gap collision antichains and LYM packing.**
+`EqualGapCollisionAntichains.lean` turns actual equal-gap crossing
+into packing of entire core families. Inclusion between two positive
+sides forces the cores to coincide; the same holds for negative sides.
+Both projections of every selected fixed-gap family are therefore
+injective antichains on the original coordinate set.
+
+The existing LYM theorem gives, separately for each side,
+sum(1/binom(n,|U|)) <= 1 and sum(1/binom(n,|V|)) <= 1 over the actual
+cores. Sperner's theorem bounds the number of cores at any fixed gap
+by binom(n,floor(n/2)). Arbitrary selected subfamilies and empty families
+are included. The denominators use the original dimension n.
+
+Verification: five theorems; 15,372 full build jobs; 5,103 complete audits
+(5,099 standard-only, four axiom-free); 136,745 passing forest tests,
+including 47 new cases. Tests use exact rational weights on verified
+families of up to nine cores. Full-support zero-sum cores attain both
+LYM bounds. Valid mixed-gap families and invalid fixed-gap examples
+show why the common-gap and validity hypotheses are needed.
+
+Next pack separating permutations for these set pairs, then count
+the events in terms of each core's own support to seek a stronger
+weighted bound. The support-dependent event formula is not yet proved.
+The extraction needed for the global conjecture remains open.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

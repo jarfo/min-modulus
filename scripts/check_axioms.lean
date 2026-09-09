@@ -5509,3 +5509,10 @@ import MinModulus
 #print axioms MinModulus.equal_gap_collision_pairs_eq_of_cross_disjoint
 #print axioms MinModulus.distinct_equal_gap_collision_pairs_cross_intersect
 #print axioms MinModulus.equal_gap_binary_collision_cores_cross_intersect
+
+-- Fixed-gap collision projections are antichains with LYM and Sperner packing.
+#print axioms MinModulus.equal_gap_binary_core_eq_of_positive_subset
+#print axioms MinModulus.equal_gap_binary_core_eq_of_negative_subset
+#print axioms MinModulus.equal_gap_binary_collision_family_projection_structure
+#print axioms MinModulus.equal_gap_binary_collision_family_lym_bounds
+#print axioms MinModulus.equal_gap_binary_collision_family_card_le_middle_binomial
