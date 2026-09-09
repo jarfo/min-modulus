@@ -4975,6 +4975,31 @@ coordinate faces. Arbitrary charged-chain extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
 
+**2026-09-09 — intrinsic loss bounds binary collision support.**
+`IntrinsicCollisionSupport.lean` proves that every equality between two
+distinct shifted subset sums forces intrinsic loss at least
+`2^(n - |U symmetric-difference V|)`. Common coordinates cancel, so the
+support bound measures precisely the coordinates where the subsets
+vary. Equivalently, `n <= support + floor(log_2(loss))`.
+
+More generally, loss below `2^(|T|-|S|)` makes all subset sums on any
+actual coordinate face `S` of `T` distinct. Zero loss is equivalent to
+this injectivity. After deleting an odd shifted coordinate at even
+nonzero modulus, either original parity loss supplies the same strict
+budget for every remaining face. None of these results assumes tuple
+validity.
+
+Verification: six theorems; 15,323 full build jobs; 4,810 complete audits
+(4,806 standard-only, four axiom-free); 133,777 passing forest tests,
+including 73 new cases. Tests cover every small binary collision, common
+coordinates, injective faces, sharp valid gap-cycle examples, odd
+coordinate deletion, and failure at the non-strict budget boundary.
+Next combine three pairwise support bounds to exclude triple fibres
+under sufficiently small intrinsic loss, then count actual profiles
+without a wide-diameter assumption. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN,
+0/3. Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

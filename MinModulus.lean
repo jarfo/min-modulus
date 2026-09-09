@@ -662,3 +662,5 @@ import MinModulus.ParityIntrinsicChainContinuation
 import MinModulus.SubsetLossRecurrence
 
 import MinModulus.SubsetFibreLossRecurrence
+
+import MinModulus.IntrinsicCollisionSupport

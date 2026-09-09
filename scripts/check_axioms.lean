@@ -5117,3 +5117,11 @@ import MinModulus
 #print axioms MinModulus.tuple_parity_loss_eq_deleted_loss_add_overlap_of_odd
 #print axioms MinModulus.tuple_parity_loss_eq_twice_deleted_parity_loss_add_overlap_of_even
 #print axioms MinModulus.deleted_loss_le_tuple_parity_loss_of_odd
+
+-- Small intrinsic loss forces large binary collision support.
+#print axioms MinModulus.subset_collision_loss_eq_zero_iff_injective
+#print axioms MinModulus.subset_sum_injective_of_loss_lt_pow_complement
+#print axioms MinModulus.pow_complement_le_loss_of_binary_collision
+#print axioms MinModulus.two_pow_outside_collision_support_le_intrinsic_loss
+#print axioms MinModulus.dimension_le_collision_support_add_log_loss
+#print axioms MinModulus.subset_sum_injective_of_odd_deleted_parity_budget
