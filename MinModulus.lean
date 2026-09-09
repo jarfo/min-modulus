@@ -668,3 +668,5 @@ import MinModulus.IntrinsicCollisionSupport
 import MinModulus.SmallIntrinsicLossFibres
 
 import MinModulus.IntrinsicFibreCardBound
+
+import MinModulus.ProfileFibreMoments

@@ -5143,3 +5143,14 @@ import MinModulus
 #print axioms MinModulus.card_le_quotient_of_support_bound
 #print axioms MinModulus.tuple_subset_fibre_card_le_intrinsic_quotient
 #print axioms MinModulus.forest_fibre_card_le_intrinsic_quotient
+
+-- Exact profile moments and quantitative overlap bounds.
+#print axioms MinModulus.twice_ordered_pair_card_of_injective_weight
+#print axioms MinModulus.twice_ordered_collision_card_eq_fibre_moment
+#print axioms MinModulus.finite_map_loss_eq_sum_fibre_excess
+#print axioms MinModulus.forest_fibre_weight_injective
+#print axioms MinModulus.twice_profile_volume_eq_fibre_moment
+#print axioms MinModulus.twice_profile_volume_eq_intrinsic_fibre_moment
+#print axioms MinModulus.intrinsic_loss_eq_sum_forest_fibre_excess
+#print axioms MinModulus.twice_profile_volume_le_fibre_cap_mul_intrinsic_loss
+#print axioms MinModulus.twice_profile_volume_le_intrinsic_quotient_mul_loss

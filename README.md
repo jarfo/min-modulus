@@ -5052,6 +5052,31 @@ use the cardinality bound to control overlap. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — exact profile fibre moments and overlap bounds.**
+`ProfileFibreMoments.lean` proves that doubled summed actual profile
+volume is `sum r*(r-1)` over nonempty sum fibres, while intrinsic loss
+is `sum (r-1)`. The generic counting proof orients finite pairs by an
+injective weight; validity supplies weight injectivity on each forest
+fibre. The loss identity itself needs no tuple validity.
+
+The profile moment also equals the moment of the original shifted
+subset-sum fibres. Thus complete forest regrouping preserves summed
+profile volume as well as intrinsic loss, including when rectangles
+overlap. A uniform fibre cap `M` gives `2*volume <= M*intrinsic loss`.
+The earlier intrinsic quotient bound supplies this cap when twice the
+loss exponent is below dimension, without a wide-diameter premise.
+
+Verification: nine theorems; 15,326 full build jobs; 4,833 complete audits
+(4,829 standard-only, four axiom-free); 133,948 passing forest tests,
+including 60 new cases. Tests exhaust small finite maps with weights
+injective only within fibres, attain the cap bound, check actual valid
+short forests with overlap, preserve moments across regroupings, and
+retain a failure example without injective weights. Next characterize
+zero profile overcounting exactly by absence of triple fibres and count
+the excess caused by larger fibres. Arbitrary charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
