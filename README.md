@@ -6282,6 +6282,35 @@ escapes. The global extraction remains open. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — binomial envelopes for collision cube volume.**
+`CollisionGapChargeEnvelope.lean` converts actual support-sensitive
+packing into a bound on the entire fixed-gap cube charge. If each
+core satisfies 2^(n-support)*binom(support,positive) <= B, the sum
+of its unweighted cube charges is at most B, independently of the
+number of cores in the family.
+
+The finite envelope maximizes 2^(n-(2u-delta))*binom(2u-delta,u)
+over delta <= u <= n with lower <= 2u-delta <= n. Every actual
+fixed-gap family whose supports are at least lower has total charge
+at most this envelope. Original escapes A and an injectivity cut B
+supply lower = n+1-2delta-|A|-|B|, with natural subtraction.
+In a group with at most one nonzero involution, original escapes
+alone supply lower = n-2delta-|A|. No forest is supplied.
+
+Verification: one definition and four theorems; 15,375 full build
+jobs; 5,117 complete audits (5,113 standard-only, four axiom-free);
+136,966 passing forest tests, including 103 new cases. Tests compare
+pointwise and whole-family volume bounds on verified shifted tuples,
+check actual doubled collisions and original escapes, and include
+sharp envelopes, impossible support ranges, selected subfamilies,
+and failures without validity or a true support lower bound.
+
+Next aggregate the bounds over a covering set of actual gaps and
+connect them to intrinsic loss, including fibres of size above two.
+This does not yet supply the gap restrictions needed for the global
+conjecture. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -5529,3 +5529,10 @@ import MinModulus
 #print axioms MinModulus.collision_separating_permutation_card_mul_choose
 #print axioms MinModulus.collision_separating_permutation_density_eq_inv_choose
 #print axioms MinModulus.equal_gap_binary_collision_family_support_lym_bound
+
+-- Binomial envelopes for fixed-gap core cube charges and original escapes.
+#print axioms MinModulus.binaryCollisionGapChargeEnvelope
+#print axioms MinModulus.equal_gap_binary_core_cube_sum_le_of_binomial_bound
+#print axioms MinModulus.equal_gap_binary_core_cube_sum_le_support_envelope
+#print axioms MinModulus.equal_gap_binary_core_cube_sum_le_envelope_with_doubling_cut
+#print axioms MinModulus.equal_gap_binary_core_cube_sum_le_envelope_of_one_collision
