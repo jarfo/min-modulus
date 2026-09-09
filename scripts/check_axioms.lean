@@ -5310,3 +5310,11 @@ import MinModulus
 #print axioms MinModulus.profile_incidence_ge_card_at_midpoint_boundary
 #print axioms MinModulus.profile_incidence_eq_card_at_midpoint_boundary
 #print axioms MinModulus.profile_incidence_one_card_at_midpoint_boundary
+
+-- Actual pairwise profile intersections are singletons at the midpoint boundary.
+#print axioms MinModulus.balanced_midpoint_bound_le_half_cube
+#print axioms MinModulus.shifted_entry_ne_zero_of_intrinsic_loss_lt_half_cube
+#print axioms MinModulus.profile_rectangle_intersection_card_le_one_of_constant_sum
+#print axioms MinModulus.profile_pair_intersection_card_le_one_of_nonzero_seeds
+#print axioms MinModulus.forest_seeds_ne_zero_at_midpoint_boundary
+#print axioms MinModulus.profile_pair_intersection_card_le_one_at_midpoint_boundary

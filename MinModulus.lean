@@ -706,3 +706,5 @@ import MinModulus.ProfileMidpointBoundary
 import MinModulus.ProfileIncidenceRanks
 
 import MinModulus.ProfileIncidenceDistribution
+
+import MinModulus.ProfileBoundaryIntersections

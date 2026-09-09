@@ -5521,6 +5521,30 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — singleton pair intersections at the midpoint boundary.**
+`ProfileBoundaryIntersections.lean` proves that an actual rectangle
+intersection with constant evaluation has at most one point when every
+seed is nonzero. Two distinct points would supply adjacent points along
+one coordinate interval; equal evaluation would then force that seed
+to vanish. This uses the actual coordinate rectangle shape.
+
+A zero shifted coordinate costs at least half the subset cube. From
+dimension four onward the balanced midpoint threshold is below that
+loss, so all shifted coordinates, and all positive-length actual chain
+seeds, are nonzero. Consequently two distinct profile rectangles share
+at most one point at a large midpoint fibre on the sharp boundary.
+No tuple validity is used in these statements.
+
+Verification: six theorems; 15,345 full build jobs; 4,959 complete audits
+(4,955 standard-only, four axiom-free); 135,232 passing forest tests,
+including 62 new cases. Tests cover coordinate rectangles, zero-seed
+counterexamples, the dimension restriction, and valid boundary families.
+Next combine singleton pair intersections with the exact incidence
+levels to count intersecting profile pairs and triples. Arbitrary
+charged-chain extraction remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
