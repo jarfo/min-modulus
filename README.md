@@ -4469,6 +4469,38 @@ That arbitrary-endpoint integration is not yet proved. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after every verified milestone.
 
+**2026-09-09 — bounded-corner charge with arbitrary endpoints.**
+`BoundedFamilyContinuation.lean` proves the original global, every
+exact-stratum and direct G3 bounds from
+`C(n,L)*2^(n-sum_i L_i) <= 2^(m-3)`, for any selected length `m >= 4`.
+Here `C` counts the bounded coefficient vectors with total weight below
+`n`. The common shift, all seeds, endpoints and unselected coordinates
+are arbitrary; empty members are allowed. There are no additional
+width or coverage premises.
+
+Removing empty members permits the genuine-endpoint theorem to force
+continuation. Controlled extension and splicing preserve the smaller
+error through a maximal family. At an internal rejoin, the actual
+cycle bounds the joint power weight of every other member. Consequently
+the truncated rectangle has total side deficit below `2*n`, and its
+cardinality is at most twice the bounded corner. The rectangle equals
+the selected single-chain error, so the doubled post-rejoin theorem
+proves all original bounds. The binomial charge
+`choose(n+r-1,r)*2^(n-sum_i L_i) <= 2^(m-3)` also suffices directly.
+
+Verification: eleven theorems; 15,304 full build jobs; 4,653 complete
+audits (4,649 standard-only, four axiom-free); 132,019 passing forest
+tests, including 54 new actual-continuation cases. The factor-two
+comparison is asymptotically sharp on valid-gap profiles: their
+rectangle has size `n^2` while twice the bounded corner is `n*(n+1)`.
+The earlier strict profile improvements now give original bounds
+without a genuine-endpoint assumption.
+Next strengthen the original counterexample restrictions using this
+smaller error and the existing all-depth cycle/escape budgets.
+Arbitrary sufficiently charged-family extraction is still unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
