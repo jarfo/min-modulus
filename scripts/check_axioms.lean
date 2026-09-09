@@ -5432,3 +5432,9 @@ import MinModulus
 #print axioms MinModulus.double_coordinate_across_independent_loss_one_block_eq_zero
 #print axioms MinModulus.add_injective_on_swapped_finset_product
 #print axioms MinModulus.exists_boundary_balanced_blocks_without_cross_doubling
+
+-- Doubling preserves complementary collision parts without validity.
+#print axioms MinModulus.no_doubling_across_loss_one_collision_parts
+#print axioms MinModulus.doubling_preserves_loss_one_collision_part
+#print axioms MinModulus.exists_loss_one_collision_parts_closed_under_doubling
+#print axioms MinModulus.exists_boundary_four_collision_parts_closed_under_doubling

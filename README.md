@@ -5871,6 +5871,32 @@ doubling there. Arbitrary charged-chain extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push
 both repositories after each verified milestone.
 
+**2026-09-09 — doubling preserves all four boundary collision parts.**
+`LossOneDoublingParts.lean` rules out doubling between opposite sides of
+a complementary collision in a loss-one block. Such an edge would create
+a distinct equal-sum pair missing a block coordinate, contradicting full
+support of every loss-one collision. A block closed under doubling thus
+splits into two complementary parts that are each closed under doubling.
+
+At the sharp large-midpoint boundary in dimension at least four, the two
+balanced blocks consequently refine into four collision parts preserved
+by every shifted doubling edge. Empty parts are allowed. These results
+require neither tuple validity nor a chosen forest.
+
+Verification: four theorems; 15,360 full build jobs; 5,049 complete audits
+(5,045 standard-only, four axiom-free); 136,191 passing forest tests,
+including 48 new cases. A new valid dimension-eight boundary family has
+an actual length-two chain, rectangle sizes one, one, sixteen, sixteen,
+and the proved singleton incidence pattern. Exhaustive coefficient
+search verifies validity; this example prevents the false inference that
+all valid boundary chains must have length one.
+
+Next turn whole-block containment into a balanced subfamily condition on
+chain lengths and a strict loss obstruction when no such subfamily
+exists. Arbitrary charged-chain extraction remains unproved. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

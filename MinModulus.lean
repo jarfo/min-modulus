@@ -736,3 +736,5 @@ import MinModulus.BoundaryCoreChainSeparation
 import MinModulus.BoundaryChainBlocks
 
 import MinModulus.BoundaryDoublingBlocks
+
+import MinModulus.LossOneDoublingParts
