@@ -5377,6 +5377,30 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — exact product of actual subset fibres.**
+`DisjointFibreProduct.lean` proves that every finite-map fibre has at most
+one more point than the map's loss. When addition is injective on the
+product of two disjoint actual block images, the union fibre at `u+v`
+has cardinality exactly the product of the block fibre cardinalities at
+`u` and `v`. Every union fibre is therefore bounded by `(lS+1)*(lT+1)`.
+
+At minimum combined loss for two colliding blocks, both losses are one
+and their image addition is injective. Every subset fibre then has at
+most four points, and an actual four-point fibre exists. Thus the bound
+is attained. A valid six-coordinate integer tuple
+`(1,100,101,1000000,100000000,-101000000)` reaches balanced loss fifteen
+with a four-point midpoint fibre. Its four subset cardinalities are
+one, two, four, and five. Validity alone does not exclude this equality
+structure in unrestricted additive groups.
+
+Verification: seven theorems; 15,339 full build jobs; 4,918 complete audits
+(4,914 standard-only, four axiom-free); 134,840 passing forest tests,
+including 69 new cases. Next extract and balance the two actual blocks
+at the sharp midpoint threshold, then recover the midpoint and deletion
+fibre sizes there. Arbitrary charged-chain extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push
+both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

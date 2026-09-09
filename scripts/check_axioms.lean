@@ -5256,3 +5256,12 @@ import MinModulus
 #print axioms MinModulus.disjoint_block_loss_product_eq_iff_add_injective
 #print axioms MinModulus.two_colliding_blocks_minimum_loss_iff
 #print axioms MinModulus.exists_unique_block_image_pair_of_minimum_loss
+
+-- Actual subset fibres factor under unique block-value addition.
+#print axioms MinModulus.finset_fibre_card_le_loss_add_one
+#print axioms MinModulus.subset_fibre_card_le_loss_add_one
+#print axioms MinModulus.disjoint_subset_fibre_card_eq_product
+#print axioms MinModulus.disjoint_subset_fibre_card_le_loss_product
+#print axioms MinModulus.disjoint_subset_fibre_card_le_four_of_minimum_loss
+#print axioms MinModulus.exists_subset_fibre_card_ge_two_of_positive_loss
+#print axioms MinModulus.exists_disjoint_subset_fibre_card_eq_four_of_minimum_loss

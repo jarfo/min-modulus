@@ -694,3 +694,5 @@ import MinModulus.DisjointCollisionLoss
 import MinModulus.SharpMidpointLoss
 
 import MinModulus.DisjointCollisionRigidity
+
+import MinModulus.DisjointFibreProduct
