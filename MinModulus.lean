@@ -776,3 +776,5 @@ import MinModulus.SeparatedPairEvaluations
 import MinModulus.SeparatedPairLayerCounts
 
 import MinModulus.OneExtraMultisetRigidity
+
+import MinModulus.UnitGapEscapeDensity

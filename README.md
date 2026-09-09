@@ -6429,6 +6429,34 @@ layer intersections remains open. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
 each verified milestone.
 
+**2026-09-09 — unit-gap collisions force linear escape density.**
+`UnitGapEscapeDensity.lean` bounds the number of coordinates with no
+affine doubling predecessor by |A|+|B|, where A contains all original
+escapes and B makes doubled values injective off the cut. This counting
+lemma does not require tuple validity. In a valid unit-gap collision,
+the smaller side lies among those roots, so |V| <= |A|+|B|.
+
+Combining this with the earlier heavier-side bound gives
+n <= 3(|A|+|B|)+2. Injective doubling gives n <= 3|A|+2.
+With at most one nonzero involution, one internally chosen cut gives
+n <= 3|A|+5, without a supplied forest or cut. Consequently, whenever
+3|A|+5 < n, the entire actual unit-gap collision-core family is empty.
+This supplies a concrete restriction on the gaps in loss certificates.
+
+Verification: six theorems; 15,380 full build jobs; 5,144 complete
+audits (5,140 standard-only, four axiom-free); 137,398 passing forest
+tests, including 61 new cases. Tests cover arbitrary small tuples
+for root counting, verified odd/even cyclic tuples at every shift
+through n=7 and selected shifts at n=8, low-escape larger-gap cycles,
+and valid elementary 2-group examples showing why the involution
+hypothesis or the full cut cost is necessary.
+
+Next extend predecessor-growth restrictions to arbitrary cardinality
+gaps and analyze predecessor-closed cycle sets. These results do not
+yet close the unrestricted high-escape residual. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

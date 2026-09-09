@@ -5565,3 +5565,11 @@ import MinModulus
 #print axioms MinModulus.no_affine_double_target_of_one_extra_other_repetition
 #print axioms MinModulus.no_affine_predecessor_of_one_short_representation
 #print axioms MinModulus.unit_gap_negative_side_has_no_affine_predecessor
+
+-- Original escapes bound unit-gap collisions and exclude them at low density.
+#print axioms MinModulus.affine_predecessor_root_count_le_escape_add_cut
+#print axioms MinModulus.unit_gap_negative_card_le_escape_add_cut
+#print axioms MinModulus.unit_gap_collision_dimension_le_three_escape_cut_add_two
+#print axioms MinModulus.unit_gap_collision_dimension_le_three_escape_add_two_of_injective
+#print axioms MinModulus.unit_gap_collision_dimension_le_three_escape_add_five_of_one_collision
+#print axioms MinModulus.unit_gap_binary_collision_cores_eq_empty_of_few_escapes
