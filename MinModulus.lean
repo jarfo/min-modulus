@@ -774,3 +774,5 @@ import MinModulus.CollisionGapLossCertificate
 import MinModulus.SeparatedPairEvaluations
 
 import MinModulus.SeparatedPairLayerCounts
+
+import MinModulus.OneExtraMultisetRigidity

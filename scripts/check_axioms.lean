@@ -5558,3 +5558,10 @@ import MinModulus
 #print axioms MinModulus.separated_pair_layer_card_eq_binomial_sum
 #print axioms MinModulus.separated_pair_balanced_and_unit_card
 #print axioms MinModulus.separated_pair_balanced_and_unit_image_card
+
+-- One-step multiset replacement rigidity and unit-gap predecessor exclusion.
+#print axioms MinModulus.multiset_eq_finset_of_validTuple_card_sum
+#print axioms MinModulus.one_extra_double_contraction_eq_subset
+#print axioms MinModulus.no_affine_double_target_of_one_extra_other_repetition
+#print axioms MinModulus.no_affine_predecessor_of_one_short_representation
+#print axioms MinModulus.unit_gap_negative_side_has_no_affine_predecessor

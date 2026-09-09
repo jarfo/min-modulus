@@ -6398,6 +6398,37 @@ or excludes doubling predecessors. No global intersection bound is
 proved yet. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — one-step multiset rigidity and unit-gap roots.**
+`OneExtraMultisetRigidity.lean` proves that a same-cardinality,
+same-sum multiset replacement of any subset of a valid tuple is
+exactly that subset. Repetitions inside the subset are also excluded.
+In a one-extra representation (i,i,R), any actual affine doubling
+edge i -> j contracts the representation to (j,R), which must recover
+the original subset exactly. If R still contains a repeated coordinate,
+i must instead be a genuine affine escape.
+
+Conversely, a one-short representation (j,R) cannot contain any j
+with an affine doubling predecessor: expansion would create a
+same-cardinality representation with a repeated coordinate. Hence
+every coordinate on the smaller side of a unit-gap collision has
+no affine doubling predecessor anywhere in the original tuple.
+This holds even before cancelling coordinates common to both sides.
+No forest, cyclicity, or finite-group hypothesis is needed.
+
+Verification: five theorems; 15,379 full build jobs; 5,138 complete
+audits (5,134 standard-only, four axiom-free); 137,337 passing forest
+tests, including 62 new cases. Tests enumerate all nearby-length
+multiset replacements of actual subsets, cover cyclic and integer
+tuples, repeated-source escapes, exact contractions, nonreduced
+unit-gap relations, and failures without validity or at larger gaps.
+
+Next bound the number of predecessor-free coordinates by original
+escapes and an injectivity cut, then derive an actual unit-gap
+exclusion threshold. Applying these restrictions to general signed-
+layer intersections remains open. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
+each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
