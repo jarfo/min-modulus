@@ -722,3 +722,5 @@ import MinModulus.BoundaryProfileIncidencePattern
 import MinModulus.ForestBinaryDigits
 
 import MinModulus.BinaryCoreProfileMap
+
+import MinModulus.ProfileCoreCharges

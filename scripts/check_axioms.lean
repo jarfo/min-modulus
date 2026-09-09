@@ -5378,3 +5378,11 @@ import MinModulus
 #print axioms MinModulus.binary_core_forest_profile_coordinate_eq
 #print axioms MinModulus.binary_core_forest_profile_surjective
 #print axioms MinModulus.binary_core_forest_profile_bijective_at_midpoint_boundary
+
+-- Exact individual profile core-charge sums and boundary power-of-two rectangle sizes.
+#print axioms MinModulus.forest_subset_digit_difference_identity
+#print axioms MinModulus.profile_coordinate_eq_iff_on_binary_difference
+#print axioms MinModulus.profile_lower_box_card_eq_ordered_binary_pair_card
+#print axioms MinModulus.profile_lower_box_card_eq_core_charge_sum
+#print axioms MinModulus.boundary_profile_lower_box_card_eq_core_charge
+#print axioms MinModulus.profile_lower_box_card_is_two_pow_at_midpoint_boundary

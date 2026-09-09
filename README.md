@@ -5717,6 +5717,31 @@ charged-chain extraction remains unproved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — individual profile rectangle core charges.**
+`ProfileCoreCharges.lean` proves that cancelling common original subset
+coordinates preserves each digit difference. For a fixed actual small
+profile, its lower rectangle counts exactly the ordered original subset
+pairs with that difference. Grouping them by their cancelled binary cores
+gives the exact rectangle cardinality as a sum of complementary cube
+charges. These general statements require neither tuple validity nor
+positive chain lengths: profile smallness supplies the needed orientation.
+
+At the valid sharp large-midpoint boundary in dimension at least four,
+the core-to-profile bijection makes each rectangle equal to one core's
+charge, `2^(n-support.card)`. Every rectangle therefore has power-of-two
+cardinality. Away from the boundary, the valid `(2,1,1)` forest with seeds
+`(10,7,2)` modulo 12 has a rectangle of size six, combining charges two
+and four; a single-core formula would be false there.
+
+Verification: six theorems; 15,353 full build jobs; 5,011 complete audits
+(5,007 standard-only, four axiom-free); 135,757 passing forest tests,
+including 100 new cases. Tests exhaust arbitrary small actual forests,
+coordinate cancellation, valid regroupings, and the boundary formula.
+Next determine the exact core support distribution across the two
+balanced blocks and the resulting rectangle sizes. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
