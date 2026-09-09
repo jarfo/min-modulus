@@ -5543,3 +5543,11 @@ import MinModulus
 #print axioms MinModulus.binary_core_cube_sum_le_allowed_gap_envelopes
 #print axioms MinModulus.intrinsic_loss_le_allowed_gap_envelopes_of_one_collision
 #print axioms MinModulus.group_card_gap_certificate_of_one_collision
+
+-- Injective ordered signed-pair evaluations and their translation laws.
+#print axioms MinModulus.equal_card_gap_pairs_eq_of_cross_disjoint_and_equal_evaluation
+#print axioms MinModulus.separatedPairsWithGap
+#print axioms MinModulus.separated_pair_evaluation_injective
+#print axioms MinModulus.separated_pair_evaluation_image_card
+#print axioms MinModulus.separated_pair_evaluation_shift
+#print axioms MinModulus.separated_pair_evaluation_image_shift

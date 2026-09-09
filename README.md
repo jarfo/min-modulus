@@ -6341,6 +6341,35 @@ structure across gaps and translations. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
 each verified milestone.
 
+**2026-09-09 — injective ordered signed-pair evaluations.**
+`SeparatedPairEvaluations.lean` extends uncrossing to disjoint pairs
+with equal signed evaluation and equal cardinality gap. The pairs
+need not each be a zero-sum collision at a common translation.
+For every coordinate permutation P and nonnegative gap delta, define
+the ordered layer by disjoint U,V with |U|=|V|+delta and all positive
+coordinates before all negative coordinates in P.
+
+On each such layer, validity makes sum(V)-sum(U) injective, so its
+concrete group-value image has the same cardinality as the pair set.
+This includes the balanced gap zero. Translating the tuple by b
+translates the entire delta layer by -delta*b; in particular the
+balanced image stays fixed. These laws hold in arbitrary additive
+commutative groups, with no finite-group or forest hypothesis.
+
+Verification: one definition and five theorems; 15,377 full build
+jobs; 5,128 complete audits (5,124 standard-only, four axiom-free);
+137,210 passing forest tests, including 173 new cases. Tests use
+verified cyclic and integer tuples, multiple coordinate orders,
+translations, empty dimensions, and counterexamples when validity,
+a common gap, or a common ordering is omitted. Exact layer counts
+are checked as regression targets for the next formal step.
+
+Next prove the support bijection and exact counts, especially the
+balanced and unit-gap layers, then investigate intersections of
+their translated images. Their counts are not yet formalized here.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
