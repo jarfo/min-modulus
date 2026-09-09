@@ -6893,6 +6893,31 @@ Then extend that correction to arbitrary multiplicity. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — triple-fibre values give exact intrinsic-loss correction.**
+`TripleFibreLossCorrection.lean` defines the attained values with
+exactly three subset representations. When all fibres have size at
+most three, intrinsic loss plus the number of these values equals
+the complementary-core cube sum exactly. A triple fibre makes the
+uncorrected core bound strict.
+
+The correction also strengthens the group-cardinality inequality:
+2^n plus the triple-value count is at most the group cardinality plus
+the core-cube sum. The cyclic half-escape condition 2|A| <= n supplies
+the three-point cap automatically, with no forest assumed.
+
+Verification: one definition and five theorems; 15,397 full build
+jobs; 5,270 complete audits (5,266 standard-only, four axiom-free).
+The full forest suite passed, including all 139,106 tests applicable
+to this milestone and its 102 new cases. For the valid tuple
+(2,3,5,9) modulo 12, loss 6 plus two triple-fibre values equals the
+core sum 8. A valid four-point-fibre example shows why the cap is
+needed: its loss is 72 and core sum 78, with no triple-fibre values.
+
+Next account for excess pairs at every fibre multiplicity, removing
+the three-point cap from the exact formula. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

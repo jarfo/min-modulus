@@ -5725,3 +5725,11 @@ import MinModulus
 #print axioms MinModulus.cyclic_half_escape_density_of_four_fibre
 #print axioms MinModulus.odd_cyclic_half_escape_density_of_four_fibre
 #print axioms MinModulus.cyclic_subset_fibre_card_le_three_of_half_escape_cost
+
+-- Triple-fibre values give exact corrections to complementary core cubes.
+#print axioms MinModulus.tupleTripleFibreValues
+#print axioms MinModulus.intrinsic_loss_add_triple_fibre_count_eq_core_cube_sum
+#print axioms MinModulus.intrinsic_loss_lt_core_cube_sum_of_triple_fibre_correction
+#print axioms MinModulus.group_card_lower_bound_with_triple_fibre_correction
+#print axioms MinModulus.cyclic_intrinsic_loss_add_triple_count_eq_core_sum_of_half_escape_cost
+#print axioms MinModulus.cyclic_modulus_lower_bound_with_triple_fibre_correction
