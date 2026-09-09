@@ -7060,6 +7060,30 @@ core-charge boundary and extract balanced blocks and four cores.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-09 — the sharp odd-correction boundary has balanced blocks and four cores.**
+OddCorrectionCoreBoundary.lean classifies a valid tuple with odd
+correction and core charge C=S+2, for the balanced two-power sum S.
+It forces correction three and loss S-1, a unique four-point midpoint,
+and at most two points in every other fibre.
+
+The actual coordinates partition into two balanced blocks of loss
+one, whose subset-sum images add injectively. The original tuple has
+exactly four oriented collision cores. Consequently C<=S+2 suffices
+for even correction and equal core/loss parity whenever the core
+family does not have exactly four elements.
+
+Verification: six theorems; 15,404 full build jobs; 5,309 complete
+audits (5,305 standard-only, four axiom-free); 139,829 passing forest
+tests, including 112 new cases. Valid balanced families exhibit all
+of the boundary structure. A valid tuple modulo 28 has correction
+three above the boundary, confirming that correction three alone
+does not force balanced loss.
+
+Next use odd-modulus parity without any charge restriction, then
+sharpen the alternatives immediately above this boundary. Conjecture
+1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

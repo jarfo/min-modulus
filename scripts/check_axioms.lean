@@ -5778,3 +5778,11 @@ import MinModulus
 #print axioms MinModulus.triple_and_four_counts_of_overcount_eq_three
 #print axioms MinModulus.exists_unique_four_point_midpoint_of_overcount_eq_three
 #print axioms MinModulus.triple_and_four_counts_of_overcount_eq_four
+
+-- The minimum odd-correction charge forces balanced blocks and four cores.
+#print axioms MinModulus.loss_and_overcount_at_odd_core_boundary
+#print axioms MinModulus.exists_unique_four_point_midpoint_at_odd_core_boundary
+#print axioms MinModulus.exists_balanced_unit_loss_partition_at_odd_core_boundary
+#print axioms MinModulus.binary_core_card_eq_four_at_odd_core_boundary
+#print axioms MinModulus.even_fibre_overcount_of_balanced_core_bound_and_card_ne_four
+#print axioms MinModulus.intrinsic_loss_mod_two_eq_core_sum_of_balanced_bound_and_card_ne_four
