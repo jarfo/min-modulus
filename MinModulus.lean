@@ -658,3 +658,5 @@ import MinModulus.ZeroSumFaceLoss
 import MinModulus.EvenIntrinsicChainContinuation
 
 import MinModulus.ParityIntrinsicChainContinuation
+
+import MinModulus.SubsetLossRecurrence

@@ -4921,6 +4921,33 @@ subset-image overlaps for descent. Arbitrary charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — exact intrinsic loss under coordinate insertion and deletion.**
+`SubsetLossRecurrence.lean` defines subset-sum image and exact loss on
+an actual finite coordinate set. Inserting a fresh coordinate a adds
+precisely the old image translated by x(a). Consequently the new loss
+is twice the old loss plus the cardinality of the actual intersection
+of those two images. This identity holds in every additive commutative
+group, without validity or finiteness of the group.
+
+On all shifted tuple coordinates these definitions equal the intrinsic
+image and loss. Deleting any chosen coordinate therefore gives the exact
+inverse recurrence, retaining its shifted value and the actual overlap.
+Repeated insertion also proves that enlarging S to T multiplies existing
+loss by at least `2^(T.card-S.card)`. These are identities and bounds for
+actual coordinate deletion, not independent supplied loss budgets.
+
+Verification: two definitions and seven theorems; 15,321 full build jobs;
+4,791 complete audits (4,787 standard-only, four axiom-free); 133,642
+passing forest tests, including 57 new cases. Tests exhaust small integer
+and cyclic coordinate sets, all insertions and weighted growth, finite
+product groups, and every deletion in valid shifted gap examples. Next
+refine the recurrence inside target predicates and parity classes: odd
+coordinate insertion exchanges the two old parity classes, while even
+insertion preserves them. This connects intrinsic loss more directly
+to descent. Arbitrary charged-chain extraction remains unproved.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

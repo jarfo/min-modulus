@@ -5091,3 +5091,14 @@ import MinModulus
 #print axioms MinModulus.global_lower_bound_of_intrinsic_parity_chain_charge
 #print axioms MinModulus.stratum_lower_bound_of_intrinsic_parity_chain_charge
 #print axioms MinModulus.not_validTuple_exceptional_of_intrinsic_parity_chain_charge
+
+-- Exact intrinsic loss under actual coordinate insertion and deletion.
+#print axioms MinModulus.subsetSumImageOn
+#print axioms MinModulus.subsetCollisionLossOn
+#print axioms MinModulus.subset_sum_image_card_add_loss
+#print axioms MinModulus.subset_sum_image_on_insert
+#print axioms MinModulus.subset_collision_loss_on_insert
+#print axioms MinModulus.subset_sum_image_on_univ_eq_tuple_image
+#print axioms MinModulus.subset_collision_loss_on_univ_eq_tuple_loss
+#print axioms MinModulus.tuple_binary_loss_eq_twice_deleted_loss_add_overlap
+#print axioms MinModulus.subset_collision_loss_growth_of_subset
