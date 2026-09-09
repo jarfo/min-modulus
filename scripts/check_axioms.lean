@@ -5359,3 +5359,13 @@ import MinModulus
 #print axioms MinModulus.pair_intersection_nonempty_iff_of_two_multiple_points
 #print axioms MinModulus.exists_two_boundary_multiple_points
 #print axioms MinModulus.exists_boundary_profile_incidence_partition
+
+-- Explicit actual binary digits and agreement of the two valid fibre orientations.
+#print axioms MinModulus.forestSubsetDigits
+#print axioms MinModulus.forest_subset_digits_injective
+#print axioms MinModulus.forest_subset_digits_bijective
+#print axioms MinModulus.forest_subset_digits_sum_eq
+#print axioms MinModulus.forest_subset_digit_weight_eq
+#print axioms MinModulus.forest_subset_digits_add_of_disjoint
+#print axioms MinModulus.forest_subset_digit_weight_bounds
+#print axioms MinModulus.forest_subset_digit_weight_lt_iff_card_lt_of_equal_sum

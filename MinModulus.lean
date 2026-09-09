@@ -718,3 +718,5 @@ import MinModulus.BoundaryCollisionCores
 import MinModulus.BoundaryProfileCount
 
 import MinModulus.BoundaryProfileIncidencePattern
+
+import MinModulus.ForestBinaryDigits

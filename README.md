@@ -5669,6 +5669,29 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — explicit binary digits and fibre orientation.**
+`ForestBinaryDigits.lean` exposes the actual subset-to-chain digit map,
+proves it bijective and sum-preserving, and proves coordinatewise
+additivity on disjoint subsets. Total box weight is the sum of the
+selected original binary place weights. Its excess over subset
+cardinality is bounded by the full forest diameter minus dimension.
+
+Combined with valid forest weight spacing, these bounds prove that
+box-weight order agrees exactly with original subset-cardinality order
+on every equal-sum fibre of a valid positive forest. This is stronger
+than equality of total ordered-pair counts and will allow the orientation
+of each binary core to pass directly to its associated profile.
+
+Verification: one definition and seven theorems; 15,351 full build jobs;
+4,998 complete audits (4,994 standard-only, four axiom-free); 135,598
+passing forest tests, including 68 new cases. Tests include arbitrary
+coordinate permutations, zero-length arms, disjoint additivity, actual
+valid doubling forests, long gap forests, and failures without validity
+or equal sums. Next construct the actual core-to-profile map, prove its
+surjectivity, and identify its boundary bijection. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
