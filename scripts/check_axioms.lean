@@ -5675,3 +5675,11 @@ import MinModulus
 #print axioms MinModulus.cyclic_escape_density_strict_of_triple_fibre
 #print axioms MinModulus.cyclic_subset_fibre_card_le_two_of_refined_actual_escape_cost
 #print axioms MinModulus.cyclic_intrinsic_loss_eq_core_cube_sum_of_refined_escape_cost
+
+-- Triple fibres force uniformly short actual walks and constructive routes to original escapes.
+#print axioms MinModulus.walk_endpoint_mem_iterated_affine_targets
+#print axioms MinModulus.no_walk_at_power_depth_of_triple_fibre
+#print axioms MinModulus.walk_length_lt_clog_of_triple_fibre
+#print axioms MinModulus.exists_short_actual_escape_walk_of_triple_fibre
+#print axioms MinModulus.exists_logarithmic_escape_walk_of_triple_fibre
+#print axioms MinModulus.no_affine_cycle_of_triple_fibre

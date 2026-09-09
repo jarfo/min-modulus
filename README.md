@@ -6740,6 +6740,32 @@ extracting an actual short route from each coordinate to an original
 escape. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — triple fibres give constructive logarithmic escape routes.**
+`TripleFibreEscapeRoutes.lean` proves the converse walk-to-target
+membership statement. Since a triple fibre makes the target set
+empty at every depth k with n <= 2^k, no actual walk of that length
+can exist. Every walk therefore has fewer than ceil(log2 n) steps.
+
+Choosing actual successors and the first original escape constructs
+a route from every coordinate to an escape within that bound. The
+argument allows zero-step routes for coordinates already at an
+escape, and it also excludes every nonempty affine cycle at the
+same shift. No cut, forest, acyclicity, or supplied route is assumed.
+
+Verification: six theorems; 15,391 full build jobs; 5,232 complete
+audits (5,228 standard-only, four axiom-free); 138,403 passing forest
+tests, including 110 new cases. Checks cover all small valid cyclic
+tuples and all shifts of larger examples. The valid tuple
+(2,3,5,9,17) modulo 31 has a triple fibre and the nontrivial route
+17 to 3, which is an original escape. Valid cycles without triples
+and invalid tuples with triples demonstrate the respective hypotheses.
+
+Next connect these routes to complete actual chain forests, keeping
+every arm logarithmically short and a longest arm ending at an
+original escape. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
