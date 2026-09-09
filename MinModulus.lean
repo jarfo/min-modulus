@@ -786,3 +786,5 @@ import MinModulus.CompletedCollisionGrowth
 import MinModulus.AffineCycleCollisionClassification
 
 import MinModulus.HighRankCollisionFibres
+
+import MinModulus.IteratedDoublingTargets

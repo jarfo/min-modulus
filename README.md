@@ -6572,6 +6572,34 @@ using original escapes and a doubling cut. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-09 — iterated actual targets give an original-escape loss budget.**
+`IteratedDoublingTargets.lean` defines P0 as all coordinates and
+P(k+1) as the actual affine doubling targets of Pk. Membership supplies
+a length-k coordinate walk; vertices may repeat, so cycles are included.
+The noninjective ranked-state refinement theorem gives its endpoint
+weight 2^k. If n <= 2^k, every smaller collision side avoids Pk, and
+intrinsic loss is at most 2^(n-|Pk|). No forest or rank function is supplied.
+
+Each target step loses at most the original escape-plus-cut count,
+giving n <= |Pk|+k(|A|+|B|). Thus loss <= 2^(k(|A|+|B|)).
+Injective doubling removes B. With at most one nonzero involution,
+an internally selected singleton cut gives loss <= 2^(k(|A|+1)).
+The target cardinality estimate itself does not require tuple validity.
+
+Verification: one definition and nine theorems; 15,385 full build jobs;
+5,181 complete audits (5,177 standard-only, four axiom-free); 137,838
+passing forest tests, including 73 new cases. Checks cover arbitrary
+small coordinate lists, every affine shift of larger valid examples,
+walks repeating cycle vertices, and many-involution cut costs. Direct
+power relations without intermediate targets do not suffice. A valid
+example has a nonempty deep target set and two different cores, so
+deep targets alone do not imply the affine-cycle singleton conclusion.
+
+Next derive fibre capacity and exact core-cube loss from a surviving
+deep target, and select the ceiling logarithmic depth automatically.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
