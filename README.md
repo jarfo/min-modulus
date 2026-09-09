@@ -6226,6 +6226,34 @@ The extraction needed for the global conjecture remains open.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-09 — separating permutations of actual collision cores.**
+`CollisionSeparatingPermutations.lean` defines the original-coordinate
+permutations that put every positive-side coordinate before every
+negative-side coordinate. Cross-intersecting pairs cannot both be
+separated by one linear ordering, even if its rank function is not
+injective. Thus distinct actual cores with the same gap have disjoint
+separating-permutation events.
+
+For every selected fixed-gap core family, the sum of the actual event
+cardinalities is at most n!. This includes empty families and pairs
+with an empty side. The exact event count in terms of each core's
+support remains to be proved; the new theorem does not assume it.
+
+Verification: one public definition and three theorems; 15,373 full
+build jobs; 5,107 complete audits (5,103 standard-only, four axiom-free);
+136,780 passing forest tests, including 35 new cases. Exhaustive
+permutation enumeration covers verified actual families through n=8,
+noninjective rank maps, empty sides, sharp full-support zero-sum cores,
+and the failure of packing without validity or a common gap. Exact
+support-dependent counts are checked as a regression target for the
+next formal step, not claimed as a Lean result yet.
+
+Next prove the exact support-dependent event count, then combine it
+with disjointness to obtain the stronger weighted packing inequality.
+The global extraction remains open. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after
+each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -762,3 +762,5 @@ import MinModulus.CollisionHeavyEscapeBound
 import MinModulus.EqualGapCollisionCrossing
 
 import MinModulus.EqualGapCollisionAntichains
+
+import MinModulus.CollisionSeparatingPermutations

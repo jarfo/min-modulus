@@ -5516,3 +5516,9 @@ import MinModulus
 #print axioms MinModulus.equal_gap_binary_collision_family_projection_structure
 #print axioms MinModulus.equal_gap_binary_collision_family_lym_bounds
 #print axioms MinModulus.equal_gap_binary_collision_family_card_le_middle_binomial
+
+-- Separating permutations of equal-gap collision cores have disjoint events.
+#print axioms MinModulus.collisionSeparatingPermutations
+#print axioms MinModulus.not_separates_both_crossing_pairs
+#print axioms MinModulus.equal_gap_collision_separating_permutations_disjoint
+#print axioms MinModulus.equal_gap_collision_separating_permutation_count_sum_le_factorial
