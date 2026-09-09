@@ -782,3 +782,5 @@ import MinModulus.UnitGapEscapeDensity
 import MinModulus.NegativeCollisionGrowth
 
 import MinModulus.CompletedCollisionGrowth
+
+import MinModulus.AffineCycleCollisionClassification

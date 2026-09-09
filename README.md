@@ -6517,6 +6517,33 @@ cycle, then connect these structural bounds to the remaining global
 cases. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — an affine cycle determines all collision cores and exact loss.**
+`AffineCycleCollisionClassification.lean` proves that any nonempty
+zero-sum predecessor-closed set C forces the entire actual binary
+core family to be exactly {(C,empty)}. Every heavier side contains C;
+removing C leaves an equal-sum pair avoiding C. Its two sides must
+have equal cardinality, and validity then makes them equal. A reduced
+core therefore has no remaining coordinates on either side.
+
+The lower complementary-cube loss bound is consequently exact:
+intrinsic loss = 2^(n-|C|). Every nonempty embedded affine cycle
+satisfies these hypotheses, with no restriction on the remaining
+coordinates. Any two affine cycle embeddings at the same shift have
+the same image; distinct disjoint cycles are impossible.
+
+Verification: six theorems; 15,383 full build jobs; 5,164 complete
+audits (5,160 standard-only, four axiom-free); 137,673 passing forest
+tests, including 92 new cases. Tests enumerate all small valid cyclic
+tuples, every affine shift of larger examples, and integer zero
+cycles. A zero-sum set without predecessor closure and an invalid
+tuple with a zero cycle demonstrate the need for the hypotheses.
+
+Next use large predecessor weights to control fibres and loss even
+without cycles, and extract suitable coordinates directly from the
+actual doubling graph. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified
+milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

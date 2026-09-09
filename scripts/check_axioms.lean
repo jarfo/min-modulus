@@ -5591,3 +5591,11 @@ import MinModulus
 #print axioms MinModulus.collision_gap_dimension_bound_of_injective_doubling
 #print axioms MinModulus.collision_gap_dimension_bound_of_one_collision
 #print axioms MinModulus.unit_gap_binary_collision_cores_eq_empty_of_twice_escape_bound
+
+-- An actual nonempty affine cycle determines the unique core and exact intrinsic loss.
+#print axioms MinModulus.binary_collision_core_eq_predecessor_closed_zero_sum
+#print axioms MinModulus.binary_collision_cores_eq_singleton_of_closed_zero_sum
+#print axioms MinModulus.intrinsic_loss_eq_complement_cube_of_closed_zero_sum
+#print axioms MinModulus.binary_collision_cores_eq_singleton_of_affine_cycle
+#print axioms MinModulus.intrinsic_loss_eq_outside_cube_of_affine_cycle
+#print axioms MinModulus.affine_cycle_images_eq
