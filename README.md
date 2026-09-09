@@ -5104,6 +5104,33 @@ charged-chain extraction remains unproved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — exact binary collision decomposition into disjoint cores.**
+`BinaryCollisionCores.lean` cancels the common coordinates of every
+oriented binary collision. Fixing its two disjoint difference sets `U,V`
+leaves exactly `2^(n-|U union V|)` pairs, one for each common subset of
+the remaining coordinates. Summing these charges over the actual cores
+counts all equal-sum pairs oriented by strict subset cardinality, without
+assuming validity.
+
+For valid tuples, cardinality is injective within each shifted sum fibre,
+so this core sum equals the summed volume of actual profiles in every
+complete forest encoding. When all fibres have at most two points, the
+same sum equals intrinsic loss. The earlier small-loss criterion supplies
+that hypothesis without choosing an encoding. Cores retain their actual
+positive and negative coordinate sets; they are not assumed to be cycles
+or zero-sum sets.
+
+Verification: two definitions and seven theorems; 15,328 full build jobs;
+4,847 complete audits (4,843 standard-only, four axiom-free); 134,065
+passing forest tests, including 58 new cases. Tests exhaust small pair
+cores and oriented collisions, check actual valid profile volumes with
+and without overlap, attain exact one-core charges in gap families, and
+retain counterexamples without disjointness or validity. Next use dyadic
+divisibility and charge budgets to force large actual relation cores.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

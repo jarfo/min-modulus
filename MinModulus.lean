@@ -672,3 +672,5 @@ import MinModulus.IntrinsicFibreCardBound
 import MinModulus.ProfileFibreMoments
 
 import MinModulus.ExactProfileOverlap
+
+import MinModulus.BinaryCollisionCores

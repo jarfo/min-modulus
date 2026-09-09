@@ -5161,3 +5161,14 @@ import MinModulus
 #print axioms MinModulus.profile_rectangles_pairwise_disjoint_of_fibre_cap_two
 #print axioms MinModulus.profile_rectangles_pairwise_disjoint_iff_fibres_le_two
 #print axioms MinModulus.triple_fibre_card_le_profile_volume_excess
+
+-- Dyadic decomposition of binary collisions into disjoint relation cores.
+#print axioms MinModulus.subset_pair_difference_fibre_card
+#print axioms MinModulus.tupleBinaryCollisionCores
+#print axioms MinModulus.tupleOrderedBinaryCollisions
+#print axioms MinModulus.ordered_binary_collision_core_mem
+#print axioms MinModulus.ordered_binary_collision_card_eq_core_cube_sum
+#print axioms MinModulus.tuple_subset_fibre_cardinality_injective
+#print axioms MinModulus.profile_volume_eq_binary_core_cube_sum
+#print axioms MinModulus.intrinsic_loss_eq_binary_core_cube_sum_of_fibres_le_two
+#print axioms MinModulus.intrinsic_loss_eq_binary_core_cube_sum_of_small_loss
