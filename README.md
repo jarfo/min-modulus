@@ -4606,6 +4606,34 @@ Arbitrary sufficiently charged-family extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
 
+**2026-09-09 — actual collision loss and joint genuine exterior intervals.**
+`CollisionLossPacking.lean` counts the union of the lower rectangles
+from actual collision profiles, retaining overlaps. This loss is at
+most the exact bounded corner and at most the sum of profile volumes.
+In a sufficiently wide valid forest the rectangles are disjoint, so
+loss equals that explicit volume sum. At arbitrary positive arm lengths,
+every avoided set satisfies `2^n + |F| <= |G| + loss`.
+
+For a subbinary valid forest, any selected genuine arms with
+`2*n+1 <= 2^L` and `4 <= L` supply their strict eighth-width exterior
+intervals as an avoided union. The union counts common residues once.
+If it pays the actual loss, binary size follows. The single-arm version
+likewise needs to pay only actual loss, not the entire coefficient
+corner. Every subbinary forest must have exterior-union size strictly
+smaller than its actual loss.
+
+Verification: two definitions and ten theorems; 15,309 full build jobs;
+4,702 complete audits (4,698 standard-only, four axiom-free); 132,847
+passing forest tests, including 24 new cases. Actual valid three-arm
+models have interval sizes 4, collision loss 8 and union size 12: the
+joint charge succeeds while each single-arm charge fails. Further tests
+cover shared exterior residues, exact collision counts and the necessary
+subbinary premise for boundary exclusion. Next split actual loss and
+exterior charge by parity. Arbitrary sufficiently charged-family
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after every
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -4975,3 +4975,17 @@ import MinModulus
 #print axioms MinModulus.exact_genuine_forest_of_injective_stratum_counterexample
 #print axioms MinModulus.exact_genuine_forest_of_odd_counterexample
 #print axioms MinModulus.exact_genuine_forest_of_critical_without_half_at_low_escape_shift
+
+-- Actual collision loss and genuine exterior unions.
+#print axioms MinModulus.forestCollisionLoss
+#print axioms MinModulus.forest_collision_loss_le_bounded_corner
+#print axioms MinModulus.forest_collision_loss_le_profile_volume
+#print axioms MinModulus.forest_collision_loss_eq_profile_volume_of_wide
+#print axioms MinModulus.collision_loss_gap_with_avoided_set_of_valid_chain_forest
+#print axioms MinModulus.forestExteriorIntervals
+#print axioms MinModulus.genuine_exterior_union_collision_loss_card_bound
+#print axioms MinModulus.binary_card_bound_of_genuine_exterior_union
+#print axioms MinModulus.exterior_union_card_lt_collision_loss_of_subbinary_forest
+#print axioms MinModulus.forest_exterior_intervals_singleton_card
+#print axioms MinModulus.wide_boundary_interval_collision_loss_card_bound
+#print axioms MinModulus.binary_card_bound_of_genuine_arm_collision_loss

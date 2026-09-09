@@ -634,3 +634,5 @@ import MinModulus.BoundedCornerGates
 import MinModulus.ObstructingChainForest
 
 import MinModulus.InjectiveObstructingForest
+
+import MinModulus.CollisionLossPacking
