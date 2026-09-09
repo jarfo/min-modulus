@@ -4383,6 +4383,34 @@ arbitrary critical tuples. The scalar escape bounds alone do not yet
 supply a charged family. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after every milestone.
 
+**2026-09-09 — all-family profile obstruction in the original gates.**
+`ChainProfileGates.lean` proves that every hypothetical global, exact
+stratum, odd-stratum or exceptional G3 counterexample fails the exact
+charge at every affine shift and every embedded finite chain family.
+For every selected member with `m >= 4`, necessarily
+`2^(m-3) < product_i min(n,2^L_i)*2^(n-sum_i L_i)`.
+Empty members and arbitrary endpoints remain included.
+
+The original G1, G2 and G3 obligations are each proved equivalent to
+their existing quantitative-escape restriction with this additional
+necessary profile condition. The three new residual names are
+`PrimitiveChainProfileDeleteStep`, `OddChainProfileLowerBound` and
+`ExceptionalChainProfileObstruction`. Exact-stratum and global induction
+still use precisely the same three open inputs, with all earlier
+escape conditions and small dimensions retained. No gate is asserted.
+
+Verification: four definitions and nine theorems; 15,301 full build
+jobs; 4,621 complete audits (4,617 standard-only, four axiom-free).
+The unchanged numerical forest checks retain their latest complete
+131,071-pass result from the preceding milestone; this change adds
+only Lean reductions and documentation.
+Next investigate the bounded coefficient corner, retaining its
+sum constraint rather than only its enclosing rectangle. Any sharper
+charge must be preserved through actual continuation and remain strong
+enough for the cycle-deficit argument. Arbitrary critical-tuple
+extraction is still unproved. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after milestones.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

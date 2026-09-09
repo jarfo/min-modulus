@@ -618,3 +618,5 @@ import MinModulus.ChainFamilyProfile
 import MinModulus.ChainChargeWithoutCover
 
 import MinModulus.ChainFamilyWithoutCover
+
+import MinModulus.ChainProfileGates
