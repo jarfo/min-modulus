@@ -5504,3 +5504,8 @@ import MinModulus
 #print axioms MinModulus.heavier_collision_card_lower_bound_with_doubling_cut
 #print axioms MinModulus.heavier_collision_card_lower_bound_of_injective_doubling
 #print axioms MinModulus.heavier_collision_card_lower_bound_of_one_collision
+
+-- Equal-gap actual collision cores form cross-intersecting set pairs.
+#print axioms MinModulus.equal_gap_collision_pairs_eq_of_cross_disjoint
+#print axioms MinModulus.distinct_equal_gap_collision_pairs_cross_intersect
+#print axioms MinModulus.equal_gap_binary_collision_cores_cross_intersect

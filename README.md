@@ -6172,6 +6172,33 @@ The extraction needed for the global conjecture remains open.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after each verified milestone.
 
+**2026-09-09 — equal-gap collision cores cross-intersect.**
+`EqualGapCollisionCrossing.lean` constrains whole families of actual
+binary collision cores in every abelian group. Two disjoint-side
+collision pairs with the same cardinality gap coincide whenever one
+negative side avoids the other's positive side. Otherwise a
+same-cardinality multiset replacement contains an outside coordinate
+and contradicts validity.
+
+Thus every distinct equal-gap pair has both cross intersections:
+V1 meets U2, and V2 meets U1. The statement retains the original
+coordinates and affine shift, and applies directly to actual
+`tupleBinaryCollisionCores`. No escape, rank, forest, boundary, or
+cyclic-group assumption is used.
+
+Verification: three theorems; 15,371 full build jobs; 5,098 complete audits
+(5,094 standard-only, four axiom-free); 136,698 passing forest tests,
+including 41 new cases. Verified shifted tuples have families of up to
+nine unit-gap cores. Tests check both crossings, scaling, reindexing,
+and reversed orientations. They also show why validity, distinctness,
+equal gaps, and removal of common coordinates are necessary.
+
+Next prove that both projected side families are injective antichains
+and apply LYM and Sperner packing to all cores at a fixed gap.
+The extraction needed for the global conjecture remains open.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
+push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
