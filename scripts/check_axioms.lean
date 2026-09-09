@@ -5334,3 +5334,12 @@ import MinModulus
 #print axioms MinModulus.subset_sum_eq_iff_blockwise_of_add_injective
 #print axioms MinModulus.collision_support_eq_block_or_union_of_unit_loss
 #print axioms MinModulus.exists_balanced_partition_controlling_all_boundary_collision_supports
+
+-- Exactly four actual binary collision cores at the valid midpoint boundary.
+#print axioms MinModulus.subsetDisjointCollisionPairs
+#print axioms MinModulus.mem_subset_disjoint_collision_pairs
+#print axioms MinModulus.disjoint_collision_pair_card_eq_three_of_loss_one
+#print axioms MinModulus.disjoint_collision_pair_card_eq_product
+#print axioms MinModulus.twice_binary_core_card_add_one_eq_disjoint_pair_card
+#print axioms MinModulus.binary_core_card_eq_four_of_unit_loss_partition
+#print axioms MinModulus.binary_core_card_eq_four_at_midpoint_boundary

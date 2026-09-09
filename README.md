@@ -5592,6 +5592,31 @@ to determine the exact number of binary cores. Arbitrary charged-chain
 extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
 OPEN, 0/3. Continue and push both repositories after each verified milestone.
 
+**2026-09-09 — exactly four boundary binary cores.**
+`BoundaryCollisionCores.lean` defines the disjoint ordered equal-sum
+subset pairs of an actual block, including the empty pair. A block of
+loss one has exactly three: the empty pair and both orientations of its
+unique complementary collision. Independent block addition makes these
+pair counts multiply, giving nine pairs for two loss-one blocks.
+
+Tuple validity makes the empty pair the only equal-cardinality pair.
+Exactly one orientation of each remaining pair is a binary collision
+core. Thus every valid tuple at the sharp large-midpoint boundary has
+exactly four actual binary cores. This requires neither a chosen forest
+nor a cyclic group. The total forest profile count remains to be linked
+to this intrinsic core count.
+
+Verification: one definition and six theorems; 15,348 full build jobs;
+4,978 complete audits (4,974 standard-only, four axiom-free); 135,406
+passing forest tests, including 65 new cases. Tests independently
+enumerate equal-sum fibres and signed cores, verify exact block products
+and validity-based orientation, and exhibit failures without the relevant
+hypotheses. Next prove that actual forest profiles inject into the
+available oriented collision count and determine their total number.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
