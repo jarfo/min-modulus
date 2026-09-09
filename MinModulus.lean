@@ -752,3 +752,5 @@ import MinModulus.RankedOutsideCollisionGap
 import MinModulus.RankedOutsideFibreBounds
 
 import MinModulus.CollisionComplementRanks
+
+import MinModulus.CollisionComplementForests

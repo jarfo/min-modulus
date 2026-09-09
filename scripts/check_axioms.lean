@@ -5490,3 +5490,8 @@ import MinModulus
 #print axioms MinModulus.internal_doubling_target_count_lt_heavier_collision_gap
 #print axioms MinModulus.predecessor_root_count_lower_bound_of_heavier_collision
 #print axioms MinModulus.no_internal_doubling_of_unit_gap_collision
+
+-- Actual affine forests on arbitrary heavier-collision complements.
+#print axioms MinModulus.not_affine_doubling_cycle_disjoint_heavier_collision
+#print axioms MinModulus.forest_diameter_lt_card_add_heavier_collision_gap
+#print axioms MinModulus.exists_actual_forest_budget_disjoint_heavier_collision
