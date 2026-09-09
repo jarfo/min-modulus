@@ -710,3 +710,5 @@ import MinModulus.ProfileIncidenceDistribution
 import MinModulus.ProfileBoundaryIntersections
 
 import MinModulus.ProfileIntersectionFamilies
+
+import MinModulus.LossOneBlockSupport

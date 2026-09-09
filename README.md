@@ -5568,6 +5568,30 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — loss-one block collision supports.**
+`LossOneBlockSupport.lean` proves that every distinct equal-sum subset
+pair in a block of loss one is disjoint and covers the entire block.
+Every proper coordinate face is therefore injective. The unique double
+fibre consists of a complementary pair at a midpoint of the block sum.
+
+Injective addition of disjoint block images makes every subset-sum
+equality split into equalities in each block. For two blocks of loss
+one, every nontrivial collision has symmetric-difference support equal
+to the first block, the second block, or their full union. Consequently
+one balanced coordinate partition controls all binary collision supports
+at the sharp large-midpoint boundary. None of these six theorems needs
+tuple validity or a chosen forest.
+
+Verification: 15,347 full build jobs; 4,971 complete audits (4,967
+standard-only, four axiom-free); 135,341 passing forest tests, including
+56 new cases. Tests exhaust small loss-one tuples, verify independent
+blocks and permuted valid boundary tuples, and check failures with
+larger loss or noninjective block addition. Next count all disjoint
+collision pairs across the two blocks and orient them using validity
+to determine the exact number of binary cores. Arbitrary charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

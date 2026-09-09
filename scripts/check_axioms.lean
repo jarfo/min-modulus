@@ -5326,3 +5326,11 @@ import MinModulus
 #print axioms MinModulus.intersecting_profile_subfamily_card_at_midpoint_boundary
 #print axioms MinModulus.intersecting_profile_pair_card_eq_four_at_midpoint_boundary
 #print axioms MinModulus.exists_unique_intersecting_profile_triple_at_midpoint_boundary
+
+-- Loss-one blocks and a balanced partition control all boundary collision supports.
+#print axioms MinModulus.complementary_subsets_of_loss_one_collision
+#print axioms MinModulus.proper_subset_loss_eq_zero_of_loss_one
+#print axioms MinModulus.exists_complementary_double_fibre_of_loss_one
+#print axioms MinModulus.subset_sum_eq_iff_blockwise_of_add_injective
+#print axioms MinModulus.collision_support_eq_block_or_union_of_unit_loss
+#print axioms MinModulus.exists_balanced_partition_controlling_all_boundary_collision_supports
