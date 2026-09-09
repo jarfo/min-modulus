@@ -79,14 +79,15 @@ theorem exists_target_of_actual_affine_chain_family_below_binary
 
 /-- A new target extends a designated member of an arbitrary family.
 Every other member and seed is preserved, and coverage increases by one. -/
-theorem actual_affine_chain_family_extend
+theorem actual_affine_chain_family_extend_controlled
     {β : Type*} [Fintype β] [DecidableEq β] {n : ℕ} {G : Type*} [AddCommGroup G]
     (g : Fin n → G) (b : G) (x : β → G) (L : β → ℕ) (v : β → ℕ → Fin n)
     (hv : ActualAffineChainFamily g b x L v) (a : β) (ha : 0 < L a)
     (w : Fin n) (hnew : ∀ c i, i < L c → v c i ≠ w)
     (htarget : g w=2 • g (v a (L a-1))+b) :
     ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
-      ActualAffineChainFamily g b x M V ∧ M a=L a+1 ∧ (∑ c, M c)=(∑ c, L c)+1 := by
+      ActualAffineChainFamily g b x M V ∧ M a=L a+1 ∧ (∑ c, M c)=(∑ c, L c)+1 ∧
+      ∀ d, d ≠ a → M d ≤ L d := by
   classical
   let M := Function.update L a (L a+1)
   let V := Function.update v a (fun i ↦ if i < L a then v a i else w)
@@ -119,22 +120,37 @@ theorem actual_affine_chain_family_extend
       · rcases hcoord d j hj with ⟨hjd,hdj⟩ | ⟨rfl,rfl,hdj⟩
         · exact (hnew d j hjd (by simpa only [hci,hdj] using heq.symm)).elim
         · exact ⟨rfl,rfl⟩
-  refine ⟨M,V,hfamily,by simp [M],?_⟩
-  have hsum := Finset.sum_erase_add Finset.univ L (Finset.mem_univ a)
-  dsimp only [M]
-  rw [Finset.sum_update_of_mem (Finset.mem_univ a),Finset.sdiff_singleton_eq_erase]
-  omega
+  refine ⟨M,V,hfamily,by simp [M],?_,?_⟩
+  · have hsum := Finset.sum_erase_add Finset.univ L (Finset.mem_univ a)
+    dsimp only [M]
+    rw [Finset.sum_update_of_mem (Finset.mem_univ a),Finset.sdiff_singleton_eq_erase]
+    omega
+  · intro c hca
+    simp [M,hca]
+
+/-- The original interface, retaining the same coverage and growth conclusion. -/
+theorem actual_affine_chain_family_extend
+    {β : Type*} [Fintype β] [DecidableEq β] {n : ℕ} {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (b : G) (x : β → G) (L : β → ℕ) (v : β → ℕ → Fin n)
+    (hv : ActualAffineChainFamily g b x L v) (a : β) (ha : 0 < L a)
+    (w : Fin n) (hnew : ∀ c i, i < L c → v c i ≠ w)
+    (htarget : g w=2 • g (v a (L a-1))+b) :
+    ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
+      ActualAffineChainFamily g b x M V ∧ M a=L a+1 ∧ (∑ c, M c)=(∑ c, L c)+1 := by
+  obtain ⟨M,V,hfamily,hgrow,hcover,_⟩ := actual_affine_chain_family_extend_controlled g b x L v hv a ha w hnew htarget
+  exact ⟨M,V,hfamily,hgrow,hcover⟩
 
 /-- Splice another member's entire reached suffix onto the designated
 member, retaining its prefix and every other member. Coverage and all
 seeds are preserved, including when the retained prefix is empty. -/
-theorem actual_affine_chain_family_splice
+theorem actual_affine_chain_family_splice_controlled
     {β : Type*} [Fintype β] [DecidableEq β] {n : ℕ} {G : Type*} [AddCommGroup G]
     (g : Fin n → G) (b : G) (x : β → G) (L : β → ℕ) (v : β → ℕ → Fin n)
     (hv : ActualAffineChainFamily g b x L v) (a z : β) (haz : a ≠ z) (ha : 0 < L a)
     (j : ℕ) (hj : j < L z) (htarget : g (v z j)=2 • g (v a (L a-1))+b) :
     ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
-      ActualAffineChainFamily g b x M V ∧ L a < M a ∧ (∑ c, M c)=∑ c, L c := by
+      ActualAffineChainFamily g b x M V ∧ L a < M a ∧ (∑ c, M c)=∑ c, L c ∧
+      ∀ d, d ≠ a → M d ≤ L d := by
   classical
   let M := Function.update (Function.update L z j) a (L a+(L z-j))
   let src : β → ℕ → β × ℕ := fun c i ↦ if c=a ∧ L a ≤ i then (z,j+(i-L a)) else (c,i)
@@ -214,17 +230,34 @@ theorem actual_affine_chain_family_splice
       have hh := hv.2 (src c i).1 (src d k).1 (src c i).2 (src d k).2
         (hbound c i hi) (hbound d k hk) heq
       exact hsrc c d i k hi hk (Prod.ext hh.1 hh.2)
-  refine ⟨M,V,hfamily,by rw [hMa]; omega,?_⟩
-  have hupdate (f : β → ℕ) (c : β) (k : ℕ) :
-      (∑ i, Function.update f c k i)+f c=(∑ i, f i)+k := by
-    have hsum := Finset.sum_erase_add Finset.univ f (Finset.mem_univ c)
-    rw [Finset.sum_update_of_mem (Finset.mem_univ c),Finset.sdiff_singleton_eq_erase]
+  refine ⟨M,V,hfamily,by rw [hMa]; omega,?_,?_⟩
+  · have hupdate (f : β → ℕ) (c : β) (k : ℕ) :
+        (∑ i, Function.update f c k i)+f c=(∑ i, f i)+k := by
+      have hsum := Finset.sum_erase_add Finset.univ f (Finset.mem_univ c)
+      rw [Finset.sum_update_of_mem (Finset.mem_univ c),Finset.sdiff_singleton_eq_erase]
+      omega
+    have h0 := hupdate L z j
+    have h1 := hupdate (Function.update L z j) a (L a+(L z-j))
+    change (∑ c, M c)+(Function.update L z j) a=(∑ c, Function.update L z j c)+(L a+(L z-j)) at h1
+    rw [Function.update_of_ne haz] at h1
     omega
-  have h0 := hupdate L z j
-  have h1 := hupdate (Function.update L z j) a (L a+(L z-j))
-  change (∑ c, M c)+(Function.update L z j) a=(∑ c, Function.update L z j c)+(L a+(L z-j)) at h1
-  rw [Function.update_of_ne haz] at h1
-  omega
+  · intro d hda
+    by_cases hdz : d=z
+    · subst d
+      rw [hMz]
+      omega
+    · simp [M,hda,hdz]
+
+/-- The original interface, retaining the same coverage and growth conclusion. -/
+theorem actual_affine_chain_family_splice
+    {β : Type*} [Fintype β] [DecidableEq β] {n : ℕ} {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (b : G) (x : β → G) (L : β → ℕ) (v : β → ℕ → Fin n)
+    (hv : ActualAffineChainFamily g b x L v) (a z : β) (haz : a ≠ z) (ha : 0 < L a)
+    (j : ℕ) (hj : j < L z) (htarget : g (v z j)=2 • g (v a (L a-1))+b) :
+    ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
+      ActualAffineChainFamily g b x M V ∧ L a < M a ∧ (∑ c, M c)=∑ c, L c := by
+  obtain ⟨M,V,hfamily,hgrow,hcover,_⟩ := actual_affine_chain_family_splice_controlled g b x L v hv a z haz ha j hj htarget
+  exact ⟨M,V,hfamily,hgrow,hcover⟩
 
 /-- Maximize one member while retaining the initial total coverage.
 Every charged family reaches an internal rejoin: extension and suffix

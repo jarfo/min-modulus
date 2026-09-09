@@ -612,3 +612,5 @@ import MinModulus.TwoChainCoverCycle
 import MinModulus.MaximalChainFamily
 
 import MinModulus.FamilyAggregateCycle
+
+import MinModulus.ChainFamilyProfile

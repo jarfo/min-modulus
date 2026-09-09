@@ -4842,3 +4842,17 @@ import MinModulus
 #print axioms MinModulus.global_lower_bound_of_affine_chain_family_layer_cover
 #print axioms MinModulus.stratum_lower_bound_of_affine_chain_family_layer_cover
 #print axioms MinModulus.not_validTuple_exceptional_of_affine_chain_family_layer_cover
+
+-- Controlled extension and splicing retain every other member's length bound.
+#print axioms MinModulus.actual_affine_chain_family_extend_controlled
+#print axioms MinModulus.actual_affine_chain_family_splice_controlled
+
+-- Exact truncated-profile preservation and original family lower bounds.
+#print axioms MinModulus.chainFamilyTruncatedError
+#print axioms MinModulus.chain_family_truncated_error_mono
+#print axioms MinModulus.exists_target_of_truncated_family_below_binary
+#print axioms MinModulus.exists_truncated_chain_family_internal_rejoin
+#print axioms MinModulus.exists_majority_cycle_of_truncated_family
+#print axioms MinModulus.global_lower_bound_of_truncated_chain_family
+#print axioms MinModulus.stratum_lower_bound_of_truncated_chain_family
+#print axioms MinModulus.not_validTuple_exceptional_of_truncated_chain_family

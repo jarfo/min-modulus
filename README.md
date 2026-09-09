@@ -83,6 +83,12 @@ depth, `B=2^t` and `D=t*B-(B-1)`, the condition
 continuation charge. This reaches families below both the prior
 single-chain and separate-logarithm coverage cutoffs.
 
+`ChainFamilyProfile.lean` further replaces the full-factor charge by
+the actual truncated error `product min(n,2^L_i)*2^(n-S)`. Controlled
+extension and splicing preserve it, so short and empty members retain
+their exact contributions. The original bounds follow with the same
+collective coverage criterion and arbitrary endpoints.
+
 Every hypothetical global or exact-stratum counterexample now obeys
 quantitative escape-count bounds at every shift, including tuples with
 actual opposite pairs. `CollisionForest.lean` preserves a widest genuine
@@ -4283,6 +4289,40 @@ so short members need not pay a full factor of `n`. Arbitrary tuples
 still need not supply sufficient selected structure. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3; continue and push both
 repositories after every verified milestone.
+
+**2026-09-09 — actual truncated profiles survive maximal continuation.**
+`ChainFamilyProfile.lean` retains the exact partial-family error
+`E = product_i min(n,2^L_i)*2^(n-S)`, where `S=sum_i L_i`.
+A selected arm of length `m >= 4` with `2*n+1 <= 2^m` keeps its corner
+side saturated at `n`. Controlled extension and suffix splicing only
+shorten other members and never reduce total coverage. Thus `E` cannot
+increase throughout the maximal-family argument. Removing empty
+members changes neither coverage nor the product.
+
+The original global, every exact-stratum and direct G3 bounds now
+follow from `E <= 2^(m-3)` together with the existing collective
+coverage condition `B*n+2*r*D <= 2*(B-1)*S`, where `B=2^t` and
+`D=t*B-(B-1)` at any chosen depth. All chain seeds, endpoints and
+unselected coordinates remain arbitrary at a common affine shift.
+The previous `n^r` charge and theorem interfaces remain available.
+
+New examples include one length-69 chain and four length-4 chains at
+`n=128`, one length-134 chain and eight length-4 chains at `n=256`,
+and one length-262 chain and eight length-5 chains at `n=512`.
+These pass the exact profile condition while failing the full-factor
+charge and earlier single-chain cutoff. Shorter selected companion
+families also fail the tested collective coverage conditions.
+Verification: one definition and nine theorems, including two stronger
+controlled helpers with wrappers preserving the old interfaces;
+15,298 full build jobs; 4,591 complete audits (4,587 standard-only and
+four axiom-free); 129,516 passing forest tests, including 655 new cases.
+Tests check exact error monotonicity, empty-member identities and
+actual valid-gap continuation/splicing with all surviving prefixes.
+Next examine whether the existing below-half-cycle bounds remove the
+separate majority-cover requirement. That strengthening is not yet
+proved. Arbitrary tuples still need not provide a sufficiently charged
+family; Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after every verified milestone.
 
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
