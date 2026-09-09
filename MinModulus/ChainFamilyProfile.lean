@@ -89,7 +89,7 @@ theorem exists_target_of_truncated_family_below_binary
 
 /-- The actual truncated product is retained throughout maximal
 continuation. It never increases under controlled extension or splicing. -/
-theorem exists_truncated_chain_family_internal_rejoin
+theorem exists_truncated_chain_family_internal_rejoin_controlled
     {β : Type*} [Fintype β] [DecidableEq β] {n N : ℕ} [NeZero N]
     (g : Fin n → ZMod N) (hg : ValidTuple g) (hsub : N < 2^n)
     (b : ZMod N) (x : β → ZMod N) (L : β → ℕ) (v : β → ℕ → Fin n)
@@ -98,6 +98,7 @@ theorem exists_truncated_chain_family_internal_rejoin
     (hcharge : chainFamilyTruncatedError n L ≤ 2^(L a-3)) :
     ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
       ActualAffineChainFamily g b x M V ∧ L a ≤ M a ∧ (∑ c, L c) ≤ (∑ c, M c) ∧
+        chainFamilyTruncatedError n M ≤ chainFamilyTruncatedError n L ∧
         ∃ i : ℕ, i < M a ∧ g (V a i)=2 • g (V a (M a-1))+b := by
   classical
   let P : ℕ → Prop := fun l ↦ ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
@@ -152,7 +153,22 @@ theorem exists_truncated_chain_family_internal_rejoin
       change MM a ≤ l at hm
       omega
   obtain ⟨i,hi,hwi⟩ := hown
-  exact ⟨M,V,hMV,by omega,hcover,i,hi,by rw [hwi]; exact hw⟩
+  exact ⟨M,V,hMV,by omega,hcover,herr,i,hi,by rw [hwi]; exact hw⟩
+
+/-- Compatibility interface for maximal truncated-profile continuation. -/
+theorem exists_truncated_chain_family_internal_rejoin
+    {β : Type*} [Fintype β] [DecidableEq β] {n N : ℕ} [NeZero N]
+    (g : Fin n → ZMod N) (hg : ValidTuple g) (hsub : N < 2^n)
+    (b : ZMod N) (x : β → ZMod N) (L : β → ℕ) (v : β → ℕ → Fin n)
+    (hv : ActualAffineChainFamily g b x L v) (a : β) (ha : 4 ≤ L a)
+    (hwide : 2*n+1 ≤ 2^(L a))
+    (hcharge : chainFamilyTruncatedError n L ≤ 2^(L a-3)) :
+    ∃ M : β → ℕ, ∃ V : β → ℕ → Fin n,
+      ActualAffineChainFamily g b x M V ∧ L a ≤ M a ∧ (∑ c, L c) ≤ (∑ c, M c) ∧
+        ∃ i : ℕ, i < M a ∧ g (V a i)=2 • g (V a (M a-1))+b := by
+  obtain ⟨M,V,hMV,hgrow,hcover,_,hjoin⟩ :=
+    exists_truncated_chain_family_internal_rejoin_controlled g hg hsub b x L v hv a ha hwide hcharge
+  exact ⟨M,V,hMV,hgrow,hcover,hjoin⟩
 
 /-- Exact truncated-profile continuation and collective outside growth
 yield an actual majority cycle with arbitrary endpoints and outsiders. -/

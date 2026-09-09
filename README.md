@@ -4353,6 +4353,36 @@ charge. Arbitrary charged-family extraction remains unproved.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and
 push both repositories after every verified milestone.
 
+**2026-09-09 — exact family charge without width or coverage premises.**
+`ChainFamilyWithoutCover.lean` proves the original global, every
+exact-stratum and direct G3 bounds for any actual embedded family
+with a selected length `m >= 4` and
+`product_i min(n,2^L_i)*2^(n-sum_i L_i) <= 2^(m-3)`.
+The common affine shift, seeds, endpoints and remaining coordinates
+are arbitrary. Empty members are allowed. Neither the old width
+condition nor a separate collective coverage condition is required.
+
+The charge itself forces `2*n+1 <= 2^m`. The maximal-family theorem
+now exposes its preserved error bound, while its old interface remains
+available. An internal rejoin supplies an actual cycle inside the
+selected member. Every disjoint member then has length at most
+`floor(log_2 n)`, so its truncated factor is exactly its power of two.
+The entire error collapses to `n*2^(n-p)` for the extended selected
+length `p`. The charge-only single-chain theorem completes all three
+original consumers. No unrestricted family-extraction claim is used.
+
+Verification: eight theorems, including the stronger continuation
+helper; 15,300 full build jobs; 4,608 complete audits (4,604 standard-only
+and four axiom-free); 131,071 passing forest tests, including 369 new
+cases. Checks retain seeds through actual extension/splicing, verify
+profile reduction with empty members, and cover families whose initial
+selected chain alone cannot pay the charge.
+Next feed the all-shift, all-family charge obstruction into the
+existing original G1/G2/G3 reductions, then study extraction from
+arbitrary critical tuples. The scalar escape bounds alone do not yet
+supply a charged family. Conjecture 1 and unrestricted G1/G2/G3 remain
+OPEN, 0/3. Continue and push both repositories after every milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

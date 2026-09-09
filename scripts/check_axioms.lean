@@ -4867,3 +4867,13 @@ import MinModulus
 #print axioms MinModulus.global_lower_bound_of_single_log_affine_chain
 #print axioms MinModulus.stratum_lower_bound_of_single_log_affine_chain
 #print axioms MinModulus.not_validTuple_exceptional_of_single_log_affine_chain
+
+-- Exact family charge without separate width or coverage premises.
+#print axioms MinModulus.exists_truncated_chain_family_internal_rejoin_controlled
+#print axioms MinModulus.chain_family_truncated_error_eq_single_charge
+#print axioms MinModulus.truncated_family_error_eq_single_charge_of_rejoin
+#print axioms MinModulus.chain_family_width_of_truncated_charge
+#print axioms MinModulus.exists_charged_chain_of_truncated_family
+#print axioms MinModulus.global_lower_bound_of_truncated_family_without_cover
+#print axioms MinModulus.stratum_lower_bound_of_truncated_family_without_cover
+#print axioms MinModulus.not_validTuple_exceptional_of_truncated_family_without_cover

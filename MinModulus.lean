@@ -616,3 +616,5 @@ import MinModulus.FamilyAggregateCycle
 import MinModulus.ChainFamilyProfile
 
 import MinModulus.ChainChargeWithoutCover
+
+import MinModulus.ChainFamilyWithoutCover
