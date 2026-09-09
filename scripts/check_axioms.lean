@@ -5291,3 +5291,12 @@ import MinModulus
 #print axioms MinModulus.profile_overlap_point_sum_eq_of_other_fibres_le_two
 #print axioms MinModulus.profile_overlap_point_sum_eq_midpoint_at_boundary
 #print axioms MinModulus.profile_rectangles_not_pairwise_disjoint_at_midpoint_boundary
+
+-- Profile incidence equals the exact rank among heavier collision partners.
+#print axioms MinModulus.strict_upper_weight_count_lt_card
+#print axioms MinModulus.strict_upper_weight_count_strictly_decreases
+#print axioms MinModulus.strict_upper_weight_count_injective
+#print axioms MinModulus.strict_upper_weight_count_image_eq_range
+#print axioms MinModulus.card_strict_upper_weight_count_ge
+#print axioms MinModulus.profile_point_incidence_card_eq_heavier_partner_card
+#print axioms MinModulus.forest_fibre_profile_incidence_ge_card

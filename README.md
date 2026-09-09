@@ -5472,6 +5472,31 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — exact profile incidence ranks in every fibre.**
+`ProfileIncidenceRanks.lean` proves that the number of actual profile
+rectangles containing a box point equals the number of its heavier
+collision partners. Injective weights on a finite set give precisely
+the upper ranks from zero to one less than its size. Consequently, in
+every valid actual forest fibre of size `r`, exactly `r-k` points lie
+in at least `k` profile rectangles, using truncated natural subtraction.
+This is a general incidence formula, without a midpoint or small-loss
+assumption.
+
+Tests retain actual rectangle membership, not only total volume. They
+cover valid short forests, complete regroupings of gap families, and
+boundary fibres with incidence ranks zero through three. Equal weights
+invalidate the rank conclusion. Even injective fibre weights alone do
+not replace tuple validity in the local profile correspondence: an
+invalid nontrivial chain forest can miss heavier collision partners.
+
+Verification: seven theorems; 15,343 full build jobs; 4,945 complete audits
+(4,941 standard-only, four axiom-free); 135,110 passing forest tests,
+including 53 new cases. Next aggregate these ranks into exact global
+incidence levels and the complete boundary multiplicity pattern.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
