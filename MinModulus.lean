@@ -746,3 +746,5 @@ import MinModulus.BoundaryChainDivisibility
 import MinModulus.PredecessorClosedOutsideLoss
 
 import MinModulus.BoundaryEscapeDensity
+
+import MinModulus.RankedOutsideCollisionGap

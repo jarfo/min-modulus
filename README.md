@@ -6001,6 +6001,33 @@ Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — finite ranked growth against outside collision gaps.**
+`RankedOutsideCollisionGap.lean` bounds actual finite doubling growth
+in every abelian group, without a cycle or sharp-boundary hypothesis.
+For a ranked coordinate set C, every positive rank has an actual
+predecessor of rank one lower. Its multisets realize every term count
+up to the aggregate weight W = sum(2^rank), preserving their sum.
+
+If a heavier subset U lies outside C and has the same sum as V,
+validity forces W < |C| + |U| - |V|. The lighter side V may meet C.
+Otherwise refinement absorbs the term-count decrease and constructs a
+full-length rival omitting a coordinate of U. Consequently, W >= |C|+|T|
+forces all subset sums of a disjoint block T to be distinct; any
+positive-loss disjoint block instead requires W < |C|+|T|.
+
+Verification: five theorems; 15,365 full build jobs; 5,078 complete audits
+(5,074 standard-only, four axiom-free); 136,438 passing forest tests,
+including 34 new cases. Tests realize intermediate refinement counts,
+check every outside collision in actual valid examples, allow the lighter
+side to intersect C, construct omitted rivals, and attain the strict
+budget one step below an outside collision's replacement cost.
+
+Next convert the collision-gap constraint into spacing of actual outside
+subset cardinalities, fibre-size bounds, and subset-image lower bounds.
+Arbitrary charged-chain extraction remains unproved. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
+after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

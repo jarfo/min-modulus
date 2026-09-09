@@ -5470,3 +5470,10 @@ import MinModulus
 #print axioms MinModulus.exists_actual_affine_forest_at_injective_midpoint_boundary
 #print axioms MinModulus.boundary_injective_escape_count_lower_bound
 #print axioms MinModulus.boundary_escape_count_lower_bound_of_one_collision
+
+-- Finite ranked growth constrains outside collision gaps.
+#print axioms MinModulus.exists_multiset_refinement_on_finite_ranked_doubling
+#print axioms MinModulus.not_validTuple_of_outside_collision_and_supported_growth
+#print axioms MinModulus.ranked_growth_lt_card_add_outside_collision_gap
+#print axioms MinModulus.disjoint_block_subset_sum_injective_of_ranked_growth
+#print axioms MinModulus.ranked_growth_lt_card_add_of_disjoint_positive_loss
