@@ -5045,3 +5045,16 @@ import MinModulus
 #print axioms MinModulus.global_lower_bound_of_intrinsic_chain_charge
 #print axioms MinModulus.stratum_lower_bound_of_intrinsic_chain_charge
 #print axioms MinModulus.not_validTuple_exceptional_of_intrinsic_chain_charge
+
+-- Intrinsic loss inside each target predicate and parity class.
+#print axioms MinModulus.tupleBinaryFibreLoss
+#print axioms MinModulus.tuple_binary_fibre_image_card_add_loss
+#print axioms MinModulus.tuple_binary_fibre_loss_add_complement
+#print axioms MinModulus.forest_box_filter_card_eq_subset_filter_card
+#print axioms MinModulus.forest_filtered_collision_loss_eq_intrinsic_fibre_loss
+#print axioms MinModulus.tupleBinaryParityLoss
+#print axioms MinModulus.forest_parity_collision_loss_eq_intrinsic_parity_loss
+#print axioms MinModulus.tuple_binary_parity_loss_add
+#print axioms MinModulus.twice_subset_parity_card_eq_two_pow
+#print axioms MinModulus.twice_intrinsic_parity_image_add_loss_eq_two_pow
+#print axioms MinModulus.exists_odd_shifted_coordinate_of_subbinary_even_tuple

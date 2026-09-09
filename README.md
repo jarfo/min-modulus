@@ -4812,6 +4812,32 @@ concentrated in one class. Arbitrary sufficiently charged-chain extraction
 remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
 Continue and push both repositories after every verified milestone.
 
+**2026-09-09 — intrinsic loss within residue predicates and parity.**
+`IntrinsicFibreLoss.lean` defines exact loss inside any target predicate
+as its binary subset-point count minus its distinct image count. Image
+and loss recover that point count; losses for a predicate and its
+complement add to total intrinsic loss, even without tuple validity.
+The complete forest/subset bijection preserves every filtered point
+count. Actual removed-profile loss in each predicate therefore equals
+this intrinsic quantity for every positive complete valid forest.
+
+The parity specialization is invariant under chain regrouping without
+an even-modulus or width premise. At nonzero even modulus, one odd
+shifted coordinate balances the subset cube: twice the parity image
+plus twice its intrinsic loss equals `2^n`. Subbinary validity supplies
+such an odd coordinate at every shift, without a half-deletion premise.
+
+Verification: two definitions and nine theorems; 15,317 full build jobs;
+4,755 complete audits (4,751 standard-only, four axiom-free); 133,316
+passing forest tests, including 78 new cases. Tests cover arbitrary
+target predicates, empty and invalid tuples, odd moduli, parity balance,
+overlapping valid short profiles and complete chain regrouping. Next
+count zero-sum subset faces in each parity class and charge actual
+cycles against those invariant losses. Arbitrary sufficiently charged-chain
+extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
+remain OPEN, 0/3. Continue and push both repositories after every
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
