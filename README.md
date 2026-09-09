@@ -4785,6 +4785,33 @@ charged-chain extraction remains unproved. Conjecture 1 and unrestricted
 G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after every
 verified milestone.
 
+**2026-09-09 — arbitrary-endpoint intrinsic chain continuation.**
+`IntrinsicChainContinuation.lean` closes the original global bound,
+every exact-stratum bound and direct G3 obstruction for any actual
+chain of length m satisfying `m >= 4`, `2*n+1 <= 2^m`, and
+`tupleBinaryCollisionLoss g b <= 2^(m-3)`. Its endpoint and every other
+coordinate are arbitrary. Completing a genuine chain by singletons
+preserves intrinsic loss, so its exterior interval forces binary size.
+Otherwise maximal actual continuation rejoins internally. The cycle-loss
+bound and logarithmic incoming tail force a half-sized cycle below binary
+modulus; the smaller-cycle case contradicts the exponential-deficit bound.
+
+The condition can be much weaker than the previous rectangular charge.
+The valid dimension-18 gap tuple at modulus `2^18-16` has intrinsic loss
+16, paid by a length-7 prefix; the old `n*2^(n-m)` charge is 36,864.
+This closes a broader conditional chain class, but does not extract a
+charged chain from an arbitrary critical tuple.
+
+Verification: eight theorems; 15,316 full build jobs; 4,744 complete
+audits (4,740 standard-only, four axiom-free); 133,238 passing forest
+tests, including 123 new cases. Tests exhaust bounded deficit arithmetic,
+continue actual affine gap chains, check genuine endpoints and verify
+the strict dimension-18 improvement. Next preserve and charge intrinsic
+loss separately in residue predicates, especially parity, to use charge
+concentrated in one class. Arbitrary sufficiently charged-chain extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -5035,3 +5035,13 @@ import MinModulus
 #print axioms MinModulus.two_pow_complement_le_intrinsic_loss_of_zero_sum
 #print axioms MinModulus.two_pow_outside_le_intrinsic_loss_of_affine_cycle
 #print axioms MinModulus.dimension_le_cycle_add_loss_exponent
+
+-- Intrinsic loss controls arbitrary-endpoint chain continuation.
+#print axioms MinModulus.cycle_exponential_deficit_of_intrinsic_charge
+#print axioms MinModulus.binary_card_bound_of_genuine_chain_intrinsic_loss
+#print axioms MinModulus.exists_rejoining_chain_of_intrinsic_loss_charge
+#print axioms MinModulus.exists_half_sized_cycle_of_intrinsic_rejoin_charge
+#print axioms MinModulus.exists_half_sized_cycle_of_intrinsic_chain_charge
+#print axioms MinModulus.global_lower_bound_of_intrinsic_chain_charge
+#print axioms MinModulus.stratum_lower_bound_of_intrinsic_chain_charge
+#print axioms MinModulus.not_validTuple_exceptional_of_intrinsic_chain_charge

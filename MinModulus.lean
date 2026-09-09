@@ -648,3 +648,5 @@ import MinModulus.ProfileCollisionPairs
 import MinModulus.ForestSubsetCube
 
 import MinModulus.CycleIntrinsicLoss
+
+import MinModulus.IntrinsicChainContinuation
