@@ -7106,6 +7106,29 @@ the triple-fibre growth bound. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after each
 verified milestone.
 
+**2026-09-09 — odd-modulus parity excludes odd correction at the next charge.**
+OddModulusCoreBoundaryGap.lean combines unrestricted odd-modulus
+parity with the balanced boundary classification. For n>=2, write
+S=2^floor(n/2)+2^ceil(n/2). Odd correction and C<=S+3 force C=S+2.
+
+Thus excluding a four-core family gives even correction and equal
+core/loss parity throughout the relaxed interval C<=S+3. At its last
+value C=S+3, correction is even and loss is odd.
+
+Verification: five theorems; 15,406 full build jobs; 5,318 complete
+audits (5,314 standard-only, four axiom-free); 139,960 passing forest
+tests, including 55 new cases. Valid odd-modulus balanced families
+require the four-core exception. The tuple (22,23,25,29,37,53) modulo
+63 attains the next charge 19 with loss 19 and zero correction.
+The valid modulo-28 counterexample has odd correction at that next
+charge, confirming the odd-modulus hypothesis.
+
+Next use complement parity to rule out equality in triple-fibre
+growth, transfer the improvement to actual escape counts, and study
+the four-fibre equality case by contracting actual doubling edges.
+Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

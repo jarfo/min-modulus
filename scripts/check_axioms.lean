@@ -5792,3 +5792,10 @@ import MinModulus
 #print axioms MinModulus.odd_intrinsic_loss_of_odd_cyclic_overcount
 #print axioms MinModulus.even_core_sum_of_odd_cyclic_overcount
 #print axioms MinModulus.even_overcount_and_odd_loss_of_odd_cyclic_core_sum
+
+-- Odd-modulus parity excludes odd correction at the next balanced charge.
+#print axioms MinModulus.even_balanced_power_sum_of_two_le
+#print axioms MinModulus.odd_cyclic_core_boundary_of_odd_overcount_and_relaxed_bound
+#print axioms MinModulus.even_overcount_of_odd_cyclic_relaxed_bound_and_card_ne_four
+#print axioms MinModulus.loss_mod_two_eq_core_sum_of_odd_cyclic_relaxed_bound
+#print axioms MinModulus.even_overcount_and_odd_loss_at_next_odd_cyclic_charge
