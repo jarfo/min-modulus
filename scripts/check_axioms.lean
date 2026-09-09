@@ -5020,3 +5020,13 @@ import MinModulus
 #print axioms MinModulus.exists_profile_of_ordered_box_collision
 #print axioms MinModulus.forestOrderedCollisionPairs
 #print axioms MinModulus.profile_volume_eq_ordered_collision_pair_card
+
+-- Complete forest boxes are the intrinsic shifted subset cube.
+#print axioms MinModulus.finset_fin_binary_weight_lt
+#print axioms MinModulus.finset_fin_binary_weight_injective
+#print axioms MinModulus.exists_subset_forest_box_equiv
+#print axioms MinModulus.tupleBinarySumImage
+#print axioms MinModulus.tupleBinaryCollisionLoss
+#print axioms MinModulus.tuple_binary_image_card_add_loss_eq_two_pow
+#print axioms MinModulus.forest_box_image_eq_tuple_binary_image
+#print axioms MinModulus.forest_collision_loss_eq_tuple_binary_loss

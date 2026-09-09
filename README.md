@@ -4739,6 +4739,28 @@ extraction remains unproved. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after every
 verified milestone.
 
+**2026-09-09 — intrinsic subset-cube collision loss.**
+`ForestSubsetCube.lean` identifies each complete affine chain forest box
+with the original shifted binary subset cube by an explicit sum-preserving
+bijection. This correspondence needs neither validity nor positive arm
+lengths, and preserves every fibre multiplicity. For positive complete
+forests of a valid tuple, the exact profile-union loss therefore equals
+`tupleBinaryCollisionLoss g b`: two to the tuple dimension minus the
+number of distinct subset sums after the fixed shift. Actual collision
+loss is unchanged when those same coordinates are regrouped into chains.
+
+Verification: two definitions and six theorems; 15,314 full build jobs;
+4,733 complete audits (4,729 standard-only, four axiom-free); 133,055
+passing forest tests, including 61 new cases. Tests recover each binary
+subset from its forest point and compare complete fibre multiplicities,
+including zero-length arms, coordinate permutations, overlapping short
+profiles, scaling, translation and multiple valid chain regroupings.
+Next charge nonempty zero-sum coordinate sets and actual affine cycles
+against this fixed loss during chain continuation. Arbitrary sufficiently
+charged-family extraction remains unproved. Conjecture 1 and unrestricted
+G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories after every
+verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
