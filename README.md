@@ -6115,6 +6115,35 @@ needed for the global conjecture remains open. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both repositories
 after each verified milestone.
 
+**2026-09-09 — one-cut complement forests and escape bounds.**
+`CollisionComplementCutForest.lean` removes injective doubling from
+actual forest extraction outside a heavier collision side. Under the
+explicit hypothesis of at most one nonzero ambient involution, at most
+one additional cut gives a forest on every selected original coordinate.
+Its native root set contains all actual escapes and has at most one
+extra member. A widest arm still ends at a genuine escape from the block.
+
+The same strict budget survives:
+sum(2^L-1) < |C| + |U| - |V|.
+It implies |C| <= |A| + |U| - |V| for the exact escape set A inside C.
+This escape bound also includes the empty complement. The forest's
+widest-arm statement requires a nonempty selected block. All native
+coordinate and root transports are explicit in the proof.
+
+Verification: two theorems; 15,369 full build jobs; 5,092 complete audits
+(5,088 standard-only, four axiom-free); 136,613 passing forest tests,
+including 49 new cases. Valid five- and six-coordinate examples contain
+actual forks in collision complements and require an additional cut.
+The five-coordinate example attains the escape bound. A separate valid
+asymmetric fork shows why an arbitrary cut can lose every widest arm
+ending at a genuine escape.
+
+Next connect internal target counts to the original tuple's escape set,
+charging the doubled collision only once, to bound every heavier
+collision side. The extraction needed for the global conjecture remains
+open. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
+and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

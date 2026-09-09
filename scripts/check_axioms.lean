@@ -5495,3 +5495,7 @@ import MinModulus
 #print axioms MinModulus.not_affine_doubling_cycle_disjoint_heavier_collision
 #print axioms MinModulus.forest_diameter_lt_card_add_heavier_collision_gap
 #print axioms MinModulus.exists_actual_forest_budget_disjoint_heavier_collision
+
+-- One-cut actual complement forests and sharp escape-count bounds.
+#print axioms MinModulus.exists_actual_cut_forest_budget_disjoint_heavier_collision
+#print axioms MinModulus.complement_escape_count_lower_bound_of_one_collision
