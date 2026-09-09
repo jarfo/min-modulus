@@ -620,3 +620,5 @@ import MinModulus.ChainChargeWithoutCover
 import MinModulus.ChainFamilyWithoutCover
 
 import MinModulus.ChainProfileGates
+
+import MinModulus.ChainRejoinDoubleCharge

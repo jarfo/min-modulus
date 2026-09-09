@@ -4892,3 +4892,11 @@ import MinModulus
 #print axioms MinModulus.exceptionalLiftObstruction_iff_chainProfile
 #print axioms MinModulus.stratum_lower_bound_of_three_chain_profile_inputs
 #print axioms MinModulus.global_lower_bound_of_three_chain_profile_inputs
+
+-- Twice the post-rejoin error allowance and original lower bounds.
+#print axioms MinModulus.three_mul_le_two_pow_of_four_le
+#print axioms MinModulus.cycle_exponential_deficit_of_doubled_chain_charge
+#print axioms MinModulus.exists_half_sized_cycle_of_rejoining_chain_with_double_charge
+#print axioms MinModulus.global_lower_bound_of_rejoining_chain_with_double_charge
+#print axioms MinModulus.stratum_lower_bound_of_rejoining_chain_with_double_charge
+#print axioms MinModulus.not_validTuple_exceptional_of_rejoining_chain_with_double_charge

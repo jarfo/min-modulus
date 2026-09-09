@@ -4411,6 +4411,33 @@ enough for the cycle-deficit argument. Arbitrary critical-tuple
 extraction is still unproved. Conjecture 1 and unrestricted G1/G2/G3
 remain OPEN, 0/3. Continue and push both repositories after milestones.
 
+**2026-09-09 — twice the post-rejoin error allowance.**
+`ChainRejoinDoubleCharge.lean` proves the original global, every
+exact-stratum and direct G3 bounds for an actual internally rejoining
+chain of length `p >= 4` satisfying `n*2^(n-p) <= 2^(p-2)`.
+The remaining coordinates are arbitrary. This doubles the previous
+error allowance. The actual rejoin is an explicit premise; no stronger
+continuation theorem is claimed for this weaker charge.
+
+The incoming tail still satisfies `2^(p-c) <= p`. If the cycle has
+`n >= 2*c+2`, the weaker charge forces the tail to have length at least
+four. Then `3*(p-c) <= 2^(p-c) <= p`, giving `2*p <= 3*c` and still
+forcing `3*2^(n-2*c) <= c`. The existing exponential-deficit theorem
+excludes this branch below binary modulus. The older single-chain
+arithmetic theorem now calls this stronger estimate, preserving its
+interface and avoiding duplicate proofs.
+
+Verification: six new theorems; 15,302 full build jobs; 4,627 complete
+audits (4,623 standard-only and four axiom-free); 131,684 passing forest
+tests, including 613 new cases. Newly admitted arithmetic examples
+include lengths 133, 518 and 2055 at dimensions 256, 1024 and 4096.
+Next prove the sharper bounded-corner count and preserve it through
+actual continuation. A reflection estimate should compare the old
+rectangle with twice that corner after a rejoin, matching this theorem.
+That geometric integration remains unproved. Conjecture 1 and all
+unrestricted G1/G2/G3 gates remain OPEN, 0/3. Continue and push both
+repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

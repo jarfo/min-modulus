@@ -10,38 +10,70 @@ No separate coverage premise is used. Unrestricted G1/G2/G3 remain open. -/
 namespace MinModulus
 open Finset
 
+/-- The exponential dominates three times its exponent from four onward. -/
+theorem three_mul_le_two_pow_of_four_le {k : ℕ} (hk : 4 ≤ k) : 3*k ≤ 2^k := by
+  induction k, hk using Nat.le_induction with
+  | base => norm_num
+  | succ k hk ih => rw [pow_succ]; nlinarith
+
+/-- A rejoining chain tolerates twice the original continuation charge
+while retaining the exponential-deficit conclusion below half size. -/
+theorem cycle_exponential_deficit_of_doubled_chain_charge
+    {n p c : ℕ} (hp : 4 ≤ p) (hcp : c ≤ p) (hpn : p ≤ n)
+    (htail : 2^(p-c) ≤ p) (hcharge : n*2^(n-p) ≤ 2^(p-2))
+    (hdef : 2*c+2 ≤ n) : 3*2^(n-2*c) ≤ c := by
+  have hn : 0 < n := by omega
+  have hp2 : 4*2^(p-2)=2^p := by
+    rw [show p=2+(p-2) by omega,pow_add]
+    norm_num
+  have hnp : 2^(n-p)*2^p=2^n := by rw [← pow_add,Nat.sub_add_cancel hpn]
+  have hbig : 4*n*2^n=(4*2^p)*(n*2^(n-p)) := by rw [← hnp]; ring
+  have hbound : 4*n*2^n ≤ (2^p)^2 := by
+    calc
+      _ = (4*2^p)*(n*2^(n-p)) := hbig
+      _ ≤ (4*2^p)*2^(p-2) := Nat.mul_le_mul_left _ hcharge
+      _ = 2^p*(4*2^(p-2)) := by ring
+      _ = (2^p)^2 := by rw [hp2,pow_two]
+  have hpowN : 2^n=2^(2*c)*2^(n-2*c) := by rw [← pow_add,Nat.add_sub_of_le (by omega : 2*c ≤ n)]
+  have hpowP : (2^p)^2=2^(2*c)*(2^(p-c))^2 := by
+    have hp' : 2^p=2^c*2^(p-c) := by rw [← pow_add,Nat.add_sub_of_le hcp]
+    rw [hp',mul_pow,← pow_mul,Nat.mul_comm c 2]
+  rw [hpowN,hpowP] at hbound
+  have hcancel : 4*n*2^(n-2*c) ≤ (2^(p-c))^2 := by
+    have hb : 0 < (2 : ℕ)^(2*c) := by positivity
+    nlinarith
+  let K := p-c
+  have hdelta : 4 ≤ (2 : ℕ)^(n-2*c) := by
+    calc
+      _ = (2 : ℕ)^2 := by norm_num
+      _ ≤ _ := Nat.pow_le_pow_right (by decide : 1 ≤ (2 : ℕ)) (by omega)
+  have hK : 4 ≤ K := by
+    by_contra hh
+    have hK3 : K ≤ 3 := by omega
+    change 4*n*2^(n-2*c) ≤ (2^K)^2 at hcancel
+    change 2^K ≤ p at htail
+    interval_cases K <;> norm_num at hcancel htail <;> nlinarith
+  have h3K : 3*K ≤ p := (three_mul_le_two_pow_of_four_le hK).trans htail
+  have hpc : 2*p ≤ 3*c := by dsimp only [K] at h3K; omega
+  have hp2c : 4*p^2 ≤ 9*c^2 := by nlinarith
+  have htail2 : (2^(p-c))^2 ≤ p^2 := Nat.pow_le_pow_left htail 2
+  have hcn : 2*c ≤ n := by omega
+  have hcpos : 0 < c := by omega
+  have hCx : 32*c*2^(n-2*c) ≤ 9*c^2 := by nlinarith
+  by_contra hh
+  have hlt : c < 3*2^(n-2*c) := by omega
+  have hmul := Nat.mul_lt_mul_of_pos_left hlt hcpos
+  have hxpos : 0 < (2 : ℕ)^(n-2*c) := by positivity
+  nlinarith
+
 /-- A charged actual chain and its power-bounded incoming tail force
 any below-half cycle into the existing exponential-deficit class. -/
 theorem cycle_exponential_deficit_of_chain_charge
     {n p c : ℕ} (hp : 4 ≤ p) (hcp : c ≤ p) (hpn : p ≤ n)
     (htail : 2^(p-c) ≤ p) (hcharge : n*2^(n-p) ≤ 2^(p-3))
     (hdef : 2*c+2 ≤ n) : 3*2^(n-2*c) ≤ c := by
-  have hn : 0 < n := by omega
-  have hp3 : 8*2^(p-3)=2^p := by
-    rw [show p=3+(p-3) by omega,pow_add]
-    norm_num
-  have hnp : 2^(n-p)*2^p=2^n := by rw [← pow_add,Nat.sub_add_cancel hpn]
-  have hbig : 8*n*2^n=(8*2^p)*(n*2^(n-p)) := by rw [← hnp]; ring
-  have hbound : 8*n*2^n ≤ (2^p)^2 := by
-    calc
-      _ = (8*2^p)*(n*2^(n-p)) := hbig
-      _ ≤ (8*2^p)*2^(p-3) := Nat.mul_le_mul_left _ hcharge
-      _ = 2^p*(8*2^(p-3)) := by ring
-      _ = (2^p)^2 := by rw [hp3,pow_two]
-  have hpowN : 2^n=2^(2*c)*2^(n-2*c) := by rw [← pow_add,Nat.add_sub_of_le (by omega : 2*c ≤ n)]
-  have hpowP : (2^p)^2=2^(2*c)*(2^(p-c))^2 := by
-    have hp' : 2^p=2^c*2^(p-c) := by rw [← pow_add,Nat.add_sub_of_le hcp]
-    rw [hp',mul_pow,← pow_mul,Nat.mul_comm c 2]
-  rw [hpowN,hpowP] at hbound
-  have hcancel : 8*n*2^(n-2*c) ≤ (2^(p-c))^2 := by
-    have hb : 0 < (2 : ℕ)^(2*c) := by positivity
-    nlinarith
-  have htail2 : (2^(p-c))^2 ≤ p^2 := Nat.pow_le_pow_left htail 2
-  have hpN : p^2 ≤ n*p := by nlinarith
-  have hsmall : 8*2^(n-2*c) ≤ p := by nlinarith
-  have hK := two_mul_le_two_pow (p-c)
-  have hpc : p ≤ 2*c := by omega
-  omega
+  apply cycle_exponential_deficit_of_doubled_chain_charge hp hcp hpn htail ?_ hdef
+  exact hcharge.trans (Nat.pow_le_pow_right (by decide : 1 ≤ (2 : ℕ)) (by omega))
 
 /-- A rejoining charged singleton family yields an actual half-sized
 cycle below binary modulus. Smaller cycles violate the existing
