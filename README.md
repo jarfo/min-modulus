@@ -4529,6 +4529,28 @@ charged-family extraction remains unproved. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after every verified milestone.
 
+**2026-09-09 — combined bounded-corner and cycle restrictions in the original gates.**
+`BoundedCornerGates.lean` retains failure of the exact bounded-corner
+charge for every embedded affine chain family at every shift, together
+with `n < 5*r+1` at every shift supporting an actual nonempty cycle.
+Every original global, exact-stratum, odd or exceptional counterexample
+satisfies this combined obstruction. It implies the earlier rectangular
+profile restriction.
+
+All three original gates are equivalent to their versions carrying
+this stronger obstruction and all previous quantitative escape
+restrictions. The exact-stratum and global induction assemblies retain
+precisely the same three open inputs, including their small dimensions.
+These are proved equivalences, not proofs of the inputs.
+
+Verification: four definitions and ten theorems; 15,306 full build jobs;
+4,674 complete audits (4,670 standard-only, four axiom-free). The latest
+unchanged forest suite has 132,709 passing tests; this milestone changes
+only Lean gate adapters. Next extract complete actual forests in the
+low-escape acyclic case. Arbitrary sufficiently charged-family extraction
+remains unproved. Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after every verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

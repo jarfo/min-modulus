@@ -628,3 +628,5 @@ import MinModulus.BoundedChainCorner
 import MinModulus.BoundedFamilyContinuation
 
 import MinModulus.LinearCycleEscape
+
+import MinModulus.BoundedCornerGates
