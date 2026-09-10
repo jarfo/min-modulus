@@ -832,3 +832,5 @@ import MinModulus.OddModulusCorrectionParity
 import MinModulus.OddModulusCoreBoundaryGap
 
 import MinModulus.FibreGrowthSaturation
+
+import MinModulus.ParityRefinedEscapeDensity

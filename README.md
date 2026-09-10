@@ -7151,6 +7151,30 @@ four-fibre equality by contracting actual doubling edges. Conjecture 1
 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-10 — strict triple growth improves actual escape density.**
+ParityRefinedEscapeDensity.lean transfers the complement-parity gain
+to complete actual forests and original affine doubling escapes.
+A triple fibre forces W+3<=2n and 2n+3<=5r for every complete forest.
+With A original escapes, cyclic tuples satisfy 2n<=5A+2; at odd
+moduli the stronger inequality 2n+3<=5A holds without a cut.
+
+Thus 5A+2<2n gives two-point fibres and exact intrinsic core-cube
+accounting in every cyclic group. At odd moduli the relaxed condition
+5A<2n+3 suffices, including the old equality case.
+
+Verification: eight theorems; 15,408 full build jobs; 5,335 complete
+audits (5,331 standard-only, four axiom-free); 140,167 passing forest
+tests, including 108 new cases. The valid tuple (1,2,4,10) modulo 16
+has one escape at the old cyclic boundary. The valid tuple
+(1,2,10,20) modulo 1009 has two escapes at the old odd boundary.
+Both are covered by the strengthened criteria.
+
+Next use actual doubling contractions to exclude four-fibre growth
+equality. Map each new result to its exact role in the G1/G2/G3
+reduction before adding Prove2Me dependency edges. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
