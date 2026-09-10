@@ -21,7 +21,18 @@ The original finite-abelian lower-bound milestone is now Proved on the
 platform, using the uploaded subset-sum injectivity theorem. Its exact local
 type check and server receipt are in the companion
 [proof bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/milestones/abelian-lower-bound).
-The canonical-family minimum is the next supporting proof-transfer target.
+The [canonical-family minimum](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/canonical-dag)
+is also Proved, using 22 additional proved source statements and two checked
+validity-model bridges. All 23 solutions match their exact targets after a
+local supported-environment build of 8,759 jobs. Its source port retains 42
+declarations in four modules without proof-body changes; 41 original types
+match literally, and one set-constructor alias is checked definitionally.
+
+The expanded DAG across the goal and all five mission milestones contains
+110 nodes and 234 edges, with an acyclicity audit. Both supporting milestones
+are complete. The whole mission frontier now consists of exactly G1, G2 and
+G3, each currently reporting closability 0. A narrower proved reduction or a
+new proof of one of these gates is the next connected milestone.
 
 ## Verification and coverage
 
