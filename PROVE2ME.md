@@ -10,12 +10,15 @@ records 39 proved supporting nodes, accepted reductions, exact source hashes,
 server theorem/submission IDs, and the complete root frontier. The goal's
 three open leaves are:
 
-- `MinModulus.two_large_parity_fibres_delete_step` (G1 residual).
+- `MinModulus.primitive_three_omission_delete_step` (current G1 residual).
 - `MinModulus.odd_stratum_lower_bound` (G2).
 - `MinModulus.exceptional_lift_obstruction` (G3).
 
-G1 is reduced to its existing two-large-parity-fibres restriction. The main
-reduction preserves the mission's original validity definition and exact
+G1 first reduced to its two-large-parity-fibres restriction. The accepted
+[primitive refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/primitive-dag)
+now narrows that residual through dimension induction, retaining the same
+G2 and G3 assumptions and discharging the child-bound premise internally.
+The main reduction preserves the mission's original validity definition and exact
 conjecture statement. Conjecture 1 and all three research inputs remain open.
 The original finite-abelian lower-bound milestone is now Proved on the
 platform, using the uploaded subset-sum injectivity theorem. Its exact local
@@ -29,10 +32,14 @@ declarations in four modules without proof-body changes; 41 original types
 match literally, and one set-constructor alias is checked definitionally.
 
 The expanded DAG across the goal and all five mission milestones contains
-110 nodes and 234 edges, with an acyclicity audit. Both supporting milestones
-are complete. The whole mission frontier now consists of exactly G1, G2 and
-G3, each currently reporting closability 0. A narrower proved reduction or a
-new proof of one of these gates is the next connected milestone.
+125 nodes and 272 edges, with an acyclicity audit. Both supporting milestones
+are complete. The whole mission frontier now consists of primitive G1, G2
+and G3. Seven additional supporting statements are Proved. Their exact platform
+files built 8,738 jobs; all seven source types and eight solution types match.
+The source port has 105 declarations with literal type matches and standard
+axiom audits. The primitive input and the original G1 parent both remain
+Open. G3’s quantitative restriction is the next measured candidate for a
+connected reduction (242 source declarations across 57 modules).
 
 ## Verification and coverage
 
