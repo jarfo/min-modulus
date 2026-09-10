@@ -597,6 +597,7 @@ import MinModulus.OddEscapeThreshold
 import MinModulus.G2QuantitativeEscape
 import MinModulus.GlobalEscapeThreshold
 import MinModulus.G3QuantitativeEscape
+import MinModulus.G3LargeQuantitativeEscape
 import MinModulus.ActualEscapeDescent
 import MinModulus.CollisionForest
 import MinModulus.CollisionEscapeThreshold
