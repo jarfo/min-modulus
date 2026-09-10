@@ -836,3 +836,5 @@ import MinModulus.FibreGrowthSaturation
 import MinModulus.ParityRefinedEscapeDensity
 
 import MinModulus.CoarsenedDoublingGrowth
+
+import MinModulus.FourFibreGrowthBoundary

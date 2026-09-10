@@ -5829,3 +5829,10 @@ import MinModulus
 #print axioms MinModulus.coarsened_double_subset_not_nodup
 #print axioms MinModulus.subset_card_lt_repeated_representation_card_of_growth
 #print axioms MinModulus.zero_subset_coarsening_card_obstruction
+
+-- Actual contractions exclude equality in the four-fibre forest bound.
+#print axioms MinModulus.zero_partition_of_four_fibre_growth_saturation
+#print axioms MinModulus.not_four_fibre_growth_saturation_of_contraction_roots
+#print axioms MinModulus.not_four_fibre_growth_saturation_of_ranks_le_one
+#print axioms MinModulus.exists_two_level_ranks_of_short_actual_forest
+#print axioms MinModulus.dimension_add_four_le_twice_forest_arms_of_four_fibre

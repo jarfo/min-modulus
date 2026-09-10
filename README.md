@@ -7200,6 +7200,32 @@ resulting estimates to G1/G2/G3 in the Prove2Me plan. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-10 — actual contractions exclude four-fibre forest equality.**
+FourFibreGrowthBoundary.lean first extracts complementary proper
+zero-sum subsets at saturated four-fibre growth. Their binary weights
+are D and 2D. Two applications of the actual contraction obstruction
+exclude this saturation for rank systems taking only values zero and one.
+
+Equality in the old forest bound forces every arm to have length at
+most two, hence such a two-level certificate. Therefore every complete
+actual forest at a fibre of size at least four now satisfies n+4<=2r,
+improving the previous n+3<=2r estimate by one.
+
+Verification: five theorems; 15,410 full build jobs; 5,347 complete
+audits (5,343 standard-only, four axiom-free); 140,390 passing forest
+tests, including 111 new cases. Tests include an actual four-point
+fibre with a doubling edge, all shifts of valid power families, and
+an invalid distinct tuple showing why validity is required. Numerical
+profiles attaining the old bound are now excluded from actual valid
+four-fibre forests. No sharpness claim is made for the improved bound.
+
+The Prove2Me DAG plan records the exact conditional routes and their
+three still-open inputs. Next transfer the four-fibre improvement to
+original escape counts, while preparing the compact conditional proof
+for the supported environment. A connecting argument to an unrestricted
+gate is still required. Conjecture 1 and G1/G2/G3 remain OPEN, 0/3.
+Continue and push both repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
