@@ -46,3 +46,12 @@ specify an attack order. Once the draft is live, select work from the root's
 `open-leaves` endpoint, using closability, tractability, and relevance to
 these open gates. The local conditional reduction still needs to be ported
 to the supported platform environment before submission.
+
+Further checked reductions refine G1 to the primitive deletion residual and
+then refine all three gates to quantitative escape inputs. The final source
+assembly is `global_lower_bound_of_three_quantitative_escape_inputs` in
+`G3QuantitativeEscape.lean`. Its dependency closure is acyclic and reaches
+19,760 declarations in 725 modules, including generated declarations. The
+DAG plan therefore stages the compact initial route first and records the
+narrower frontier for later transfer. Equivalences supply one chosen
+reduction direction; they must not create circular proof dependencies.
