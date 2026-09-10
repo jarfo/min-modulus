@@ -7175,6 +7175,31 @@ reduction before adding Prove2Me dependency edges. Conjecture 1 and
 unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
 repositories after each verified milestone.
 
+**2026-09-10 — actual doubling contractions obstruct short repeated sums.**
+CoarsenedDoublingGrowth.lean doubles a subset and contracts selected
+coordinates along actual rank-increasing doubling edges. The resulting
+multiset has the same doubled group sum and binary weight, while each
+contraction removes one occurrence. An uncontracted coordinate repeats.
+
+For a valid tuple, a repeated equal-sum representation whose weight is at
+least the target subset cardinality must contain strictly more terms than
+the target. Applied to zero-sum subsets U,V and selected roots R, this
+proves |V|+|U intersection R|<2|U| whenever the stated weight budget
+holds and U has an uncontracted coordinate.
+
+Verification: one definition and six theorems; 15,409 full build jobs;
+5,342 complete audits (5,338 standard-only, four axiom-free); 140,279
+passing forest tests, including 112 new cases. Valid doubling cycles
+attain one extra occurrence after contraction. A checked thirteen-entry
+valid tuple with proper zero blocks of sizes five and eight also attains
+one unit of strict slack, using the actual edge 1 -> 2.
+
+Next use both complementary zero blocks to exclude the four-fibre
+growth equality, then retain an explicit connecting obligation from the
+resulting estimates to G1/G2/G3 in the Prove2Me plan. Conjecture 1 and
+unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full

@@ -5820,3 +5820,12 @@ import MinModulus
 #print axioms MinModulus.cyclic_intrinsic_loss_eq_core_cube_sum_of_parity_refined_escape_cost
 #print axioms MinModulus.odd_cyclic_subset_fibre_card_le_two_of_parity_refined_escape_cost
 #print axioms MinModulus.odd_cyclic_intrinsic_loss_eq_core_sum_of_parity_refined_escape_cost
+
+-- Actual doubling contractions obstruct short repeated zero-sum representations.
+#print axioms MinModulus.coarsenedDoubleSubset
+#print axioms MinModulus.coarsened_double_subset_card
+#print axioms MinModulus.coarsened_double_subset_sum
+#print axioms MinModulus.coarsened_double_subset_weight
+#print axioms MinModulus.coarsened_double_subset_not_nodup
+#print axioms MinModulus.subset_card_lt_repeated_representation_card_of_growth
+#print axioms MinModulus.zero_subset_coarsening_card_obstruction
