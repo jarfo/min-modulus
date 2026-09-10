@@ -12,7 +12,7 @@ three open leaves are:
 
 - `MinModulus.primitive_three_omission_delete_step` (current G1 residual).
 - `MinModulus.odd_stratum_lower_bound` (G2).
-- `MinModulus.exceptional_quantitative_escape_obstruction` (current G3 residual).
+- `MinModulus.large_exceptional_quantitative_escape_obstruction` (current G3 residual, n≥5).
 
 G1 first reduced to its two-large-parity-fibres restriction. The accepted
 [primitive refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/primitive-dag)
@@ -32,10 +32,10 @@ declarations in four modules without proof-body changes; 41 original types
 match literally, and one set-constructor alias is checked definitionally.
 
 The expanded DAG across the goal and all five mission milestones contains
-318 nodes and 793 edges, with an acyclicity audit. Both supporting milestones
+326 nodes and 807 edges, with an acyclicity audit. Both supporting milestones
 are complete. The whole mission frontier now consists of primitive G1, G2
-and quantitative G3. Seven additional primitive supporting statements are Proved. Their exact platform
-files built 8,738 jobs; all seven source types and eight solution types match.
+and quantitative G3 for n≥5. Seven additional primitive supporting statements
+are Proved. Their exact platform files built 8,738 jobs; all seven source types and eight solution types match.
 The source port has 105 declarations with literal type matches and standard
 axiom audits. The primitive input and the original G1 parent both remain
 Open. The accepted
@@ -46,12 +46,19 @@ and one checked set-constructor alias. All 114 platform source types match
 literally. The exact upload build passed 8,960 jobs, all four new definitions
 passed axiom audits, and all 115 private statements were read back exactly.
 
-The G3 milestone now points to its equivalent quantitative restriction,
-retaining every original dimension and the collision-inclusive all-shift
-bounds. Its reason is recorded in platform history. Original G3 remains an
-Open parent. Across all four bundles, the consolidated audit verifies 187
-proof dependency sets and all 182 source nodes are Proved. No research gate
-is proved. The known dimension-three exclusion is the next small G3 refinement.
+The first G3 refinement retained every original dimension and the
+collision-inclusive all-shift bounds. The milestone now points to the
+equivalent n≥5 restriction after discharging n=3. Both changes and their
+reasons are recorded in platform history. Original G3 remains an Open parent. Across all five bundles, the consolidated audit verifies 191
+proof dependency sets and all 185 source nodes are Proved. No research gate
+is proved. The [dimension-three refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g3-large-dag)
+adds three Proved source nodes and four accepted solutions. The new
+`exceptionalQuantitativeEscapeObstruction_iff_large` equivalence uses the
+known three-coordinate exclusion modulo four to leave exactly the n≥5
+quantitative G3 obligation. Its supported platform build passed 8,723 jobs,
+with three literal source types, four independently checked solution types
+and one definition axiom audit. The original and preceding quantitative G3
+parents remain in the DAG, and the milestone history records the reduction.
 
 ## Verification and coverage
 
@@ -87,9 +94,9 @@ the proof graph remains acyclic.
 Refresh the goal graph and every page of its open leaves, update the source
 commit and theorem/submission IDs, and commit and push both repositories.
 Then continue with a connected open obligation, considering closability,
-tractability and reuse. The package's maintenance script supports publish,
-prove and refresh operations; credentials remain in the user's Prove2Me
-workspace and are never committed.
+tractability and reuse. Run `platform-dag/scripts/refresh_verified.py` in the
+companion bundle to refresh the consolidated graph and require all dependency
+audits to pass. Credentials remain in the user's external Prove2Me workspace.
 
 The original four-item proposal, independent blind readbacks, and initial
 8,716-job statement build are preserved in the
