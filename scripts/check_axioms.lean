@@ -5799,3 +5799,14 @@ import MinModulus
 #print axioms MinModulus.even_overcount_of_odd_cyclic_relaxed_bound_and_card_ne_four
 #print axioms MinModulus.loss_mod_two_eq_core_sum_of_odd_cyclic_relaxed_bound
 #print axioms MinModulus.even_overcount_and_odd_loss_at_next_odd_cyclic_charge
+
+-- Complement parity excludes odd fibre growth saturation and closes the aggregate equality boundary.
+#print axioms MinModulus.separated_weight_card_bound
+#print axioms MinModulus.fibre_growth_bound_with_weight_floor
+#print axioms MinModulus.fibre_growth_bound_strict_of_value_ne_zero
+#print axioms MinModulus.zero_value_and_total_of_fibre_growth_saturation
+#print axioms MinModulus.even_fibre_card_of_growth_saturation
+#print axioms MinModulus.fibre_growth_bound_strict_of_odd_card
+#print axioms MinModulus.total_ranked_weight_add_three_le_twice_dimension_of_triple_fibre
+#print axioms MinModulus.subset_fibre_card_le_two_of_total_ranked_weight_ge
+#print axioms MinModulus.intrinsic_loss_eq_core_cube_sum_of_total_ranked_weight_ge

@@ -830,3 +830,5 @@ import MinModulus.OddCorrectionCoreBoundary
 import MinModulus.OddModulusCorrectionParity
 
 import MinModulus.OddModulusCoreBoundaryGap
+
+import MinModulus.FibreGrowthSaturation

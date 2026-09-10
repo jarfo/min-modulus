@@ -7129,6 +7129,28 @@ the four-fibre equality case by contracting actual doubling edges.
 Conjecture 1 and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue
 and push both repositories after each verified milestone.
 
+**2026-09-10 — complement parity excludes triple-fibre growth equality.**
+FibreGrowthSaturation.lean proves that a saturated predecessor-weight
+bound forces the fibre value and total shifted sum to be zero. In
+positive dimension such a fibre has even cardinality by complementation.
+Consequently, odd fibres and nonzero fibres leave strict growth slack.
+
+Writing W=sum_i 2^r_i for an actual predecessor rank certificate,
+every fibre of size at least three now satisfies W+3<=2n. Thus
+W+2>=2n suffices for two-point fibres and exact intrinsic core-cube
+accounting, including the old aggregate equality boundary.
+
+Verification: nine theorems; 15,407 full build jobs; 5,327 complete
+audits (5,323 standard-only, four axiom-free); 140,059 passing forest
+tests, including 99 new cases. The valid tuple (1,2,10,20) modulo
+1000 or 1009 has ranks (0,1,0,1) and W=6=2n-2, witnessing the newly
+covered boundary. No sharpness claim is made for the new triple bound.
+
+Next transfer the improvement to actual escape counts and exclude
+four-fibre equality by contracting actual doubling edges. Conjecture 1
+and unrestricted G1/G2/G3 remain OPEN, 0/3. Continue and push both
+repositories after each verified milestone.
+
 There is also an unconditional structural result in every dimension:
 `DoublingValidity.lean` proves that validity forces a doubling permutation
 to be a single cycle. A proper zero-sum component can be extended to full
