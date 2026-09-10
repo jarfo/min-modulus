@@ -44,8 +44,8 @@ connecting them to a gate requires a further argument.
 On Prove2Me, accepted reductions establish graph edges; milestones only
 specify an attack order. Once the draft is live, select work from the root's
 `open-leaves` endpoint, using closability, tractability, and relevance to
-these open gates. The local conditional reduction still needs to be ported
-to the supported platform environment before submission.
+these open gates. The compact conditional proof has now been ported locally; the final split
+into platform statement and solution files remains before submission.
 
 Further checked reductions refine G1 to the primitive deletion residual and
 then refine all three gates to quantitative escape inputs. The final source
@@ -55,3 +55,16 @@ assembly is `global_lower_bound_of_three_quantitative_escape_inputs` in
 DAG plan therefore stages the compact initial route first and records the
 narrower frontier for later transfer. Equivalences supply one chosen
 reduction direction; they must not create circular proof dependencies.
+
+## Verified supported-environment port
+
+The [compact conditional port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/conditional-port)
+builds on Lean 4.33.1 and the supported Mathlib revision with 8,728 jobs.
+All 102 elaborated declaration types match the source exactly, including
+universe display; all 102 pass the axiom audit. The generator retained 98
+source commands in 21 modules without changing any proof body.
+
+This proves the same conditional reduction, with G1/G2/G3 still explicit
+open inputs. The package includes the source plan, reproducible build,
+type-comparison evidence, and an audit script. It is not yet a platform
+reduction and has not changed the four-item draft on Prove2Me.
