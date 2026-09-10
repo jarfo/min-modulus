@@ -23,3 +23,26 @@ unrestricted G1/G2/G3 proof obligations remain open.
 The independent statement package uses the Prove2Me environment; this proof
 repository retains its existing Lean and Mathlib pins. Its formal proofs
 remain subject to the repository's complete build and axiom audit.
+
+## The dependency frontier
+
+The companion [DAG plan](https://github.com/jarfo/unique/blob/main/papers/min-modulus/prove2me/dag-plan.md)
+records how the existing conditional theorem connects Conjecture 1 to
+`CriticalThreeOmissionDeleteStep`, `OddStratumLowerBound`, and
+`ExceptionalLiftObstruction`. These are open assumptions, with proved
+conditional reductions between them and the goal. G1 further reduces to its
+existing two-large-parity-fibres residual.
+
+A Lean meta-program extracted the proof dependencies at commit
+`b615a8bbc7fb52a7700f5b8d2c6b89f86c807efb`: the conditional root plus the G1
+parity equivalence reaches 102 declarations in 21 modules. The
+[dependency excerpt](https://github.com/jarfo/unique/blob/main/papers/min-modulus/prove2me/source-dependency-slice.json)
+contains selected exact records and pinned source links. The recent
+escape-density results are not yet dependencies of that conditional proof;
+connecting them to a gate requires a further argument.
+
+On Prove2Me, accepted reductions establish graph edges; milestones only
+specify an attack order. Once the draft is live, select work from the root's
+`open-leaves` endpoint, using closability, tractability, and relevance to
+these open gates. The local conditional reduction still needs to be ported
+to the supported platform environment before submission.
