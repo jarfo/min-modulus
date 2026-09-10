@@ -17,8 +17,11 @@ three open leaves are:
 G1 is reduced to its existing two-large-parity-fibres restriction. The main
 reduction preserves the mission's original validity definition and exact
 conjecture statement. Conjecture 1 and all three research inputs remain open.
-The original abelian lower bound and canonical-family minimum remain separate
-supporting proof-transfer targets in the mission.
+The original finite-abelian lower-bound milestone is now Proved on the
+platform, using the uploaded subset-sum injectivity theorem. Its exact local
+type check and server receipt are in the companion
+[proof bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/milestones/abelian-lower-bound).
+The canonical-family minimum is the next supporting proof-transfer target.
 
 ## Verification and coverage
 
