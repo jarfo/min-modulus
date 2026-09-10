@@ -1,70 +1,63 @@
-# Prove2Me mission draft
+# Prove2Me mission and maintained DAG
 
-The draft **The min-modulus conjecture for unique multiset sums** was created
-on 2026-09-10. It is available in [My missions](https://prove2.me/my-missions)
-under proposal ID `e0c1179a-b95d-496d-b2ae-d1788fcb3447`.
+The owner launched **The min-modulus conjecture for unique multiset sums**
+as a private mission on 2026-09-10. Open [My missions](https://prove2.me/my-missions).
+Mission ID: `6b060afa-1e7b-4c80-8f4a-cc89ff36784e`.
+Goal theorem ID: `67fbce28-44f4-45cb-8e37-de63df56557c`.
 
-The reproducible statement bundle, exact uploaded payloads, independent
-readbacks, and server receipts are in the companion repository:
-[Prove2Me bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me).
+The [platform DAG package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/platform-dag)
+records 39 proved supporting nodes, accepted reductions, exact source hashes,
+server theorem/submission IDs, and the complete root frontier. The goal's
+three open leaves are:
 
-Before upload, the definition, three open theorem statements, and separate
-proof-based model checks passed a complete local build (8,716 jobs) using
-Lean `leanprover/lean4:v4.33.1` and the supported Mathlib revision
-`0df444a360eaa60ab8c11dca51a86af692955474`. The server readback confirms
-four items, two supporting milestones, and unpublished **Draft** status.
+- `MinModulus.two_large_parity_fibres_delete_step` (G1 residual).
+- `MinModulus.odd_stratum_lower_bound` (G2).
+- `MinModulus.exceptional_lift_obstruction` (G3).
 
-The goal is Conjecture 1 for arbitrary distinct valid tuples in positive
-cyclic moduli. The two supporting milestones are the known finite-abelian
-lower bound and the exact canonical-family minimum. The draft theorem
-placeholders are statement declarations, not proofs. Conjecture 1 and the
-unrestricted G1/G2/G3 proof obligations remain open.
+G1 is reduced to its existing two-large-parity-fibres restriction. The main
+reduction preserves the mission's original validity definition and exact
+conjecture statement. Conjecture 1 and all three research inputs remain open.
+The original abelian lower bound and canonical-family minimum remain separate
+supporting proof-transfer targets in the mission.
 
-The independent statement package uses the Prove2Me environment; this proof
-repository retains its existing Lean and Mathlib pins. Its formal proofs
-remain subject to the repository's complete build and axiom audit.
+## Verification and coverage
 
-## The dependency frontier
+The supported platform environment is Lean 4.33.1 with Mathlib
+`0df444a360eaa60ab8c11dca51a86af692955474`. This proof repository retains
+its existing pins. The compact source port contains 102 declarations in 21
+modules from commit `b615a8bbc7fb52a7700f5b8d2c6b89f86c807efb`: all 102
+original types and axiom audits passed without proof-body changes.
 
-The companion [DAG plan](https://github.com/jarfo/unique/blob/main/papers/min-modulus/prove2me/dag-plan.md)
-records how the existing conditional theorem connects Conjecture 1 to
-`CriticalThreeOmissionDeleteStep`, `OddStratumLowerBound`, and
-`ExceptionalLiftObstruction`. These are open assumptions, with proved
-conditional reductions between them and the goal. G1 further reduces to its
-existing two-large-parity-fibres residual.
+The final platform split built 8,797 jobs. Its 39 source theorem types match
+after canonicalizing universe names (38 also match without that step), all
+41 independent solutions match their target types, and all 23 bundled
+definition declarations pass the standard-axiom audit. Server verification
+establishes the accepted graph edges.
 
-A Lean meta-program extracted the proof dependencies at commit
-`b615a8bbc7fb52a7700f5b8d2c6b89f86c807efb`: the conditional root plus the G1
-parity equivalence reaches 102 declarations in 21 modules. The
-[dependency excerpt](https://github.com/jarfo/unique/blob/main/papers/min-modulus/prove2me/source-dependency-slice.json)
-contains selected exact records and pinned source links. The recent
-escape-density results are not yet dependencies of that conditional proof;
-connecting them to a gate requires a further argument.
+The [DAG plan](https://github.com/jarfo/unique/blob/main/papers/min-modulus/prove2me/dag-plan.md)
+also records the primitive and quantitative refinements of the same three
+gates. Their full source closure reaches 19,760 declarations in 725 modules,
+including generated declarations; they have not all been ported. Recent
+strict-growth and escape-density results need a further argument connecting
+them to an open gate. The unrestricted common-touch assertion is false and
+must not reappear as an open sufficient lemma.
 
-On Prove2Me, accepted reductions establish graph edges; milestones only
-specify an attack order. Once the draft is live, select work from the root's
-`open-leaves` endpoint, using closability, tractability, and relevance to
-these open gates. The compact conditional proof has now been ported locally; the final split
-into platform statement and solution files remains before submission.
+## Continue after each verified milestone
 
-Further checked reductions refine G1 to the primitive deletion residual and
-then refine all three gates to quantitative escape inputs. The final source
-assembly is `global_lower_bound_of_three_quantitative_escape_inputs` in
-`G3QuantitativeEscape.lean`. Its dependency closure is acyclic and reaches
-19,760 declarations in 725 modules, including generated declarations. The
-DAG plan therefore stages the compact initial route first and records the
-narrower frontier for later transfer. Equivalences supply one chosen
-reduction direction; they must not create circular proof dependencies.
+Build new statements and proofs on a currently supported platform revision,
+compare their source types and audit their axioms, then publish any new
+prerequisites and submit the checked proof or reduction. Retain the private
+visibility. Accepted reductions supply dependencies; milestone ordering
+supplies an attack order. Choose one direction when using an equivalence so
+the proof graph remains acyclic.
 
-## Verified supported-environment port
+Refresh the goal graph and every page of its open leaves, update the source
+commit and theorem/submission IDs, and commit and push both repositories.
+Then continue with a connected open obligation, considering closability,
+tractability and reuse. The package's maintenance script supports publish,
+prove and refresh operations; credentials remain in the user's Prove2Me
+workspace and are never committed.
 
-The [compact conditional port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/conditional-port)
-builds on Lean 4.33.1 and the supported Mathlib revision with 8,728 jobs.
-All 102 elaborated declaration types match the source exactly, including
-universe display; all 102 pass the axiom audit. The generator retained 98
-source commands in 21 modules without changing any proof body.
-
-This proves the same conditional reduction, with G1/G2/G3 still explicit
-open inputs. The package includes the source plan, reproducible build,
-type-comparison evidence, and an audit script. It is not yet a platform
-reduction and has not changed the four-item draft on Prove2Me.
+The original four-item proposal, independent blind readbacks, and initial
+8,716-job statement build are preserved in the
+[initial bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me).
