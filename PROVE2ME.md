@@ -12,7 +12,7 @@ three open leaves are:
 
 - `MinModulus.primitive_three_omission_delete_step` (current G1 residual).
 - `MinModulus.odd_stratum_lower_bound` (G2).
-- `MinModulus.exceptional_lift_obstruction` (G3).
+- `MinModulus.exceptional_quantitative_escape_obstruction` (current G3 residual).
 
 G1 first reduced to its two-large-parity-fibres restriction. The accepted
 [primitive refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/primitive-dag)
@@ -32,14 +32,26 @@ declarations in four modules without proof-body changes; 41 original types
 match literally, and one set-constructor alias is checked definitionally.
 
 The expanded DAG across the goal and all five mission milestones contains
-125 nodes and 272 edges, with an acyclicity audit. Both supporting milestones
+318 nodes and 793 edges, with an acyclicity audit. Both supporting milestones
 are complete. The whole mission frontier now consists of primitive G1, G2
-and G3. Seven additional supporting statements are Proved. Their exact platform
+and quantitative G3. Seven additional primitive supporting statements are Proved. Their exact platform
 files built 8,738 jobs; all seven source types and eight solution types match.
 The source port has 105 declarations with literal type matches and standard
 axiom audits. The primitive input and the original G1 parent both remain
-Open. G3’s quantitative restriction is the next measured candidate for a
-connected reduction (242 source declarations across 57 modules).
+Open. The accepted
+[G3 quantitative reduction](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g3-dag)
+now adds 114 Proved source nodes and 115 checked solutions. Its 242-declaration
+source slice retains 241 original bodies byte for byte, with 241 literal types
+and one checked set-constructor alias. All 114 platform source types match
+literally. The exact upload build passed 8,960 jobs, all four new definitions
+passed axiom audits, and all 115 private statements were read back exactly.
+
+The G3 milestone now points to its equivalent quantitative restriction,
+retaining every original dimension and the collision-inclusive all-shift
+bounds. Its reason is recorded in platform history. Original G3 remains an
+Open parent. Across all four bundles, the consolidated audit verifies 187
+proof dependency sets and all 182 source nodes are Proved. No research gate
+is proved. The known dimension-three exclusion is the next small G3 refinement.
 
 ## Verification and coverage
 
