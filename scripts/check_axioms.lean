@@ -5894,3 +5894,29 @@ import MinModulus
 #print axioms MinModulus.cyclic_even_lower_bound_five
 #print axioms MinModulus.even_stratum_lower_bound_five
 #print axioms MinModulus.primitiveThreeOmissionDeleteStepFrom_four_iff_five
+
+-- The bounded kernel certificate for the complete six-coordinate G3 case.
+#print axioms MinModulus.SixModFiftySixCertificate.Rival
+#print axioms MinModulus.SixModFiftySixCertificate.Rival.vector
+#print axioms MinModulus.SixModFiftySixCertificate.Rival.valid
+#print axioms MinModulus.SixModFiftySixCertificate.Rival.hits
+#print axioms MinModulus.SixModFiftySixCertificate.rivals
+#print axioms MinModulus.SixModFiftySixCertificate.covered
+#print axioms MinModulus.SixModFiftySixCertificate.coveredRow
+#print axioms MinModulus.SixModFiftySixCertificate.coveredBlock
+#print axioms MinModulus.SixModFiftySixCertificate.coveredRow_of_block
+#print axioms MinModulus.SixModFiftySixCertificate.not_validTuple_of_covered
+#print axioms MinModulus.SixModFiftySixCertificate.not_validTuple_sorted
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_2_4
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_4_7
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_7_10
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_10_14
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_14_19
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_19_28
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_28_56
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_of_blocks
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered
+#print axioms MinModulus.not_validTuple_six_normalized_of_sorted
+#print axioms MinModulus.not_validTuple_six_mod_fifty_six_of_sorted
+#print axioms MinModulus.not_validTuple_six_mod_fifty_six
+#print axioms MinModulus.exceptionalQuantitativeEscapeObstructionFrom_six_iff_seven

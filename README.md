@@ -59,8 +59,26 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`G3SixModFiftySix.lean` now proves the complete six-coordinate exclusion
+modulo 56, without escape hypotheses. A proved unit-difference normalization
+and validity-preserving coordinate permutations reduce arbitrary tuples to
+strictly increasing normalized tails. Seven bounded kernel computations
+check all 316,251 such tails against 203 natural multiplicity candidates.
+Every component computation is axiom-free; the coverage assembly and full
+exclusion use only standard Lean axioms. Splitting the computation into
+separate modules bounds the memory needed for each check and lets later
+builds reuse the compiled blocks.
+
+`exceptionalQuantitativeEscapeObstructionFrom_six_iff_seven` removes the
+entire n=6 exceptional case, leaving the equivalent local G3 input for
+non-power-of-two dimensions n≥7. All quantitative hypotheses are preserved.
+The full source build passes 15,429 jobs and the project axiom audit checks
+5,424 declarations, including all 24 new public declarations. Prove2Me's
+accepted G3 frontier remains at n≥6 until the supported upload and connecting
+reduction are verified and accepted. The unrestricted conjecture remains open.
+
 The five-coordinate even-stratum refinement is now accepted on Prove2Me.
-The current G1 leaf is `PrimitiveThreeOmissionDeleteStepFrom 5` (parent length
+The accepted platform G1 leaf is `PrimitiveThreeOmissionDeleteStepFrom 5` (parent length
 at least six), with G2 unchanged and quantitative G3 retained for n≥6.
 The consolidated private mission has 379 nodes and 927 edges, and its
 220 recorded proof dependency sets pass the audit. G2 is assigned to the

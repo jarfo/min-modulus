@@ -152,6 +152,20 @@ complete branch snapshots. The consolidated mission has 379 nodes and
 220 proof dependency sets pass the audit. G1, G2, G3 and the conjecture remain
 Open. G2 is the selected independent parallel-agent assignment.
 
+## New local six-coordinate G3 refinement
+
+`G3SixModFiftySix.lean` proves that no arbitrary six-tuple modulo 56 is valid.
+Seven bounded, axiom-free kernel checks cover all increasing normalized tails;
+proved soundness, coordinate sorting and unit-difference normalization handle
+arbitrary input tuples. The complete exclusion and its coverage assembly use
+only standard Lean axioms.
+
+The new equivalence restricts `ExceptionalQuantitativeEscapeObstructionFrom 6`
+to `ExceptionalQuantitativeEscapeObstructionFrom 7`, retaining every original
+quantitative hypothesis. The full original build and 5,424-declaration axiom
+audit pass. The live platform G3 leaf above remains at n≥6 pending supported
+source/solution verification and acceptance of the connecting reduction.
+
 ## Continue after each verified milestone
 
 Build new statements and proofs on a currently supported platform revision,
