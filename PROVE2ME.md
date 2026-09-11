@@ -195,3 +195,17 @@ audits to pass. Credentials remain in the user's external Prove2Me workspace.
 The original four-item proposal, independent blind readbacks, and initial
 8,716-job statement build are preserved in the
 [initial bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me).
+
+## Verified six-coordinate even-stratum source
+
+The six-coordinate even-stratum source milestone now proves `60 ≤ N` for
+every valid six-tuple at a positive even modulus, and the exact-stratum
+bounds 62 at valuation one and 60 at higher valuations.
+`primitiveThreeOmissionDeleteStepFrom_five_iff_six` removes parent length six
+from G1. The original build passed 15,498 jobs and the complete
+axiom audit checked 6,079 declarations. The supported Lean 4.33.1
+source port passed 8,794 jobs, with 762 literal type matches and
+727 byte-identical command bodies in 87 modules.
+The exact platform statement/solution package and accepted submissions remain
+pending; the accepted G1 leaf stays at P(5) until that work passes. G2, G3
+and the unrestricted conjecture remain open.
