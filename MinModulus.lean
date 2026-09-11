@@ -866,3 +866,4 @@ import MinModulus.SevenModSixtySix
 import MinModulus.G3SevenModOneTwenty
 import MinModulus.OddSmallCertificate
 import MinModulus.G2AnchoredUnion
+import MinModulus.SevenModOneTwentyBundles

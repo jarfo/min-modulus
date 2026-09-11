@@ -331,3 +331,15 @@ anchored union size 29, a counterexample to the proposed even extension.
 The bounded clique search does not justify the live discussion's claim
 that every fixed-family proof is impossible. The odd anchored-union bound
 and G2 remain unproved. See the [fresh review and reproducible evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260911T211122Z).
+
+## Bounded modulo-120 DAG preparation
+
+`SevenModOneTwentyBundles.lean` groups 2,883 verified prefix certificates
+into 324 proposed DAG nodes: 252 conjunctions and 72 reused singleton
+statements. All 252 new types and all 2,883 component projections pass on
+both Lean versions. The integrated original build passes 15,995 jobs and
+9,669 axiom audits. No original proof or statement changed.
+
+These are locally verified source bundles; exact platform conversion and
+publication remain pending. The accepted G3 frontier is still From7.
+See the [bundle evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven120-bundles).
