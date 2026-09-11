@@ -59,6 +59,16 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`G1ExactMersenneDescent.lean` now constructs the sharpened descent from
+an actual valid doubling subtuple. Each cycle coordinate generates the
+entire leaf span with exact order `2^d-1` dividing the odd factor. The
+construction chooses the minimal transversal and retains its quotient and
+private witnesses; a direct adapter uses the existing saturated G1 leaf
+algebra. The full source build passed 15,500 jobs and 6,090 axiom audits;
+the supported port passed 8,733 jobs, with 83 literal type matches and
+83 unchanged complete commands. The failed-charge branch remains open,
+and these three new source lemmas are not yet uploaded.
+
 The new `G1MersenneCharge.lean` sharpens the uniform quotient-charge
 factor from `2^(b+1)` to `2^(b+1)-1` when at least two coordinates remain,
 and proves sharpness at valuation one with two retained coordinates.

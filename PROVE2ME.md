@@ -225,3 +225,19 @@ This source refinement is not yet uploaded and does not close a research gate.
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/mersenne-charge-port)
 preserves both-revision builds, compiled statements, source-command
 comparisons, and axiom audits. The accepted platform frontier is unchanged.
+
+## Constructed exact Mersenne descent
+
+`G1ExactMersenneDescent.lean` now constructs the sharpened descent from
+an actual valid doubling subtuple. Each cycle coordinate generates the
+entire leaf span with exact order `2^d-1` dividing the odd factor. The
+construction chooses the minimal transversal and retains its quotient and
+private witnesses; a direct adapter uses the existing saturated G1 leaf
+algebra. The full source build passed 15,500 jobs and 6,090 axiom audits;
+the supported port passed 8,733 jobs, with 83 literal type matches and
+83 unchanged complete commands. The failed-charge branch remains open,
+and these three new source lemmas are not yet uploaded.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/exact-mersenne-descent-port)
+retains the complete verification evidence. The accepted platform
+frontier is unchanged.
