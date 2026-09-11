@@ -59,6 +59,15 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`G1CycleSupportedDescent.lean` now chooses the minimal kernel-witness
+transversal inside the actual affine doubling cycle. If charge fails,
+the chosen deletion set equals the whole cycle; it contains no outside
+coordinate. A direct adapter uses the saturated G1 leaf algebra. The
+full source build passed 15,501 jobs and 6,095 axiom audits;
+the supported port passed 8,740 jobs with 104 literal type matches
+and unchanged complete commands. The whole-cycle deletion case remains
+open. These five source lemmas are not yet uploaded.
+
 `G1ExactMersenneDescent.lean` now constructs the sharpened descent from
 an actual valid doubling subtuple. Each cycle coordinate generates the
 entire leaf span with exact order `2^d-1` dividing the odd factor. The

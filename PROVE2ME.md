@@ -241,3 +241,18 @@ and these three new source lemmas are not yet uploaded.
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/exact-mersenne-descent-port)
 retains the complete verification evidence. The accepted platform
 frontier is unchanged.
+
+## Descent supported on the cycle
+
+`G1CycleSupportedDescent.lean` now chooses the minimal kernel-witness
+transversal inside the actual affine doubling cycle. If charge fails,
+the chosen deletion set equals the whole cycle; it contains no outside
+coordinate. A direct adapter uses the saturated G1 leaf algebra. The
+full source build passed 15,501 jobs and 6,095 axiom audits;
+the supported port passed 8,740 jobs with 104 literal type matches
+and unchanged complete commands. The whole-cycle deletion case remains
+open. These five source lemmas are not yet uploaded.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/cycle-transversal-port)
+retains the verification evidence. The accepted platform frontier
+is unchanged.
