@@ -5836,3 +5836,20 @@ import MinModulus
 #print axioms MinModulus.not_four_fibre_growth_saturation_of_ranks_le_one
 #print axioms MinModulus.exists_two_level_ranks_of_short_actual_forest
 #print axioms MinModulus.dimension_add_four_le_twice_forest_arms_of_four_fibre
+
+-- The full five-coordinate exceptional exclusion and its G3 connection.
+#print axioms MinModulus.FiveModTwentyFourCertificate.Rival
+#print axioms MinModulus.FiveModTwentyFourCertificate.Rival.vector
+#print axioms MinModulus.FiveModTwentyFourCertificate.Rival.valid
+#print axioms MinModulus.FiveModTwentyFourCertificate.Rival.hits
+#print axioms MinModulus.FiveModTwentyFourCertificate.rivals
+#print axioms MinModulus.FiveModTwentyFourCertificate.covered
+#print axioms MinModulus.FiveModTwentyFourCertificate.all_covered
+#print axioms MinModulus.FiveModTwentyFourCertificate.not_validTuple_of_covered
+#print axioms MinModulus.FiveModTwentyFourCertificate.not_validTuple_normalized
+#print axioms MinModulus.unit_difference_mod_twenty_four
+#print axioms MinModulus.exists_unit_difference_of_valid_five_mod_twenty_four
+#print axioms MinModulus.exists_normalized_valid_five_of_unit_difference
+#print axioms MinModulus.not_validTuple_five_mod_twenty_four
+#print axioms MinModulus.ExceptionalQuantitativeEscapeObstructionFrom
+#print axioms MinModulus.largeExceptionalQuantitativeEscapeObstruction_iff_from_six

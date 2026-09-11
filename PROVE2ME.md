@@ -82,6 +82,15 @@ strict-growth and escape-density results need a further argument connecting
 them to an open gate. The unrestricted common-touch assertion is false and
 must not reappear as an open sufficient lemma.
 
+## New local proof ready for platform verification
+
+`not_validTuple_five_mod_twenty_four` now excludes the complete n=5
+exceptional case. The proved equivalence reduces the current n≥5 G3 input
+to `ExceptionalQuantitativeEscapeObstructionFrom 6`. The full original build
+and axiom audit pass, and the supported 40-declaration source port has literal
+type matches and byte-identical proof bodies. The existing platform snapshot
+above remains at n≥5 until the separately checked reduction is accepted.
+
 ## Continue after each verified milestone
 
 Build new statements and proofs on a currently supported platform revision,

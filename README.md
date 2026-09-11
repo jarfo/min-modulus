@@ -57,7 +57,23 @@ super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
 results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
-## Conjecture 1: current proof frontier (2026-09-09)
+## Conjecture 1: current proof frontier (2026-09-11)
+
+`G3FiveModTwentyFour.lean` now proves the complete five-coordinate
+exceptional case: no arbitrary tuple `Fin 5 → ZMod 24` is valid. A proved
+affine normalization reduces it to `(0,1,a,b,c)`; Lean's kernel checks all
+24³ residue triples against explicit multiplicity rivals and verifies the
+certificate's soundness. The coverage theorem has no axioms, and the final
+exclusion uses only the standard three axioms.
+
+The new equivalence `largeExceptionalQuantitativeEscapeObstruction_iff_from_six`
+discharges n=5 from the quantitative G3 input, leaving
+`ExceptionalQuantitativeEscapeObstructionFrom 6`. Its all-shift inequalities
+remain explicit. The full original build passes 15,413 jobs and its complete
+axiom audit checks 5,363 declarations. The compact supported Lean 4.33.1
+source port has 40 literal type matches and unchanged proof bodies.
+The unrestricted conjecture and all three research gates remain open.
+
 
 For `n >= 16`, any actual affine chain with
 `n+2*floor(log_2(n)) <= 2*m` now gives the original global and every
