@@ -59,6 +59,18 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`G1InvolutionCycleDescent.lean` proves recursive descent for an actual
+affine doubling cycle beside an outside coordinate annihilated by two
+after translation. Deleting all but one cycle coordinate already meets
+every nonzero kernel witness, so a minimal deletion set has size below
+the cycle length and the sharp Mersenne charge always succeeds. The
+saturated leaf-permutation adapter supplies the involution from its star
+center. The full build passed 15,502 jobs and 6,102 axiom audits;
+the supported port passed 8,743 jobs with 119 identical types and
+complete commands. The operational global-star case was already closed
+by `G1PureStarElimination.lean`; the new general cycle result does not
+close the remaining main G1 gates. These seven lemmas are not yet uploaded.
+
 `G1CycleSupportedDescent.lean` now chooses the minimal kernel-witness
 transversal inside the actual affine doubling cycle. If charge fails,
 the chosen deletion set equals the whole cycle; it contains no outside

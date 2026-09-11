@@ -256,3 +256,21 @@ open. These five source lemmas are not yet uploaded.
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/cycle-transversal-port)
 retains the verification evidence. The accepted platform frontier
 is unchanged.
+
+## Recursive cycle descent with an outside involution
+
+`G1InvolutionCycleDescent.lean` proves recursive descent for an actual
+affine doubling cycle beside an outside coordinate annihilated by two
+after translation. Deleting all but one cycle coordinate already meets
+every nonzero kernel witness, so a minimal deletion set has size below
+the cycle length and the sharp Mersenne charge always succeeds. The
+saturated leaf-permutation adapter supplies the involution from its star
+center. The full build passed 15,502 jobs and 6,102 axiom audits;
+the supported port passed 8,743 jobs with 119 identical types and
+complete commands. The operational global-star case was already closed
+by `G1PureStarElimination.lean`; the new general cycle result does not
+close the remaining main G1 gates. These seven lemmas are not yet uploaded.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/involution-cycle-port)
+retains the verification evidence. The accepted platform frontier
+is unchanged.

@@ -859,3 +859,5 @@ import MinModulus.G1MersenneCharge
 import MinModulus.G1ExactMersenneDescent
 
 import MinModulus.G1CycleSupportedDescent
+
+import MinModulus.G1InvolutionCycleDescent
