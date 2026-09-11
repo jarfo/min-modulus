@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      LEAN_NUM_THREADS: "2"
     steps:
       - uses: actions/checkout@v5
 
@@ -17,6 +19,9 @@ jobs:
         with:
           use-mathlib-cache: true
           build-args: "--wfail"
+
+      - name: Check certificate import graph
+        run: lake env lean --run scripts/check_shcsix_imports.lean
 
       - name: Check for sorry
         run: |

@@ -6,8 +6,8 @@ selections from the 55 nonunits above 3.  For each fixed pair of initial tail
 indices, Torch finds a decision tree of subset-collision/head-2 witnesses.
 Symbolic branches use only relations independent of the remaining coordinates;
 the emitted Lean files check every relation with ordinary kernel reduction.
-Generated block imports form two dependency lanes so fresh Lake builds never
-compile more than two certificate blocks concurrently.
+Generated blocks import only the lightweight certificate data module.
+Use LEAN_NUM_THREADS to bound Lake concurrency independently of imports.
 This script and Torch remain outside the trusted base.
 """
 
@@ -23,7 +23,6 @@ import torch
 
 MODULUS = 105
 COORDINATES = 6
-BUILD_LANES = 2
 TAIL_VALUES = [x for x in range(4, MODULUS) if math.gcd(x, MODULUS) != 1]
 
 
@@ -141,12 +140,10 @@ def block_source(
     offset: int,
     second: int,
     tree: list[tuple[int | None, list[tuple[int | None, list[int]]]]],
-    predecessor: str | None,
 ) -> str:
-    suffix = f"{first:02d}_{offset:02d}"
     remaining = len(TAIL_VALUES) - second - 1
     lines = [
-        f"import {predecessor or 'MinModulus.SHCSixExceptionalCertificate'}\n\n",
+        "import MinModulus.SHCSixExceptionalCertificateData\n\n",
         "namespace MinModulus.SHCSixExceptionalCertificate.Generated\n\n",
         "set_option maxRecDepth 1000000\n",
         "set_option maxHeartbeats 1000000000\n\n",
@@ -274,12 +271,6 @@ def generate(output: Path, only_first: int | None = None) -> tuple[int, int, int
     output.mkdir(parents=True, exist_ok=True)
     rows = relation_rows()
     row_tensor = torch.tensor([row for row, _code in rows], dtype=torch.int32)
-    block_modules = [
-        f"MinModulus.Generated.SHCSixN105A{first:02d}B{offset:02d}"
-        for first in range(51)
-        for offset, _second in enumerate(range(first + 1, 52))
-    ]
-    block_index = {module: index for index, module in enumerate(block_modules)}
     first_values = range(51) if only_first is None else (only_first,)
     total_blocks = 0
     total_branches = 0
@@ -288,12 +279,9 @@ def generate(output: Path, only_first: int | None = None) -> tuple[int, int, int
         for offset, second in enumerate(range(first + 1, 52)):
             tree, branches = choose_tree(first, second, rows, row_tensor)
             blocks.append((offset, second))
-            module = f"MinModulus.Generated.SHCSixN105A{first:02d}B{offset:02d}"
-            index = block_index[module]
-            predecessor = block_modules[index - BUILD_LANES] if index >= BUILD_LANES else None
             write_generated(
                 output / f"SHCSixN105A{first:02d}B{offset:02d}.lean",
-                block_source(first, offset, second, tree, predecessor),
+                block_source(first, offset, second, tree),
             )
             total_blocks += 1
             total_branches += branches

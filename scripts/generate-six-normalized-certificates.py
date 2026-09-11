@@ -6,9 +6,9 @@ selection from 2 through N - 1.  For each fixed pair of initial tail values,
 Torch finds a decision tree of subset-collision/head-2 witnesses.  Symbolic
 branches use only relations independent of the remaining coordinates; the
 emitted Lean files check every relation with ordinary kernel reduction.
-Generated block imports form two dependency lanes so fresh Lake builds never
-compile more than two certificate blocks concurrently.  This script and
-Torch remain outside the trusted base.
+Generated blocks import only the lightweight certificate data module.
+Use LEAN_NUM_THREADS to bound Lake concurrency independently of imports.
+This script and Torch remain outside the trusted base.
 """
 
 from __future__ import annotations
@@ -22,7 +22,6 @@ import torch
 
 
 COORDINATES = 6
-BUILD_LANES = 2
 
 
 def write_generated(path: Path, source: str) -> None:
@@ -149,14 +148,12 @@ def block_source(
     offset: int,
     second: int,
     tree: list[tuple[int | None, list[tuple[int | None, list[int]]]]],
-    predecessor: str | None,
 ) -> str:
-    suffix = f"{first:02d}_{offset:02d}"
     remaining = tail_count - second - 1
     first_value = first + 2
     second_value = second + 2
     lines = [
-        f"import {predecessor or 'MinModulus.SHCSixCertificate'}\n\n",
+        "import MinModulus.SHCSixCertificateData\n\n",
         "namespace MinModulus.SHCSixCertificate.Generated\n\n",
         "set_option maxRecDepth 1000000\n",
         "set_option maxHeartbeats 1000000000\n\n",
@@ -297,12 +294,6 @@ def generate(
     output.mkdir(parents=True, exist_ok=True)
     rows = relation_rows()
     row_tensor = torch.tensor([row for row, _code in rows], dtype=torch.int32)
-    block_modules = [
-        module_name(modulus, first, offset)
-        for first in range(first_count)
-        for offset, _second in enumerate(range(first + 1, tail_count - 3))
-    ]
-    block_index = {module: index for index, module in enumerate(block_modules)}
     first_values = range(first_count) if only_first is None else (only_first,)
     total_blocks = 0
     total_branches = 0
@@ -313,9 +304,6 @@ def generate(
                 modulus, tail_values, first, second, rows, row_tensor
             )
             blocks.append((offset, second))
-            module = module_name(modulus, first, offset)
-            index = block_index[module]
-            predecessor = block_modules[index - BUILD_LANES] if index >= BUILD_LANES else None
             write_generated(
                 output / f"SHCSixNormalizedN{modulus}A{first:02d}B{offset:02d}.lean",
                 block_source(
@@ -325,7 +313,6 @@ def generate(
                     offset,
                     second,
                     tree,
-                    predecessor,
                 ),
             )
             total_blocks += 1

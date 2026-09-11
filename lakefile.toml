@@ -14,3 +14,5 @@ relaxedAutoImplicit = false
 
 [[lean_lib]]
 name = "MinModulus"
+# Keep file concurrency (LEAN_NUM_THREADS) separate from threads within Lean.
+weakLeanArgs = ["-j2"]

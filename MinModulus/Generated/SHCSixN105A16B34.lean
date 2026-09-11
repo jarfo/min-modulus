@@ -1,4 +1,4 @@
-import MinModulus.Generated.SHCSixN105A16B32
+import MinModulus.SHCSixExceptionalCertificateData
 
 namespace MinModulus.SHCSixExceptionalCertificate.Generated
 

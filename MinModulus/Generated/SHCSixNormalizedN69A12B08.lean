@@ -1,4 +1,4 @@
-import MinModulus.Generated.SHCSixNormalizedN69A12B06
+import MinModulus.SHCSixCertificateData
 
 namespace MinModulus.SHCSixCertificate.Generated
 

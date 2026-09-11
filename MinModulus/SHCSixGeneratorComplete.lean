@@ -13,6 +13,7 @@ proves generator-coordinate existence throughout the odd strict window
 65 through 125.
 -/
 import MinModulus.SHCSixGenerator
+import MinModulus.SHCSixExceptionalCertificate
 import MinModulus.Generated.SHCSixN105
 
 namespace MinModulus

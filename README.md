@@ -8515,7 +8515,35 @@ With [elan](https://github.com/leanprover/elan) on your `PATH` (it reads
 
 ```sh
 lake exe cache get   # fetch the prebuilt Mathlib cache
-lake build
+./scripts/build.sh  # full build, four workers by default
+```
+
+The generated six-coordinate certificates now have a shallow dependency graph:
+`certificate → row → block → data`. All 5,233 blocks import one of two
+lightweight data modules, independently of other blocks and the structural
+SHC proofs. The previous two-lane predecessor imports made the longest
+six-coordinate certificate path 1,694 local modules deep; it is now four.
+Every generated proof body is unchanged, and all certificate theorems remain
+part of the default full build.
+The optimized full build passes 15,457 jobs and the 5,450-declaration axiom
+audit. [Measurements and verification logs](https://github.com/jarfo/unique/tree/main/papers/min-modulus/build-optimization)
+record the import-depth reduction and representative compilation timings.
+
+The build wrapper bounds compiler concurrency with `LEAN_NUM_THREADS`.
+For example, `LEAN_NUM_THREADS=2 ./scripts/build.sh` suits a smaller machine;
+`LEAN_NUM_THREADS=8 ./scripts/build.sh` allows more parallel work on a machine
+with sufficient memory. The equivalent direct command is
+`LEAN_NUM_THREADS=4 lake build`. Lean's `-j` option controls threads inside a
+compiler process; the pinned Lake does not provide a `lake build -j` option.
+Each compiler uses two threads, configured through `weakLeanArgs`; the
+worker limit controls how many files compile at once. CI uses two workers.
+Keep `.lake` between builds to reuse compiled proofs;
+the Mathlib cache does not contain this project's generated certificates.
+
+Check that regeneration has preserved the shallow graph with:
+
+```sh
+lake env lean --run scripts/check_shcsix_imports.lean
 ```
 
 To reproduce the axiom audit:
