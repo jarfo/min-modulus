@@ -10190,3 +10190,19 @@ import MinModulus
 #print axioms MinModulus.outside_surplus_sparse_target_of_valid_mersenne_cycle
 #print axioms MinModulus.outside_one_surplus_target_eq_zero_of_valid_mersenne_cycle
 #print axioms MinModulus.outside_two_surplus_target_zero_or_entry_of_valid_mersenne_cycle
+
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_6_7
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_7_8
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_8_9
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_9_10
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_10_11
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_11_12
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_12_14
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_14_16
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_16_18
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_18_20
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_20_23
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_23_26
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_26_30
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_30_37
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_5_part_37_58

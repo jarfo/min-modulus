@@ -370,3 +370,15 @@ the full project passes 15,996 jobs and 9,673 axiom audits.
 These are local structural results, not a discharge of a research gate, and
 have not been uploaded. See the
 [proof evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/cycle-sparse-targets).
+
+## Bounded modulo-58 row-5 revision
+
+Modulo-58 row 5 now uses 15 bounded interval certificates after two
+server verification timeouts. They cover 22,100 sorted tails, at most 1,946
+per part; the original row statement and other row proofs are unchanged.
+All 16 affected types match across both Lean revisions and the platform
+statements; all 16 exact platform proofs and dependency checks pass. The full original project passes 16,011
+jobs and 9,688 axiom audits. All 216 accepted submissions
+are retained; the revised six-even publication remains pending.
+
+See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-row5-port).
