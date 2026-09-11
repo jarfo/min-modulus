@@ -59,15 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
-The modulo-56 certificate now exposes 26 individual row theorems so each
-Prove2Me verification job can check one row independently. Six of
-the seven original coverage blocks are assembled from those rows; the last
-block retains its accepted direct computation. Every row and every assembled
-source block remains axiom-free. The revised original project passes 15,455
-build jobs and its expanded 5,450-declaration axiom audit. The supported source
-port passes 8,752 jobs, with 114 literal type matches and 81 byte-identical
-source commands in 45 modules. The exact platform statement/solution package
-and new row submissions remain pending; G3 stays at Q(6) during that work.
+The complete six-coordinate exclusion modulo 56 is accepted on Prove2Me.
+The G3 leaf is `MinModulus.exceptional_quantitative_escape_obstruction_from_seven`
+(`871bd599-0124-4e97-ba23-2278e25c515e`), retaining every quantitative premise for non-power-of-two
+dimensions n≥7. Bridge `c8d15a16-56d7-4514-bdc4-e17eacaf887e` consumes the reverse direction
+of the proved Q(6)↔Q(7) equivalence. The preceding Q(6) theorem remains an
+Open parent. G1, G2, G3 and the unrestricted conjecture remain Open.
+G2 is the selected independent parallel-agent assignment.
 
 `G3SixModFiftySix.lean` now proves the complete six-coordinate exclusion
 modulo 56, without escape hypotheses. A proved unit-difference normalization
@@ -84,14 +82,14 @@ entire n=6 exceptional case, leaving the equivalent local G3 input for
 non-power-of-two dimensions n≥7. All quantitative hypotheses are preserved.
 The full source build passes 15,429 jobs and the project axiom audit checks
 5,424 declarations, including all 24 new public declarations. Prove2Me's
-accepted G3 frontier remains at n≥6 until the supported upload and connecting
-reduction are verified and accepted. The unrestricted conjecture remains open.
+accepted G3 frontier is now Q(7), after verification and acceptance of the
+connecting reduction. The unrestricted conjecture remains open.
 
 The five-coordinate even-stratum refinement is now accepted on Prove2Me.
 The accepted platform G1 leaf is `PrimitiveThreeOmissionDeleteStepFrom 5` (parent length
-at least six), with G2 unchanged and quantitative G3 retained for n≥6.
-The consolidated private mission has 379 nodes and 927 edges, and its
-220 recorded proof dependency sets pass the audit. G2 is assigned to the
+at least six), with G2 unchanged and quantitative G3 now restricted to n≥7.
+The consolidated private mission has 430 nodes and 1032 edges, and its
+259 recorded proof dependency sets pass the audit. G2 is assigned to the
 independent parallel agent; the coordinator maintains the shared DAG.
 
 `FiveEvenCyclicLowerBound.lean` now proves that every valid five-tuple
