@@ -59,6 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+The two largest stalled modulo-58 rows now use 33 independent interval
+proofs, each covering at most 2,000 sorted tails. Their original statements
+are unchanged. The full original build passes 15,994 jobs and 9,417 axiom
+audits; all 35 affected types and exact platform proofs pass supported Lean
+checks. The six-even publication can reuse every accepted submission and
+replace only the two timed-out proofs. Platform acceptance remains pending.
+
 The latest parallel branch update, `d3ef872`, adds the conjectural
 anchored-union bound and a checked implication from it to G2. Its four
 declaration types match on the original and supported Lean revisions; the

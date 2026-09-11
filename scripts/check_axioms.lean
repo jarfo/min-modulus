@@ -9896,3 +9896,38 @@ import MinModulus
 
 -- Conditional anchored-union route to G2; the conjectural input remains open.
 #print axioms MinModulus.oddStratumLowerBound_of_anchoredUnion
+
+-- Bounded certificate parts for the two largest remaining modulo-58 rows.
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_4_5
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_5_6
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_6_7
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_7_8
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_8_9
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_9_10
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_10_11
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_11_12
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_12_14
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_14_16
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_16_18
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_18_20
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_20_23
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_23_26
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_26_30
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_30_37
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_3_part_37_58
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_5_6
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_6_7
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_7_8
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_8_9
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_9_10
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_10_11
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_11_12
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_12_14
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_14_16
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_16_18
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_18_20
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_20_23
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_23_26
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_26_30
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_30_37
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_4_part_37_58
