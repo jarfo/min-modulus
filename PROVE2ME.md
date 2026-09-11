@@ -10,7 +10,7 @@ records 39 proved supporting nodes, accepted reductions, exact source hashes,
 server theorem/submission IDs, and the complete root frontier. The goal's
 three open leaves are:
 
-- `MinModulus.primitive_three_omission_delete_step` (current G1 residual).
+- `MinModulus.primitive_three_omission_delete_step_from_four` (current G1 residual, parent length ≥5).
 - `MinModulus.odd_stratum_lower_bound` (G2).
 - `MinModulus.exceptional_quantitative_escape_obstruction_from_six` (current G3 residual, n≥6).
 
@@ -32,7 +32,7 @@ declarations in four modules without proof-body changes; 41 original types
 match literally, and one set-constructor alias is checked definitionally.
 
 The expanded DAG across the goal and all five mission milestones contains
-341 nodes and 840 edges, with an acyclicity audit. Both supporting milestones
+363 nodes and 891 edges, with an acyclicity audit. Both supporting milestones
 are complete. The whole mission frontier now consists of primitive G1, G2
 and quantitative G3 for n≥6. Seven additional primitive supporting statements
 are Proved. Their exact platform files built 8,738 jobs; all seven source types and eight solution types match.
@@ -50,8 +50,8 @@ The first G3 refinement retained every original dimension and the
 collision-inclusive all-shift bounds. The milestone first moved to the
 equivalent n≥5 restriction after discharging n=3, and now to n≥6 after
 discharging the full n=5 case modulo 24. Both changes and their
-reasons are recorded in platform history. Original G3 remains an Open parent. Across all six bundles, the consolidated audit verifies 199
-proof dependency sets and all 192 source nodes are Proved. No research gate
+reasons are recorded in platform history. Original G3 remains an Open parent. Across all seven bundles, the consolidated audit verifies 210
+proof dependency sets and all 202 source nodes are Proved. No research gate
 is proved. The [dimension-three refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g3-large-dag)
 adds three Proved source nodes and four accepted solutions. The new
 `exceptionalQuantitativeEscapeObstruction_iff_large` equivalence uses the
@@ -102,15 +102,30 @@ All seven new source nodes are Proved. The new G3 input remains Open.
 The [platform bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/five24-dag)
 preserves the accepted receipts, exact statement readbacks, dependency audit,
 supported source evidence, and milestone history. The consolidated mission
-has 341 nodes and 840 edges, with the same three research branches.
+has 363 nodes and 891 edges, with the same three research branches.
 
-## New local four-coordinate G1 refinement
+## Accepted four-coordinate G1 refinement
 
-The full four-coordinate cyclic bound and every exact stratum now hold in
-`FourCyclicLowerBound.lean`. The proved equivalence reduces primitive G1 to
-`PrimitiveThreeOmissionDeleteStepFrom 4`, whose parent length is at least
-five. This local result does not yet change the platform frontier above;
-that requires supported verification and an accepted connecting reduction.
+`FourCyclicLowerBound.lean` proves the unrestricted positive cyclic bound
+12≤N and every exact two-adic stratum for valid four-tuples. Its equivalence
+now reduces primitive G1 to `PrimitiveThreeOmissionDeleteStepFrom 4` on
+Prove2Me: child dimension at least four and parent length at least five.
+The current leaf is `7f5a692e-58b4-4ef1-807c-27b2dc4a7c12` and the accepted parent bridge
+is `5a1e0170-34ad-4b45-b6ad-fe769d3b3615`. The milestone and its history record the replacement.
+
+The full original build passed 15,416 jobs and its axiom audit covers 5,379
+declarations. The supported source port has 70 literal type matches and
+standard-axiom audits, with all 53 source command bodies byte-identical.
+The exact platform build passed 8,745 jobs: ten source types match (nine
+literally, one after a checked bound-universe rename), all eleven solution
+types match, and all three new definition declarations pass the axiom audit.
+All ten new source nodes are Proved. The remaining G1 input is Open.
+
+The [platform bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/four10-dag)
+preserves exact readbacks, accepted receipts, type and axiom evidence,
+source hashes, the dependency audit, and milestone history. The complete
+consolidated mission has 363 nodes and 891 edges and the same three
+research branches. G2 is the selected parallel-agent assignment.
 
 ## Continue after each verified milestone
 
