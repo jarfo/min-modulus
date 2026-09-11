@@ -209,3 +209,19 @@ source port passed 8,794 jobs, with 762 literal type matches and
 The exact platform statement/solution package and accepted submissions remain
 pending; the accepted G1 leaf stays at P(5) until that work passes. G2, G3
 and the unrestricted conjecture remain open.
+
+## Verified sharp Mersenne charge
+
+The new `G1MersenneCharge.lean` sharpens the uniform quotient-charge
+factor from `2^(b+1)` to `2^(b+1)-1` when at least two coordinates remain,
+and proves sharpness at valuation one with two retained coordinates.
+At Mersenne order, failed charge now forces cycle length `d ≤ b`, improving
+the previous `d-1 ≤ b` boundary. Eight new lemmas connect this to the
+existing doubling rigidity and full-cycle descent. The full source build
+passed 15,499 jobs and 6,087 axiom audits; the supported port passed
+8,723 jobs with 46 literal type matches and 46 unchanged complete commands.
+This source refinement is not yet uploaded and does not close a research gate.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/mersenne-charge-port)
+preserves both-revision builds, compiled statements, source-command
+comparisons, and axiom audits. The accepted platform frontier is unchanged.

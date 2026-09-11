@@ -59,6 +59,16 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+The new `G1MersenneCharge.lean` sharpens the uniform quotient-charge
+factor from `2^(b+1)` to `2^(b+1)-1` when at least two coordinates remain,
+and proves sharpness at valuation one with two retained coordinates.
+At Mersenne order, failed charge now forces cycle length `d ≤ b`, improving
+the previous `d-1 ≤ b` boundary. Eight new lemmas connect this to the
+existing doubling rigidity and full-cycle descent. The full source build
+passed 15,499 jobs and 6,087 axiom audits; the supported port passed
+8,723 jobs with 46 literal type matches and 46 unchanged complete commands.
+This source refinement is not yet uploaded and does not close a research gate.
+
 The six-coordinate even-stratum source milestone now proves `60 ≤ N` for
 every valid six-tuple at a positive even modulus, and the exact-stratum
 bounds 62 at valuation one and 60 at higher valuations.

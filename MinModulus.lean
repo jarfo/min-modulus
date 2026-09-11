@@ -853,3 +853,5 @@ import MinModulus.G1FiveCoordinateBase
 import MinModulus.G3SixModFiftySix
 
 import MinModulus.SixEvenCyclicLowerBound
+
+import MinModulus.G1MersenneCharge
