@@ -148,506 +148,324 @@ def rivals4_13 : List Rival4 := [
   ⟨3,0,1,0⟩,
   ⟨4,0,0,0⟩]
 
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `17`. -/
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `17`. -/
 def rivals5Unit17 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨0,0,1,3,1⟩,
-  ⟨0,0,1,4,0⟩,
-  ⟨1,1,0,1,2⟩,
-  ⟨1,1,0,2,1⟩,
-  ⟨1,1,0,0,3⟩,
-  ⟨1,1,0,3,0⟩,
-  ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨0,0,2,3,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,0,5,0,0⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨0,1,1,2,1⟩,
   ⟨0,1,2,1,1⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨1,0,1,2,1⟩,
   ⟨1,0,2,1,1⟩,
-  ⟨1,3,0,0,1⟩,
+  ⟨0,3,0,1,1⟩,
+  ⟨1,1,0,2,1⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,0,2,1,2⟩,
+  ⟨1,1,0,3,0⟩,
+  ⟨0,1,0,2,2⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨1,0,2,2,0⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨0,1,2,2,0⟩,
+  ⟨1,0,0,2,2⟩,
+  ⟨1,0,1,0,3⟩,
+  ⟨0,2,0,3,0⟩,
   ⟨1,3,0,1,0⟩,
-  ⟨1,3,1,0,0⟩,
-  ⟨0,4,0,0,1⟩,
-  ⟨0,4,0,1,0⟩,
-  ⟨0,4,1,0,0⟩,
-  ⟨2,3,0,0,0⟩,
-  ⟨1,0,0,0,4⟩,
-  ⟨1,0,0,4,0⟩,
-  ⟨1,0,4,0,0⟩]
+  ⟨0,0,0,1,4⟩,
+  ⟨1,0,0,1,3⟩,
+  ⟨0,0,1,2,2⟩]
 
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `19`. -/
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `19`. -/
 def rivals5Unit19 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨0,0,1,3,1⟩,
-  ⟨0,0,1,4,0⟩,
-  ⟨1,1,0,1,2⟩,
-  ⟨1,1,0,2,1⟩,
-  ⟨1,1,0,0,3⟩,
-  ⟨1,1,0,3,0⟩,
-  ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨0,0,2,3,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,0,5,0,0⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨0,1,1,2,1⟩,
   ⟨0,1,2,1,1⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨1,0,1,2,1⟩,
   ⟨1,0,2,1,1⟩,
-  ⟨1,3,0,0,1⟩,
-  ⟨1,3,0,1,0⟩,
-  ⟨1,3,1,0,0⟩,
-  ⟨0,2,0,0,3⟩,
-  ⟨0,2,0,3,0⟩,
-  ⟨0,2,3,0,0⟩,
-  ⟨2,0,0,0,3⟩,
-  ⟨2,0,0,3,0⟩,
-  ⟨2,0,3,0,0⟩,
-  ⟨3,1,0,0,1⟩,
-  ⟨3,1,0,1,0⟩,
-  ⟨3,1,1,0,0⟩]
-
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `21`. -/
-def rivals5Unit21 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨0,1,2,2,0⟩,
-  ⟨1,0,2,2,0⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨0,1,2,0,2⟩,
-  ⟨0,1,2,1,1⟩,
-  ⟨1,0,2,0,2⟩,
-  ⟨1,0,2,1,1⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨0,0,5,0,0⟩,
-  ⟨1,1,0,1,2⟩,
-  ⟨1,1,0,2,1⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,1,3,0,1⟩,
-  ⟨0,1,3,1,0⟩,
-  ⟨1,0,3,0,1⟩,
-  ⟨1,0,3,1,0⟩,
-  ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨1,1,0,0,3⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨0,1,1,2,1⟩,
-  ⟨1,0,1,2,1⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,0,0,3⟩,
-  ⟨2,0,0,0,3⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨1,1,0,3,0⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨0,1,0,2,2⟩,
-  ⟨1,0,0,2,2⟩,
-  ⟨0,1,1,0,3⟩,
-  ⟨1,0,1,0,3⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,2,0,3,0⟩,
-  ⟨2,0,0,3,0⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,1,0,1,3⟩,
-  ⟨1,0,0,1,3⟩,
-  ⟨0,2,3,0,0⟩,
-  ⟨1,3,0,1,0⟩,
-  ⟨2,0,3,0,0⟩,
-  ⟨3,1,0,1,0⟩]
-
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `23`. -/
-def rivals5Unit23 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨0,0,1,3,1⟩,
-  ⟨0,0,1,4,0⟩,
-  ⟨1,1,0,1,2⟩,
-  ⟨1,1,0,2,1⟩,
-  ⟨1,1,0,0,3⟩,
-  ⟨1,1,0,3,0⟩,
-  ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨0,0,2,3,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,0,5,0,0⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨0,1,1,2,1⟩,
-  ⟨0,1,2,1,1⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨1,0,1,2,1⟩,
-  ⟨1,0,2,1,1⟩,
-  ⟨1,3,0,0,1⟩,
-  ⟨1,3,0,1,0⟩,
-  ⟨1,3,1,0,0⟩,
-  ⟨0,2,0,0,3⟩,
-  ⟨0,2,0,3,0⟩,
-  ⟨0,2,3,0,0⟩,
-  ⟨2,0,0,0,3⟩,
-  ⟨2,0,0,3,0⟩,
-  ⟨2,0,3,0,0⟩,
-  ⟨3,1,0,0,1⟩,
-  ⟨3,1,0,1,0⟩,
-  ⟨3,1,1,0,0⟩,
-  ⟨0,4,0,0,1⟩,
-  ⟨0,4,0,1,0⟩,
-  ⟨0,4,1,0,0⟩,
-  ⟨2,3,0,0,0⟩,
-  ⟨3,2,0,0,0⟩,
-  ⟨0,1,0,2,2⟩,
-  ⟨0,1,2,0,2⟩,
-  ⟨0,1,2,2,0⟩,
-  ⟨0,5,0,0,0⟩,
-  ⟨1,0,0,2,2⟩,
-  ⟨1,0,2,0,2⟩,
-  ⟨1,0,2,2,0⟩,
-  ⟨5,0,0,0,0⟩,
-  ⟨1,4,0,0,0⟩,
-  ⟨0,1,0,0,4⟩,
-  ⟨0,1,0,1,3⟩,
-  ⟨0,1,0,3,1⟩,
-  ⟨0,1,0,4,0⟩,
-  ⟨1,0,1,0,3⟩,
-  ⟨1,0,1,3,0⟩,
-  ⟨0,1,1,0,3⟩,
-  ⟨0,1,1,3,0⟩,
-  ⟨1,0,0,1,3⟩,
-  ⟨1,0,0,3,1⟩]
-
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `25`. -/
-def rivals5Unit25 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨1,4,0,0,0⟩,
-  ⟨2,3,0,0,0⟩,
-  ⟨3,2,0,0,0⟩,
-  ⟨4,1,0,0,0⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,1,3,0,1⟩,
-  ⟨0,1,3,1,0⟩,
-  ⟨1,0,3,0,1⟩,
-  ⟨1,0,3,1,0⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,0,1,3,1⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨1,1,0,1,2⟩,
-  ⟨1,1,0,2,1⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨0,0,2,3,0⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨1,1,0,0,3⟩,
-  ⟨1,1,0,3,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,0,1,4,0⟩,
-  ⟨0,0,5,0,0⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨0,1,1,2,1⟩,
-  ⟨0,1,2,1,1⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨1,0,1,2,1⟩,
-  ⟨1,0,2,1,1⟩,
-  ⟨0,1,2,0,2⟩,
-  ⟨0,1,2,2,0⟩,
-  ⟨1,0,2,0,2⟩,
-  ⟨1,0,2,2,0⟩,
-  ⟨0,1,0,1,3⟩,
-  ⟨0,1,0,3,1⟩,
-  ⟨0,1,0,2,2⟩,
-  ⟨1,0,0,2,2⟩,
-  ⟨1,0,0,1,3⟩,
-  ⟨1,0,0,3,1⟩,
-  ⟨0,1,1,0,3⟩,
-  ⟨0,1,1,3,0⟩,
-  ⟨1,0,1,0,3⟩,
-  ⟨1,0,1,3,0⟩,
-  ⟨0,1,0,0,4⟩,
-  ⟨0,1,0,4,0⟩,
-  ⟨0,1,4,0,0⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨3,1,0,0,1⟩,
-  ⟨3,1,0,1,0⟩,
-  ⟨3,1,1,0,0⟩,
-  ⟨1,3,0,0,1⟩,
-  ⟨1,3,0,1,0⟩,
-  ⟨1,3,1,0,0⟩,
-  ⟨1,0,0,0,4⟩,
-  ⟨1,0,0,4,0⟩,
-  ⟨1,0,4,0,0⟩]
-
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `27`. -/
-def rivals5Unit27 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨0,1,2,2,0⟩,
-  ⟨1,0,2,2,0⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,1,2,0,2⟩,
-  ⟨0,1,2,1,1⟩,
-  ⟨1,0,2,0,2⟩,
-  ⟨1,0,2,1,1⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨1,1,0,1,2⟩,
-  ⟨1,1,0,2,1⟩,
-  ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨1,1,0,0,3⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,1,1,2,1⟩,
-  ⟨1,0,1,2,1⟩,
-  ⟨1,1,0,3,0⟩,
-  ⟨0,0,2,3,0⟩,
-  ⟨0,0,1,4,0⟩,
-  ⟨0,0,1,3,1⟩,
-  ⟨0,1,0,2,2⟩,
-  ⟨1,0,0,2,2⟩,
-  ⟨2,3,0,0,0⟩,
-  ⟨3,2,0,0,0⟩,
-  ⟨0,1,1,0,3⟩,
-  ⟨1,0,1,0,3⟩,
-  ⟨0,1,0,1,3⟩,
-  ⟨1,0,0,1,3⟩,
-  ⟨0,1,0,3,1⟩,
-  ⟨1,0,0,3,1⟩,
-  ⟨0,1,1,3,0⟩,
-  ⟨1,0,1,3,0⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨0,2,0,0,3⟩,
-  ⟨2,0,0,0,3⟩,
-  ⟨0,1,3,1,0⟩,
-  ⟨1,0,3,1,0⟩,
-  ⟨0,1,3,0,1⟩,
-  ⟨1,0,3,0,1⟩,
-  ⟨0,1,0,0,4⟩,
-  ⟨1,0,0,0,4⟩,
-  ⟨1,3,0,1,0⟩,
-  ⟨3,1,0,1,0⟩,
-  ⟨1,3,1,0,0⟩,
-  ⟨3,1,1,0,0⟩,
-  ⟨0,2,0,3,0⟩,
-  ⟨2,0,0,3,0⟩,
-  ⟨1,3,0,0,1⟩,
-  ⟨3,1,0,0,1⟩,
-  ⟨0,2,3,0,0⟩,
-  ⟨2,0,3,0,0⟩,
-  ⟨0,1,0,4,0⟩,
-  ⟨0,1,4,0,0⟩,
-  ⟨1,0,0,4,0⟩,
-  ⟨1,0,4,0,0⟩,
   ⟨0,3,0,1,1⟩,
-  ⟨0,3,1,0,1⟩,
-  ⟨0,3,1,1,0⟩,
-  ⟨0,4,0,0,1⟩,
-  ⟨0,4,0,1,0⟩,
-  ⟨0,4,1,0,0⟩]
-
-/-- Rivals covering every normalized five-tuple `(0,1,a,b,c)` modulo `29`. -/
-def rivals5Unit29 : List Rival5 := [
-  ⟨0,0,0,0,5⟩,
-  ⟨0,0,0,1,4⟩,
-  ⟨0,0,0,2,3⟩,
-  ⟨0,0,0,3,2⟩,
-  ⟨0,0,0,4,1⟩,
-  ⟨0,0,0,5,0⟩,
-  ⟨1,1,1,0,2⟩,
-  ⟨0,2,1,0,2⟩,
-  ⟨0,2,1,2,0⟩,
-  ⟨0,0,1,0,4⟩,
-  ⟨0,0,1,1,3⟩,
-  ⟨0,0,1,2,2⟩,
-  ⟨0,0,1,3,1⟩,
-  ⟨0,0,1,4,0⟩,
-  ⟨1,1,0,1,2⟩,
   ⟨1,1,0,2,1⟩,
-  ⟨1,1,0,0,3⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨0,1,0,2,2⟩,
   ⟨1,1,0,3,0⟩,
   ⟨0,0,2,1,2⟩,
-  ⟨0,0,2,2,1⟩,
-  ⟨0,0,2,0,3⟩,
-  ⟨0,0,2,3,0⟩,
-  ⟨0,0,3,0,2⟩,
-  ⟨0,0,3,1,1⟩,
-  ⟨0,0,3,2,0⟩,
-  ⟨1,1,3,0,0⟩,
-  ⟨0,0,4,0,1⟩,
-  ⟨0,0,4,1,0⟩,
-  ⟨0,0,5,0,0⟩,
-  ⟨0,1,1,1,2⟩,
-  ⟨0,1,1,2,1⟩,
-  ⟨0,1,2,1,1⟩,
-  ⟨0,2,0,1,2⟩,
-  ⟨0,2,0,2,1⟩,
-  ⟨0,2,2,0,1⟩,
-  ⟨0,2,2,1,0⟩,
-  ⟨1,0,1,1,2⟩,
-  ⟨1,0,1,2,1⟩,
-  ⟨1,0,2,1,1⟩,
-  ⟨1,3,0,0,1⟩,
-  ⟨1,3,0,1,0⟩,
-  ⟨1,3,1,0,0⟩,
-  ⟨0,2,0,0,3⟩,
-  ⟨0,2,0,3,0⟩,
-  ⟨0,2,3,0,0⟩,
-  ⟨2,0,0,0,3⟩,
-  ⟨2,0,0,3,0⟩,
-  ⟨2,0,3,0,0⟩,
-  ⟨3,1,0,0,1⟩,
-  ⟨3,1,0,1,0⟩,
-  ⟨3,1,1,0,0⟩,
-  ⟨0,4,0,0,1⟩,
-  ⟨0,4,0,1,0⟩,
-  ⟨0,4,1,0,0⟩,
-  ⟨4,0,0,0,1⟩,
-  ⟨4,0,0,1,0⟩,
-  ⟨4,0,1,0,0⟩,
-  ⟨0,1,0,2,2⟩,
-  ⟨0,1,2,0,2⟩,
+  ⟨1,0,2,2,0⟩,
   ⟨0,1,2,2,0⟩,
   ⟨1,0,0,2,2⟩,
-  ⟨1,0,2,0,2⟩,
-  ⟨1,0,2,2,0⟩,
-  ⟨0,1,0,1,3⟩,
-  ⟨0,1,0,3,1⟩,
-  ⟨1,0,1,0,3⟩,
-  ⟨1,0,1,3,0⟩,
-  ⟨0,1,1,0,3⟩,
-  ⟨0,1,1,3,0⟩,
-  ⟨1,0,0,1,3⟩,
-  ⟨1,0,0,3,1⟩,
-  ⟨0,1,3,0,1⟩,
-  ⟨0,1,3,1,0⟩,
-  ⟨1,0,3,0,1⟩,
-  ⟨1,0,3,1,0⟩,
-  ⟨0,1,0,0,4⟩,
-  ⟨0,1,0,4,0⟩,
-  ⟨0,1,4,0,0⟩,
+  ⟨2,0,0,3,0⟩,
+  ⟨3,1,0,1,0⟩,
+  ⟨0,0,2,2,1⟩,
   ⟨0,3,0,0,2⟩,
-  ⟨0,3,0,2,0⟩,
-  ⟨0,3,2,0,0⟩,
-  ⟨2,3,0,0,0⟩,
+  ⟨1,3,0,1,0⟩,
+  ⟨0,4,0,0,1⟩,
+  ⟨0,0,2,0,3⟩,
+  ⟨0,1,1,3,0⟩,
+  ⟨0,1,0,3,1⟩,
+  ⟨0,0,1,2,2⟩,
+  ⟨0,0,3,2,0⟩]
+
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `21`. -/
+def rivals5Unit21 : List Rival5 := [
+  ⟨0,1,2,1,1⟩,
+  ⟨1,0,2,1,1⟩,
   ⟨0,3,0,1,1⟩,
-  ⟨0,3,1,0,1⟩,
-  ⟨0,3,1,1,0⟩,
-  ⟨3,0,0,0,2⟩,
-  ⟨3,0,0,2,0⟩,
+  ⟨1,1,0,2,1⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,0,2,1,2⟩,
+  ⟨1,1,0,3,0⟩,
+  ⟨0,2,0,3,0⟩,
+  ⟨1,3,0,1,0⟩,
+  ⟨2,0,0,3,0⟩,
+  ⟨3,1,0,1,0⟩,
+  ⟨0,4,0,1,0⟩,
+  ⟨4,0,0,1,0⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨0,1,0,2,2⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨1,0,2,2,0⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,2,2,0⟩,
+  ⟨1,0,0,2,2⟩,
+  ⟨1,0,1,0,3⟩,
+  ⟨0,0,1,2,2⟩,
+  ⟨0,0,2,2,1⟩,
+  ⟨0,0,0,3,2⟩,
+  ⟨0,0,2,3,0⟩,
+  ⟨0,1,0,3,1⟩,
+  ⟨1,0,1,3,0⟩,
+  ⟨0,1,1,3,0⟩,
+  ⟨0,3,0,0,2⟩,
+  ⟨2,3,0,0,0⟩,
+  ⟨0,0,0,1,4⟩,
+  ⟨0,0,0,2,3⟩]
+
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `23`. -/
+def rivals5Unit23 : List Rival5 := [
+  ⟨0,1,2,1,1⟩,
+  ⟨1,0,2,1,1⟩,
+  ⟨0,3,0,1,1⟩,
+  ⟨1,1,0,2,1⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨0,0,2,1,2⟩,
+  ⟨0,1,0,2,2⟩,
+  ⟨1,0,2,2,0⟩,
+  ⟨1,1,0,3,0⟩,
+  ⟨0,1,2,2,0⟩,
+  ⟨1,0,0,2,2⟩,
+  ⟨2,0,0,3,0⟩,
+  ⟨3,1,0,1,0⟩,
+  ⟨0,2,0,3,0⟩,
+  ⟨1,0,1,0,3⟩,
+  ⟨1,3,0,1,0⟩,
+  ⟨0,3,0,0,2⟩,
   ⟨3,0,2,0,0⟩,
+  ⟨0,1,0,3,1⟩,
+  ⟨1,0,1,3,0⟩,
+  ⟨0,0,1,2,2⟩,
+  ⟨0,0,2,2,1⟩,
+  ⟨0,0,0,4,1⟩,
+  ⟨0,0,1,4,0⟩,
+  ⟨0,0,2,0,3⟩,
+  ⟨0,0,3,0,2⟩,
+  ⟨1,4,0,0,0⟩,
+  ⟨4,1,0,0,0⟩,
+  ⟨0,0,0,2,3⟩,
+  ⟨0,0,3,2,0⟩,
+  ⟨0,5,0,0,0⟩,
+  ⟨5,0,0,0,0⟩,
+  ⟨0,1,0,4,0⟩,
+  ⟨0,1,3,1,0⟩]
+
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `25`. -/
+def rivals5Unit25 : List Rival5 := [
+  ⟨0,1,2,1,1⟩,
+  ⟨1,0,2,1,1⟩,
+  ⟨0,3,0,1,1⟩,
+  ⟨1,1,0,2,1⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,0,2,1,2⟩,
+  ⟨1,1,0,3,0⟩,
+  ⟨0,2,0,3,0⟩,
+  ⟨1,3,0,1,0⟩,
+  ⟨2,0,0,3,0⟩,
+  ⟨3,1,0,1,0⟩,
+  ⟨0,4,0,1,0⟩,
+  ⟨4,0,0,1,0⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨0,1,0,2,2⟩,
+  ⟨1,0,2,2,0⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,2,2,0⟩,
+  ⟨1,0,0,2,2⟩,
+  ⟨1,0,1,0,3⟩,
+  ⟨0,3,0,0,2⟩,
+  ⟨3,0,2,0,0⟩,
+  ⟨0,3,2,0,0⟩,
+  ⟨3,0,0,0,2⟩,
+  ⟨0,0,0,3,2⟩,
+  ⟨0,0,2,3,0⟩,
+  ⟨0,0,0,5,0⟩,
+  ⟨0,1,0,4,0⟩,
+  ⟨1,0,0,4,0⟩,
+  ⟨0,1,1,3,0⟩,
+  ⟨1,0,0,3,1⟩,
+  ⟨0,0,0,2,3⟩,
+  ⟨0,0,1,1,3⟩,
+  ⟨0,0,1,2,2⟩,
+  ⟨0,0,2,2,1⟩,
+  ⟨0,0,3,1,1⟩,
+  ⟨0,0,3,2,0⟩,
+  ⟨2,3,0,0,0⟩,
   ⟨3,2,0,0,0⟩,
-  ⟨3,0,0,1,1⟩,
-  ⟨3,0,1,0,1⟩,
-  ⟨3,0,1,1,0⟩]
+  ⟨0,1,0,1,3⟩,
+  ⟨1,0,3,1,0⟩]
+
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `27`. -/
+def rivals5Unit27 : List Rival5 := [
+  ⟨0,1,2,1,1⟩,
+  ⟨1,0,2,1,1⟩,
+  ⟨0,3,0,1,1⟩,
+  ⟨1,1,0,2,1⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨1,0,1,0,3⟩,
+  ⟨0,0,2,1,2⟩,
+  ⟨0,1,0,2,2⟩,
+  ⟨1,0,2,2,0⟩,
+  ⟨1,1,0,3,0⟩,
+  ⟨0,1,2,2,0⟩,
+  ⟨1,0,0,2,2⟩,
+  ⟨0,2,0,3,0⟩,
+  ⟨1,3,0,1,0⟩,
+  ⟨2,0,0,3,0⟩,
+  ⟨3,1,0,1,0⟩,
+  ⟨0,3,0,0,2⟩,
+  ⟨3,0,2,0,0⟩,
+  ⟨0,3,2,0,0⟩,
+  ⟨3,0,0,0,2⟩,
+  ⟨0,4,0,1,0⟩,
+  ⟨4,0,0,1,0⟩,
+  ⟨2,3,0,0,0⟩,
+  ⟨3,2,0,0,0⟩,
+  ⟨0,0,1,2,2⟩,
+  ⟨0,0,2,2,1⟩,
+  ⟨1,3,0,0,1⟩,
+  ⟨1,4,0,0,0⟩,
+  ⟨0,5,0,0,0⟩,
+  ⟨0,4,0,0,1⟩,
+  ⟨0,0,0,2,3⟩,
+  ⟨0,0,1,1,3⟩,
+  ⟨0,0,2,0,3⟩,
+  ⟨3,1,1,0,0⟩,
+  ⟨0,0,4,0,1⟩,
+  ⟨0,0,0,5,0⟩,
+  ⟨0,0,3,1,1⟩,
+  ⟨0,1,0,1,3⟩,
+  ⟨0,1,1,3,0⟩,
+  ⟨1,0,1,3,0⟩,
+  ⟨0,0,0,1,4⟩,
+  ⟨0,0,0,3,2⟩,
+  ⟨0,1,0,3,1⟩,
+  ⟨1,0,0,3,1⟩,
+  ⟨1,0,3,1,0⟩,
+  ⟨1,3,1,0,0⟩,
+  ⟨3,1,0,0,1⟩,
+  ⟨0,0,4,1,0⟩,
+  ⟨0,1,0,4,0⟩,
+  ⟨0,2,0,0,3⟩,
+  ⟨1,0,0,1,3⟩]
+
+/-- Rivals covering every sorted normalized five-tuple `(0,1,a,b,c)`, `a ≤ b ≤ c`, modulo `29`. -/
+def rivals5Unit29 : List Rival5 := [
+  ⟨0,1,2,1,1⟩,
+  ⟨1,0,2,1,1⟩,
+  ⟨0,3,0,1,1⟩,
+  ⟨1,1,0,2,1⟩,
+  ⟨0,2,2,0,1⟩,
+  ⟨1,1,1,0,2⟩,
+  ⟨0,2,1,2,0⟩,
+  ⟨3,0,1,1,0⟩,
+  ⟨0,0,1,3,1⟩,
+  ⟨0,0,2,1,2⟩,
+  ⟨1,1,0,3,0⟩,
+  ⟨0,2,0,3,0⟩,
+  ⟨1,3,0,1,0⟩,
+  ⟨2,0,0,3,0⟩,
+  ⟨3,1,0,1,0⟩,
+  ⟨0,4,0,1,0⟩,
+  ⟨4,0,0,1,0⟩,
+  ⟨0,1,1,0,3⟩,
+  ⟨0,1,3,0,1⟩,
+  ⟨0,1,0,2,2⟩,
+  ⟨1,0,2,2,0⟩,
+  ⟨1,0,3,0,1⟩,
+  ⟨0,1,2,2,0⟩,
+  ⟨1,0,0,2,2⟩,
+  ⟨1,0,1,0,3⟩,
+  ⟨0,3,0,0,2⟩,
+  ⟨3,0,2,0,0⟩,
+  ⟨0,3,2,0,0⟩,
+  ⟨3,0,0,0,2⟩,
+  ⟨0,0,0,3,2⟩,
+  ⟨0,0,2,3,0⟩,
+  ⟨0,0,0,2,3⟩,
+  ⟨0,0,3,2,0⟩,
+  ⟨1,3,0,0,1⟩,
+  ⟨3,1,1,0,0⟩,
+  ⟨0,0,1,2,2⟩,
+  ⟨0,0,2,2,1⟩,
+  ⟨2,3,0,0,0⟩,
+  ⟨3,2,0,0,0⟩,
+  ⟨0,0,1,1,3⟩,
+  ⟨0,0,3,1,1⟩,
+  ⟨1,4,0,0,0⟩,
+  ⟨4,1,0,0,0⟩,
+  ⟨0,1,1,3,0⟩,
+  ⟨1,0,0,3,1⟩,
+  ⟨0,0,0,5,0⟩,
+  ⟨0,1,3,1,0⟩,
+  ⟨1,0,0,1,3⟩,
+  ⟨0,1,0,3,1⟩,
+  ⟨0,1,0,4,0⟩,
+  ⟨1,0,0,4,0⟩,
+  ⟨1,0,1,3,0⟩,
+  ⟨1,3,1,0,0⟩,
+  ⟨3,1,0,0,1⟩,
+  ⟨0,0,2,0,3⟩,
+  ⟨0,0,3,0,2⟩,
+  ⟨0,2,3,0,0⟩,
+  ⟨2,0,0,0,3⟩,
+  ⟨0,0,0,4,1⟩,
+  ⟨0,0,1,4,0⟩,
+  ⟨0,2,0,0,3⟩,
+  ⟨1,1,0,0,3⟩,
+  ⟨1,1,3,0,0⟩,
+  ⟨2,0,3,0,0⟩]
 
 /-- Rivals covering every translated five-tuple of non-units modulo `17`. -/
 def rivals5Zero17 : List Rival5 := [
@@ -743,18 +561,19 @@ def covered5Unit (N a b c : ℕ) : Bool := (rivals5Unit N).any fun r ↦ r.valid
 def covered5Zero (N a b c d : ℕ) : Bool := (rivals5Zero N).any fun r ↦ r.valid && r.hitsZero N a b c d
 
 /-- Residues below `N` that are not coprime to `N`; `0` is included. -/
-def nonunits (N : ℕ) : List ℕ := (List.range N).filter fun x ↦ Nat.gcd x N ≠ 1
+def nonunitList (N : ℕ) : List ℕ := (List.range N).filter fun x ↦ Nat.gcd x N ≠ 1
 
 def allCovered3 (N : ℕ) : Bool :=
   (List.range N).all fun a ↦ (List.range N).all fun b ↦ covered3 N a b
 def allCovered4 (N : ℕ) : Bool :=
   (List.range N).all fun a ↦ (List.range N).all fun b ↦ (List.range N).all fun c ↦ covered4 N a b c
+/-- Only sorted triples `a ≤ b ≤ c` are checked; validity is permutation-invariant. -/
 def allCovered5Unit (N : ℕ) : Bool :=
   (List.range N).all fun a ↦ (List.range N).all fun b ↦ (List.range N).all fun c ↦
-    covered5Unit N a b c
+    (!(decide (a ≤ b ∧ b ≤ c)) || covered5Unit N a b c)
 def allCovered5Zero (N : ℕ) : Bool :=
-  (nonunits N).all fun a ↦ (nonunits N).all fun b ↦ (nonunits N).all fun c ↦
-    (nonunits N).all fun d ↦ covered5Zero N a b c d
+  (nonunitList N).all fun a ↦ (nonunitList N).all fun b ↦ (nonunitList N).all fun c ↦
+    (nonunitList N).all fun d ↦ covered5Zero N a b c d
 
 
 /-! ### Kernel-checked coverage facts
@@ -766,64 +585,71 @@ check is trusted. -/
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 /-- Every translated triple modulo `5` has a listed rival. -/
-theorem certificate_three : allCovered3 5 = true := by decide
+theorem certificate_three : allCovered3 5 = true := by decide +kernel
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 /-- Every translated four-tuple modulo `9` has a listed rival. -/
-theorem certificate_four_nine : allCovered4 9 = true := by decide
+theorem certificate_four_nine : allCovered4 9 = true := by decide +kernel
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 /-- Every translated four-tuple modulo `11` has a listed rival. -/
-theorem certificate_four_eleven : allCovered4 11 = true := by decide
+theorem certificate_four_eleven : allCovered4 11 = true := by decide +kernel
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 /-- Every translated four-tuple modulo `13` has a listed rival. -/
-theorem certificate_four_thirteen : allCovered4 13 = true := by decide
+theorem certificate_four_thirteen : allCovered4 13 = true := by decide +kernel
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `17`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `17` has a listed rival. -/
 theorem certificate_five_seventeen : allCovered5Unit 17 = true ∧ allCovered5Zero 17 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `19`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `19` has a listed rival. -/
 theorem certificate_five_nineteen : allCovered5Unit 19 = true ∧ allCovered5Zero 19 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `21`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `21` has a listed rival. -/
 theorem certificate_five_twenty_one : allCovered5Unit 21 = true ∧ allCovered5Zero 21 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `23`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `23` has a listed rival. -/
 theorem certificate_five_twenty_three : allCovered5Unit 23 = true ∧ allCovered5Zero 23 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `25`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `25` has a listed rival. -/
 theorem certificate_five_twenty_five : allCovered5Unit 25 = true ∧ allCovered5Zero 25 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `27`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `27` has a listed rival. -/
 theorem certificate_five_twenty_seven : allCovered5Unit 27 = true ∧ allCovered5Zero 27 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
-/-- Every normalized five-tuple modulo `29`, in either normal form, has a listed rival. -/
+/-- Every sorted unit-normalized five-tuple and every translated non-unit
+five-tuple modulo `29` has a listed rival. -/
 theorem certificate_five_twenty_nine : allCovered5Unit 29 = true ∧ allCovered5Zero 29 = true :=
-  ⟨by decide, by decide⟩
+  ⟨by decide +kernel, by decide +kernel⟩
 
 /-! ### Soundness: a covering rival is an actual multiplicity rival -/
 
@@ -920,6 +746,66 @@ theorem not_validTuple_five_zero_of_covered (N a b c d : ℕ)
     by simpa [Rival5.vector] using hone 3,
     by simpa [Rival5.vector] using hone 4⟩
 
+/-! ### Permutation invariance and sorting of the unit-normalized form -/
+
+/-- Validity is invariant under permuting the coordinates. -/
+theorem validTuple_perm {n : ℕ} {G : Type*} [AddCommGroup G]
+    (g : Fin n → G) (hg : ValidTuple g) (σ : Equiv.Perm (Fin n)) :
+    ValidTuple (fun i ↦ g (σ i)) := by
+  intro k hsum hval
+  have hsum' : (∑ i, k (σ.symm i)) = n := by
+    rw [Equiv.sum_comp σ.symm k]
+    exact hsum
+  have hval' : (∑ i, k (σ.symm i) • g i) = ∑ i, g i := by
+    have h1 : (∑ i, k (σ.symm i) • g i) = ∑ i, k i • g (σ i) := by
+      rw [← Equiv.sum_comp σ (fun i ↦ k (σ.symm i) • g i)]
+      simp only [Equiv.symm_apply_apply]
+    have h2 : (∑ i, g i) = ∑ i, g (σ i) := (Equiv.sum_comp σ g).symm
+    rw [h1, h2]
+    exact hval
+  intro i
+  have hh := hg (fun i ↦ k (σ.symm i)) hsum' hval' (σ i)
+  simpa only [Equiv.symm_apply_apply] using hh
+
+/-- Swapping the third and fourth coordinates of a unit-normalized five-tuple. -/
+theorem validTuple_swap23_five {N : ℕ} (x y z : ZMod N)
+    (h : ValidTuple (![0, 1, x, y, z])) : ValidTuple (![0, 1, y, x, z]) := by
+  have hh := validTuple_perm _ h (Equiv.swap (2 : Fin 5) 3)
+  have heq : (fun i ↦ (![0, 1, x, y, z] : Fin 5 → ZMod N) (Equiv.swap (2 : Fin 5) 3 i)) =
+      ![0, 1, y, x, z] := by
+    funext i
+    fin_cases i <;> simp [Equiv.swap_apply_def]
+  rwa [heq] at hh
+
+/-- Swapping the fourth and fifth coordinates of a unit-normalized five-tuple. -/
+theorem validTuple_swap34_five {N : ℕ} (x y z : ZMod N)
+    (h : ValidTuple (![0, 1, x, y, z])) : ValidTuple (![0, 1, x, z, y]) := by
+  have hh := validTuple_perm _ h (Equiv.swap (3 : Fin 5) 4)
+  have heq : (fun i ↦ (![0, 1, x, y, z] : Fin 5 → ZMod N) (Equiv.swap (3 : Fin 5) 4 i)) =
+      ![0, 1, x, z, y] := by
+    funext i
+    fin_cases i <;> simp [Equiv.swap_apply_def]
+  rwa [heq] at hh
+
+/-- A valid unit-normalized five-tuple can be permuted so that the last three
+representatives are sorted. -/
+theorem exists_sorted_valid_five {N : ℕ} [NeZero N] (a b c : ZMod N)
+    (h : ValidTuple (![0, 1, a, b, c])) :
+    ∃ a' b' c' : ZMod N, ValidTuple (![0, 1, a', b', c']) ∧
+      a'.val ≤ b'.val ∧ b'.val ≤ c'.val := by
+  rcases le_total a.val b.val with hab | hab
+  · rcases le_total b.val c.val with hbc | hbc
+    · exact ⟨a, b, c, h, hab, hbc⟩
+    · rcases le_total a.val c.val with hac | hac
+      · exact ⟨a, c, b, validTuple_swap34_five _ _ _ h, hac, hbc⟩
+      · exact ⟨c, a, b, validTuple_swap23_five _ _ _ (validTuple_swap34_five _ _ _ h), hac, hab⟩
+  · rcases le_total a.val c.val with hac | hac
+    · exact ⟨b, a, c, validTuple_swap23_five _ _ _ h, hab, hac⟩
+    · rcases le_total b.val c.val with hbc | hbc
+      · exact ⟨b, c, a, validTuple_swap34_five _ _ _ (validTuple_swap23_five _ _ _ h), hbc, hac⟩
+      · exact ⟨c, b, a, validTuple_swap23_five _ _ _
+          (validTuple_swap34_five _ _ _ (validTuple_swap23_five _ _ _ h)), hbc, hab⟩
+
 /-! ### From a checked modulus to an arbitrary tuple -/
 
 /-- A complete three-coordinate certificate excludes every tuple, after
@@ -956,8 +842,8 @@ theorem not_validTuple_four_of_certificate {N : ℕ} [NeZero N]
 
 /-- A residue that is not a unit appears in the non-unit list. -/
 theorem val_mem_nonunits {N : ℕ} [NeZero N] (x : ZMod N) (hx : ¬ IsUnit x) :
-    x.val ∈ nonunits N := by
-  simp only [nonunits, List.mem_filter, List.mem_range, decide_eq_true_eq]
+    x.val ∈ nonunitList N := by
+  simp only [nonunitList, List.mem_filter, List.mem_range, decide_eq_true_eq]
   refine ⟨ZMod.val_lt x, ?_⟩
   intro hgcd
   apply hx
@@ -965,8 +851,9 @@ theorem val_mem_nonunits {N : ℕ} [NeZero N] (x : ZMod N) (hx : ¬ IsUnit x) :
   simpa only [ZMod.natCast_zmod_val] using hu
 
 /-- Complete five-coordinate certificates, in both normal forms, exclude every
-tuple: a unit coordinate difference gives the form `(0,1,a,b,c)`, and otherwise
-translation gives `(0,a,b,c,d)` with non-unit coordinates. -/
+tuple: a unit coordinate difference gives the form `(0,1,a,b,c)`, sorted by a
+permutation, and otherwise translation gives `(0,a,b,c,d)` with non-unit
+coordinates. -/
 theorem not_validTuple_five_of_certificates {N : ℕ} [NeZero N] (h1 : N ≠ 1)
     (hu : allCovered5Unit N = true) (h0 : allCovered5Zero N = true)
     (g : Fin 5 → ZMod N) : ¬ ValidTuple g := by
@@ -975,18 +862,28 @@ theorem not_validTuple_five_of_certificates {N : ℕ} [NeZero N] (h1 : N ≠ 1)
   by_cases hex : ∃ a b, IsUnit (g b - g a)
   · obtain ⟨a, b, hab⟩ := hex
     obtain ⟨w, hw, hw0, hw1⟩ := exists_normalized_valid_five_of_unit_difference g hg a b hab
-    have heq : w = ![0, 1, (((w 2).val : ℕ) : ZMod N), (((w 3).val : ℕ) : ZMod N),
-        (((w 4).val : ℕ) : ZMod N)] := by
+    have heq : w = ![0, 1, w 2, w 3, w 4] := by
       funext i
-      fin_cases i <;> simp [hw0, hw1, ZMod.natCast_zmod_val]
+      fin_cases i <;> simp [hw0, hw1]
     rw [heq] at hw
+    obtain ⟨a', b', c', hw', hab', hbc'⟩ := exists_sorted_valid_five _ _ _ hw
+    have heq' : (![0, 1, a', b', c'] : Fin 5 → ZMod N) =
+        ![0, 1, ((a'.val : ℕ) : ZMod N), ((b'.val : ℕ) : ZMod N), ((c'.val : ℕ) : ZMod N)] := by
+      funext i
+      fin_cases i <;> simp [ZMod.natCast_zmod_val]
+    rw [heq'] at hw'
     simp only [allCovered5Unit, List.all_eq_true] at hu
-    exact not_validTuple_five_unit_of_covered N _ _ _
-      (hu _ (List.mem_range.mpr (ZMod.val_lt _)) _ (List.mem_range.mpr (ZMod.val_lt _))
-        _ (List.mem_range.mpr (ZMod.val_lt _))) hw
+    have hh := hu _ (List.mem_range.mpr (ZMod.val_lt a')) _ (List.mem_range.mpr (ZMod.val_lt b'))
+      _ (List.mem_range.mpr (ZMod.val_lt c'))
+    have hcov : covered5Unit N a'.val b'.val c'.val = true := by
+      simp only [Bool.or_eq_true, Bool.not_eq_true', decide_eq_false_iff_not] at hh
+      rcases hh with h1 | h1
+      · exact absurd ⟨hab', hbc'⟩ h1
+      · exact h1
+    exact not_validTuple_five_unit_of_covered N _ _ _ hcov hw'
   · push_neg at hex
     have hw := validTuple_sub_const g hg (g 0)
-    have hmem : ∀ i, (g i - g 0).val ∈ nonunits N := fun i ↦
+    have hmem : ∀ i, (g i - g 0).val ∈ nonunitList N := fun i ↦
       val_mem_nonunits _ (hex 0 i)
     have heq : (fun i ↦ g i - g 0) =
         ![0, (((g 1 - g 0).val : ℕ) : ZMod N), (((g 2 - g 0).val : ℕ) : ZMod N),
