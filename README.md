@@ -59,6 +59,18 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`TerminalExpansion.lean` extracts a terminal outside multiset from a
+putative minimal-dimensional subbinary counterexample with an actual
+Mersenne cycle. A positive path shorter than the cycle length preserves
+actual sums and ends with a missing coordinate, a triple-used head, and
+no remaining coordinate equal to a two-coin sum of the original outside
+alphabet. Adjoining zero to terminal-support subtuples preserves quotient
+validity. This identifies the obstruction an iteration argument must rule
+out; the cycle and smaller-dimensional induction hypothesis remain inputs.
+The original project passes 16,013 jobs and 9,701 axiom audits;
+the supported port verifies 51 identical types and complete commands
+in 17 modules. G1/G2/G3 and the full conjecture remain open.
+
 `CycleShortSumRigidity.lean` proves exact short-sum rigidity for valid
 zero-sum families closed under doubling predecessors. Proper subset sums
 are uniquely shortest, and their small-subset sumsets have exact binomial

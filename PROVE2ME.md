@@ -396,3 +396,19 @@ The cycle remains an input and repeated expansion remains open; these
 results do not discharge G1, G2, G3 or the full conjecture.
 
 The new lemmas are not uploaded. See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/cycle-short-sum-rigidity).
+
+## Terminal outside expansion obstruction
+
+`TerminalExpansion.lean` extracts a terminal outside multiset from a
+putative minimal-dimensional subbinary counterexample with an actual
+Mersenne cycle. A positive path shorter than the cycle length preserves
+actual sums and ends with a missing coordinate, a triple-used head, and
+no remaining coordinate equal to a two-coin sum of the original outside
+alphabet. Adjoining zero to terminal-support subtuples preserves quotient
+validity. This identifies the obstruction an iteration argument must rule
+out; the cycle and smaller-dimensional induction hypothesis remain inputs.
+The original project passes 16,013 jobs and 9,701 axiom audits;
+the supported port verifies 51 identical types and complete commands
+in 17 modules. G1/G2/G3 and the full conjecture remain open.
+
+These lemmas are not uploaded. The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/terminal-expansion-port) retains the verification evidence.

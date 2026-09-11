@@ -871,3 +871,5 @@ import MinModulus.SevenModOneTwentyBundles
 import MinModulus.CycleSparseTargets
 
 import MinModulus.CycleShortSumRigidity
+
+import MinModulus.TerminalExpansion
