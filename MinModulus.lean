@@ -851,3 +851,7 @@ import MinModulus.FiveEvenCyclicLowerBound
 import MinModulus.G1FiveCoordinateBase
 
 import MinModulus.G3SixModFiftySix
+
+import MinModulus.OddSmallCertificate
+import MinModulus.G2OddSmallDimensions
+import MinModulus.G2AnchoredUnion
