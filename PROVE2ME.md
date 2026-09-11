@@ -412,3 +412,21 @@ the supported port verifies 51 identical types and complete commands
 in 17 modules. G1/G2/G3 and the full conjecture remain open.
 
 These lemmas are not uploaded. The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/terminal-expansion-port) retains the verification evidence.
+
+## Complete outside spectra beside an actual cycle
+
+`CycleOutsideSpectrum.lean` proves an exact validity criterion for a
+tuple containing an actual mapped Mersenne cycle, with arbitrarily many
+outsiders. It covers every outside multiset through the parent length:
+short quotient representations are unique, intermediate discrepancies
+have sparse cycle support, and the outside-only full-length layer omits
+the original total. The proof includes the converse, with no induction
+assumption. Distinct targets in surplus layer r number at most
+sum(j<r, binom(m,j)). The original project passes 16,014 jobs
+and 9,707 axiom audits; supported Mathlib checks
+67 identical types and 65 complete source commands
+in 20 modules, including checks of two regenerated auxiliaries.
+Forcing a spectrum violation in the strict critical range remains open,
+as do actual-cycle extraction, G1/G2/G3 and the full conjecture.
+
+The five new theorems and target-set definition are not uploaded. The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/outside-spectrum-port) retains all verification evidence.
