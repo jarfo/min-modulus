@@ -10,7 +10,7 @@ records 39 proved supporting nodes, accepted reductions, exact source hashes,
 server theorem/submission IDs, and the complete root frontier. The goal's
 three open leaves are:
 
-- `MinModulus.primitive_three_omission_delete_step_from_four` (current G1 residual, parent length ≥5).
+- `MinModulus.primitive_three_omission_delete_step_from_five` (current G1 residual, parent length ≥6).
 - `MinModulus.odd_stratum_lower_bound` (G2).
 - `MinModulus.exceptional_quantitative_escape_obstruction_from_six` (current G3 residual, n≥6).
 
@@ -32,7 +32,7 @@ declarations in four modules without proof-body changes; 41 original types
 match literally, and one set-constructor alias is checked definitionally.
 
 The expanded DAG across the goal and all five mission milestones contains
-363 nodes and 891 edges, with an acyclicity audit. Both supporting milestones
+379 nodes and 927 edges, with an acyclicity audit. Both supporting milestones
 are complete. The whole mission frontier now consists of primitive G1, G2
 and quantitative G3 for n≥6. Seven additional primitive supporting statements
 are Proved. Their exact platform files built 8,738 jobs; all seven source types and eight solution types match.
@@ -50,8 +50,8 @@ The first G3 refinement retained every original dimension and the
 collision-inclusive all-shift bounds. The milestone first moved to the
 equivalent n≥5 restriction after discharging n=3, and now to n≥6 after
 discharging the full n=5 case modulo 24. Both changes and their
-reasons are recorded in platform history. Original G3 remains an Open parent. Across all seven bundles, the consolidated audit verifies 210
-proof dependency sets and all 202 source nodes are Proved. No research gate
+reasons are recorded in platform history. Original G3 remains an Open parent. Across all eight bundles, the consolidated audit verifies 220
+proof dependency sets and all 211 source nodes are Proved. No research gate
 is proved. The [dimension-three refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g3-large-dag)
 adds three Proved source nodes and four accepted solutions. The new
 `exceptionalQuantitativeEscapeObstruction_iff_large` equivalence uses the
@@ -102,7 +102,7 @@ All seven new source nodes are Proved. The new G3 input remains Open.
 The [platform bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/five24-dag)
 preserves the accepted receipts, exact statement readbacks, dependency audit,
 supported source evidence, and milestone history. The consolidated mission
-has 363 nodes and 891 edges, with the same three research branches.
+has 379 nodes and 927 edges, with the same three research branches.
 
 ## Accepted four-coordinate G1 refinement
 
@@ -110,7 +110,7 @@ has 363 nodes and 891 edges, with the same three research branches.
 12≤N and every exact two-adic stratum for valid four-tuples. Its equivalence
 now reduces primitive G1 to `PrimitiveThreeOmissionDeleteStepFrom 4` on
 Prove2Me: child dimension at least four and parent length at least five.
-The current leaf is `7f5a692e-58b4-4ef1-807c-27b2dc4a7c12` and the accepted parent bridge
+At that milestone the leaf was `7f5a692e-58b4-4ef1-807c-27b2dc4a7c12` and the accepted parent bridge
 is `5a1e0170-34ad-4b45-b6ad-fe769d3b3615`. The milestone and its history record the replacement.
 
 The full original build passed 15,416 jobs and its axiom audit covers 5,379
@@ -124,18 +124,33 @@ All ten new source nodes are Proved. The remaining G1 input is Open.
 The [platform bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/four10-dag)
 preserves exact readbacks, accepted receipts, type and axiom evidence,
 source hashes, the dependency audit, and milestone history. The complete
-consolidated mission has 363 nodes and 891 edges and the same three
+consolidated mission has 379 nodes and 927 edges and the same three
 research branches. G2 is the selected parallel-agent assignment.
 
-## New local five-coordinate even-stratum refinement
+## Accepted five-coordinate even-stratum refinement
 
-`FiveEvenCyclicLowerBound.lean` proves the predicted lower bound in every
-positive two-adic stratum for five-tuples. The equivalence in
-`G1FiveCoordinateBase.lean` reduces `PrimitiveThreeOmissionDeleteStepFrom 4`
-to `PrimitiveThreeOmissionDeleteStepFrom 5`, with parent length at least six.
-The full build and axiom audit pass. The accepted platform frontier above
-remains at parent length at least five until the supported statement/solution
-split and its connecting reduction are verified and accepted.
+`FiveEvenCyclicLowerBound.lean` proves every positive exact two-adic stratum
+for valid five-tuples: bound 30 at valuation one and 28 at higher valuations.
+The equivalence in `G1FiveCoordinateBase.lean` reduces P(4) to P(5), so the
+remaining G1 input has parent length at least six. Its current theorem is
+`ae79dd8a-6831-472d-98ed-3c562de4cc13` and the accepted bridge is `ea93c82c-2d79-4e7f-be01-809ea2bb3a9f`.
+The milestone replacement and its reason are saved in platform history.
+
+The full original build passed 15,419 jobs and the complete axiom audit
+covered 5,400 declarations. The supported source port has 68 literal type
+matches and all 60 selected source command bodies unchanged. The exact
+platform build passed 8,744 jobs, with nine literal source type
+matches, ten independently matching solution types and six passing
+definition axiom audits. All four numerical coverage proofs are axiom-free.
+All nine new source nodes are Proved and all ten submissions have accepted
+verdicts. Sixteen existing theorem IDs and eight definition bundles are reused.
+
+The [accepted bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/five-even-dag)
+retains exact readbacks, receipts, source hashes, type/axiom evidence and
+complete branch snapshots. The consolidated mission has 379 nodes and
+927 edges; all 211 source nodes across eight bundles are Proved and all
+220 proof dependency sets pass the audit. G1, G2, G3 and the conjecture remain
+Open. G2 is the selected independent parallel-agent assignment.
 
 ## Continue after each verified milestone
 

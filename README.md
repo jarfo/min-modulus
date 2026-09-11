@@ -59,6 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+The five-coordinate even-stratum refinement is now accepted on Prove2Me.
+The current G1 leaf is `PrimitiveThreeOmissionDeleteStepFrom 5` (parent length
+at least six), with G2 unchanged and quantitative G3 retained for n≥6.
+The consolidated private mission has 379 nodes and 927 edges, and its
+220 recorded proof dependency sets pass the audit. G2 is assigned to the
+independent parallel agent; the coordinator maintains the shared DAG.
+
 `FiveEvenCyclicLowerBound.lean` now proves that every valid five-tuple
 at a positive even modulus satisfies `28 ≤ N`. Every positive exact two-adic
 stratum has its predicted bound: 30 when the valuation is one, and 28 when
