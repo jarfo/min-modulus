@@ -127,6 +127,16 @@ source hashes, the dependency audit, and milestone history. The complete
 consolidated mission has 363 nodes and 891 edges and the same three
 research branches. G2 is the selected parallel-agent assignment.
 
+## New local five-coordinate even-stratum refinement
+
+`FiveEvenCyclicLowerBound.lean` proves the predicted lower bound in every
+positive two-adic stratum for five-tuples. The equivalence in
+`G1FiveCoordinateBase.lean` reduces `PrimitiveThreeOmissionDeleteStepFrom 4`
+to `PrimitiveThreeOmissionDeleteStepFrom 5`, with parent length at least six.
+The full build and axiom audit pass. The accepted platform frontier above
+remains at parent length at least five until the supported statement/solution
+split and its connecting reduction are verified and accepted.
+
 ## Continue after each verified milestone
 
 Build new statements and proofs on a currently supported platform revision,

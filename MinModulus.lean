@@ -845,3 +845,7 @@ import MinModulus.FourFibreGrowthBoundary
 import MinModulus.CyclicUnitNormalization
 import MinModulus.FourModTenCertificate
 import MinModulus.FourCyclicLowerBound
+
+import MinModulus.FiveSmallEvenCertificate
+import MinModulus.FiveEvenCyclicLowerBound
+import MinModulus.G1FiveCoordinateBase

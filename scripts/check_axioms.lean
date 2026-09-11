@@ -5871,3 +5871,26 @@ import MinModulus
 #print axioms MinModulus.stratum_lower_bound_four
 #print axioms MinModulus.PrimitiveThreeOmissionDeleteStepFrom
 #print axioms MinModulus.primitiveThreeOmissionDeleteStep_iff_from_four
+
+-- The complete five-coordinate positive-even strata and the next G1 cutoff.
+#print axioms MinModulus.FiveSmallEvenCertificate.hits
+#print axioms MinModulus.FiveSmallEvenCertificate.covered
+#print axioms MinModulus.FiveSmallEvenCertificate.not_validTuple_of_covered
+#print axioms MinModulus.FiveSmallEvenCertificate.not_validTuple_normalized
+#print axioms MinModulus.FiveSmallEvenCertificate.rivals18
+#print axioms MinModulus.FiveSmallEvenCertificate.all_covered18
+#print axioms MinModulus.FiveSmallEvenCertificate.rivals20
+#print axioms MinModulus.FiveSmallEvenCertificate.all_covered20
+#print axioms MinModulus.FiveSmallEvenCertificate.rivals22
+#print axioms MinModulus.FiveSmallEvenCertificate.all_covered22
+#print axioms MinModulus.FiveSmallEvenCertificate.rivals26
+#print axioms MinModulus.FiveSmallEvenCertificate.all_covered26
+#print axioms MinModulus.not_validTuple_five_of_normalized_exclusion
+#print axioms MinModulus.not_validTuple_five_mod_sixteen
+#print axioms MinModulus.not_validTuple_five_mod_eighteen
+#print axioms MinModulus.not_validTuple_five_mod_twenty
+#print axioms MinModulus.not_validTuple_five_mod_twenty_two
+#print axioms MinModulus.not_validTuple_five_mod_twenty_six
+#print axioms MinModulus.cyclic_even_lower_bound_five
+#print axioms MinModulus.even_stratum_lower_bound_five
+#print axioms MinModulus.primitiveThreeOmissionDeleteStepFrom_four_iff_five

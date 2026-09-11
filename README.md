@@ -59,6 +59,24 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`FiveEvenCyclicLowerBound.lean` now proves that every valid five-tuple
+at a positive even modulus satisfies `28 ≤ N`. Every positive exact two-adic
+stratum has its predicted bound: 30 when the valuation is one, and 28 when
+it is at least two. Four kernel-checked candidate lists exclude the remaining
+moduli 18, 20, 22 and 26 after a proved affine normalization. Their coverage
+theorems have no axioms; the full deductions use only standard Lean axioms.
+The established modulo-24 exclusion and equality obstruction modulo 16
+complete the even range. No odd-modulus assumption or G3 research input is
+used to prove this even-stratum result.
+
+`G1FiveCoordinateBase.lean` proves
+`primitiveThreeOmissionDeleteStepFrom_four_iff_five`, removing parent length
+five from the preceding G1 input. The remaining local input has child
+dimension at least five and parent length at least six. The full build passes
+15,419 jobs and the complete axiom audit covers 5,400 declarations. The
+conjecture and all three research gates remain open; platform acceptance is
+tracked separately in PROVE2ME.md.
+
 `FourCyclicLowerBound.lean` now proves the unrestricted cyclic bound
 `12 ≤ N` for every valid four-tuple with positive modulus, and the predicted
 bound in every exact two-adic stratum. A kernel-checked list of 18 natural
@@ -72,7 +90,7 @@ the four-coordinate parent case from primitive G1. The remaining input is
 `PrimitiveThreeOmissionDeleteStepFrom 4`, with child dimension at least four
 and parent length at least five. The earlier four-coordinate half-deletion
 theorem remains available; the new argument proves the full stratum bound.
-The complete source build passes 15,416 jobs and its axiom audit checks
+The four-coordinate source milestone passed 15,416 jobs and its axiom audit checked
 5,379 declarations. Platform acceptance is recorded separately in PROVE2ME.md.
 
 `G3FiveModTwentyFour.lean` now proves the complete five-coordinate
@@ -85,8 +103,8 @@ exclusion uses only the standard three axioms.
 The new equivalence `largeExceptionalQuantitativeEscapeObstruction_iff_from_six`
 discharges n=5 from the quantitative G3 input, leaving
 `ExceptionalQuantitativeEscapeObstructionFrom 6`. Its all-shift inequalities
-remain explicit. The full original build passes 15,413 jobs and its complete
-axiom audit checks 5,363 declarations. The compact supported Lean 4.33.1
+remain explicit. That G3 source milestone passed 15,413 jobs and its complete
+axiom audit checked 5,363 declarations. The compact supported Lean 4.33.1
 source port has 40 literal type matches and unchanged proof bodies.
 The unrestricted conjecture and all three research gates remain open.
 
