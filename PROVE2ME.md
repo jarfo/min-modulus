@@ -265,3 +265,17 @@ close the remaining main G1 gates. These seven lemmas are not yet uploaded.
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/involution-cycle-port)
 retains the verification evidence. The accepted platform frontier
 is unchanged.
+
+## Seven-coordinate exclusion modulo 66
+
+`SevenModSixtySix.lean` proves that no valid seven-coordinate tuple exists
+modulo 66. It combines 129 kernel-checked certificate rows in 56 independent
+modules, using affine normalization when a unit difference exists and a
+separate nonunit-pair certificate otherwise. Generic prefix soundness lemmas
+cover every sorted extension. The final original build passes 15,567 jobs
+and 6,417 axiom audits; the supported port passes 8,777 jobs with 474 literal
+type matches and 450 byte-identical complete commands. This is one finite
+modulus, not the full seven-coordinate even bound. G1/G2/G3 remain open;
+these new source results are not yet uploaded to Prove2Me.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven66-port) retains the verification evidence.
