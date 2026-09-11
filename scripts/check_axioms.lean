@@ -5853,3 +5853,21 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_five_mod_twenty_four
 #print axioms MinModulus.ExceptionalQuantitativeEscapeObstructionFrom
 #print axioms MinModulus.largeExceptionalQuantitativeEscapeObstruction_iff_from_six
+
+-- Full four-coordinate cyclic bounds and the primitive G1 cutoff.
+#print axioms MinModulus.exists_normalized_valid_of_unit_difference
+#print axioms MinModulus.exists_nonzero_cast_difference_of_valid_subbinary
+#print axioms MinModulus.not_validTuple_natCast_of_checked_rival
+#print axioms MinModulus.FourModTenCertificate.rivals
+#print axioms MinModulus.FourModTenCertificate.covered
+#print axioms MinModulus.FourModTenCertificate.all_covered
+#print axioms MinModulus.FourModTenCertificate.not_validTuple_of_covered
+#print axioms MinModulus.FourModTenCertificate.not_validTuple_normalized
+#print axioms MinModulus.unit_difference_mod_ten
+#print axioms MinModulus.exists_unit_difference_of_valid_four_mod_ten
+#print axioms MinModulus.not_validTuple_four_mod_ten
+#print axioms MinModulus.not_validTuple_four_mod_eight
+#print axioms MinModulus.cyclic_lower_bound_four
+#print axioms MinModulus.stratum_lower_bound_four
+#print axioms MinModulus.PrimitiveThreeOmissionDeleteStepFrom
+#print axioms MinModulus.primitiveThreeOmissionDeleteStep_iff_from_four

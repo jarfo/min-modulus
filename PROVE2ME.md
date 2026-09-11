@@ -104,6 +104,14 @@ preserves the accepted receipts, exact statement readbacks, dependency audit,
 supported source evidence, and milestone history. The consolidated mission
 has 341 nodes and 840 edges, with the same three research branches.
 
+## New local four-coordinate G1 refinement
+
+The full four-coordinate cyclic bound and every exact stratum now hold in
+`FourCyclicLowerBound.lean`. The proved equivalence reduces primitive G1 to
+`PrimitiveThreeOmissionDeleteStepFrom 4`, whose parent length is at least
+five. This local result does not yet change the platform frontier above;
+that requires supported verification and an accepted connecting reduction.
+
 ## Continue after each verified milestone
 
 Build new statements and proofs on a currently supported platform revision,

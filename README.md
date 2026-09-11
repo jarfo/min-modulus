@@ -59,6 +59,22 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`FourCyclicLowerBound.lean` now proves the unrestricted cyclic bound
+`12 ≤ N` for every valid four-tuple with positive modulus, and the predicted
+bound in every exact two-adic stratum. A kernel-checked list of 18 natural
+multiplicity vectors excludes all normalized tuples modulo ten; proved
+unit-difference normalization handles arbitrary tuples. Equality in the
+abelian bound excludes modulus eight, and the established odd bound
+handles the odd cases.
+
+The equivalence `primitiveThreeOmissionDeleteStep_iff_from_four` removes
+the four-coordinate parent case from primitive G1. The remaining input is
+`PrimitiveThreeOmissionDeleteStepFrom 4`, with child dimension at least four
+and parent length at least five. The earlier four-coordinate half-deletion
+theorem remains available; the new argument proves the full stratum bound.
+The complete source build passes 15,416 jobs and its axiom audit checks
+5,379 declarations. Platform acceptance is recorded separately in PROVE2ME.md.
+
 `G3FiveModTwentyFour.lean` now proves the complete five-coordinate
 exceptional case: no arbitrary tuple `Fin 5 → ZMod 24` is valid. A proved
 affine normalization reduces it to `(0,1,a,b,c)`; Lean's kernel checks all
