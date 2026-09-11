@@ -343,3 +343,18 @@ both Lean versions. The integrated original build passes 15,995 jobs and
 These are locally verified source bundles; exact platform conversion and
 publication remain pending. The accepted G3 frontier is still From7.
 See the [bundle evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven120-bundles).
+
+## Exact modulo-120 platform verification
+
+The G3 split now builds against supported Lean 4.33.1 / Mathlib `0df444a3`:
+401 source statements match their original compiled types literally, all
+402 solutions pass independent type/axiom/dependency checks, and 19 generic
+definition commands have only standard axioms. The final Lake pass completed
+9,532 jobs in 13m37s with previously built dependencies and statements.
+
+The package retains 324 bounded certificate nodes for 2,883 components and
+77 generic/assembly nodes. Exact source and payload hashes, parser evidence,
+and 6,122 unchanged source slices are preserved in the
+[local platform package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven120-platform).
+Publication is pending; the accepted G3 frontier remains From7 and the full
+conjecture remains open.
