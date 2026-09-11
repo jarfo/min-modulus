@@ -358,3 +358,15 @@ and 6,122 unchanged source slices are preserved in the
 [local platform package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven120-platform).
 Publication is pending; the accepted G3 frontier remains From7 and the full
 conjecture remains open.
+
+## General sparse targets beside an actual Mersenne cycle
+
+`CycleSparseTargets.lean` extends the outside lifting argument to arbitrary
+integer coefficient vectors bounded below by -1. A positive total k smaller
+than the cycle length can hit its subgroup only at a sum of fewer than k
+cycle entries. The total-one and total-two cases follow without a support
+restriction. All four types and axiom audits pass on both Lean revisions;
+the full project passes 15,996 jobs and 9,673 axiom audits.
+These are local structural results, not a discharge of a research gate, and
+have not been uploaded. See the
+[proof evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/cycle-sparse-targets).

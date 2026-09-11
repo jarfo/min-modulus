@@ -10185,3 +10185,8 @@ import MinModulus
 #print axioms MinModulus.PrefixCertificate.Seven120.certificate_BlockNonunit321
 #print axioms MinModulus.PrefixCertificate.Seven120.certificate_BlockNonunit322
 #print axioms MinModulus.PrefixCertificate.Seven120.certificate_BlockNonunit323
+
+#print axioms MinModulus.mersenne_short_cover_or_sparse_sum
+#print axioms MinModulus.outside_surplus_sparse_target_of_valid_mersenne_cycle
+#print axioms MinModulus.outside_one_surplus_target_eq_zero_of_valid_mersenne_cycle
+#print axioms MinModulus.outside_two_surplus_target_zero_or_entry_of_valid_mersenne_cycle

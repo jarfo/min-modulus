@@ -57,7 +57,17 @@ super-increasing one) remains a conjecture (Conjecture 1 in the paper,
 CP-certified for $`n \le 7`$) and is not proved here; the formalized partial
 results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
-## Conjecture 1: current proof frontier (2026-09-11)
+## Conjecture 1: current proof frontier (2026-09-12)
+
+`CycleSparseTargets.lean` proves a general restriction on outside relations
+beside a mapped Mersenne cycle of length m. Integer coefficients bounded
+below by -1 and summing to k, with 0<k<m, can hit the cycle subgroup only at
+sums of fewer than k distinct cycle entries. A one-unit surplus therefore
+lifts to actual zero; a two-unit surplus gives zero or one cycle entry.
+All four types match literally on both Lean revisions and use only standard
+axioms. The full project passes 15,996 jobs and 9,673 axiom audits.
+The cycle remains an input; G1/G2/G3 and the full conjecture remain open.
+
 
 The two largest stalled modulo-58 rows now use 33 independent interval
 proofs, each covering at most 2,000 sorted tails. Their original statements
