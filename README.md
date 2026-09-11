@@ -59,6 +59,14 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+The latest parallel branch update, `d3ef872`, adds the conjectural
+anchored-union bound and a checked implication from it to G2. Its four
+declaration types match on the original and supported Lean revisions; the
+integrated project passes 15,960 jobs and 9,384 axiom audits. The conjectural
+bound itself remains open and is not an accepted G2 reduction. Fresh platform
+reads confirm all 29 earlier G2 submissions remain accepted and the only G2
+open leaf is still the odd-stratum lower bound from dimension six.
+
 `SevenModOneTwenty.lean` excludes valid seven-coordinate tuples modulo
 120. `G3SevenModOneTwenty.lean` consequently proves the equivalence between
 the G3 inputs from dimension seven and from dimension nine. The proof uses

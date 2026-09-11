@@ -9893,3 +9893,6 @@ import MinModulus
 #print axioms MinModulus.PrefixCertificate.thirdMinimal_of_prefix
 #print axioms MinModulus.exceptionalQuantitativeEscapeObstructionFrom_seven_iff_nine
 #print axioms MinModulus.not_validTuple_seven_mod_one_twenty
+
+-- Conditional anchored-union route to G2; the conjectural input remains open.
+#print axioms MinModulus.oddStratumLowerBound_of_anchoredUnion

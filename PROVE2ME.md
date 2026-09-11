@@ -293,3 +293,15 @@ full conjecture remain open. These results are not yet uploaded to Prove2Me;
 the accepted platform G3 leaf remains From7.
 
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven120-port) retains the verification evidence.
+
+## Parallel anchored-union proposal review
+
+The latest parallel branch update, `d3ef872`, adds the conjectural
+anchored-union bound and a checked implication from it to G2. Its four
+declaration types match on the original and supported Lean revisions; the
+integrated project passes 15,960 jobs and 9,384 axiom audits. The conjectural
+bound itself remains open and is not an accepted G2 reduction. Fresh platform
+reads confirm all 29 earlier G2 submissions remain accepted and the only G2
+open leaf is still the odd-stratum lower bound from dimension six.
+
+The [independent review](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review) preserves exact proof checks and fresh server readbacks.
