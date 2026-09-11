@@ -59,6 +59,16 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+`SevenModOneTwenty.lean` excludes valid seven-coordinate tuples modulo
+120. `G3SevenModOneTwenty.lean` consequently proves the equivalence between
+the G3 inputs from dimension seven and from dimension nine. The proof uses
+minimal affine representatives, 324 independent kernel-checked certificate
+blocks and 63 assembly modules. The original build passes 15,959 jobs and
+9,383 axiom audits; the supported port passes 9,111 jobs with 5,914 literal
+type matches and 5,894 byte-identical complete commands. G1/G2/G3 and the
+full conjecture remain open. These results are not yet uploaded to Prove2Me;
+the accepted platform G3 leaf remains From7.
+
 `SevenModSixtySix.lean` proves that no valid seven-coordinate tuple exists
 modulo 66. It combines 129 kernel-checked certificate rows in 56 independent
 modules, using affine normalization when a unit difference exists and a

@@ -863,3 +863,4 @@ import MinModulus.G1CycleSupportedDescent
 import MinModulus.G1InvolutionCycleDescent
 import MinModulus.G2OddSmallDimensions
 import MinModulus.SevenModSixtySix
+import MinModulus.G3SevenModOneTwenty

@@ -279,3 +279,17 @@ modulus, not the full seven-coordinate even bound. G1/G2/G3 remain open;
 these new source results are not yet uploaded to Prove2Me.
 
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven66-port) retains the verification evidence.
+
+## G3 reduction from dimension seven to nine
+
+`SevenModOneTwenty.lean` excludes valid seven-coordinate tuples modulo
+120. `G3SevenModOneTwenty.lean` consequently proves the equivalence between
+the G3 inputs from dimension seven and from dimension nine. The proof uses
+minimal affine representatives, 324 independent kernel-checked certificate
+blocks and 63 assembly modules. The original build passes 15,959 jobs and
+9,383 axiom audits; the supported port passes 9,111 jobs with 5,914 literal
+type matches and 5,894 byte-identical complete commands. G1/G2/G3 and the
+full conjecture remain open. These results are not yet uploaded to Prove2Me;
+the accepted platform G3 leaf remains From7.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/seven120-port) retains the verification evidence.
