@@ -59,6 +59,16 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`CycleShortSumRigidity.lean` proves exact short-sum rigidity for valid
+zero-sum families closed under doubling predecessors. Proper subset sums
+are uniquely shortest, and their small-subset sumsets have exact binomial
+cardinality. For an actual Mersenne cycle, the shortened-cover obstruction
+is an equivalence, and each outside surplus target has a unique small
+cycle support. All six types match on both Lean revisions; the integrated
+project passes 16,012 jobs and 9,694 axiom audits.
+The cycle remains an input and repeated expansion remains open; these
+results do not discharge G1, G2, G3 or the full conjecture.
+
 Modulo-58 row 5 now uses 15 bounded interval certificates after two
 server verification timeouts. They cover 22,100 sorted tails, at most 1,946
 per part; the original row statement and other row proofs are unchanged.

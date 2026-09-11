@@ -382,3 +382,17 @@ jobs and 9,688 axiom audits. All 216 accepted submissions
 are retained; the revised six-even publication remains pending.
 
 See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-row5-port).
+
+## Exact short-sum rigidity and unique sparse targets
+
+`CycleShortSumRigidity.lean` proves exact short-sum rigidity for valid
+zero-sum families closed under doubling predecessors. Proper subset sums
+are uniquely shortest, and their small-subset sumsets have exact binomial
+cardinality. For an actual Mersenne cycle, the shortened-cover obstruction
+is an equivalence, and each outside surplus target has a unique small
+cycle support. All six types match on both Lean revisions; the integrated
+project passes 16,012 jobs and 9,694 axiom audits.
+The cycle remains an input and repeated expansion remains open; these
+results do not discharge G1, G2, G3 or the full conjecture.
+
+The new lemmas are not uploaded. See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/cycle-short-sum-rigidity).

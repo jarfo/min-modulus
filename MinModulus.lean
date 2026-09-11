@@ -869,3 +869,5 @@ import MinModulus.G2AnchoredUnion
 import MinModulus.SevenModOneTwentyBundles
 
 import MinModulus.CycleSparseTargets
+
+import MinModulus.CycleShortSumRigidity
