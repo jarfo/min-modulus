@@ -59,6 +59,18 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+The reviewed parallel branch `prove2me-001` adds
+[`G2OddSmallDimensions.lean`](MinModulus/G2OddSmallDimensions.lean) and
+[`OddSmallCertificate.lean`](MinModulus/OddSmallCertificate.lean).
+Their 27 new theorems prove the odd-modulus bound through dimension five
+and `OddStratumLowerBound ↔ OddStratumLowerBoundFrom 6`. The full
+integrated build passes 15,504 jobs and 6,129 axiom audits. The supported
+port preserves 89 whole commands and checks 104 literal types.
+All 29 exact accepted platform solutions, including the cardinality
+adapter and G2 bridge, pass independent type and dependency checks.
+The remaining G2 leaf starts at dimension six. The [maintained DAG](PROVE2ME.md)
+has 472 nodes, 1123 edges and three open leaves; the conjecture remains open.
+
 `G1InvolutionCycleDescent.lean` proves recursive descent for an actual
 affine doubling cycle beside an outside coordinate annihilated by two
 after translation. Deleting all but one cycle coordinate already meets

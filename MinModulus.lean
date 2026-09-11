@@ -861,3 +861,4 @@ import MinModulus.G1ExactMersenneDescent
 import MinModulus.G1CycleSupportedDescent
 
 import MinModulus.G1InvolutionCycleDescent
+import MinModulus.G2OddSmallDimensions

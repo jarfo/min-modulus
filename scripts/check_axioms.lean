@@ -6606,3 +6606,32 @@ import MinModulus
 #print axioms MinModulus.PureEdgeStarLeafPermutationAlgebra.exists_recursive_descent
 #print axioms MinModulus.PureEdgeStarLeafPermutationAlgebra.stratumBound_le_of_smaller_odd_factors
 #print axioms MinModulus.PureEdgeStarLeafPermutationOutcome.nonsaturated_of_smaller_odd_factors
+
+-- Parallel G2 base cases and the dimension-six reduction.
+#print axioms MinModulus.not_validTuple_five_of_odd_lt_thirty_one
+#print axioms MinModulus.OddSmallCertificate.validTuple_swap23_five
+#print axioms MinModulus.OddSmallCertificate.certificate_five_twenty_three
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_five_of_certificates
+#print axioms MinModulus.not_validTuple_three_of_odd_lt_seven
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_three_of_certificate
+#print axioms MinModulus.OddSmallCertificate.certificate_four_eleven
+#print axioms MinModulus.OddSmallCertificate.certificate_four_thirteen
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_five_zero_of_covered
+#print axioms MinModulus.OddSmallCertificate.certificate_five_seventeen
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_four_of_covered
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_four_of_certificate
+#print axioms MinModulus.OddSmallCertificate.exists_sorted_valid_five
+#print axioms MinModulus.OddSmallCertificate.validTuple_perm
+#print axioms MinModulus.OddSmallCertificate.certificate_four_nine
+#print axioms MinModulus.OddSmallCertificate.certificate_five_twenty_five
+#print axioms MinModulus.OddSmallCertificate.val_mem_nonunits
+#print axioms MinModulus.OddSmallCertificate.validTuple_swap34_five
+#print axioms MinModulus.OddSmallCertificate.certificate_five_twenty_nine
+#print axioms MinModulus.OddSmallCertificate.certificate_three
+#print axioms MinModulus.OddSmallCertificate.certificate_five_twenty_seven
+#print axioms MinModulus.OddSmallCertificate.certificate_five_twenty_one
+#print axioms MinModulus.OddSmallCertificate.certificate_five_nineteen
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_three_of_covered
+#print axioms MinModulus.not_validTuple_four_of_odd_lt_fifteen
+#print axioms MinModulus.oddStratumLowerBound_iff_from_six
+#print axioms MinModulus.OddSmallCertificate.not_validTuple_five_unit_of_covered
