@@ -12,7 +12,7 @@ three open leaves are:
 
 - `MinModulus.primitive_three_omission_delete_step` (current G1 residual).
 - `MinModulus.odd_stratum_lower_bound` (G2).
-- `MinModulus.large_exceptional_quantitative_escape_obstruction` (current G3 residual, n≥5).
+- `MinModulus.exceptional_quantitative_escape_obstruction_from_six` (current G3 residual, n≥6).
 
 G1 first reduced to its two-large-parity-fibres restriction. The accepted
 [primitive refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/primitive-dag)
@@ -32,9 +32,9 @@ declarations in four modules without proof-body changes; 41 original types
 match literally, and one set-constructor alias is checked definitionally.
 
 The expanded DAG across the goal and all five mission milestones contains
-326 nodes and 807 edges, with an acyclicity audit. Both supporting milestones
+341 nodes and 840 edges, with an acyclicity audit. Both supporting milestones
 are complete. The whole mission frontier now consists of primitive G1, G2
-and quantitative G3 for n≥5. Seven additional primitive supporting statements
+and quantitative G3 for n≥6. Seven additional primitive supporting statements
 are Proved. Their exact platform files built 8,738 jobs; all seven source types and eight solution types match.
 The source port has 105 declarations with literal type matches and standard
 axiom audits. The primitive input and the original G1 parent both remain
@@ -47,14 +47,15 @@ literally. The exact upload build passed 8,960 jobs, all four new definitions
 passed axiom audits, and all 115 private statements were read back exactly.
 
 The first G3 refinement retained every original dimension and the
-collision-inclusive all-shift bounds. The milestone now points to the
-equivalent n≥5 restriction after discharging n=3. Both changes and their
-reasons are recorded in platform history. Original G3 remains an Open parent. Across all five bundles, the consolidated audit verifies 191
-proof dependency sets and all 185 source nodes are Proved. No research gate
+collision-inclusive all-shift bounds. The milestone first moved to the
+equivalent n≥5 restriction after discharging n=3, and now to n≥6 after
+discharging the full n=5 case modulo 24. Both changes and their
+reasons are recorded in platform history. Original G3 remains an Open parent. Across all six bundles, the consolidated audit verifies 199
+proof dependency sets and all 192 source nodes are Proved. No research gate
 is proved. The [dimension-three refinement](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g3-large-dag)
 adds three Proved source nodes and four accepted solutions. The new
 `exceptionalQuantitativeEscapeObstruction_iff_large` equivalence uses the
-known three-coordinate exclusion modulo four to leave exactly the n≥5
+known three-coordinate exclusion modulo four to leave the intermediate n≥5
 quantitative G3 obligation. Its supported platform build passed 8,723 jobs,
 with three literal source types, four independently checked solution types
 and one definition axiom audit. The original and preceding quantitative G3
@@ -82,14 +83,26 @@ strict-growth and escape-density results need a further argument connecting
 them to an open gate. The unrestricted common-touch assertion is false and
 must not reappear as an open sufficient lemma.
 
-## New local proof ready for platform verification
+## Accepted five-coordinate G3 refinement
 
-`not_validTuple_five_mod_twenty_four` now excludes the complete n=5
-exceptional case. The proved equivalence reduces the current n≥5 G3 input
-to `ExceptionalQuantitativeEscapeObstructionFrom 6`. The full original build
-and axiom audit pass, and the supported 40-declaration source port has literal
-type matches and byte-identical proof bodies. The existing platform snapshot
-above remains at n≥5 until the separately checked reduction is accepted.
+`not_validTuple_five_mod_twenty_four` excludes the complete n=5 exceptional
+case. Its proved equivalence now connects the preceding n≥5 G3 input to
+`ExceptionalQuantitativeEscapeObstructionFrom 6` on Prove2Me. The current
+leaf is `c18a7a8e-12c6-4c36-bd3c-8e1c29d290fc` and the accepted parent bridge is
+`e6d19aef-88ad-430a-b878-0618b6578106`. The G3 milestone and its history reflect this replacement.
+
+The full original build passed 15,413 jobs and the axiom audit covers 5,363
+declarations. The supported source port has 40 literal type matches and
+standard-axiom audits, with all 34 source command bodies byte-identical.
+The exact platform build passed 8,736 jobs; all seven source types and eight
+solution types match, and all 13 new definition declarations pass axiom
+audits. The coverage theorem uses kernel evaluation and has no axioms.
+All seven new source nodes are Proved. The new G3 input remains Open.
+
+The [platform bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/five24-dag)
+preserves the accepted receipts, exact statement readbacks, dependency audit,
+supported source evidence, and milestone history. The consolidated mission
+has 341 nodes and 840 edges, with the same three research branches.
 
 ## Continue after each verified milestone
 
