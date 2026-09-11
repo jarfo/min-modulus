@@ -316,3 +316,18 @@ checks. The six-even publication can reuse every accepted submission and
 replace only the two timed-out proofs. Platform acceptance remains pending.
 
 The [supported proof package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-parts-port) records the source and platform checks.
+
+## Parallel G2 recheck (2026-09-11 21:11 UTC)
+
+Remote and local parallel branch `prove2me-001` remain at `d3ef872`, already
+merged into `descent`; the parallel checkout has no uncommitted changes.
+Fresh server reads confirm 28 accepted proofs and one accepted reduction,
+with `OddStratumLowerBoundFrom 6` still the sole G2 leaf and no submissions
+on that leaf. Its milestone is already linked correctly.
+
+The separate exploration scripts are now available for review. Independent
+finite checks reproduce the valid tuple `(0,28,12,22,7)` modulo 30 with
+anchored union size 29, a counterexample to the proposed even extension.
+The bounded clique search does not justify the live discussion's claim
+that every fixed-family proof is impossible. The odd anchored-union bound
+and G2 remain unproved. See the [fresh review and reproducible evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260911T211122Z).
