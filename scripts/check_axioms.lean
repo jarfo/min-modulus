@@ -5920,3 +5920,31 @@ import MinModulus
 #print axioms MinModulus.not_validTuple_six_mod_fifty_six_of_sorted
 #print axioms MinModulus.not_validTuple_six_mod_fifty_six
 #print axioms MinModulus.exceptionalQuantitativeEscapeObstructionFrom_six_iff_seven
+
+-- Individually checked rows for bounded server verification.
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_2
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_3
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_4
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_5
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_6
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_7
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_8
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_9
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_10
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_11
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_12
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_13
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_14
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_15
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_16
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_17
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_18
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_19
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_20
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_21
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_22
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_23
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_24
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_25
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_26
+#print axioms MinModulus.SixModFiftySixCertificate.all_covered_row_27

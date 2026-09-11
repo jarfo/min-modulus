@@ -166,6 +166,21 @@ quantitative hypothesis. The full original build and 5,424-declaration axiom
 audit pass. The live platform G3 leaf above remains at n≥6 pending supported
 source/solution verification and acceptance of the connecting reduction.
 
+## Individual row proofs for bounded platform verification
+
+The initial six larger computation submissions exceeded server resources.
+A lower-memory implementation still hit the 300-second limit, so the source
+now exposes `SixModFiftySixRow2.lean` through `SixModFiftySixRow27.lean`.
+The six larger blocks consume these 26 individually kernel-checked rows;
+the accepted final block is unchanged. All 33 source row/block results remain
+axiom-free. The full revised build passes 15,455 jobs and its axiom audit
+covers 5,450 declarations. The supported source closure has 114 declarations
+in 45 modules; its supported build passes 8,752 jobs. All 114 types match
+literally and all 81 selected command bodies are byte-identical. The exact
+platform statement/solution split and smaller private submissions remain
+pending. The milestone will change only after every supporting computation
+is accepted.
+
 ## Continue after each verified milestone
 
 Build new statements and proofs on a currently supported platform revision,

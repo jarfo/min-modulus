@@ -1,10 +1,15 @@
-import MinModulus.SixModFiftySixData
+import MinModulus.SixModFiftySixRow2
+import MinModulus.SixModFiftySixRow3
 
 namespace MinModulus.SixModFiftySixCertificate
 
-set_option maxRecDepth 100000 in
-set_option maxHeartbeats 0 in
-/-- Kernel verification of every increasing tail whose first entry is in [2,4). -/
-theorem all_covered_2_4 : coveredBlock 2 4=true := by decide +kernel
+private theorem combine_rows (a b : Bool) (ha : a=true) (hb : b=true) : (a && b)=true := by
+  cases ha
+  cases hb
+  rfl
+
+/-- The individually checked rows cover the interval [2,4). -/
+theorem all_covered_2_4 : coveredBlock 2 4=true :=
+  (combine_rows (coveredRow 2) (coveredRow 3 && (true)) all_covered_row_2 (combine_rows (coveredRow 3) (true) all_covered_row_3 (rfl : true=true)))
 
 end MinModulus.SixModFiftySixCertificate

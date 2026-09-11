@@ -59,6 +59,16 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-11)
 
+The modulo-56 certificate now exposes 26 individual row theorems so each
+Prove2Me verification job can check one row independently. Six of
+the seven original coverage blocks are assembled from those rows; the last
+block retains its accepted direct computation. Every row and every assembled
+source block remains axiom-free. The revised original project passes 15,455
+build jobs and its expanded 5,450-declaration axiom audit. The supported source
+port passes 8,752 jobs, with 114 literal type matches and 81 byte-identical
+source commands in 45 modules. The exact platform statement/solution package
+and new row submissions remain pending; G3 stays at Q(6) during that work.
+
 `G3SixModFiftySix.lean` now proves the complete six-coordinate exclusion
 modulo 56, without escape hypotheses. A proved unit-difference normalization
 and validity-preserving coordinate permutations reduce arbitrary tuples to
