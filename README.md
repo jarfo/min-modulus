@@ -59,6 +59,17 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`FullCoordinateHoleBudget.lean` strengthens the doubling layer counts
+beside an actual affine cycle by retaining every outside coordinate and
+cutting only one source arrow. For K=m+c outsiders, c≥2, it proves the
+binary lower bound under 5*(2^c+1)≤2*m+3*c for all positive moduli, or
+5*(2^(c−1)+1)≤2*m+3*c for even moduli. These improve the earlier sufficient
+cycle-size thresholds. The eleven new lemmas pass the full original build
+(16,015 jobs, 9,718 axiom audits)
+and the supported Mathlib port (126 identical types,
+125 byte-identical complete commands in 39 modules).
+Actual-cycle extraction and the unrestricted G1/G2/G3 gates remain open.
+
 `CycleOutsideSpectrum.lean` proves an exact validity criterion for a
 tuple containing an actual mapped Mersenne cycle, with arbitrarily many
 outsiders. It covers every outside multiset through the parent length:

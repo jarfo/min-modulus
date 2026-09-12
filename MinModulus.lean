@@ -875,3 +875,5 @@ import MinModulus.CycleShortSumRigidity
 import MinModulus.TerminalExpansion
 
 import MinModulus.CycleOutsideSpectrum
+
+import MinModulus.FullCoordinateHoleBudget

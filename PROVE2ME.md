@@ -430,3 +430,18 @@ Forcing a spectrum violation in the strict critical range remains open,
 as do actual-cycle extraction, G1/G2/G3 and the full conjecture.
 
 The five new theorems and target-set definition are not uploaded. The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/outside-spectrum-port) retains all verification evidence.
+
+## Hole budgets retaining every coordinate
+
+`FullCoordinateHoleBudget.lean` strengthens the doubling layer counts
+beside an actual affine cycle by retaining every outside coordinate and
+cutting only one source arrow. For K=m+c outsiders, c≥2, it proves the
+binary lower bound under 5*(2^c+1)≤2*m+3*c for all positive moduli, or
+5*(2^(c−1)+1)≤2*m+3*c for even moduli. These improve the earlier sufficient
+cycle-size thresholds. The eleven new lemmas pass the full original build
+(16,015 jobs, 9,718 axiom audits)
+and the supported Mathlib port (126 identical types,
+125 byte-identical complete commands in 39 modules).
+Actual-cycle extraction and the unrestricted G1/G2/G3 gates remain open.
+
+The eleven new lemmas are not uploaded. The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/full-coordinate-budget-port) retains the verification evidence.
