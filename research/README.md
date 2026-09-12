@@ -204,3 +204,17 @@ are checked in a scratch workspace with the recorded dependency caches.
 The exact platform layout and upload remain pending. This is a more efficient
 composition of an already proved finite exclusion; general G2 remains open.
 [Sources, audits, timings and reproducible inputs](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-seven107-grouped-assembly).
+
+## Generic prefix-certificate platform API
+
+The generic API needed by the G2 finite exclusions is checked in its exact
+Prove2Me layout: nineteen definitions, nine new reusable theorem/proof nodes
+and six existing theorem interfaces, including the already published sorting
+theorem. All 34 modules compile on both revisions; all solution types and
+dependencies, 31 definition/constructor types and 21 definition values match.
+The supported maximum module time is 13.051 seconds with one Lean thread.
+
+The private payloads and all existing dependency files were checked against
+live Prove2Me text. Publication is the next step; this package does not prove
+general G2 or change the three open leaves.
+[Exact sources, payloads, compiler facts and audits](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-prefix-api).
