@@ -59,6 +59,14 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`OddThreeSums.lean` proves a uniform three-coin sumset bound at odd
+order: |C_3| >= binom(n,3)+binom(n+1,2). Repeated triple sums and
+complementary (n-3)-coin sums pack disjointly. At n=6 this forces N>=62,
+and oddness yields N>=63. `G2OddSixDimensions.lean` therefore moves the
+local G2 obligation to dimensions n>=7. The full build passes 16,024 jobs
+and 9,799 axiom audits; the supported port preserves 127 literal types
+and 112 complete proof/definition commands. General G1/G2/G3 remain open.
+
 `CyclicLiftCircuit.lean` refines the complete carry-certificate criterion
 for arbitrary nonempty cyclic quotients. Nonexistence of a valid lift is
 equivalent to an inconsistent parity circuit of at most n actual rivals.

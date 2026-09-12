@@ -10315,3 +10315,17 @@ import MinModulus
 #print axioms MinModulus.exists_carry_obstruction_parity_circuit
 #print axioms MinModulus.no_valid_cyclic_lift_iff_carry_circuit
 #print axioms MinModulus.parity_circuit_equations_solvable_after_erasing
+
+#print axioms MinModulus.sum_card_le_biUnion_card_add_choose_two
+#print axioms MinModulus.repeatedThreeSums
+#print axioms MinModulus.choose_two_le_repeatedThreeSums_card
+#print axioms MinModulus.squarefreeThreeSums
+#print axioms MinModulus.squarefreeThreeSums_card
+#print axioms MinModulus.repeatedThreeSums_disjoint_squarefree
+#print axioms MinModulus.repeatedThreeSums_subset_coinCover
+#print axioms MinModulus.choose_three_add_choose_two_le_three_coin_card
+#print axioms MinModulus.repeatedThreeSums_add_coinCover_ne_total
+#print axioms MinModulus.repeatedThreeSums_card_add_coinCover_card_le
+#print axioms MinModulus.odd_modulus_ge_sixty_three_of_valid_six
+#print axioms MinModulus.oddStratumLowerBoundFrom_six_iff_from_seven
+#print axioms MinModulus.oddStratumLowerBound_iff_from_seven

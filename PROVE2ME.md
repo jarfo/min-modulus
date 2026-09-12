@@ -602,3 +602,15 @@ graph pages are unchanged, reproducing the acyclic 472-node, 1,123-edge DAG.
 G1 From5, G2 From6 and G3 From7 remain open. The anchored-union bound is unproved.
 The [review and evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T045847Z)
 record this check. No Lean files or platform content changed.
+
+## Uniform odd-order dimension-six bound
+
+`OddThreeSums.lean` proves a uniform three-coin sumset bound at odd
+order: |C_3| >= binom(n,3)+binom(n+1,2). Repeated triple sums and
+complementary (n-3)-coin sums pack disjointly. At n=6 this forces N>=62,
+and oddness yields N>=63. `G2OddSixDimensions.lean` therefore moves the
+local G2 obligation to dimensions n>=7. The full build passes 16,024 jobs
+and 9,799 axiom audits; the supported port preserves 127 literal types
+and 112 complete proof/definition commands. General G1/G2/G3 remain open.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-port) records exact verification evidence. The platform leaf is still From6 pending the private DAG refinement.
