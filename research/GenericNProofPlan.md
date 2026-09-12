@@ -50,3 +50,16 @@ The remaining issue is enough independent values, not just one per pair.
 The linked note records an exact finite matrix experiment supporting an
 absolute quartic bound. Its general rank assertion is unproved, and the
 whole range of degrees is still required for a generic-n G2 argument.
+
+## Uniform collision count
+
+[Single-repeat fibres](SingleRepeatFibres.md) now proves, for every n and
+d=k+2, that r anchors representing one residue satisfy
+r<=binomial(n-r,k). Residual supports avoid all anchors and are distinct
+by injective doubling. The exact total incidence is
+(k+1)*binomial(n,k+1), giving a global lower bound on repeated sums after
+dividing by the maximum permitted fibre size. Both revisions verify the
+argument. This remains weaker than |D_d|>=|C_(d-1)|; counting enough
+independent values across repetition patterns is still unresolved.
+A reproduced valid n=9 example rules out a uniform single-repeat cap of
+three even inside the half-degree range. No finite exclusion is added.

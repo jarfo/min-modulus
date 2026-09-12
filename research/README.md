@@ -254,3 +254,13 @@ shift. Nine declarations pass both revisions with fifteen type/axiom and
 seven definition-value checks. The associated finite matrix experiment
 has 770 independently verified witnesses; its general rank claim remains
 open. These results preserve the focus on arbitrary n.
+
+## Generic single-repeat collision bound
+
+[SingleRepeatFibres](SingleRepeatFibres.md) proves the arbitrary-n,
+arbitrary-degree bound r<=binomial(n-r,d-2), exact total incidences, and
+a resulting global repeated-sum lower bound. Fourteen declarations pass
+both Lean revisions with twenty type/axiom and nine definition-value
+checks. The bound is weaker than the general growth target. The archive
+also makes the saved cap-three counterexample and earlier fibre probe
+reproducible, separately from the uniform Lean proof.
