@@ -181,6 +181,26 @@ eleven conjunction statements covering all 634 terminal-certificate theorems
 of the modulus-107 exclusion. Each independent proof carries its own local
 witness data. All eleven groups pass both Lean revisions, with complete
 component-type checks and standard axioms. The generator reproduces all 22
-verified source files byte for byte. The remaining assembly and platform
-dependency bundle are still pending.
+verified source files byte for byte. The assembly is now checked as described
+below; the exact platform dependency layout remains pending.
 [Sources, checks and timings](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-seven107-grouped-exports).
+
+
+## Fast assembly of the grouped modulus-107 proof
+
+[The assembly generator](../scripts/prepare_g2_seven107_assembly.py) composes
+all eleven proved conjunctions into the unconditional modulus-107 exclusion.
+It exposes 634 component aliases and checks the 28 internal assembly steps
+as separate theorems. Supported compilation takes 69.928 seconds
+with one Lean thread; a monolithic imported-group probe exceeded 367 seconds
+before being stopped. Both revisions pass all 683 type/axiom checks, 664
+original helper-type comparisons and seven core definition-value comparisons.
+The proof dependency audit confirms all eleven groups are used, without
+direct component shortcuts or reuse of the original final exclusion.
+
+The generator reproduces the verified sources from the existing evidence
+archives and copies the eleven matching group-target sources. These outputs
+are checked in a scratch workspace with the recorded dependency caches.
+The exact platform layout and upload remain pending. This is a more efficient
+composition of an already proved finite exclusion; general G2 remains open.
+[Sources, audits, timings and reproducible inputs](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-seven107-grouped-assembly).
