@@ -554,3 +554,12 @@ the supported port preserves 53 complete commands and
 G1/G2/G3 remain open.
 
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/ternary-escape-port) retains the verification evidence and the independently checked two-mark boundary example. These new source lemmas have not been uploaded; the accepted platform DAG is unchanged.
+
+## Parallel G2 check (2026-09-12 03:37 UTC)
+
+Freshly fetched `prove2me-001` and its clean separate checkout remain at
+`d3ef872`, fully merged into `descent`. Prove2Me still reports 28 accepted
+proofs and one accepted reduction; G2 for dimensions at least six has
+zero submissions. The G2 milestone already points to that open leaf.
+The mission frontier and discussion are unchanged. The anchored-union
+conjecture remains unproved. See the [recorded check](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T033655Z).
