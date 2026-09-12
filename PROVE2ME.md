@@ -614,3 +614,14 @@ and 9,799 axiom audits; the supported port preserves 127 literal types
 and 112 complete proof/definition commands. General G1/G2/G3 remain open.
 
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-port) records exact verification evidence. The platform leaf is still From6 pending the private DAG refinement.
+
+## A limitation of repeated-coin sumset comparison
+
+The standalone `research/RepeatedFourComparison.lean` records a failed
+extension: the valid tuple (0,11,8,6) modulo 15 has fifteen three-coin sums
+but only fourteen repeated four-coin sums. Therefore repeated k-coin sums
+need not dominate all (k-1)-coin sums, even at odd order. Both toolchains
+verify the seven new declarations with identical types and standard axioms.
+The weaker partial-binomial bound remains unproved. This does not refute G2.
+
+[Proof and exact verification evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/repeated-four-research). No platform content was uploaded for this research certificate.
