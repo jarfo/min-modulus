@@ -147,8 +147,8 @@ proves that C_r intersect (sum(S)-C_s), for |S|=r+s, consists exactly of
 r-subset sums of S and has binomial(r+s,r) elements. Thus
 |C_r|+|C_s|<=N+binomial(r+s,r) whenever r+s<=n. Together with three-coin
 counting, this gives N>=107 for every valid seven-tuple at odd order.
-The ten odd moduli from 107 through 125 remain to be excluded in dimension
-seven. Identical source passes both revisions and all ten type/axiom audits.
+The ten odd moduli from 107 through 125 are now excluded by the
+[completed seven-dimensional bridge](../MinModulus/G2OddSevenDimensions.lean). Identical source passes both revisions and all ten type/axiom audits.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/complementary-coin-intersections-research).
 
 ## Half-degree coin growth and general G2
@@ -230,3 +230,15 @@ The default library root and required audits pass with checked cached
 dependencies. Prove2Me remains at From7 pending connecting proof acceptance.
 Further mathematical effort prioritizes the uniform half-degree growth
 inequality, not another finite-dimensional campaign.
+
+## Generic repeated-coin growth target
+
+[The generic proof plan](GenericNProofPlan.md) prioritizes arbitrary n.
+[RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) identifies D_d exactly
+with the doubled-coordinate translates of C_(d-2), separates the squarefree
+sums, and discharges the degree-two and degree-three growth increments.
+The remaining target is |2·A+C_(d-2)|>=|C_(d-1)| for d>=4 and 2d<=n+1.
+Its truth would settle full G2; every odd counterexample must force a
+strict failure at one such degree. The inequality remains unproved.
+Both revisions verify fifteen declarations, twenty literal type/axiom
+checks and seven definition values. G1 and G3 still need general proofs.
