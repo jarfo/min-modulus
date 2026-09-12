@@ -893,3 +893,5 @@ import MinModulus.TernaryEscape
 import MinModulus.CyclicLiftCircuit
 
 import MinModulus.G2OddSixDimensions
+
+import MinModulus.G2OddSevenDimensions

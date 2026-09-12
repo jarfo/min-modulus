@@ -10342,3 +10342,25 @@ import MinModulus
 #print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_26_30
 #print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37
 #print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58
+
+#print axioms MinModulus.Research.subsetCoinSums_card
+#print axioms MinModulus.Research.coinCover_inter_reflection_eq
+#print axioms MinModulus.Research.coinCover_inter_reflection_card
+#print axioms MinModulus.Research.coinCover_card_add_le_modulus_add_choose
+#print axioms MinModulus.Research.twice_three_coin_lower_bound_le_modulus_add_twenty
+#print axioms MinModulus.Research.odd_modulus_ge_one_hundred_seven_of_valid_seven
+#print axioms MinModulus.Research.valid_seven_small_odd_modulus_cases
+#print axioms MinModulus.not_validTuple_seven_mod_107
+#print axioms MinModulus.not_validTuple_seven_mod_109
+#print axioms MinModulus.not_validTuple_seven_mod_111
+#print axioms MinModulus.not_validTuple_seven_mod_113
+#print axioms MinModulus.not_validTuple_seven_mod_115
+#print axioms MinModulus.not_validTuple_seven_mod_117
+#print axioms MinModulus.not_validTuple_seven_mod_119
+#print axioms MinModulus.not_validTuple_seven_mod_121
+#print axioms MinModulus.not_validTuple_seven_mod_123
+#print axioms MinModulus.not_validTuple_seven_mod_125
+#print axioms MinModulus.not_validTuple_seven_of_odd_lt_one_hundred_twenty_seven
+#print axioms MinModulus.odd_modulus_ge_one_hundred_twenty_seven_of_valid_seven
+#print axioms MinModulus.oddStratumLowerBoundFrom_seven_iff_from_eight
+#print axioms MinModulus.oddStratumLowerBound_iff_from_eight

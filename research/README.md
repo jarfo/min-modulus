@@ -218,3 +218,13 @@ The private payloads and all existing dependency files were checked against
 live Prove2Me text. Publication is the next step; this package does not prove
 general G2 or change the three open leaves.
 [Exact sources, payloads, compiler facts and audits](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-prefix-api).
+
+## Seven-dimensional bridge completed; generic proof remains the goal
+
+[The bridge](../MinModulus/G2OddSevenDimensions.lean) proves the sharp odd
+bound in dimension seven and reduces local general G2 to n>=8. Both Lean
+revisions pass 27 type/axiom checks and six definition-value comparisons.
+The default library root and required audits pass with checked cached
+dependencies. Prove2Me remains at From7 pending connecting proof acceptance.
+Further mathematical effort prioritizes the uniform half-degree growth
+inequality, not another finite-dimensional campaign.

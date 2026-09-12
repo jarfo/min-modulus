@@ -19,7 +19,14 @@ standard-axiom audits, and matching values for the seven core definitions.
 | 123 | Verified on both revisions | [G2Seven123.lean](../MinModulus/G2Seven123.lean) |
 | 125 | Verified on both revisions | [G2Seven125.lean](../MinModulus/G2Seven125.lean) |
 
-These modules are not yet imported by the default library root. They can
-be built explicitly with `lake build MinModulus.G2SevenN`, replacing N
-by a completed modulus. The final dimension-seven bridge is still pending.
-G1, G2, G3 and the full min-modulus conjecture remain open.
+The [dimension-seven bridge](../MinModulus/G2OddSevenDimensions.lean) is now verified on both revisions
+and imported by the default library root. It proves the sharp bound N>=127
+and the equivalence of full G2 with its restriction to n>=8. Integration
+checks compile the root against previously audited dependency objects and
+run the required axiom and certificate-import checks; no clean full rebuild
+was run for this integration milestone.
+
+This is a local theorem result. Prove2Me still has G2/From7 as its open
+frontier until the connecting proofs are accepted there. G1, general G2,
+G3 and the full conjecture remain open. Further proof work prioritizes a
+generic-n argument, starting with half-degree coin growth.
