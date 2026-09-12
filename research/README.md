@@ -112,5 +112,17 @@ required size. Absence of a compatible relation is equivalent to intersection
 {0} and gives N >= 2^n-1. Existence of such a pair remains an explicit input.
 Both Lean revisions pass ten literal type and standard-axiom checks. A related
 binomial counting formula passes all 6,668 previously sampled ordered pairs;
-that general counting formula is not yet formalized.
+the general formula is now proved in [AnchoredIntersectionCount.lean](AnchoredIntersectionCount.lean).
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-compatible-research).
+
+## Exact anchored-intersection counts
+
+[AnchoredIntersectionCount.lean](AnchoredIntersectionCount.lean) proves the
+exact binomial-weight formula for every valid tuple. Normalized subset pairs
+are in bijection with disjoint signed supports P,Q and a shared selector U;
+for fixed |U|=r, the weight is binomial(n-|P|-|Q|,r), and the multiplier is
+|Q|+r. The proof establishes both inverse maps and counts each fibre, so no
+common point is counted twice. Identical source passes both Lean revisions
+with all 28 literal type and standard-axiom audits. Bounding this sum for
+suitable anchor pairs remains open; the identity alone does not prove G2.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-intersection-count-research).
