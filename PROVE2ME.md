@@ -642,3 +642,16 @@ source theorem nodes and 304 recorded proof dependency sets pass
 across 11 bundles.
 
 [Exact platform files and verification evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-dag).
+
+## Anchored-cube intersection bounds fail
+
+The [anchored-cube intersection certificate](research/AnchoredIntersectionCounterexample.lean)
+refutes uniform pairwise-quarter and triple-eighth bounds for valid tuples
+at odd modulus. For (0,11,8,6) modulo 15, the selected intersections have
+five and three elements, exceeding four and two. The anchored union still
+fills all fifteen residues. Both Lean revisions verify identical types
+and standard axioms. Exhaustive tests cover dimensions 2–6 and odd moduli
+through 63; some pair satisfies the quarter bound in every tested set,
+but that weaker existence statement remains unproved.
+
+[Complete experiments and Lean verification](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-intersections-research). This does not refute G2 or the anchored-union conjecture.

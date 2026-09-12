@@ -49,3 +49,14 @@ same twelve audited types with standard axioms. The
 records the exact relation, the local repair, and bounded experiments on
 the still-unproved Frobenius-span approach to G2. No default imports or
 main research gates change.
+
+## Anchored-cube intersection bounds
+
+The [anchored-cube intersection certificate](AnchoredIntersectionCounterexample.lean)
+refutes uniform pairwise-quarter and triple-eighth bounds for valid tuples
+at odd modulus. For (0,11,8,6) modulo 15, the selected intersections have
+five and three elements, exceeding four and two. The anchored union still
+fills all fifteen residues. Both Lean revisions verify identical types
+and standard axioms. Exhaustive tests cover dimensions 2–6 and odd moduli
+through 63; some pair satisfies the quarter bound in every tested set,
+but that weaker existence statement remains unproved.
