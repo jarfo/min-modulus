@@ -60,3 +60,12 @@ fills all fifteen residues. Both Lean revisions verify identical types
 and standard axioms. Exhaustive tests cover dimensions 2–6 and odd moduli
 through 63; some pair satisfies the quarter bound in every tested set,
 but that weaker existence statement remains unproved.
+
+## The surviving anchored-pair route
+
+[AnchoredPairLowerBound.lean](AnchoredPairLowerBound.lean) proves that one
+intersection of size at most `2^(n-2)` forces `N >= 3*2^(n-2)` for a valid
+length-n tuple, n>=2. The small-pair inequality is an explicit hypothesis;
+its existence at odd moduli remains unproved. Both Lean revisions pass,
+with four literal type and standard-axiom comparisons. This standalone
+file adds no default-library jobs.
