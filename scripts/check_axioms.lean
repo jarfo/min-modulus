@@ -10309,3 +10309,9 @@ import MinModulus
 #print axioms MinModulus.ternary_forest_bound_mono
 #print axioms MinModulus.exponential_bound_of_valid_odd_affine_tripling
 #print axioms MinModulus.exponential_bound_of_genuine_affine_tripling_escapes
+
+#print axioms MinModulus.binary_obstruction_contains_parity_circuit
+#print axioms MinModulus.binary_equations_on_parity_circuit_iff
+#print axioms MinModulus.exists_carry_obstruction_parity_circuit
+#print axioms MinModulus.no_valid_cyclic_lift_iff_carry_circuit
+#print axioms MinModulus.parity_circuit_equations_solvable_after_erasing

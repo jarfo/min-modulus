@@ -889,3 +889,5 @@ import MinModulus.TernarySegment
 import MinModulus.TernaryForest
 
 import MinModulus.TernaryEscape
+
+import MinModulus.CyclicLiftCircuit

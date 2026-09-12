@@ -59,6 +59,19 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`CyclicLiftCircuit.lean` refines the complete carry-certificate criterion
+for arbitrary nonempty cyclic quotients. Nonexistence of a valid lift is
+equivalent to an inconsistent parity circuit of at most n actual rivals.
+Only the empty and full subfamilies have zero parity sum. Prescribed dot
+products on a circuit are attainable exactly when their total is zero;
+deleting any one row makes the remaining equations solvable. The n-row
+bound was already known; irreducibility and exact local solvability are
+new. Full verification passes 16,022 jobs and
+9,786 axiom audits; the supported port preserves
+32 complete commands and 34 literal
+types in 10 modules. Uniform exceptional-certificate extraction
+and general G1/G2/G3 remain open.
+
 `TernaryEscape.lean` removes the injectivity and acyclicity assumptions
 from the ternary forest argument. For every valid length-n tuple modulo
 odd N, every affine tripling map with r genuine escapes satisfies
