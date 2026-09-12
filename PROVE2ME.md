@@ -5,6 +5,13 @@ is available under [My missions](https://prove2.me/my-missions).
 Mission ID: `6b060afa-1e7b-4c80-8f4a-cc89ff36784e`.
 Goal theorem ID: `67fbce28-44f4-45cb-8e37-de63df56557c`.
 
+Live parallel-work check, 2026-09-12 00:52 UTC: `prove2me-001` is unchanged
+at `d3ef872` and fully merged into `descent`; the separate checkout is
+clean. All 28 proofs remain ACCEPTED and the G2 reduction SKETCH_ACCEPTED.
+G2 From6 has no submissions; the anchored-union proposal remains unproved.
+[Readbacks](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T005251Z)
+preserve this check. The client documentation now matches API 0.10.2.
+
 The current consolidated DAG has 472 nodes, 1123 edges and exactly three
 open leaves. Its 277 source nodes across ten bundles are Proved, and all
 288 proof dependency sets match compiler records and accepted reductions.

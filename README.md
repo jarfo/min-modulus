@@ -59,6 +59,13 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+A [standalone research certificate](research/README.md) rules out an
+unrestricted characteristic-two interpolation bound: six distinct torus
+points over F4 extract the squarefree cubic coefficient, with one common
+nonzero weight. All nine declaration types match on the original and
+supported revisions, with standard axioms only. This records a failed
+route; the odd cyclic-orbit version needed for G2 remains open. The certificate adds no default-library build jobs.
+
 `FullCoordinateHoleBudget.lean` strengthens the doubling layer counts
 beside an actual affine cycle by retaining every outside coordinate and
 cutting only one source arrow. For K=m+c outsiders, c≥2, it proves the

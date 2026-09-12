@@ -1,0 +1,39 @@
+# Six-point obstruction to an unrestricted cubic interpolation bound
+
+Let K have characteristic two and let w satisfy w²+w+1=0. The six points
+
+```
+(1,1,1), (1,w,1), (1,w+1,w+1),
+(1,w+1,w), (1,w,w+1), (1,1,w)
+```
+
+are distinct and have no zero coordinates. For every homogeneous cubic f,
+
+```
+w * sum_i f(P_i) = coefficient of x*y*z in f.
+```
+
+The file proves this first for all ten cubic monomials, then for arbitrary
+homogeneous cubics by linearity. It constructs the required w in
+`GaloisField 2 2`, so the hypotheses are realized. The final theorem
+`six_point_cubic_counterexample` combines the interpolation, distinctness,
+nonzero coordinates and weight, and the inequality 6 < 2³−1.
+
+This disproves the unrestricted claim that squarefree degree-n coefficient
+extraction by distinct torus points with a common nonzero weight always
+requires at least 2^n−1 points. The example leaves open the version restricted to the odd cyclic orbits
+that arise from min-modulus characters. The example is not a
+valid-tuple or odd cyclic-orbit counterexample. It does not settle G2 or
+any other main research gate.
+
+The standalone source lives at `research/CharTwoSixPointInterpolation.lean`
+in the Lean repository. It is outside the default library and adds no
+imports or build jobs to the main proof. From a built checkout, run:
+
+```sh
+lake env lean research/CharTwoSixPointInterpolation.lean
+```
+
+Verification on both revisions and the complete axiom/type records are
+preserved in the [companion research archive](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/char-two-research).
+The main conjecture and G1/G2/G3 remain open.
