@@ -196,7 +196,61 @@ theorem checked_row_6 : coveredRow 58 rivals 6=true := by decide +kernel
 
 theorem checked_row_7 : coveredRow 58 rivals 7=true := by decide +kernel
 
-theorem checked_row_8 : coveredRow 58 rivals 8=true := by decide +kernel
+theorem checked_row_8 : coveredRow 58 rivals 8=true := by
+  unfold coveredRow
+  apply List.all_eq_true.mpr
+  intro y hy
+  have hylt : y < 49 := by simpa using (List.mem_range.mp hy)
+  interval_cases y
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_9_10) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_10_11) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_11_12) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_12_14) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_12_14) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_14_16) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_14_16) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_16_18) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_16_18) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_18_20) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_18_20) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_20_23) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_20_23) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_20_23) 2 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_23_26) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_23_26) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_23_26) 2 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_26_30) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_26_30) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_26_30) 2 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_26_30) 3 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 2 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 3 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 4 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 5 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37) 6 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 0 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 1 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 2 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 3 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 4 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 5 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 6 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 7 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 8 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 9 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 10 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 11 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 12 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 13 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 14 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 15 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 16 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 17 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 18 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 19 (by decide)
+  · exact (List.all_eq_true.mp MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58) 20 (by decide)
 
 theorem checked_row_9 : coveredRow 58 rivals 9=true := by decide +kernel
 

@@ -655,3 +655,15 @@ through 63; some pair satisfies the quarter bound in every tested set,
 but that weaker existence statement remains unproved.
 
 [Complete experiments and Lean verification](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-intersections-research). This does not refute G2 or the anchored-union conjecture.
+
+## Bounded modulo-58 row-8 revision
+
+Modulo-58 row 8 now uses 12 bounded interval certificates after two
+server timeouts. They cover 18,424 sorted tails, at most 1,946 per part.
+All 13 affected types match across both Lean revisions and exact platform
+statements, and all 13 solution dependency checks pass. The original full
+project passes 16,036 jobs and 9,811 axiom audits.
+The row statement and earlier accepted submission IDs are preserved.
+The final six-even upload remains pending.
+
+See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-row8-port).

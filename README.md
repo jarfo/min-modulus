@@ -59,6 +59,14 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+Modulo-58 row 8 now uses 12 bounded interval certificates after two
+server timeouts. They cover 18,424 sorted tails, at most 1,946 per part.
+All 13 affected types match across both Lean revisions and exact platform
+statements, and all 13 solution dependency checks pass. The original full
+project passes 16,036 jobs and 9,811 axiom audits.
+The row statement and earlier accepted submission IDs are preserved.
+The final six-even upload remains pending.
+
 `OddThreeSums.lean` proves a uniform three-coin sumset bound at odd
 order: |C_3| >= binom(n,3)+binom(n+1,2). Repeated triple sums and
 complementary (n-3)-coin sums pack disjointly. At n=6 this forces N>=62,

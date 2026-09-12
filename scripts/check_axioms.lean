@@ -10329,3 +10329,16 @@ import MinModulus
 #print axioms MinModulus.odd_modulus_ge_sixty_three_of_valid_six
 #print axioms MinModulus.oddStratumLowerBoundFrom_six_iff_from_seven
 #print axioms MinModulus.oddStratumLowerBound_iff_from_seven
+
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_9_10
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_10_11
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_11_12
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_12_14
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_14_16
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_16_18
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_18_20
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_20_23
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_23_26
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_26_30
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_30_37
+#print axioms MinModulus.SixEvenCertificate.N58.checked_row_8_part_37_58
