@@ -580,3 +580,15 @@ types in 10 modules. Uniform exceptional-certificate extraction
 and general G1/G2/G3 remain open.
 
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/carry-circuit-port) retains the complete verification evidence. No new platform content was uploaded.
+
+## Parallel G2 check (2026-09-12 04:17–04:20 UTC)
+
+`prove2me-001` and its clean separate checkout remain at `d3ef872`, fully
+merged into `descent`. The 28 proofs and one reduction retain their accepted
+verdicts; G2 From6 still has zero submissions. A full scan of all 570
+MinModulus catalog entries found no newly created theorem since the last
+review. Fresh reads of all 14 graph pages reproduce the existing acyclic
+472-node, 1,123-edge mission DAG exactly. G1 From5, G2 From6, and G3 From7
+remain open; the anchored-union conjecture is unproved. The
+[recorded review](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T041732Z)
+includes catalog and graph evidence. No Lean source changed.
