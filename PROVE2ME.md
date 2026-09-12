@@ -13,9 +13,11 @@ The previous P(5) theorem remains an Open parent. G2 remains From7 and G3
 remains From7; all three research inputs and the full conjecture remain Open.
 
 All 292 supporting source nodes are Proved, and all 293 proof submissions
-or reductions have accepted verdicts. The consolidated DAG has 831 nodes, 1884 edges and exactly three open leaves.
-Across twelve bundles, all 584 source theorem nodes are Proved and all
-597 proof dependency sets match the compiler plans and accepted reductions.
+or reductions have accepted verdicts. The consolidated DAG has 848 nodes, 1926 edges and exactly three open leaves.
+Across thirteen bundles, all 593 source theorem nodes are Proved and all
+606 proof dependency sets match the compiler plans and accepted reductions.
+The newly accepted generic G2 prefix API contributes nine proved nodes and
+three supporting roots, while leaving all research gates open.
 
 - G1: `MinModulus.primitive_three_omission_delete_step_from_six`, parent length at least seven.
 - G2: `MinModulus.odd_stratum_lower_bound_from_seven`, tuple length at least seven.
@@ -29,8 +31,9 @@ retry instruction. Earlier accepted proof IDs and the failed attempts are
 retained. Local proof hashes, exact server readbacks, all accepted verdicts,
 the sole G1 leaf, and the complete mission DAG were checked before this update.
 
-The latest recorded parallel branch check has `prove2me-001` at `7e717f5`,
-fully merged into `descent`. Its odd-modulus proofs cover dimensions through
+The latest recorded parallel branch check has `prove2me-001` at `a43fdfe8`,
+fully contained in `descent`; it independently confirms the dimension-seven
+SDR obstruction. See [the updated log review](research/G2ParallelLogReview.md). Its odd-modulus proofs cover dimensions through
 five; the accepted uniform three-coin proof subsequently covers dimension
 six and moves G2 to From7. The anchored-union proposal remains unproved.
 The Prove2Me client uses the checked 0.10.3 documentation.
@@ -39,7 +42,8 @@ The [six-even proof bundle](https://github.com/jarfo/unique/tree/main/papers/min
 and [consolidated DAG](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/platform-dag)
 preserve exact files, hashes, compiler checks, publication receipts and
 milestone history. The DAG includes the goal, all five milestones and the
-additional proved G2 cutoff equivalence. After each verified milestone,
+additional proved G2 cutoff equivalence and three generic prefix API roots.
+After each verified milestone,
 refresh the private mission DAG and commit and push both repositories.
 
 ## Earlier verification and coverage

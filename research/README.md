@@ -215,8 +215,10 @@ dependencies, 31 definition/constructor types and 21 definition values match.
 The supported maximum module time is 13.051 seconds with one Lean thread.
 
 The private payloads and all existing dependency files were checked against
-live Prove2Me text. Publication is the next step; this package does not prove
-general G2 or change the three open leaves.
+live Prove2Me text. The definition and all nine theorem nodes are now
+published privately, with ACCEPTED proofs and exact server dependency checks.
+The three proved API roots are included in the consolidated DAG. This package
+does not prove general G2 or change the three open leaves.
 [Exact sources, payloads, compiler facts and audits](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-prefix-api).
 
 ## Seven-dimensional bridge completed; generic proof remains the goal
