@@ -173,3 +173,14 @@ Identical source passes both Lean revisions, nine literal type/axiom audits
 and four definition-value comparisons. Independent checks of 427 sampled
 valid seven-tuples find 40 SDR failures. No default build jobs are added.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-sdr-seven-research).
+
+## Grouped modulus-107 certificate exports
+
+[The grouped-export generator](../scripts/prepare_g2_seven107_groups.py) reproduces
+eleven conjunction statements covering all 634 terminal-certificate theorems
+of the modulus-107 exclusion. Each independent proof carries its own local
+witness data. All eleven groups pass both Lean revisions, with complete
+component-type checks and standard axioms. The generator reproduces all 22
+verified source files byte for byte. The remaining assembly and platform
+dependency bundle are still pending.
+[Sources, checks and timings](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-seven107-grouped-exports).
