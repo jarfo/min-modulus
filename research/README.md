@@ -88,3 +88,16 @@ Both Lean revisions pass all fifteen literal type and standard-axiom checks.
 This eliminates the separate-increment strategy; the cumulative strategy
 and the full G2 bound remain open. No default build jobs are added.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-increment-research).
+
+## Anchored-overlap multiplier relations
+
+[AnchoredOverlapMultipliers.lean](AnchoredOverlapMultipliers.lean) proves that
+nonzero overlap forces a ternary relation with anchor multiplier 2 through n.
+It also proves that multiplier one is impossible, and that one relation-free
+pair implies N >= 2^n - 1. Existence of that pair is an explicit hypothesis;
+the general G2 theorem remains open. Both Lean revisions pass 18 literal
+type and standard-axiom checks. The corrected parallel runs reproduce 605
+relation-free ordered-pair occurrences, not the 632 claimed in their summary;
+all intersections are {0}. The converse is false because the search omits
+subset-cardinality constraints. No default build jobs are added.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-multipliers-research).
