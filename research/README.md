@@ -69,3 +69,10 @@ length-n tuple, n>=2. The small-pair inequality is an explicit hypothesis;
 its existence at odd moduli remains unproved. Both Lean revisions pass,
 with four literal type and standard-axiom comparisons. This standalone
 file adds no default-library jobs.
+
+Additional seeded tests sample 100,000 sets in each of dimensions seven
+and eight, finding 426 and six valid sets respectively. Every valid sample
+has some quarter-sized pair intersection. An independent Python checker
+confirms all validity and intersection results. These samples are not
+exhaustive; the small-pair existence claim remains open.
+[Reproduction data](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-intersections-research/higher-dimensional-sampling).
