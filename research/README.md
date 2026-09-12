@@ -37,3 +37,15 @@ lake env lean research/CharTwoSixPointInterpolation.lean
 Verification on both revisions and the complete axiom/type records are
 preserved in the [companion research archive](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/char-two-research).
 The main conjecture and G1/G2/G3 remain open.
+
+## Symmetric products and Frobenius
+
+[SymmetricProductDependence.lean](SymmetricProductDependence.lean) proves
+that the seven nonempty squarefree symmetric products for the valid tuple
+(0,1,3,7) modulo 15 are dependent. Replacing the last product by the square
+of the first gives seven independent vectors. Both revisions verify the
+same twelve audited types with standard axioms. The
+[companion archive](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/symmetric-product-research)
+records the exact relation, the local repair, and bounded experiments on
+the still-unproved Frobenius-span approach to G2. No default imports or
+main research gates change.
