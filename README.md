@@ -59,6 +59,15 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`TriplingValidity.lean` proves that a valid tuple of length at least two,
+in a group with injective doubling, can be permuted by tripling only as
+one cycle of odd length. Hence every even-length valid tuple at an odd
+modulus coprime to three has a tripling escape. The eleven new lemmas use
+no conjectural lower bound. The full original build passes 16,016
+jobs and 9,729 axiom audits; the supported port
+preserves all 20 complete commands and literal types in seven modules.
+This is a structural constraint; the general G1/G2/G3 gates remain open.
+
 A [standalone research certificate](research/README.md) rules out an
 unrestricted characteristic-two interpolation bound: six distinct torus
 points over F4 extract the squarefree cubic coefficient, with one common

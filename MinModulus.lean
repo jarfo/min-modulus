@@ -877,3 +877,5 @@ import MinModulus.TerminalExpansion
 import MinModulus.CycleOutsideSpectrum
 
 import MinModulus.FullCoordinateHoleBudget
+
+import MinModulus.TriplingValidity

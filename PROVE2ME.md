@@ -452,3 +452,16 @@ and the supported Mathlib port (126 identical types,
 Actual-cycle extraction and the unrestricted G1/G2/G3 gates remain open.
 
 The eleven new lemmas are not uploaded. The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/full-coordinate-budget-port) retains the verification evidence.
+
+## Tripling-cycle parity obstruction
+
+`TriplingValidity.lean` proves that a valid tuple of length at least two,
+in a group with injective doubling, can be permuted by tripling only as
+one cycle of odd length. Hence every even-length valid tuple at an odd
+modulus coprime to three has a tripling escape. The eleven new lemmas use
+no conjectural lower bound. The full original build passes 16,016
+jobs and 9,729 axiom audits; the supported port
+preserves all 20 complete commands and literal types in seven modules.
+This is a structural constraint; the general G1/G2/G3 gates remain open.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/tripling-validity-port) preserves the verification evidence. These new lemmas are not uploaded.
