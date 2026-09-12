@@ -63,7 +63,7 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 order: |C_3| >= binom(n,3)+binom(n+1,2). Repeated triple sums and
 complementary (n-3)-coin sums pack disjointly. At n=6 this forces N>=62,
 and oddness yields N>=63. `G2OddSixDimensions.lean` therefore moves the
-local G2 obligation to dimensions n>=7. The full build passes 16,024 jobs
+G2 obligation to dimensions n>=7, locally and on Prove2Me. The full build passes 16,024 jobs
 and 9,799 axiom audits; the supported port preserves 127 literal types
 and 112 complete proof/definition commands. General G1/G2/G3 remain open.
 

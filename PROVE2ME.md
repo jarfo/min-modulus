@@ -613,7 +613,7 @@ local G2 obligation to dimensions n>=7. The full build passes 16,024 jobs
 and 9,799 axiom audits; the supported port preserves 127 literal types
 and 112 complete proof/definition commands. General G1/G2/G3 remain open.
 
-The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-port) records exact verification evidence. The platform leaf is still From6 pending the private DAG refinement.
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-port) records exact verification evidence. The private DAG refinement below now replaces the From6 leaf.
 
 ## A limitation of repeated-coin sumset comparison
 
@@ -625,3 +625,20 @@ verify the seven new declarations with identical types and standard axioms.
 The weaker partial-binomial bound remains unproved. This does not refute G2.
 
 [Proof and exact verification evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/repeated-four-research). No platform content was uploaded for this research certificate.
+
+## Accepted uniform dimension-six refinement
+
+The private Prove2Me G2 frontier is now **dimensions n≥7**. All 15
+supporting theorems are Proved, and the From6-to-From7 reduction is accepted.
+The general cubic coin-sum bound and complementary packing give N≥63
+uniformly in dimension six. The parallel agent's accepted results through
+dimension five are reused. General G1/G2/G3 and the conjecture remain open.
+
+The current G2 target in the [private mission](https://prove2.me/my-missions) is
+`MinModulus.odd_stratum_lower_bound_from_seven`. The consolidated graph has 499 nodes,
+1183 edges, seven roots (the goal, five milestones and one proved
+supporting equivalence), and three open leaves. All 292
+source theorem nodes and 304 recorded proof dependency sets pass
+across 11 bundles.
+
+[Exact platform files and verification evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-dag).
