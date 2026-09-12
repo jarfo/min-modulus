@@ -10287,3 +10287,14 @@ import MinModulus
 #print axioms MinModulus.validTuple_ternary_segment_of_affine_representation
 #print axioms MinModulus.affine_ternary_segment_modulus_bound
 #print axioms MinModulus.odd_stratum_lower_bound_of_affine_ternary_segment
+
+#print axioms MinModulus.sum_map_perturbed_replicates
+#print axioms MinModulus.ranked_ternary_relation_profile_eq_zero
+#print axioms MinModulus.balanced_ternary_forest_displacements_eq_zero
+#print axioms MinModulus.ternary_box_collision_joint_distance_lt
+#print axioms MinModulus.ternary_box_collision_meets_upper_simplex
+#print axioms MinModulus.ternary_forest_box_card_bound
+#print axioms MinModulus.ternary_forest_exponential_card_bound
+#print axioms MinModulus.powers_of_ordered_tripling_arrows
+#print axioms MinModulus.exists_ternary_forest_of_injective_acyclic_affine_tripling
+#print axioms MinModulus.exponential_bound_of_injective_acyclic_affine_tripling

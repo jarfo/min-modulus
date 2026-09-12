@@ -885,3 +885,5 @@ import MinModulus.TriplingOrder
 import MinModulus.TriplingClosure
 
 import MinModulus.TernarySegment
+
+import MinModulus.TernaryForest

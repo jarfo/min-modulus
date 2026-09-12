@@ -59,6 +59,19 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`TernaryForest.lean` extends finite ternary refinement to every actual
+forest, preserving each arm's integer profile. Removing one upper simplex
+makes the coefficient box injective into the group together with one parity
+bit. For n coordinates in r arms, this proves
+`3^n <= 2^(r+1)*card(G) + 2^r*binomial(n+r-1,r)`.
+The forest is also extracted from actual injective acyclic affine tripling
+outside a marked escape set; no chain-length normal form is supplied.
+The ten new lemmas use no conjectural gate or finite cutoff. Original
+verification passes 16,020 jobs and 9,771 axiom audits;
+the supported port preserves 25 complete commands and
+25 literal types in 11 modules. Many escapes, internal cycles,
+and general G1/G2/G3 remain unresolved.
+
 `TernarySegment.lean` proves `3^n+1 <= 4*N+2*n` for every valid tuple
 modulo positive N that is a translated, reordered initial ternary segment.
 At odd N this yields the full G2 bound `2^n-1 <= N` for that class, even
