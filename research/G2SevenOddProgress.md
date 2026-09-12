@@ -10,7 +10,7 @@ standard-axiom audits, and matching values for the seven core definitions.
 | --- | --- | --- |
 | 107 | Verified on both revisions | [G2Seven107.lean](../MinModulus/G2Seven107.lean) |
 | 109 | Verified on both revisions | [G2Seven109.lean](../MinModulus/G2Seven109.lean) |
-| 111 | Pending | |
+| 111 | Verified on both revisions | [G2Seven111.lean](../MinModulus/G2Seven111.lean) |
 | 113 | Pending | |
 | 115 | Pending | |
 | 117 | Pending | |
