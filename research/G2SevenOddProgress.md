@@ -17,7 +17,7 @@ standard-axiom audits, and matching values for the seven core definitions.
 | 119 | Verified on both revisions | [G2Seven119.lean](../MinModulus/G2Seven119.lean) |
 | 121 | Verified on both revisions | [G2Seven121.lean](../MinModulus/G2Seven121.lean) |
 | 123 | Verified on both revisions | [G2Seven123.lean](../MinModulus/G2Seven123.lean) |
-| 125 | Pending | |
+| 125 | Verified on both revisions | [G2Seven125.lean](../MinModulus/G2Seven125.lean) |
 
 These modules are not yet imported by the default library root. They can
 be built explicitly with `lake build MinModulus.G2SevenN`, replacing N
