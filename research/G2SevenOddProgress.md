@@ -16,7 +16,7 @@ standard-axiom audits, and matching values for the seven core definitions.
 | 117 | Verified on both revisions | [G2Seven117.lean](../MinModulus/G2Seven117.lean) |
 | 119 | Verified on both revisions | [G2Seven119.lean](../MinModulus/G2Seven119.lean) |
 | 121 | Verified on both revisions | [G2Seven121.lean](../MinModulus/G2Seven121.lean) |
-| 123 | Pending | |
+| 123 | Verified on both revisions | [G2Seven123.lean](../MinModulus/G2Seven123.lean) |
 | 125 | Pending | |
 
 These modules are not yet imported by the default library root. They can
