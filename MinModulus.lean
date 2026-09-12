@@ -881,3 +881,5 @@ import MinModulus.FullCoordinateHoleBudget
 import MinModulus.TriplingValidity
 
 import MinModulus.TriplingOrder
+
+import MinModulus.TriplingClosure

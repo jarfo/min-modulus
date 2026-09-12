@@ -483,3 +483,17 @@ G1/G2/G3 goals remain open.
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/tripling-order-port) retains full verification evidence. These new results have not been uploaded.
 
 The [parallel-work check at 01:41 UTC](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T014112Z) found `prove2me-001` unchanged at `d3ef872`, already merged, with a clean checkout. All 28 G2 proofs and the reduction remain accepted; G2 From6 has zero submissions. The anchored-union proposal remains unproved.
+
+## Affine tripling closure and quotient-by-three descent
+
+`TriplingClosure.lean` proves N≥3^(n-1) for every valid tuple modulo
+odd N closed under an affine tripling map. This includes nonbijective
+tripling when 3 divides N: dividing the tripled image by three gives an
+actual valid child with at most one lost coordinate. Thus every potential
+G2 counterexample must escape every affine tripling map. The eleven new
+lemmas use no conjectural gate or finite cutoff. The original build passes
+16,018 jobs and 9,751 axiom audits; the supported
+port preserves 50 complete commands and 50
+literal types in 16 modules. General G1/G2/G3 remain open.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/tripling-closure-port) retains full verification evidence. These new source lemmas have not been uploaded; the accepted platform DAG is unchanged.
