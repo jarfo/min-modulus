@@ -59,13 +59,25 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+The complete six-coordinate even-stratum refinement is accepted on Prove2Me.
+G1 is now `PrimitiveThreeOmissionDeleteStepFrom 6`: child dimension at least
+six and parent length at least seven. The open theorem is `9be4560f-734d-411b-b590-01db97a5b179`.
+Accepted reduction `d0b11323-d53d-4fa6-b101-5bde7142b3ff` uses the proved P(5)↔P(6) equivalence.
+The previous P(5) theorem remains an Open parent. G2 remains From7 and G3
+remains From7; all three research inputs and the full conjecture remain Open.
+
+All 292 supporting source nodes are Proved, and all 293 proof submissions
+or reductions have accepted verdicts. The consolidated DAG has 831 nodes, 1884 edges and exactly three open leaves.
+Across twelve bundles, all 584 source theorem nodes are Proved and all
+597 proof dependency sets match the compiler plans and accepted reductions.
+
 Modulo-58 row 8 now uses 12 bounded interval certificates after two
 server timeouts. They cover 18,424 sorted tails, at most 1,946 per part.
 All 13 affected types match across both Lean revisions and exact platform
 statements, and all 13 solution dependency checks pass. The original full
 project passes 16,036 jobs and 9,811 axiom audits.
 The row statement and earlier accepted submission IDs are preserved.
-The final six-even upload remains pending.
+The final six-even upload is now accepted.
 
 `OddThreeSums.lean` proves a uniform three-coin sumset bound at odd
 order: |C_3| >= binom(n,3)+binom(n+1,2). Repeated triple sums and
@@ -215,7 +227,7 @@ per part; the original row statement and other row proofs are unchanged.
 All 16 affected types match across both Lean revisions and the platform
 statements; all 16 exact platform proofs and dependency checks pass. The full original project passes 16,011
 jobs and 9,688 axiom audits. All 216 accepted submissions
-are retained; the revised six-even publication remains pending.
+are retained; the revised six-even publication is now accepted.
 
 `CycleSparseTargets.lean` proves a general restriction on outside relations
 beside a mapped Mersenne cycle of length m. Integer coefficients bounded
@@ -231,8 +243,8 @@ The two largest stalled modulo-58 rows now use 33 independent interval
 proofs, each covering at most 2,000 sorted tails. Their original statements
 are unchanged. The full original build passes 15,994 jobs and 9,417 axiom
 audits; all 35 affected types and exact platform proofs pass supported Lean
-checks. The six-even publication can reuse every accepted submission and
-replace only the two timed-out proofs. Platform acceptance remains pending.
+checks. These parts are included in the accepted six-even publication;
+earlier accepted submissions and the failed attempts are preserved.
 
 The latest parallel branch update, `d3ef872`, adds the conjectural
 anchored-union bound and a checked implication from it to G2. Its four
@@ -323,9 +335,9 @@ from G1. The original build passed 15,498 jobs and the complete
 axiom audit checked 6,079 declarations. The supported Lean 4.33.1
 source port passed 8,794 jobs, with 762 literal type matches and
 727 byte-identical command bodies in 87 modules.
-The exact platform statement/solution package and accepted submissions remain
-pending; the accepted G1 leaf stays at P(5) until that work passes. G2, G3
-and the unrestricted conjecture remain open.
+The platform package is now accepted: 292 supporting source nodes and
+293 submissions. G1 is P(6), with parent length at least seven; G2 and G3
+remain From7. The unrestricted conjecture remains open.
 
 The complete six-coordinate exclusion modulo 56 is accepted on Prove2Me.
 The G3 leaf is `MinModulus.exceptional_quantitative_escape_obstruction_from_seven`
@@ -354,7 +366,7 @@ accepted G3 frontier is now Q(7), after verification and acceptance of the
 connecting reduction. The unrestricted conjecture remains open.
 
 The five-coordinate even-stratum refinement is now accepted on Prove2Me.
-The accepted platform G1 leaf is `PrimitiveThreeOmissionDeleteStepFrom 5` (parent length
+The preceding platform G1 leaf was `PrimitiveThreeOmissionDeleteStepFrom 5` (parent length
 at least six), with G2 unchanged and quantitative G3 now restricted to n≥7.
 The consolidated private mission has 430 nodes and 1032 edges, and its
 259 recorded proof dependency sets pass the audit. G2 is assigned to the

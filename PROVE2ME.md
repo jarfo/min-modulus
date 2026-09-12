@@ -5,56 +5,42 @@ is available under [My missions](https://prove2.me/my-missions).
 Mission ID: `6b060afa-1e7b-4c80-8f4a-cc89ff36784e`.
 Goal theorem ID: `67fbce28-44f4-45cb-8e37-de63df56557c`.
 
-Live parallel-work check, 2026-09-12 00:52 UTC: `prove2me-001` is unchanged
-at `d3ef872` and fully merged into `descent`; the separate checkout is
-clean. All 28 proofs remain ACCEPTED and the G2 reduction SKETCH_ACCEPTED.
-G2 From6 has no submissions; the anchored-union proposal remains unproved.
-[Readbacks](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T005251Z)
-preserve this check. The client documentation now matches API 0.10.2.
+The complete six-coordinate even-stratum refinement is accepted on Prove2Me.
+G1 is now `PrimitiveThreeOmissionDeleteStepFrom 6`: child dimension at least
+six and parent length at least seven. The open theorem is `9be4560f-734d-411b-b590-01db97a5b179`.
+Accepted reduction `d0b11323-d53d-4fa6-b101-5bde7142b3ff` uses the proved P(5)↔P(6) equivalence.
+The previous P(5) theorem remains an Open parent. G2 remains From7 and G3
+remains From7; all three research inputs and the full conjecture remain Open.
 
-The current consolidated DAG has 472 nodes, 1123 edges and exactly three
-open leaves. Its 277 source nodes across ten bundles are Proved, and all
-288 proof dependency sets match compiler records and accepted reductions.
-The finite-abelian and canonical-family milestones are Proved. The
-unrestricted conjecture and all three research gates remain Open.
+All 292 supporting source nodes are Proved, and all 293 proof submissions
+or reductions have accepted verdicts. The consolidated DAG has 831 nodes, 1884 edges and exactly three open leaves.
+Across twelve bundles, all 584 source theorem nodes are Proved and all
+597 proof dependency sets match the compiler plans and accepted reductions.
 
-- G1: `MinModulus.primitive_three_omission_delete_step_from_five`, for parent lengths at least six.
-- G2: `MinModulus.odd_stratum_lower_bound_from_six`, for tuple lengths at least six.
-- G3: `MinModulus.exceptional_quantitative_escape_obstruction_from_seven`, for dimensions at least seven.
+- G1: `MinModulus.primitive_three_omission_delete_step_from_six`, parent length at least seven.
+- G2: `MinModulus.odd_stratum_lower_bound_from_seven`, tuple length at least seven.
+- G3: `MinModulus.exceptional_quantitative_escape_obstruction_from_seven`, dimension at least seven.
 
-The parallel branch `prove2me-001` at
-`a3f0ebe423455ac8edae01663f87f35a61957dbd` proves every odd-modulus case
-through dimension five. Its 27 new source theorems and the newly published
-adapter for the existing cardinality bound are Proved. Accepted reduction
-`30e0673e-abf8-43ce-9adf-c121953fd403` connects the original G2 parent to
-the proved equivalence and the new open leaf
-`cbc1224a-b0c0-4642-b405-5c8fde522e5f`. The milestone history preserves
-this equivalent replacement. This is the parallel agent's next target.
+The finite-abelian lower bound and exact canonical-family minimum remain
+Proved. The accepted six-coordinate even bound is 62 at two-adic valuation
+one and 60 at higher positive valuations. The 15 replacement row-5 and 12 replacement row-8 interval
+statements and remaining proofs were published after the owner's explicit
+retry instruction. Earlier accepted proof IDs and the failed attempts are
+retained. Local proof hashes, exact server readbacks, all accepted verdicts,
+the sole G1 leaf, and the complete mission DAG were checked before this update.
 
-The exact branch source compiles unchanged. The integrated full project
-passes 15,504 jobs and a 6,129-declaration axiom audit. The supported
-source port passes 8,715 jobs, 104 literal type matches and standard-axiom
-checks in eight modules, preserving all 89 selected whole commands.
-All 28 published source types match literally. All 29 exact accepted
-solutions have matching target types and actual server dependency sets;
-98 definition declarations pass the standard-axiom audit.
+The latest recorded parallel branch check has `prove2me-001` at `7e717f5`,
+fully merged into `descent`. Its odd-modulus proofs cover dimensions through
+five; the accepted uniform three-coin proof subsequently covers dimension
+six and moves G2 to From7. The anchored-union proposal remains unproved.
+The Prove2Me client uses the checked 0.10.3 documentation.
 
-The companion [G2 proof bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-small-dag)
-and [source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-small-port)
-preserve exact files, hashes, compiler records and server receipts.
-The [consolidated DAG](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/platform-dag)
-includes the goal and all five captain milestones and passes acyclicity,
-frontier and whole-mission dependency audits.
-
-The six-coordinate even-stratum publication is still in progress; G1
-remains at its accepted parent-length-six leaf until all submissions and
-the resulting DAG are verified. Recent source cycle-descent lemmas also
-need accepted connecting proofs before they change the platform frontier.
-
-After each verified milestone, update the private platform, run
-`platform-dag/scripts/refresh_verified.py`, update these records, and
-commit and push both repositories before continuing. Independent agents
-use separate checkouts; one coordinator maintains the consolidated DAG.
+The [six-even proof bundle](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six-even-dag)
+and [consolidated DAG](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/platform-dag)
+preserve exact files, hashes, compiler checks, publication receipts and
+milestone history. The DAG includes the goal, all five milestones and the
+additional proved G2 cutoff equivalence. After each verified milestone,
+refresh the private mission DAG and commit and push both repositories.
 
 ## Earlier verification and coverage
 
@@ -130,7 +116,7 @@ research branches. G2 is the selected parallel-agent assignment.
 `FiveEvenCyclicLowerBound.lean` proves every positive exact two-adic stratum
 for valid five-tuples: bound 30 at valuation one and 28 at higher valuations.
 The equivalence in `G1FiveCoordinateBase.lean` reduces P(4) to P(5), so the
-remaining G1 input has parent length at least six. Its current theorem is
+G1 input at that milestone had parent length at least six. Its theorem was
 `ae79dd8a-6831-472d-98ed-3c562de4cc13` and the accepted bridge is `ea93c82c-2d79-4e7f-be01-809ea2bb3a9f`.
 The milestone replacement and its reason are saved in platform history.
 
@@ -204,9 +190,9 @@ from G1. The original build passed 15,498 jobs and the complete
 axiom audit checked 6,079 declarations. The supported Lean 4.33.1
 source port passed 8,794 jobs, with 762 literal type matches and
 727 byte-identical command bodies in 87 modules.
-The exact platform statement/solution package and accepted submissions remain
-pending; the accepted G1 leaf stays at P(5) until that work passes. G2, G3
-and the unrestricted conjecture remain open.
+The exact platform package is now accepted: 292 supporting source nodes
+and 293 submissions. G1 is P(6), with parent length at least seven.
+G2 and G3 remain From7, and the unrestricted conjecture remains open.
 
 ## Verified sharp Mersenne charge
 
@@ -319,8 +305,8 @@ The two largest stalled modulo-58 rows now use 33 independent interval
 proofs, each covering at most 2,000 sorted tails. Their original statements
 are unchanged. The full original build passes 15,994 jobs and 9,417 axiom
 audits; all 35 affected types and exact platform proofs pass supported Lean
-checks. The six-even publication can reuse every accepted submission and
-replace only the two timed-out proofs. Platform acceptance remains pending.
+checks. These parts are included in the accepted six-even publication;
+earlier accepted submissions and the failed attempts are preserved.
 
 The [supported proof package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-parts-port) records the source and platform checks.
 
@@ -386,7 +372,7 @@ per part; the original row statement and other row proofs are unchanged.
 All 16 affected types match across both Lean revisions and the platform
 statements; all 16 exact platform proofs and dependency checks pass. The full original project passes 16,011
 jobs and 9,688 axiom audits. All 216 accepted submissions
-are retained; the revised six-even publication remains pending.
+are retained; the revised six-even publication is now accepted.
 
 See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-row5-port).
 
@@ -635,11 +621,11 @@ uniformly in dimension six. The parallel agent's accepted results through
 dimension five are reused. General G1/G2/G3 and the conjecture remain open.
 
 The current G2 target in the [private mission](https://prove2.me/my-missions) is
-`MinModulus.odd_stratum_lower_bound_from_seven`. The consolidated graph has 499 nodes,
-1183 edges, seven roots (the goal, five milestones and one proved
-supporting equivalence), and three open leaves. All 292
-source theorem nodes and 304 recorded proof dependency sets pass
-across 11 bundles.
+`MinModulus.odd_stratum_lower_bound_from_seven`. The consolidated graph has 831 nodes,
+1884 edges, seven roots (the goal, five milestones and one proved
+supporting equivalence), and three open leaves. All 584
+source theorem nodes and 597 recorded proof dependency sets pass
+across 12 bundles.
 
 [Exact platform files and verification evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/odd-three-sums-dag).
 
@@ -664,6 +650,6 @@ All 13 affected types match across both Lean revisions and exact platform
 statements, and all 13 solution dependency checks pass. The original full
 project passes 16,036 jobs and 9,811 axiom audits.
 The row statement and earlier accepted submission IDs are preserved.
-The final six-even upload remains pending.
+The final six-even upload is now accepted.
 
 See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-row8-port).
