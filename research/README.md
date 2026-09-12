@@ -126,3 +126,16 @@ common point is counted twice. Identical source passes both Lean revisions
 with all 28 literal type and standard-axiom audits. Bounding this sum for
 suitable anchor pairs remains open; the identity alone does not prove G2.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-intersection-count-research).
+
+## Bounded multiplier packing
+
+[AnchoredMultiplierPacking.lean](AnchoredMultiplierPacking.lean) proves
+(r+1)*2^(n-2) <= N if one anchor pair excludes multipliers 2 through r.
+Consequently every ordered anchor pair has a multiplier-two or multiplier-three
+relation whenever N<2^n, including all possible G2 counterexamples. This
+chooses a small witness; larger relations still contribute to intersections.
+Excluding just multiplier two gives the three-quarter numerical bound.
+Both revisions pass ten literal type and standard-axiom audits. Exhaustive
+checks through dimension six and odd modulus 63 find a multiplier-two-free
+pair in every one of 551,440 valid sets; general existence remains open.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-multiplier-packing-research).
