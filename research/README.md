@@ -76,3 +76,15 @@ has some quarter-sized pair intersection. An independent Python checker
 confirms all validity and intersection results. These samples are not
 exhaustive; the small-pair existence claim remains open.
 [Reproduction data](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-intersections-research/higher-dimensional-sampling).
+
+## Adaptive anchored-union increments
+
+[AnchoredIncrementObstruction.lean](AnchoredIncrementObstruction.lean) proves
+that no anchor order for the canonical valid seven-tuple modulo 127 can
+add at least 64,32,16,... new points successively. A qualifying pair covers
+100 points, while every triple covers at most 115. The full union nevertheless
+fills 127 residues, and the natural order meets the weaker cumulative targets.
+Both Lean revisions pass all fifteen literal type and standard-axiom checks.
+This eliminates the separate-increment strategy; the cumulative strategy
+and the full G2 bound remain open. No default build jobs are added.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-increment-research).
