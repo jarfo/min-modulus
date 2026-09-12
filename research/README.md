@@ -161,3 +161,15 @@ The growth hypothesis remains explicit and unproved. Identical source passes
 both Lean revisions, thirteen literal type/axiom audits and six definition-value
 comparisons. This is a conditional research result, not a proof of G2.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/half-degree-coin-growth-research).
+
+## The proper-subset SDR fails at dimension seven
+
+[AnchoredSDRCounterexample.lean](AnchoredSDRCounterexample.lean) proves full
+validity of (0,41,97,107,110,215,251) modulo 329 and refutes the external-anchor
+SDR proposal for its proper subsets. The six-element subsets omitting 110
+and 251 both have only the value 51 available. This two-set obstruction is
+inside the live dimension-seven-and-higher range. It does not refute G2.
+Identical source passes both Lean revisions, nine literal type/axiom audits
+and four definition-value comparisons. Independent checks of 427 sampled
+valid seven-tuples find 40 SDR failures. No default build jobs are added.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-sdr-seven-research).
