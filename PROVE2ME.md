@@ -653,3 +653,12 @@ The row statement and earlier accepted submission IDs are preserved.
 The final six-even upload is now accepted.
 
 See the [verification package](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/six58-row8-port).
+
+## Seven-coordinate odd-modulus certificates
+
+The [local seven-coordinate progress record](research/G2SevenOddProgress.md)
+tracks unconditional exclusions for the ten odd moduli from 107 through
+125. Each completed case is checked on both Lean revisions. The general
+G2/From7 leaf remains open until all cases and the dimension bridge are
+verified and the platform DAG is updated. The certificates use independent
+proof groups and a shallow aggregate, with no long import chain.
