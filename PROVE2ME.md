@@ -506,3 +506,18 @@ proofs and one accepted reduction; G2 for dimensions at least six has
 zero submissions. The G2 milestone already points to that open leaf.
 The mission frontier and discussion are unchanged. The anchored-union
 conjecture remains unproved. See the [recorded check](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T023146Z).
+
+## Initial ternary segments without last-to-first closure
+
+`TernarySegment.lean` proves `3^n+1 <= 4*N+2*n` for every valid tuple
+modulo positive N that is a translated, reordered initial ternary segment.
+At odd N this yields the full G2 bound `2^n-1 <= N` for that class, even
+when the last triple lies outside the tuple. A generic finite coin-refinement
+lemma preserves values while adding two coins per split; balanced ternary
+then gives a rival below the stated modulus bound. No conjectural gate or
+finite cutoff is used. The original project passes 16,019 jobs and
+9,761 axiom audits; the supported port preserves
+27 complete commands and 27 literal types in
+7 modules. General G1/G2/G3 remain open.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/ternary-segment-port) retains the verification evidence. These new source lemmas have not been uploaded; the accepted platform DAG is unchanged.

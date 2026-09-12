@@ -883,3 +883,5 @@ import MinModulus.TriplingValidity
 import MinModulus.TriplingOrder
 
 import MinModulus.TriplingClosure
+
+import MinModulus.TernarySegment

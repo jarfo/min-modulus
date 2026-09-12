@@ -59,6 +59,17 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`TernarySegment.lean` proves `3^n+1 <= 4*N+2*n` for every valid tuple
+modulo positive N that is a translated, reordered initial ternary segment.
+At odd N this yields the full G2 bound `2^n-1 <= N` for that class, even
+when the last triple lies outside the tuple. A generic finite coin-refinement
+lemma preserves values while adding two coins per split; balanced ternary
+then gives a rival below the stated modulus bound. No conjectural gate or
+finite cutoff is used. The original project passes 16,019 jobs and
+9,761 axiom audits; the supported port preserves
+27 complete commands and 27 literal types in
+7 modules. General G1/G2/G3 remain open.
+
 `TriplingClosure.lean` proves N≥3^(n-1) for every valid tuple modulo
 odd N closed under an affine tripling map. This includes nonbijective
 tripling when 3 divides N: dividing the tripled image by three gives an
