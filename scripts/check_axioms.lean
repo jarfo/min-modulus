@@ -10252,3 +10252,15 @@ import MinModulus
 #print axioms MinModulus.isCycle_and_odd_length_of_valid_tripling_zmod
 #print axioms MinModulus.odd_length_of_valid_tripling_closed
 #print axioms MinModulus.exists_tripling_escape_of_even_valid_odd_zmod
+
+#print axioms MinModulus.card_le_zero_multiset_of_valid_tripling
+#print axioms MinModulus.two_mul_sum_ternary_powers_add_one
+#print axioms MinModulus.exists_balanced_ternary_coefficients
+#print axioms MinModulus.card_le_sum_of_valid_tripling
+#print axioms MinModulus.balanced_relation_eq_zero_of_valid_tripling
+#print axioms MinModulus.balanced_even_relation_eq_zero_of_valid_tripling
+#print axioms MinModulus.sum_ternary_powers_lt_two_mul_of_valid_tripling
+#print axioms MinModulus.exists_tripling_generator_of_valid
+#print axioms MinModulus.sum_ternary_powers_le_modulus_of_valid_tripling
+#print axioms MinModulus.two_pow_sub_one_le_sum_ternary_powers
+#print axioms MinModulus.odd_stratum_lower_bound_of_valid_tripling

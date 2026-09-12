@@ -879,3 +879,5 @@ import MinModulus.CycleOutsideSpectrum
 import MinModulus.FullCoordinateHoleBudget
 
 import MinModulus.TriplingValidity
+
+import MinModulus.TriplingOrder
