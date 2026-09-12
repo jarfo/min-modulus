@@ -538,3 +538,19 @@ the supported port preserves 25 complete commands and
 and general G1/G2/G3 remain unresolved.
 
 The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/ternary-forest-port) retains the verification evidence. These new source lemmas have not been uploaded; the accepted platform DAG is unchanged.
+
+## Unconditional affine-tripling escape bound
+
+`TernaryEscape.lean` removes the injectivity and acyclicity assumptions
+from the ternary forest argument. For every valid length-n tuple modulo
+odd N, every affine tripling map with r genuine escapes satisfies
+`3^n <= 2^(r+3)*N + 2^(r+2)*binomial(n+r+1,r+2)` for n>0.
+One mark handles the sole possible collision pair, and one handles the
+periodic component. First-hit ranks then construct a forest retaining all
+original coordinates. The ten new lemmas use no conjectural gate or cutoff.
+Original verification passes 16,021 jobs and 9,781 axiom audits;
+the supported port preserves 53 complete commands and
+53 literal types in 20 modules. The many-escape case and general
+G1/G2/G3 remain open.
+
+The [supported source port](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/ternary-escape-port) retains the verification evidence and the independently checked two-mark boundary example. These new source lemmas have not been uploaded; the accepted platform DAG is unchanged.

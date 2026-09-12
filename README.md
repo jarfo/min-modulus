@@ -59,6 +59,18 @@ results and remaining critical-range G1/G2/G3 interfaces are summarized below.
 
 ## Conjecture 1: current proof frontier (2026-09-12)
 
+`TernaryEscape.lean` removes the injectivity and acyclicity assumptions
+from the ternary forest argument. For every valid length-n tuple modulo
+odd N, every affine tripling map with r genuine escapes satisfies
+`3^n <= 2^(r+3)*N + 2^(r+2)*binomial(n+r+1,r+2)` for n>0.
+One mark handles the sole possible collision pair, and one handles the
+periodic component. First-hit ranks then construct a forest retaining all
+original coordinates. The ten new lemmas use no conjectural gate or cutoff.
+Original verification passes 16,021 jobs and 9,781 axiom audits;
+the supported port preserves 53 complete commands and
+53 literal types in 20 modules. The many-escape case and general
+G1/G2/G3 remain open.
+
 `TernaryForest.lean` extends finite ternary refinement to every actual
 forest, preserving each arm's integer profile. Removing one upper simplex
 makes the coefficient box injective into the group together with one parity
