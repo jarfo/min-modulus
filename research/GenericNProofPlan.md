@@ -37,3 +37,16 @@ This route does not discharge G1 (the general primitive deletion step)
 or G3 (the general exceptional-lift obstruction). The maintained server
 DAG retains those independent obligations. No higher-dimensional finite
 enumeration is planned; next proof effort should use arbitrary n and d.
+
+## New uniform restriction on a counterexample
+
+[Quadratic translate rigidity](QuadraticTranslateRigidity.md) proves that
+an outside shift with A+t contained in A+A forces a cover by doubles and
+hence all the required growth inequalities. Thus an odd counterexample
+has an escape from A+A for every outside shift. In particular, each
+distinct coordinate pair has a repeated quartic value outside 2·C_2.
+The remaining issue is enough independent values, not just one per pair.
+
+The linked note records an exact finite matrix experiment supporting an
+absolute quartic bound. Its general rank assertion is unproved, and the
+whole range of degrees is still required for a generic-n G2 argument.

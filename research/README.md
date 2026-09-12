@@ -242,3 +242,15 @@ Its truth would settle full G2; every odd counterexample must force a
 strict failure at one such degree. The inequality remains unproved.
 Both revisions verify fifteen declarations, twenty literal type/axiom
 checks and seven definition values. G1 and G3 still need general proofs.
+
+## Uniform quadratic-translate rigidity
+
+[The new argument](QuadraticTranslateRigidity.md) proves that a squarefree
+hit confines an outside quadratic translate to three coordinates, while
+four hits force doubled representations. A complete outside translate
+therefore supplies all coin-growth inequalities and the sharp odd bound.
+Every hypothetical counterexample must have an escape for every outside
+shift. Nine declarations pass both revisions with fifteen type/axiom and
+seven definition-value checks. The associated finite matrix experiment
+has 770 independently verified witnesses; its general rank claim remains
+open. These results preserve the focus on arbitrary n.
