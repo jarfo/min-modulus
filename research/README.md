@@ -150,3 +150,14 @@ counting, this gives N>=107 for every valid seven-tuple at odd order.
 The ten odd moduli from 107 through 125 remain to be excluded in dimension
 seven. Identical source passes both revisions and all ten type/axiom audits.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/complementary-coin-intersections-research).
+
+## Half-degree coin growth and general G2
+
+[HalfDegreeCoinGrowth.lean](HalfDegreeCoinGrowth.lean) proves that the growth
+|C_k|+binomial(n,k+1)<=|C_(k+1)| for 1<=k and 2(k+1)<=n+1 would establish
+the full odd-stratum bound N>=2^n-1 for every valid tuple. The proof combines
+partial binomial sums with the exact complementary coin intersection bound.
+The growth hypothesis remains explicit and unproved. Identical source passes
+both Lean revisions, thirteen literal type/axiom audits and six definition-value
+comparisons. This is a conditional research result, not a proof of G2.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/half-degree-coin-growth-research).
