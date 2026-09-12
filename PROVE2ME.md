@@ -592,3 +592,13 @@ review. Fresh reads of all 14 graph pages reproduce the existing acyclic
 remain open; the anchored-union conjecture is unproved. The
 [recorded review](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T041732Z)
 includes catalog and graph evidence. No Lean source changed.
+
+## Parallel work check (2026-09-12 04:58–04:59 UTC)
+
+Freshly fetched `prove2me-001` remains at `d3ef872`, fully merged, with a clean
+separate checkout. Prove2Me still records 28 accepted proofs and one accepted
+reduction; G2 From6 has no submissions. The full 570-entry catalog and all 14
+graph pages are unchanged, reproducing the acyclic 472-node, 1,123-edge DAG.
+G1 From5, G2 From6 and G3 From7 remain open. The anchored-union bound is unproved.
+The [review and evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/g2-anchored-review/recheck-20260912T045847Z)
+record this check. No Lean files or platform content changed.
