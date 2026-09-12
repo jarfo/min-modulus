@@ -9,7 +9,7 @@ standard-axiom audits, and matching values for the seven core definitions.
 | Modulus | Local Lean status | Source |
 | --- | --- | --- |
 | 107 | Verified on both revisions | [G2Seven107.lean](../MinModulus/G2Seven107.lean) |
-| 109 | Pending | |
+| 109 | Verified on both revisions | [G2Seven109.lean](../MinModulus/G2Seven109.lean) |
 | 111 | Pending | |
 | 113 | Pending | |
 | 115 | Pending | |
