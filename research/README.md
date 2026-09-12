@@ -139,3 +139,14 @@ Both revisions pass ten literal type and standard-axiom audits. Exhaustive
 checks through dimension six and odd modulus 63 find a multiplier-two-free
 pair in every one of 551,440 valid sets; general existence remains open.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-multiplier-packing-research).
+
+## Complementary coin intersections
+
+[ComplementaryCoinIntersections.lean](ComplementaryCoinIntersections.lean)
+proves that C_r intersect (sum(S)-C_s), for |S|=r+s, consists exactly of
+r-subset sums of S and has binomial(r+s,r) elements. Thus
+|C_r|+|C_s|<=N+binomial(r+s,r) whenever r+s<=n. Together with three-coin
+counting, this gives N>=107 for every valid seven-tuple at odd order.
+The ten odd moduli from 107 through 125 remain to be excluded in dimension
+seven. Identical source passes both revisions and all ten type/axiom audits.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/complementary-coin-intersections-research).
