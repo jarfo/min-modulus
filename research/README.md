@@ -101,3 +101,16 @@ relation-free ordered-pair occurrences, not the 632 claimed in their summary;
 all intersections are {0}. The converse is false because the search omits
 subset-cardinality constraints. No default build jobs are added.
 [Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-multipliers-research).
+
+## Cardinality-compatible anchored relations
+
+[AnchoredCompatibleRelation.lean](AnchoredCompatibleRelation.lean) proves an
+exact criterion for nonzero cube overlap: disjoint off-anchor signed supports
+P,Q must admit a relation with 2 <= M, |Q| <= M and M+|P| <= n. Both directions
+are proved by extracting subset supports and reconstructing subsets of the
+required size. Absence of a compatible relation is equivalent to intersection
+{0} and gives N >= 2^n-1. Existence of such a pair remains an explicit input.
+Both Lean revisions pass ten literal type and standard-axiom checks. A related
+binomial counting formula passes all 6,668 previously sampled ordered pairs;
+that general counting formula is not yet formalized.
+[Evidence](https://github.com/jarfo/unique/tree/main/papers/min-modulus/prove2me/anchored-compatible-research).
