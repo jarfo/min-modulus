@@ -398,7 +398,9 @@ The full one-escape dependency port keeps 122 named declarations in
 26 source modules, with three explicit simp portability edits. Original
 types, definitions and standard axioms match while avoiding the
 1025-module import closure.
-No upload of these two applications is claimed. The required generic
+These two applications and ten supporting theorem nodes are now
+accepted on Prove2Me. All 633 recorded proof dependency sets match,
+and the three generic open leaves are unchanged. The required generic
 repeated-sum growth is still open.
 
 ## Quadratic escape counts inherit affine restrictions

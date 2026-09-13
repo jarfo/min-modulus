@@ -32,7 +32,7 @@ The final lemma keeps the affine-closure exclusion as an explicit premise.
 `odd_lower_bound_of_valid_one_escape_doubling` theorem to discharge that
 premise under N<2^n-1. Its two resulting theorems now pass BOTH revisions,
 including the full one-escape proof dependency port and standard-axiom
-audits. These applications have not been uploaded to Prove2Me.
+audits. The later platform export is accepted; its details appear below.
 
 The compiler identifies 440 project constants, including generated proof
 helpers, owned by 122 named source declarations in 26 modules. Extracting
@@ -49,3 +49,32 @@ main repository's complete import graph is not changed.
 The one-escape affine-doubling bound is an existing result, not a new
 proof of G2. The new contribution is its conversion into a stronger
 quadratic-translate restriction. All three generic gates remain open.
+
+## Accepted Prove2Me statements
+
+Twelve theorem statements are now private and Proved, with ACCEPTED
+submissions and exact server proof-source readbacks. Six fill the existing
+one-escape affine-doubling chain; one specializes the accepted general
+translate theorem to quadratic hits; three transfer lemmas and two
+applications establish the uniform two-escape restriction. The export
+reuses eleven existing theorem interfaces and adds one lightweight
+quadratic-hit definition. Both Lean revisions, exact original types,
+eleven definition values and every proof dependency set pass.
+
+* logarithmic_chain_of_valid_affine_cycle_chain: 1c92f847-7ce6-4359-8227-6aae177e421b
+* stratum_lower_bound_of_valid_affine_cycle_chain: 9dc3d0f8-82d5-4a5f-9970-74386d2299b2
+* valid_fixed_of_valid_doubling_chain: 9c78557d-f3e6-4f4b-9882-73eb418e9f04
+* stratum_lower_bound_of_valid_almost_doubling_perm: 5d5daecd-492e-4bed-bd7b-947165bf0956
+* stratum_lower_bound_of_valid_one_escape_doubling: 45702a98-bc92-4647-b7d3-147734a7443f
+* odd_lower_bound_of_valid_one_escape_doubling: fae81b54-b0bd-4ed1-8d1f-14843d6a274e
+* quadratic_translate_hit_is_double_of_four_hits: 17ddbb91-53d8-402a-8722-2d4af434d3f8
+* exists_exception_of_large_index_set: 54dd4b58-e5ee-4536-8569-dd9ea33e883d
+* one_escape_of_large_quadratic_translate: 28687d38-48f0-47a4-a900-5ac4f28c30de
+* two_quadratic_escapes_of_one_escape_exclusion: 96d38f36-efbb-4b95-9083-0f64e88d7da6
+* odd_lower_bound_of_almost_full_quadratic_translate: 833273ea-ecce-4feb-820c-6d201a5f492b
+* two_quadratic_escapes_of_odd_counterexample: a064ccd1-c7ce-4fa9-a202-43f8e996d884
+
+Two terminal supporting roots connect these results to the consolidated
+DAG, now 900 nodes and 2072 edges. All 633 proof
+dependency sets across 18 bundles match. The three generic open leaves
+are unchanged. The full repeated-sum growth inequality is still open.
