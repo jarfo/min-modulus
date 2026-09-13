@@ -863,3 +863,13 @@ and one definition pass both revisions; fourteen exact types and two
 definition values agree. Split export and Prove2Me upload remain.
 The residual doubled shift still needs a uniform bound. Absolute central
 bounds and generic G1/G2/G3 remain open.
+
+## Verified ten-theorem recurrence export
+
+All ten recurrence statements and their original proof bodies have a
+verified split export on both revisions. Exact target types and dependency
+sets agree, as do the two reused interface types and two definition
+values. The export adds one lightweight definition bundle and reuses two
+private Proved theorem interfaces. Metadata and live preflight pass.
+Publication is pending. The doubled-shift remainder still needs control;
+absolute central bounds and generic G1/G2/G3 remain open.

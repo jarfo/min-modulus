@@ -41,3 +41,13 @@ close an induction. The next task is to bound that residual intersection
 using validity and the relation that produced the doubled shift. The
 absolute central repeated-sum inequalities and generic G1/G2/G3 remain
 open. Prove2Me split export and upload are the next verification stage.
+
+## Verified ten-theorem recurrence export
+
+All ten recurrence statements and their original proof bodies have a
+verified split export on both revisions. Exact target types and dependency
+sets agree, as do the two reused interface types and two definition
+values. The export adds one lightweight definition bundle and reuses two
+private Proved theorem interfaces. Metadata and live preflight pass.
+Publication is pending. The doubled-shift remainder still needs control;
+absolute central bounds and generic G1/G2/G3 remain open.
