@@ -658,3 +658,18 @@ and the inline subsetCoinSums definition value. Four existing Proved
 interfaces are reused. The conditional G2 theorem is the terminal root.
 Metadata and live preflight pass; publication is pending. The required
 central absolute bounds and generic G1/G2/G3 remain open.
+
+## A concrete matrix criterion for repeated-sum cardinality
+
+[Weighted probes](WeightedProbeCardinality.md) formalizes a fixed matrix
+combination of the existing coefficient probes. If it recovers all
+coefficients in degree 2k+1 outside 2*C_(k+1), then
+|D_(2k+2)| >= |C_(k+1)| + choose(n,2k+1). The quartic specialization
+for valid tuples gives the absolute bound choose(n+1,2)+choose(n,3).
+Doubling containment and probe vanishing are proved in every degree.
+All four proof bodies pass both revisions, nine exact printed types,
+five definition values and standard axioms. The matrix-recovery
+hypothesis is still open; joint determination by all probes does not
+supply it. In higher degrees, more lower-binomial terms are still
+needed for the central target. G1/G2/G3 remain open. Platform export
+and upload of these results and their weighted-probe definition remain.
