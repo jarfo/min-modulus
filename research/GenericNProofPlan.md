@@ -426,3 +426,15 @@ values and standard axioms with the same source body. Its explicit
 heartbeat limit is 800000. No finite enumeration is used. The residual
 fibre instantiation is next; global growth/rank and G1/G2/G3 remain open.
 This graph-counting result awaits platform export and upload.
+
+## Quartic single-repeat fibres occupy at most half the coordinates
+
+[Quartic fibre bound](QuarticFibreHalfBound.md) proves 2|R|<=n for every
+quartic single-repeat family in a valid tuple with injective doubling,
+and specializes it to the actual fibre. Its residual graph has |R|
+edges on at most n-|R| available vertices. The verified graph edge
+bound completes the argument uniformly in n, without enumeration.
+Both revisions pass the same two proof bodies, five exact printed types,
+three definition values and standard axioms. A combined six-node export
+with the four parity/counting prerequisites is next. Global growth/rank
+and generic G1/G2/G3 remain open.
