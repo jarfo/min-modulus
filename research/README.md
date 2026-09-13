@@ -891,3 +891,15 @@ The unresolved rank step is preservation of the contraction image through
 residue grouping and restriction outside the doubled coin cover, for one
 full matrix. Matrix injectivity alone does not imply this. Central
 repeated-sum bounds and all generic gates remain open.
+
+## Translated squarefree sum packing
+
+[Translated squarefree packing](TranslatedSquarefreePacking.md) proves that
+if t is absent from differences of k-element subset sums, the translated
+(k+1)-sum sets intersect in at most binomial(2k+2,k+1) values. In degree
+two the bound is six whenever t is not a coordinate difference. This
+holds for all n in every additive commutative group. Five proofs pass
+both revisions, comparing twelve types and two definition values. The
+quartic application still needs control of anchor pairs whose doubled
+difference is a coordinate difference. Generic G1/G2/G3 remain open.
+Platform export and upload remain.
