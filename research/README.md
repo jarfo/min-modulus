@@ -478,3 +478,16 @@ with one new lightweight definition bundle. Metadata and live preflight
 pass. Publication is complete; the single full-rank combination and
 G1/G2/G3 remain open.
 The consolidated DAG has 929 nodes and 2145 edges. All 647 proof dependency sets across 22 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+## Residual trades and rooted balances constrain repeated-sum fibres
+
+[Residual-trade rigidity](ResidualTradeRigidity.md) proves that, in every
+positive residual degree, the aggregate residual multiset determines the
+selected anchor subset. In quartic fibres, two rooted residual balances
+cannot have disjoint anchor supports. Both theorems hold for arbitrary n
+in any abelian group with injective doubling. Both revisions pass three
+printed-type checks, one definition value and standard-axiom audits.
+The proposed graph consequence is at most one odd residual cycle and a
+half-dimension fibre cap; that graph argument is not yet formalized.
+No export or publication is claimed. Global repeated-sum growth, the
+full-rank coefficient combination and G1/G2/G3 remain open.
