@@ -251,3 +251,15 @@ checks, and five definition values match. Only two existing Proved
 interfaces are reused; no definitions are added. Metadata and live
 preflight pass. Publication is pending and the three generic gates
 remain open.
+
+## Midpoint rigidity controls hits outside the squarefree support
+
+[Midpoint support rigidity](MidpointSupportRigidity.md) proves that two
+hits outside a squarefree support S force all hits to be those two.
+Thus at most two hits lie outside S. For |S|=2k,k>=1, odd modulus
+then gives at least n-(2k+2) single-repeat values anchored outside S
+and escaping 2·C_(k+1). This improves the previous bound after excluding
+anchors in S, and applies at every even repeated degree. All four
+proofs pass both revisions, eight type comparisons, four definition
+values and standard axioms. No publication is claimed yet. Controlling
+overlap across supports is still necessary; G1, G2 and G3 remain open.
