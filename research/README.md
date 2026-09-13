@@ -1222,3 +1222,15 @@ is introduced. Metadata and live preflight pass; publication is pending.
 The final quartic bound assumes the explicit condition
 (n-9)*C<=(n-12)*choose(n,2), with n>=12. Dense exceptional cases, higher
 absolute central counts and generic G1/G2/G3 remain open.
+
+## Negative affine doubling domains
+
+[Negative affine blocks](NegativeAffineBlock.md) proves that a partial
+map with g(f(i))+2*g(i)=t on a valid domain S, under injective doubling,
+can map back into S only at a fixed point. The map is injective on S,
+so nonfixed images inject outside S and 2*|S|<=n+|fixed points in S|.
+Three original proofs, six exact types and the ValidTuple definition
+value pass on both revisions. The fixed-point term remains explicit.
+Extracting affine structure from dense represented differences, the
+absolute central counts and generic G1/G2/G3 remain open. Split export
+and private Prove2Me publication remain.
