@@ -1006,26 +1006,53 @@ see the exact recurrence milestone below.
 
 ## Exact all-degree coordinate-difference recurrence
 
-[Coordinate-difference recurrence](CoordinateDifferenceRecursion.md) proves
-I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q))
-for every valid tuple in any additive commutative group, with p,q in A.
-If either endpoint is absent, the intersection is empty in every degree.
-The proof partitions support matches into two explicit bijections and
-identifies support counts with value-intersection counts. Ten theorems
-and one definition pass both revisions; fourteen exact types and two
-definition values agree. Split export and Prove2Me upload remain.
-The residual doubled shift still needs a uniform bound. Absolute central
-bounds and generic G1/G2/G3 remain open.
+For every valid tuple in an additive commutative group and distinct p,q
+in an allowed coordinate set A, the exact squarefree intersection formula is
+I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)).
+If either endpoint is missing, the intersection is empty in every degree.
+No injectivity of doubling or odd-order hypothesis is needed. The proof
+uses explicit normal/repeated support bijections and the exact projection
+from support matches to common values.
+
+All ten all-degree recurrence results are private and Proved. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify ten original target types and dependency sets, two reused
+interface types and two definition values. Every original proof body is
+retained. Two existing proved interfaces and one lightweight definition
+bundle are used. Two supporting roots retain the complete recurrence and
+all-degree endpoint exclusion.
+
+The consolidated DAG has 1051 nodes and 2405 edges. All 713 exact proof dependency sets across 36 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The exact recurrence is proved. Its residual doubled shift need not be a
+coordinate difference on the remaining coordinates. Controlling this
+remainder and proving the absolute central bounds remain open, as do
+generic G1/G2/G3.
 
 ## Verified ten-theorem recurrence export
 
-All ten recurrence statements and their original proof bodies have a
-verified split export on both revisions. Exact target types and dependency
-sets agree, as do the two reused interface types and two definition
-values. The export adds one lightweight definition bundle and reuses two
-private Proved theorem interfaces. Metadata and live preflight pass.
-Publication is pending. The doubled-shift remainder still needs control;
-absolute central bounds and generic G1/G2/G3 remain open.
+For every valid tuple in an additive commutative group and distinct p,q
+in an allowed coordinate set A, the exact squarefree intersection formula is
+I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)).
+If either endpoint is missing, the intersection is empty in every degree.
+No injectivity of doubling or odd-order hypothesis is needed. The proof
+uses explicit normal/repeated support bijections and the exact projection
+from support matches to common values.
+
+All ten all-degree recurrence results are private and Proved. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify ten original target types and dependency sets, two reused
+interface types and two definition values. Every original proof body is
+retained. Two existing proved interfaces and one lightweight definition
+bundle are used. Two supporting roots retain the complete recurrence and
+all-degree endpoint exclusion.
+
+The consolidated DAG has 1051 nodes and 2405 edges. All 713 exact proof dependency sets across 36 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The exact recurrence is proved. Its residual doubled shift need not be a
+coordinate difference on the remaining coordinates. Controlling this
+remainder and proving the absolute central bounds remain open, as do
+generic G1/G2/G3.
 
 ## All-degree fibre transport of doubled differences
 
