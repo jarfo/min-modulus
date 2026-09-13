@@ -496,3 +496,17 @@ retained. Two Proved external interfaces are reused. Metadata and live
 preflight pass; publication is pending. Existence of the one recovering
 matrix is still unproved, and the displayed higher-degree bound alone
 does not supply the full central target. Generic G1/G2/G3 remain open.
+
+## Weighted-probe rank permits symbolic coefficient fields
+
+[Field-linear weighted probes](WeightedProbeLinearRank.md) extends the
+fixed-matrix cardinality implication to arbitrary fields. Additivity and
+scalar compatibility make the coefficient encoding a linear map; its
+assumed injectivity gives the required dimension inequality even when
+the field is infinite. Thus a rational-function field with symbolic
+matrix entries can be used directly. The quartic consequence remains
+|D4| >= choose(n+1,2)+choose(n,3), conditional on coefficient recovery.
+All four proof bodies pass both revisions, nine exact printed types,
+five definition values and standard axioms. A recovering matrix and
+the missing higher-degree terms remain unproved; G1/G2/G3 stay open.
+The four field-version statements await platform export and upload.
