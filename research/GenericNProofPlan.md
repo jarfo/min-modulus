@@ -310,3 +310,15 @@ and the ValidTuple definition matches. One Proved interface is reused,
 with no new definitions. Metadata and live preflight pass. Publication is complete; the graph counting consequence and
 G1/G2/G3 remain open.
 The consolidated DAG has 933 nodes and 2153 edges. All 649 proof dependency sets across 23 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+## Even and odd residual cycles translate to multiset balances
+
+[Residual cycle balances](ResidualCycleBalances.md) excludes every nonempty
+alternating even residual cycle, encoded by finite maps and a reconnection
+permutation, inside a quartic fibre. A second combinatorial theorem turns
+an odd endpoint cycle into a rooted residual balance with two copies of
+its initial vertex. Both results are uniform in the dimension and cycle
+length. Both revisions pass three printed types, the ValidTuple definition
+value and standard-axiom checks. No export or publication is claimed yet.
+The actual graph-walk interface, graph decomposition and half-dimension
+fibre cap remain open, as do global repeated-sum growth and G1/G2/G3.
