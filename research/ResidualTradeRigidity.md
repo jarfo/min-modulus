@@ -44,7 +44,7 @@ P to be contained in Q, contradicting their cardinalities.
 Both proofs pass the original and supported Mathlib revisions. The two
 theorem types and ValidTuple's type and definition value match exactly;
 all proof axioms are standard. The source bodies are identical across
-revisions. The proofs have not yet been exported or uploaded to Prove2Me.
+revisions. Both statements are now Proved on Prove2Me; see below.
 
 ## Proposed graph consequence, not yet formalized
 
@@ -75,5 +75,17 @@ There are no proof holes outside declared interfaces. The export
 reuses one Proved theorem interface and existing definitions; it adds
 no definitions or inline helpers. Both split proof bodies match the
 checked source file. Metadata, exact live readbacks and unused names
-pass. The two theorem nodes have not yet been uploaded. The graph
+pass. Both theorem nodes are now Proved on Prove2Me. The graph
 consequence and generic G1/G2/G3 gates remain open.
+
+## Verified Prove2Me proofs
+
+Both residual-trade statements are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both independent
+supporting roots retain the residual-aggregate and rooted-balance
+theorems. Existing definitions are reused.
+
+The consolidated DAG has 933 nodes and 2153 edges. All 649 proof dependency sets across 23 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+* residual_aggregate_determines_anchor_subset: 06390362-5e43-4e8b-b356-8db1d133b1d2
+* quartic_rooted_residual_balances_share_anchor: ecf42c8c-11c2-4257-8243-8f889fa3dc76
