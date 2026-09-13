@@ -385,3 +385,15 @@ not repair the quarter/eighth bounds, and universal existence of a
 relation-free pair is false. A condition restricted to hypothetical
 counterexamples N<2^n-1 remains an unproved possible sufficient condition.
 Four further theorems pass both revisions. No generic gate is closed.
+
+## Two quadratic escapes from every outside translate
+
+[QuadraticOneEscape](QuadraticOneEscape.md) connects quadratic rigidity
+to the existing unconditional odd one-escape affine-doubling theorem.
+For n>=5, n-1 hits give an injective partial matching to doubled
+coordinates; reversing it leaves at most one forward escape. Therefore
+N<2^n-1 forces two distinct quadratic escapes at every outside shift.
+The three transfer lemmas pass both revisions. The two applications
+to the existing one-escape theorem pass the original revision only;
+the full supported dependency port is pending, and no upload of these
+applications is claimed. The required repeated-sum growth is still open.
