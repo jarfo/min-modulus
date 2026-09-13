@@ -169,3 +169,26 @@ additional structure not implied by bounded isolation. The older heavy
 anchored-witness route already permits coefficients growing with n and
 is not ruled out by this result. Ten theorems pass both Lean revisions;
 the conjecture and all three generic gates remain open.
+
+## Translate rigidity in every degree
+
+[HigherTranslateRigidity](HigherTranslateRigidity.md) extends the quadratic
+argument to every degree d. For t outside C_(d-1), one squarefree hit of
+A+t in C_d confines all hits to at most d+1 coordinates. At least d+2 hits
+force all hits to be repeated. A full outside translate, when n>=d+2,
+gives |C_(r+1)|<=|D_(r+d)| for every r>=0 by an injective translation.
+The five uniform theorems pass both revisions, exact types, definitions
+and standard axioms. The needed complete translate is not known to exist;
+for d>2 the resulting degree jump exceeds one. Thus this does not settle
+the remaining generic G2 growth inequality.
+
+## Limits of averaged anchored overlaps
+
+[AnchoredMomentCounterexample](AnchoredMomentCounterexample.md) reuses the
+valid tuple (0,11,8,6) modulo 15. Its pair intersections sum to 25>24 and
+its triple intersections sum to 9>8. Every distinct pair has more than one
+common point, although the union is all 15 residues. Hence averaging does
+not repair the quarter/eighth bounds, and universal existence of a
+relation-free pair is false. A condition restricted to hypothetical
+counterexamples N<2^n-1 remains an unproved possible sufficient condition.
+Four further theorems pass both revisions. No generic gate is closed.

@@ -94,8 +94,9 @@ and the full G2 bound remain open. No default build jobs are added.
 [AnchoredOverlapMultipliers.lean](AnchoredOverlapMultipliers.lean) proves that
 nonzero overlap forces a ternary relation with anchor multiplier 2 through n.
 It also proves that multiplier one is impossible, and that one relation-free
-pair implies N >= 2^n - 1. Existence of that pair is an explicit hypothesis;
-the general G2 theorem remains open. Both Lean revisions pass 18 literal
+pair implies N >= 2^n - 1. Universal existence of that pair is false, as
+the anchored-moment follow-up below now proves. Existence restricted to
+N<2^n-1 remains an unproved sufficient condition; general G2 remains open. Both Lean revisions pass 18 literal
 type and standard-axiom checks. The corrected parallel runs reproduce 605
 relation-free ordered-pair occurrences, not the 632 claimed in their summary;
 all intersections are {0}. The converse is false because the search omits
@@ -109,7 +110,8 @@ exact criterion for nonzero cube overlap: disjoint off-anchor signed supports
 P,Q must admit a relation with 2 <= M, |Q| <= M and M+|P| <= n. Both directions
 are proved by extracting subset supports and reconstructing subsets of the
 required size. Absence of a compatible relation is equivalent to intersection
-{0} and gives N >= 2^n-1. Existence of such a pair remains an explicit input.
+{0} and gives N >= 2^n-1. Universal existence is false; existence restricted to N<2^n-1 remains
+an unproved sufficient condition (see the anchored-moment follow-up below).
 Both Lean revisions pass ten literal type and standard-axiom checks. A related
 binomial counting formula passes all 6,668 previously sampled ordered pairs;
 the general formula is now proved in [AnchoredIntersectionCount.lean](AnchoredIntersectionCount.lean).
@@ -360,3 +362,26 @@ additional structure not implied by bounded isolation. The older heavy
 anchored-witness route already permits coefficients growing with n and
 is not ruled out by this result. Ten theorems pass both Lean revisions;
 the conjecture and all three generic gates remain open.
+
+## Translate rigidity in every degree
+
+[HigherTranslateRigidity](HigherTranslateRigidity.md) extends the quadratic
+argument to every degree d. For t outside C_(d-1), one squarefree hit of
+A+t in C_d confines all hits to at most d+1 coordinates. At least d+2 hits
+force all hits to be repeated. A full outside translate, when n>=d+2,
+gives |C_(r+1)|<=|D_(r+d)| for every r>=0 by an injective translation.
+The five uniform theorems pass both revisions, exact types, definitions
+and standard axioms. The needed complete translate is not known to exist;
+for d>2 the resulting degree jump exceeds one. Thus this does not settle
+the remaining generic G2 growth inequality.
+
+## Limits of averaged anchored overlaps
+
+[AnchoredMomentCounterexample](AnchoredMomentCounterexample.md) reuses the
+valid tuple (0,11,8,6) modulo 15. Its pair intersections sum to 25>24 and
+its triple intersections sum to 9>8. Every distinct pair has more than one
+common point, although the union is all 15 residues. Hence averaging does
+not repair the quarter/eighth bounds, and universal existence of a
+relation-free pair is false. A condition restricted to hypothetical
+counterexamples N<2^n-1 remains an unproved possible sufficient condition.
+Four further theorems pass both revisions. No generic gate is closed.
