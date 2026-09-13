@@ -1104,26 +1104,53 @@ generic G1/G2/G3 remain open.
 
 ## Global single-repeat incidence and collision bounds
 
-[Single-repeat incidence bounds](SingleRepeatIncidenceBounds.md) gives an
-exact reindexing by residual supports, an all-even-degree summed escape
-bound, and a global inequality whose remaining loss is a sum of unordered
-anchor-pair collisions. Common fibre values inject into restricted
-translated squarefree intersections. Six original proofs pass both
-revisions, with sixteen exact types and five definition values. There
-are no new definitions. Bounding the total collision loss and the
-absolute central inequalities remains open, as do G1/G2/G3. Split export
-and private Prove2Me publication remain.
+For arbitrary selected values Y, single-repeat incidences equal a sum
+over residual supports and outside anchors. At odd modulus, the midpoint
+escape bound gives (n-(2k+2))*choose(n,2k) incidences outside 2*C_(k+1).
+The resulting value bound loses exactly a sum of pair collisions; this
+sum is reindexed by unordered anchor pairs. Common values of anchors a,b
+inject into translated squarefree intersections on coordinates excluding
+a,b, with shift 2*(g_a-g_b). These identities apply in arbitrary degree.
+
+All six global incidence results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, three
+external interface types, three inline helper types, one bundled helper
+type, four ordinary definition values and the inline configuration
+definition value. Every original proof body is retained. Three existing
+proved interfaces are reused; no new definition bundle is introduced.
+Three supporting roots retain all six results.
+
+The consolidated DAG has 1069 nodes and 2444 edges. All 723 exact proof dependency sets across 38 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The incidence identities and collision reductions are proved. Bounding
+the total loss sufficiently for the absolute central inequalities and
+generic G1/G2/G3 remains open.
 
 ## Verified six-theorem incidence export
 
-All six incidence statements and original proof bodies have a verified
-split export on both revisions. Exact target types, three external
-interfaces, three inline helper types, one bundled helper type and six
-dependency sets agree. Four ordinary definition values and the inline
-configuration definition value agree. No new definition bundle is
-introduced. Metadata and live preflight pass; publication is pending.
-The exact global collision sum is now reduced to translated residual
-intersections. Absolute central counts and generic G1/G2/G3 remain open.
+For arbitrary selected values Y, single-repeat incidences equal a sum
+over residual supports and outside anchors. At odd modulus, the midpoint
+escape bound gives (n-(2k+2))*choose(n,2k) incidences outside 2*C_(k+1).
+The resulting value bound loses exactly a sum of pair collisions; this
+sum is reindexed by unordered anchor pairs. Common values of anchors a,b
+inject into translated squarefree intersections on coordinates excluding
+a,b, with shift 2*(g_a-g_b). These identities apply in arbitrary degree.
+
+All six global incidence results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, three
+external interface types, three inline helper types, one bundled helper
+type, four ordinary definition values and the inline configuration
+definition value. Every original proof body is retained. Three existing
+proved interfaces are reused; no new definition bundle is introduced.
+Three supporting roots retain all six results.
+
+The consolidated DAG has 1069 nodes and 2444 edges. All 723 exact proof dependency sets across 38 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The incidence identities and collision reductions are proved. Bounding
+the total loss sufficiently for the absolute central inequalities and
+generic G1/G2/G3 remains open.
 
 ## Quartic collision bounds and sparse differences
 
