@@ -136,3 +136,17 @@ a stronger use of the cyclic kernel; no generic gate is closed.
 The two reusable G3 compatible-family statements are now accepted on
 Prove2Me and connected through two supporting roots. The consolidated
 DAG has 866 nodes; its three generic open leaves are unchanged.
+
+## Generic limitation of balanced G3 isolation
+
+[G3BalancedCountermodel](G3BalancedCountermodel.md) proves, for every
+non-power-of-two n>=3, an invalid tuple at the exact exceptional modulus
+with no nonzero balanced unit-coefficient zero relation. Binary powers
+have injective fixed-rank subset sums modulo every power-gap modulus;
+when its removed power exceeds n, binary splitting gives a different
+n-coin multiset with the all-ones target. Six theorems pass both revisions.
+Consequently fixed-rank separation, quotient counting, and compatible
+families alone cannot prove G3. The next step must use stronger validity
+constraints, such as one-sided admissible relations with a coefficient
+above one. The antichain theorem does use such stronger constraints and
+is not refuted by this countermodel. No generic gate is closed.
