@@ -789,3 +789,14 @@ both revisions, comparing eight types and the ValidTuple definition value.
 These results assume validity and injective doubling, including all odd
 cyclic tuples. Global quartic and central bounds and G1/G2/G3 remain open.
 Platform export and upload remain.
+
+## Six-node export for coordinate-difference packing
+
+All six coordinate-difference statements have a verified split export.
+Both revisions pass six exact original target types and dependency sets,
+two reused helper types, and the ValidTuple definition value. Every
+original proof body is retained, with three existing proved interfaces
+and no new definition bundle. Metadata and live preflight pass.
+Publication is pending. The restricted linear bound and endpoint exclusion
+are proved; the global quartic count and central bounds remain open,
+as do generic G1/G2/G3.

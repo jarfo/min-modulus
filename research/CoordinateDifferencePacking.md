@@ -46,3 +46,14 @@ the global collision count have not yet been exported as Lean corollaries.
 The absolute quartic bound, central-degree bounds and generic G1/G2/G3
 remain open. The next step is to combine the restricted intersection
 bounds with midpoint losses. No finite enumeration was used.
+
+## Verified six-theorem coordinate-difference export
+
+All six coordinate-difference statements have a verified split export.
+Both revisions pass six exact original target types and dependency sets,
+two reused helper types, and the ValidTuple definition value. Every
+original proof body is retained, with three existing proved interfaces
+and no new definition bundle. Metadata and live preflight pass.
+Publication is pending. The restricted linear bound and endpoint exclusion
+are proved; the global quartic count and central bounds remain open,
+as do generic G1/G2/G3.
