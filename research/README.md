@@ -417,3 +417,17 @@ All three split proofs have matching original types, definition values
 and exact dependency sets; their five external interfaces are Proved.
 These three nodes have not yet been uploaded. G1, G2 and G3 remain open,
 and independent repeated-sum growth is still needed.
+
+## Squarefree midpoints give many escapes in every even repeated degree
+
+[Squarefree midpoint escapes](SquarefreeMidpointEscapes.md) proves that
+the midpoint of a squarefree 2k-sum lies outside C_k and has at most
+2k+1 coordinate hits in C_(k+1), for every k>=1. At odd order, each
+support therefore yields at least n-(2k+1) distinct repeated sums of
+degree 2k+2 outside 2·C_(k+1). In particular, every coordinate pair
+has at least n-3 quartic escapes, with no counterexample premise.
+The proof combines the earlier translate rigidity with validity of a
+squarefree sum on 2k+2 coordinates. All five theorem statements pass
+both revisions and standard-axiom audits. No platform publication is
+claimed yet. Overlap across different supports remains uncontrolled;
+the full repeated-sum growth inequality and G1/G2/G3 remain open.
