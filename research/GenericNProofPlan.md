@@ -370,3 +370,15 @@ checks and three definition-value checks. The source proof bodies are
 retained. One fibre definition bundle is new, and one Proved external
 interface is reused. Metadata and live preflight pass. Publication is
 pending; graph-walk instantiation, decomposition and G1/G2/G3 remain open.
+
+## Odd cycles in the residual graph
+
+[Residual graph cycles](ResidualGraphCycles.md) now gives injective anchor
+labels for every graph trail and proves that every cycle of a valid
+quartic residual graph has odd length when doubling is injective. This
+connects the finite even-cycle identity to actual SimpleGraph walks.
+Both revisions pass five exact printed types, three definition values
+and standard axioms, with identical source bodies. The odd-cycle rooted
+balance and edge-disjoint-cycle obstruction still need graph interfaces.
+Graph decomposition, the prospective fibre cap, global growth/rank and
+G1/G2/G3 remain open. These two results await platform export and upload.
