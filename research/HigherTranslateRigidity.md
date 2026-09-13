@@ -42,3 +42,22 @@ G1, G2, G3 and the arbitrary-n conjecture remain open.
 
 Repository Mathlib: `81a5d257c8e410db227a6665ed08f64fea08e997`.
 Supported Mathlib: `0df444a360eaa60ab8c11dca51a86af692955474`.
+
+## Accepted Prove2Me statements
+
+All five statements are private and Proved, with ACCEPTED submissions.
+The exact server proof files match the locally checked split sources.
+One terminal supporting root connects the whole chain to the consolidated
+DAG, using the existing multiset uniqueness interface. The shared new
+definition file contains only the repeated cover and translate-hit set.
+
+* coin_translate_hit_mem_insert_of_squarefree_hit: f5022c9a-de14-471c-ad82-21203903f540
+* outside_coin_translate_anchor_not_mem: 5e883d7c-c266-448b-9684-a580b795d176
+* outside_coin_translate_hits_le_of_squarefree_hit: 57e46439-4a4f-4576-8d8a-bac1d5955fe4
+* outside_coin_translate_hit_repeated_of_many_hits: fa8209ca-690a-43da-a04b-8df516b85c57
+* repeated_coin_growth_of_full_higher_translate: e170c98c-649f-47e6-b060-c3f65787f34f
+
+The consolidated DAG is acyclic with 876 nodes and 1982 edges. All 621
+recorded proof dependency sets across 17 bundles match. G1/P6, G2/From7
+and G3/From7 remain the three open leaves. Complete outside-translate
+existence and generic one-step growth remain unproved.

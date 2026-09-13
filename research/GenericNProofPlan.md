@@ -204,3 +204,8 @@ The three transfer lemmas pass both revisions. The two applications
 to the existing one-escape theorem pass the original revision only;
 the full supported dependency port is pending, and no upload of these
 applications is claimed. The required repeated-sum growth is still open.
+
+All five higher-translate statements are now accepted on Prove2Me and
+connected through their terminal growth implication. The consolidated
+DAG has 876 nodes and 1982 edges; all 621 exact proof dependency
+sets match, and its three generic open leaves are unchanged.
