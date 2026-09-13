@@ -603,3 +603,17 @@ pass both revisions with four exact types and one definition value.
 This preserves additive obstructions but may enlarge the modulus greatly;
 it does not preserve N<2^n-1. The diagonal-probe application is still
 being formalized. Generic G1/G2/G3 remain open. Platform export remains.
+
+## Diagonal probes fail in every dimension at least four
+
+[The diagonal obstruction](DiagonalProbeObstruction.md) proves that
+valid odd cyclic tuples in every dimension 4+r can contain a cubic
+coefficient invisible to every diagonal weighted probe outside 2 C_2.
+The fixed verified control supplies three doubled-pair identities;
+additive transport and the generic extension preserve them. A nonzero
+kernel vector refutes exactly the coefficient-recovery hypothesis over
+any nontrivial semiring. All four proof bodies pass both revisions,
+with nine exact types, five definition values and standard axioms.
+No new finite search is used. Full matrices, central repeated-sum
+bounds and generic G1/G2/G3 remain open. The modulus may be large;
+this gives no min-modulus counterexample. Platform export remains.
