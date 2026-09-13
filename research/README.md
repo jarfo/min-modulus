@@ -710,3 +710,14 @@ All four proof bodies pass both revisions, nine exact printed types,
 five definition values and standard axioms. A recovering matrix and
 the missing higher-degree terms remain unproved; G1/G2/G3 stay open.
 The four field-version statements await platform export and upload.
+
+## Four-node export for symbolic-field weighted-probe rank
+
+All four field-linear probe statements have a verified split export.
+Both revisions pass four exact original types and dependency sets,
+five definition comparisons and two original inline helper types.
+All original theorem and helper bodies are retained. Four Proved
+interfaces and existing definitions are reused. The conditional quartic
+bound over arbitrary fields is the terminal root. Metadata and live
+preflight pass; publication is pending. Matrix existence and the missing
+higher-degree terms remain unproved. G1/G2/G3 remain open.

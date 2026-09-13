@@ -37,3 +37,16 @@ of a single weighted combination. For degrees above four, the displayed
 bound also lacks some lower binomial terms required by the central
 absolute target. G1, G2 and G3 remain open. These four field-version
 statements have not yet been exported or uploaded to Prove2Me.
+
+## Verified four-theorem symbolic-field probe export
+
+All four field-linear probe statements have a verified split export.
+Both revisions pass four exact original types and dependency sets,
+five definition comparisons and two original inline helper types.
+All original theorem and helper bodies are retained. Four existing
+Proved interfaces are reused, including the newly accepted doubled-cover
+and probe-support lemmas. No new definition is added. The conditional
+quartic bound over arbitrary fields is the terminal supporting root.
+Metadata and live preflight pass. These four nodes have not yet been
+uploaded. Matrix existence, the missing higher-degree binomial terms,
+and G1/G2/G3 remain open.
