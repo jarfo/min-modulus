@@ -294,3 +294,12 @@ hypothetical exceptional tuple therefore has a reversible kernel witness
 vanishing at any chosen coordinate. Five theorems pass both revisions.
 The kernel target may vary with the coordinate, so this does not supply
 same-target compatible witnesses or discharge G3.
+
+## Parallel G1 two-escape proposal
+
+[The parallel review](G1TwoEscapeShiftReview.md) integrates the sufficient
+implication TwoEscapeShift -> G1 from branch commit 285a7b97. The extraction
+predicate remains unproved and is stronger than the current G1 input.
+The original revision and standard axioms are checked; no supported port
+or platform upload is claimed. The documentation limits the small-case
+numerics and distinguishes the stratum endpoint from the global bound.
