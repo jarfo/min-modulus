@@ -1,42 +1,46 @@
 # Generic-n proof priority
 
-The objective is the min-modulus conjecture for arbitrary n. Finite
-dimensions are supporting results. The local seventh odd dimension is
-complete, so local general G2 is equivalent to its restriction to n>=8.
-The Prove2Me G2 frontier remains From7 until its connecting proofs are
-accepted. General G1 and G3 also remain necessary and unresolved.
+The objective remains the min-modulus conjecture for arbitrary n. Generic
+G1, G2 and G3 are all open. The local seventh odd dimension is proved;
+no further finite enumeration is planned. The maintained Prove2Me main
+frontier remains G1/P6, G2/From7 and G3/From7.
 
-The current generic G2 target is the following. For a valid tuple
-g:Fin n -> ZMod N with N odd, let A be its coordinate set, C_d the set of
-all d-coin sums with repetitions allowed, and D_d the sums admitting a
-repeated coordinate. Write 2·A for the dilate {2a:a in A}.
+For a valid tuple g:Fin n -> ZMod N with N odd, let C_d be all d-coin
+values and D_d the values admitting a repeated coordinate. The current
+weaker sufficient target for G2 is the pair of absolute central bounds
 
-For every d>=2, Lean proves the exact identity
+    |D_k| + 1 >= sum_{j<k} binomial(n,j),
+    k = floor(n/2) and k = ceil(n/2).
 
-    D_d = 2·A + C_(d-2).
+[AbsoluteRepeatedCoinBounds.lean](AbsoluteRepeatedCoinBounds.lean) proves
+that these two inequalities imply N>=2^n-1 for n>=2. They hold through
+degree three, so every odd counterexample must fail one of them at a
+central degree k>=4. These are proved reductions; the required uniform
+central inequalities remain open.
 
-Validity gives a disjoint split into binomial(n,d) squarefree sums and D_d.
-Consequently the desired increment is equivalent to
+A concrete first step is the absolute quartic bound
 
-    |2·A + C_(d-2)| >= |C_(d-1)|.
+    |D_4| >= binomial(n+1,2) + binomial(n,3).
 
-The degree-two and degree-three increments are already proved uniformly.
-The remaining hypothesis is the displayed inequality for d>=4 and
-2d<=n+1. Its first open case is |2·A+C_2|>=|C_3| for n>=7. Proving just
-that first case would not prove general G2: all required degrees matter.
+[WeightedProbeLinearRank.lean](WeightedProbeLinearRank.lean) proves this
+from injectivity of one matrix-weighted cubic probe outside 2*C_2,
+over any coefficient field. Symbolic matrix entries are therefore
+permitted. Existence of such an injective matrix remains unproved.
+Joint recovery by all separate probes does not establish it. In higher
+degrees, the current probe criterion also lacks some binomial terms
+needed by the central target. Proving only the quartic case would not
+settle generic G2.
 
-[RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves the exact
-reformulation, the two base increments and the implication from the
-remaining uniform inequality to full G2. It also proves that any odd G2
-counterexample must exhibit a strict failure of that inequality at some
-degree d>=4 in the half-degree range. This allows future arguments to
-work within a hypothetical counterexample, where N<2^n-1 is available.
-The cardinal inequality itself is not proved.
+[QuarticFibreHalfBound.lean](QuarticFibreHalfBound.lean) proves that every
+quartic single-repeat fibre has at most floor(n/2) anchors. This uniform
+local collision bound is available, but does not supply the global rank
+or cardinality inequality.
 
-This route does not discharge G1 (the general primitive deletion step)
-or G3 (the general exceptional-lift obstruction). The maintained server
-DAG retains those independent obligations. No higher-dimensional finite
-enumeration is planned; next proof effort should use arbitrary n and d.
+The stronger successive-growth route remains available. For d>=2,
+[RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
+D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
+|D_d|>=|C_(d-1)| are proved at d=2,3; proving them for d>=4 and
+2d<=n+1 would also settle G2. Neither route discharges G1 or G3.
 
 ## New uniform restriction on a counterexample
 
@@ -545,25 +549,44 @@ more lower-binomial terms are needed. These implications do not close G2.
 
 ## Weighted-probe rank permits symbolic coefficient fields
 
-[Field-linear weighted probes](WeightedProbeLinearRank.md) extends the
-fixed-matrix cardinality implication to arbitrary fields. Additivity and
-scalar compatibility make the coefficient encoding a linear map; its
-assumed injectivity gives the required dimension inequality even when
-the field is infinite. Thus a rational-function field with symbolic
-matrix entries can be used directly. The quartic consequence remains
-|D4| >= choose(n+1,2)+choose(n,3), conditional on coefficient recovery.
-All four proof bodies pass both revisions, nine exact printed types,
-five definition values and standard axioms. A recovering matrix and
-the missing higher-degree terms remain unproved; G1/G2/G3 stay open.
-The four field-version statements await platform export and upload.
+The fixed-matrix coefficient-recovery hypothesis gives
+|D_(2k+2)| >= |C_(k+1)| + choose(n,2k+1) over any coefficient field,
+including an infinite field with symbolic matrix entries. The proof uses
+an injective linear map and finite-dimensional rank. For valid tuples,
+the quartic consequence is |D4| >= choose(n+1,2)+choose(n,3).
+The existence of a recovering matrix remains open. Higher degrees
+still require missing lower-binomial terms for the central target.
+
+All four field-linear probe results are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, five definition comparisons
+and two original inline helper types. All original theorem and helper
+bodies are retained. Four Proved interfaces are reused, with no new
+definition. The conditional quartic bound over any field is the root.
+
+The consolidated DAG has 990 nodes and 2278 edges. All 680 proof dependency sets across 31 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The recovering matrix and missing higher-degree binomial terms remain unproved.
+These are conditional rank implications and do not close generic G2.
 
 ## Four-node export for symbolic-field weighted-probe rank
 
-All four field-linear probe statements have a verified split export.
-Both revisions pass four exact original types and dependency sets,
-five definition comparisons and two original inline helper types.
-All original theorem and helper bodies are retained. Four Proved
-interfaces and existing definitions are reused. The conditional quartic
-bound over arbitrary fields is the terminal root. Metadata and live
-preflight pass; publication is pending. Matrix existence and the missing
-higher-degree terms remain unproved. G1/G2/G3 remain open.
+The fixed-matrix coefficient-recovery hypothesis gives
+|D_(2k+2)| >= |C_(k+1)| + choose(n,2k+1) over any coefficient field,
+including an infinite field with symbolic matrix entries. The proof uses
+an injective linear map and finite-dimensional rank. For valid tuples,
+the quartic consequence is |D4| >= choose(n+1,2)+choose(n,3).
+The existence of a recovering matrix remains open. Higher degrees
+still require missing lower-binomial terms for the central target.
+
+All four field-linear probe results are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, five definition comparisons
+and two original inline helper types. All original theorem and helper
+bodies are retained. Four Proved interfaces are reused, with no new
+definition. The conditional quartic bound over any field is the root.
+
+The consolidated DAG has 990 nodes and 2278 edges. All 680 proof dependency sets across 31 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The recovering matrix and missing higher-degree binomial terms remain unproved.
+These are conditional rank implications and do not close generic G2.

@@ -733,25 +733,44 @@ more lower-binomial terms are needed. These implications do not close G2.
 
 ## Weighted-probe rank permits symbolic coefficient fields
 
-[Field-linear weighted probes](WeightedProbeLinearRank.md) extends the
-fixed-matrix cardinality implication to arbitrary fields. Additivity and
-scalar compatibility make the coefficient encoding a linear map; its
-assumed injectivity gives the required dimension inequality even when
-the field is infinite. Thus a rational-function field with symbolic
-matrix entries can be used directly. The quartic consequence remains
-|D4| >= choose(n+1,2)+choose(n,3), conditional on coefficient recovery.
-All four proof bodies pass both revisions, nine exact printed types,
-five definition values and standard axioms. A recovering matrix and
-the missing higher-degree terms remain unproved; G1/G2/G3 stay open.
-The four field-version statements await platform export and upload.
+The fixed-matrix coefficient-recovery hypothesis gives
+|D_(2k+2)| >= |C_(k+1)| + choose(n,2k+1) over any coefficient field,
+including an infinite field with symbolic matrix entries. The proof uses
+an injective linear map and finite-dimensional rank. For valid tuples,
+the quartic consequence is |D4| >= choose(n+1,2)+choose(n,3).
+The existence of a recovering matrix remains open. Higher degrees
+still require missing lower-binomial terms for the central target.
+
+All four field-linear probe results are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, five definition comparisons
+and two original inline helper types. All original theorem and helper
+bodies are retained. Four Proved interfaces are reused, with no new
+definition. The conditional quartic bound over any field is the root.
+
+The consolidated DAG has 990 nodes and 2278 edges. All 680 proof dependency sets across 31 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The recovering matrix and missing higher-degree binomial terms remain unproved.
+These are conditional rank implications and do not close generic G2.
 
 ## Four-node export for symbolic-field weighted-probe rank
 
-All four field-linear probe statements have a verified split export.
-Both revisions pass four exact original types and dependency sets,
-five definition comparisons and two original inline helper types.
-All original theorem and helper bodies are retained. Four Proved
-interfaces and existing definitions are reused. The conditional quartic
-bound over arbitrary fields is the terminal root. Metadata and live
-preflight pass; publication is pending. Matrix existence and the missing
-higher-degree terms remain unproved. G1/G2/G3 remain open.
+The fixed-matrix coefficient-recovery hypothesis gives
+|D_(2k+2)| >= |C_(k+1)| + choose(n,2k+1) over any coefficient field,
+including an infinite field with symbolic matrix entries. The proof uses
+an injective linear map and finite-dimensional rank. For valid tuples,
+the quartic consequence is |D4| >= choose(n+1,2)+choose(n,3).
+The existence of a recovering matrix remains open. Higher degrees
+still require missing lower-binomial terms for the central target.
+
+All four field-linear probe results are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, five definition comparisons
+and two original inline helper types. All original theorem and helper
+bodies are retained. Four Proved interfaces are reused, with no new
+definition. The conditional quartic bound over any field is the root.
+
+The consolidated DAG has 990 nodes and 2278 edges. All 680 proof dependency sets across 31 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The recovering matrix and missing higher-degree binomial terms remain unproved.
+These are conditional rank implications and do not close generic G2.

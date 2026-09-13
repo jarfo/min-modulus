@@ -35,18 +35,24 @@ A coefficient-recovering matrix is still unproved. In particular, the
 joint injectivity of all separate probes does not establish injectivity
 of a single weighted combination. For degrees above four, the displayed
 bound also lacks some lower binomial terms required by the central
-absolute target. G1, G2 and G3 remain open. These four field-version
-statements have not yet been exported or uploaded to Prove2Me.
+absolute target. G1, G2 and G3 remain open. All four field-version statements are now Proved on Prove2Me.
 
-## Verified four-theorem symbolic-field probe export
 
-All four field-linear probe statements have a verified split export.
-Both revisions pass four exact original types and dependency sets,
-five definition comparisons and two original inline helper types.
-All original theorem and helper bodies are retained. Four existing
-Proved interfaces are reused, including the newly accepted doubled-cover
-and probe-support lemmas. No new definition is added. The conditional
-quartic bound over arbitrary fields is the terminal supporting root.
-Metadata and live preflight pass. These four nodes have not yet been
-uploaded. Matrix existence, the missing higher-degree binomial terms,
-and G1/G2/G3 remain open.
+## Verified Prove2Me field-linear weighted-probe results
+
+All four field-linear probe results are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, five definition comparisons
+and two original inline helper types. All original theorem and helper
+bodies are retained. Four Proved interfaces are reused, with no new
+definition. The conditional quartic bound over any field is the root.
+
+The consolidated DAG has 990 nodes and 2278 edges. All 680 proof dependency sets across 31 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The recovering matrix and missing higher-degree binomial terms remain unproved.
+These are conditional rank implications and do not close generic G2.
+
+* weighted_single_repeat_probe_add: 4ab6a46e-e7b8-438c-a7e8-01a10ddc9f6a
+* weighted_single_repeat_probe_smul: 273ec338-6474-4db3-82be-1d6069d14357
+* even_degree_card_bound_of_weighted_probe_injective_field: d58ea37f-5143-4c3b-ae8a-64f259391f9e
+* absolute_quartic_bound_of_weighted_probe_injective_field: 67406726-99c1-4844-bac4-aa337924b21f
