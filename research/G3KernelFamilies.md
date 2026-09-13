@@ -69,5 +69,19 @@ The previously verified balanced-kernel and middle-layer sources and
 objects were reused as dependencies. No finite enumeration was used.
 
 These results are locally verified and recorded in the mission plan.
-No platform theorem node is claimed for this file yet. G1, G2, G3 and
+Two reusable statements from this file are now accepted on Prove2Me. G1, G2, G3 and
 the main arbitrary-n conjecture remain open.
+
+## Accepted Prove2Me statements
+
+The two reusable statements are private and Proved; every submission is
+ACCEPTED, and the exact server proof sources match the locally checked
+files. Their two terminal nodes are supporting roots in the consolidated
+DAG. The existing zero-witness validity interface is reused without a duplicate upload.
+
+* large_rank_yields_compatible_kernel_family: 10a48f3a-b5ff-47d4-bc95-a13f49814f1e
+* difference_witness_of_compatible_family: 7ae928be-e18e-4243-812d-2ac2262a897e
+
+The consolidated DAG remains acyclic with 866 nodes and 1963 edges. All 616
+recorded proof dependency sets across 16 bundles match. G1/P6, G2/From7
+and G3/From7 remain its three open leaves.

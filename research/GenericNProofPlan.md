@@ -132,3 +132,7 @@ quotient kernel. Zero is included; the other members and every nonzero
 pairwise difference are reversible witnesses. Four theorems pass both
 revisions. The missing G3 step is control between different families or
 a stronger use of the cyclic kernel; no generic gate is closed.
+
+The two reusable G3 compatible-family statements are now accepted on
+Prove2Me and connected through two supporting roots. The consolidated
+DAG has 866 nodes; its three generic open leaves are unchanged.
