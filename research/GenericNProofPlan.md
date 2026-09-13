@@ -104,3 +104,7 @@ predicate remains unproved and is stronger than the current G1 input.
 The original revision and standard axioms are checked; no supported port
 or platform upload is claimed. The documentation limits the small-case
 numerics and distinguishes the stratum endpoint from the global bound.
+
+The four reusable G3 balanced-kernel statements are now accepted on
+Prove2Me and connected through two supporting roots. The consolidated
+DAG has 862 nodes; its three generic open leaves are unchanged.

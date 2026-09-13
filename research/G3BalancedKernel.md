@@ -51,3 +51,20 @@ compatible vectors at the same target. The antichain bound alone also
 does not force such a pair: a sufficient lower bound or stronger
 cross-target argument is still missing. G1, G2, G3 and the generic
 min-modulus conjecture remain open.
+
+## Accepted Prove2Me statements
+
+The four reusable statements are private and Proved; every submission is
+ACCEPTED, and the exact server proof sources match the locally checked
+files. Their two terminal nodes are supporting roots in the consolidated
+DAG. The zero-witness validity interface and the parallel odd-factor
+divisibility theorem are reused without duplicate uploads.
+
+* exists_equal_card_subset_sum_collision: 618d39af-0a8b-4e1c-9269-37f80932278f
+* exists_unit_kernel_witness_of_small_quotient: 710e0ca5-27b6-4abf-8a03-5ba287bd3ca3
+* exists_exceptional_reversible_kernel_witness: 63743669-19a5-4251-b439-8c80be28a52c
+* same_target_unit_witness_family_card_le_middle_binomial: 9e5de40d-7484-4c6f-ae8c-06f9d5bfa979
+
+The consolidated DAG remains acyclic with 862 nodes and 1955 edges. All 614
+recorded proof dependency sets across 15 bundles match. G1/P6, G2/From7
+and G3/From7 remain its three open leaves.
