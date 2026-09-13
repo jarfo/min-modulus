@@ -617,3 +617,15 @@ with nine exact types, five definition values and standard axioms.
 No new finite search is used. Full matrices, central repeated-sum
 bounds and generic G1/G2/G3 remain open. The modulus may be large;
 this gives no min-modulus counterexample. Platform export remains.
+
+## Verified eight-node diagonal-obstruction export
+
+The three odd cyclic extension lemmas, existing control-validity theorem,
+and four diagonal obstruction results have a verified split export.
+Both revisions pass eight exact original types and dependency sets,
+five definition values and the original bounded control helper type.
+Every original theorem and helper body is retained. One control definition
+bundle is added; existing probe definitions are reused. Two supporting
+roots retain the entire chain. Metadata and live preflight pass.
+These nodes have not yet been uploaded. Full-matrix coefficient recovery,
+central repeated-sum bounds and generic G1/G2/G3 remain open.
