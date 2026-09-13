@@ -31,3 +31,17 @@ lengths and the shared-edge property. The proposed 2|R|<=n fibre cap has
 not yet been proved. Global repeated-sum growth, the full-rank coefficient
 combination and G1/G2/G3 remain open. These two results await platform
 export and upload.
+
+## Verified four-theorem graph-cycle export
+
+The trail-label, odd-cycle, rooted-balance and shared-edge theorems now
+form one verified four-node export under residual-graph-cycles-research.
+Both revisions pass all four exact original types and dependency sets,
+and both residual-graph and ValidTuple definition types and values. All
+four source proof bodies are retained, with no holes outside declared
+interfaces. Four Proved external interfaces and existing definitions
+are reused. No new definitions or inline helpers are added. The common
+edge theorem is the terminal root and retains all four new statements.
+Metadata, exact live readbacks and unused-name checks pass. These four
+nodes have not yet been uploaded. Graph decomposition, the prospective
+fibre cap, global growth/rank and G1/G2/G3 remain open.

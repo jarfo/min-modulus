@@ -394,3 +394,11 @@ Both revisions pass five exact printed types, three definition values
 and standard axioms with identical source bodies. These two results
 await platform export and upload. Graph decomposition and counting, the
 proposed half-dimension fibre cap, global growth/rank and G1/G2/G3 remain open.
+
+The four concrete graph-cycle results have one verified split export.
+Both revisions pass four exact original types and dependency sets and
+two definition-value checks. Four external Proved theorem interfaces
+are reused, with no new definitions. All four original bodies are retained.
+The shared-edge theorem is the terminal root. Metadata and live preflight
+pass; publication is pending. Graph decomposition, the prospective fibre
+cap, global growth/rank and G1/G2/G3 remain open.
