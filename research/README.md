@@ -1188,3 +1188,14 @@ quartic bound for n>=12 under the weaker explicit condition
 and five definition values pass on both revisions. No new definition is
 introduced. Dense exceptional cases, absolute central inequalities and
 generic G1/G2/G3 remain open. Split export and private publication remain.
+
+## Verified four-theorem quadratic counting export
+
+All four quadratic counting statements and original proof bodies have
+a verified split export on both revisions. Four exact target types and
+dependency sets, five external interface types, three original inline
+helper types and five definition values agree. No new definition bundle
+is introduced. Metadata and live preflight pass; publication is pending.
+The final quartic bound assumes the explicit condition
+(n-9)*C<=(n-12)*choose(n,2), with n>=12. Dense exceptional cases, higher
+absolute central counts and generic G1/G2/G3 remain open.
