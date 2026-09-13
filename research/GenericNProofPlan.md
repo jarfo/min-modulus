@@ -31,6 +31,13 @@ degrees, the current probe criterion also lacks some binomial terms
 needed by the central target. Proving only the quartic case would not
 settle generic G2.
 
+[DiagonalProbeObstruction.lean](DiagonalProbeObstruction.lean) rules out
+diagonal matrices in every dimension at least four, over every
+nontrivial coefficient semiring. Full-matrix recovery requires an
+argument using off-diagonal entries; changing the field alone does not
+repair diagonal probes. This obstruction does not bound the modulus
+and is not a counterexample to min-modulus.
+
 [QuarticFibreHalfBound.lean](QuarticFibreHalfBound.lean) proves that every
 quartic single-repeat fibre has at most floor(n/2) anchors. This uniform
 local collision bound is available, but does not supply the global rank
@@ -593,39 +600,71 @@ These are conditional rank implications and do not close generic G2.
 
 ## Valid odd cyclic tuples extend to every larger dimension
 
-[Odd cyclic extensions](ValidTupleOddExtension.md) proves that every
-valid tuple at odd cyclic order embeds into a valid tuple in every
-larger dimension, preserving original coordinates by an index embedding
-and an injective additive homomorphism. A large new cyclic factor forces
-the adjoined coordinate to have multiplicity one, and the Chinese
-remainder equivalence restores a cyclic ambient group. All three proofs
-pass both revisions with four exact types and one definition value.
-This preserves additive obstructions but may enlarge the modulus greatly;
-it does not preserve N<2^n-1. The diagonal-probe application is still
-being formalized. Generic G1/G2/G3 remain open. Platform export remains.
+Every valid odd cyclic tuple embeds into valid odd cyclic tuples in
+every larger dimension through an index embedding and an injective
+additive map. A new cyclic factor forces the adjoined coordinate's
+multiplicity to be one; the Chinese remainder equivalence restores a
+cyclic ambient group. Every original additive relation is preserved.
+The new modulus may be large, so no min-modulus counterexample follows.
+
+All eight extension/control/diagonal results are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+Both Mathlib revisions pass eight original types and dependency sets,
+five definition values and the original bounded control helper type.
+All original theorem and helper bodies are retained. The new control
+definition is published; existing probe definitions are reused.
+Two supporting roots retain the whole chain. No new finite search is used.
+
+The consolidated DAG has 1003 nodes and 2301 edges. All 688 exact proof dependency sets across 32 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Full-matrix coefficient recovery and the central repeated-sum inequalities
+remain open. The extension does not preserve a small modulus; the
+diagonal obstruction gives no min-modulus counterexample.
 
 ## Diagonal probes fail in every dimension at least four
 
-[The diagonal obstruction](DiagonalProbeObstruction.md) proves that
-valid odd cyclic tuples in every dimension 4+r can contain a cubic
+Valid odd cyclic tuples in every dimension 4+r can contain a cubic
 coefficient invisible to every diagonal weighted probe outside 2 C_2.
-The fixed verified control supplies three doubled-pair identities;
-additive transport and the generic extension preserve them. A nonzero
-kernel vector refutes exactly the coefficient-recovery hypothesis over
-any nontrivial semiring. All four proof bodies pass both revisions,
-with nine exact types, five definition values and standard axioms.
-No new finite search is used. Full matrices, central repeated-sum
-bounds and generic G1/G2/G3 remain open. The modulus may be large;
-this gives no min-modulus counterexample. Platform export remains.
+The fixed control supplies three doubled-pair identities, preserved by
+additive transport and the generic odd cyclic extension. Over every
+nontrivial coefficient semiring, a nonzero kernel vector refutes exactly
+the coefficient-recovery hypothesis of the quartic counting theorem.
+Off-diagonal entries remain available in the full-matrix rank problem.
+
+All eight extension/control/diagonal results are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+Both Mathlib revisions pass eight original types and dependency sets,
+five definition values and the original bounded control helper type.
+All original theorem and helper bodies are retained. The new control
+definition is published; existing probe definitions are reused.
+Two supporting roots retain the whole chain. No new finite search is used.
+
+The consolidated DAG has 1003 nodes and 2301 edges. All 688 exact proof dependency sets across 32 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Full-matrix coefficient recovery and the central repeated-sum inequalities
+remain open. The extension does not preserve a small modulus; the
+diagonal obstruction gives no min-modulus counterexample.
 
 ## Verified eight-node diagonal-obstruction export
 
-The three odd cyclic extension lemmas, existing control-validity theorem,
-and four diagonal obstruction results have a verified split export.
-Both revisions pass eight exact original types and dependency sets,
+Valid odd cyclic tuples in every dimension 4+r can contain a cubic
+coefficient invisible to every diagonal weighted probe outside 2 C_2.
+The fixed control supplies three doubled-pair identities, preserved by
+additive transport and the generic odd cyclic extension. Over every
+nontrivial coefficient semiring, a nonzero kernel vector refutes exactly
+the coefficient-recovery hypothesis of the quartic counting theorem.
+Off-diagonal entries remain available in the full-matrix rank problem.
+
+All eight extension/control/diagonal results are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+Both Mathlib revisions pass eight original types and dependency sets,
 five definition values and the original bounded control helper type.
-Every original theorem and helper body is retained. One control definition
-bundle is added; existing probe definitions are reused. Two supporting
-roots retain the entire chain. Metadata and live preflight pass.
-These nodes have not yet been uploaded. Full-matrix coefficient recovery,
-central repeated-sum bounds and generic G1/G2/G3 remain open.
+All original theorem and helper bodies are retained. The new control
+definition is published; existing probe definitions are reused.
+Two supporting roots retain the whole chain. No new finite search is used.
+
+The consolidated DAG has 1003 nodes and 2301 edges. All 688 exact proof dependency sets across 32 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Full-matrix coefficient recovery and the central repeated-sum inequalities
+remain open. The extension does not preserve a small modulus; the
+diagonal obstruction gives no min-modulus counterexample.

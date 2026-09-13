@@ -1,35 +1,26 @@
 # Valid odd cyclic tuples embed into every larger dimension
 
-[ValidTupleOddExtension.lean](ValidTupleOddExtension.lean) proves three
-uniform extension results, with no finite search.
+Every valid odd cyclic tuple embeds into valid odd cyclic tuples in
+every larger dimension through an index embedding and an injective
+additive map. A new cyclic factor forces the adjoined coordinate's
+multiplicity to be one; the Chinese remainder equivalence restores a
+cyclic ambient group. Every original additive relation is preserved.
+The new modulus may be large, so no min-modulus counterexample follows.
 
-* If g is a valid n-tuple in an abelian group G and p>n+1, adjoining
-  (0,1) to the coordinates (g_i,0) in G x ZMod p preserves validity.
-* A valid tuple at odd cyclic order embeds into a valid tuple with one
-  additional coordinate at another odd cyclic order.
-* Iterating gives a valid tuple in every dimension n+r. The original
-  coordinates are preserved through an index embedding and an injective
-  additive homomorphism, so every original additive relation persists.
+The three extension theorems are now Proved on Prove2Me as part of the
+eight-node diagonal-obstruction chain. The transported obstruction is
+proved in every dimension at least four.
 
-For the first result, projecting a rival multiplicity vector onto the
-new cyclic factor gives k_0=1 modulo p. Its total size bounds k_0 by n+1,
-so k_0=1 as a natural number. The original validity then forces every
-remaining multiplicity to be one. For the cyclic result, choose an odd
-prime p>N+n+2 and transport the product tuple through the Chinese
-remainder equivalence ZMod(N*p) = ZMod N x ZMod p.
+All eight extension/control/diagonal results are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+Both Mathlib revisions pass eight original types and dependency sets,
+five definition values and the original bounded control helper type.
+All original theorem and helper bodies are retained. The new control
+definition is published; existing probe definitions are reused.
+Two supporting roots retain the whole chain. No new finite search is used.
 
-All three original proof bodies pass Lean 4.32 and Lean 4.33.1 against
-the original and supported Mathlib revisions. Four exact declaration
-types, the ValidTuple definition value, and standard-axiom audits match.
-The build uses selective caches and at most four compiler threads.
+The consolidated DAG has 1003 nodes and 2301 edges. All 688 exact proof dependency sets across 32 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
-The construction can carry a fixed structural obstruction into the
-range of arbitrarily large dimensions. The current application under
-construction is an invisible cubic coefficient for every diagonal probe
-matrix. That application is not yet claimed here.
-
-The enlarged modulus can be large. This construction does not preserve
-an upper bound N<2^n-1 and gives no min-modulus counterexample. Matrix
-injectivity for unrestricted matrices, the central repeated-sum bounds,
-and generic G1/G2/G3 remain open. Platform export and upload of these
-three extension statements remain.
+Full-matrix coefficient recovery and the central repeated-sum inequalities
+remain open. The extension does not preserve a small modulus; the
+diagonal obstruction gives no min-modulus counterexample.
