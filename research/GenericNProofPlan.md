@@ -269,3 +269,16 @@ and four definition values match. Four Proved interfaces are reused,
 with no new definitions. Metadata and live preflight pass. Publication
 is pending; overlap across supports and the three generic gates remain
 open.
+
+## Outside coefficient probes have trivial joint kernel
+
+[Single-repeat probes](SingleRepeatProbes.md) defines the individual
+operators underlying the proposed repeated-sum rank matrices. Validity
+makes a fixed anchor/removal probe isolate one squarefree coefficient.
+For every k>=1,n>=2k+2 at odd modulus, the midpoint escape theorem
+therefore makes all probes outside 2·C_(k+1) jointly determine every
+coefficient of support size 2k+1. Both proofs pass both revisions,
+five printed-type checks, three definition values and standard axioms.
+Finding one full-rank combination of the probes remains open; the
+joint-kernel statement alone does not establish the required global
+count. No platform publication is claimed yet, and G1/G2/G3 remain open.
