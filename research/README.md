@@ -429,16 +429,15 @@ degree 2k+2 outside 2·C_(k+1). In particular, every coordinate pair
 has at least n-3 quartic escapes, with no counterexample premise.
 The proof combines the earlier translate rigidity with validity of a
 squarefree sum on 2k+2 coordinates. All five theorem statements pass
-both revisions and standard-axiom audits. No platform publication is
-claimed yet. Overlap across different supports remains uncontrolled;
+both revisions and standard-axiom audits. All five midpoint nodes are now accepted on Prove2Me. Overlap across different supports remains uncontrolled;
 the full repeated-sum growth inequality and G1/G2/G3 remain open.
 
 The squarefree midpoint results now have a verified five-node split
 export. Both revisions pass all five original-type and exact dependency
 checks, and five definition values match. Only two existing Proved
 interfaces are reused; no definitions are added. Metadata and live
-preflight pass. Publication is pending and the three generic gates
-remain open.
+preflight pass. Publication is complete; the three generic gates remain open.
+The consolidated DAG has 916 nodes and 2116 edges. All 641 proof dependency sets across 20 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Midpoint rigidity controls hits outside the squarefree support
 

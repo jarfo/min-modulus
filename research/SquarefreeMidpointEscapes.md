@@ -48,8 +48,7 @@ The remaining obstacle is overlap between values coming from different
 supports S. A separate bound for each support does not give the total
 number of distinct repeated sums required by generic G2. The extension
 covers every even repeated degree; it does not supply all required
-odd-degree growth steps. G1, G2 and G3 remain open. These five new
-theorems have not yet been uploaded to Prove2Me.
+odd-degree growth steps. G1, G2 and G3 remain open. All five theorems are now accepted on Prove2Me; see below.
 
 ## Verified statement/proof export
 
@@ -62,6 +61,20 @@ two existing Proved theorem interfaces and adds no definitions.
 The quadratic hit-cap solution specializes the arbitrary-degree bound;
 the source repository's direct quadratic proof remains separately
 checked. Precise descriptions, exact live definition and interface
-readbacks, and unused-name checks pass. These five theorem nodes have
-not yet been uploaded. Their proved per-support escape bounds still
+readbacks, and unused-name checks pass. These five theorem nodes are now Proved on Prove2Me. Their proved per-support escape bounds still
 leave overlap across supports and the generic G1/G2/G3 gates unresolved.
+
+## Accepted Prove2Me proofs
+
+All five midpoint statements are private and Proved, with ACCEPTED
+submissions and exact server proof-source readbacks. The two terminal
+supporting roots retain the arbitrary-degree bound and its quartic
+specialization. No new definitions were needed.
+
+The consolidated DAG has 916 nodes and 2116 edges. All 641 proof dependency sets across 20 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+* squarefree_midpoint_outside_half_coin_cover: ceaeeab2-b0f7-4ca0-919c-dff12d137f79
+* squarefree_midpoint_coin_hits_le: 01367c20-b2da-4251-90a4-dd8cdf5b7e37
+* squarefree_doubled_coin_escape_count: 0c365c88-6cee-451e-9b90-bc071c41d59a
+* quadratic_midpoint_hits_le_three: f4456dc6-3069-45e2-bf9e-91fa1daa7317
+* repeated_quartic_escape_count_ge_pred_three: aa40fd9d-f2c9-4617-a736-35ce66091883
