@@ -41,3 +41,14 @@ All four original proofs pass both Mathlib revisions. Eight exact
 declaration types and the ValidTuple definition value agree. The axiom
 audit finds only standard Lean axioms. No new definition is introduced.
 Split Prove2Me export and publication remain.
+
+## Verified four-theorem cyclic fixed-point export
+
+All four cyclic fixed-point statements and original proof bodies have
+a verified split export on both revisions. Four exact target types and
+dependency sets, three external interface types and the ValidTuple
+definition value agree. No inline helper or new definition bundle is
+introduced. Metadata and live preflight pass; publication is pending.
+The affine-domain and full-closure hypotheses remain explicit. Extracting
+structure from pair density, absolute central inequalities and generic
+G1/G2/G3 remain open.
