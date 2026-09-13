@@ -601,3 +601,16 @@ All three proofs pass both revisions, six printed types, three definition
 values and standard axioms with identical bodies. These three results
 await platform export and upload. The injective parity code and graph
 edge count are next; the proposed fibre cap, global growth/rank and G1/G2/G3 remain open.
+
+## A vertex-parity code bounds the number of graph edges
+
+[Graph counting](ResidualGraphCounting.md) proves that a finite simple
+graph with odd cycles that pairwise share an edge has at most as many
+edges as vertices. An injective code stores degree parities at all but
+one vertex and uses its final bit for edge-count parity. Equal codes
+give an even-degree, even-size symmetric difference, which must be empty.
+The proof passes both revisions, four exact printed types, three definition
+values and standard axioms with the same source body. Its explicit
+heartbeat limit is 800000. No finite enumeration is used. The residual
+fibre instantiation is next; global growth/rank and G1/G2/G3 remain open.
+This graph-counting result awaits platform export and upload.
