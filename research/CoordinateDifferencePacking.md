@@ -69,7 +69,8 @@ I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)),
 where I_d is the intersection size of squarefree d-sum values and their
 translate, and p,q belong to A. This would lower the degree by one while
 removing two coordinates, preserving the central-degree relation. The
-cardinality recurrence is not yet proved in Lean.
+cardinality recurrence is now proved in [CoordinateDifferenceRecursion.lean](CoordinateDifferenceRecursion.lean).
+Its doubled-shift remainder still needs a uniform bound.
 
 * coordinate_difference_disjoint_match_anchors_mem: 17c6dc6e-0578-4bd0-be33-28f779bd2d45
 * coordinate_difference_overlapping_pair_match: 0721c08c-ee1f-470b-b948-979e6466eb5d

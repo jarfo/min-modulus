@@ -816,7 +816,8 @@ I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)),
 where I_d is the intersection size of squarefree d-sum values and their
 translate, and p,q belong to A. This would lower the degree by one while
 removing two coordinates, preserving the central-degree relation. The
-cardinality recurrence is not yet proved in Lean.
+cardinality recurrence is now proved in CoordinateDifferenceRecursion.lean;
+see the exact recurrence milestone below.
 
 ## Six-node export for coordinate-difference packing
 
@@ -847,4 +848,18 @@ I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)),
 where I_d is the intersection size of squarefree d-sum values and their
 translate, and p,q belong to A. This would lower the degree by one while
 removing two coordinates, preserving the central-degree relation. The
-cardinality recurrence is not yet proved in Lean.
+cardinality recurrence is now proved in CoordinateDifferenceRecursion.lean;
+see the exact recurrence milestone below.
+
+## Exact all-degree coordinate-difference recurrence
+
+[Coordinate-difference recurrence](CoordinateDifferenceRecursion.md) proves
+I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q))
+for every valid tuple in any additive commutative group, with p,q in A.
+If either endpoint is absent, the intersection is empty in every degree.
+The proof partitions support matches into two explicit bijections and
+identifies support counts with value-intersection counts. Ten theorems
+and one definition pass both revisions; fourteen exact types and two
+definition values agree. Split export and Prove2Me upload remain.
+The residual doubled shift still needs a uniform bound. Absolute central
+bounds and generic G1/G2/G3 remain open.
