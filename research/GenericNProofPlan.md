@@ -38,6 +38,13 @@ argument using off-diagonal entries; changing the field alone does not
 repair diagonal probes. This obstruction does not bound the modulus
 and is not a counterexample to min-modulus.
 
+[WeightedProbeContractions.lean](WeightedProbeContractions.lean) gives
+an exact factorization into matrix contractions and residue grouping.
+An injective matrix preserves every positive-degree coefficient through
+the first stage, over any semiring. The open task is to make the second
+stage, restricted outside the doubled cover, preserve that contraction
+image for some full matrix. This is not implied by matrix invertibility.
+
 [QuarticFibreHalfBound.lean](QuarticFibreHalfBound.lean) proves that every
 quartic single-repeat fibre has at most floor(n/2) anchors. This uniform
 local collision bound is available, but does not supply the global rank
@@ -671,27 +678,46 @@ diagonal obstruction gives no min-modulus counterexample.
 
 ## Weighted probes factor through matrix contractions
 
-[The contraction factorization](WeightedProbeContractions.md) writes every
-positive-degree weighted probe as matrix contractions followed by grouping
-entries with equal residue sums. An injective matrix preserves every
-squarefree coefficient through the contraction stage. Zero contractions
-imply zero weighted probes. These statements are uniform in degree and
-n, over arbitrary semirings, and need no tuple validity or oddness.
-Four original proof bodies and the new definition pass both revisions:
-seven exact types, three definition values and standard axioms.
-The unresolved rank step is whether grouping and restriction outside the
-doubled cover preserve the contraction image for some full matrix.
-Matrix injectivity alone does not establish this. The central bounds and
-generic G1/G2/G3 remain open. Platform export and upload remain.
+Every positive-degree weighted probe is exactly a matrix contraction
+followed by grouping entries with equal residue sums. If the matrix
+acts injectively on coordinate vectors, the contraction stage preserves
+every squarefree coefficient. The statements hold in all dimensions
+and degrees over arbitrary semirings, without validity or oddness.
+The contraction recovery theorem does not involve the tuple or group.
+
+All four contraction results are private and Proved, and the new
+definition is published privately. Verified submissions and exact
+server proof-source readbacks pass. Both revisions verify four original types
+and dependency sets, three definition values, and all original proof
+bodies. No inline helpers or external theorem interfaces are needed.
+Two supporting roots retain the entire chain.
+
+The consolidated DAG has 1010 nodes and 2312 edges. All 692 exact proof dependency sets across 33 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The unresolved rank step is preservation of the contraction image through
+residue grouping and restriction outside the doubled coin cover, for one
+full matrix. Matrix injectivity alone does not imply this. Central
+repeated-sum bounds and all generic gates remain open.
 
 ## Four-node export for weighted-probe contractions
 
-All four contraction statements have a verified split export. Both
-revisions pass four exact original types and dependency sets and three
-definition values, retaining every original proof body. No inline theorem
-helpers or external theorem interfaces are needed. The new contraction
-definition imports the existing probe definitions. Two supporting roots
-retain all four results. Metadata and live preflight pass. Publication
-is pending. Matrix contraction preserves coefficients for injective
-matrices; the unresolved step is preserving its image through residue
-grouping and outside-output restriction. Generic G1/G2/G3 remain open.
+Every positive-degree weighted probe is exactly a matrix contraction
+followed by grouping entries with equal residue sums. If the matrix
+acts injectively on coordinate vectors, the contraction stage preserves
+every squarefree coefficient. The statements hold in all dimensions
+and degrees over arbitrary semirings, without validity or oddness.
+The contraction recovery theorem does not involve the tuple or group.
+
+All four contraction results are private and Proved, and the new
+definition is published privately. Verified submissions and exact
+server proof-source readbacks pass. Both revisions verify four original types
+and dependency sets, three definition values, and all original proof
+bodies. No inline helpers or external theorem interfaces are needed.
+Two supporting roots retain the entire chain.
+
+The consolidated DAG has 1010 nodes and 2312 edges. All 692 exact proof dependency sets across 33 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The unresolved rank step is preservation of the contraction image through
+residue grouping and restriction outside the doubled coin cover, for one
+full matrix. Matrix injectivity alone does not imply this. Central
+repeated-sum bounds and all generic gates remain open.

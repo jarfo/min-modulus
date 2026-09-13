@@ -40,16 +40,52 @@ Local verification and platform publication status are recorded below.
 
 Four original proof bodies and the contraction definition pass Lean 4.32
 and 4.33.1. Seven exact declaration types, three definition values and
-standard-axiom audits match. Platform export and upload remain.
+standard-axiom audits match. All four statements and the contraction definition are now published on Prove2Me.
 
-## Verified four-theorem contraction export
+## Matching alone does not establish weighted rank
 
-All four contraction statements have a verified split export. Both
-revisions pass four exact original types and dependency sets and three
-definition values, retaining every original proof body. No inline theorem
-helpers or external theorem interfaces are needed. The new contraction
-definition imports the existing probe definitions. Two supporting roots
-retain all four results. Metadata and live preflight pass. Publication
-is pending. Matrix contraction preserves coefficients for injective
-matrices; the unresolved step is preserving its image through residue
-grouping and outside-output restriction. Generic G1/G2/G3 remain open.
+A separate exact symbolic calculation checks the matrix
+
+    [ a  c  0  0 ]
+    [ 0  b  d  0 ]
+    [ 0  0  c  a ]
+    [ b  0  0  d ]
+
+Its determinant is identically zero, while its leading three-by-three
+minor is a*b*c. Thus its rank over Q(a,b,c,d) is three. The vector
+(-c*d, a*d, -a*b, b*c) is a nonzero symbolic kernel vector.
+
+Each coefficient matrix of a,b,c,d is a partial permutation matrix.
+The coefficient matrices have zero joint kernel and cokernel, and the
+union of their supports has a perfect matching (the diagonal). These
+facts still do not yield one injective weighted combination: the two
+perfect matchings contribute the same monomial with opposite signs.
+
+This is an abstract matrix-space example, not a realization of the full
+probe family of a valid tuple and not a min-modulus counterexample.
+The calculation uses exact polynomial arithmetic, separately from the
+four Lean proofs above, with no tuple or modulus enumeration. A rank
+argument must use more of validity's relations between different probe
+labels than this matching information alone.
+
+
+## Verified Prove2Me contraction chain
+
+All four contraction results are private and Proved, and the new
+definition is published privately. Verified submissions and exact
+server proof-source readbacks pass. Both revisions verify four original types
+and dependency sets, three definition values, and all original proof
+bodies. No inline helpers or external theorem interfaces are needed.
+Two supporting roots retain the entire chain.
+
+The consolidated DAG has 1010 nodes and 2312 edges. All 692 exact proof dependency sets across 33 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The unresolved rank step is preservation of the contraction image through
+residue grouping and restriction outside the doubled coin cover, for one
+full matrix. Matrix injectivity alone does not imply this. Central
+repeated-sum bounds and all generic gates remain open.
+
+* single_repeat_probe_reindex_residual_support: 7ea0495f-552a-4bfd-8cb4-7389be18b21c
+* weighted_probe_eq_grouped_contractions: 327a5184-b093-45fd-9dad-d16c15fb4719
+* weighted_probe_eq_zero_of_contractions_eq_zero: 07600286-2cf2-4b81-aae5-327c5249b017
+* injective_matrix_contractions_determine_coefficients: 2ece6d40-9960-4c1e-8064-e4676edb55aa
