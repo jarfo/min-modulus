@@ -260,15 +260,15 @@ then gives at least n-(2k+2) single-repeat values anchored outside S
 and escaping 2·C_(k+1). This improves the previous bound after excluding
 anchors in S, and applies at every even repeated degree. All four
 proofs pass both revisions, eight type comparisons, four definition
-values and standard axioms. No publication is claimed yet. Controlling
+values and standard axioms. All four support-rigidity nodes are accepted on Prove2Me. Controlling
 overlap across supports is still necessary; G1, G2 and G3 remain open.
 
 The midpoint support results now have a verified four-node split export.
 Both revisions pass four original-type and exact dependency checks,
 and four definition values match. Four Proved interfaces are reused,
-with no new definitions. Metadata and live preflight pass. Publication
-is pending; overlap across supports and the three generic gates remain
-open.
+with no new definitions. Metadata and live preflight pass. Publication is complete; overlap across supports and the three
+generic gates remain open.
+The consolidated DAG has 924 nodes and 2135 edges. All 645 proof dependency sets across 21 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Outside coefficient probes have trivial joint kernel
 
