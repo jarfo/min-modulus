@@ -49,3 +49,14 @@ imports. Prove2Me export and publication remain.
 
 The global repeated-value count, absolute central inequalities and
 G1/G2/G3 remain open. Quartic alone would not settle generic G2.
+
+## Verified six-theorem incidence export
+
+All six incidence statements and original proof bodies have a verified
+split export on both revisions. Exact target types, three external
+interfaces, three inline helper types, one bundled helper type and six
+dependency sets agree. Four ordinary definition values and the inline
+configuration definition value agree. No new definition bundle is
+introduced. Metadata and live preflight pass; publication is pending.
+The exact global collision sum is now reduced to translated residual
+intersections. Absolute central counts and generic G1/G2/G3 remain open.

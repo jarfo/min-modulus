@@ -1113,3 +1113,14 @@ revisions, with sixteen exact types and five definition values. There
 are no new definitions. Bounding the total collision loss and the
 absolute central inequalities remains open, as do G1/G2/G3. Split export
 and private Prove2Me publication remain.
+
+## Verified six-theorem incidence export
+
+All six incidence statements and original proof bodies have a verified
+split export on both revisions. Exact target types, three external
+interfaces, three inline helper types, one bundled helper type and six
+dependency sets agree. Four ordinary definition values and the inline
+configuration definition value agree. No new definition bundle is
+introduced. Metadata and live preflight pass; publication is pending.
+The exact global collision sum is now reduced to translated residual
+intersections. Absolute central counts and generic G1/G2/G3 remain open.
