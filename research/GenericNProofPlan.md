@@ -683,3 +683,15 @@ The unresolved rank step is whether grouping and restriction outside the
 doubled cover preserve the contraction image for some full matrix.
 Matrix injectivity alone does not establish this. The central bounds and
 generic G1/G2/G3 remain open. Platform export and upload remain.
+
+## Four-node export for weighted-probe contractions
+
+All four contraction statements have a verified split export. Both
+revisions pass four exact original types and dependency sets and three
+definition values, retaining every original proof body. No inline theorem
+helpers or external theorem interfaces are needed. The new contraction
+definition imports the existing probe definitions. Two supporting roots
+retain all four results. Metadata and live preflight pass. Publication
+is pending. Matrix contraction preserves coefficients for injective
+matrices; the unresolved step is preserving its image through residue
+grouping and outside-output restriction. Generic G1/G2/G3 remain open.

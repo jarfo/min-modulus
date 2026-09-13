@@ -41,3 +41,15 @@ Local verification and platform publication status are recorded below.
 Four original proof bodies and the contraction definition pass Lean 4.32
 and 4.33.1. Seven exact declaration types, three definition values and
 standard-axiom audits match. Platform export and upload remain.
+
+## Verified four-theorem contraction export
+
+All four contraction statements have a verified split export. Both
+revisions pass four exact original types and dependency sets and three
+definition values, retaining every original proof body. No inline theorem
+helpers or external theorem interfaces are needed. The new contraction
+definition imports the existing probe definitions. Two supporting roots
+retain all four results. Metadata and live preflight pass. Publication
+is pending. Matrix contraction preserves coefficients for injective
+matrices; the unresolved step is preserving its image through residue
+grouping and outside-output restriction. Generic G1/G2/G3 remain open.
