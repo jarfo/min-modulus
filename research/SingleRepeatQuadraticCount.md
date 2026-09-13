@@ -48,15 +48,26 @@ G1 and G3 also remain open.
 All four original proofs pass both Mathlib revisions. Fourteen exact
 declaration types and five definition values agree, and the compiler
 axiom audit finds only standard Lean axioms. No new definition is needed.
-Split Prove2Me export and publication remain.
+All four results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified four-theorem quadratic counting export
 
-All four quadratic counting statements and original proof bodies have
-a verified split export on both revisions. Four exact target types and
-dependency sets, five external interface types, three original inline
-helper types and five definition values agree. No new definition bundle
-is introduced. Metadata and live preflight pass; publication is pending.
-The final quartic bound assumes the explicit condition
-(n-9)*C<=(n-12)*choose(n,2), with n>=12. Dense exceptional cases, higher
-absolute central counts and generic G1/G2/G3 remain open.
+## Verified Prove2Me quadratic counting chain
+
+All four quadratic counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, five
+external interface types, three original inline helper types and five
+definition values. Every original proof body is retained. Existing
+definitions are reused; no new definition bundle is introduced. One
+supporting root retains the complete four-theorem chain.
+
+The consolidated DAG has 1089 nodes and 2496 edges. All 733 exact proof dependency sets across 40 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The conditional quartic bound is proved. Dense exceptional cases, the
+higher absolute central inequalities and generic G1/G2/G3 remain open.
+
+* two_single_repeat_incidence_le_three_values_add_pair_collisions: 2102852e-2f22-456f-abaf-d879ce67e6f4
+* single_repeat_outside_doubled_cover_quadratic_count: 5f480f2f-0373-4055-b55c-6d04a0b97edd
+* quartic_outside_card_of_quadratic_sparsity: 5009fef0-968f-4d36-a88b-9c4229f9c4ad
+* absolute_quartic_bound_of_quadratic_sparsity: 4db89b31-5ee3-4e31-92c0-32b24bf122f4

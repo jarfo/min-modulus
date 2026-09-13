@@ -101,6 +101,15 @@ C of disjointly represented doubled-difference anchor pairs satisfies
 definition are verified on Prove2Me. The condition is explicit; dense
 exceptional cases and the higher central bounds remain open.
 
+[SingleRepeatQuadraticCount.lean](SingleRepeatQuadraticCount.lean)
+proves 2*incidences<=3*occupied_values+pair_collisions in every degree.
+For n>=12 at odd modulus, the weaker explicit condition
+(n-9)*C<=(n-12)*choose(n,2) now suffices for the absolute quartic count.
+The four results are verified on Prove2Me. The remaining large-n
+quartic case has only O(n) nonexceptional pairs; extracting sufficient
+structure from this density is unproved. Higher central bounds and
+generic G1/G2/G3 remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1083,26 +1092,51 @@ higher absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Quadratic incidence counts and improved quartic sparsity
 
-[Quadratic incidence counts](SingleRepeatQuadraticCount.md) proves
-2*incidences<=3*occupied_values+pair_collisions in every degree. The
-pointwise inequality is exact at fibre sizes two and three. Combining
-it with the escape supply and quartic collision cap proves the absolute
-quartic bound for n>=12 under the weaker explicit condition
-(n-9)*C<=(n-12)*choose(n,2). Four original proofs, fourteen exact types
-and five definition values pass on both revisions. No new definition is
-introduced. Dense exceptional cases, absolute central inequalities and
-generic G1/G2/G3 remain open. Split export and private publication remain.
+In every degree, twice the single-repeat incidence count is at most
+three times the occupied repeated-value count plus the pair-collision
+count. The scalar inequality is exact at fibre sizes two and three.
+Together with the escape supply and the quartic collision cap, this
+proves |D4|>=choose(n+1,2)+choose(n,3) at odd modulus for n>=12 under
+the explicit condition (n-9)*C<=(n-12)*choose(n,2). The condition is
+weaker than the preceding quartic criterion, but is not asserted for
+arbitrary valid tuples.
+
+All four quadratic counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, five
+external interface types, three original inline helper types and five
+definition values. Every original proof body is retained. Existing
+definitions are reused; no new definition bundle is introduced. One
+supporting root retains the complete four-theorem chain.
+
+The consolidated DAG has 1089 nodes and 2496 edges. All 733 exact proof dependency sets across 40 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The conditional quartic bound is proved. Dense exceptional cases, the
+higher absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified four-theorem quadratic counting export
 
-All four quadratic counting statements and original proof bodies have
-a verified split export on both revisions. Four exact target types and
-dependency sets, five external interface types, three original inline
-helper types and five definition values agree. No new definition bundle
-is introduced. Metadata and live preflight pass; publication is pending.
-The final quartic bound assumes the explicit condition
-(n-9)*C<=(n-12)*choose(n,2), with n>=12. Dense exceptional cases, higher
-absolute central counts and generic G1/G2/G3 remain open.
+In every degree, twice the single-repeat incidence count is at most
+three times the occupied repeated-value count plus the pair-collision
+count. The scalar inequality is exact at fibre sizes two and three.
+Together with the escape supply and the quartic collision cap, this
+proves |D4|>=choose(n+1,2)+choose(n,3) at odd modulus for n>=12 under
+the explicit condition (n-9)*C<=(n-12)*choose(n,2). The condition is
+weaker than the preceding quartic criterion, but is not asserted for
+arbitrary valid tuples.
+
+All four quadratic counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, five
+external interface types, three original inline helper types and five
+definition values. Every original proof body is retained. Existing
+definitions are reused; no new definition bundle is introduced. One
+supporting root retains the complete four-theorem chain.
+
+The consolidated DAG has 1089 nodes and 2496 edges. All 733 exact proof dependency sets across 40 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The conditional quartic bound is proved. Dense exceptional cases, the
+higher absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Negative affine doubling domains
 
