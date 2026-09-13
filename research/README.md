@@ -1291,3 +1291,16 @@ The consolidated DAG has 1095 nodes and 2510 edges. All 736 exact proof dependen
 
 The domain restrictions are proved. Affine structure
 extraction, absolute central inequalities and generic G1/G2/G3 remain open.
+
+## Cyclic fixed points and negative affine closure
+
+[Cyclic negative affine bounds](CyclicNegativeAffineBlock.md) proves
+that a valid tuple at any nonzero cyclic modulus has at most two
+coordinates with 3*g_i=t, including when three is not invertible.
+Consequently a negative affine domain satisfies 2*|S|<=n+2 under
+injective doubling. Full negative affine closure at odd modulus forces
+n<=2. Four original proofs, eight exact types and the ValidTuple value
+pass on both revisions. No new definition is introduced. Extracting
+structure from dense doubled differences, absolute central inequalities
+and generic G1/G2/G3 remain open. Split export and private publication
+remain.
