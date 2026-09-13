@@ -673,3 +673,14 @@ hypothesis is still open; joint determination by all probes does not
 supply it. In higher degrees, more lower-binomial terms are still
 needed for the central target. G1/G2/G3 remain open. Platform export
 and upload of these results and their weighted-probe definition remain.
+
+## Four-node export for the weighted-probe cardinality criterion
+
+The general even-degree probe implication and quartic specialization
+have a verified four-node export with one weighted-probe definition.
+Both revisions pass four exact types and dependency sets, five definition
+comparisons and two exact inline helper types. All proof bodies are
+retained. Two Proved external interfaces are reused. Metadata and live
+preflight pass; publication is pending. Existence of the one recovering
+matrix is still unproved, and the displayed higher-degree bound alone
+does not supply the full central target. Generic G1/G2/G3 remain open.

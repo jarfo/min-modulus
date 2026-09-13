@@ -37,3 +37,16 @@ also does not supply all the lower binomial terms in the central absolute
 target. Neither this criterion nor the quartic half-fibre bound closes
 G1, G2 or G3. These four statements and their weighted-probe definition
 await platform export and upload.
+
+## Verified four-theorem weighted-probe export
+
+All four weighted-probe results have a verified split export with one
+new definition bundle for the weighted combination. Both revisions pass
+four exact original types and dependency sets, five definition type/value
+comparisons and two original inline helper types. All original theorem
+and helper bodies are retained. Two existing Proved theorem interfaces
+are reused. The conditional quartic bound is the terminal root and
+retains the general even-degree implication and both support lemmas.
+Metadata, exact live dependencies and unused names pass. The new
+definition and four nodes have not yet been uploaded. Matrix existence,
+the missing higher-degree binomial terms, and G1/G2/G3 remain open.
