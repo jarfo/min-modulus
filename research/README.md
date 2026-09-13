@@ -774,3 +774,16 @@ The consolidated DAG has 990 nodes and 2278 edges. All 680 proof dependency sets
 
 The recovering matrix and missing higher-degree binomial terms remain unproved.
 These are conditional rank implications and do not close generic G2.
+
+## Valid odd cyclic tuples extend to every larger dimension
+
+[Odd cyclic extensions](ValidTupleOddExtension.md) proves that every
+valid tuple at odd cyclic order embeds into a valid tuple in every
+larger dimension, preserving original coordinates by an index embedding
+and an injective additive homomorphism. A large new cyclic factor forces
+the adjoined coordinate to have multiplicity one, and the Chinese
+remainder equivalence restores a cyclic ambient group. All three proofs
+pass both revisions with four exact types and one definition value.
+This preserves additive obstructions but may enlarge the modulus greatly;
+it does not preserve N<2^n-1. The diagonal-probe application is still
+being formalized. Generic G1/G2/G3 remain open. Platform export remains.
