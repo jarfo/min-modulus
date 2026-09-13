@@ -400,3 +400,16 @@ types, definitions and standard axioms match while avoiding the
 1025-module import closure.
 No upload of these two applications is claimed. The required generic
 repeated-sum growth is still open.
+
+## Quadratic escape counts inherit affine restrictions
+
+[QuadraticEscapeCounts](QuadraticEscapeCounts.md) proves that, at odd
+modulus, four outside quadratic hits force equality with the forward
+affine hit count at offset -t. Always, quadratic escapes are at least
+min(n-3, affine escapes). Both count proofs pass both revisions.
+The existing exact-stratum affine bound consequently gives
+n<(r+1)^2*(floor(log2 n)+1)+3*(r+1) for every outside shift's quadratic
+escape count r in an odd counterexample. That quantitative application
+passes the original full-source revision; its supported split check is
+pending. No publication of these three results is claimed yet. G1, G2
+and G3 remain open, and independent repeated-sum growth is still needed.
