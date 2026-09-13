@@ -571,3 +571,14 @@ and standard axioms, with identical source bodies. The odd-cycle rooted
 balance and edge-disjoint-cycle obstruction still need graph interfaces.
 Graph decomposition, the prospective fibre cap, global growth/rank and
 G1/G2/G3 remain open. These two results await platform export and upload.
+
+## Rooted graph balances and shared cycle edges
+
+[Odd graph balances](ResidualGraphOddBalances.md) proves that every odd
+closed trail supplies a rooted residual balance on disjoint anchor sets,
+with each support an edge of that trail. In a valid single-repeat quartic
+family with injective doubling, any two actual graph cycles share an edge.
+Both revisions pass five exact printed types, three definition values
+and standard axioms with identical source bodies. These two results
+await platform export and upload. Graph decomposition and counting, the
+proposed half-dimension fibre cap, global growth/rank and G1/G2/G3 remain open.
