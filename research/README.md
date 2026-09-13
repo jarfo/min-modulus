@@ -1176,3 +1176,15 @@ unordered anchor pairs. Metadata and live preflight pass; publication
 is pending. The final quartic bound assumes the stated sparsity
 inequality. Dense exceptional cases, absolute central counts and generic
 G1/G2/G3 remain open.
+
+## Quadratic incidence counts and improved quartic sparsity
+
+[Quadratic incidence counts](SingleRepeatQuadraticCount.md) proves
+2*incidences<=3*occupied_values+pair_collisions in every degree. The
+pointwise inequality is exact at fibre sizes two and three. Combining
+it with the escape supply and quartic collision cap proves the absolute
+quartic bound for n>=12 under the weaker explicit condition
+(n-9)*C<=(n-12)*choose(n,2). Four original proofs, fourteen exact types
+and five definition values pass on both revisions. No new definition is
+introduced. Dense exceptional cases, absolute central inequalities and
+generic G1/G2/G3 remain open. Split export and private publication remain.
