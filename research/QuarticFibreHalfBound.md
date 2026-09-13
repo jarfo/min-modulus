@@ -25,3 +25,16 @@ The two fibre statements and their four graph parity/counting prerequisites
 are awaiting a combined six-node Prove2Me export. The fibre bound alone
 does not establish repeated-sum growth or a full-rank coefficient
 combination. Generic G1, G2 and G3 remain open.
+
+## Verified six-theorem parity, counting and fibre export
+
+The three graph parity results, graph edge-count bound and two quartic
+fibre bounds form one verified six-node export. Both revisions pass six
+exact original types and dependency sets, plus the residual-graph,
+single-repeat-fibre and ValidTuple definition types and values. All six
+original proof bodies are retained. Five Proved external interfaces and
+existing definitions are reused, with no new definitions or inline helpers.
+The actual-fibre theorem is the terminal root and retains all six nodes.
+Metadata, live readbacks and unused-name checks pass. These six nodes
+have not yet been uploaded. The generic half-dimension fibre cap is
+proved; global growth/rank and G1/G2/G3 remain open.

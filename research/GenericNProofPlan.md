@@ -438,3 +438,13 @@ Both revisions pass the same two proof bodies, five exact printed types,
 three definition values and standard axioms. A combined six-node export
 with the four parity/counting prerequisites is next. Global growth/rank
 and generic G1/G2/G3 remain open.
+
+## Six-node export for the generic quartic fibre bound
+
+The graph parity, edge-count and quartic fibre bounds have a verified
+six-node split export. Both revisions pass all six exact original types
+and dependency sets and three definition-value checks. Five external
+Proved interfaces are reused; all six original proof bodies are retained.
+The actual-fibre theorem is the terminal root. Metadata and live preflight
+pass; publication is pending. The half-dimension fibre bound is proved.
+Global growth/rank and G1/G2/G3 remain open.

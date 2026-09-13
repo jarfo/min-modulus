@@ -26,3 +26,16 @@ of the anchor family should give 2|R|<=n. That fibre instantiation is not
 yet verified. Global repeated-sum growth, the full-rank coefficient
 combination and G1/G2/G3 remain open. This graph-counting theorem has not
 yet been exported or uploaded to Prove2Me.
+
+## Verified six-theorem parity, counting and fibre export
+
+The three graph parity results, graph edge-count bound and two quartic
+fibre bounds form one verified six-node export. Both revisions pass six
+exact original types and dependency sets, plus the residual-graph,
+single-repeat-fibre and ValidTuple definition types and values. All six
+original proof bodies are retained. Five Proved external interfaces and
+existing definitions are reused, with no new definitions or inline helpers.
+The actual-fibre theorem is the terminal root and retains all six nodes.
+Metadata, live readbacks and unused-name checks pass. These six nodes
+have not yet been uploaded. The generic half-dimension fibre cap is
+proved; global growth/rank and G1/G2/G3 remain open.
