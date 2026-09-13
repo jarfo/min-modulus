@@ -359,8 +359,8 @@ residual supports simultaneously for every anchor in an actual single-repeat
 fibre, in every degree and abelian group. A second theorem counts exactly
 one residual graph edge per anchor for two-element supports in a valid
 fibre with injective doubling. Both revisions pass five printed types,
-three definition values and standard axioms. These two results await their
-Prove2Me export and publication. They provide the actual-fibre realization
+three definition values and standard axioms. Both actual-fibre and edge-count results are
+now Proved on Prove2Me. They provide the actual-fibre realization
 and edge-count interfaces; graph-walk translation and graph decomposition
 remain, along with the global growth/rank argument and G1/G2/G3.
 
@@ -368,8 +368,9 @@ The actual-fibre and edge-count results have a verified two-node split
 export. Both revisions pass the two exact original-type and dependency
 checks and three definition-value checks. The source proof bodies are
 retained. One fibre definition bundle is new, and one Proved external
-interface is reused. Metadata and live preflight pass. Publication is
-pending; graph-walk instantiation, decomposition and G1/G2/G3 remain open.
+interface is reused. Metadata and exact server proof readbacks pass. Publication is
+complete; graph-walk instantiation, decomposition and G1/G2/G3 remain open.
+The consolidated DAG has 951 nodes and 2185 edges. All 658 proof dependency sets across 26 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Odd cycles in the residual graph
 
