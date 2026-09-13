@@ -778,3 +778,14 @@ The consolidated DAG has 1019 nodes and 2330 edges. All 697 exact proof dependen
 The quartic application still needs control of anchor pairs whose doubled
 difference is a coordinate difference. The absolute quartic and central
 bounds and all generic gates remain open.
+
+## Coordinate-difference pair-sum packing
+
+[Coordinate-difference packing](CoordinateDifferencePacking.md) proves
+that squarefree pair sums on an allowed set A have at most |A|-1 matches
+under a nonzero coordinate-difference shift. If either difference endpoint
+is absent from A, the intersection is empty. Six original proofs pass
+both revisions, comparing eight types and the ValidTuple definition value.
+These results assume validity and injective doubling, including all odd
+cyclic tuples. Global quartic and central bounds and G1/G2/G3 remain open.
+Platform export and upload remain.
