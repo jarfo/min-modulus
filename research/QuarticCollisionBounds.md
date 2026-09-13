@@ -51,3 +51,14 @@ All six original proofs pass on Lean 4.32 / Mathlib
 and five definition values agree. The compiler axiom audit finds only
 standard Lean axioms. Builds reuse cached dependencies and use at most
 four compiler threads. Split Prove2Me export and publication remain.
+
+## Verified six-theorem quartic collision export
+
+All six quartic statements and original proof bodies have a verified
+split export on both revisions. Six exact target types and dependency
+sets, eight external interface types, two original inline helper types
+and five definition values agree. One new definition records exceptional
+unordered anchor pairs. Metadata and live preflight pass; publication
+is pending. The final quartic bound assumes the stated sparsity
+inequality. Dense exceptional cases, absolute central counts and generic
+G1/G2/G3 remain open.
