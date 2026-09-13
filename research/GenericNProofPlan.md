@@ -63,3 +63,15 @@ argument. This remains weaker than |D_d|>=|C_(d-1)|; counting enough
 independent values across repetition patterns is still unresolved.
 A reproduced valid n=9 example rules out a uniform single-repeat cap of
 three even inside the half-degree range. No finite exclusion is added.
+
+## Parallel generic G3 route
+
+[The parallel review](G3ParallelReview.md) verifies the exceptional-modulus
+factorization into a power of two and a Mersenne odd factor, and the
+impossibility of a valid full-length tuple in that odd factor. Four existing
+Prove2Me proofs are integrated into the consolidated DAG. The generic
+continuation [G3WitnessCompatibility.lean](G3WitnessCompatibility.lean)
+proves the exact subtraction-floor test, the forced reverse tail crossing,
+and uniqueness from target plus omitted tail. The missing step remains
+existence of two distinct compatible witnesses at one kernel target.
+These supporting results do not discharge G3 or the other main gates.

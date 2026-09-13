@@ -264,3 +264,13 @@ both Lean revisions with twenty type/axiom and nine definition-value
 checks. The bound is weaker than the general growth target. The archive
 also makes the saved cap-three counterexample and earlier fibre probe
 reproducible, separately from the uniform Lean proof.
+
+## Parallel G3 structure and witness compatibility
+
+[G3ParallelReview](G3ParallelReview.md) audits the parallel branch and live
+mission comment 96b76a47. The exceptional-modulus source passes both Lean
+revisions, and four existing private proofs are read back as accepted and
+integrated into the consolidated DAG. Four new generic compatibility lemmas
+also pass both revisions, making the anchor and tail subtraction conditions
+explicit. A target and the omitted tail determine a light witness uniquely.
+The required compatible-pair existence theorem remains open.
