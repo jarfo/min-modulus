@@ -274,3 +274,14 @@ integrated into the consolidated DAG. Four new generic compatibility lemmas
 also pass both revisions, making the anchor and tail subtraction conditions
 explicit. A target and the omitted tail determine a light witness uniquely.
 The required compatible-pair existence theorem remains open.
+
+## Reversible G3 kernel witnesses
+
+[G3BalancedKernel](G3BalancedKernel.md) strengthens the generic quotient
+argument: (n+1)q<2^n forces an equal-rank subset collision modulo the
+Mersenne odd factor. Every hypothetical exceptional tuple therefore has
+a nonzero kernel witness with all coefficients in {-1,0,1}, and its
+negative is also a witness. At each target, such witnesses form an
+antichain through their negative supports, giving the middle-binomial
+Sperner bound. Eight theorems pass both revisions. The distinct compatible
+same-target pair, and all three main gates, remain open.

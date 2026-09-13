@@ -75,3 +75,14 @@ proves the exact subtraction-floor test, the forced reverse tail crossing,
 and uniqueness from target plus omitted tail. The missing step remains
 existence of two distinct compatible witnesses at one kernel target.
 These supporting results do not discharge G3 or the other main gates.
+
+## Reversible G3 kernel witnesses
+
+[G3BalancedKernel](G3BalancedKernel.md) strengthens the generic quotient
+argument: (n+1)q<2^n forces an equal-rank subset collision modulo the
+Mersenne odd factor. Every hypothetical exceptional tuple therefore has
+a nonzero kernel witness with all coefficients in {-1,0,1}, and its
+negative is also a witness. At each target, such witnesses form an
+antichain through their negative supports, giving the middle-binomial
+Sperner bound. Eight theorems pass both revisions. The distinct compatible
+same-target pair, and all three main gates, remain open.
