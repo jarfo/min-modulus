@@ -37,8 +37,7 @@ The code uses explicit multiset multiplicities, finite sums and
 permutation reindexing. Both proofs pass the original and supported
 Mathlib revisions, with three exact printed types, the ValidTuple
 definition value, standard axioms, and identical source bodies. No
-finite tuple or modulus enumeration is used. These two new proofs have
-not yet been exported or uploaded to Prove2Me.
+finite tuple or modulus enumeration is used. Both statements are now Proved on Prove2Me; see below.
 
 What remains is the interface from actual residual graph walks to these
 coordinate encodings, followed by the graph decomposition and the
@@ -54,5 +53,17 @@ There are no proof holes outside declared interfaces. The export
 reuses one Proved theorem interface and existing definitions; it adds
 no definitions or inline helpers. Both split proof bodies match the
 checked source file. Metadata, exact live readbacks and unused names
-pass. The two theorem nodes have not yet been uploaded. The graph
+pass. Both theorem nodes are now Proved on Prove2Me. The graph
 walk interface, counting consequence and G1/G2/G3 remain open.
+
+## Verified Prove2Me proofs
+
+Both residual-cycle statements are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both independent
+supporting roots retain the even-cycle exclusion and odd-cycle balance
+theorems. Existing definitions are reused.
+
+The consolidated DAG has 936 nodes and 2158 edges. All 651 proof dependency sets across 24 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+* no_even_residual_cycle: 7dc91880-097b-4c1e-95da-6d8845999dfd
+* odd_residual_cycle_balance: fe539253-cd25-4e1c-98d0-ab80bb5031f5

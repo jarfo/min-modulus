@@ -507,12 +507,13 @@ permutation, inside a quartic fibre. A second combinatorial theorem turns
 an odd endpoint cycle into a rooted residual balance with two copies of
 its initial vertex. Both results are uniform in the dimension and cycle
 length. Both revisions pass three printed types, the ValidTuple definition
-value and standard-axiom checks. No export or publication is claimed yet.
+value and standard-axiom checks. Both residual-cycle nodes are now Proved on Prove2Me.
 The actual graph-walk interface, graph decomposition and half-dimension
 fibre cap remain open, as do global repeated-sum growth and G1/G2/G3.
 
 The residual-cycle results now have a verified two-node split export.
 Both revisions pass two original-type and exact dependency checks,
 and the ValidTuple definition matches. One Proved interface is reused,
-with no new definitions. Metadata and live preflight pass. Publication
-is pending; the graph counting consequence and G1/G2/G3 remain open.
+with no new definitions. Metadata and live preflight pass. Publication is complete; the graph counting consequence and
+G1/G2/G3 remain open.
+The consolidated DAG has 936 nodes and 2158 edges. All 651 proof dependency sets across 24 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
