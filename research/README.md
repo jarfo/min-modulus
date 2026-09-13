@@ -1056,24 +1056,48 @@ generic G1/G2/G3.
 
 ## All-degree fibre transport of doubled differences
 
-[Single-repeat difference transport](SingleRepeatDifferenceTransport.md)
-proves that a coordinate representation of the doubled difference of
-two fibre anchors uses endpoints outside the entire anchor set R, in
-any residual degree. With injective doubling, represented ordered anchor
-pairs inject into ordered pairs outside R, giving the exact bound
-|E|<=(n-|R|)*(n-|R|-1). If every distinct anchor pair is represented and
-|R|>=2, this implies |R|<=n-|R|. Four proof bodies pass both revisions,
-with nine exact types and the ValidTuple definition value. The graph
-bound is proved; the full global count and generic G1/G2/G3 remain open.
-Split export and private Prove2Me publication remain.
+In a single-repeat fibre with anchor set R and arbitrary residual degree,
+a coordinate representation of a doubled difference between fibre anchors
+has both endpoints outside all of R. Under injective doubling, any family
+E of represented ordered anchor pairs satisfies
+|E|<=(n-|R|)*(n-|R|-1), by injection into complement pairs. If all distinct
+anchor pairs are represented and |R|>=2, then |R|<=n-|R|. The representation
+hypothesis is explicit and is not claimed for arbitrary fibres.
+
+All four all-degree fibre transport results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, four
+external interface types, two original inline helper types and two
+definition values. Every original proof body is retained. Four existing
+proved interfaces are reused; no new definition bundle is introduced.
+One supporting root retains the entire four-theorem chain.
+
+The consolidated DAG has 1059 nodes and 2424 edges. All 717 exact proof dependency sets across 37 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The fibre bounds are proved. Turning these collision restrictions into
+enough distinct repeated values, the absolute central inequalities and
+generic G1/G2/G3 remain open.
 
 ## Verified four-theorem fibre transport export
 
-All four fibre transport statements and original proof bodies have a
-verified split export on both revisions. Exact target types, four
-external interface types, two original inline helper types and dependency
-sets agree. ValidTuple and the imported squarefreeTranslationMatches
-definition values agree. No new definition bundle is introduced. Metadata
-and live preflight pass; publication is pending. The final half-fibre
-bound assumes every distinct anchor pair has a represented doubled
-difference. The global count and generic G1/G2/G3 remain open.
+In a single-repeat fibre with anchor set R and arbitrary residual degree,
+a coordinate representation of a doubled difference between fibre anchors
+has both endpoints outside all of R. Under injective doubling, any family
+E of represented ordered anchor pairs satisfies
+|E|<=(n-|R|)*(n-|R|-1), by injection into complement pairs. If all distinct
+anchor pairs are represented and |R|>=2, then |R|<=n-|R|. The representation
+hypothesis is explicit and is not claimed for arbitrary fibres.
+
+All four all-degree fibre transport results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, four
+external interface types, two original inline helper types and two
+definition values. Every original proof body is retained. Four existing
+proved interfaces are reused; no new definition bundle is introduced.
+One supporting root retains the entire four-theorem chain.
+
+The consolidated DAG has 1059 nodes and 2424 edges. All 717 exact proof dependency sets across 37 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The fibre bounds are proved. Turning these collision restrictions into
+enough distinct repeated values, the absolute central inequalities and
+generic G1/G2/G3 remain open.

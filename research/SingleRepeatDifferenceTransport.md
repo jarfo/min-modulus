@@ -44,16 +44,27 @@ finite enumeration or default library build is added.
 These results constrain how coordinate-difference collisions can occur
 inside a whole fibre. They do not supply the global repeated-sum count
 or the absolute central inequalities. Generic G1/G2/G3 remain open.
-Prove2Me export and publication remain; the prerequisite all-degree
-recurrence chain is currently being verified on the server.
+All four results are now verified on Prove2Me, reusing the fully proved
+all-degree recurrence chain.
 
-## Verified four-theorem fibre transport export
 
-All four fibre transport statements and original proof bodies have a
-verified split export on both revisions. Exact target types, four
-external interface types, two original inline helper types and dependency
-sets agree. ValidTuple and the imported squarefreeTranslationMatches
-definition values agree. No new definition bundle is introduced. Metadata
-and live preflight pass; publication is pending. The final half-fibre
-bound assumes every distinct anchor pair has a represented doubled
-difference. The global count and generic G1/G2/G3 remain open.
+## Verified Prove2Me fibre transport chain
+
+All four all-degree fibre transport results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, four
+external interface types, two original inline helper types and two
+definition values. Every original proof body is retained. Four existing
+proved interfaces are reused; no new definition bundle is introduced.
+One supporting root retains the entire four-theorem chain.
+
+The consolidated DAG has 1059 nodes and 2424 edges. All 717 exact proof dependency sets across 37 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The fibre bounds are proved. Turning these collision restrictions into
+enough distinct repeated values, the absolute central inequalities and
+generic G1/G2/G3 remain open.
+
+* doubled_difference_endpoints_mem_residual_union: 6a0de2fe-3f64-4d0b-8b03-7cec9e18bc31
+* single_repeat_fibre_doubled_difference_endpoints_outside: 0a2c516c-6096-4684-ab95-2a540c7fc014
+* single_repeat_fibre_coordinate_difference_edges_card_le: ffcad971-d1d0-4d6d-a65f-39a7a5e17663
+* single_repeat_fibre_card_le_complement_of_all_differences: 5e484cbb-1a08-4561-83dd-edc68d295043
