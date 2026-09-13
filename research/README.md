@@ -410,6 +410,8 @@ min(n-3, affine escapes). Both count proofs pass both revisions.
 The existing exact-stratum affine bound consequently gives
 n<(r+1)^2*(floor(log2 n)+1)+3*(r+1) for every outside shift's quadratic
 escape count r in an odd counterexample. That quantitative application
-passes the original full-source revision; its supported split check is
-pending. No publication of these three results is claimed yet. G1, G2
-and G3 remain open, and independent repeated-sum growth is still needed.
+passes the original full-source revision and a supported split proof.
+All three split proofs have matching original types, definition values
+and exact dependency sets; their five external interfaces are Proved.
+These three nodes have not yet been uploaded. G1, G2 and G3 remain open,
+and independent repeated-sum growth is still needed.

@@ -35,10 +35,16 @@ For at most three hits, r>=n-3 makes the inequality immediate. This is a
 uniform constraint on counterexamples, not a finite exclusion campaign.
 It still does not prove enough independent repeated sums for general G2.
 
-This quantitative application passes the ORIGINAL full-source revision
-and standard-axiom audit. A supported main-source build is not claimed.
-The supported split proof can reuse two already accepted G3 interfaces:
-stratum_lower_bound_of_escape_binomial_threshold_with_collision and
-length_lt_escape_quadratic_log_of_binomial. That split proof has not yet
-been verified or uploaded. None of these three new count results is
-claimed published on Prove2Me at this milestone.
+The quantitative application passes the original full-source revision
+and standard-axiom audit. All three count statements now also pass BOTH
+revisions as separate statement/proof pairs: all three original types,
+three definition values and three exact theorem dependency sets match.
+The split proof reuses five existing Proved interfaces, including the
+quadratic four-hit theorem and the G3 binomial threshold and numerical
+escape bound. There are no proof holes outside those declared interfaces.
+
+This verifies the supported split proof, while a complete supported
+main-source build is not claimed. All metadata and live dependency
+preflight checks pass. These three new theorem nodes have not yet been
+uploaded; publication follows the ongoing twelve-node one-escape batch.
+G1, G2 and G3 remain open.
