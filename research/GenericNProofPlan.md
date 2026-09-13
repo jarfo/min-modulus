@@ -989,3 +989,17 @@ configuration definition value agree. No new definition bundle is
 introduced. Metadata and live preflight pass; publication is pending.
 The exact global collision sum is now reduced to translated residual
 intersections. Absolute central counts and generic G1/G2/G3 remain open.
+
+## Quartic collision bounds and sparse differences
+
+[Quartic collision bounds](QuarticCollisionBounds.md) controls common
+quartic values by six for ordinary anchor pairs and by n-3 for pairs
+whose doubled difference is represented by two other coordinates. For
+n>=9, the exact collision sum is at most
+6*choose(n,2)+(n-9)*C, where C counts those exceptional unordered pairs.
+For n>=14 at odd modulus, 3*(n-9)*C<=2*(n-14)*choose(n,2) suffices for
+|D4|>=choose(n+1,2)+choose(n,3). The sparsity condition is explicit.
+Six original proofs, seventeen exact declaration types and five
+definition values pass on both revisions. Dense exceptional cases,
+absolute central inequalities and generic G1/G2/G3 remain open. Split
+export and private Prove2Me publication remain.
