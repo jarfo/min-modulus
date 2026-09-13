@@ -34,3 +34,16 @@ The central absolute bounds from degree four onward remain unproved.
 The quartic half-fibre bound does not by itself supply them. G1, G2 and
 G3 remain open. These four new reduction statements await platform export
 and upload.
+
+## Verified four-theorem central-degree export
+
+All four central-degree reductions now have a verified split export.
+Both revisions pass all four exact original types and dependency sets,
+four definition comparisons and fourteen exact inline helper types.
+The local subsetCoinSums helper definition also matches its original
+value. All four original proof bodies and all inline helper bodies are
+retained. Four existing Proved interfaces and existing definitions are
+reused; no new server definition bundle is introduced. The proof of the
+uniform conditional G2 reduction is the terminal supporting root.
+Metadata and live preflight pass. These four nodes have not yet been
+uploaded. The uniform central absolute bounds and G1/G2/G3 remain open.

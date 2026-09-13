@@ -460,3 +460,13 @@ hypothesis is required. All four original bodies pass both revisions,
 eight exact printed types, four definition values and standard axioms.
 The central bounds from degree four onward and generic G1/G2/G3 remain
 open. These four reduction statements await platform export and upload.
+
+## Four-node export for the central-degree G2 reduction
+
+All four original central-degree proof bodies have a verified split
+export. Both revisions pass four exact original types and dependency
+sets, four definition comparisons, fourteen original inline helper types
+and the inline subsetCoinSums definition value. Four existing Proved
+interfaces are reused. The conditional G2 theorem is the terminal root.
+Metadata and live preflight pass; publication is pending. The required
+central absolute bounds and generic G1/G2/G3 remain open.
