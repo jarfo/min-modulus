@@ -65,3 +65,15 @@ They are the next steps to check. No new numerical fibre cap is claimed.
 Even that dimension-dependent cap would leave the global repeated-sum
 growth problem open. The full-rank combination of coefficient probes,
 generic G2, G1 and G3 remain unresolved.
+
+## Verified statement/proof export
+
+Both residual-trade statements pass both revisions as separate statement
+and proof files. Their two original types and two exact theorem
+dependency sets match, as does ValidTuple in type and definition value.
+There are no proof holes outside declared interfaces. The export
+reuses one Proved theorem interface and existing definitions; it adds
+no definitions or inline helpers. Both split proof bodies match the
+checked source file. Metadata, exact live readbacks and unused names
+pass. The two theorem nodes have not yet been uploaded. The graph
+consequence and generic G1/G2/G3 gates remain open.

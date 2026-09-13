@@ -303,3 +303,9 @@ The proposed graph consequence is at most one odd residual cycle and a
 half-dimension fibre cap; that graph argument is not yet formalized.
 No export or publication is claimed. Global repeated-sum growth, the
 full-rank coefficient combination and G1/G2/G3 remain open.
+
+The residual-trade results now have a verified two-node split export.
+Both revisions pass two original-type and exact dependency checks,
+and the ValidTuple definition matches. One Proved interface is reused,
+with no new definitions. Metadata and live preflight pass. Publication
+is pending; the graph counting consequence and G1/G2/G3 remain open.
