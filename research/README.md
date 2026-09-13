@@ -1026,3 +1026,16 @@ values. The export adds one lightweight definition bundle and reuses two
 private Proved theorem interfaces. Metadata and live preflight pass.
 Publication is pending. The doubled-shift remainder still needs control;
 absolute central bounds and generic G1/G2/G3 remain open.
+
+## All-degree fibre transport of doubled differences
+
+[Single-repeat difference transport](SingleRepeatDifferenceTransport.md)
+proves that a coordinate representation of the doubled difference of
+two fibre anchors uses endpoints outside the entire anchor set R, in
+any residual degree. With injective doubling, represented ordered anchor
+pairs inject into ordered pairs outside R, giving the exact bound
+|E|<=(n-|R|)*(n-|R|-1). If every distinct anchor pair is represented and
+|R|>=2, this implies |R|<=n-|R|. Four proof bodies pass both revisions,
+with nine exact types and the ValidTuple definition value. The graph
+bound is proved; the full global count and generic G1/G2/G3 remain open.
+Split export and private Prove2Me publication remain.
