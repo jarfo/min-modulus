@@ -405,49 +405,61 @@ cap, global growth/rank and G1/G2/G3 remain open.
 
 ## Even-degree edge subsets and graph parity
 
-[Graph parity](ResidualGraphParity.md) proves that any nonempty finite
-even-degree graph contains a cycle. Under pairwise cycle edge intersection,
-every nonempty even-degree subgraph consists of one cycle. If all ambient
-cycles are odd, a subgraph with even degrees and even edge count is empty.
-All three proofs pass both revisions, six printed types, three definition
-values and standard axioms with identical bodies. These three results
-await platform export and upload. The injective parity code and graph
-edge count are next; the proposed fibre cap, global growth/rank and G1/G2/G3 remain open.
+Three general finite-graph lemmas are proved: nonempty even-degree
+graphs contain cycles; under pairwise cycle-edge intersection, every
+nonempty even-degree subgraph is one cycle; if those cycles are odd,
+an even-degree subgraph with even edge count is empty. The parity
+code and induced residual-graph application are also complete.
+All six graph parity/counting/fibre statements are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+The actual-fibre theorem is the terminal supporting root. It retains
+all six statements and reuses five existing Proved interfaces. Both
+revisions pass six exact original types and dependency sets, three
+definition-value checks and all six original proof bodies.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 668 proof dependency sets across 28 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## A vertex-parity code bounds the number of graph edges
 
-[Graph counting](ResidualGraphCounting.md) proves that a finite simple
-graph with odd cycles that pairwise share an edge has at most as many
-edges as vertices. An injective code stores degree parities at all but
-one vertex and uses its final bit for edge-count parity. Equal codes
-give an even-degree, even-size symmetric difference, which must be empty.
-The proof passes both revisions, four exact printed types, three definition
-values and standard axioms with the same source body. Its explicit
-heartbeat limit is 800000. No finite enumeration is used. The residual
-fibre instantiation is next; global growth/rank and G1/G2/G3 remain open.
-This graph-counting result awaits platform export and upload.
+A finite graph whose cycles are odd and pairwise share an edge has
+at most as many edges as vertices. An injective vertex-parity code
+proves this uniformly, without enumeration. Its residual-graph
+application now proves the half-dimension quartic fibre bound.
+All six graph parity/counting/fibre statements are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+The actual-fibre theorem is the terminal supporting root. It retains
+all six statements and reuses five existing Proved interfaces. Both
+revisions pass six exact original types and dependency sets, three
+definition-value checks and all six original proof bodies.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 668 proof dependency sets across 28 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Quartic single-repeat fibres occupy at most half the coordinates
 
-[Quartic fibre bound](QuarticFibreHalfBound.md) proves 2|R|<=n for every
-quartic single-repeat family in a valid tuple with injective doubling,
-and specializes it to the actual fibre. Its residual graph has |R|
-edges on at most n-|R| available vertices. The verified graph edge
-bound completes the argument uniformly in n, without enumeration.
-Both revisions pass the same two proof bodies, five exact printed types,
-three definition values and standard axioms. A combined six-node export
-with the four parity/counting prerequisites is next. Global growth/rank
-and generic G1/G2/G3 remain open.
+For every valid tuple in a group with injective doubling, a quartic
+single-repeat fibre has at most floor(n/2) anchors. This applies to
+all odd cyclic groups. The family graph has |R| edges on at most
+n-|R| complementary vertices. The graph edge bound gives 2|R|<=n.
+Global repeated-sum growth and the full-rank combination remain open.
+All six graph parity/counting/fibre statements are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+The actual-fibre theorem is the terminal supporting root. It retains
+all six statements and reuses five existing Proved interfaces. Both
+revisions pass six exact original types and dependency sets, three
+definition-value checks and all six original proof bodies.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 668 proof dependency sets across 28 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Six-node export for the generic quartic fibre bound
 
-The graph parity, edge-count and quartic fibre bounds have a verified
-six-node split export. Both revisions pass all six exact original types
-and dependency sets and three definition-value checks. Five external
-Proved interfaces are reused; all six original proof bodies are retained.
-The actual-fibre theorem is the terminal root. Metadata and live preflight
-pass; publication is pending. The half-dimension fibre bound is proved.
-Global growth/rank and G1/G2/G3 remain open.
+All six graph parity/counting/fibre statements are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+The actual-fibre theorem is the terminal supporting root. It retains
+all six statements and reuses five existing Proved interfaces. Both
+revisions pass six exact original types and dependency sets, three
+definition-value checks and all six original proof bodies.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 668 proof dependency sets across 28 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Absolute repeated-sum bounds at the two central degrees
 

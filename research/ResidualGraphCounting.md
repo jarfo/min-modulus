@@ -21,21 +21,24 @@ the same source body, four exact printed types, three unchanged definition
 values and standard axioms. Its explicit heartbeat limit is 800000; the
 build reuses selective caches and stays within four compiler threads.
 
-Applying this edge bound to the residual graph induced on the complement
-of the anchor family should give 2|R|<=n. That fibre instantiation is not
-yet verified. Global repeated-sum growth, the full-rank coefficient
-combination and G1/G2/G3 remain open. This graph-counting theorem has not
-yet been exported or uploaded to Prove2Me.
+QuarticFibreHalfBound.lean now applies this edge bound to the
+residual graph induced on the complement of the anchor family,
+proving 2|R|<=n. Global growth/rank and G1/G2/G3 remain open.
 
-## Verified six-theorem parity, counting and fibre export
+## Verified Prove2Me parity, counting and fibre proofs
 
-The three graph parity results, graph edge-count bound and two quartic
-fibre bounds form one verified six-node export. Both revisions pass six
-exact original types and dependency sets, plus the residual-graph,
-single-repeat-fibre and ValidTuple definition types and values. All six
-original proof bodies are retained. Five Proved external interfaces and
-existing definitions are reused, with no new definitions or inline helpers.
-The actual-fibre theorem is the terminal root and retains all six nodes.
-Metadata, live readbacks and unused-name checks pass. These six nodes
-have not yet been uploaded. The generic half-dimension fibre cap is
-proved; global growth/rank and G1/G2/G3 remain open.
+All six graph parity/counting/fibre statements are private and Proved,
+with verified submissions and exact server proof-source readbacks.
+The actual-fibre theorem is the terminal supporting root. It retains
+all six statements and reuses five existing Proved interfaces. Both
+revisions pass six exact original types and dependency sets, three
+definition-value checks and all six original proof bodies.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 668 proof dependency sets across 28 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+* exists_cycle_of_even_degrees: 954c7f59-0d2c-44d8-86c9-cf1b7e55674e
+* even_subgraph_eq_cycle_of_cycles_share_edge: f8e50e0d-d590-4f9e-9377-4e5994a60bd5
+* even_degree_even_edge_subgraph_eq_bot: e2fca457-f0ec-4bae-819b-1f7035cf5f55
+* card_edges_le_vertices_of_odd_cycles_share_edge: 0febafdf-d7e0-47d5-8de7-d51265d5c1bd
+* quartic_single_repeat_family_twice_card_le: 992521a4-f24b-4592-ad0a-abc3143d89cf
+* quartic_single_repeat_fibre_twice_card_le: 2b902049-8f74-43b8-bce8-d5eae952b46f
