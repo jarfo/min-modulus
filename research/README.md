@@ -517,3 +517,15 @@ and the ValidTuple definition matches. One Proved interface is reused,
 with no new definitions. Metadata and live preflight pass. Publication is complete; the graph counting consequence and
 G1/G2/G3 remain open.
 The consolidated DAG has 936 nodes and 2158 edges. All 651 proof dependency sets across 24 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+## A residual graph with unique anchors outside its vertices
+
+[Quartic residual graph](QuarticResidualGraph.md) defines graph edges
+from the two-element residual supports of an anchor family. Three
+interfaces prove that single-repeat residual supports avoid every
+anchor, equal residual supports determine equal anchors under injective
+doubling, and graph endpoints lie outside the anchor set. The definition
+and all interfaces pass both revisions, five printed types, two definition
+values and standard axioms. No export or publication is claimed yet.
+Instantiation for actual fibres, the graph-walk cycle interface and the
+graph counting consequence remain open, as do generic G1/G2/G3.
