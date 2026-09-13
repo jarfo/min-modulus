@@ -402,3 +402,14 @@ are reused, with no new definitions. All four original bodies are retained.
 The shared-edge theorem is the terminal root. Metadata and live preflight
 pass; publication is pending. Graph decomposition, the prospective fibre
 cap, global growth/rank and G1/G2/G3 remain open.
+
+## Even-degree edge subsets and graph parity
+
+[Graph parity](ResidualGraphParity.md) proves that any nonempty finite
+even-degree graph contains a cycle. Under pairwise cycle edge intersection,
+every nonempty even-degree subgraph consists of one cycle. If all ambient
+cycles are odd, a subgraph with even degrees and even edge count is empty.
+All three proofs pass both revisions, six printed types, three definition
+values and standard axioms with identical bodies. These three results
+await platform export and upload. The injective parity code and graph
+edge count are next; the proposed fibre cap, global growth/rank and G1/G2/G3 remain open.
