@@ -350,3 +350,15 @@ The injectivity helper uses a shorter singleton proof of the same type;
 the other four bodies match the checked source. Metadata and live preflight
 pass. Publication is pending; actual-fibre and graph-walk instantiation,
 graph counting and G1/G2/G3 remain open.
+
+## Actual fibre supports and exact residual graph edge counts
+
+[Actual-fibre graph realization](SingleRepeatGraphRealization.md) chooses
+residual supports simultaneously for every anchor in an actual single-repeat
+fibre, in every degree and abelian group. A second theorem counts exactly
+one residual graph edge per anchor for two-element supports in a valid
+fibre with injective doubling. Both revisions pass five printed types,
+three definition values and standard axioms. These two results await their
+Prove2Me export and publication. They provide the actual-fibre realization
+and edge-count interfaces; graph-walk translation and graph decomposition
+remain, along with the global growth/rank argument and G1/G2/G3.
