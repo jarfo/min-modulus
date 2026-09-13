@@ -116,6 +116,14 @@ domain, and 2*|S|<=n+|fixed points in S|. All three results are verified
 on Prove2Me. The fixed-point term is explicit; extracting a large affine
 block from represented-difference density is still unproved.
 
+[CyclicNegativeAffineBlock.lean](CyclicNegativeAffineBlock.lean) removes
+the fixed-point term for cyclic groups: a triple fibre has at most two
+valid coordinates, even when three is not invertible. Therefore
+2*|S|<=n+2 for a negative affine domain under injective doubling, and
+full negative affine closure at odd modulus forces n<=2. All four results
+are verified on Prove2Me. Affine structure extraction from dense pair
+relations and the absolute central inequalities remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1190,27 +1198,49 @@ extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Cyclic fixed points and negative affine closure
 
-[Cyclic negative affine bounds](CyclicNegativeAffineBlock.md) proves
-that a valid tuple at any nonzero cyclic modulus has at most two
-coordinates with 3*g_i=t, including when three is not invertible.
-Consequently a negative affine domain satisfies 2*|S|<=n+2 under
-injective doubling. Full negative affine closure at odd modulus forces
-n<=2. Four original proofs, eight exact types and the ValidTuple value
-pass on both revisions. No new definition is introduced. Extracting
-structure from dense doubled differences, absolute central inequalities
-and generic G1/G2/G3 remain open. Split export and private publication
-remain.
+For a valid tuple at any nonzero cyclic modulus, every fibre 3*g_i=t
+has at most two coordinates, including when three is not invertible.
+Thus a negative affine domain has at most two fixed points and obeys
+2*|S|<=n+2 under injective doubling. At odd modulus, negative affine
+closure on the entire valid tuple forces n<=2. The closure assumption
+is explicit; these results do not extract a large affine block from
+dense represented differences.
+
+All four cyclic fixed-point results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, three
+external interface types and the ValidTuple definition value. Every
+original proof body is retained. No inline helper or new definition
+bundle is introduced. One supporting root retains the complete
+four-theorem chain.
+
+The consolidated DAG has 1103 nodes and 2528 edges. All 740 exact proof dependency sets across 42 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Cyclic fixed-point control is proved. Affine structure extraction, absolute
+central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified four-theorem cyclic fixed-point export
 
-All four cyclic fixed-point statements and original proof bodies have
-a verified split export on both revisions. Four exact target types and
-dependency sets, three external interface types and the ValidTuple
-definition value agree. No inline helper or new definition bundle is
-introduced. Metadata and live preflight pass; publication is pending.
-The affine-domain and full-closure hypotheses remain explicit. Extracting
-structure from pair density, absolute central inequalities and generic
-G1/G2/G3 remain open.
+For a valid tuple at any nonzero cyclic modulus, every fibre 3*g_i=t
+has at most two coordinates, including when three is not invertible.
+Thus a negative affine domain has at most two fixed points and obeys
+2*|S|<=n+2 under injective doubling. At odd modulus, negative affine
+closure on the entire valid tuple forces n<=2. The closure assumption
+is explicit; these results do not extract a large affine block from
+dense represented differences.
+
+All four cyclic fixed-point results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, three
+external interface types and the ValidTuple definition value. Every
+original proof body is retained. No inline helper or new definition
+bundle is introduced. One supporting root retains the complete
+four-theorem chain.
+
+The consolidated DAG has 1103 nodes and 2528 edges. All 740 exact proof dependency sets across 42 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Cyclic fixed-point control is proved. Affine structure extraction, absolute
+central inequalities and generic G1/G2/G3 remain open.
 
 ## Propagation from positive affine domains
 
