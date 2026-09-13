@@ -46,3 +46,14 @@ inside a whole fibre. They do not supply the global repeated-sum count
 or the absolute central inequalities. Generic G1/G2/G3 remain open.
 Prove2Me export and publication remain; the prerequisite all-degree
 recurrence chain is currently being verified on the server.
+
+## Verified four-theorem fibre transport export
+
+All four fibre transport statements and original proof bodies have a
+verified split export on both revisions. Exact target types, four
+external interface types, two original inline helper types and dependency
+sets agree. ValidTuple and the imported squarefreeTranslationMatches
+definition values agree. No new definition bundle is introduced. Metadata
+and live preflight pass; publication is pending. The final half-fibre
+bound assumes every distinct anchor pair has a represented doubled
+difference. The global count and generic G1/G2/G3 remain open.

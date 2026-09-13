@@ -1066,3 +1066,14 @@ pairs inject into ordered pairs outside R, giving the exact bound
 with nine exact types and the ValidTuple definition value. The graph
 bound is proved; the full global count and generic G1/G2/G3 remain open.
 Split export and private Prove2Me publication remain.
+
+## Verified four-theorem fibre transport export
+
+All four fibre transport statements and original proof bodies have a
+verified split export on both revisions. Exact target types, four
+external interface types, two original inline helper types and dependency
+sets agree. ValidTuple and the imported squarefreeTranslationMatches
+definition values agree. No new definition bundle is introduced. Metadata
+and live preflight pass; publication is pending. The final half-fibre
+bound assumes every distinct anchor pair has a represented doubled
+difference. The global count and generic G1/G2/G3 remain open.
