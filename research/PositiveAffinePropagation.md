@@ -53,3 +53,14 @@ declaration types and three definition values agree (ValidTuple,
 actualFibreCoinCover and quadraticTranslateHits). The axiom audit finds
 only standard Lean axioms. No new definition is introduced. Split
 Prove2Me export and publication remain.
+
+## Verified five-theorem positive affine propagation export
+
+All five positive affine propagation statements and original proof bodies
+have a verified split export on both revisions. Five exact target types
+and dependency sets, three external interface types, two inline helper
+types and three definition values agree. No new definition bundle is
+introduced. Metadata and live preflight pass; publication is pending.
+The affine-domain, outside-coordinate and seven-neighbor hypotheses
+remain explicit. Extracting structure from pair density, absolute central
+inequalities and generic G1/G2/G3 remain open.
