@@ -54,6 +54,14 @@ counting, anchor pairs whose doubled difference is a coordinate difference
 remain the exception that needs control. This does not yet give the
 absolute quartic or central bounds.
 
+[CoordinateDifferencePacking.lean](CoordinateDifferencePacking.lean)
+complements this with the coordinate-difference case: squarefree pair
+sums on allowed coordinates A meet their translate by g_p-g_q in at
+most |A|-1 values, and in no values if p or q is absent. This uses
+validity and injective doubling. For pure quartic collisions the
+residual supports avoid both anchors, so endpoint exclusion and an
+n-3 bound can now be applied. The global count remains open.
+
 [QuarticFibreHalfBound.lean](QuarticFibreHalfBound.lean) proves that every
 quartic single-repeat fibre has at most floor(n/2) anchors. This uniform
 local collision bound is available, but does not supply the global rank
@@ -781,22 +789,62 @@ bounds and all generic gates remain open.
 
 ## Coordinate-difference pair-sum packing
 
-[Coordinate-difference packing](CoordinateDifferencePacking.md) proves
-that squarefree pair sums on an allowed set A have at most |A|-1 matches
-under a nonzero coordinate-difference shift. If either difference endpoint
-is absent from A, the intersection is empty. Six original proofs pass
-both revisions, comparing eight types and the ValidTuple definition value.
-These results assume validity and injective doubling, including all odd
-cyclic tuples. Global quartic and central bounds and G1/G2/G3 remain open.
-Platform export and upload remain.
+For a valid tuple in an additive commutative group with injective
+doubling, fix distinct p,q and an allowed coordinate set A. The squarefree
+pair-sum values on A have at most |A|-1 matches under g_p-g_q if both
+endpoints belong to A, and no matches if either endpoint is absent.
+Overlapping matches are exactly {q,c},{p,c}; at most one additional
+disjoint match exists. This gives the n-1 bound on the full tuple and
+endpoint exclusion on every restricted tuple, uniformly in n.
+
+All six coordinate-difference packing results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass.
+Both revisions verify six original target types and dependency sets,
+two reused helper types, and the ValidTuple definition value. Every
+original proof body is retained. Three existing proved interfaces are
+reused; no new definition bundle is required. One supporting root
+retains all six results.
+
+The consolidated DAG has 1031 nodes and 2360 edges. All 703 exact proof dependency sets across 35 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The restricted pair-intersection bounds are now available. Combining them
+into a global quartic estimate and proving all central degrees remain
+open, as do generic G1/G2/G3.
+
+A next target in every degree is the exact recurrence
+I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)),
+where I_d is the intersection size of squarefree d-sum values and their
+translate, and p,q belong to A. This would lower the degree by one while
+removing two coordinates, preserving the central-degree relation. The
+cardinality recurrence is not yet proved in Lean.
 
 ## Six-node export for coordinate-difference packing
 
-All six coordinate-difference statements have a verified split export.
-Both revisions pass six exact original target types and dependency sets,
+For a valid tuple in an additive commutative group with injective
+doubling, fix distinct p,q and an allowed coordinate set A. The squarefree
+pair-sum values on A have at most |A|-1 matches under g_p-g_q if both
+endpoints belong to A, and no matches if either endpoint is absent.
+Overlapping matches are exactly {q,c},{p,c}; at most one additional
+disjoint match exists. This gives the n-1 bound on the full tuple and
+endpoint exclusion on every restricted tuple, uniformly in n.
+
+All six coordinate-difference packing results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass.
+Both revisions verify six original target types and dependency sets,
 two reused helper types, and the ValidTuple definition value. Every
-original proof body is retained, with three existing proved interfaces
-and no new definition bundle. Metadata and live preflight pass.
-Publication is pending. The restricted linear bound and endpoint exclusion
-are proved; the global quartic count and central bounds remain open,
-as do generic G1/G2/G3.
+original proof body is retained. Three existing proved interfaces are
+reused; no new definition bundle is required. One supporting root
+retains all six results.
+
+The consolidated DAG has 1031 nodes and 2360 edges. All 703 exact proof dependency sets across 35 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The restricted pair-intersection bounds are now available. Combining them
+into a global quartic estimate and proving all central degrees remain
+open, as do generic G1/G2/G3.
+
+A next target in every degree is the exact recurrence
+I_(k+1)(A,g_p-g_q)=binomial(|A|-2,k)+I_k(A without {p,q},2(g_p-g_q)),
+where I_d is the intersection size of squarefree d-sum values and their
+translate, and p,q belong to A. This would lower the degree by one while
+removing two coordinates, preserving the central-degree relation. The
+cardinality recurrence is not yet proved in Lean.
