@@ -636,3 +636,15 @@ Proved interfaces are reused; all six original proof bodies are retained.
 The actual-fibre theorem is the terminal root. Metadata and live preflight
 pass; publication is pending. The half-dimension fibre bound is proved.
 Global growth/rank and G1/G2/G3 remain open.
+
+## Absolute repeated-sum bounds at the two central degrees
+
+[Central-degree reduction](AbsoluteRepeatedCoinBounds.md) proves that G2
+follows from explicit absolute repeated-sum bounds only at floor(n/2)
+and ceil(n/2). The target is |D_k|+1 >= sum_{j<k} choose(n,j). It holds
+through degree three. Every odd counterexample must violate this bound
+at one of the two central degrees, necessarily k>=4. No successive-growth
+hypothesis is required. All four original bodies pass both revisions,
+eight exact printed types, four definition values and standard axioms.
+The central bounds from degree four onward and generic G1/G2/G3 remain
+open. These four reduction statements await platform export and upload.
