@@ -668,3 +668,18 @@ The consolidated DAG has 1003 nodes and 2301 edges. All 688 exact proof dependen
 Full-matrix coefficient recovery and the central repeated-sum inequalities
 remain open. The extension does not preserve a small modulus; the
 diagonal obstruction gives no min-modulus counterexample.
+
+## Weighted probes factor through matrix contractions
+
+[The contraction factorization](WeightedProbeContractions.md) writes every
+positive-degree weighted probe as matrix contractions followed by grouping
+entries with equal residue sums. An injective matrix preserves every
+squarefree coefficient through the contraction stage. Zero contractions
+imply zero weighted probes. These statements are uniform in degree and
+n, over arbitrary semirings, and need no tuple validity or oddness.
+Four original proof bodies and the new definition pass both revisions:
+seven exact types, three definition values and standard axioms.
+The unresolved rank step is whether grouping and restriction outside the
+doubled cover preserve the contraction image for some full matrix.
+Matrix injectivity alone does not establish this. The central bounds and
+generic G1/G2/G3 remain open. Platform export and upload remain.
