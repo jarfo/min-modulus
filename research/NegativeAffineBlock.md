@@ -36,3 +36,14 @@ All three original proof bodies pass both Mathlib revisions. Six exact
 declaration types and the ValidTuple definition value agree; the axiom
 audit finds only standard Lean axioms. No new definition is introduced.
 Split Prove2Me export and publication remain.
+
+## Verified three-theorem negative affine export
+
+All three negative affine statements and original proof bodies have a
+verified split export on both revisions. Three exact target types and
+dependency sets, two external interface types, one original inline
+helper type and the ValidTuple definition value agree. No new definition
+bundle is introduced. Metadata and live preflight pass; publication is
+pending. The domain bound keeps its fixed-point term explicit. Extracting
+affine structure from pair density, absolute central counts and generic
+G1/G2/G3 remain open.

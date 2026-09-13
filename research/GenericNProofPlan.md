@@ -1149,3 +1149,14 @@ value pass on both revisions. The fixed-point term remains explicit.
 Extracting affine structure from dense represented differences, the
 absolute central counts and generic G1/G2/G3 remain open. Split export
 and private Prove2Me publication remain.
+
+## Verified three-theorem negative affine export
+
+All three negative affine statements and original proof bodies have a
+verified split export on both revisions. Three exact target types and
+dependency sets, two external interface types, one original inline
+helper type and the ValidTuple definition value agree. No new definition
+bundle is introduced. Metadata and live preflight pass; publication is
+pending. The domain bound keeps its fixed-point term explicit. Extracting
+affine structure from pair density, absolute central counts and generic
+G1/G2/G3 remain open.
