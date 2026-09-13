@@ -503,29 +503,45 @@ These are conditional reductions and do not close generic G2.
 
 ## A concrete matrix criterion for repeated-sum cardinality
 
-[Weighted probes](WeightedProbeCardinality.md) formalizes a fixed matrix
-combination of the existing coefficient probes. If it recovers all
-coefficients in degree 2k+1 outside 2*C_(k+1), then
-|D_(2k+2)| >= |C_(k+1)| + choose(n,2k+1). The quartic specialization
-for valid tuples gives the absolute bound choose(n+1,2)+choose(n,3).
-Doubling containment and probe vanishing are proved in every degree.
-All four proof bodies pass both revisions, nine exact printed types,
-five definition values and standard axioms. The matrix-recovery
-hypothesis is still open; joint determination by all probes does not
-supply it. In higher degrees, more lower-binomial terms are still
-needed for the central target. G1/G2/G3 remain open. Platform export
-and upload of these results and their weighted-probe definition remain.
+A single coefficient-recovering probe matrix outside 2*C_(k+1) forces
+|D_(2k+2)| >= |C_(k+1)|+choose(n,2k+1). Its quartic specialization for
+valid tuples gives choose(n+1,2)+choose(n,3). The recovering matrix is
+still unproved; joint recovery by all separate probes does not suffice.
+The higher-degree bound also lacks some terms of the central target.
+
+All four weighted-probe implications are private and Proved, with
+verified submissions and exact server proof-source readbacks. The new
+weighted-probe definition is private and verified. Both revisions pass
+four exact original types and dependency sets, five definition values
+and two original inline helper types. All original proof and helper
+bodies are retained. Two existing Proved interfaces are reused. The
+conditional quartic result is the terminal supporting root.
+
+The consolidated DAG has 984 nodes and 2263 edges. All 676 proof dependency sets across 30 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The coefficient-recovering matrix remains unproved. In higher degrees,
+more lower-binomial terms are needed. These implications do not close G2.
 
 ## Four-node export for the weighted-probe cardinality criterion
 
-The general even-degree probe implication and quartic specialization
-have a verified four-node export with one weighted-probe definition.
-Both revisions pass four exact types and dependency sets, five definition
-comparisons and two exact inline helper types. All proof bodies are
-retained. Two Proved external interfaces are reused. Metadata and live
-preflight pass; publication is pending. Existence of the one recovering
-matrix is still unproved, and the displayed higher-degree bound alone
-does not supply the full central target. Generic G1/G2/G3 remain open.
+A single coefficient-recovering probe matrix outside 2*C_(k+1) forces
+|D_(2k+2)| >= |C_(k+1)|+choose(n,2k+1). Its quartic specialization for
+valid tuples gives choose(n+1,2)+choose(n,3). The recovering matrix is
+still unproved; joint recovery by all separate probes does not suffice.
+The higher-degree bound also lacks some terms of the central target.
+
+All four weighted-probe implications are private and Proved, with
+verified submissions and exact server proof-source readbacks. The new
+weighted-probe definition is private and verified. Both revisions pass
+four exact original types and dependency sets, five definition values
+and two original inline helper types. All original proof and helper
+bodies are retained. Two existing Proved interfaces are reused. The
+conditional quartic result is the terminal supporting root.
+
+The consolidated DAG has 984 nodes and 2263 edges. All 676 proof dependency sets across 30 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The coefficient-recovering matrix remains unproved. In higher degrees,
+more lower-binomial terms are needed. These implications do not close G2.
 
 ## Weighted-probe rank permits symbolic coefficient fields
 

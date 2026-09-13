@@ -35,18 +35,25 @@ all probes jointly determine coefficients does not imply that one fixed
 matrix combination does so. In degrees above four, the displayed bound
 also does not supply all the lower binomial terms in the central absolute
 target. Neither this criterion nor the quartic half-fibre bound closes
-G1, G2 or G3. These four statements and their weighted-probe definition
-await platform export and upload.
+G1, G2 or G3. All four statements and their weighted-probe definition are now published and verified on Prove2Me.
 
-## Verified four-theorem weighted-probe export
 
-All four weighted-probe results have a verified split export with one
-new definition bundle for the weighted combination. Both revisions pass
-four exact original types and dependency sets, five definition type/value
-comparisons and two original inline helper types. All original theorem
-and helper bodies are retained. Two existing Proved theorem interfaces
-are reused. The conditional quartic bound is the terminal root and
-retains the general even-degree implication and both support lemmas.
-Metadata, exact live dependencies and unused names pass. The new
-definition and four nodes have not yet been uploaded. Matrix existence,
-the missing higher-degree binomial terms, and G1/G2/G3 remain open.
+## Verified Prove2Me weighted-probe implications
+
+All four weighted-probe implications are private and Proved, with
+verified submissions and exact server proof-source readbacks. The new
+weighted-probe definition is private and verified. Both revisions pass
+four exact original types and dependency sets, five definition values
+and two original inline helper types. All original proof and helper
+bodies are retained. Two existing Proved interfaces are reused. The
+conditional quartic result is the terminal supporting root.
+
+The consolidated DAG has 984 nodes and 2263 edges. All 676 proof dependency sets across 30 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The coefficient-recovering matrix remains unproved. In higher degrees,
+more lower-binomial terms are needed. These implications do not close G2.
+
+* doubled_coin_cover_subset_repeated_coin_cover: d3d6e0fe-8c9e-4248-ab5c-18c5a52c8ec0
+* single_repeat_probe_eq_zero_outside_repeated: 5ab11b5a-8d47-461a-a796-324f0e0ae2b2
+* even_degree_card_bound_of_weighted_probe_injective: d52e2c2b-21b4-4956-81b0-304375286f07
+* absolute_quartic_bound_of_weighted_probe_injective: a9f2bce0-f79d-436e-ac62-243c4e840920
