@@ -322,3 +322,9 @@ length. Both revisions pass three printed types, the ValidTuple definition
 value and standard-axiom checks. No export or publication is claimed yet.
 The actual graph-walk interface, graph decomposition and half-dimension
 fibre cap remain open, as do global repeated-sum growth and G1/G2/G3.
+
+The residual-cycle results now have a verified two-node split export.
+Both revisions pass two original-type and exact dependency checks,
+and the ValidTuple definition matches. One Proved interface is reused,
+with no new definitions. Metadata and live preflight pass. Publication
+is pending; the graph counting consequence and G1/G2/G3 remain open.

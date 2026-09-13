@@ -44,3 +44,15 @@ What remains is the interface from actual residual graph walks to these
 coordinate encodings, followed by the graph decomposition and the
 proposed bound 2|R|<=n. The global repeated-sum growth inequality, a
 single full-rank coefficient combination, and G1/G2/G3 remain open.
+
+## Verified statement/proof export
+
+Both residual-cycle translations pass both revisions as separate statement
+and proof files. Their two original types and two exact theorem
+dependency sets match, as does ValidTuple in type and definition value.
+There are no proof holes outside declared interfaces. The export
+reuses one Proved theorem interface and existing definitions; it adds
+no definitions or inline helpers. Both split proof bodies match the
+checked source file. Metadata, exact live readbacks and unused names
+pass. The two theorem nodes have not yet been uploaded. The graph
+walk interface, counting consequence and G1/G2/G3 remain open.
