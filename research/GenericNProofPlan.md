@@ -110,6 +110,12 @@ quartic case has only O(n) nonexceptional pairs; extracting sufficient
 structure from this density is unproved. Higher central bounds and
 generic G1/G2/G3 remain open.
 
+[NegativeAffineBlock.lean](NegativeAffineBlock.lean) restricts partial
+negative affine doubling maps: a nonfixed image cannot remain in the
+domain, and 2*|S|<=n+|fixed points in S|. All three results are verified
+on Prove2Me. The fixed-point term is explicit; extracting a large affine
+block from represented-difference density is still unproved.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1140,23 +1146,44 @@ higher absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Negative affine doubling domains
 
-[Negative affine blocks](NegativeAffineBlock.md) proves that a partial
-map with g(f(i))+2*g(i)=t on a valid domain S, under injective doubling,
-can map back into S only at a fixed point. The map is injective on S,
-so nonfixed images inject outside S and 2*|S|<=n+|fixed points in S|.
-Three original proofs, six exact types and the ValidTuple definition
-value pass on both revisions. The fixed-point term remains explicit.
-Extracting affine structure from dense represented differences, the
-absolute central counts and generic G1/G2/G3 remain open. Split export
-and private Prove2Me publication remain.
+For a valid tuple with injective doubling, a partial map satisfying
+g(f(i))+2*g(i)=t on S can take i back into S only when f(i)=i. This
+negative affine map is injective on S, so its nonfixed images inject
+into the complement of S. Hence 2*|S|<=n+|fixed points in S|, with the
+fixed-point term explicit. These statements do not extract an affine
+block from a dense represented-difference graph.
+
+All three negative affine domain results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, two
+external interface types, one original inline helper type and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete three-theorem chain.
+
+The consolidated DAG has 1095 nodes and 2510 edges. All 736 exact proof dependency sets across 41 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The domain restrictions are proved. Affine structure
+extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified three-theorem negative affine export
 
-All three negative affine statements and original proof bodies have a
-verified split export on both revisions. Three exact target types and
-dependency sets, two external interface types, one original inline
-helper type and the ValidTuple definition value agree. No new definition
-bundle is introduced. Metadata and live preflight pass; publication is
-pending. The domain bound keeps its fixed-point term explicit. Extracting
-affine structure from pair density, absolute central counts and generic
-G1/G2/G3 remain open.
+For a valid tuple with injective doubling, a partial map satisfying
+g(f(i))+2*g(i)=t on S can take i back into S only when f(i)=i. This
+negative affine map is injective on S, so its nonfixed images inject
+into the complement of S. Hence 2*|S|<=n+|fixed points in S|, with the
+fixed-point term explicit. These statements do not extract an affine
+block from a dense represented-difference graph.
+
+All three negative affine domain results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, two
+external interface types, one original inline helper type and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete three-theorem chain.
+
+The consolidated DAG has 1095 nodes and 2510 edges. All 736 exact proof dependency sets across 41 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The domain restrictions are proved. Affine structure
+extraction, absolute central inequalities and generic G1/G2/G3 remain open.

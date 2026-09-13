@@ -35,15 +35,25 @@ and G1/G2/G3 remain open.
 All three original proof bodies pass both Mathlib revisions. Six exact
 declaration types and the ValidTuple definition value agree; the axiom
 audit finds only standard Lean axioms. No new definition is introduced.
-Split Prove2Me export and publication remain.
+All three results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified three-theorem negative affine export
 
-All three negative affine statements and original proof bodies have a
-verified split export on both revisions. Three exact target types and
-dependency sets, two external interface types, one original inline
-helper type and the ValidTuple definition value agree. No new definition
-bundle is introduced. Metadata and live preflight pass; publication is
-pending. The domain bound keeps its fixed-point term explicit. Extracting
-affine structure from pair density, absolute central counts and generic
-G1/G2/G3 remain open.
+## Verified Prove2Me negative affine chain
+
+All three negative affine domain results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, two
+external interface types, one original inline helper type and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete three-theorem chain.
+
+The consolidated DAG has 1095 nodes and 2510 edges. All 736 exact proof dependency sets across 41 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The domain restrictions are proved. Affine structure
+extraction, absolute central inequalities and generic G1/G2/G3 remain open.
+
+* negative_affine_image_mem_domain_iff_fixed: 02925060-9408-4123-b963-1b265080ce78
+* negative_affine_map_injOn: 71c88901-2693-4955-ac35-21e2fa84900d
+* negative_affine_domain_twice_card_le_add_fixed: bf72659d-f12a-40fd-9b0d-ae0b30a72f01
