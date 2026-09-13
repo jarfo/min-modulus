@@ -41,8 +41,7 @@ Both proofs and the new probe definition pass the original and supported
 Mathlib revisions. Five printed types and three definition values match;
 all proof axioms are standard, and the source bodies are identical.
 Compilation reuses the checked selective dependency caches. No new
-finite enumeration is used. These results have not yet been exported
-or uploaded to Prove2Me.
+finite enumeration is used. Both statements are now Proved on Prove2Me; see below.
 
 ## Verified statement/proof export
 
@@ -55,6 +54,17 @@ definition bundle containing only the probe definition. Both split
 proof bodies are retained from the checked source file.
 
 Precise descriptions, exact live definition and interface readbacks,
-and unused-name checks pass. The new definition and two theorem nodes
-have not yet been uploaded. A single full-rank combination and the
+and unused-name checks pass. The new definition is published and both theorem nodes are Proved. A single full-rank combination and the
 generic G1/G2/G3 gates remain open.
+
+## Verified Prove2Me proofs
+
+Both coefficient-probe statements are private and Proved, with
+verified submissions and exact server proof-source readbacks. The
+probe definition is published, and one terminal supporting root
+retains the joint-determination theorem and its dependencies.
+
+The consolidated DAG has 929 nodes and 2145 edges. All 647 proof dependency sets across 22 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+* single_repeat_probe_isolates_coefficient: b0f2901c-fc8f-4af3-83d2-603dd8af5b96
+* outside_single_repeat_probes_determine_coefficients: b9c39b8c-1df9-4d9d-a075-633718acea1b

@@ -469,11 +469,12 @@ coefficient of support size 2k+1. Both proofs pass both revisions,
 five printed-type checks, three definition values and standard axioms.
 Finding one full-rank combination of the probes remains open; the
 joint-kernel statement alone does not establish the required global
-count. No platform publication is claimed yet, and G1/G2/G3 remain open.
+count. Both probe theorem nodes are now Proved on Prove2Me; G1/G2/G3 remain open.
 
 The coefficient-probe results now have a verified two-node split export.
 Both revisions pass two original-type and exact dependency checks,
 and three definition values match. Two Proved interfaces are reused,
 with one new lightweight definition bundle. Metadata and live preflight
-pass. Publication is pending; the single full-rank combination and
+pass. Publication is complete; the single full-rank combination and
 G1/G2/G3 remain open.
+The consolidated DAG has 929 nodes and 2145 edges. All 647 proof dependency sets across 22 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
