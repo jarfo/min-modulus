@@ -966,3 +966,15 @@ The consolidated DAG has 1059 nodes and 2424 edges. All 717 exact proof dependen
 The fibre bounds are proved. Turning these collision restrictions into
 enough distinct repeated values, the absolute central inequalities and
 generic G1/G2/G3 remain open.
+
+## Global single-repeat incidence and collision bounds
+
+[Single-repeat incidence bounds](SingleRepeatIncidenceBounds.md) gives an
+exact reindexing by residual supports, an all-even-degree summed escape
+bound, and a global inequality whose remaining loss is a sum of unordered
+anchor-pair collisions. Common fibre values inject into restricted
+translated squarefree intersections. Six original proofs pass both
+revisions, with sixteen exact types and five definition values. There
+are no new definitions. Bounding the total collision loss and the
+absolute central inequalities remains open, as do G1/G2/G3. Split export
+and private Prove2Me publication remain.
