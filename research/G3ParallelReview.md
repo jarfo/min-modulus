@@ -83,3 +83,11 @@ compatibility interface and a counting restriction, not the missing
 compatible-pair existence argument. G1, G2, G3 and the main arbitrary-n
 conjecture remain open. No new finite exclusion search or mod-120 upload
 is started.
+
+## Completed parallel search
+
+The parallel search log now ends with its budget exhausted: 6000000
+candidate extensions, maximum depth eight, and no valid nine-tuple found
+modulo 496. This was a randomized search, not an exhaustive exclusion.
+It supplies no proof of the n=9 case or of generic G3. The exact existing
+script and completed log are archived; this review did not rerun it.
