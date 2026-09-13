@@ -1315,3 +1315,16 @@ introduced. Metadata and live preflight pass; publication is pending.
 The affine-domain and full-closure hypotheses remain explicit. Extracting
 structure from pair density, absolute central inequalities and generic
 G1/G2/G3 remain open.
+
+## Propagation from positive affine domains
+
+[Positive affine propagation](PositiveAffinePropagation.md) proves that
+seven represented doubled-difference neighbors of an outside coordinate
+in a positive affine domain force a second affine map on their images.
+Two distinct such outside coordinates have at most one common rich
+neighbor, and any rich neighbor set R in a domain S obeys |R|+|S|<=n+1.
+All representation and outside hypotheses are explicit. Five original
+proofs, thirteen exact types and three definition values pass on both
+revisions. No new definition is introduced. Extracting a useful domain
+from pair density, the absolute central inequalities and generic G1/G2/G3
+remain open. Split export and private publication remain.
