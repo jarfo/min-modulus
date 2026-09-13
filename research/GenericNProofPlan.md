@@ -341,3 +341,12 @@ and all interfaces pass both revisions, five printed types, two definition
 values and standard axioms. No export or publication is claimed yet.
 Instantiation for actual fibres, the graph-walk cycle interface and the
 graph counting consequence remain open, as do generic G1/G2/G3.
+
+The graph interfaces now have a verified five-node split export, including
+two existing helpers being made reusable on Prove2Me. Both revisions pass
+five original-type and exact dependency checks and two definition values.
+One Proved external interface is reused, with one graph definition bundle.
+The injectivity helper uses a shorter singleton proof of the same type;
+the other four bodies match the checked source. Metadata and live preflight
+pass. Publication is pending; actual-fibre and graph-walk instantiation,
+graph counting and G1/G2/G3 remain open.

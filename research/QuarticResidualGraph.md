@@ -35,3 +35,20 @@ actual single-repeat fibre, converting graph walks to the verified
 finite-coordinate cycle encodings, and proving the graph decomposition
 and the proposed 2|R|<=n bound remain to be done. Global repeated-sum
 growth, the full-rank coefficient combination and G1/G2/G3 remain open.
+
+## Verified graph and helper export
+
+The three graph interfaces and two existing supporting lemmas now pass
+both revisions as five separate statement/proof pairs. All five original
+theorem types and exact dependency sets match; the graph and ValidTuple
+definitions also match in type and value. No proof holes occur outside
+declared interfaces. The export adds one lightweight graph definition
+bundle and reuses one Proved external interface.
+
+The support-avoidance helper and validTuple_injective are being published
+for the first time. The latter uses a shorter authored singleton-support
+proof from multiset rigidity; its original theorem type is preserved.
+The other four split bodies match the checked source. Metadata, exact
+live readbacks and all six unused names pass. None of these new nodes
+has been uploaded yet. Actual-fibre instantiation, the graph-walk and
+counting arguments, and G1/G2/G3 remain open.
