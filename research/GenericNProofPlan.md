@@ -93,6 +93,14 @@ verified on Prove2Me. Uniform control of the total loss, especially for
 dense represented doubled differences, and the absolute central bounds
 remain open.
 
+[QuarticCollisionBounds.lean](QuarticCollisionBounds.lean) proves a
+quantitative quartic criterion: for n>=14 at odd modulus, if the number
+C of disjointly represented doubled-difference anchor pairs satisfies
+3*(n-9)*C<=2*(n-14)*choose(n,2), then
+|D4|>=choose(n+1,2)+choose(n,3). All six results and the exceptional-pair
+definition are verified on Prove2Me. The condition is explicit; dense
+exceptional cases and the higher central bounds remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1027,28 +1035,51 @@ generic G1/G2/G3 remains open.
 
 ## Quartic collision bounds and sparse differences
 
-[Quartic collision bounds](QuarticCollisionBounds.md) controls common
-quartic values by six for ordinary anchor pairs and by n-3 for pairs
-whose doubled difference is represented by two other coordinates. For
-n>=9, the exact collision sum is at most
-6*choose(n,2)+(n-9)*C, where C counts those exceptional unordered pairs.
-For n>=14 at odd modulus, 3*(n-9)*C<=2*(n-14)*choose(n,2) suffices for
-|D4|>=choose(n+1,2)+choose(n,3). The sparsity condition is explicit.
-Six original proofs, seventeen exact declaration types and five
-definition values pass on both revisions. Dense exceptional cases,
-absolute central inequalities and generic G1/G2/G3 remain open. Split
-export and private Prove2Me publication remain.
+For a valid tuple with injective doubling, ordinary anchor pairs have
+at most six common quartic values. Pairs whose doubled difference is
+represented by two distinct outside coordinates have at most n-3. If C
+counts those exceptional unordered pairs and n>=9, the global pair loss
+is at most 6*choose(n,2)+(n-9)*C. At odd modulus and n>=14, the explicit
+hypothesis 3*(n-9)*C<=2*(n-14)*choose(n,2) yields the absolute quartic
+bound |D4|>=choose(n+1,2)+choose(n,3). Sparsity is not asserted for
+arbitrary valid tuples.
+
+All six quartic collision results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, eight
+external interface types, two original inline helper types and five
+definition values. Every original proof body is retained. One new
+definition records exceptional unordered anchor pairs. One supporting
+root retains the complete six-theorem chain.
+
+The consolidated DAG has 1082 nodes and 2478 edges. All 729 exact proof dependency sets across 39 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The conditional quartic bound is proved. Dense exceptional cases, the
+higher absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified six-theorem quartic collision export
 
-All six quartic statements and original proof bodies have a verified
-split export on both revisions. Six exact target types and dependency
-sets, eight external interface types, two original inline helper types
-and five definition values agree. One new definition records exceptional
-unordered anchor pairs. Metadata and live preflight pass; publication
-is pending. The final quartic bound assumes the stated sparsity
-inequality. Dense exceptional cases, absolute central counts and generic
-G1/G2/G3 remain open.
+For a valid tuple with injective doubling, ordinary anchor pairs have
+at most six common quartic values. Pairs whose doubled difference is
+represented by two distinct outside coordinates have at most n-3. If C
+counts those exceptional unordered pairs and n>=9, the global pair loss
+is at most 6*choose(n,2)+(n-9)*C. At odd modulus and n>=14, the explicit
+hypothesis 3*(n-9)*C<=2*(n-14)*choose(n,2) yields the absolute quartic
+bound |D4|>=choose(n+1,2)+choose(n,3). Sparsity is not asserted for
+arbitrary valid tuples.
+
+All six quartic collision results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, eight
+external interface types, two original inline helper types and five
+definition values. Every original proof body is retained. One new
+definition records exceptional unordered anchor pairs. One supporting
+root retains the complete six-theorem chain.
+
+The consolidated DAG has 1082 nodes and 2478 edges. All 729 exact proof dependency sets across 39 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The conditional quartic bound is proved. Dense exceptional cases, the
+higher absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Quadratic incidence counts and improved quartic sparsity
 

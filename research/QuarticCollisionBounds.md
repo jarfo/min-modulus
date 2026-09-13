@@ -50,15 +50,28 @@ All six original proofs pass on Lean 4.32 / Mathlib
 0df444a360eaa60ab8c11dca51a86af692955474. Seventeen exact declaration types
 and five definition values agree. The compiler axiom audit finds only
 standard Lean axioms. Builds reuse cached dependencies and use at most
-four compiler threads. Split Prove2Me export and publication remain.
+four compiler threads. All six results and the new definition are now verified privately on
+Prove2Me and integrated into the consolidated DAG.
 
-## Verified six-theorem quartic collision export
 
-All six quartic statements and original proof bodies have a verified
-split export on both revisions. Six exact target types and dependency
-sets, eight external interface types, two original inline helper types
-and five definition values agree. One new definition records exceptional
-unordered anchor pairs. Metadata and live preflight pass; publication
-is pending. The final quartic bound assumes the stated sparsity
-inequality. Dense exceptional cases, absolute central counts and generic
-G1/G2/G3 remain open.
+## Verified Prove2Me quartic collision chain
+
+All six quartic collision results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, eight
+external interface types, two original inline helper types and five
+definition values. Every original proof body is retained. One new
+definition records exceptional unordered anchor pairs. One supporting
+root retains the complete six-theorem chain.
+
+The consolidated DAG has 1082 nodes and 2478 edges. All 729 exact proof dependency sets across 39 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The conditional quartic bound is proved. Dense exceptional cases, the
+higher absolute central inequalities and generic G1/G2/G3 remain open.
+
+* quartic_pair_values_card_le_six_of_no_coordinate_difference: 62a8c460-e4ab-4ac1-b883-0bd9c061c581
+* quartic_pair_values_card_le_of_coordinate_difference: c53a2dd4-b99c-4d69-8b77-980759257598
+* quartic_anchor_pair_values_card_le_exceptional: d2e8183c-6402-441a-97fa-2641bef143de
+* quartic_pair_collision_sum_le: c170dd60-ac6d-4518-9f2c-19a96b606d3f
+* quartic_outside_doubled_cover_card_of_sparse_differences: 6536bb34-c9fc-4132-9bc2-d5dca22bb81d
+* absolute_quartic_bound_of_sparse_differences: 1c1ef1be-fd69-4fd0-8485-15408fce294d
