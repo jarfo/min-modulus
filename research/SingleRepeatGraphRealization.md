@@ -34,3 +34,15 @@ printed types and three definition values match exactly; all proof
 axioms are standard and the source bodies are identical. Compilation
 reuses the selective dependency caches and uses no finite enumeration.
 These two results await their Prove2Me export and publication.
+
+## Verified actual-fibre export
+
+Both results now pass the original and supported revisions as separate
+statement/proof pairs, with their original proof bodies retained. Both
+original theorem types and exact dependency sets match. The three
+definition types and values match; no proof holes occur outside declared
+interfaces. The export adds one singleRepeatFibre definition bundle with
+its direct membership interface and reuses the Proved anchor-uniqueness
+theorem. Metadata, live readbacks and all three unused names pass.
+These new nodes have not yet been uploaded. Graph-walk instantiation,
+graph decomposition, the proposed half-dimension cap and G1/G2/G3 remain open.

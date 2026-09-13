@@ -363,3 +363,10 @@ three definition values and standard axioms. These two results await their
 Prove2Me export and publication. They provide the actual-fibre realization
 and edge-count interfaces; graph-walk translation and graph decomposition
 remain, along with the global growth/rank argument and G1/G2/G3.
+
+The actual-fibre and edge-count results have a verified two-node split
+export. Both revisions pass the two exact original-type and dependency
+checks and three definition-value checks. The source proof bodies are
+retained. One fibre definition bundle is new, and one Proved external
+interface is reused. Metadata and live preflight pass. Publication is
+pending; graph-walk instantiation, decomposition and G1/G2/G3 remain open.
