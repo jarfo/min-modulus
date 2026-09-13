@@ -903,3 +903,14 @@ both revisions, comparing twelve types and two definition values. The
 quartic application still needs control of anchor pairs whose doubled
 difference is a coordinate difference. Generic G1/G2/G3 remain open.
 Platform export and upload remain.
+
+## Five-node export for translated squarefree packing
+
+All five translated packing statements have a verified split export.
+Both revisions pass five exact original target types and dependency sets,
+nine helper types, and the validity and separating-permutation definition
+values. Every original proof body is retained, with one existing proved
+interface and no new definition bundle. Metadata and live preflight pass.
+Publication is pending. The six-point pair-sum bound applies off coordinate
+differences; exceptional doubled differences still require an argument.
+The absolute quartic and central bounds and generic G1/G2/G3 remain open.

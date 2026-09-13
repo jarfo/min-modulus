@@ -39,3 +39,14 @@ prove the absolute quartic bound, the central-degree bounds, or any of
 G1/G2/G3. It is also distinct from the anchored-cube quarter bound, which
 has counterexamples. The next task is to combine this uniform bound with
 control of exceptional doubled differences.
+
+## Verified five-theorem packing export
+
+All five translated packing statements have a verified split export.
+Both revisions pass five exact original target types and dependency sets,
+nine helper types, and the validity and separating-permutation definition
+values. Every original proof body is retained, with one existing proved
+interface and no new definition bundle. Metadata and live preflight pass.
+Publication is pending. The six-point pair-sum bound applies off coordinate
+differences; exceptional doubled differences still require an argument.
+The absolute quartic and central bounds and generic G1/G2/G3 remain open.
