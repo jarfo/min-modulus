@@ -30,12 +30,21 @@ The final lemma keeps the affine-closure exclusion as an explicit premise.
 
 `QuadraticOneEscapeBound.lean` applies the existing unconditional
 `odd_lower_bound_of_valid_one_escape_doubling` theorem to discharge that
-premise under N<2^n-1. Its two resulting theorems pass the ORIGINAL
-revision and the standard-axiom audit. Their full supported-revision
-check is not claimed: AlmostDoubling imports a 1025-module source closure,
-and its original cached object was reused. These applications have not
-been uploaded to Prove2Me. A supported port should extract only the
-needed verified dependency closure before attempting publication.
+premise under N<2^n-1. Its two resulting theorems now pass BOTH revisions,
+including the full one-escape proof dependency port and standard-axiom
+audits. These applications have not been uploaded to Prove2Me.
+
+The compiler identifies 440 project constants, including generated proof
+helpers, owned by 122 named source declarations in 26 modules. Extracting
+those exact declaration commands avoids the 1025-module source import
+closure. Retained variable context contributes one additional module
+import. Three simp calls in two AlmostDoubling proofs explicitly unfold
+Equiv.ofBijective for compatibility; all other selected declaration
+bodies are unchanged. All 122 original statement types and 13 definition values are checked: 121
+types match literally; the remaining type differs only in the printed
+setOf/Set.ofPred name and its original statement passes the Lean kernel. The two new
+quadratic applications also have exactly their original types. This is an isolated supported build of the required proof; the
+main repository's complete import graph is not changed.
 
 The one-escape affine-doubling bound is an existing result, not a new
 proof of G2. The new contribution is its conversion into a stronger

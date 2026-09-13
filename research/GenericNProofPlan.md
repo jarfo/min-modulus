@@ -200,10 +200,13 @@ to the existing unconditional odd one-escape affine-doubling theorem.
 For n>=5, n-1 hits give an injective partial matching to doubled
 coordinates; reversing it leaves at most one forward escape. Therefore
 N<2^n-1 forces two distinct quadratic escapes at every outside shift.
-The three transfer lemmas pass both revisions. The two applications
-to the existing one-escape theorem pass the original revision only;
-the full supported dependency port is pending, and no upload of these
-applications is claimed. The required repeated-sum growth is still open.
+All three transfer lemmas and both applications now pass both revisions.
+The full one-escape dependency port keeps 122 named declarations in
+26 source modules, with three explicit simp portability edits. Original
+types, definitions and standard axioms match while avoiding the
+1025-module import closure.
+No upload of these two applications is claimed. The required generic
+repeated-sum growth is still open.
 
 All five higher-translate statements are now accepted on Prove2Me and
 connected through their terminal growth implication. The consolidated
