@@ -86,3 +86,12 @@ negative is also a witness. At each target, such witnesses form an
 antichain through their negative supports, giving the middle-binomial
 Sperner bound. Eight theorems pass both revisions. The distinct compatible
 same-target pair, and all three main gates, remain open.
+
+## Kernel-witness avoidance at every coordinate
+
+[G3MiddleLayer](G3MiddleLayer.md) proves, for arbitrary n>=3, that the
+middle rank on n-1 coordinates exceeds the Mersenne odd factor. Every
+hypothetical exceptional tuple therefore has a reversible kernel witness
+vanishing at any chosen coordinate. Five theorems pass both revisions.
+The kernel target may vary with the coordinate, so this does not supply
+same-target compatible witnesses or discharge G3.
