@@ -263,3 +263,10 @@ anchors in S, and applies at every even repeated degree. All four
 proofs pass both revisions, eight type comparisons, four definition
 values and standard axioms. No publication is claimed yet. Controlling
 overlap across supports is still necessary; G1, G2 and G3 remain open.
+
+The midpoint support results now have a verified four-node split export.
+Both revisions pass four original-type and exact dependency checks,
+and four definition values match. Four Proved interfaces are reused,
+with no new definitions. Metadata and live preflight pass. Publication
+is pending; overlap across supports and the three generic gates remain
+open.

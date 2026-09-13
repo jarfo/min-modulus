@@ -43,3 +43,17 @@ definition types), four matching definition values and standard axioms
 only. The verified selective caches avoid a full dependency rebuild.
 The four new statements have not been uploaded to Prove2Me. Generic
 repeated-sum growth and G1, G2 and G3 remain open.
+
+## Verified statement/proof export
+
+All four support-rigidity statements also pass both revisions as separate
+statement and proof files. Their four original types, four exact theorem
+dependency sets and four definition values match. There are no proof
+holes outside the declared interfaces. The export reuses four existing
+Proved theorem interfaces and adds no definitions or inline helpers.
+All four split proof bodies are retained from the checked source file.
+
+Precise descriptions, exact live definition and interface readbacks,
+and unused-name checks pass. The four new theorem nodes have not yet
+been uploaded. Overlap between different supports and the generic
+G1/G2/G3 gates remain unresolved.
