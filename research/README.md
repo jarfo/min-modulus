@@ -415,8 +415,9 @@ escape count r in an odd counterexample. That quantitative application
 passes the original full-source revision and a supported split proof.
 All three split proofs have matching original types, definition values
 and exact dependency sets; their five external interfaces are Proved.
-These three nodes have not yet been uploaded. G1, G2 and G3 remain open,
-and independent repeated-sum growth is still needed.
+All three nodes are now accepted on Prove2Me and connected to the
+consolidated DAG. All 636 proof dependency sets across 19 bundles match.
+G1, G2 and G3 remain open, and independent repeated-sum growth is still needed.
 
 ## Squarefree midpoints give many escapes in every even repeated degree
 

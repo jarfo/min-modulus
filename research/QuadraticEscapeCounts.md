@@ -43,8 +43,17 @@ The split proof reuses five existing Proved interfaces, including the
 quadratic four-hit theorem and the G3 binomial threshold and numerical
 escape bound. There are no proof holes outside those declared interfaces.
 
-This verifies the supported split proof, while a complete supported
-main-source build is not claimed. All metadata and live dependency
-preflight checks pass. These three new theorem nodes have not yet been
-uploaded; publication follows the ongoing twelve-node one-escape batch.
-G1, G2 and G3 remain open.
+All three statements are now private and Proved on Prove2Me, with
+ACCEPTED submissions and exact server proof-source readbacks. The split
+export reuses five existing Proved interfaces and adds no definitions.
+Both Lean revisions, three original types, three definition values and
+all three dependency sets pass. A complete supported main-source build
+is not claimed. The generic repeated-sum growth inequality is still open.
+
+The consolidated DAG has 906 nodes and 2094 edges; all 636 exact proof dependency sets across 19 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Accepted theorem identifiers:
+
+* quadratic_hit_card_eq_affine_hit_card_of_four_hits: 888b67ac-3f60-482b-b654-086790e96190
+* quadratic_escape_count_ge_min_affine_escapes: 1a988dba-9811-480d-b3b6-35fd49b0d66f
+* quadratic_escapes_quadratic_log_of_odd_counterexample: e6aa15ff-5f5b-4857-97c6-056923f700c6
