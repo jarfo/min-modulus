@@ -526,7 +526,7 @@ interfaces prove that single-repeat residual supports avoid every
 anchor, equal residual supports determine equal anchors under injective
 doubling, and graph endpoints lie outside the anchor set. The definition
 and all interfaces pass both revisions, five printed types, two definition
-values and standard axioms. No export or publication is claimed yet.
+values and standard axioms. All five graph/helper nodes are now Proved on Prove2Me.
 Instantiation for actual fibres, the graph-walk cycle interface and the
 graph counting consequence remain open, as do generic G1/G2/G3.
 
@@ -536,8 +536,9 @@ five original-type and exact dependency checks and two definition values.
 One Proved external interface is reused, with one graph definition bundle.
 The injectivity helper uses a shorter singleton proof of the same type;
 the other four bodies match the checked source. Metadata and live preflight
-pass. Publication is pending; actual-fibre and graph-walk instantiation,
+pass. Publication is complete; actual-fibre and graph-walk instantiation,
 graph counting and G1/G2/G3 remain open.
+The consolidated DAG has 947 nodes and 2179 edges. All 656 proof dependency sets across 25 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 ## Actual fibre supports and exact residual graph edge counts
 

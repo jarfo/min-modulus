@@ -27,8 +27,7 @@ graph definition and applies the first result.
 The graph definition and all three interfaces pass the original and
 supported Mathlib revisions. Five printed types and two definition
 values match; proof axioms are standard, and source bodies are identical.
-No finite enumeration is used. These new interfaces have not yet been
-exported or uploaded to Prove2Me.
+No finite enumeration is used. The graph interfaces and two helpers are now Proved on Prove2Me; see below.
 
 The graph still takes R and B as parameters. Instantiating it for an
 actual single-repeat fibre, converting graph walks to the verified
@@ -49,6 +48,20 @@ The support-avoidance helper and validTuple_injective are being published
 for the first time. The latter uses a shorter authored singleton-support
 proof from multiset rigidity; its original theorem type is preserved.
 The other four split bodies match the checked source. Metadata, exact
-live readbacks and all six unused names pass. None of these new nodes
-has been uploaded yet. Actual-fibre instantiation, the graph-walk and
+live readbacks and all six unused names pass. The graph definition is published and all five theorem nodes are Proved. Actual-fibre instantiation, the graph-walk and
 counting arguments, and G1/G2/G3 remain open.
+
+## Verified Prove2Me proofs
+
+All five graph/helper statements are private and Proved, with
+verified submissions and exact server proof-source readbacks. The
+graph definition is published. Two supporting roots retain the
+three graph interfaces and both reusable helpers.
+
+The consolidated DAG has 947 nodes and 2179 edges. All 656 proof dependency sets across 25 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+* single_repeat_support_avoids_other_anchor: 6d96c994-173c-4a2d-9c33-60b3986d10d2
+* validTuple_injective: 7d42e12d-de0b-4973-9930-27e8c874f24d
+* residual_support_disjoint_anchor_family: 9bc42a6d-492c-4809-b862-88a6bf1dc340
+* residual_support_determines_anchor: 6ecfe9dc-8d6f-4e83-9bb6-e92f806f534f
+* residual_graph_adj_outside_anchor_family: b4a2d981-4ffe-4fa1-b926-ea872ee4d305
