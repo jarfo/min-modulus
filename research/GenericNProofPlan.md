@@ -122,3 +122,13 @@ Six implications pass the original revision and standard-axiom audit.
 No supported port or platform upload is claimed, and no generic gate
 is closed. This strengthens the explanation of what TwoEscapeShift
 would imply; its extraction remains unproved.
+
+## Simultaneous compatible kernel-witness families
+
+[G3KernelFamilies](G3KernelFamilies.md) constructs a family of more than r
+compatible coefficient vectors whenever |H|*r<binomial(|A|,k), supported
+inside any prescribed coordinate set A and with distinct targets in the
+quotient kernel. Zero is included; the other members and every nonzero
+pairwise difference are reversible witnesses. Four theorems pass both
+revisions. The missing G3 step is control between different families or
+a stronger use of the cyclic kernel; no generic gate is closed.
