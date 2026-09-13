@@ -303,3 +303,17 @@ predicate remains unproved and is stronger than the current G1 input.
 The original revision and standard axioms are checked; no supported port
 or platform upload is claimed. The documentation limits the small-case
 numerics and distinguishes the stratum endpoint from the global bound.
+
+## Large-dimension consequence of the parallel extraction
+
+[TwoEscapeLargeBound](TwoEscapeLargeBound.md) proves that the unproved
+TwoEscapeShift predicate would directly give every even-stratum bound
+and the G3 obstruction from dimension 52. The existing unconditional
+three-escape lower bound contradicts the proposed two-escape extraction
+in a hypothetical critical tuple. With G2, the full global bound follows
+for all n>=52 without a G3 premise; full arbitrary-n assembly additionally
+needs only the explicitly assumed exceptional exclusions below 52.
+Six implications pass the original revision and standard-axiom audit.
+No supported port or platform upload is claimed, and no generic gate
+is closed. This strengthens the explanation of what TwoEscapeShift
+would imply; its extraction remains unproved.
