@@ -40,13 +40,25 @@ G1/G2/G3. It is also distinct from the anchored-cube quarter bound, which
 has counterexamples. The next task is to combine this uniform bound with
 control of exceptional doubled differences.
 
-## Verified five-theorem packing export
 
-All five translated packing statements have a verified split export.
-Both revisions pass five exact original target types and dependency sets,
-nine helper types, and the validity and separating-permutation definition
-values. Every original proof body is retained, with one existing proved
-interface and no new definition bundle. Metadata and live preflight pass.
-Publication is pending. The six-point pair-sum bound applies off coordinate
-differences; exceptional doubled differences still require an argument.
-The absolute quartic and central bounds and generic G1/G2/G3 remain open.
+## Verified Prove2Me packing chain
+
+All five translated squarefree packing results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass.
+Both revisions verify five original target types and dependency sets,
+nine original helper types, and the validity and separating-permutation
+definition values. Every original proof body is retained. One existing
+proved interface is reused; no new definition bundle is required.
+A single supporting root retains all five results.
+
+The consolidated DAG has 1019 nodes and 2330 edges. All 697 exact proof dependency sets across 34 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The quartic application still needs control of anchor pairs whose doubled
+difference is a coordinate difference. The absolute quartic and central
+bounds and all generic gates remain open.
+
+* equal_evaluation_disjoint_family_card_le_choose: 4aeabcaf-957a-4623-b972-4867b9019116
+* translated_supports_disjoint_of_no_smaller_shift: d32a1d12-94bd-40c9-8095-7b7e33adbc61
+* translated_squarefree_family_card_le_choose: 75692012-d877-4e43-bb82-f3ddc90df8fb
+* translated_squarefree_intersection_card_le_choose: 10dbb8ef-17ea-4520-ba4e-1569b5dc2f3c
+* translated_pair_sum_intersection_card_le_six: 35c743d6-9781-4921-821e-9b152bcd7ecc

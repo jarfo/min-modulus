@@ -894,23 +894,48 @@ repeated-sum bounds and all generic gates remain open.
 
 ## Translated squarefree sum packing
 
-[Translated squarefree packing](TranslatedSquarefreePacking.md) proves that
-if t is absent from differences of k-element subset sums, the translated
-(k+1)-sum sets intersect in at most binomial(2k+2,k+1) values. In degree
-two the bound is six whenever t is not a coordinate difference. This
-holds for all n in every additive commutative group. Five proofs pass
-both revisions, comparing twelve types and two definition values. The
-quartic application still needs control of anchor pairs whose doubled
-difference is a coordinate difference. Generic G1/G2/G3 remain open.
-Platform export and upload remain.
+For a valid tuple in any additive commutative group, let S_k be its
+k-element subset-sum values. If t is absent from S_k-S_k, then
+|(S_(k+1)+t) intersect S_(k+1)| <= binomial(2k+2,k+1).
+In particular, squarefree pair-sum translates meet in at most six points
+when their shift is not a coordinate difference. This holds for every n,
+without cyclicity or oddness. The proof cancels shared coordinates and
+packs separating-permutation events using the existing uncrossing lemma.
+
+All five translated squarefree packing results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass.
+Both revisions verify five original target types and dependency sets,
+nine original helper types, and the validity and separating-permutation
+definition values. Every original proof body is retained. One existing
+proved interface is reused; no new definition bundle is required.
+A single supporting root retains all five results.
+
+The consolidated DAG has 1019 nodes and 2330 edges. All 697 exact proof dependency sets across 34 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The quartic application still needs control of anchor pairs whose doubled
+difference is a coordinate difference. The absolute quartic and central
+bounds and all generic gates remain open.
 
 ## Five-node export for translated squarefree packing
 
-All five translated packing statements have a verified split export.
-Both revisions pass five exact original target types and dependency sets,
-nine helper types, and the validity and separating-permutation definition
-values. Every original proof body is retained, with one existing proved
-interface and no new definition bundle. Metadata and live preflight pass.
-Publication is pending. The six-point pair-sum bound applies off coordinate
-differences; exceptional doubled differences still require an argument.
-The absolute quartic and central bounds and generic G1/G2/G3 remain open.
+For a valid tuple in any additive commutative group, let S_k be its
+k-element subset-sum values. If t is absent from S_k-S_k, then
+|(S_(k+1)+t) intersect S_(k+1)| <= binomial(2k+2,k+1).
+In particular, squarefree pair-sum translates meet in at most six points
+when their shift is not a coordinate difference. This holds for every n,
+without cyclicity or oddness. The proof cancels shared coordinates and
+packs separating-permutation events using the existing uncrossing lemma.
+
+All five translated squarefree packing results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass.
+Both revisions verify five original target types and dependency sets,
+nine original helper types, and the validity and separating-permutation
+definition values. Every original proof body is retained. One existing
+proved interface is reused; no new definition bundle is required.
+A single supporting root retains all five results.
+
+The consolidated DAG has 1019 nodes and 2330 edges. All 697 exact proof dependency sets across 34 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The quartic application still needs control of anchor pairs whose doubled
+difference is a coordinate difference. The absolute quartic and central
+bounds and all generic gates remain open.
