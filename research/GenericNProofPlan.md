@@ -148,5 +148,24 @@ n-coin multiset with the all-ones target. Six theorems pass both revisions.
 Consequently fixed-rank separation, quotient counting, and compatible
 families alone cannot prove G3. The next step must use stronger validity
 constraints, such as one-sided admissible relations with a coefficient
-above one. The antichain theorem does use such stronger constraints and
-is not refuted by this countermodel. No generic gate is closed.
+above one. That file leaves the stronger antichain restriction unresolved; the
+bounded-coefficient follow-up below settles its limitation for large n. No generic gate is closed.
+
+## Fixed coefficient cutoffs and antichains cannot close generic G3
+
+[G3BoundedCoefficientCountermodel](G3BoundedCoefficientCountermodel.md)
+proves that every fixed coefficient cutoff eventually misses invalid
+binary tuples at the actual G3 modulus. For any C, non-power-of-two
+n>=2^(C+4) admits an invalid tuple with no nonzero balanced zero relation
+having -1<=c_i<C. More precisely, every rival binary multiset has ordinary
+value 2^s-1 and is supported below s; n>C*s excludes multiplicities <=C.
+Here s=floor(log2 n)+1.
+
+For n>=16 the same invalid tuple satisfies the unit-witness negative-support
+antichain and Sperner bounds, at every target. Those restrictions therefore
+cannot repair the generic G3 inference by themselves. An admissible-relation
+argument must exploit a coefficient range growing with n, or introduce
+additional structure not implied by bounded isolation. The older heavy
+anchored-witness route already permits coefficients growing with n and
+is not ruled out by this result. Ten theorems pass both Lean revisions;
+the conjecture and all three generic gates remain open.

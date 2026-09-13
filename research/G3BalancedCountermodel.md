@@ -72,3 +72,11 @@ The construction is uniform in n and s and uses no finite enumeration.
 
 This local proof and its implications are recorded in the private
 mission plan. No platform proof is claimed for this file yet.
+
+## Follow-up: arbitrary fixed coefficient caps
+
+[G3BoundedCoefficientCountermodel](G3BoundedCoefficientCountermodel.md)
+now proves that the limitation persists for every fixed coefficient cap
+in sufficiently large dimensions. It also settles the antichain question
+left open here: for every G3 dimension n>=16, the invalid binary tuple
+satisfies the same-target unit-witness antichain and Sperner restrictions.
