@@ -282,3 +282,10 @@ five printed-type checks, three definition values and standard axioms.
 Finding one full-rank combination of the probes remains open; the
 joint-kernel statement alone does not establish the required global
 count. No platform publication is claimed yet, and G1/G2/G3 remain open.
+
+The coefficient-probe results now have a verified two-node split export.
+Both revisions pass two original-type and exact dependency checks,
+and three definition values match. Two Proved interfaces are reused,
+with one new lightweight definition bundle. Metadata and live preflight
+pass. Publication is pending; the single full-rank combination and
+G1/G2/G3 remain open.

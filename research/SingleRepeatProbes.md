@@ -43,3 +43,18 @@ all proof axioms are standard, and the source bodies are identical.
 Compilation reuses the checked selective dependency caches. No new
 finite enumeration is used. These results have not yet been exported
 or uploaded to Prove2Me.
+
+## Verified statement/proof export
+
+Both coefficient-probe statements pass both revisions as separate
+statement and proof files. Their two original types and two exact
+theorem dependency sets match, as do three definition types and values.
+There are no proof holes outside declared interfaces. The export
+reuses two Proved theorem interfaces and introduces one lightweight
+definition bundle containing only the probe definition. Both split
+proof bodies are retained from the checked source file.
+
+Precise descriptions, exact live definition and interface readbacks,
+and unused-name checks pass. The new definition and two theorem nodes
+have not yet been uploaded. A single full-rank combination and the
+generic G1/G2/G3 gates remain open.
