@@ -50,3 +50,18 @@ number of distinct repeated sums required by generic G2. The extension
 covers every even repeated degree; it does not supply all required
 odd-degree growth steps. G1, G2 and G3 remain open. These five new
 theorems have not yet been uploaded to Prove2Me.
+
+## Verified statement/proof export
+
+All five statements now also pass both revisions as separate theorem and
+proof files. Each proof has its exact original type and exactly its
+declared theorem dependencies; there are no other proof holes. Five
+definition values match the original sources. The export reuses only
+two existing Proved theorem interfaces and adds no definitions.
+
+The quadratic hit-cap solution specializes the arbitrary-degree bound;
+the source repository's direct quadratic proof remains separately
+checked. Precise descriptions, exact live definition and interface
+readbacks, and unused-name checks pass. These five theorem nodes have
+not yet been uploaded. Their proved per-support escape bounds still
+leave overlap across supports and the generic G1/G2/G3 gates unresolved.

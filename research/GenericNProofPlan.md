@@ -244,3 +244,10 @@ squarefree sum on 2k+2 coordinates. All five theorem statements pass
 both revisions and standard-axiom audits. No platform publication is
 claimed yet. Overlap across different supports remains uncontrolled;
 the full repeated-sum growth inequality and G1/G2/G3 remain open.
+
+The squarefree midpoint results now have a verified five-node split
+export. Both revisions pass all five original-type and exact dependency
+checks, and five definition values match. Only two existing Proved
+interfaces are reused; no definitions are added. Metadata and live
+preflight pass. Publication is pending and the three generic gates
+remain open.
