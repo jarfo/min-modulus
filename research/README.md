@@ -651,25 +651,43 @@ The consolidated DAG has 977 nodes and 2249 edges. All 668 proof dependency sets
 
 ## Absolute repeated-sum bounds at the two central degrees
 
-[Central-degree reduction](AbsoluteRepeatedCoinBounds.md) proves that G2
-follows from explicit absolute repeated-sum bounds only at floor(n/2)
-and ceil(n/2). The target is |D_k|+1 >= sum_{j<k} choose(n,j). It holds
-through degree three. Every odd counterexample must violate this bound
-at one of the two central degrees, necessarily k>=4. No successive-growth
-hypothesis is required. All four original bodies pass both revisions,
-eight exact printed types, four definition values and standard axioms.
-The central bounds from degree four onward and generic G1/G2/G3 remain
-open. These four reduction statements await platform export and upload.
+For k=floor(n/2) and k=ceil(n/2), the absolute target
+|D_k|+1 >= sum_{j<k} choose(n,j) suffices for G2. The bound is
+proved through degree three, so every odd counterexample violates
+it at a central degree k>=4. No successive-growth hypothesis is
+required. The uniform central bounds remain the open step.
+
+All four central-degree reductions are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, four definition comparisons,
+fourteen original inline helper types and the inline subsetCoinSums value.
+All original proof and helper bodies are retained. Four existing Proved
+interfaces are reused. The conditional G2 theorem is the supporting root.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 672 proof dependency sets across 29 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The central absolute bounds from degree four onward remain unproved.
+These are conditional reductions and do not close generic G2.
 
 ## Four-node export for the central-degree G2 reduction
 
-All four original central-degree proof bodies have a verified split
-export. Both revisions pass four exact original types and dependency
-sets, four definition comparisons, fourteen original inline helper types
-and the inline subsetCoinSums definition value. Four existing Proved
-interfaces are reused. The conditional G2 theorem is the terminal root.
-Metadata and live preflight pass; publication is pending. The required
-central absolute bounds and generic G1/G2/G3 remain open.
+For k=floor(n/2) and k=ceil(n/2), the absolute target
+|D_k|+1 >= sum_{j<k} choose(n,j) suffices for G2. The bound is
+proved through degree three, so every odd counterexample violates
+it at a central degree k>=4. No successive-growth hypothesis is
+required. The uniform central bounds remain the open step.
+
+All four central-degree reductions are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, four definition comparisons,
+fourteen original inline helper types and the inline subsetCoinSums value.
+All original proof and helper bodies are retained. Four existing Proved
+interfaces are reused. The conditional G2 theorem is the supporting root.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 672 proof dependency sets across 29 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The central absolute bounds from degree four onward remain unproved.
+These are conditional reductions and do not close generic G2.
 
 ## A concrete matrix criterion for repeated-sum cardinality
 

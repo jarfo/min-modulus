@@ -32,18 +32,24 @@ degrees are symbolic base cases of the reduction.
 
 The central absolute bounds from degree four onward remain unproved.
 The quartic half-fibre bound does not by itself supply them. G1, G2 and
-G3 remain open. These four new reduction statements await platform export
-and upload.
+G3 remain open. All four reduction statements are now Proved on Prove2Me.
 
-## Verified four-theorem central-degree export
 
-All four central-degree reductions now have a verified split export.
-Both revisions pass all four exact original types and dependency sets,
-four definition comparisons and fourteen exact inline helper types.
-The local subsetCoinSums helper definition also matches its original
-value. All four original proof bodies and all inline helper bodies are
-retained. Four existing Proved interfaces and existing definitions are
-reused; no new server definition bundle is introduced. The proof of the
-uniform conditional G2 reduction is the terminal supporting root.
-Metadata and live preflight pass. These four nodes have not yet been
-uploaded. The uniform central absolute bounds and G1/G2/G3 remain open.
+## Verified Prove2Me central-degree reductions
+
+All four central-degree reductions are private and Proved, with verified
+submissions and exact server proof-source readbacks. Both revisions pass
+four original types and dependency sets, four definition comparisons,
+fourteen original inline helper types and the inline subsetCoinSums value.
+All original proof and helper bodies are retained. Four existing Proved
+interfaces are reused. The conditional G2 theorem is the supporting root.
+
+The consolidated DAG has 977 nodes and 2249 edges. All 672 proof dependency sets across 29 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The central absolute bounds from degree four onward remain unproved.
+These are conditional reductions and do not close generic G2.
+
+* partial_choose_le_repeated_card_add_one_through_three: 561cb87e-2839-4cbd-ba2b-79581fb01b28
+* odd_modulus_lower_bound_of_balanced_repeated_bounds: 698c7632-47fc-4854-a0af-678ef218fdf3
+* exists_balanced_repeated_bound_failure_of_odd_counterexample: 3aa2e946-098a-4cae-977b-e66c7ddce3af
+* oddStratumLowerBound_of_balanced_repeated_bounds: 1971fd39-22d6-4f56-acbb-64fa3209b49f
