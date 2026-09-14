@@ -33,14 +33,23 @@ inequalities and generic G1/G2/G3 remain open.
 All three original proofs pass both Mathlib revisions. Ten exact
 declaration types and three definition values agree: ValidTuple and the
 two affine-domain definitions. Only standard Lean axioms occur. No new
-definition is introduced. Split Prove2Me export and publication remain.
+definition is introduced. All three results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified three-theorem represented-triangle count export
 
-All three original proofs have a verified split export on both revisions.
-Three exact target types and dependency sets, four external interface
-types and three existing definition values agree. No inline helper or
-new definition is required. Metadata and live preflight pass; publication
-is pending. The representation and positive-domain size bound remain
-explicit. Controlling coordinates outside large domains, absolute
-central inequalities and generic G1/G2/G3 remain open.
+## Verified Prove2Me represented-triangle count chain
+
+All three represented-triangle counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, four
+external interface types and three existing definition values. Every
+original proof body is retained. No inline helper or new definition
+bundle is required. One supporting root retains all three results.
+
+The consolidated DAG has 1151 nodes and 2641 edges. All 764 exact proof dependency sets across 48 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Controlling coordinates outside large domains, absolute central inequalities and generic G1/G2/G3 remain open.
+
+* represented_triangle_support_trichotomy: 365cba63-8885-446d-a391-84cf69dc3d42
+* represented_triangle_family_outside_affine_card_le: 2cb4f84e-2cae-4944-ae14-5484f9885624
+* represented_triangle_family_card_upper_bound: d1ccfe28-bde8-4d5e-8e57-58fd6a08b71e
