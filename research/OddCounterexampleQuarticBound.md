@@ -24,4 +24,10 @@ required for generic G2. Existing small-dimension results are unchanged.
 Three original proofs, eight exact declaration types and three existing
 definition values pass both installed Lean/Mathlib revisions with standard
 axioms only. No new definition or finite enumeration is introduced.
-Generic G1/G2/G3 remain open. Split Prove2Me export and publication remain.
+Generic G1/G2/G3 remain open. The split export and private publication are verified below.
+
+## Verified Prove2Me growth constraints and certificate limits
+
+These results are included in the seven-theorem growth-constraint and certificate-limit
+chain, now private and Proved. See [the consolidated chain](CounterexampleGrowthConstraints.md).
+The numerical certificate premises remain explicit, and unrestricted G1/G2/G3 remain open.

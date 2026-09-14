@@ -18,9 +18,19 @@ degree three, so every odd counterexample must fail one of them at a
 central degree k>=4. These are proved reductions; the required uniform
 central inequalities remain open.
 
-A concrete first step is the absolute quartic bound
+For n>=144, [OddCounterexampleQuarticBound.md](OddCounterexampleQuarticBound.md)
+now proves the following quartic inequality under the hypothetical
+counterexample premise N<2^n-1, by combining the dense-case obstruction
+with the quadratic incidence bound:
 
     |D_4| >= binomial(n+1,2) + binomial(n,3).
+
+The next priority is growth at arbitrary central degrees, with every
+required binomial term accounted for.
+[TranslationRankCertificateBarrier.md](TranslationRankCertificateBarrier.md)
+proves that allowing rank two gives the current fractional relaxation a
+three-eighths central-layer floor. Stronger structural information or a
+broader repeated-sum count is needed to improve past that floor.
 
 [WeightedProbeLinearRank.lean](WeightedProbeLinearRank.lean) proves this
 from injectivity of one matrix-weighted cubic probe outside 2*C_2,
@@ -187,6 +197,12 @@ central inequalities remain to be proved.
 the ten proved core-rank and fractional packing results. The combined
 rational certificate retains both the shared permutation budget and
 independent rank caps. A sufficient central-degree certificate remains open.
+
+[CounterexampleGrowthConstraints.md](CounterexampleGrowthConstraints.md) records
+seven proved certificate-limit and counterexample-growth results. Rank two
+forces a three-eighths central-layer floor for the current relaxation; every
+hypothetical odd counterexample at n>=144 satisfies the absolute quartic
+growth bound. Higher central-degree inequalities remain open.
 
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
@@ -1871,7 +1887,7 @@ by a valid tuple. Four original proofs and four exact types pass both
 revisions with standard axioms. No new definitions or finite exclusion
 campaigns are involved. Stronger small-core compatibility or aggregate
 control across anchor pairs is still needed; G1/G2/G3 remain open.
-Split export and private publication remain.
+These results are included in the seven-theorem chain, now private and Proved.
 
 ## Quartic growth inside a hypothetical large odd counterexample
 
@@ -1884,7 +1900,7 @@ represented doubled-difference pair family. It therefore satisfies
 premise stays explicit; this does not establish the higher central
 inequalities. Three original proofs, eight exact declaration types and
 three existing definition values pass both revisions. Generic G1/G2/G3
-remain open. Split export and private publication remain.
+remain open. These results are included in the seven-theorem chain, now private and Proved.
 
 ## Counterexample growth constraints and certificate limits
 
@@ -1908,9 +1924,14 @@ does not establish the higher central-degree inequalities; generic
 G1/G2/G3 remain open. The original proofs are in
 TranslationRankCertificateBarrier.lean and OddCounterexampleQuarticBound.lean.
 
-The split export passes both revisions: seven exact original target
-types and dependency sets, two external interface types and three existing
-definition values match. Exact parser spans retain every original proof
-body. No new definition bundle or inline helper is required. Metadata and
-live preflight pass; private publication is pending. Two supporting roots
-retain the certificate floor and the counterexample quartic consequence.
+All seven results are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify seven original target types and dependency sets, two external
+interface types and three existing definition values. All original proof
+bodies are retained. No new definition bundle or inline helper is needed.
+Two supporting roots retain the certificate floor and the hypothetical
+counterexample quartic-growth consequence.
+
+The consolidated DAG has 1231 nodes and 2816 edges. All 808 exact proof dependency sets across 54 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The numerical certificate premises remain explicit. Sufficient central-degree estimates and unrestricted G1/G2/G3 remain open.

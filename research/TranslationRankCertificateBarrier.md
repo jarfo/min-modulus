@@ -26,4 +26,10 @@ cannot by itself improve past this floor when rank two remains allowed.
 Four original proofs and four exact declaration types pass both installed
 Lean/Mathlib revisions with standard axioms only. No new definition and
 no finite enumeration or exclusion campaign is introduced. Generic
-G1/G2/G3 remain open. Split Prove2Me export and publication remain.
+G1/G2/G3 remain open. The split export and private publication are verified below.
+
+## Verified Prove2Me growth constraints and certificate limits
+
+These results are included in the seven-theorem growth-constraint and certificate-limit
+chain, now private and Proved. See [the consolidated chain](CounterexampleGrowthConstraints.md).
+The numerical certificate premises remain explicit, and unrestricted G1/G2/G3 remain open.

@@ -1903,7 +1903,7 @@ by a valid tuple. Four original proofs and four exact types pass both
 revisions with standard axioms. No new definitions or finite exclusion
 campaigns are involved. Stronger small-core compatibility or aggregate
 control across anchor pairs is still needed; G1/G2/G3 remain open.
-Split export and private publication remain.
+These results are included in the seven-theorem chain, now private and Proved.
 
 ## Quartic growth inside a hypothetical large odd counterexample
 
@@ -1916,7 +1916,7 @@ represented doubled-difference pair family. It therefore satisfies
 premise stays explicit; this does not establish the higher central
 inequalities. Three original proofs, eight exact declaration types and
 three existing definition values pass both revisions. Generic G1/G2/G3
-remain open. Split export and private publication remain.
+remain open. These results are included in the seven-theorem chain, now private and Proved.
 
 ## Counterexample growth constraints and certificate limits
 
@@ -1940,9 +1940,14 @@ does not establish the higher central-degree inequalities; generic
 G1/G2/G3 remain open. The original proofs are in
 TranslationRankCertificateBarrier.lean and OddCounterexampleQuarticBound.lean.
 
-The split export passes both revisions: seven exact original target
-types and dependency sets, two external interface types and three existing
-definition values match. Exact parser spans retain every original proof
-body. No new definition bundle or inline helper is required. Metadata and
-live preflight pass; private publication is pending. Two supporting roots
-retain the certificate floor and the counterexample quartic consequence.
+All seven results are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify seven original target types and dependency sets, two external
+interface types and three existing definition values. All original proof
+bodies are retained. No new definition bundle or inline helper is needed.
+Two supporting roots retain the certificate floor and the hypothetical
+counterexample quartic-growth consequence.
+
+The consolidated DAG has 1231 nodes and 2816 edges. All 808 exact proof dependency sets across 54 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The numerical certificate premises remain explicit. Sufficient central-degree estimates and unrestricted G1/G2/G3 remain open.
