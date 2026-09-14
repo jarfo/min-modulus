@@ -1293,3 +1293,16 @@ complete five-theorem chain.
 The consolidated DAG has 1113 nodes and 2557 edges. All 745 exact proof dependency sets across 43 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 Affine structure extraction, absolute central inequalities and generic G1/G2/G3 remain open.
+
+## Classification of represented triangles
+
+[Triangle difference patterns](TriangleDifferencePatterns.md) classifies
+every triangle of represented doubled differences for arbitrary n. It
+lies in a positive affine domain, lies in a negative affine domain, or
+has image edges {(u,v),(u,z),(w,v)} on four distinct coordinates with
+2*(g(u)-g(v))=g(z)-g(w). The affine alternatives contain the three
+anchors. Four original proofs, eight exact declaration types and the
+ValidTuple definition value pass both revisions. No new definition is
+introduced. Counting exceptional triangles, extracting large affine
+domains, absolute central inequalities and generic G1/G2/G3 remain open.
+Split export and private publication remain.
