@@ -1696,3 +1696,16 @@ definition values pass both revisions. Applying AlmostDoubling remains.
 The density premise is explicit; other tuples, absolute central
 inequalities and generic G1/G2/G3 remain open. Split export and private
 publication remain.
+
+## Sharp odd modulus bound from few missing pairs
+
+[Dense-pair modulus bound](DensePairModulusBound.md) proves
+2^n-1<=N for a valid odd tuple at n>=144 whenever an explicit
+pair cover D of the unrepresented doubled differences satisfies
+(n-9)*|D|<3*choose(n,2). The proof applies AlmostDoubling to the
+extracted one-escape structure. Conversely, any smaller odd-modulus
+counterexample must have 3*choose(n,2)<=(n-9)*|D| for every such D.
+Both original proofs, six exact declaration types and the ValidTuple
+value pass both revisions. The sparse represented-pair regime, lower
+dimensions, absolute central inequalities and generic G1/G2/G3 remain
+open. Split export and private publication remain.
