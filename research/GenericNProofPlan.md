@@ -138,6 +138,12 @@ affine, negative affine, or an L-shaped image on four distinct
 coordinates. All four results are verified on Prove2Me. Extracting large positive domains remains open,
 as are the absolute central inequalities.
 
+[ExceptionalTriangleCount.lean](ExceptionalTriangleCount.lean) proves
+that any family of represented triangles with explicit L-shape witnesses
+has at most binomial(n,2) distinct anchor supports. All four results are
+verified on Prove2Me. Extracting large positive domains remains open, as do the absolute central
+inequalities.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1344,26 +1350,47 @@ Large positive-domain extraction, absolute central inequalities and generic G1/G
 
 ## Counting triangles with L-shaped images
 
-[Exceptional triangle count](ExceptionalTriangleCount.md) proves that
-a family of represented triangles with explicit L-shape witnesses has
-at most binomial(n,2) distinct anchor supports. The unordered repeated
-endpoint pair determines the symmetric image edges, which recover the
-anchor triangle. Four original proofs, six exact declaration types and
-the ValidTuple definition value pass both revisions. No new definition
-is introduced. Counting triangles inside affine domains, extracting
-large positive domains, absolute central inequalities and generic
-G1/G2/G3 remain open. Split export and private publication remain.
+For any valid tuple with injective doubling, a family of represented
+triangles with explicit L-shaped image witnesses has at most binomial(n,2)
+distinct anchor supports. The unordered repeated endpoint pair determines
+the symmetric image edges and thereby recovers the anchor support. The
+result is generic in the dimension and ambient additive commutative
+group. Affine-domain triangle counts and large-domain extraction are
+separate tasks.
+
+All four exceptional triangle count results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, two
+external interface types, two original inline helper types and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete four-theorem chain.
+
+The consolidated DAG has 1129 nodes and 2595 edges. All 753 exact proof dependency sets across 45 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Extracting large positive domains, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified four-theorem exceptional triangle count export
 
-All four generic exceptional triangle count statements and original proof
-bodies have a verified split export on both revisions. Four exact target
-types and dependency sets, two external interface types, two original
-inline helper types and the ValidTuple definition value agree. No new
-definition bundle is introduced. Metadata and live preflight pass;
-publication is pending. The L-shape witness hypotheses are explicit.
-Counting affine-domain triangles, extracting large affine domains, absolute
-central inequalities and generic G1/G2/G3 remain open.
+For any valid tuple with injective doubling, a family of represented
+triangles with explicit L-shaped image witnesses has at most binomial(n,2)
+distinct anchor supports. The unordered repeated endpoint pair determines
+the symmetric image edges and thereby recovers the anchor support. The
+result is generic in the dimension and ambient additive commutative
+group. Affine-domain triangle counts and large-domain extraction are
+separate tasks.
+
+All four exceptional triangle count results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, two
+external interface types, two original inline helper types and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete four-theorem chain.
+
+The consolidated DAG has 1129 nodes and 2595 edges. All 753 exact proof dependency sets across 45 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Extracting large positive domains, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Pair and triangle counts in linear block families
 
