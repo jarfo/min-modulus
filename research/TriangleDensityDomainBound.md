@@ -38,3 +38,14 @@ Next combine its outside-neighbor restrictions with the same missing-pair
 budget. The density premise has not been deduced merely from a small
 modulus; it is suggested by failure of the quartic count. Higher central
 degrees and generic G1/G2/G3 remain open.
+
+## Verified three-theorem triangle density domain export
+
+All three original proofs have a verified split export on both revisions.
+Three exact target types and dependency sets, two external interface
+types and three existing definition values agree. No inline helper or
+new definition is required. Metadata and live preflight pass; publication
+is pending. At n>=44 the explicit missing-pair coverage and density
+hypotheses yield an offset t with n<2*|positiveAffineDomain(g,t)|+40.
+The one-escape conclusion, absolute central inequalities and generic
+G1/G2/G3 remain open.
