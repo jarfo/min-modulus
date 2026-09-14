@@ -2130,12 +2130,20 @@ The central-degree union lower bounds and generic G1/G2/G3 remain open.
 
 ## CR1 — draft central repeated-cover target
 
-[CR1](CentralRepeatedCoinTarget.md) is an explicitly unproved research
-target: for every valid tuple at positive odd modulus, and either central
-degree k>=4, prove |D_k|+1>=sum_(j<k)choose(n,j). No affine closure
-or restricted multiplicity hypothesis is included. Lean checks that its
-entire quantified type matches the hypothesis of the already proved G2
-sufficiency theorem. Both revisions type-check the statement and retain
-the expected unproved placeholder; no CR1 proof is submitted. Private
-problem publication and mission linkage are pending. The main G1/G2/G3
-gates remain open, and alternative routes remain available.
+CR1 is an explicitly unproved sufficient target for G2. For every valid
+tuple at positive odd modulus and either central degree k>=4, prove
+
+    |D_k|+1 >= sum_(j<k) choose(n,j),
+
+where D_k includes every repeated-coordinate representation. No affine
+closure, density condition or overlap cap is assumed. Lean checks on both
+revisions establish that the statement's entire quantified type matches
+the premise of the already proved G2 sufficiency theorem
+1971fd39-22d6-4f56-acbb-64fa3209b49f. This is a statement check, not a proof.
+
+CR1 is private and Open on Prove2Me, with an exact statement readback and
+an attached research milestone. No CR1 solution has been submitted.
+Theorem ID: 06a6b75d-6df1-4976-ae05-72ff1e7fc854
+Milestone ID: 500f994a-6a1e-4cd4-8aa1-e183f116b1f9
+
+The consolidated DAG has 1259 nodes, 2885 edges and 79 roots. Its four open leaves comprise the unchanged three core gates G1/P6, G2/From7 and G3/From7 plus CR1. All 824 exact proof dependency sets across 58 proved bundles still match; the new Open target adds no proved theorem. Alternative routes to the core gates remain available.

@@ -37,7 +37,15 @@ The draft statement is checked on both the original Mathlib revision
 platform's expected `by sorry` placeholder. This is a type check, **not a
 proof**. No solution for CR1 is being submitted.
 
-Private problem publication and mission linkage are pending. The three
+CR1 is now private and Open on Prove2Me. The statement readback and
+mission linkage are verified. No CR1 proof has been submitted. The three
 main gates G1/P6, G2/From7 and G3/From7 remain open. CR1 is an additional
 research target, not a replacement for those gates or for alternative
 proof routes.
+
+CR1 is private and Open on Prove2Me, with an exact statement readback and
+an attached research milestone. No CR1 solution has been submitted.
+Theorem ID: 06a6b75d-6df1-4976-ae05-72ff1e7fc854
+Milestone ID: 500f994a-6a1e-4cd4-8aa1-e183f116b1f9
+
+The consolidated DAG has 1259 nodes, 2885 edges and 79 roots. Its four open leaves comprise the unchanged three core gates G1/P6, G2/From7 and G3/From7 plus CR1. All 824 exact proof dependency sets across 58 proved bundles still match; the new Open target adds no proved theorem. Alternative routes to the core gates remain available.
