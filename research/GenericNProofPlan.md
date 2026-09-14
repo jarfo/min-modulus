@@ -1721,3 +1721,16 @@ two existing definition values pass both revisions. No new definition
 is introduced. The arbitrary-degree match decomposition and numerical
 central bounds remain; unrestricted G1/G2/G3 remain open. Split export
 and private publication remain.
+
+## Exact squarefree translation counts from disjoint cores
+
+[Squarefree translation core counts](SquarefreeTranslationCoreCount.md)
+proves an exact formula in every degree: each match decomposes uniquely
+into disjoint equal-size difference supports (U,V) and a common subset
+outside their union. The match count is the sum over cores of
+choose(|A|-2*|U|,k-|U|). Validity then allows nonuniform weighted packing
+to bound this count through explicit support-binomial products. Four
+original proofs, nine exact declaration types and three definition values
+pass both revisions. One new generic core definition is introduced.
+The numerical central bounds and unrestricted G1/G2/G3 remain open.
+Split export and private publication remain.
