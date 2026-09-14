@@ -1329,3 +1329,14 @@ the ValidTuple definition value pass both revisions. No new definition
 is introduced. Counting triangles inside affine domains, extracting
 large positive domains, absolute central inequalities and generic
 G1/G2/G3 remain open. Split export and private publication remain.
+
+## Verified four-theorem exceptional triangle count export
+
+All four generic exceptional triangle count statements and original proof
+bodies have a verified split export on both revisions. Four exact target
+types and dependency sets, two external interface types, two original
+inline helper types and the ValidTuple definition value agree. No new
+definition bundle is introduced. Metadata and live preflight pass;
+publication is pending. The L-shape witness hypotheses are explicit.
+Counting affine-domain triangles, extracting large affine domains, absolute
+central inequalities and generic G1/G2/G3 remain open.

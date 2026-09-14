@@ -37,3 +37,14 @@ All four original proofs pass both Mathlib revisions. Six exact
 declaration types and the ValidTuple definition value agree, with only
 standard Lean axioms. No new definition is introduced. Split Prove2Me
 export and publication remain.
+
+## Verified four-theorem exceptional triangle count export
+
+All four generic exceptional triangle count statements and original proof
+bodies have a verified split export on both revisions. Four exact target
+types and dependency sets, two external interface types, two original
+inline helper types and the ValidTuple definition value agree. No new
+definition bundle is introduced. Metadata and live preflight pass;
+publication is pending. The L-shape witness hypotheses are explicit.
+Counting affine-domain triangles, extracting large affine domains, absolute
+central inequalities and generic G1/G2/G3 remain open.
