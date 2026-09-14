@@ -2137,3 +2137,15 @@ One supporting root retains the entire exact Mersenne count family.
 The consolidated DAG has 1258 nodes and 2884 edges. All 824 exact proof dependency sets across 58 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 The central-degree union lower bounds and generic G1/G2/G3 remain open.
+
+## CR1 — draft central repeated-cover target
+
+[CR1](CentralRepeatedCoinTarget.md) is an explicitly unproved research
+target: for every valid tuple at positive odd modulus, and either central
+degree k>=4, prove |D_k|+1>=sum_(j<k)choose(n,j). No affine closure
+or restricted multiplicity hypothesis is included. Lean checks that its
+entire quantified type matches the hypothesis of the already proved G2
+sufficiency theorem. Both revisions type-check the statement and retain
+the expected unproved placeholder; no CR1 proof is submitted. Private
+problem publication and mission linkage are pending. The main G1/G2/G3
+gates remain open, and alternative routes remain available.
