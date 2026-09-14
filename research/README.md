@@ -1394,3 +1394,14 @@ ValidTuple definition value pass both revisions. No new definition is
 introduced. Counting exceptional triangles, extracting large affine
 domains, absolute central inequalities and generic G1/G2/G3 remain open.
 Split export and private publication remain.
+
+## Verified four-theorem triangle classification export
+
+All four generic triangle classification statements and original proof
+bodies have a verified split export on both revisions. Four exact target
+types and dependency sets, three external interface types, two original
+inline helper types and the ValidTuple definition value agree. No new
+definition bundle is introduced. Metadata and live preflight pass;
+publication is pending. The represented-triangle hypotheses are explicit.
+Counting exceptional triangles, extracting large affine domains, absolute
+central inequalities and generic G1/G2/G3 remain open.
