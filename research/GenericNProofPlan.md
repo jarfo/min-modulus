@@ -1414,3 +1414,14 @@ types and three existing definition values pass both revisions. No new
 definition is introduced. A triangle lower bound from missing pairs and
 large-domain extraction remain, as do the absolute central inequalities
 and generic G1/G2/G3. Split export and private publication remain.
+
+## Verified six-theorem affine-domain count export
+
+All six statements and original proof bodies have a verified split
+export on both revisions. Six exact target types and dependency sets,
+five external interface types, two original inline helper types and
+three definition values agree. One new bundle contains the full
+positive and negative affine-domain definitions. Metadata and live
+preflight pass; publication is pending. The validity, doubling and
+domain-size hypotheses remain explicit. Large-domain extraction,
+absolute central inequalities and generic G1/G2/G3 remain open.

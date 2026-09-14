@@ -38,3 +38,14 @@ All six original proofs pass both Mathlib revisions. Sixteen exact
 declaration types and three definition values agree: ValidTuple and the
 two new affine-domain definitions. Only standard Lean axioms occur.
 Split Prove2Me export and publication remain.
+
+## Verified six-theorem affine-domain count export
+
+All six statements and original proof bodies have a verified split
+export on both revisions. Six exact target types and dependency sets,
+five external interface types, two original inline helper types and
+three definition values agree. One new bundle contains the full
+positive and negative affine-domain definitions. Metadata and live
+preflight pass; publication is pending. The validity, doubling and
+domain-size hypotheses remain explicit. Large-domain extraction,
+absolute central inequalities and generic G1/G2/G3 remain open.
