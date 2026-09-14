@@ -30,6 +30,10 @@ with the quadratic incidence bound:
 
 The next priority is growth at arbitrary central degrees, with every
 required binomial term accounted for.
+[AnchoredCubeCoinFiltrationResearch.md](AnchoredCubeCoinFiltrationResearch.md)
+now determines exactly the part of every coin cover lying in a fixed
+anchored cube. The complementary part is disjoint from the entire cube.
+Its required central-degree lower bound remains unproved.
 [FrobeniusStableCubicResearch.md](FrobeniusStableCubicResearch.md) now rules
 out a seven-point cubic interpolation bound even with torus coordinates,
 unit weights and Frobenius stability. Its six points cannot form a full
@@ -2214,8 +2218,7 @@ lies outside the entire cube, giving an exact disjoint count. All anchors,
 dimensions and degrees are covered without oddness or closure assumptions.
 Six original proofs, eleven exact declaration types and three definition
 values pass both revisions. The central outside-cube lower bound is still
-unproved; G1/G2/G3 and CR1 remain open. Split export and private publication
-remain.
+unproved; G1/G2/G3 and CR1 remain open. All six results are now private and Proved on Prove2Me.
 
 ## Verified anchored-cube coin filtration
 
@@ -2237,9 +2240,13 @@ layer-overlap bounds are unnecessary. The missing central lower bound
 on the outside portion is not proved; G1/G2/G3 and CR1 remain open.
 The original proofs are in AnchoredCubeCoinFiltration.lean.
 
-Both revisions verify six original target types and dependency sets,
-two existing external theorem interface types and three definition values.
-One new shared definition contains the anchored cube; no inline helper is
-needed. Exact parser spans retain all six original proof bodies. Metadata
-and live preflight pass; private publication is pending. One supporting
-root retains the exact all-anchor, all-degree decomposition.
+All six results are private and Proved on Prove2Me. Verified submissions
+and exact server proof-source readbacks pass. Both revisions verify six
+original target types and dependency sets, two external theorem interface
+types and three definition values. One shared definition contains the
+anchored cube. No inline helper is needed. One supporting root retains
+the full all-anchor, all-degree decomposition.
+
+The consolidated DAG has 1281 nodes and 2928 edges. All 835 exact proof dependency sets across 60 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
+
+The central outside-cube lower bound and CR1/G1/G2/G3 remain open.

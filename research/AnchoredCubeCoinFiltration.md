@@ -41,4 +41,6 @@ the exact intersection cardinality, the disjoint full-cover count and
 normalization at an arbitrary anchor. The definition zeroAnchorSubsetCube
 contains the zero-normalized cube. Both Lean/Mathlib revisions pass: six proofs, eleven exact declaration
 types, three definition values and only standard axioms. G1, G2, G3 and
-CR1 remain open. Split export and private publication remain.
+CR1 remain open. All six results are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](AnchoredCubeCoinFiltrationResearch.md).
