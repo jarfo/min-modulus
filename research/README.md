@@ -1441,3 +1441,13 @@ only. No new definition is introduced. Applying these counts to the
 affine-domain families, extracting large domains, absolute central
 inequalities and generic G1/G2/G3 remain open. Split export and private
 publication remain.
+
+## Verified two-theorem linear block count export
+
+Both block-family counting statements and original proof bodies have
+a verified split export on both revisions. Both exact target types and
+dependency sets agree. No definition bundle, inline helper or external
+theorem interface is required. Metadata and live preflight pass;
+publication is pending. The intersection and largest-block hypotheses
+remain explicit. Affine-domain assembly, large-domain extraction, the
+absolute central inequalities and generic G1/G2/G3 remain open.
