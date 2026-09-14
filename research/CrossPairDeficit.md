@@ -20,3 +20,9 @@ The next step is to combine these counts with the full positive domain
 neighbor bounds and the missing-pair density hypothesis. The one-escape
 conclusion, absolute central inequalities and generic G1/G2/G3 remain
 open. Split Prove2Me export and private publication remain.
+
+## Verified Prove2Me dense-case chain
+
+These results are included in the fourteen-theorem dense positive-domain
+chain, now private and Proved. See [the consolidated chain](DensePositiveDomainResearch.md).
+The density premise is explicit, and unrestricted G1/G2/G3 remain open.

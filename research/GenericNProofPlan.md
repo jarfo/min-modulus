@@ -172,6 +172,12 @@ under explicit missing-pair coverage and density assumptions. All three
 results are verified on Prove2Me. One-escape closure and the conditional sharp odd bound at n>=144
 are verified locally. Absolute central inequalities remain open.
 
+[DensePositiveDomainResearch.md](DensePositiveDomainResearch.md) records
+the fourteen proved dense-case lemmas. At n>=144, the explicit missing-pair
+density condition yields actual one-escape closure and the sharp odd bound.
+Any remaining odd counterexample must satisfy the reverse pair-cover
+density inequality. The sparse regime and the central inequalities remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1700,13 +1706,18 @@ The fourteen original proofs are in five source modules:
 * DensePositiveDomainOneEscape.lean: three actual one-escape extraction results.
 * DensePairModulusBound.lean: the sharp odd bound and necessary counterexample density.
 
-The split export passes both revisions: fourteen exact original target
-types and dependency sets, four external interface types, one original
-inline helper type and two existing definition values match. All original
-proof bodies are retained. No new definition bundle is introduced. Five
-files use restricted parser spans; the OddOrder helper uses full compiler
-InfoTree spans because its source has section variables. Metadata and live
-preflight pass. Private proof publication is pending.
+All fourteen results are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify fourteen original target types and dependency sets, four external
+interface types, one original inline helper type and two existing
+definition values. All original proof bodies are retained. No new
+definition bundle is required. One terminal root retains all fourteen
+results, including the conditional sharp odd bound and its necessary
+counterexample-density consequence.
+
+The consolidated DAG has 1184 nodes and 2709 edges. All 783 exact proof dependency sets across 51 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The density premise remains explicit. The sparse represented-pair regime, absolute central inequalities and unrestricted G1/G2/G3 remain open.
 
 ## Nonuniform translated-support packing
 
