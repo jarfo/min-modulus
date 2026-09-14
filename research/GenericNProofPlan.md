@@ -2307,7 +2307,7 @@ and landing back in B forces a strictly smaller subset layer.
 Three original proofs, eleven exact declaration types and four definition
 values pass both revisions, without oddness. No outside-cube lower bound
 or matrix independence is proved. G1/G2/G3/CR1 remain open.
-Split export and private publication remain.
+All three exported theorem nodes are now private and Proved on Prove2Me.
 
 ## Verified repeated anchored cube filtration
 
@@ -2322,9 +2322,13 @@ all degrees without oddness. They determine the cube portion and its
 strict decrease under duplication; they do not prove independence or
 a lower bound for outside values. G1/G2/G3/CR1 remain open.
 
-Both revisions verify three target types and dependency sets, four
-external theorem interface types and four existing definition values.
-There are no inline helpers or new definition bundles. Exact parser
-spans retain every original proof body. Metadata and live preflight pass;
-private publication is pending. Two supporting roots retain the exact
-intersection count and the strict decrease theorem.
+All three theorem nodes are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify three target types and dependency sets, four external interface
+types and four definition values. There are no inline helpers or new
+definition bundles. Two supporting roots retain the exact intersection
+count and strict subset-size decrease.
+
+The consolidated DAG has 1295 nodes and 2975 edges. All 843 exact proof dependency sets across 62 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
+
+The central outside-cube lower bound and CR1/G1/G2/G3 remain open.

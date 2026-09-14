@@ -48,6 +48,8 @@ an attached research milestone. No CR1 solution has been submitted.
 Theorem ID: 06a6b75d-6df1-4976-ae05-72ff1e7fc854
 Milestone ID: 500f994a-6a1e-4cd4-8aa1-e183f116b1f9
 
-The consolidated DAG has 1289 nodes and 2954 edges. All 840 exact proof dependency sets across 61 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open. Its four open leaves are the three core gates and CR1.
+The consolidated DAG has 1295 nodes and 2975 edges. All 843 exact proof dependency sets across 62 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open. Its four open leaves are the three core gates and CR1.
 
 [OutsideCubeRepeatedBoundsResearch.md](OutsideCubeRepeatedBoundsResearch.md) now proves that the repeated-cover bound for g is equivalent, at every anchor q, to |C_k(g-g_q) outside B|+1>=sum_(j<k) choose(n-1,j), where B is the entire anchored subset-sum cube. The proof retains all Pascal boundary terms and translation invariance. This is an equivalence only; the central outside-cube inequality remains unproved.
+
+[Repeated anchored cube filtration](RepeatedAnchoredCubeFiltrationResearch.md) now determines B intersection D_(k+2) exactly and proves that duplicating a subset member can return to B only in a smaller subset layer. It does not prove independence or a lower bound for outside values.

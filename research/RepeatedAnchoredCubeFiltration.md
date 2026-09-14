@@ -34,4 +34,6 @@ outside values. Those are unresolved mathematical questions.
 
 Both Lean/Mathlib revisions pass: three proofs, eleven exact declaration
 types, four definition values and only standard axioms.
-Split export and private publication remain.
+All three exported theorem nodes are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](RepeatedAnchoredCubeFiltrationResearch.md).
