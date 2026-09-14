@@ -2186,3 +2186,16 @@ needed. One supporting root retains the full symbolic obstruction.
 The consolidated DAG has 1268 nodes and 2901 edges. All 829 exact proof dependency sets across 59 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
 
 CR1 and generic G1/G2/G3 remain open; this is an obstruction to a different rank claim.
+
+## Exact anchored-cube coin filtration
+
+[Anchored-cube coin filtration](AnchoredCubeCoinFiltration.md) proves that
+every anchored subset sum has its subset size as minimum coin count and
+is uniquely represented at that size. In every degree k, the zero-anchored
+cube meets C_k in exactly sum_(j<=k) choose(n-1,j) values. The rest of C_k
+lies outside the entire cube, giving an exact disjoint count. All anchors,
+dimensions and degrees are covered without oddness or closure assumptions.
+Six original proofs, eleven exact declaration types and three definition
+values pass both revisions. The central outside-cube lower bound is still
+unproved; G1/G2/G3 and CR1 remain open. Split export and private publication
+remain.
