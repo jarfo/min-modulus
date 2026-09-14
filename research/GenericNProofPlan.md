@@ -1849,3 +1849,17 @@ parser spans retain all original proof bodies. No new definition bundle
 is needed. Metadata and live preflight pass. Private publication is
 pending. Two roots retain the positive-rank estimate and the combined
 fractional certificate.
+
+## A uniform limitation of the core-rank certificate
+
+[Translation rank-certificate barrier](TranslationRankCertificateBarrier.md)
+proves a symbolic limitation of the current numerical relaxation. If
+rank two is allowed at support size2*k with k>=3, every nonnegative
+beta certificate has objective at least6*choose(2*k-4,k-2), hence at
+least three eighths of choose(2*k,k). This is a certificate-objective
+lower bound; it does not assert that the abstract profile is realized
+by a valid tuple. Four original proofs and four exact types pass both
+revisions with standard axioms. No new definitions or finite exclusion
+campaigns are involved. Stronger small-core compatibility or aggregate
+control across anchor pairs is still needed; G1/G2/G3 remain open.
+Split export and private publication remain.
