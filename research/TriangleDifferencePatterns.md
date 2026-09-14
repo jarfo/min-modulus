@@ -25,29 +25,38 @@ configuration for arbitrary n.
   affine domain g(f(i))+t=2*g(i), lies in a negative affine domain
   g(f(i))+2*g(i)=t, or has the four-coordinate L-shape above.
 
-These alternatives need not be mutually exclusive. The conclusion gives
-existence of an L-shape; uniqueness and a bound on the number of such
-triangles have not yet been established. A domain in the classification
-contains the three displayed anchors; the theorem does not assert that
-many triangles share an offset or extract a large domain.
+These alternatives need not be mutually exclusive. A domain in the
+classification contains the three displayed anchors; the theorem does
+not assert that many triangles share an offset or extract a large domain.
 
-The next counting task is to show that the exceptional shapes determine
-at most binomial(n,2) unordered triangles and to count triangles inside
-affine domains. Those cardinality arguments, extraction of large domains,
-the absolute central inequalities and generic G1/G2/G3 remain open.
+The subsequent ExceptionalTriangleCount.lean now bounds a family with
+explicit L-shape witnesses by binomial(n,2), verified on both revisions.
+AffineDomainTriangleCounts.lean and RepresentedTriangleCounts.lean now
+assemble the affine-domain counts and the total represented-triangle
+upper bound, verified on both revisions. Extracting large domains remains
+open, as do the absolute central inequalities and generic G1/G2/G3.
 
 All four original proofs pass both Mathlib revisions. Eight exact
 declaration types and the ValidTuple definition value agree, with only
-standard Lean axioms. No new definition is introduced. Split Prove2Me
-export and publication remain.
+standard Lean axioms. No new definition is introduced. All four results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified four-theorem triangle classification export
 
-All four generic triangle classification statements and original proof
-bodies have a verified split export on both revisions. Four exact target
-types and dependency sets, three external interface types, two original
-inline helper types and the ValidTuple definition value agree. No new
-definition bundle is introduced. Metadata and live preflight pass;
-publication is pending. The represented-triangle hypotheses are explicit.
-Counting exceptional triangles, extracting large affine domains, absolute
-central inequalities and generic G1/G2/G3 remain open.
+## Verified Prove2Me triangle classification chain
+
+All four triangle classification results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, three
+external interface types, two original inline helper types and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete four-theorem chain.
+
+The consolidated DAG has 1121 nodes and 2576 edges. All 749 exact proof dependency sets across 44 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large positive-domain extraction, absolute central inequalities and generic G1/G2/G3 remain open.
+
+* repeated_balanced_three_edges_l_shape: 27fb8821-dccc-4b34-ba48-0765ca17a112
+* represented_triangle_image_edges: 735e7ed1-29fe-4095-8776-7229069cddb1
+* squarefree_balanced_three_edges_cycle: 87857775-8354-4d05-9036-79e7e129e07f
+* represented_triangle_affine_or_l_shape: 6de05c26-c308-4701-b4ae-31bcd38f8b64

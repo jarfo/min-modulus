@@ -1384,27 +1384,45 @@ Affine structure extraction, absolute central inequalities and generic G1/G2/G3 
 
 ## Classification of represented triangles
 
-[Triangle difference patterns](TriangleDifferencePatterns.md) classifies
-every triangle of represented doubled differences for arbitrary n. It
+For any valid tuple with injective doubling, every represented triangle
 lies in a positive affine domain, lies in a negative affine domain, or
 has image edges {(u,v),(u,z),(w,v)} on four distinct coordinates with
-2*(g(u)-g(v))=g(z)-g(w). The affine alternatives contain the three
-anchors. Four original proofs, eight exact declaration types and the
-ValidTuple definition value pass both revisions. No new definition is
-introduced. Counting exceptional triangles, extracting large affine
-domains, absolute central inequalities and generic G1/G2/G3 remain open.
-Split export and private publication remain.
+2*(g(u)-g(v))=g(z)-g(w). The result is generic in the dimension and
+ambient additive commutative group. It does not count the exceptional
+triangles or assert that many triangles share an affine offset.
+
+All four triangle classification results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, three
+external interface types, two original inline helper types and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete four-theorem chain.
+
+The consolidated DAG has 1121 nodes and 2576 edges. All 749 exact proof dependency sets across 44 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large positive-domain extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified four-theorem triangle classification export
 
-All four generic triangle classification statements and original proof
-bodies have a verified split export on both revisions. Four exact target
-types and dependency sets, three external interface types, two original
-inline helper types and the ValidTuple definition value agree. No new
-definition bundle is introduced. Metadata and live preflight pass;
-publication is pending. The represented-triangle hypotheses are explicit.
-Counting exceptional triangles, extracting large affine domains, absolute
-central inequalities and generic G1/G2/G3 remain open.
+For any valid tuple with injective doubling, every represented triangle
+lies in a positive affine domain, lies in a negative affine domain, or
+has image edges {(u,v),(u,z),(w,v)} on four distinct coordinates with
+2*(g(u)-g(v))=g(z)-g(w). The result is generic in the dimension and
+ambient additive commutative group. It does not count the exceptional
+triangles or assert that many triangles share an affine offset.
+
+All four triangle classification results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify four original target types and dependency sets, three
+external interface types, two original inline helper types and the
+ValidTuple definition value. Every original proof body is retained.
+No new definition bundle is introduced. One supporting root retains
+the complete four-theorem chain.
+
+The consolidated DAG has 1121 nodes and 2576 edges. All 749 exact proof dependency sets across 44 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large positive-domain extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Counting triangles with L-shaped images
 
