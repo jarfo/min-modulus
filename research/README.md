@@ -1596,3 +1596,13 @@ new definition is required. Metadata and live preflight pass; publication
 is pending. The representation and positive-domain size bound remain
 explicit. Controlling coordinates outside large domains, absolute
 central inequalities and generic G1/G2/G3 remain open.
+
+## Verified two-theorem missing-pair triangle count export
+
+Both original proofs have a verified split export on both revisions.
+Both exact target types and dependency sets agree. No definition bundle,
+inline helper or external theorem interface is required. Metadata and
+live preflight pass; publication is pending. A family Ts containing every
+triangle that avoids a pair family D satisfies
+choose(n,3)<=|Ts|+(n-2)*|D|. The coverage hypothesis is explicit.
+Absolute central inequalities and generic G1/G2/G3 remain open.

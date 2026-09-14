@@ -24,3 +24,13 @@ G1/G2/G3.
 Both original proofs pass both Mathlib revisions. Both exact declaration
 types agree, with standard Lean axioms only. No new definition is
 introduced. Split Prove2Me export and publication remain.
+
+## Verified two-theorem missing-pair triangle count export
+
+Both original proofs have a verified split export on both revisions.
+Both exact target types and dependency sets agree. No definition bundle,
+inline helper or external theorem interface is required. Metadata and
+live preflight pass; publication is pending. A family Ts containing every
+triangle that avoids a pair family D satisfies
+choose(n,3)<=|Ts|+(n-2)*|D|. The coverage hypothesis is explicit.
+Absolute central inequalities and generic G1/G2/G3 remain open.
