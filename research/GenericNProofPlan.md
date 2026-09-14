@@ -1425,3 +1425,16 @@ positive and negative affine-domain definitions. Metadata and live
 preflight pass; publication is pending. The validity, doubling and
 domain-size hypotheses remain explicit. Large-domain extraction,
 absolute central inequalities and generic G1/G2/G3 remain open.
+
+## Triangle lower bound from missing coordinate pairs
+
+[Missing pair triangle count](MissingPairTriangleCount.md) proves that
+a coordinate pair lies in at most n-2 triples. If a family Ts contains
+every triple avoiding a pair family D, then
+choose(n,3)<=|Ts|+(n-2)*|D|. The pair-size and coverage hypotheses are
+explicit; no group or validity premise is needed. Both original proofs
+and exact declaration types pass both revisions, with standard axioms
+only and no new definition. Applying this to represented differences and
+extracting large positive domains remain, as do the absolute central
+inequalities and generic G1/G2/G3. Split export and private publication
+remain.
