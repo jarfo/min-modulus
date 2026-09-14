@@ -2147,3 +2147,15 @@ Theorem ID: 06a6b75d-6df1-4976-ae05-72ff1e7fc854
 Milestone ID: 500f994a-6a1e-4cd4-8aa1-e183f116b1f9
 
 The consolidated DAG has 1259 nodes, 2885 edges and 79 roots. Its four open leaves comprise the unchanged three core gates G1/P6, G2/From7 and G3/From7 plus CR1. All 824 exact proof dependency sets across 58 proved bundles still match; the new Open target adds no proved theorem. Alternative routes to the core gates remain available.
+
+## Frobenius-stable interpolation still needs a cyclic orbit
+
+[Frobenius-stable cubic interpolation](FrobeniusStableCubicInterpolation.md)
+constructs six distinct torus points in characteristic two, closed under
+squaring, whose unit-weight evaluations extract every cubic squarefree
+coefficient. They cannot be a single full multiplicative cyclic orbit,
+even after reordering. Five original proofs, nine exact declaration types
+and two definition values pass both revisions. The GF(4) instance rules
+out an unrestricted seven-point bound with Frobenius stability; it does
+not refute CR1, a 2^n-2 point bound, or min-modulus. G1/G2/G3 and CR1 remain
+open. Split export and private publication remain.
