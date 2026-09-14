@@ -1508,17 +1508,24 @@ Large-domain extraction, absolute central inequalities and generic G1/G2/G3 rema
 
 ## Triangle counts in full affine domains
 
-[Affine domain triangle counts](AffineDomainTriangleCounts.md) defines
-full positive and negative affine domains and proves that distinct
-offsets give domains intersecting in at most one coordinate. Positive
-domains bounded by M have 3*sum choose(|S|,3)<=(M-2)*choose(n,2).
-Negative domains in a nonzero cyclic modulus have
-6*sum choose(|S|,3)<=(n-2)*choose(n,2). Validity and injective doubling
-are explicit. Six original proofs, sixteen exact declaration types and
-three definition values pass both revisions, including two new domain
-definitions. Assembling the total represented-triangle count, extracting
-large positive domains, absolute central inequalities and generic
-G1/G2/G3 remain open. Split export and private publication remain.
+Full positive and negative affine domains at distinct offsets meet
+in at most one coordinate for a valid tuple with injective doubling.
+Positive domains with size bounded by M satisfy
+3*sum choose(|S|,3)<=(M-2)*choose(n,2). At nonzero cyclic modulus,
+negative domains satisfy 6*sum choose(|S|,3)<=(n-2)*choose(n,2).
+The sums are over distinct full domains; all hypotheses are explicit.
+
+All six affine-domain counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, five
+external interface types, two original inline helper types and three
+definition values. Every original proof body is retained. One new
+bundle contains the full positive and negative domains. Two supporting
+roots retain all six results.
+
+The consolidated DAG has 1145 nodes and 2626 edges. All 761 exact proof dependency sets across 47 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large-domain extraction under an explicit missing-pair density hypothesis is verified locally. Absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Total count of represented triangles
 
@@ -1535,14 +1542,24 @@ and generic G1/G2/G3. Split export and private publication remain.
 
 ## Verified six-theorem affine-domain count export
 
-All six statements and original proof bodies have a verified split
-export on both revisions. Six exact target types and dependency sets,
-five external interface types, two original inline helper types and
-three definition values agree. One new bundle contains the full
-positive and negative affine-domain definitions. Metadata and live
-preflight pass; publication is pending. The validity, doubling and
-domain-size hypotheses remain explicit. Large-domain extraction,
-absolute central inequalities and generic G1/G2/G3 remain open.
+Full positive and negative affine domains at distinct offsets meet
+in at most one coordinate for a valid tuple with injective doubling.
+Positive domains with size bounded by M satisfy
+3*sum choose(|S|,3)<=(M-2)*choose(n,2). At nonzero cyclic modulus,
+negative domains satisfy 6*sum choose(|S|,3)<=(n-2)*choose(n,2).
+The sums are over distinct full domains; all hypotheses are explicit.
+
+All six affine-domain counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify six original target types and dependency sets, five
+external interface types, two original inline helper types and three
+definition values. Every original proof body is retained. One new
+bundle contains the full positive and negative domains. Two supporting
+roots retain all six results.
+
+The consolidated DAG has 1145 nodes and 2626 edges. All 761 exact proof dependency sets across 47 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large-domain extraction under an explicit missing-pair density hypothesis is verified locally. Absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Triangle lower bound from missing coordinate pairs
 
