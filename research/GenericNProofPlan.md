@@ -144,6 +144,11 @@ has at most binomial(n,2) distinct anchor supports. All four results are
 verified on Prove2Me. Extracting large positive domains remains open, as do the absolute central
 inequalities.
 
+[LinearBlockTriangleCount.lean](LinearBlockTriangleCount.lean) proves
+pair and triangle counts for families whose distinct blocks meet in at
+most one coordinate. Both results are verified on Prove2Me. Extracting large domains and the
+absolute central inequalities remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1394,26 +1399,41 @@ Extracting large positive domains, absolute central inequalities and generic G1/
 
 ## Pair and triangle counts in linear block families
 
-[Linear block triangle count](LinearBlockTriangleCount.md) proves that
-a family of coordinate subsets whose distinct members meet in at most
-one point has at most binomial(n,2) pairs across all its blocks. If each
-block has size at most M, its total triangle count satisfies
-3*sum choose(|S|,3)<=(M-2)*choose(n,2). Both original proofs and their
-two exact declaration types pass both revisions, with standard axioms
-only. No new definition is introduced. Applying these counts to the
-affine-domain families, extracting large domains, absolute central
-inequalities and generic G1/G2/G3 remain open. Split export and private
-publication remain.
+For a family of coordinate subsets whose distinct members intersect
+in at most one point, the total pair count is at most binomial(n,2).
+If every block has size at most M, then
+3*sum choose(|S|,3)<=(M-2)*choose(n,2). The formulas include empty and
+small blocks and use natural subtraction. These are purely combinatorial
+results, with their intersection and size hypotheses explicit.
+
+Both linear block counting results are private and Proved. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify both original target types and dependency sets. Every original
+proof body is retained. No definition bundle, inline helper or external
+theorem interface is required. One supporting root retains both results.
+
+The consolidated DAG has 1132 nodes and 2597 edges. All 755 exact proof dependency sets across 46 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large-domain extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified two-theorem linear block count export
 
-Both block-family counting statements and original proof bodies have
-a verified split export on both revisions. Both exact target types and
-dependency sets agree. No definition bundle, inline helper or external
-theorem interface is required. Metadata and live preflight pass;
-publication is pending. The intersection and largest-block hypotheses
-remain explicit. Affine-domain assembly, large-domain extraction, the
-absolute central inequalities and generic G1/G2/G3 remain open.
+For a family of coordinate subsets whose distinct members intersect
+in at most one point, the total pair count is at most binomial(n,2).
+If every block has size at most M, then
+3*sum choose(|S|,3)<=(M-2)*choose(n,2). The formulas include empty and
+small blocks and use natural subtraction. These are purely combinatorial
+results, with their intersection and size hypotheses explicit.
+
+Both linear block counting results are private and Proved. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify both original target types and dependency sets. Every original
+proof body is retained. No definition bundle, inline helper or external
+theorem interface is required. One supporting root retains both results.
+
+The consolidated DAG has 1132 nodes and 2597 edges. All 755 exact proof dependency sets across 46 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large-domain extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Triangle counts in full affine domains
 

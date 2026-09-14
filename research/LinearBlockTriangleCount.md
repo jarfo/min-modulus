@@ -24,14 +24,21 @@ Absolute central inequalities and generic G1/G2/G3 remain open.
 
 Both original proofs pass both Mathlib revisions. The two exact
 declaration types agree and only standard Lean axioms occur. No new
-definition is introduced. Split Prove2Me export and publication remain.
+definition is introduced. Both results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified two-theorem linear block count export
 
-Both block-family counting statements and original proof bodies have
-a verified split export on both revisions. Both exact target types and
-dependency sets agree. No definition bundle, inline helper or external
-theorem interface is required. Metadata and live preflight pass;
-publication is pending. The intersection and largest-block hypotheses
-remain explicit. Affine-domain assembly, large-domain extraction, the
-absolute central inequalities and generic G1/G2/G3 remain open.
+## Verified Prove2Me linear block count chain
+
+Both linear block counting results are private and Proved. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify both original target types and dependency sets. Every original
+proof body is retained. No definition bundle, inline helper or external
+theorem interface is required. One supporting root retains both results.
+
+The consolidated DAG has 1132 nodes and 2597 edges. All 755 exact proof dependency sets across 46 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Large-domain extraction, absolute central inequalities and generic G1/G2/G3 remain open.
+
+* linear_block_family_sum_choose_two_le: 3a0e7cce-be18-4378-a407-e76f0839b3bc
+* linear_block_family_sum_choose_three_le: bc195050-9b7e-40a3-bf08-27366462dbb2
