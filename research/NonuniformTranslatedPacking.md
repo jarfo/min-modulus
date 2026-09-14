@@ -34,3 +34,9 @@ count possible common intersections. The resulting numerical bound must
 still be shown strong enough for the central-degree target. These lemmas
 do not establish the unrestricted conjecture; G1/G2/G3 remain open.
 Split Prove2Me export and private publication remain.
+
+## Verified Prove2Me nonuniform translation chain
+
+These results are included in the eight-theorem nonuniform translation
+chain, now private and Proved. See [the consolidated chain](NonuniformTranslationResearch.md).
+The numerical premise is explicit, and unrestricted G1/G2/G3 remain open.

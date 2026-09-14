@@ -178,6 +178,11 @@ density condition yields actual one-escape closure and the sharp odd bound.
 Any remaining odd counterexample must satisfy the reverse pair-cover
 density inequality. The sparse regime and the central inequalities remain open.
 
+[NonuniformTranslationResearch.md](NonuniformTranslationResearch.md) records
+the eight proved nonuniform packing and exact core-count lemmas. They hold
+in arbitrary degree; sufficient numerical core-weight bounds for the
+central inequalities remain to be proved.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1773,12 +1778,17 @@ SquarefreeTranslationCoreCount.lean. The new definition bundle contains
 the original separating-permutation event definition (previously inline)
 and the new squarefreeTranslationCores definition.
 
-The split export passes both revisions: eight exact original target
-types and dependency sets, three external interface types, eight original
-inline helper types and four definition values match. Exact parser spans
-retain all original proof bodies. Metadata and live preflight pass.
-Private proof publication is pending. Two supporting roots will retain
-the support-union cap and the final weighted match bound.
+All eight results are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify eight original target types and dependency sets, three external
+interface types, eight original inline helper types and four definition
+values. All original proof bodies are retained. One new definition bundle
+contains the separating-event and disjoint-core definitions. Two supporting
+roots retain the support-union cap and the final weighted match bound.
+
+The consolidated DAG has 1200 nodes and 2744 edges. All 791 exact proof dependency sets across 52 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The numerical core-weight premise remains explicit. Sufficient central-degree estimates and unrestricted G1/G2/G3 remain open.
 
 ## Squarefree translation counts grouped by core rank
 
