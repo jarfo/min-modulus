@@ -31,7 +31,9 @@ work already proves the min-modulus bound for this class and for the
 broader one-escape class. The new result supplies exact degree-by-degree
 coin-cover counts; it does not establish closure or the needed union
 inequality for arbitrary valid tuples. Generic G1/G2/G3 remain open.
-The Mersenne-family specialization is being checked separately.
+[The Mersenne specialization](MersenneExactCoinCountsResearch.md) now
+realizes these exact counts in every positive dimension and degree, with
+both proofs private and Proved on Prove2Me.
 
 All five original proofs pass both Mathlib revisions:
 81a5d257c8e410db227a6665ed08f64fea08e997 and

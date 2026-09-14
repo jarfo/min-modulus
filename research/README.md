@@ -2061,7 +2061,7 @@ proved exponential layer overlap at central degrees n=6*m. No finite
 enumeration is used. Two original proofs, fourteen exact types and six
 existing definition values pass both revisions. The uniform central
 inequality for arbitrary valid tuples and G1/G2/G3 remain open.
-Split export and private publication remain.
+Both results are now private and Proved on Prove2Me.
 
 ## Exact closed-doubling coin counts on Prove2Me
 
@@ -2117,9 +2117,13 @@ counts. The formula concerns the known extremal family. The uniform
 central inequality for arbitrary valid tuples and G1/G2/G3 remain open.
 The original proofs are in MersenneExactCoinCounts.lean.
 
-The split export passes both revisions: two exact original target
-types and dependency sets, six external theorem interfaces and six
-existing definition values match. Exact parser spans retain both original
+Both results are private and Proved on Prove2Me. Verified submissions
+and exact server proof-source readbacks pass. Both revisions verify two
+original target types and dependency sets, six external theorem interfaces
+and six existing definition values. Exact parser spans retain both original
 proof bodies. No inline helper or new definition bundle is required.
-Metadata and live preflight pass; private publication is pending. One
-supporting root retains both the closure and the exact-count family.
+One supporting root retains the entire exact Mersenne count family.
+
+The consolidated DAG has 1258 nodes and 2884 edges. All 824 exact proof dependency sets across 58 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The central-degree union lower bounds and generic G1/G2/G3 remain open.

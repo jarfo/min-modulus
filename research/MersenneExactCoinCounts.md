@@ -29,4 +29,6 @@ Both original proofs pass the original Mathlib revision
 and six existing definition values match, with standard axioms only.
 Existing supported CycleThinCover modules were reused in an owned
 namespace; shared caches are unchanged.
-Split Prove2Me export and publication remain.
+Both results are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](MersenneExactCoinCountsResearch.md).
