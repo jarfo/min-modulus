@@ -51,16 +51,26 @@ and generic G1/G2/G3 remain open.
 All five original proofs pass both Mathlib revisions. Thirteen exact
 declaration types and three definition values agree (ValidTuple,
 actualFibreCoinCover and quadraticTranslateHits). The axiom audit finds
-only standard Lean axioms. No new definition is introduced. Split
-Prove2Me export and publication remain.
+only standard Lean axioms. No new definition is introduced. All five results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified five-theorem positive affine propagation export
 
-All five positive affine propagation statements and original proof bodies
-have a verified split export on both revisions. Five exact target types
-and dependency sets, three external interface types, two inline helper
-types and three definition values agree. No new definition bundle is
-introduced. Metadata and live preflight pass; publication is pending.
-The affine-domain, outside-coordinate and seven-neighbor hypotheses
-remain explicit. Extracting structure from pair density, absolute central
-inequalities and generic G1/G2/G3 remain open.
+## Verified Prove2Me positive affine propagation chain
+
+All five positive affine propagation results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify five original target types and dependency sets, three
+external interface types, two original inline helper types and three
+definition values. Every original proof body is retained. No new
+definition bundle is introduced. Two supporting roots retain the
+complete five-theorem chain.
+
+The consolidated DAG has 1113 nodes and 2557 edges. All 745 exact proof dependency sets across 43 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Affine structure extraction, absolute central inequalities and generic G1/G2/G3 remain open.
+
+* two_coin_family_fibre_card_le_two: 165276ff-0c29-4f67-9c86-79cc09190eb6
+* positive_affine_offsets_eq_of_two_coordinates: e644bdbc-f584-4324-bb05-944f97bace5a
+* positive_affine_neighbor_propagation: 69a032c2-395c-4db6-a344-ad4879475207
+* positive_affine_rich_neighbor_intersection_card_le_one: 6bb9691c-2031-46c7-82b0-86827733bceb
+* positive_affine_rich_neighbors_add_domain_card_le: b14c2abe-e44d-4b0b-8a48-bb58a00d3dd5

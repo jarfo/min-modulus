@@ -124,6 +124,14 @@ full negative affine closure at odd modulus forces n<=2. All four results
 are verified on Prove2Me. Affine structure extraction from dense pair
 relations and the absolute central inequalities remain open.
 
+[PositiveAffinePropagation.lean](PositiveAffinePropagation.lean) proves
+that seven represented neighbors of an outside coordinate in a positive
+affine domain induce a positive affine map on their images. Distinct
+outside coordinates have rich neighbor sets meeting in at most one
+point, and a rich neighbor set R in S obeys |R|+|S|<=n+1. All five
+results are verified on Prove2Me. Existence of a useful domain and the
+absolute central inequalities remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1244,24 +1252,44 @@ central inequalities and generic G1/G2/G3 remain open.
 
 ## Propagation from positive affine domains
 
-[Positive affine propagation](PositiveAffinePropagation.md) proves that
-seven represented doubled-difference neighbors of an outside coordinate
-in a positive affine domain force a second affine map on their images.
-Two distinct such outside coordinates have at most one common rich
-neighbor, and any rich neighbor set R in a domain S obeys |R|+|S|<=n+1.
-All representation and outside hypotheses are explicit. Five original
-proofs, thirteen exact types and three definition values pass on both
-revisions. No new definition is introduced. Extracting a useful domain
-from pair density, the absolute central inequalities and generic G1/G2/G3
-remain open. Split export and private publication remain.
+A positive affine domain with at least seven represented neighbors
+of an outside coordinate forces another positive affine map on their
+images. Rich neighbor sets of distinct outside coordinates meet in
+at most one point, and a rich neighbor set R in a domain S obeys
+|R|+|S|<=n+1. The domain, outside-coordinate and seven-neighbor
+hypotheses are explicit; a useful affine domain has not yet been
+extracted from dense represented differences.
+
+All five positive affine propagation results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify five original target types and dependency sets, three
+external interface types, two original inline helper types and three
+definition values. Every original proof body is retained. No new
+definition bundle is introduced. Two supporting roots retain the
+complete five-theorem chain.
+
+The consolidated DAG has 1113 nodes and 2557 edges. All 745 exact proof dependency sets across 43 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Affine structure extraction, absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified five-theorem positive affine propagation export
 
-All five positive affine propagation statements and original proof bodies
-have a verified split export on both revisions. Five exact target types
-and dependency sets, three external interface types, two inline helper
-types and three definition values agree. No new definition bundle is
-introduced. Metadata and live preflight pass; publication is pending.
-The affine-domain, outside-coordinate and seven-neighbor hypotheses
-remain explicit. Extracting structure from pair density, absolute central
-inequalities and generic G1/G2/G3 remain open.
+A positive affine domain with at least seven represented neighbors
+of an outside coordinate forces another positive affine map on their
+images. Rich neighbor sets of distinct outside coordinates meet in
+at most one point, and a rich neighbor set R in a domain S obeys
+|R|+|S|<=n+1. The domain, outside-coordinate and seven-neighbor
+hypotheses are explicit; a useful affine domain has not yet been
+extracted from dense represented differences.
+
+All five positive affine propagation results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify five original target types and dependency sets, three
+external interface types, two original inline helper types and three
+definition values. Every original proof body is retained. No new
+definition bundle is introduced. Two supporting roots retain the
+complete five-theorem chain.
+
+The consolidated DAG has 1113 nodes and 2557 edges. All 745 exact proof dependency sets across 43 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Affine structure extraction, absolute central inequalities and generic G1/G2/G3 remain open.
