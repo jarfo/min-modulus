@@ -2158,7 +2158,7 @@ even after reordering. Five original proofs, nine exact declaration types
 and two definition values pass both revisions. The GF(4) instance rules
 out an unrestricted seven-point bound with Frobenius stability; it does
 not refute CR1, a 2^n-2 point bound, or min-modulus. G1/G2/G3 and CR1 remain
-open. Split export and private publication remain.
+open. All five results are now private and Proved on Prove2Me.
 
 ## Verified Frobenius-stable cubic obstruction
 
@@ -2176,9 +2176,13 @@ proposed rank argument. It does not refute CR1, an unrestricted 2^n-2 point
 bound, or min-modulus. G1/G2/G3 and CR1 remain open.
 The original proofs are in FrobeniusStableCubicInterpolation.lean.
 
-Both revisions verify five original target types and dependency sets,
-two original inline helper types and two definition values. One new shared
-definition bundle contains the point configuration and the existing
-squarefree exponent. No external theorem interface is needed. Exact parser
-spans retain all original proofs; metadata and live preflight pass. Private
-publication is pending. One supporting root retains the full obstruction.
+All five results are private and Proved on Prove2Me. Verified submissions
+and exact server proof-source readbacks pass. Both revisions verify five
+original target types and dependency sets, two original inline helper types
+and two definition values. One shared definition bundle contains the point
+configuration and squarefree exponent; no external theorem interface is
+needed. One supporting root retains the full symbolic obstruction.
+
+The consolidated DAG has 1268 nodes and 2901 edges. All 829 exact proof dependency sets across 59 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
+
+CR1 and generic G1/G2/G3 remain open; this is an obstruction to a different rank claim.

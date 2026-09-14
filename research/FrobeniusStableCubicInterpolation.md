@@ -36,5 +36,6 @@ The calculations are symbolic in w. No valid-set enumeration or exclusion
 campaign is used. The two helpers concerning a cubic root, and the
 squarefree exponent definition, come from CharTwoSixPointInterpolation.lean.
 Both Lean/Mathlib revisions pass: five proofs, nine exact declaration types,
-two definition values, and only standard axioms. Private split publication
-remains. G1, G2, G3 and CR1 remain open.
+two definition values, and only standard axioms. All five results are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](FrobeniusStableCubicResearch.md). G1, G2, G3 and CR1 remain open.
