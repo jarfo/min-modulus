@@ -2250,3 +2250,14 @@ the full all-anchor, all-degree decomposition.
 The consolidated DAG has 1281 nodes and 2928 edges. All 835 exact proof dependency sets across 60 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
 
 The central outside-cube lower bound and CR1/G1/G2/G3 remain open.
+
+## Exact CR1 equivalence at every anchor
+
+[Outside-cube repeated bounds](OutsideCubeRepeatedBounds.md) proves that
+the repeated-cover inequality for any valid g is equivalent, at every
+anchor q and degree k, to |C_k(g-g_q) outside B|+1>=sum_(j<k) choose(n-1,j).
+The proof includes Pascal boundary terms and exact repeated-cover
+translation invariance. Four original proofs, eleven exact declaration
+types and four definition values pass both revisions. Neither inequality
+is proved here. The central outside count and G1/G2/G3/CR1 remain open.
+Split export and private publication remain.
