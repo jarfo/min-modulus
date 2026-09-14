@@ -25,6 +25,7 @@ definition value pass the original and supported Lean/Mathlib revisions
 with only standard axioms. No new definition is introduced.
 
 This proves the sharp odd bound under an explicit missing-pair density
-premise. The sparse represented-pair regime, the dimensions below 144,
-absolute central inequalities and unrestricted G1/G2/G3 remain open.
+premise. This argument does not cover dimensions below 144; existing small-dimension
+results remain valid. The sparse represented-pair regime, absolute central
+inequalities and unrestricted G1/G2/G3 remain open.
 Split Prove2Me export and private publication remain.
