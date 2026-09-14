@@ -1935,3 +1935,15 @@ counterexample quartic-growth consequence.
 The consolidated DAG has 1231 nodes and 2816 edges. All 808 exact proof dependency sets across 54 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 The numerical certificate premises remain explicit. Sufficient central-degree estimates and unrestricted G1/G2/G3 remain open.
+
+## Full recursive decomposition of repeated coin values
+
+[Squarefree-double decomposition](SquarefreeDoubleCoinDecomposition.md)
+includes every multiplicity pattern at arbitrary degree. Each multiset
+has a unique squarefree remainder S and a halved multiset t. Consequently,
+C_k is the union of sum(S)+2*C_r over |S|+2*r=k, and D_k is exactly the
+same union with r>=1. At odd modulus every fixed S layer has |C_r| values.
+Seven original proofs, ten exact declaration types and two existing
+definition values pass both revisions. Distinct layers can overlap;
+bounding that overlap sufficiently for the central inequalities remains
+open. Generic G1/G2/G3 remain open. Split export and private publication remain.
