@@ -1660,3 +1660,14 @@ distinct pair in a set A of size at least two, then
 both revisions. No definitions or group hypotheses are needed.
 The one-escape conclusion, absolute central inequalities and generic
 G1/G2/G3 remain open. Split export and private publication remain.
+
+## Arithmetic for the dense domain complement
+
+[Dense complement arithmetic](DenseDomainComplementArithmetic.md)
+proves three scalar consequences of (n-9)*D<3*choose(n,2) at n>=144.
+First 5*D<8*n. For M+r=n and n<2*M+40, the averaged bound
+r*M<=2*D+6*r when r>=2 forces r<=12. Then r*M<=D+13*r forces
+r<=1. All three original proofs and exact types pass both revisions.
+Connecting the explicit scalar premises to a full affine domain remains.
+Absolute central inequalities and generic G1/G2/G3 remain open.
+Split export and private publication remain.
