@@ -1821,3 +1821,16 @@ inline helper types and four definition values match. Exact parser spans
 retain all original proof bodies. Metadata and live preflight pass.
 Private proof publication is pending. Two supporting roots will retain
 the support-union cap and the final weighted match bound.
+
+## Squarefree translation counts grouped by core rank
+
+[Squarefree translation core ranks](SquarefreeTranslationCoreRanks.md)
+groups the exact arbitrary-degree match count over any finite cover of
+the core sizes. For valid tuples, each size-j core family is bounded by
+choose(2*j,j); injective doubling also bounds it by choose(|A|,2*j).
+The common-support weights can be summed against the minimum of both
+caps. Nonzero translations have no empty core, so their explicit bound
+starts at j=1. Six original proofs, thirteen exact declaration types
+and three existing definition values pass both revisions. No definition
+is introduced. These estimates do not yet establish the central bounds;
+unrestricted G1/G2/G3 remain open. Split export and publication remain.
