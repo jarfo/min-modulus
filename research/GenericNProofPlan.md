@@ -1792,3 +1792,18 @@ starts at j=1. Six original proofs, thirteen exact declaration types
 and three existing definition values pass both revisions. No definition
 is introduced. These estimates do not yet establish the central bounds;
 unrestricted G1/G2/G3 remain open. Split export and publication remain.
+
+## Fractional packing and combined core-rank certificates
+
+[Nonuniform fractional translation bounds](NonuniformTranslationFractional.md)
+normalizes the separating-permutation count over the rationals: the sum
+of reciprocal support-binomial numbers is at most one. Grouped by core
+size, this gives sum_j c_j/choose(2*j,j)<=1. A rational certificate with
+alpha>=0, beta_j>=0 and common-support weight w_j<=alpha/choose(2*j,j)+beta_j
+therefore bounds the match count by alpha+sum_j C_j*beta_j, where
+C_j=min(choose(2*j,j),choose(|A|,2*j)). This combines the shared packing
+budget and rank caps without discarding either. Four original proofs,
+fourteen exact declaration types and four existing definition values
+pass both revisions. No new definition is introduced. The certificate
+premises and sufficient central-degree estimates remain to be supplied;
+unrestricted G1/G2/G3 remain open. Split export and publication remain.
