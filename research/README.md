@@ -2239,7 +2239,7 @@ The proof includes Pascal boundary terms and exact repeated-cover
 translation invariance. Four original proofs, eleven exact declaration
 types and four definition values pass both revisions. Neither inequality
 is proved here. The central outside count and G1/G2/G3/CR1 remain open.
-Split export and private publication remain.
+All five exported theorem nodes are now private and Proved on Prove2Me.
 
 ## Verified all-anchor CR1 equivalence
 
@@ -2260,10 +2260,14 @@ G1/G2/G3/CR1 remain open. No new counting hypothesis is assumed.
 The new proofs are in OutsideCubeRepeatedBounds.lean; the existing count
 is in RepeatedCoinGrowth.lean.
 
-Both revisions verify five target types and dependency sets, three
-external theorem interface types, four existing definition values and
-five exact original inline helper types, including the subset-sum
-helper definition value. No new definition bundle is introduced. Exact
-parser spans retain every original proof body. Metadata and live preflight
-pass; private publication is pending. One supporting root retains the
-all-anchor equivalence and its exact counting chain.
+All five theorem nodes are private and Proved on Prove2Me: four new
+original proofs and one existing proof promoted from an inline helper.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify five target types and dependency sets, three external
+interface types, four definition values, five original inline helper
+types and the inline subset-sum definition value. No new definition bundle
+is needed. One supporting root retains the exact all-anchor equivalence.
+
+The consolidated DAG has 1289 nodes and 2954 edges. All 840 exact proof dependency sets across 61 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
+
+The central outside-cube lower bound and CR1/G1/G2/G3 remain open.

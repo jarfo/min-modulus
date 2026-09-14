@@ -26,5 +26,6 @@ Four original proofs provide the partial-row identity, the zero-anchor
 equivalence, repeated-cover translation invariance and the all-anchor
 equivalence. Both Lean/Mathlib revisions pass: four proofs, eleven exact declaration
 types, four definition values and only standard axioms. The central
-inequality and G1/G2/G3/CR1 remain open. Split export and private publication
-remain.
+inequality and G1/G2/G3/CR1 remain open. All five exported theorem nodes are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](OutsideCubeRepeatedBoundsResearch.md).

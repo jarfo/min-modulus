@@ -48,6 +48,6 @@ an attached research milestone. No CR1 solution has been submitted.
 Theorem ID: 06a6b75d-6df1-4976-ae05-72ff1e7fc854
 Milestone ID: 500f994a-6a1e-4cd4-8aa1-e183f116b1f9
 
-The consolidated DAG has 1281 nodes and 2928 edges. All 835 exact proof dependency sets across 60 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open. Its four open leaves are the three core gates and CR1.
+The consolidated DAG has 1289 nodes and 2954 edges. All 840 exact proof dependency sets across 61 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open. Its four open leaves are the three core gates and CR1.
 
-The exact anchored-cube decomposition in [AnchoredCubeCoinFiltrationResearch.md](AnchoredCubeCoinFiltrationResearch.md) isolates a disjoint outside portion. After subtracting any anchor, write B for the entire remaining subset-sum cube and C_k for the normalized coin cover. Then |C_k|=sum_(j<=k) choose(n-1,j)+|C_k outside B|. The central outside lower bound |C_k outside B|+1>=sum_(j<k) choose(n-1,j) remains unproved; it is the corresponding numerical target for CR1.
+[OutsideCubeRepeatedBoundsResearch.md](OutsideCubeRepeatedBoundsResearch.md) now proves that the repeated-cover bound for g is equivalent, at every anchor q, to |C_k(g-g_q) outside B|+1>=sum_(j<k) choose(n-1,j), where B is the entire anchored subset-sum cube. The proof retains all Pascal boundary terms and translation invariance. This is an equivalence only; the central outside-cube inequality remains unproved.
