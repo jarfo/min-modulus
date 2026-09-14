@@ -2037,3 +2037,15 @@ generic independent-block construction.
 The consolidated DAG has 1245 nodes and 2847 edges. All 817 exact proof dependency sets across 56 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 The central-degree union lower bounds and generic G1/G2/G3 remain open.
+
+## Exact coin counts under affine doubling closure
+
+[Closed doubling coin counts](ClosedDoublingCoinCounts.md) proves that
+if 2*A=A+b for the coordinate set A, then D_(k+2)=C_(k+1)+b
+in every degree. For a valid tuple this gives |C_d|+1=sum_(j<=d)choose(n,j)
+and |D_d|+1=sum_(j<d)choose(n,j) for every d>=1. The full repeated
+cover is counted with all multiplicity patterns and overlaps. Closure
+is an explicit hypothesis; the modulus bound for this class was already
+known. Five original proofs, eleven exact types and three existing
+definition values pass both revisions. General central inequalities
+and G1/G2/G3 remain open. Split export and private publication remain.
