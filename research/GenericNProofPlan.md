@@ -1340,3 +1340,16 @@ definition bundle is introduced. Metadata and live preflight pass;
 publication is pending. The L-shape witness hypotheses are explicit.
 Counting affine-domain triangles, extracting large affine domains, absolute
 central inequalities and generic G1/G2/G3 remain open.
+
+## Pair and triangle counts in linear block families
+
+[Linear block triangle count](LinearBlockTriangleCount.md) proves that
+a family of coordinate subsets whose distinct members meet in at most
+one point has at most binomial(n,2) pairs across all its blocks. If each
+block has size at most M, its total triangle count satisfies
+3*sum choose(|S|,3)<=(M-2)*choose(n,2). Both original proofs and their
+two exact declaration types pass both revisions, with standard axioms
+only. No new definition is introduced. Applying these counts to the
+affine-domain families, extracting large domains, absolute central
+inequalities and generic G1/G2/G3 remain open. Split export and private
+publication remain.
