@@ -28,4 +28,6 @@ The aggregate central outside-cube count and G1/G2/G3/CR1 remain open.
 
 Both Lean/Mathlib revisions pass: two proofs, seven exact declaration
 types, two definition values and only standard axioms.
-Split export and private publication remain.
+Both exported theorem nodes are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](AnchoredCubeDuplicationEscapeResearch.md).
