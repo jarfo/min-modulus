@@ -1363,3 +1363,17 @@ theorem interface is required. Metadata and live preflight pass;
 publication is pending. The intersection and largest-block hypotheses
 remain explicit. Affine-domain assembly, large-domain extraction, the
 absolute central inequalities and generic G1/G2/G3 remain open.
+
+## Triangle counts in full affine domains
+
+[Affine domain triangle counts](AffineDomainTriangleCounts.md) defines
+full positive and negative affine domains and proves that distinct
+offsets give domains intersecting in at most one coordinate. Positive
+domains bounded by M have 3*sum choose(|S|,3)<=(M-2)*choose(n,2).
+Negative domains in a nonzero cyclic modulus have
+6*sum choose(|S|,3)<=(n-2)*choose(n,2). Validity and injective doubling
+are explicit. Six original proofs, sixteen exact declaration types and
+three definition values pass both revisions, including two new domain
+definitions. Assembling the total represented-triangle count, extracting
+large positive domains, absolute central inequalities and generic
+G1/G2/G3 remain open. Split export and private publication remain.
