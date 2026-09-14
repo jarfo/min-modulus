@@ -1682,3 +1682,17 @@ is pending. At n>=44 the explicit missing-pair coverage and density
 hypotheses yield an offset t with n<2*|positiveAffineDomain(g,t)|+40.
 The one-escape conclusion, absolute central inequalities and generic
 G1/G2/G3 remain open.
+
+## One-escape structure from few missing pairs
+
+[Dense positive domain one-escape](DensePositiveDomainOneEscape.md)
+proves that, for a valid nonzero cyclic tuple with injective doubling
+and n>=144, an explicit pair cover D with
+(n-9)*|D|<3*choose(n,2) forces an actual one-escape affine doubling
+closure. Triangle counts give a large domain; missing-incidence counting
+and neighbor bounds show its complement has size at most one. Three
+original proofs, twelve exact declaration types and two existing
+definition values pass both revisions. Applying AlmostDoubling remains.
+The density premise is explicit; other tuples, absolute central
+inequalities and generic G1/G2/G3 remain open. Split export and private
+publication remain.
