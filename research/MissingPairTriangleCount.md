@@ -23,14 +23,22 @@ G1/G2/G3.
 
 Both original proofs pass both Mathlib revisions. Both exact declaration
 types agree, with standard Lean axioms only. No new definition is
-introduced. Split Prove2Me export and publication remain.
+introduced. Both results are now verified privately on Prove2Me and integrated
+into the consolidated DAG.
 
-## Verified two-theorem missing-pair triangle count export
 
-Both original proofs have a verified split export on both revisions.
-Both exact target types and dependency sets agree. No definition bundle,
-inline helper or external theorem interface is required. Metadata and
-live preflight pass; publication is pending. A family Ts containing every
-triangle that avoids a pair family D satisfies
-choose(n,3)<=|Ts|+(n-2)*|D|. The coverage hypothesis is explicit.
+## Verified Prove2Me missing-pair triangle count chain
+
+Both missing-pair triangle counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify both original target types and dependency sets. Every
+original proof body is retained. No definition bundle, inline helper or
+external theorem interface is required. One supporting root retains
+both results.
+
+The consolidated DAG has 1154 nodes and 2643 edges. All 766 exact proof dependency sets across 49 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
 Absolute central inequalities and generic G1/G2/G3 remain open.
+
+* pair_containing_triples_card_le: f8d8df7b-d448-49e1-8464-3e7455c9c78f
+* triangle_family_card_add_missing_pair_bound: 9a80d68f-187d-49b6-b6bb-ee89e0859819

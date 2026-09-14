@@ -161,6 +161,11 @@ and exceptional families. All three results are verified on Prove2Me.
 Controlling coordinates outside large positive domains and the absolute
 central inequalities remain open.
 
+[MissingPairTriangleCount.lean](MissingPairTriangleCount.lean) bounds
+the number of triangles lost to a family of missing pairs. Both results
+are verified on Prove2Me. The pair-size and coverage hypotheses are
+explicit; absolute central inequalities remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1510,16 +1515,22 @@ Large-domain extraction under an explicit missing-pair density hypothesis is ver
 
 ## Triangle lower bound from missing coordinate pairs
 
-[Missing pair triangle count](MissingPairTriangleCount.md) proves that
-a coordinate pair lies in at most n-2 triples. If a family Ts contains
-every triple avoiding a pair family D, then
-choose(n,3)<=|Ts|+(n-2)*|D|. The pair-size and coverage hypotheses are
-explicit; no group or validity premise is needed. Both original proofs
-and exact declaration types pass both revisions, with standard axioms
-only and no new definition. Applying this to represented differences and
-extracting large positive domains remain, as do the absolute central
-inequalities and generic G1/G2/G3. Split export and private publication
-remain.
+A two-coordinate subset is contained in at most n-2 coordinate
+triangles. Thus a family Ts containing every triangle that avoids
+a pair family D satisfies choose(n,3)<=|Ts|+(n-2)*|D|. These are
+purely combinatorial results, with the pair-size and coverage
+hypotheses explicit.
+
+Both missing-pair triangle counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify both original target types and dependency sets. Every
+original proof body is retained. No definition bundle, inline helper or
+external theorem interface is required. One supporting root retains
+both results.
+
+The consolidated DAG has 1154 nodes and 2643 edges. All 766 exact proof dependency sets across 49 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## A large positive domain from few missing pairs
 
@@ -1555,12 +1566,21 @@ Controlling coordinates outside large domains, absolute central inequalities and
 
 ## Verified two-theorem missing-pair triangle count export
 
-Both original proofs have a verified split export on both revisions.
-Both exact target types and dependency sets agree. No definition bundle,
-inline helper or external theorem interface is required. Metadata and
-live preflight pass; publication is pending. A family Ts containing every
-triangle that avoids a pair family D satisfies
-choose(n,3)<=|Ts|+(n-2)*|D|. The coverage hypothesis is explicit.
+A two-coordinate subset is contained in at most n-2 coordinate
+triangles. Thus a family Ts containing every triangle that avoids
+a pair family D satisfies choose(n,3)<=|Ts|+(n-2)*|D|. These are
+purely combinatorial results, with the pair-size and coverage
+hypotheses explicit.
+
+Both missing-pair triangle counting results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify both original target types and dependency sets. Every
+original proof body is retained. No definition bundle, inline helper or
+external theorem interface is required. One supporting root retains
+both results.
+
+The consolidated DAG has 1154 nodes and 2643 edges. All 766 exact proof dependency sets across 49 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
 Absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Neighbors outside a full positive affine domain
