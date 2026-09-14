@@ -1521,3 +1521,13 @@ eight exact declaration types and three existing definition values pass
 both revisions. No new definition is introduced. Controlling coordinates
 outside the extracted domain, absolute central inequalities and generic
 G1/G2/G3 remain open. Split export and private publication remain.
+
+## Verified three-theorem represented-triangle count export
+
+All three original proofs have a verified split export on both revisions.
+Three exact target types and dependency sets, four external interface
+types and three existing definition values agree. No inline helper or
+new definition is required. Metadata and live preflight pass; publication
+is pending. The representation and positive-domain size bound remain
+explicit. Controlling coordinates outside large domains, absolute
+central inequalities and generic G1/G2/G3 remain open.

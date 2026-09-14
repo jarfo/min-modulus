@@ -34,3 +34,13 @@ All three original proofs pass both Mathlib revisions. Ten exact
 declaration types and three definition values agree: ValidTuple and the
 two affine-domain definitions. Only standard Lean axioms occur. No new
 definition is introduced. Split Prove2Me export and publication remain.
+
+## Verified three-theorem represented-triangle count export
+
+All three original proofs have a verified split export on both revisions.
+Three exact target types and dependency sets, four external interface
+types and three existing definition values agree. No inline helper or
+new definition is required. Metadata and live preflight pass; publication
+is pending. The representation and positive-domain size bound remain
+explicit. Controlling coordinates outside large domains, absolute
+central inequalities and generic G1/G2/G3 remain open.
