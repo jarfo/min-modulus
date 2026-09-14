@@ -27,6 +27,18 @@ with the quadratic incidence bound:
 
 The next priority is growth at arbitrary central degrees, with every
 required binomial term accounted for.
+[SquarefreeDoubleCoinResearch.md](SquarefreeDoubleCoinResearch.md) now gives
+an exact recursive union for every repeated degree, retaining all
+multiplicity patterns. Bounding overlaps in this full union remains open.
+
+The unrestricted comparison |A+2*A|>=|A+A| is false, where 2*A
+denotes the dilation {2*a : a in A}. Applying the binary-linear-form
+comparison theorem to x+y and 2*x+y gives integer sets with the reverse
+strict inequality. See [Nathanson, O’Bryant, Orosz, Ruzsa and Silva](https://arxiv.org/abs/math/0701001).
+As a direct consequence, reducing such a finite set modulo a sufficiently
+large odd integer preserves both cardinalities. Thus odd modulus alone
+cannot justify this comparison; a growth argument must use validity.
+These are general-set examples, not counterexamples to min-modulus.
 [TranslationRankCertificateBarrier.md](TranslationRankCertificateBarrier.md)
 proves that allowing rank two gives the current fractional relaxation a
 three-eighths central-layer floor. Stronger structural information or a
@@ -1946,7 +1958,7 @@ same union with r>=1. At odd modulus every fixed S layer has |C_r| values.
 Seven original proofs, ten exact declaration types and two existing
 definition values pass both revisions. Distinct layers can overlap;
 bounding that overlap sufficiently for the central inequalities remains
-open. Generic G1/G2/G3 remain open. Split export and private publication remain.
+open. Generic G1/G2/G3 remain open. The seven results are now private and Proved on Prove2Me.
 
 ## Full squarefree-double coin decomposition on Prove2Me
 
@@ -1965,10 +1977,14 @@ distinct value layers can overlap. Bounding this full union sufficiently
 at both central degrees remains open, as do generic G1/G2/G3.
 The original proofs are in SquarefreeDoubleCoinDecomposition.lean.
 
-The split export passes both revisions: seven exact original target
-types and dependency sets, one original inline helper type and two existing
-definition values match. Exact parser spans retain every original proof
-body. No new definition bundle or external theorem interface is required.
-Metadata and live preflight pass; private publication is pending. Four
-supporting roots retain multiset uniqueness, both complete union identities,
-and fixed-layer cardinality.
+All seven results are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify seven original target types and dependency sets, one original
+inline helper type and two existing definition values. Exact parser spans
+retain every original proof body. No new definition bundle or external
+theorem interface is required. Four supporting roots retain multiset
+uniqueness, both complete union identities, and fixed-layer cardinality.
+
+The consolidated DAG has 1242 nodes and 2835 edges. All 815 exact proof dependency sets across 55 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+Different layers can overlap. The central-degree union lower bounds and generic G1/G2/G3 remain open.

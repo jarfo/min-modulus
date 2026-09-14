@@ -43,4 +43,6 @@ The source and original proof bodies pass the original Mathlib revision
 0df444a360eaa60ab8c11dca51a86af692955474. Ten exact declaration types,
 two existing definition values and standard-axiom checks agree. No new
 definitions, default-library imports or full-library build jobs are added.
-Split Prove2Me export and publication remain.
+The seven results are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](SquarefreeDoubleCoinResearch.md).
