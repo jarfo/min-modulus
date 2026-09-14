@@ -2307,3 +2307,16 @@ count and strict subset-size decrease.
 The consolidated DAG has 1295 nodes and 2975 edges. All 843 exact proof dependency sets across 62 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
 
 The central outside-cube lower bound and CR1/G1/G2/G3 remain open.
+
+## Every anchored subset has an escaping duplication
+
+[Anchored cube duplication escape](AnchoredCubeDuplicationEscape.md)
+proves that every nonempty subset avoiding a zero anchor has a member
+whose duplication leaves the entire anchored cube, at odd modulus.
+The first theorem assumes injective doubling explicitly. The proof
+chooses a largest return layer and uses shortest-representation rigidity
+to force an impossible zero coordinate. Two original proofs, seven exact
+declaration types and two definition values pass both revisions.
+This rules out an empty outside contribution for any subset; distinct
+escapes or matrix independence are not established. G1/G2/G3/CR1 remain open.
+Split export and private publication remain.
