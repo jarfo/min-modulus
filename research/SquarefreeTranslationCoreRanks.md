@@ -29,3 +29,9 @@ Six original proofs, thirteen exact declaration types and three existing
 definition values pass both installed Lean/Mathlib revisions with standard
 axioms only. No new definition is introduced. G1/G2/G3 remain open.
 Split Prove2Me export and private publication remain.
+
+## Verified Prove2Me core-rank and fractional chain
+
+These results are included in the ten-theorem core-rank and fractional
+chain, now private and Proved. See [the consolidated chain](CoreRankFractionalResearch.md).
+The numerical certificate premises remain explicit, and unrestricted G1/G2/G3 remain open.

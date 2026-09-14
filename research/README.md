@@ -1879,13 +1879,17 @@ central-degree goal is supplied. Unrestricted G1/G2/G3 remain open.
 The original proofs are in SquarefreeTranslationCoreRanks.lean and
 NonuniformTranslationFractional.lean.
 
-The split export passes both revisions: ten exact original target
-types and dependency sets, five external interface types, seven original
-inline helper types and four existing definition values match. Exact
-parser spans retain all original proof bodies. No new definition bundle
-is needed. Metadata and live preflight pass. Private publication is
-pending. Two roots retain the positive-rank estimate and the combined
-fractional certificate.
+All ten results are private and Proved on Prove2Me. Verified
+submissions and exact server proof-source readbacks pass. Both revisions
+verify ten original target types and dependency sets, five external
+interface types, seven original inline helper types and four existing
+definition values. All original proof bodies are retained. No new
+definition bundle is needed. Two supporting roots retain the explicit
+positive-rank bound and the combined fractional certificate.
+
+The consolidated DAG has 1220 nodes and 2794 edges. All 801 exact proof dependency sets across 53 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The numerical certificate premises remain explicit. Sufficient central-degree estimates and unrestricted G1/G2/G3 remain open.
 
 ## A uniform limitation of the core-rank certificate
 
