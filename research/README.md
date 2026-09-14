@@ -1405,3 +1405,15 @@ definition bundle is introduced. Metadata and live preflight pass;
 publication is pending. The represented-triangle hypotheses are explicit.
 Counting exceptional triangles, extracting large affine domains, absolute
 central inequalities and generic G1/G2/G3 remain open.
+
+## Counting triangles with L-shaped images
+
+[Exceptional triangle count](ExceptionalTriangleCount.md) proves that
+a family of represented triangles with explicit L-shape witnesses has
+at most binomial(n,2) distinct anchor supports. The unordered repeated
+endpoint pair determines the symmetric image edges, which recover the
+anchor triangle. Four original proofs, six exact declaration types and
+the ValidTuple definition value pass both revisions. No new definition
+is introduced. Counting triangles inside affine domains, extracting
+large positive domains, absolute central inequalities and generic
+G1/G2/G3 remain open. Split export and private publication remain.
