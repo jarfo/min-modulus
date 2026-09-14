@@ -1541,3 +1541,16 @@ live preflight pass; publication is pending. A family Ts containing every
 triangle that avoids a pair family D satisfies
 choose(n,3)<=|Ts|+(n-2)*|D|. The coverage hypothesis is explicit.
 Absolute central inequalities and generic G1/G2/G3 remain open.
+
+## Neighbors outside a full positive affine domain
+
+[Full positive domain neighbors](FullPositiveDomainNeighbors.md)
+specializes affine propagation to full domains. An outside coordinate
+has at most six represented neighbors, or its neighbor set plus the
+domain has size at most n+1. Rich neighbor sets from distinct outside
+coordinates meet in at most one point. Their missing counts satisfy
+|S|<=d_a+d_b+6. Four original proofs, eight exact declaration types
+and two existing definition values pass both revisions. Counting and
+averaging the missing incidences remains; the one-escape conclusion,
+absolute central inequalities and generic G1/G2/G3 remain open.
+Split export and private publication remain.
