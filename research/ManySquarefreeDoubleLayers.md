@@ -45,4 +45,6 @@ six existing definition values agree, with standard axioms only. The
 supported check composes two existing small roadmap module bodies in its
 owned directory to retain both the G2 interface and the already proved
 canonical-validity transport. Shared caches are unchanged.
-Split Prove2Me export and publication remain.
+Both results are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](CentralLayerOverlapResearch.md).

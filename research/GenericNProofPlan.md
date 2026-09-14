@@ -30,6 +30,11 @@ required binomial term accounted for.
 [SquarefreeDoubleCoinResearch.md](SquarefreeDoubleCoinResearch.md) now gives
 an exact recursive union for every repeated degree, retaining all
 multiplicity patterns. Bounding overlaps in this full union remains open.
+[CentralLayerOverlapResearch.md](CentralLayerOverlapResearch.md) proves
+that valid sharp Mersenne tuples have exponentially many layers through a
+single value at arbitrarily large central degrees. Thus a global bound
+must accommodate large individual overlaps; constant multiplicity caps
+cannot suffice. Aggregate or weighted estimates remain open.
 
 The unrestricted comparison |A+2*A|>=|A+A| is false, where 2*A
 denotes the dilation {2*a : a in A}. Applying the binary-linear-form
@@ -2001,7 +2006,7 @@ The modulus is the sharp odd example 2^(6*m)-1, so the result is not a
 counterexample to min-modulus. A useful lower bound on the full union must
 handle large individual overlaps. Two original proofs, twelve exact types
 and six existing definition values pass both revisions. Generic central
-inequalities and G1/G2/G3 remain open. Split export and private publication remain.
+inequalities and G1/G2/G3 remain open. Both results are now private and Proved on Prove2Me.
 
 ## Verified exponential central-layer overlap
 
@@ -2022,9 +2027,14 @@ or aggregate lower bounds on the entire union remain possible and open.
 Generic central inequalities and G1/G2/G3 remain open.
 The original proofs are in ManySquarefreeDoubleLayers.lean.
 
-The split export passes both revisions: two exact original target
-types and dependency sets, four external theorem interfaces and six
-existing definition values match. Exact parser spans retain both original
-proof bodies. No inline helper or new definition is required. Metadata
-and live preflight pass; private publication is pending. One supporting
-root retains the valid central-degree family and its generic construction.
+Both results are private and Proved on Prove2Me. Verified submissions
+and exact server proof-source readbacks pass. Both revisions verify two
+original target types and dependency sets, four external theorem interfaces
+and six existing definition values. Exact parser spans retain both
+original proof bodies. No inline helper or new definition is required.
+One supporting root retains the valid central-degree family and its
+generic independent-block construction.
+
+The consolidated DAG has 1245 nodes and 2847 edges. All 817 exact proof dependency sets across 56 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The central-degree union lower bounds and generic G1/G2/G3 remain open.
