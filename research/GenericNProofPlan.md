@@ -2050,3 +2050,16 @@ is an explicit hypothesis; the modulus bound for this class was already
 known. Five original proofs, eleven exact types and three existing
 definition values pass both revisions. General central inequalities
 and G1/G2/G3 remain open. Split export and private publication remain.
+
+## Exact Mersenne counts in every positive degree
+
+[Exact Mersenne coin counts](MersenneExactCoinCounts.md) proves that
+for every n>=1 the valid power tuple modulo 2^n-1 is closed under
+doubling and has |C_d|+1=sum_(j<=d)choose(n,j) and
+|D_d|+1=sum_(j<d)choose(n,j) for every d>=1. These full counts
+include all multiplicity patterns and remain exact despite the previously
+proved exponential layer overlap at central degrees n=6*m. No finite
+enumeration is used. Two original proofs, fourteen exact types and six
+existing definition values pass both revisions. The uniform central
+inequality for arbitrary valid tuples and G1/G2/G3 remain open.
+Split export and private publication remain.
