@@ -2296,3 +2296,15 @@ is needed. One supporting root retains the exact all-anchor equivalence.
 The consolidated DAG has 1289 nodes and 2954 edges. All 840 exact proof dependency sets across 61 bundles match. G1/P6, G2/From7, G3/From7 and CR1 remain open.
 
 The central outside-cube lower bound and CR1/G1/G2/G3 remain open.
+
+## Exact repeated representations inside an anchored cube
+
+[Repeated anchored cube filtration](RepeatedAnchoredCubeFiltration.md)
+proves that the value of a subset S avoiding the zero anchor belongs to
+D_k exactly when |S|+2<=k. Hence B intersection D_(k+2) has exactly
+sum_(j<=k) choose(n-1,j) values. Duplicating a member of any subset S
+and landing back in B forces a strictly smaller subset layer.
+Three original proofs, eleven exact declaration types and four definition
+values pass both revisions, without oddness. No outside-cube lower bound
+or matrix independence is proved. G1/G2/G3/CR1 remain open.
+Split export and private publication remain.
