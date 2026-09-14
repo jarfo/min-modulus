@@ -166,6 +166,12 @@ the number of triangles lost to a family of missing pairs. Both results
 are verified on Prove2Me. The pair-size and coverage hypotheses are
 explicit; absolute central inequalities remain open.
 
+[TriangleDensityDomainBound.lean](TriangleDensityDomainBound.lean)
+extracts a full positive affine domain of roughly half the coordinates
+under explicit missing-pair coverage and density assumptions. All three
+results are verified on Prove2Me. One-escape closure and the conditional sharp odd bound at n>=144
+are verified locally. Absolute central inequalities remain open.
+
 The stronger successive-growth route remains available. For d>=2,
 [RepeatedCoinGrowth.lean](RepeatedCoinGrowth.lean) proves
 D_d = 2*A + C_(d-2) and |C_d| = binomial(n,d) + |D_d|. The inequalities
@@ -1534,16 +1540,23 @@ Absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## A large positive domain from few missing pairs
 
-[Triangle density domain bound](TriangleDensityDomainBound.md) combines
-the triangle lower and upper counts. For a valid cyclic tuple with
-injective doubling, let D cover all unrepresented pairs and assume
-(n-9)*|D|<3*choose(n,2). At n>=44 there is an actual full positive
-affine domain of size M with n<2*M+40. Pair-cardinality, coverage,
-density and dimension hypotheses are explicit. Three original proofs,
-eight exact declaration types and three existing definition values pass
-both revisions. No new definition is introduced. Controlling coordinates
-outside the extracted domain, absolute central inequalities and generic
-G1/G2/G3 remain open. Split export and private publication remain.
+For a valid nonzero cyclic tuple with injective doubling, let D be
+a family of two-coordinate subsets covering every unrepresented doubled
+difference pair. If n>=44 and (n-9)*|D|<3*choose(n,2), then some
+offset t satisfies n<2*|positiveAffineDomain(g,t)|+40. The proof
+combines triangle counts and maximizes domain size over the finite
+offset group. Coverage and density remain explicit assumptions.
+
+All three triangle density domain results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, two
+external interface types and three existing definition values. Every
+original proof body is retained. No inline helper or new definition
+bundle is required. One supporting root retains all three results.
+
+The consolidated DAG has 1160 nodes and 2656 edges. All 769 exact proof dependency sets across 50 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+One-escape closure and the conditional sharp odd bound at n>=144 are now verified locally. The density premise remains explicit; absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## Verified three-theorem represented-triangle count export
 
@@ -1620,14 +1633,23 @@ Split export and private publication remain.
 
 ## Verified three-theorem triangle density domain export
 
-All three original proofs have a verified split export on both revisions.
-Three exact target types and dependency sets, two external interface
-types and three existing definition values agree. No inline helper or
-new definition is required. Metadata and live preflight pass; publication
-is pending. At n>=44 the explicit missing-pair coverage and density
-hypotheses yield an offset t with n<2*|positiveAffineDomain(g,t)|+40.
-The one-escape conclusion, absolute central inequalities and generic
-G1/G2/G3 remain open.
+For a valid nonzero cyclic tuple with injective doubling, let D be
+a family of two-coordinate subsets covering every unrepresented doubled
+difference pair. If n>=44 and (n-9)*|D|<3*choose(n,2), then some
+offset t satisfies n<2*|positiveAffineDomain(g,t)|+40. The proof
+combines triangle counts and maximizes domain size over the finite
+offset group. Coverage and density remain explicit assumptions.
+
+All three triangle density domain results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, two
+external interface types and three existing definition values. Every
+original proof body is retained. No inline helper or new definition
+bundle is required. One supporting root retains all three results.
+
+The consolidated DAG has 1160 nodes and 2656 edges. All 769 exact proof dependency sets across 50 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+One-escape closure and the conditional sharp odd bound at n>=144 are now verified locally. The density premise remains explicit; absolute central inequalities and generic G1/G2/G3 remain open.
 
 ## One-escape structure from few missing pairs
 

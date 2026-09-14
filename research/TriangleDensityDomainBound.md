@@ -39,13 +39,20 @@ budget. The density premise has not been deduced merely from a small
 modulus; it is suggested by failure of the quartic count. Higher central
 degrees and generic G1/G2/G3 remain open.
 
-## Verified three-theorem triangle density domain export
 
-All three original proofs have a verified split export on both revisions.
-Three exact target types and dependency sets, two external interface
-types and three existing definition values agree. No inline helper or
-new definition is required. Metadata and live preflight pass; publication
-is pending. At n>=44 the explicit missing-pair coverage and density
-hypotheses yield an offset t with n<2*|positiveAffineDomain(g,t)|+40.
-The one-escape conclusion, absolute central inequalities and generic
-G1/G2/G3 remain open.
+## Verified Prove2Me triangle density domain chain
+
+All three triangle density domain results are private and Proved.
+Verified submissions and exact server proof-source readbacks pass. Both
+revisions verify three original target types and dependency sets, two
+external interface types and three existing definition values. Every
+original proof body is retained. No inline helper or new definition
+bundle is required. One supporting root retains all three results.
+
+The consolidated DAG has 1160 nodes and 2656 edges. All 769 exact proof dependency sets across 50 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+One-escape closure and the conditional sharp odd bound at n>=144 are now verified locally. The density premise remains explicit; absolute central inequalities and generic G1/G2/G3 remain open.
+
+* missing_pair_cover_bounds_positive_affine_domains: dd5d07ac-8957-4a17-83d4-3e131b12c290
+* positive_affine_domain_bound_of_few_missing_pairs: e49d4987-55f7-4e42-a917-b86f9b6c1dcb
+* exists_large_positive_affine_domain_of_few_missing_pairs: 7795b24c-5156-4b5b-a29e-b2e39c5262f2
