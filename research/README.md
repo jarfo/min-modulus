@@ -1992,3 +1992,17 @@ uniqueness, both complete union identities, and fixed-layer cardinality.
 The consolidated DAG has 1242 nodes and 2835 edges. All 815 exact proof dependency sets across 55 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
 
 Different layers can overlap. The central-degree union lower bounds and generic G1/G2/G3 remain open.
+
+## Exponential overlap of full central-degree layers
+
+[Many squarefree-double layers](ManySquarefreeDoubleLayers.md) proves
+that independent pairs of doubling relations can produce exponentially
+many squarefree remainders for one coin value. For every m>=1, the valid
+Mersenne power tuple of length n=6*m has a repeated value at central
+degree k=3*m lying in at least 2^m distinct layers sum g(S)+2*C_m, with
+|S|=m. This is a symbolic family for arbitrary m, not a finite search.
+The modulus is the sharp odd example 2^(6*m)-1, so the result is not a
+counterexample to min-modulus. A useful lower bound on the full union must
+handle large individual overlaps. Two original proofs, twelve exact types
+and six existing definition values pass both revisions. Generic central
+inequalities and G1/G2/G3 remain open. Split export and private publication remain.
