@@ -37,4 +37,6 @@ All five original proofs pass both Mathlib revisions:
 81a5d257c8e410db227a6665ed08f64fea08e997 and
 0df444a360eaa60ab8c11dca51a86af692955474. Eleven exact declaration types
 and three existing definition values match, with standard axioms only.
-Split Prove2Me export and publication remain.
+All five results are private and Proved on Prove2Me. The split export,
+exact proof-source readbacks and consolidated dependency audit pass. See
+[the verified chain](ClosedDoublingCoinCountsResearch.md).

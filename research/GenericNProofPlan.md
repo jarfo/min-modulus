@@ -35,6 +35,10 @@ that valid sharp Mersenne tuples have exponentially many layers through a
 single value at arbitrarily large central degrees. Thus a global bound
 must accommodate large individual overlaps; constant multiplicity caps
 cannot suffice. Aggregate or weighted estimates remain open.
+[ClosedDoublingCoinCountsResearch.md](ClosedDoublingCoinCountsResearch.md)
+now gives exact full-degree counts under the explicit equality 2*A=A+b.
+This identifies an equality class for the central target; no closure
+hypothesis is inferred for an arbitrary valid tuple.
 
 The unrestricted comparison |A+2*A|>=|A+A| is false, where 2*A
 denotes the dilation {2*a : a in A}. Applying the binary-linear-form
@@ -2049,7 +2053,7 @@ cover is counted with all multiplicity patterns and overlaps. Closure
 is an explicit hypothesis; the modulus bound for this class was already
 known. Five original proofs, eleven exact types and three existing
 definition values pass both revisions. General central inequalities
-and G1/G2/G3 remain open. Split export and private publication remain.
+and G1/G2/G3 remain open. All five results are now private and Proved on Prove2Me.
 
 ## Exact Mersenne counts in every positive degree
 
@@ -2084,10 +2088,14 @@ Closure is not inferred for arbitrary valid tuples. Generic central
 inequalities and G1/G2/G3 remain open.
 The original proofs are in ClosedDoublingCoinCounts.lean.
 
-The split export passes both revisions: five exact original target
-types and dependency sets, two external theorem interfaces and three
-existing definition values match. Nine exact original inline helper types
-and the inline subset-sum definition value also agree. Exact parser spans
-retain all original proof bodies. No new definition bundle is required.
-Metadata and live preflight pass; private publication is pending. One
-supporting root retains the entire exact-count chain.
+All five results are private and Proved on Prove2Me. Verified submissions
+and exact server proof-source readbacks pass. Both revisions verify five
+original target types and dependency sets, two external theorem interfaces
+and three existing definition values. Nine exact original inline helper
+types and the inline subset-sum definition value also agree. Exact parser
+spans retain every original proof body. No new definition bundle is required.
+One supporting root retains the full exact-count chain.
+
+The consolidated DAG has 1254 nodes and 2867 edges. All 822 exact proof dependency sets across 57 bundles match. G1/P6, G2/From7 and G3/From7 remain open.
+
+The central-degree union lower bounds and generic G1/G2/G3 remain open.
