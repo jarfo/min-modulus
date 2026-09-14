@@ -1872,3 +1872,16 @@ revisions with standard axioms. No new definitions or finite exclusion
 campaigns are involved. Stronger small-core compatibility or aggregate
 control across anchor pairs is still needed; G1/G2/G3 remain open.
 Split export and private publication remain.
+
+## Quartic growth inside a hypothetical large odd counterexample
+
+[Odd-counterexample quartic bound](OddCounterexampleQuarticBound.md)
+connects the proved dense-case obstruction to the earlier quadratic
+incidence count. For n>=144, any valid odd-modulus tuple with N<2^n-1
+must obey (n-9)*|E|<=(n-12)*choose(n,2), where E is the disjointly
+represented doubled-difference pair family. It therefore satisfies
+|repeatedCoinCover(g,4)|>=choose(n+1,2)+choose(n,3). The counterexample
+premise stays explicit; this does not establish the higher central
+inequalities. Three original proofs, eight exact declaration types and
+three existing definition values pass both revisions. Generic G1/G2/G3
+remain open. Split export and private publication remain.
