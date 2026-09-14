@@ -1377,3 +1377,16 @@ three definition values pass both revisions, including two new domain
 definitions. Assembling the total represented-triangle count, extracting
 large positive domains, absolute central inequalities and generic
 G1/G2/G3 remain open. Split export and private publication remain.
+
+## Total count of represented triangles
+
+[Represented triangle counts](RepresentedTriangleCounts.md) assembles
+the affine-domain and exceptional bounds. At nonzero cyclic modulus,
+for a valid tuple with injective doubling and a bound M on all positive
+domain sizes, any represented-triangle family Ts satisfies
+6*|Ts|<=(2*(M-2)+(n-2)+6)*choose(n,2). The domain-size and representation
+hypotheses are explicit. Three original proofs, ten exact declaration
+types and three existing definition values pass both revisions. No new
+definition is introduced. A triangle lower bound from missing pairs and
+large-domain extraction remain, as do the absolute central inequalities
+and generic G1/G2/G3. Split export and private publication remain.
