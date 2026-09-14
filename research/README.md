@@ -1619,3 +1619,14 @@ and two existing definition values pass both revisions. Counting and
 averaging the missing incidences remains; the one-escape conclusion,
 absolute central inequalities and generic G1/G2/G3 remain open.
 Split export and private publication remain.
+
+## Missing incidences and averaged pair deficits
+
+[Cross-pair deficit counts](CrossPairDeficit.md) proves two finite
+counting lemmas. Missing incidences between disjoint sides inject into
+any unordered-pair family covering them. If M<=d_a+d_b+C for every
+distinct pair in a set A of size at least two, then
+|A|*M<=2*sum_a d_a+C*|A|. Both original proofs and exact types pass
+both revisions. No definitions or group hypotheses are needed.
+The one-escape conclusion, absolute central inequalities and generic
+G1/G2/G3 remain open. Split export and private publication remain.
