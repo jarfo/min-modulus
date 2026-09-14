@@ -1485,3 +1485,16 @@ only and no new definition. Applying this to represented differences and
 extracting large positive domains remain, as do the absolute central
 inequalities and generic G1/G2/G3. Split export and private publication
 remain.
+
+## A large positive domain from few missing pairs
+
+[Triangle density domain bound](TriangleDensityDomainBound.md) combines
+the triangle lower and upper counts. For a valid cyclic tuple with
+injective doubling, let D cover all unrepresented pairs and assume
+(n-9)*|D|<3*choose(n,2). At n>=44 there is an actual full positive
+affine domain of size M with n<2*M+40. Pair-cardinality, coverage,
+density and dimension hypotheses are explicit. Three original proofs,
+eight exact declaration types and three existing definition values pass
+both revisions. No new definition is introduced. Controlling coordinates
+outside the extracted domain, absolute central inequalities and generic
+G1/G2/G3 remain open. Split export and private publication remain.
