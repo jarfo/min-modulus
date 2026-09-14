@@ -1755,3 +1755,17 @@ proof bodies are retained. No new definition bundle is introduced. Five
 files use restricted parser spans; the OddOrder helper uses full compiler
 InfoTree spans because its source has section variables. Metadata and live
 preflight pass. Private proof publication is pending.
+
+## Nonuniform translated-support packing
+
+[Nonuniform translated packing](NonuniformTranslatedPacking.md) extends
+permutation packing to equal-value disjoint pairs of varying support
+sizes and fixed cardinality gap. If each natural weight times its
+support binomial coefficient is at most M, the total weight is at most M.
+With injective doubling, the union determines a pair at fixed first-side
+cardinality, giving a second bound choose(|A|,2*j) for balanced pairs
+of side size j. Four original proofs, ten exact declaration types and
+two existing definition values pass both revisions. No new definition
+is introduced. The arbitrary-degree match decomposition and numerical
+central bounds remain; unrestricted G1/G2/G3 remain open. Split export
+and private publication remain.
