@@ -922,6 +922,7 @@ import MinModulus.SILiftFlip
 import MinModulus.SILiftShift
 import MinModulus.SILiftSheetMove
 import MinModulus.SILiftTwoCoins
+import MinModulus.SILiftClassify
 import MinModulus.SILiftReserve
 import MinModulus.SILiftTransport
 import MinModulus.SILiftSheet

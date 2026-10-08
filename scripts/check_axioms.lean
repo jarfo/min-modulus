@@ -10468,3 +10468,6 @@ import MinModulus
 #print axioms MinModulus.reserveAt_dsum
 #print axioms MinModulus.exists_rem_rep
 #print axioms MinModulus.exists_two_coins
+#print axioms MinModulus.siReduce_e_of_target
+#print axioms MinModulus.siSheet_val
+#print axioms MinModulus.siLiftSI_affine
