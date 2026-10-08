@@ -112,6 +112,34 @@ theorem shiftTwo_sheet_step {m t : ℕ} (b : ℕ → ℕ) (ht : 1 ≤ t) (htm : 
   have e2 : 2 * 2 ^ m = 2 ^ (m + 1) := by rw [pow_succ]; ring
   omega
 
+/-- **The transport runs downwards too.**  Moving two coins from `m` back
+down to `t - 1` subtracts `NC`.  Since `2 · NC = 0` in the parent, BOTH
+directions swap the two sheet classes, so the transport is available as
+soon as some family at EITHER target has two coins at `t - 1` or two at
+`m` — four ways in, not one.
+
+An exhaustive check at `(n,s) = (5,2), (6,2), (7,2), (8,2), (8,3), (9,3)`
+finds one of the four available for EVERY `d` with `d ≢ 0 (mod NC)`: the
+transport alone covers the whole non-constant case, with no appeal to the
+flipping moves. -/
+theorem shiftTwo_sheet_step_down {m t : ℕ} (b : ℕ → ℕ) (ht : 1 ≤ t)
+    (htm : t ≤ m) (hk : 2 ≤ k m) :
+    val (m + 1) (shiftTwo k m (t - 1)) + 2 ^ (m + 1)
+        = val (m + 1) k + 2 ^ t
+      ∧ dsum (m + 1) (shiftTwo k m (t - 1)) = dsum (m + 1) k
+      ∧ sheetSum (m + 1) b (shiftTwo k m (t - 1)) = sheetSum (m + 1) b k := by
+  have hne : m ≠ t - 1 := by omega
+  have hp : m < m + 1 := by omega
+  have hq : t - 1 < m + 1 := by omega
+  refine ⟨?_, shiftTwo_dsum hne hp hq hk, shiftTwo_sheetSum b hne hk⟩
+  have h := shiftTwo_val (w := m + 1) hne hp hq hk
+  have e1 : 2 * 2 ^ (t - 1) = 2 ^ t := by
+    have := pow_succ 2 (t - 1)
+    rw [show t - 1 + 1 = t from by omega] at this
+    omega
+  have e2 : 2 * 2 ^ m = 2 ^ (m + 1) := by rw [pow_succ]; ring
+  omega
+
 end SheetMove
 
 end MinModulus

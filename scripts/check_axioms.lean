@@ -10463,3 +10463,4 @@ import MinModulus
 #print axioms MinModulus.shiftTwo_parity
 #print axioms MinModulus.shiftTwo_sheetSum
 #print axioms MinModulus.shiftTwo_sheet_step
+#print axioms MinModulus.shiftTwo_sheet_step_down
