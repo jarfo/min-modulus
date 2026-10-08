@@ -10429,3 +10429,6 @@ import MinModulus
 #print axioms MinModulus.exists_reserved_two
 #print axioms MinModulus.exists_both_parities_two
 #print axioms MinModulus.exists_rep_of_parity_two
+#print axioms MinModulus.siReindex_last
+#print axioms MinModulus.siReindex_castSucc
+#print axioms MinModulus.si_affine_extra
