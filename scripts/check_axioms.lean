@@ -10399,3 +10399,8 @@ import MinModulus
 #print axioms MinModulus.si_extra_eq_top_of_valid_shift
 #print axioms MinModulus.si_even_card_odd
 #print axioms MinModulus.si_sheet_parity_const
+#print axioms MinModulus.val_update
+#print axioms MinModulus.dsum_update
+#print axioms MinModulus.flipMove_val
+#print axioms MinModulus.flipMove_dsum
+#print axioms MinModulus.flipMove_sheetSum
