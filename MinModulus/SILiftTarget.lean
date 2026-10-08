@@ -1,5 +1,6 @@
 import MinModulus.SILiftRival
 import MinModulus.SILiftReduce
+import MinModulus.SILiftDigit
 
 /-!
 # The explicit rival target
@@ -143,6 +144,81 @@ theorem siLiftSI_not_valid_of_target (hm : t ≤ m) (b κ₀ : ℕ → ℕ)
   have h1 := hv κ hsum hval (Fin.last (m + 1))
   rw [hlast] at h1
   exact absurd h1 (by norm_num)
+
+/-! ### The constant-sheet case, at the lift
+
+When the sheet bits are constant the rival's parity is constant too
+(`si_sheet_parity_const`), so there is only ONE target, and
+`si_digit_cover` hits every residue but `2 ^ s - 1`.  Validity therefore
+pins the target to that one unreachable residue, and unwinding gives the
+classification: the extra reduces to the next super-increasing entry. -/
+
+theorem siLiftSI_affine_of_const (hm : t ≤ m) (hm3 : 3 ≤ m) (ht : 1 ≤ t)
+    (hsn : 2 ^ (t + 1) ≤ m + 2) (β : ℕ) (b : ℕ → ℕ) (hb : ∀ i, b i = β)
+    (e : ZMod (siFull m t)) (hv : ValidTuple (siLiftSI m t b e)) :
+    siReduce hm e
+      = siReduce hm ((2 ^ (m + 1) - 1 : ℕ) : ZMod (siFull m t)) := by
+  haveI : NeZero (siFull m t) := ⟨by have := siFull_pos hm; omega⟩
+  obtain ⟨T, hT⟩ : ∃ T : ZMod (siFull m t),
+      T = ((2 ^ (m + 1) : ℕ) : ZMod (siFull m t)) + e + β • siSheet m t :=
+    ⟨_, rfl⟩
+  -- the target must be the one residue `si_digit_cover` cannot reach
+  have hval : T.val = 2 ^ (t + 1) - 1 := by
+    by_contra hne
+    have hTlt : T.val < 2 ^ (m + 2) - 2 ^ (t + 1) := by
+      have h := ZMod.val_lt T
+      unfold siFull at h
+      exact h
+    obtain ⟨κ₀, hd, hvmod⟩ :=
+      si_digit_cover (n := m + 2) (s := t + 1) (r := T.val)
+        (by omega) (by omega) hsn hTlt hne
+    rw [show m + 2 - 1 = m + 1 from by omega] at hd hvmod
+    refine siLiftSI_not_valid_of_target hm b κ₀ e hd ?_ hv
+    have hsheet : (sheetSum (m + 1) b κ₀) • siSheet m t
+        = β • siSheet m t := by
+      refine nsmul_siSheet_congr hm ?_
+      have hfil : sheetSum (m + 1) b κ₀
+          = ∑ _i ∈ (range (m + 1)).filter (fun i => κ₀ i % 2 = 0), β := by
+        unfold sheetSum
+        rw [Finset.sum_filter]
+        exact Finset.sum_congr rfl fun i _ => by rw [hb i]
+      rw [hfil]
+      exact si_sheet_parity_const (m + 1) κ₀ hd β
+    rw [hsheet, ← hT]
+    have hmod : val (m + 1) κ₀ % siFull m t = T.val := by
+      unfold siFull; exact hvmod
+    calc ((val (m + 1) κ₀ : ℕ) : ZMod (siFull m t))
+        = ((val (m + 1) κ₀ % siFull m t : ℕ) : ZMod (siFull m t)) :=
+          (ZMod.natCast_mod _ _).symm
+      _ = ((T.val : ℕ) : ZMod (siFull m t)) := by rw [hmod]
+      _ = T := ZMod.natCast_rightInverse T
+  -- unwind: the target IS `2 ^ s - 1`, so `e` is pinned modulo the sheet
+  have hTeq : T = ((2 ^ (t + 1) - 1 : ℕ) : ZMod (siFull m t)) := by
+    rw [← hval]; exact (ZMod.natCast_rightInverse T).symm
+  have he : e = ((2 ^ (t + 1) - 1 : ℕ) : ZMod (siFull m t))
+      - ((2 ^ (m + 1) : ℕ) : ZMod (siFull m t)) - β • siSheet m t := by
+    rw [← hTeq, hT]; ring
+  rw [he, map_sub, map_sub, map_nsmul, siReduce_sheet hm, smul_zero, sub_zero]
+  -- `2 ^ (t+1) - 1 = (2 ^ (m+1) - 1) + 2 ^ (m+1) - siFull` as naturals
+  have hkey : ((2 ^ (t + 1) - 1 : ℕ) : ZMod (siFull m t))
+      = (((2 ^ (m + 1) - 1) + 2 ^ (m + 1) - siFull m t : ℕ) :
+          ZMod (siFull m t)) := by
+    congr 1
+    have h1 : (1 : ℕ) ≤ 2 ^ (m + 1) := Nat.one_le_pow _ _ (by norm_num)
+    have h3 : (2 : ℕ) ^ (t + 1) ≤ 2 ^ (m + 1) :=
+      Nat.pow_le_pow_right (by norm_num) (by omega)
+    have hNv : siFull m t = 2 ^ (m + 2) - 2 ^ (t + 1) := rfl
+    have hp : (2 : ℕ) ^ (m + 2) = 2 * 2 ^ (m + 1) := by ring
+    omega
+  rw [hkey, Nat.cast_sub (by
+      have h1 : (1 : ℕ) ≤ 2 ^ (m + 1) := Nat.one_le_pow _ _ (by norm_num)
+      have hNv : siFull m t = 2 ^ (m + 2) - 2 ^ (t + 1) := rfl
+      have hp : (2 : ℕ) ^ (m + 2) = 2 * 2 ^ (m + 1) := by ring
+      have h2 : (1 : ℕ) ≤ 2 ^ (t + 1) := Nat.one_le_pow _ _ (by norm_num)
+      omega),
+    Nat.cast_add, ZMod.natCast_self]
+  simp only [map_sub, map_add, map_zero, sub_zero]
+  abel
 
 end Target
 

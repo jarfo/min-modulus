@@ -10457,3 +10457,4 @@ import MinModulus
 #print axioms MinModulus.siLiftSI_weighted_base_sum
 #print axioms MinModulus.siLiftSI_rival_target
 #print axioms MinModulus.siLiftSI_not_valid_of_target
+#print axioms MinModulus.siLiftSI_affine_of_const
