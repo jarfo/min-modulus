@@ -10364,3 +10364,27 @@ import MinModulus
 #print axioms MinModulus.odd_modulus_ge_one_hundred_twenty_seven_of_valid_seven
 #print axioms MinModulus.oddStratumLowerBoundFrom_seven_iff_from_eight
 #print axioms MinModulus.oddStratumLowerBound_iff_from_eight
+
+-- R-lift exclusion (S* first-lift obligation), promoted 2026-10-08
+#print axioms MinModulus.reflectedTuple_not_valid_of_odd
+#print axioms MinModulus.reflectedTupleE_valid_of_even
+#print axioms MinModulus.digit_bound
+#print axioms MinModulus.digit_eq
+#print axioms MinModulus.shifted_sum_eq
+#print axioms MinModulus.rliftParent_power_not_valid
+#print axioms MinModulus.rliftParentSheet_not_valid
+#print axioms MinModulus.rival_vector_ne
+#print axioms MinModulus.master_coverage
+#print axioms MinModulus.master_pair_contra
+#print axioms MinModulus.master_triple_contra
+#print axioms MinModulus.master_not_valid
+#print axioms MinModulus.special_modM_two_not_valid
+#print axioms MinModulus.special_threeHalf_not_valid
+#print axioms MinModulus.special_sporadic_not_valid
+#print axioms MinModulus.rliftParentE_not_valid_all
+#print axioms MinModulus.rliftSmallK2_not_valid_all
+#print axioms MinModulus.rliftSmallK4_not_valid_all
+#print axioms MinModulus.rliftSmallK6_not_valid_all
+#print axioms MinModulus.rliftParentE_not_valid_even
+#print axioms MinModulus.rliftReduce_kernel
+#print axioms MinModulus.rlift_exclusion
