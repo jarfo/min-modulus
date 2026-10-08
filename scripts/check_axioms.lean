@@ -10404,3 +10404,4 @@ import MinModulus
 #print axioms MinModulus.flipMove_val
 #print axioms MinModulus.flipMove_dsum
 #print axioms MinModulus.flipMove_sheetSum
+#print axioms MinModulus.flipMove_rival

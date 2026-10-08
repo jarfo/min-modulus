@@ -203,6 +203,24 @@ theorem flipMove_sheetSum (b : ℕ → ℕ) (hc : 1 ≤ c) (hcm : c + 1 < m)
     · rw [if_pos (by omega), if_neg hkc]; omega
   omega
 
+/-- **The move as a rival transformer.**  Applied to a coin family realizing
+a given target with a given coin count, it returns another family realizing
+the SAME target with the SAME count but the OPPOSITE sheet parity, provided
+the sheet bits differ at the adjacent pair `(c, c+1)`.
+
+This is the exact interface the parity-refined digit lemma has to feed: it
+must supply, for a prescribed non-constant adjacent pair, a realizing family
+with at least two coins at `c-1` and at least one at `c+1`. -/
+theorem flipMove_rival (b : ℕ → ℕ) (hc : 1 ≤ c) (hcm : c + 1 < m)
+    (h1 : 2 ≤ k (c - 1)) (h2 : 1 ≤ k (c + 1))
+    (hne : b c % 2 ≠ b (c + 1) % 2) :
+    dsum m (flipMove k c) = dsum m k
+      ∧ val m (flipMove k c) = val m k
+      ∧ sheetSum m b (flipMove k c) % 2 ≠ sheetSum m b k % 2 := by
+  refine ⟨flipMove_dsum hc hcm h1 h2, flipMove_val hc hcm h1 h2, ?_⟩
+  have h := flipMove_sheetSum b hc hcm h1 h2
+  omega
+
 end Move
 
 end MinModulus
