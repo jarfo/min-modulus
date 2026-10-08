@@ -10446,3 +10446,8 @@ import MinModulus
 #print axioms MinModulus.siLiftParent_sheet_term
 #print axioms MinModulus.neg_nsmul_siSheet
 #print axioms MinModulus.siLiftParent_rival_sheetSum
+#print axioms MinModulus.s2_bit_set
+#print axioms MinModulus.s2_bit_clear
+#print axioms MinModulus.s2_remove_two_bits
+#print axioms MinModulus.exists_both_parities_two_of_interval
+#print axioms MinModulus.exists_rep_of_parity_two_of_interval

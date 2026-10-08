@@ -299,6 +299,80 @@ theorem exists_rep_of_parity_two (b : ℕ → ℕ) (hx1 : 1 ≤ x) (haw1 : a + 1
     · exact ⟨k, hv, hd, by omega⟩
     · exact ⟨k', hv', hd', by omega⟩
 
+/-! ### Choosing the block on two set bits of the target
+
+The reserved block costs three coins for a value of minimal count two, so
+it only works when the remainder can be represented with `cnt - 3` coins.
+The way to guarantee that is to put the block ON two set bits of the
+target: then no borrow occurs and the remainder's popcount is exactly two
+smaller, which is precisely the saving required. -/
+
+lemma s2_bit_set (j A r : ℕ) (hr : r < 2 ^ j) :
+    s2 (A * 2 ^ (j + 1) + 2 ^ j + r) = s2 A + 1 + s2 r := by
+  have hrw : A * 2 ^ (j + 1) + 2 ^ j + r = (2 * A + 1) * 2 ^ j + r := by
+    rw [pow_succ]; ring
+  rw [hrw, s2_append j (2 * A + 1) r hr, s2_two_mul_add A 1 (by norm_num)]
+
+lemma s2_bit_clear (j A r : ℕ) (hr : r < 2 ^ j) :
+    s2 (A * 2 ^ (j + 1) + r) = s2 A + s2 r := by
+  have hrw : A * 2 ^ (j + 1) + r = (2 * A + 0) * 2 ^ j + r := by
+    rw [pow_succ]; ring
+  rw [hrw, s2_append j (2 * A + 0) r hr, s2_two_mul_add A 0 (by norm_num)]
+  omega
+
+/-- **Removing two set bits drops the popcount by exactly two.**  The
+target is presented split at its two chosen set bits `q < p`. -/
+theorem s2_remove_two_bits {p q Ahi Amid Alo : ℕ} (hqp : q < p)
+    (hmid : Amid < 2 ^ (p - q - 1)) (hlo : Alo < 2 ^ q) :
+    s2 (Ahi * 2 ^ (p + 1) + 2 ^ p + (Amid * 2 ^ (q + 1) + 2 ^ q + Alo))
+      = s2 (Ahi * 2 ^ (p + 1) + (Amid * 2 ^ (q + 1) + Alo)) + 2 := by
+  have hq1 : (2 : ℕ) ^ (q + 1) * 2 ^ (p - q - 1) = 2 ^ p := by
+    rw [← pow_add]; congr 1; omega
+  have h3 : (2 : ℕ) ^ (q + 1) = 2 * 2 ^ q := by ring
+  have h4 : (2 : ℕ) ^ (q + 1) ≤ 2 ^ p :=
+    Nat.pow_le_pow_right (by norm_num) (by omega)
+  have h1 : Amid * 2 ^ (q + 1) ≤ (2 ^ (p - q - 1) - 1) * 2 ^ (q + 1) :=
+    Nat.mul_le_mul_right _ (by omega)
+  have h2 : (2 ^ (p - q - 1) - 1) * 2 ^ (q + 1) = 2 ^ p - 2 ^ (q + 1) := by
+    rw [Nat.sub_mul, one_mul,
+      mul_comm ((2 : ℕ) ^ (p - q - 1)) ((2 : ℕ) ^ (q + 1)), hq1]
+  have hMlt : Amid * 2 ^ (q + 1) + 2 ^ q + Alo < 2 ^ p := by omega
+  have hMlt' : Amid * 2 ^ (q + 1) + Alo < 2 ^ p := by omega
+  rw [s2_bit_set p Ahi _ hMlt, s2_bit_clear p Ahi _ hMlt',
+    s2_bit_set q Amid Alo hlo, s2_bit_clear q Amid Alo hlo]
+  omega
+
+/-! ### Interval forms -/
+
+/-- Both parities, with the remainder hypothesis discharged by the standard
+digit interval `[s2 R, R]`. -/
+theorem exists_both_parities_two_of_interval (b : ℕ → ℕ) (hx1 : 1 ≤ x)
+    (haw1 : a + 1 < w) (hxw : x < w) (hxa : x ≠ a) (hxa1 : x ≠ a + 1)
+    {V cnt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hlt : V - 2 * 2 ^ a - 2 ^ x < 2 ^ w)
+    (hlow : s2 (V - 2 * 2 ^ a - 2 ^ x) ≤ cnt - 3)
+    (hhigh : cnt - 3 ≤ V - 2 * 2 ^ a - 2 ^ x)
+    (hne : b x % 2 ≠ b (a + 1) % 2) :
+    ∃ k k', (val w k = V ∧ dsum w k = cnt)
+      ∧ (val w k' = V ∧ dsum w k' = cnt)
+      ∧ sheetSum w b k' % 2 ≠ sheetSum w b k % 2 := by
+  refine exists_both_parities_two b hx1 haw1 hxw hxa hxa1 hV hc ?_ hne
+  obtain ⟨kR, _, hv, hd⟩ := binary_rep w (V - 2 * 2 ^ a - 2 ^ x) hlt
+  exact exists_dsum_eq ⟨kR, hv, by omega⟩ hhigh
+
+/-- Parity on demand, interval form. -/
+theorem exists_rep_of_parity_two_of_interval (b : ℕ → ℕ) (hx1 : 1 ≤ x)
+    (haw1 : a + 1 < w) (hxw : x < w) (hxa : x ≠ a) (hxa1 : x ≠ a + 1)
+    {V cnt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hlt : V - 2 * 2 ^ a - 2 ^ x < 2 ^ w)
+    (hlow : s2 (V - 2 * 2 ^ a - 2 ^ x) ≤ cnt - 3)
+    (hhigh : cnt - 3 ≤ V - 2 * 2 ^ a - 2 ^ x)
+    (hne : b x % 2 ≠ b (a + 1) % 2) (p : ℕ) :
+    ∃ k, val w k = V ∧ dsum w k = cnt ∧ sheetSum w b k % 2 = p % 2 := by
+  refine exists_rep_of_parity_two b hx1 haw1 hxw hxa hxa1 hV hc ?_ hne p
+  obtain ⟨kR, _, hv, hd⟩ := binary_rep w (V - 2 * 2 ^ a - 2 ^ x) hlt
+  exact exists_dsum_eq ⟨kR, hv, by omega⟩ hhigh
+
 end ReserveTwo
 
 end MinModulus
