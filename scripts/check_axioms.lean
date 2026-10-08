@@ -10396,3 +10396,4 @@ import MinModulus
 #print axioms MinModulus.si_digit_cover
 #print axioms MinModulus.si_extra_eq_of_valid
 #print axioms MinModulus.si_extra_eq_top_of_valid
+#print axioms MinModulus.si_extra_eq_top_of_valid_shift
