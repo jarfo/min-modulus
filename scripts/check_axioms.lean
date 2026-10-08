@@ -10439,3 +10439,10 @@ import MinModulus
 #print axioms MinModulus.siReduce_eq_iff
 #print axioms MinModulus.exists_sheet_bit
 #print axioms MinModulus.nsmul_siSheet
+#print axioms MinModulus.siLiftParent_sum
+#print axioms MinModulus.siLiftParent_weighted_sum
+#print axioms MinModulus.siLiftParent_rival_iff
+#print axioms MinModulus.sheetSum_weighted
+#print axioms MinModulus.siLiftParent_sheet_term
+#print axioms MinModulus.neg_nsmul_siSheet
+#print axioms MinModulus.siLiftParent_rival_sheetSum

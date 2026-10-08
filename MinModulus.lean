@@ -923,3 +923,4 @@ import MinModulus.SILiftShift
 import MinModulus.SILiftReserve
 import MinModulus.SILiftTransport
 import MinModulus.SILiftSheet
+import MinModulus.SILiftRival
