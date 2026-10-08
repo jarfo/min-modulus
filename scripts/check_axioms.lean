@@ -10397,3 +10397,5 @@ import MinModulus
 #print axioms MinModulus.si_extra_eq_of_valid
 #print axioms MinModulus.si_extra_eq_top_of_valid
 #print axioms MinModulus.si_extra_eq_top_of_valid_shift
+#print axioms MinModulus.si_even_card_odd
+#print axioms MinModulus.si_sheet_parity_const

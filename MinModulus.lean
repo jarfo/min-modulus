@@ -917,3 +917,4 @@ import MinModulus.RLiftTransport
 import MinModulus.SILiftDigit
 import MinModulus.SILiftReduce
 import MinModulus.SILiftConstant
+import MinModulus.SILiftParity
