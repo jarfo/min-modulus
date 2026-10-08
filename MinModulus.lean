@@ -924,3 +924,4 @@ import MinModulus.SILiftReserve
 import MinModulus.SILiftTransport
 import MinModulus.SILiftSheet
 import MinModulus.SILiftRival
+import MinModulus.SILiftTarget

@@ -10453,3 +10453,7 @@ import MinModulus
 #print axioms MinModulus.exists_rep_of_parity_two_of_interval
 #print axioms MinModulus.exists_both_parities_two_of_split
 #print axioms MinModulus.exists_rep_of_parity_two_of_split
+#print axioms MinModulus.siLiftSI_base_sum
+#print axioms MinModulus.siLiftSI_weighted_base_sum
+#print axioms MinModulus.siLiftSI_rival_target
+#print axioms MinModulus.siLiftSI_not_valid_of_target
