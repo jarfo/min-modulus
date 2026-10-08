@@ -10451,3 +10451,5 @@ import MinModulus
 #print axioms MinModulus.s2_remove_two_bits
 #print axioms MinModulus.exists_both_parities_two_of_interval
 #print axioms MinModulus.exists_rep_of_parity_two_of_interval
+#print axioms MinModulus.exists_both_parities_two_of_split
+#print axioms MinModulus.exists_rep_of_parity_two_of_split

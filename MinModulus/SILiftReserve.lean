@@ -373,6 +373,55 @@ theorem exists_rep_of_parity_two_of_interval (b : ℕ → ℕ) (hx1 : 1 ≤ x)
   obtain ⟨kR, _, hv, hd⟩ := binary_rep w (V - 2 * 2 ^ a - 2 ^ x) hlt
   exact exists_dsum_eq ⟨kR, hv, by omega⟩ hhigh
 
+/-! ### The split form
+
+The interval forms above route the remainder through `binary_rep`, which
+needs `R < 2 ^ w`; that reaches only the targets below `2 ^ (w)`.  Half of
+the residues modulo `2 ^ n - 2 ^ s` are larger than that, and for them the
+remainder has to carry several coins at the TOP exponent.  The split form
+below uses `exists_val_dsum_of_split` instead and covers them. -/
+
+/-- Both parities, with the remainder split at the top exponent. -/
+theorem exists_both_parities_two_of_split (b : ℕ → ℕ) (hx1 : 1 ≤ x)
+    (haw1 : a + 1 < w) (hxw : x < w) (hxa : x ≠ a) (hxa1 : x ≠ a + 1)
+    {V cnt qq tt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hsplit : V - 2 * 2 ^ a - 2 ^ x = qq * 2 ^ (w - 1) + tt)
+    (ht : tt < 2 ^ (w - 1))
+    (hlow : qq + s2 tt ≤ cnt - 3)
+    (hhigh : cnt - 3 ≤ V - 2 * 2 ^ a - 2 ^ x)
+    (hne : b x % 2 ≠ b (a + 1) % 2) :
+    ∃ k k', (val w k = V ∧ dsum w k = cnt)
+      ∧ (val w k' = V ∧ dsum w k' = cnt)
+      ∧ sheetSum w b k' % 2 ≠ sheetSum w b k % 2 := by
+  refine exists_both_parities_two b hx1 haw1 hxw hxa hxa1 hV hc ?_ hne
+  obtain ⟨kR, hv, hd⟩ :=
+    exists_val_dsum_of_split (w - 1) qq tt (cnt - 3) ht hlow (by omega)
+  refine ⟨kR, ?_, ?_⟩
+  · rw [show w - 1 + 1 = w from by omega] at hv
+    rw [hv, hsplit]
+  · rw [show w - 1 + 1 = w from by omega] at hd
+    exact hd
+
+/-- Parity on demand, split form.  This is the fully general entry point:
+any target of either size, any admissible block. -/
+theorem exists_rep_of_parity_two_of_split (b : ℕ → ℕ) (hx1 : 1 ≤ x)
+    (haw1 : a + 1 < w) (hxw : x < w) (hxa : x ≠ a) (hxa1 : x ≠ a + 1)
+    {V cnt qq tt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hsplit : V - 2 * 2 ^ a - 2 ^ x = qq * 2 ^ (w - 1) + tt)
+    (ht : tt < 2 ^ (w - 1))
+    (hlow : qq + s2 tt ≤ cnt - 3)
+    (hhigh : cnt - 3 ≤ V - 2 * 2 ^ a - 2 ^ x)
+    (hne : b x % 2 ≠ b (a + 1) % 2) (p : ℕ) :
+    ∃ k, val w k = V ∧ dsum w k = cnt ∧ sheetSum w b k % 2 = p % 2 := by
+  obtain ⟨k, k', ⟨hv, hd⟩, ⟨hv', hd'⟩, hp⟩ :=
+    exists_both_parities_two_of_split b hx1 haw1 hxw hxa hxa1 hV hc hsplit ht
+      hlow hhigh hne
+  rcases Nat.lt_or_ge (sheetSum w b k % 2) (p % 2) with h | h
+  · exact ⟨k', hv', hd', by omega⟩
+  · rcases Nat.eq_or_lt_of_le h with h' | h'
+    · exact ⟨k, hv, hd, by omega⟩
+    · exact ⟨k', hv', hd', by omega⟩
+
 end ReserveTwo
 
 end MinModulus
