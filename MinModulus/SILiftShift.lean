@@ -182,6 +182,31 @@ theorem sheetSum_toggle_two (b k k' : ℕ → ℕ) {u v : ℕ}
     · rw [if_pos (by omega), if_neg h]; omega
   omega
 
+/-! ### Exponent zero is pinned
+
+The move toggles parities at `j ≥ 1` and `q + 1 ≥ 1`, never at exponent
+zero — and that is forced, not an artifact.  The parity of `k 0` is
+determined by the value alone, so NO value- and count-preserving
+rearrangement can change it.  This is exactly why the sheet bit `b_0` is
+free in the classification: its contribution to every rival's sheet sum is
+one and the same constant. -/
+
+/-- The parity at exponent zero is pinned by the value. -/
+lemma val_mod_two (hm : 1 ≤ m) (k : ℕ → ℕ) : val m k % 2 = k 0 % 2 := by
+  have hmem : 0 ∈ range m := Finset.mem_range.mpr (by omega)
+  unfold val
+  rw [← Finset.add_sum_erase (range m) (fun i => k i * 2 ^ i) hmem]
+  have hdvd : 2 ∣ ∑ i ∈ (range m).erase 0, k i * 2 ^ i := by
+    refine Finset.dvd_sum fun i hi => ?_
+    exact (dvd_pow_self 2 (Finset.ne_of_mem_erase hi)).mul_left (k i)
+  simp only [pow_zero, mul_one]
+  omega
+
+/-- Two families with the same value agree in parity at exponent zero. -/
+lemma parity_zero_eq_of_val_eq (hm : 1 ≤ m) (k k' : ℕ → ℕ)
+    (h : val m k' = val m k) : k' 0 % 2 = k 0 % 2 := by
+  rw [← val_mod_two hm k', ← val_mod_two hm k, h]
+
 /-! ### A mergeable position always exists -/
 
 /-- With more coins than exponents some exponent carries at least two coins,

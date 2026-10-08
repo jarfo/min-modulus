@@ -10415,3 +10415,5 @@ import MinModulus
 #print axioms MinModulus.shiftMove_dsum
 #print axioms MinModulus.shiftMove_sheetSum
 #print axioms MinModulus.shiftMove_rival
+#print axioms MinModulus.val_mod_two
+#print axioms MinModulus.parity_zero_eq_of_val_eq
