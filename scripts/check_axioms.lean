@@ -10405,3 +10405,13 @@ import MinModulus
 #print axioms MinModulus.flipMove_dsum
 #print axioms MinModulus.flipMove_sheetSum
 #print axioms MinModulus.flipMove_rival
+#print axioms MinModulus.splitAt_val
+#print axioms MinModulus.splitAt_dsum
+#print axioms MinModulus.mergeAt_val
+#print axioms MinModulus.mergeAt_dsum
+#print axioms MinModulus.sheetSum_toggle_two
+#print axioms MinModulus.exists_two_of_dsum_gt
+#print axioms MinModulus.shiftMove_val
+#print axioms MinModulus.shiftMove_dsum
+#print axioms MinModulus.shiftMove_sheetSum
+#print axioms MinModulus.shiftMove_rival

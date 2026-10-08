@@ -919,3 +919,4 @@ import MinModulus.SILiftReduce
 import MinModulus.SILiftConstant
 import MinModulus.SILiftParity
 import MinModulus.SILiftFlip
+import MinModulus.SILiftShift
