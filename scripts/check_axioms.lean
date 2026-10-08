@@ -10458,3 +10458,8 @@ import MinModulus
 #print axioms MinModulus.siLiftSI_rival_target
 #print axioms MinModulus.siLiftSI_not_valid_of_target
 #print axioms MinModulus.siLiftSI_affine_of_const
+#print axioms MinModulus.shiftTwo_val
+#print axioms MinModulus.shiftTwo_dsum
+#print axioms MinModulus.shiftTwo_parity
+#print axioms MinModulus.shiftTwo_sheetSum
+#print axioms MinModulus.shiftTwo_sheet_step

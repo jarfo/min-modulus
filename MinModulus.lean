@@ -920,6 +920,7 @@ import MinModulus.SILiftConstant
 import MinModulus.SILiftParity
 import MinModulus.SILiftFlip
 import MinModulus.SILiftShift
+import MinModulus.SILiftSheetMove
 import MinModulus.SILiftReserve
 import MinModulus.SILiftTransport
 import MinModulus.SILiftSheet
