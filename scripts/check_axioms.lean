@@ -10424,3 +10424,8 @@ import MinModulus
 #print axioms MinModulus.exists_both_parities
 #print axioms MinModulus.exists_rep_of_parity
 #print axioms MinModulus.si_exists_rep_of_parity
+#print axioms MinModulus.reserveTwo_val
+#print axioms MinModulus.reserveTwo_dsum
+#print axioms MinModulus.exists_reserved_two
+#print axioms MinModulus.exists_both_parities_two
+#print axioms MinModulus.exists_rep_of_parity_two

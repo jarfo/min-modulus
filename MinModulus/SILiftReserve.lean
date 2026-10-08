@@ -182,4 +182,123 @@ theorem si_exists_rep_of_parity {n u : ℕ} (b : ℕ → ℕ) (hn : 5 ≤ n)
 
 end Reserve
 
+/-! ### The general reserved block
+
+`reserve` fixes the block at exponents `0` and `u`, which forces the toggle
+pair to be `(u, 1)`.  Allowing the two coins to sit at an arbitrary exponent
+`a` and the single coin at an arbitrary `x` gives the toggle pair
+`(x, a + 1)` and a far larger supply of usable targets: an exhaustive count
+over all rival shapes at `(n,s) = (6,2), (7,2), (8,2), (8,3), (9,3)` puts the
+coverage of the general block above 95% of the targets that admit both
+parities at all, against about 50% for the fixed block.
+
+Note `1 ≤ x` is essential: exponent `0` can never be toggled
+(`val_mod_two`), and dropping the hypothesis makes the statement false. -/
+
+section ReserveTwo
+
+variable {w a x : ℕ}
+
+/-- Two coins at exponent `a` and one at exponent `x ≠ a`, on top of `kR`. -/
+def reserveTwo (kR : ℕ → ℕ) (a x : ℕ) : ℕ → ℕ :=
+  fun i => kR i + (if i = a then 2 else 0) + (if i = x then 1 else 0)
+
+lemma reserveTwo_val (haw : a < w) (hxw : x < w) (kR : ℕ → ℕ) :
+    val w (reserveTwo kR a x) = val w kR + 2 * 2 ^ a + 2 ^ x := by
+  unfold val reserveTwo
+  have hsplit : ∀ i ∈ range w,
+      (kR i + (if i = a then 2 else 0) + (if i = x then 1 else 0)) * 2 ^ i
+        = kR i * 2 ^ i + (if i = a then 2 else 0) * 2 ^ i
+          + (if i = x then 1 else 0) * 2 ^ i := fun i _ => by ring
+  rw [Finset.sum_congr rfl hsplit, Finset.sum_add_distrib,
+    Finset.sum_add_distrib, sum_indicator 2 a haw (fun i => 2 ^ i),
+    sum_indicator 1 x hxw (fun i => 2 ^ i)]
+  ring
+
+lemma reserveTwo_dsum (haw : a < w) (hxw : x < w) (kR : ℕ → ℕ) :
+    dsum w (reserveTwo kR a x) = dsum w kR + 3 := by
+  unfold dsum reserveTwo
+  have hsplit : ∀ i ∈ range w,
+      kR i + (if i = a then 2 else 0) + (if i = x then 1 else 0)
+        = kR i + (if i = a then 2 else 0) * 1 + (if i = x then 1 else 0) * 1 :=
+    fun i _ => by ring
+  rw [Finset.sum_congr rfl hsplit, Finset.sum_add_distrib,
+    Finset.sum_add_distrib, sum_indicator 2 a haw (fun _ => 1),
+    sum_indicator 1 x hxw (fun _ => 1)]
+
+lemma reserveTwo_at_a (hxa : x ≠ a) (kR : ℕ → ℕ) :
+    2 ≤ reserveTwo kR a x a := by
+  unfold reserveTwo
+  rw [if_pos rfl, if_neg (Ne.symm hxa)]
+  omega
+
+lemma reserveTwo_at_x (hxa : x ≠ a) (kR : ℕ → ℕ) :
+    1 ≤ reserveTwo kR a x x := by
+  unfold reserveTwo
+  rw [if_pos rfl, if_neg hxa]
+  omega
+
+/-- A realizing family with two coins at `a` and one at `x`. -/
+theorem exists_reserved_two (hxa : x ≠ a) (haw : a < w) (hxw : x < w)
+    {V cnt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hex : ∃ kR, val w kR = V - 2 * 2 ^ a - 2 ^ x ∧ dsum w kR = cnt - 3) :
+    ∃ k, val w k = V ∧ dsum w k = cnt ∧ 2 ≤ k a ∧ 1 ≤ k x := by
+  obtain ⟨kR, hv, hd⟩ := hex
+  refine ⟨reserveTwo kR a x, ?_, ?_, reserveTwo_at_a hxa kR,
+    reserveTwo_at_x hxa kR⟩
+  · rw [reserveTwo_val haw hxw, hv]; omega
+  · rw [reserveTwo_dsum haw hxw, hd]; omega
+
+/-- **Both parities, general block.**  The reserved block at `(a, x)`
+toggles the pair `(x, a + 1)`: `shiftMove` with `j = x`, `q = a` handles
+`x < a` and `x > a + 2`, and `flipMove` at `c = a + 1` handles the
+remaining adjacent case `x = a + 2`. -/
+theorem exists_both_parities_two (b : ℕ → ℕ) (hx1 : 1 ≤ x) (haw1 : a + 1 < w)
+    (hxw : x < w) (hxa : x ≠ a) (hxa1 : x ≠ a + 1)
+    {V cnt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hex : ∃ kR, val w kR = V - 2 * 2 ^ a - 2 ^ x ∧ dsum w kR = cnt - 3)
+    (hne : b x % 2 ≠ b (a + 1) % 2) :
+    ∃ k k', (val w k = V ∧ dsum w k = cnt)
+      ∧ (val w k' = V ∧ dsum w k' = cnt)
+      ∧ sheetSum w b k' % 2 ≠ sheetSum w b k % 2 := by
+  obtain ⟨k, hv, hd, ha, hx⟩ :=
+    exists_reserved_two hxa (by omega) hxw hV hc hex
+  rcases Nat.lt_or_ge x a with hlt | hge
+  · -- `x < a`: the split-and-merge move, `j < q`
+    obtain ⟨hd', hv', hp⟩ :=
+      shiftMove_rival (m := w) (j := x) (q := a) (k := k) b hx1 hxw
+        (by omega) (Or.inr hlt) hx ha hne
+    exact ⟨k, shiftMove k x a, ⟨hv, hd⟩, ⟨by rw [hv', hv], by rw [hd', hd]⟩, hp⟩
+  · rcases Nat.eq_or_lt_of_le (show a + 2 ≤ x by omega) with heq | hgt
+    · -- `x = a + 2`: the adjacent three-point move at `c = a + 1`
+      obtain ⟨hd', hv', hp⟩ :=
+        flipMove_rival (m := w) (c := a + 1) (k := k) b (by omega) (by omega)
+          (by simpa using ha) (by rw [show a + 1 + 1 = x from by omega]; exact hx)
+          (by rw [show a + 1 + 1 = x from by omega]; exact Ne.symm hne)
+      exact ⟨k, flipMove k (a + 1), ⟨hv, hd⟩,
+        ⟨by rw [hv', hv], by rw [hd', hd]⟩, hp⟩
+    · -- `x > a + 2`: the split-and-merge move, `q + 1 < j - 1`
+      obtain ⟨hd', hv', hp⟩ :=
+        shiftMove_rival (m := w) (j := x) (q := a) (k := k) b hx1 hxw
+          (by omega) (Or.inl (by omega)) hx ha hne
+      exact ⟨k, shiftMove k x a, ⟨hv, hd⟩,
+        ⟨by rw [hv', hv], by rw [hd', hd]⟩, hp⟩
+
+/-- Parity on demand, general block. -/
+theorem exists_rep_of_parity_two (b : ℕ → ℕ) (hx1 : 1 ≤ x) (haw1 : a + 1 < w)
+    (hxw : x < w) (hxa : x ≠ a) (hxa1 : x ≠ a + 1)
+    {V cnt : ℕ} (hV : 2 * 2 ^ a + 2 ^ x ≤ V) (hc : 3 ≤ cnt)
+    (hex : ∃ kR, val w kR = V - 2 * 2 ^ a - 2 ^ x ∧ dsum w kR = cnt - 3)
+    (hne : b x % 2 ≠ b (a + 1) % 2) (p : ℕ) :
+    ∃ k, val w k = V ∧ dsum w k = cnt ∧ sheetSum w b k % 2 = p % 2 := by
+  obtain ⟨k, k', ⟨hv, hd⟩, ⟨hv', hd'⟩, hp⟩ :=
+    exists_both_parities_two b hx1 haw1 hxw hxa hxa1 hV hc hex hne
+  rcases Nat.lt_or_ge (sheetSum w b k % 2) (p % 2) with h | h
+  · exact ⟨k', hv', hd', by omega⟩
+  · rcases Nat.eq_or_lt_of_le h with h' | h'
+    · exact ⟨k, hv, hd, by omega⟩
+    · exact ⟨k', hv', hd', by omega⟩
+
+end ReserveTwo
+
 end MinModulus
