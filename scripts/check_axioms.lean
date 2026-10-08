@@ -10417,3 +10417,10 @@ import MinModulus
 #print axioms MinModulus.shiftMove_rival
 #print axioms MinModulus.val_mod_two
 #print axioms MinModulus.parity_zero_eq_of_val_eq
+#print axioms MinModulus.reserve_val
+#print axioms MinModulus.reserve_dsum
+#print axioms MinModulus.exists_reserved_rep
+#print axioms MinModulus.exists_reserved_rep_of_interval
+#print axioms MinModulus.exists_both_parities
+#print axioms MinModulus.exists_rep_of_parity
+#print axioms MinModulus.si_exists_rep_of_parity
