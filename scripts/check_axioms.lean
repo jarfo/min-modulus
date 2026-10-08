@@ -10432,3 +10432,10 @@ import MinModulus
 #print axioms MinModulus.siReindex_last
 #print axioms MinModulus.siReindex_castSucc
 #print axioms MinModulus.si_affine_extra
+#print axioms MinModulus.siFull_eq_two_mul
+#print axioms MinModulus.siSheet_add_self
+#print axioms MinModulus.siReduce_sheet
+#print axioms MinModulus.siReduce_kernel
+#print axioms MinModulus.siReduce_eq_iff
+#print axioms MinModulus.exists_sheet_bit
+#print axioms MinModulus.nsmul_siSheet
