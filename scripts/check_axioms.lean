@@ -10394,3 +10394,5 @@ import MinModulus
 #print axioms MinModulus.s2_eq_width
 #print axioms MinModulus.exists_val_dsum_of_split
 #print axioms MinModulus.si_digit_cover
+#print axioms MinModulus.si_extra_eq_of_valid
+#print axioms MinModulus.si_extra_eq_top_of_valid
