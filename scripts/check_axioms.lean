@@ -10471,3 +10471,6 @@ import MinModulus
 #print axioms MinModulus.siReduce_e_of_target
 #print axioms MinModulus.siSheet_val
 #print axioms MinModulus.siLiftSI_affine
+#print axioms MinModulus.siSheet_ne_zero
+#print axioms MinModulus.unit_mul_siSheet
+#print axioms MinModulus.siLift_affine_extra
