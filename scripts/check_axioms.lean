@@ -10388,3 +10388,9 @@ import MinModulus
 #print axioms MinModulus.rliftParentE_not_valid_even
 #print axioms MinModulus.rliftReduce_kernel
 #print axioms MinModulus.rlift_exclusion
+
+-- SI-lift classification (S* SI child), digit layer, 2026-10-08
+#print axioms MinModulus.s2_eq_zero_iff
+#print axioms MinModulus.s2_eq_width
+#print axioms MinModulus.exists_val_dsum_of_split
+#print axioms MinModulus.si_digit_cover

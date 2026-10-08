@@ -914,3 +914,4 @@ import MinModulus.RLiftSmallK4
 import MinModulus.RLiftSmallK6
 import MinModulus.RLiftSmallK
 import MinModulus.RLiftTransport
+import MinModulus.SILiftDigit
