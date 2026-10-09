@@ -935,3 +935,4 @@ import MinModulus.StratumOnePigeonhole
 import MinModulus.StratumOneLevels
 import MinModulus.StratumOneAssemble
 import MinModulus.StratumOneTriple
+import MinModulus.StratumOneCancel

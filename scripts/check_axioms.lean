@@ -10510,3 +10510,8 @@ import MinModulus
 #print axioms MinModulus.StratumOne.compat_self
 #print axioms MinModulus.StratumOne.compat_pair
 #print axioms MinModulus.StratumOne.exists_compatible_pair
+#print axioms MinModulus.StratumOne.sheet_ne_zero
+#print axioms MinModulus.StratumOne.three_cancel_absurd
+#print axioms MinModulus.StratumOne.kernel_two_mul
+#print axioms MinModulus.StratumOne.sheet_gap_of_valid
+#print axioms MinModulus.StratumOne.no_cancelling_triple
