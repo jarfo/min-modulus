@@ -10570,3 +10570,7 @@ import MinModulus
 #print axioms MinModulus.StratumOne.reflected_rigid
 #print axioms MinModulus.StratumOne.antipodal_rigid
 #print axioms MinModulus.StratumOne.stratum_one_half_descent
+#print axioms MinModulus.kernel_mul_cast
+#print axioms MinModulus.not_exists_valid_lift_of_covering
+#print axioms MinModulus.not_exists_valid_of_quotient_cover
+#print axioms MinModulus.quotient_card_le_two
