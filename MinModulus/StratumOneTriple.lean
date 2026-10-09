@@ -272,6 +272,19 @@ theorem compat_pair {T : Finset (ZMod d)} {a b : ZMod d} (ha : a ∈ T) (hb : b 
     · simp only [if_neg h1, if_neg h2]
       split_ifs <;> omega
 
+/-- The concentrated vector never drops below `-1`: its only negatives are
+the run, which has distinct indices. -/
+theorem assemble_conLevel_ge {T : Finset (ZMod d)} {a : ZMod d} (ha : a ∈ T)
+    (x : ZMod d) : -1 ≤ assemble T (conLevel T a) x := by
+  classical
+  rw [assemble_conLevel_apply ha]; split_ifs <;> omega
+
+/-- The distributed vector never drops below `-1`. -/
+theorem assemble_disLevel_ge {T : Finset (ZMod d)} {b : ZMod d} (hb : b ∈ T)
+    (x : ZMod d) : -1 ≤ assemble T (disLevel b) x := by
+  classical
+  rw [assemble_disLevel_apply hb]; split_ifs <;> omega
+
 /-- `topIdx` written with the shift `s - 2`. -/
 theorem topIdx_eq_add {T : Finset (ZMod d)} (a : ZMod d) :
     topIdx T a = a + (((T.card - 1 : ℕ) : ZMod d) - 1) := by
@@ -292,6 +305,7 @@ theorem exists_compatible_pair (T : Finset (ZMod d))
       coeffSum (assemble T L₁) = 1 ∧ coeffSum (assemble T L₂) = 1 ∧
       value (assemble T L₁) = ∑ t ∈ T, pow2 (t - 1) ∧
       value (assemble T L₂) = ∑ t ∈ T, pow2 (t - 1) ∧
+      (∀ x, -1 ≤ assemble T L₁ x) ∧ (∀ x, -1 ≤ assemble T L₂ x) ∧
       ∀ x, assemble T L₁ x + assemble T L₂ x ≤ 1 := by
   classical
   have hne : T.Nonempty := Finset.card_pos.mp (by omega)
@@ -308,9 +322,11 @@ theorem exists_compatible_pair (T : Finset (ZMod d))
         coeffSum (assemble T L₁) = 1 ∧ coeffSum (assemble T L₂) = 1 ∧
         value (assemble T L₁) = ∑ t ∈ T, pow2 (t - 1) ∧
         value (assemble T L₂) = ∑ t ∈ T, pow2 (t - 1) ∧
+        (∀ x, -1 ≤ assemble T L₁ x) ∧ (∀ x, -1 ≤ assemble T L₂ x) ∧
         ∀ x, assemble T L₁ x + assemble T L₂ x ≤ 1 := by
     intro a b ha hb hcompat
-    refine ⟨conLevel T a, disLevel b, ?_, ?_, ?_, ?_, hcompat⟩
+    refine ⟨conLevel T a, disLevel b, ?_, ?_, ?_, ?_,
+      assemble_conLevel_ge ha, assemble_disLevel_ge hb, hcompat⟩
     · rw [coeffSum_assemble T _ (hLcon a), sum_conLevel ha]; ring
     · rw [coeffSum_assemble T _ (hLdis b), sum_disLevel hb]; ring
     · exact value_assemble T _ (hLcon a)

@@ -10515,3 +10515,5 @@ import MinModulus
 #print axioms MinModulus.StratumOne.kernel_two_mul
 #print axioms MinModulus.StratumOne.sheet_gap_of_valid
 #print axioms MinModulus.StratumOne.no_cancelling_triple
+#print axioms MinModulus.StratumOne.assemble_conLevel_ge
+#print axioms MinModulus.StratumOne.assemble_disLevel_ge
