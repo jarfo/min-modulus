@@ -10556,3 +10556,11 @@ import MinModulus
 #print axioms MinModulus.StratumOne.antipodal_parity
 #print axioms MinModulus.StratumOne.antipodal_parity_const
 #print axioms MinModulus.StratumOne.parity_const_off_pair
+#print axioms MinModulus.StratumOne.stratum_one_dichotomy
+#print axioms MinModulus.StratumOne.coeffSum_zeroVec
+#print axioms MinModulus.StratumOne.zeroVec_ge
+#print axioms MinModulus.StratumOne.value_zeroVec
+#print axioms MinModulus.StratumOne.zeroVec_parity_sum
+#print axioms MinModulus.StratumOne.reflected_parity
+#print axioms MinModulus.StratumOne.succ_ne_self
+#print axioms MinModulus.StratumOne.singleton_parity_fibre

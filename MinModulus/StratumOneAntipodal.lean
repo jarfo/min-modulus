@@ -241,6 +241,106 @@ theorem parity_const_off_pair
 
 end Pair
 
+section Reflected
+
+variable {d : ℕ} [NeZero d]
+
+/-- The rival of the reflected case: doubling block position `t` and omitting
+its successor has value zero. -/
+def zeroVec (t : ZMod d) : ZMod d → ℤ :=
+  fun x => ind t x + ind t x - ind (t + 1) x
+
+theorem coeffSum_zeroVec (t : ZMod d) : coeffSum (zeroVec t) = 1 := by
+  simp only [coeffSum, zeroVec, Finset.sum_sub_distrib, Finset.sum_add_distrib, sum_ind]
+  ring
+
+omit [NeZero d] in
+theorem zeroVec_ge (t : ZMod d) (x : ZMod d) : -1 ≤ zeroVec t x := by
+  have h1 := ind_nonneg t x
+  have h2 : ind (t + 1) x ≤ 1 := by unfold ind; split_ifs <;> norm_num
+  unfold zeroVec
+  linarith
+
+theorem value_zeroVec (hd : 1 < d) (t : ZMod d) : value (zeroVec t) = 0 := by
+  have hpt : ∀ x : ZMod d, zeroVec t x • pow2 x
+      = ind t x • pow2 x + ind t x • pow2 x - ind (t + 1) x • pow2 x := by
+    intro x; unfold zeroVec; simp only [sub_smul, add_smul]
+  simp only [value, Finset.sum_congr rfl (fun x _ => hpt x), Finset.sum_sub_distrib,
+    Finset.sum_add_distrib, sum_ind_smul]
+  rw [pow2_succ hd t]
+  abel
+
+/-- The parity vector of the reflected rival is `e_{t+1}`. -/
+theorem zeroVec_parity_sum {A : Type*} [AddCommGroup A] (hA : ∀ a : A, a + a = 0)
+    (t : ZMod d) (h : ZMod d → A) :
+    ∑ x : ZMod d, zeroVec t x • h x = h (t + 1) := by
+  have hpt : ∀ x : ZMod d, zeroVec t x • h x
+      = ind t x • h x + ind t x • h x - ind (t + 1) x • h x := by
+    intro x; unfold zeroVec; simp only [sub_smul, add_smul]
+  rw [Finset.sum_congr rfl (fun x _ => hpt x)]
+  simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib, sum_ind_smul]
+  have hneg : ∀ a : A, -a = a := fun a => by
+    have := hA a; linear_combination (norm := abel) -this
+  rw [sub_eq_add_neg, hneg, hA (h t), zero_add]
+
+end Reflected
+
+section ReflectedPair
+
+variable {d n : ℕ} [NeZero d] {emb : ZMod d → Fin n} {ext : Fin n}
+
+/-- **The reflected branch.**  If the extra residue is `-1`, every block entry
+has parity opposite to the extra coordinate. -/
+theorem reflected_parity
+    (g : Fin n → ZMod (2 * (2 ^ d - 1))) (hg : ValidTuple g) (hd : 1 < d)
+    (hinj : Function.Injective emb) (hext : ∀ t, emb t ≠ ext)
+    (hcover : ∀ i : Fin n, i = ext ∨ ∃ t, emb t = i)
+    (hblk : ∀ t, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      (g (emb t)) = pow2 t - 1)
+    (hextra : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext) = -1)
+    (j : ZMod d) :
+    parityHom (2 ^ d - 1) (g (emb j)) = parityHom (2 ^ d - 1) (g ext) + 1 := by
+  classical
+  have hd1 : 1 ≤ d := le_of_lt hd
+  have h2d : 2 ≤ 2 ^ d := by
+    calc (2 : ℕ) = 2 ^ 1 := (pow_one 2).symm
+      _ ≤ 2 ^ d := Nat.pow_le_pow_right (by norm_num) hd1
+  have hM : 1 ≤ 2 ^ d - 1 := by omega
+  have hodd : Odd (2 ^ d - 1) := mersenne_odd hd1
+  have hn : n = d + 1 := card_eq_succ hinj hext hcover
+  set t : ZMod d := j - 1 with ht
+  have htj : t + 1 = j := by rw [ht]; ring
+  have hlo : ∀ x, (-1 : ℤ) ≤ zeroVec t x := zeroVec_ge t
+  have hcard : ∑ i, blockMult emb ext (zeroVec t) 0 i = n := by
+    have hs := sum_blockMult hinj hext hcover hlo 0
+    have hval : ((0 : ℕ) : ℤ) + (d : ℤ) + coeffSum (zeroVec t) = (n : ℤ) := by
+      rw [coeffSum_zeroVec, hn]; push_cast; ring
+    exact Nat.cast_injective (by rw [hs, hval])
+  have hnt : ∃ i, blockMult emb ext (zeroVec t) 0 i ≠ 1 :=
+    ⟨ext, by rw [blockMult_ext]; omega⟩
+  have hmod : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      ((∑ i, blockMult emb ext (zeroVec t) 0 i • g i) - ∑ i, g i) = 0 := by
+    rw [map_sub, map_sum, map_sum,
+      Finset.sum_congr rfl (fun i _ =>
+        map_nsmul (ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))) _ (g i)),
+      reduced_gap hinj hext hcover hlo 0
+        (fun i => ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g i)) hblk,
+      hextra, value_zeroVec hd, coeffSum_zeroVec]
+    simp only [Nat.cast_zero, zero_sub, neg_smul, one_smul]
+    ring
+  have hpar := sheet_parity_of_valid hM hodd hg hcard hnt hmod
+  have hgap := blockMult_gap hinj hext hcover hlo 0
+    (fun i => parityHom (2 ^ d - 1) (g i))
+  have hsum : ∑ x : ZMod d, zeroVec t x • parityHom (2 ^ d - 1) (g (emb x))
+      = parityHom (2 ^ d - 1) (g (emb (t + 1))) :=
+    zeroVec_parity_sum (by decide) t (fun x => parityHom (2 ^ d - 1) (g (emb x)))
+  rw [hsum, htj, hpar] at hgap
+  simp only [Nat.cast_zero, zero_sub, neg_one_zsmul, add_sub_cancel_left] at hgap
+  have key : ∀ x w : ZMod 2, (1 : ZMod 2) = -w + x → x = w + 1 := by decide
+  exact key _ _ hgap
+
+end ReflectedPair
+
 end StratumOne
 
 end MinModulus

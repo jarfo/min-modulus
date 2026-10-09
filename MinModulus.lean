@@ -940,3 +940,4 @@ import MinModulus.StratumOneRivals
 import MinModulus.StratumOneWeight
 import MinModulus.StratumOneParity
 import MinModulus.StratumOneAntipodal
+import MinModulus.StratumOneClassify
