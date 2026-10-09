@@ -5,12 +5,22 @@ is available under [My missions](https://prove2.me/my-missions).
 Mission ID: `6b060afa-1e7b-4c80-8f4a-cc89ff36784e`.
 Goal theorem ID: `67fbce28-44f4-45cb-8e37-de63df56557c`.
 
+> **Frontier (re-queried live 2026-10-09).** The paragraphs below are a dated
+> ledger and their cutoff claims lag the server. `GET
+> /theorems/<goal>/open-leaves` returns **14 open leaves**: G1
+> `primitive_three_omission_delete_step_from_six`, G2
+> `odd_stratum_lower_bound_from_eight`, G3
+> `exceptional_quantitative_escape_obstruction_from_nine`,
+> `not_validTuple_seven_mod_one_twenty`, and the ten finite odd leaves
+> `not_validTuple_seven_mod_{107,…,125}`.  G2 moved to From8 and G3 to From9
+> on 2026-10-07.  Re-query the server rather than reading cutoffs from here.
+
 The complete six-coordinate even-stratum refinement is accepted on Prove2Me.
 G1 is now `PrimitiveThreeOmissionDeleteStepFrom 6`: child dimension at least
 six and parent length at least seven. The open theorem is `9be4560f-734d-411b-b590-01db97a5b179`.
 Accepted reduction `d0b11323-d53d-4fa6-b101-5bde7142b3ff` uses the proved P(5)↔P(6) equivalence.
-The previous P(5) theorem remains an Open parent. G2 remains From7 and G3
-remains From7; all three research inputs and the full conjecture remain Open.
+The previous P(5) theorem remains an Open parent. At that milestone G2 and G3
+were both From7; all three research inputs and the full conjecture remain Open.
 
 All 292 supporting source nodes are Proved, and all 293 proof submissions
 or reductions have accepted verdicts. The consolidated DAG has 848 nodes, 1926 edges and exactly three open leaves.
