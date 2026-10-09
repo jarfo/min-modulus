@@ -10569,3 +10569,4 @@ import MinModulus
 #print axioms MinModulus.StratumOne.reflected_not_valid_of_even_dim
 #print axioms MinModulus.StratumOne.reflected_rigid
 #print axioms MinModulus.StratumOne.antipodal_rigid
+#print axioms MinModulus.StratumOne.stratum_one_half_descent

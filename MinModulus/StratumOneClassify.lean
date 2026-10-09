@@ -5,6 +5,7 @@ Released under Apache 2.0 license.
 import MinModulus.StratumOneWeight
 import MinModulus.StratumOneAntipodal
 import MinModulus.StratumOneReflected
+import MinModulus.G1ParityFibreDescent
 
 /-!
 # The stratum-one dichotomy
@@ -210,6 +211,28 @@ theorem antipodal_rigid
             (succ_ne_self hd k),
         parity_const_off_pair g' hg' hd hinj hext hcover hblk' hextra' htk
             (succ_ne_self hd k), hoff]
+
+/-- **Half descent at the stratum-one endpoint.**  A valid tuple at the first
+even stratum whose block reduces to the super-increasing block supplies a valid
+`d`-tuple at half the modulus.
+
+This closes the loop with `G1ParityFibreDescent`: the classification produces a
+singleton parity fibre, and a singleton parity fibre is exactly what the
+parity-fibre half descent consumes.  The stratum-one endpoint therefore needs no
+common touch, no half-witness and no criticality hypothesis. -/
+theorem stratum_one_half_descent
+    (g : Fin (d + 1) → ZMod (2 * (2 ^ d - 1))) (hg : ValidTuple g) (hd : 1 < d)
+    (hblk : ∀ i : Fin d, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      (g i.castSucc) = 2 ^ (i : ℕ) - 1) :
+    AdmitsValidTuple d (2 ^ d - 1) := by
+  have hd1 : 1 ≤ d := le_of_lt hd
+  have h2d : 2 ≤ 2 ^ d := by
+    calc (2 : ℕ) = 2 ^ 1 := (pow_one 2).symm
+      _ ≤ 2 ^ d := Nat.pow_le_pow_right (by norm_num) hd1
+  haveI : NeZero (2 ^ d - 1) := ⟨by omega⟩
+  obtain ⟨i₀, hi₀⟩ := singleton_parity_fibre g hg hd blockEmb_injective blockEmb_ne_last
+    blockEmb_cover (fun t => hblk ⟨t.val, ZMod.val_lt t⟩)
+  exact admitsValidTuple_half_of_all_but_one_same_parity g hg i₀ _ hi₀
 
 end StratumOne
 
