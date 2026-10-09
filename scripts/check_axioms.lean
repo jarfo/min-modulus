@@ -10474,3 +10474,13 @@ import MinModulus
 #print axioms MinModulus.siSheet_ne_zero
 #print axioms MinModulus.unit_mul_siSheet
 #print axioms MinModulus.siLift_affine_extra
+
+-- Top-stratum child obligations at n = 6, 2026-10-09
+#print axioms MinModulus.siLiftParent_not_valid_of_rival
+#print axioms MinModulus.nsmul_siSheet_flip
+#print axioms MinModulus.pair_cert_not_valid
+#print axioms MinModulus.split_sixty
+#print axioms MinModulus.sporA_not_valid
+#print axioms MinModulus.sporB_not_valid
+#print axioms MinModulus.sporC_not_valid
+#print axioms MinModulus.sporD_not_valid
