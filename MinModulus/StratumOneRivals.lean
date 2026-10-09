@@ -100,6 +100,28 @@ theorem sum_blockMult (hinj : Function.Injective emb) (hext : ∀ t, emb t ≠ e
   simp only [Finset.sum_const, Finset.card_univ, ZMod.card d, nsmul_eq_mul, mul_one, coeffSum]
   ring
 
+/-- The target gap of a multiplicity vector in an arbitrary abelian group: the
+extra coordinate contributes `e - 1` copies of its entry, each block position
+its own coefficient. -/
+theorem blockMult_gap {A : Type*} [AddCommGroup A]
+    (hinj : Function.Injective emb) (hext : ∀ t, emb t ≠ ext)
+    (hcover : ∀ j : Fin n, j = ext ∨ ∃ t, emb t = j) (hδ : ∀ x, -1 ≤ δ x) (e : ℕ)
+    (h : Fin n → A) :
+    (∑ j, blockMult emb ext δ e j • h j) - (∑ j, h j)
+      = ((e : ℤ) - 1) • h ext + ∑ t : ZMod d, δ t • h (emb t) := by
+  have hterm : ∀ t : ZMod d, blockMult emb ext δ e (emb t) • h (emb t)
+      = h (emb t) + δ t • h (emb t) := by
+    intro t
+    rw [blockMult_emb hinj hext, ← natCast_zsmul,
+      Int.toNat_of_nonneg (by linarith [hδ t] : (0 : ℤ) ≤ 1 + δ t), add_smul, one_smul]
+  have hhead : blockMult emb ext δ e ext • h ext = (e : ℤ) • h ext := by
+    rw [blockMult_ext, natCast_zsmul]
+  rw [sum_split hinj hext hcover (fun j => blockMult emb ext δ e j • h j),
+    sum_split hinj hext hcover h, hhead,
+    Finset.sum_congr rfl (fun t _ => hterm t), Finset.sum_add_distrib,
+    sub_smul, one_smul]
+  abel
+
 /-- **The reduced target gap.**  Modulo `M = 2 ^ d - 1`, a tuple whose block is
 the super-increasing block `2 ^ t - 1` turns the multiplicity vector of `δ` into
 an explicit expression in `value δ`, `coeffSum δ` and the extra residue. -/

@@ -10524,6 +10524,7 @@ import MinModulus
 #print axioms MinModulus.StratumOne.blockMult_ext
 #print axioms MinModulus.StratumOne.blockMult_emb
 #print axioms MinModulus.StratumOne.sum_blockMult
+#print axioms MinModulus.StratumOne.blockMult_gap
 #print axioms MinModulus.StratumOne.reduced_gap
 #print axioms MinModulus.StratumOne.coeffSum_negSum
 #print axioms MinModulus.StratumOne.value_negSum
@@ -10539,3 +10540,19 @@ import MinModulus
 #print axioms MinModulus.StratumOne.card_image_add_one
 #print axioms MinModulus.StratumOne.sum_pow2_pred_image
 #print axioms MinModulus.StratumOne.not_validTuple_of_extra_weight
+#print axioms MinModulus.StratumOne.natCast_odd_eq_one
+#print axioms MinModulus.StratumOne.sheet_parity_of_valid
+#print axioms MinModulus.StratumOne.sheet_parity_mul_of_valid
+#print axioms MinModulus.StratumOne.ind_nonneg
+#print axioms MinModulus.StratumOne.sum_ind_smul
+#print axioms MinModulus.StratumOne.sum_ind
+#print axioms MinModulus.StratumOne.coeffSum_antiVec
+#print axioms MinModulus.StratumOne.antiVec_ge
+#print axioms MinModulus.StratumOne.pow2_succ
+#print axioms MinModulus.StratumOne.value_antiVec
+#print axioms MinModulus.StratumOne.antiVec_parity_sum
+#print axioms MinModulus.StratumOne.mersenne_odd
+#print axioms MinModulus.StratumOne.antipodal_pair
+#print axioms MinModulus.StratumOne.antipodal_parity
+#print axioms MinModulus.StratumOne.antipodal_parity_const
+#print axioms MinModulus.StratumOne.parity_const_off_pair
