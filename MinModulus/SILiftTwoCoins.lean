@@ -64,17 +64,18 @@ lemma reserveAt_dsum {w p : ℕ} (hp : p < w) (kR : ℕ → ℕ) :
 lemma reserveAt_at (kR : ℕ → ℕ) (p : ℕ) : 2 ≤ reserveAt kR p p := by
   unfold reserveAt; rw [if_pos rfl]; omega
 
-/-- `m < 2 ^ (m - 2)` from `m ≥ 5`, which is what keeps the popcount of a
-remainder below `m` small enough. -/
-private lemma lt_two_pow_sub_two : ∀ k, 5 ≤ k → k < 2 ^ (k - 2) := by
+/-- `m ≤ 2 ^ (m - 2)` from `m ≥ 4`, which is what keeps the popcount of a
+remainder below `m` small enough.  The non-strict form is what admits
+`m = 4`, i.e. dimension `n = 6`. -/
+private lemma le_two_pow_sub_two : ∀ k, 4 ≤ k → k ≤ 2 ^ (k - 2) := by
   intro k
   induction k with
   | zero => omega
   | succ j ih =>
     intro hj
-    rcases Nat.lt_or_ge j 5 with h | h
-    · have hj4 : j = 4 := by omega
-      subst hj4; norm_num
+    rcases Nat.lt_or_ge j 4 with h | h
+    · have hj3 : j = 3 := by omega
+      subst hj3; norm_num
     · have hprev := ih h
       have hp : (2 : ℕ) ^ (j + 1 - 2) = 2 * 2 ^ (j - 2) := by
         rw [show j + 1 - 2 = (j - 2) + 1 from by omega, pow_succ]; ring
@@ -84,7 +85,7 @@ private lemma lt_two_pow_sub_two : ∀ k, 5 ≤ k → k < 2 ^ (k - 2) := by
 possible top digits `0, 1, 2` are each in budget: `2 ^ (m+1) - 1` is the
 only value the middle one could fail on, and a top digit of `2` leaves a
 remainder below `m`, whose popcount is at most `m - 2`. -/
-lemma exists_rem_rep (hm : 5 ≤ m) {X : ℕ} (hXlo : m ≤ X)
+lemma exists_rem_rep (hm : 4 ≤ m) {X : ℕ} (hXlo : m ≤ X)
     (hXhi : X < 2 ^ (m + 1) + m) (hXne : X ≠ 2 ^ (m + 1) - 1) :
     ∃ kR, val (m + 1) kR = X ∧ dsum (m + 1) kR = m := by
   have hpow : (2 : ℕ) ^ (m + 1) = 2 * 2 ^ m := by ring
@@ -112,7 +113,7 @@ lemma exists_rem_rep (hm : 5 ≤ m) {X : ℕ} (hXlo : m ≤ X)
     · -- top digit two: the remainder is below `m`
       have hsmall : X % 2 ^ m < m := by omega
       have hlt2 : X % 2 ^ m < 2 ^ (m - 2) := by
-        have := lt_two_pow_sub_two m hm; omega
+        have := le_two_pow_sub_two m hm; omega
       have := s2_le_of_lt_two_pow (m - 2) _ hlt2
       omega
   obtain ⟨kR, hv, hd⟩ :=
@@ -123,7 +124,7 @@ lemma exists_rem_rep (hm : 5 ≤ m) {X : ℕ} (hXlo : m ≤ X)
 `[NC, NP)` other than the single exceptional residue
 `2 ^ (m+1) + 2 ^ t - 1`, there is a realizing family with `m + 2` coins
 carrying two coins at `t - 1` or two at `m`. -/
-theorem exists_two_coins (hm : 5 ≤ m) (ht : 1 ≤ t)
+theorem exists_two_coins (hm : 4 ≤ m) (ht : 1 ≤ t)
     (htm : 2 ^ (t + 1) ≤ m + 2) {r : ℕ}
     (hlo : 2 ^ (m + 1) - 2 ^ t ≤ r) (hhi : r < 2 ^ (m + 2) - 2 ^ (t + 1))
     (hne : r ≠ 2 ^ (m + 1) + 2 ^ t - 1) :

@@ -925,6 +925,7 @@ import MinModulus.SILiftTwoCoins
 import MinModulus.SILiftClassify
 import MinModulus.SILiftPairCert
 import MinModulus.SILiftSporadic
+import MinModulus.SILiftTopSix
 import MinModulus.SILiftReserve
 import MinModulus.SILiftTransport
 import MinModulus.SILiftSheet

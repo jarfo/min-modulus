@@ -10484,3 +10484,6 @@ import MinModulus
 #print axioms MinModulus.sporB_not_valid
 #print axioms MinModulus.sporC_not_valid
 #print axioms MinModulus.sporD_not_valid
+#print axioms MinModulus.siLiftParent_affine_normalize
+#print axioms MinModulus.topSix_si
+#print axioms MinModulus.topSix_sporadic_not_valid

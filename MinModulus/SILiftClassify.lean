@@ -75,7 +75,7 @@ lemma siSheet_val (hmt : t ≤ m) :
 /-- **The SI-lift classification.**  A valid parent over an exact
 super-increasing child has its extra entry reducing to the next
 super-increasing entry: the parent is affine-`SI` one step up. -/
-theorem siLiftSI_affine (hmt : t ≤ m) (hm5 : 5 ≤ m) (ht : 1 ≤ t)
+theorem siLiftSI_affine (hmt : t ≤ m) (hm5 : 4 ≤ m) (ht : 1 ≤ t)
     (htm : 2 ^ (t + 1) ≤ m + 2) (b : ℕ → ℕ) (e : ZMod (siFull m t))
     (hv : ValidTuple (siLiftSI m t b e)) :
     siReduce hmt e
@@ -224,12 +224,59 @@ lemma unit_mul_siSheet (hmt : t ≤ m) (u : (ZMod (siFull m t))ˣ) :
     simpa [← mul_assoc, Units.inv_mul] using h0
   · exact h
 
+/-- **Affine normalization.**  Reindexing, translating and dividing by the
+unit carry a parent whose deletion-child is an affine image of the block
+`A` to one whose child is `A` itself, preserving validity.  The sheet bits
+survive untouched, because a unit fixes the sheet. -/
+theorem siLiftParent_affine_normalize (hmt : t ≤ m)
+    (A : Fin (m + 1) → ZMod (siFull m t))
+    (G : Fin (m + 2) → ZMod (siFull m t))
+    (d : Fin (m + 2)) (σ : Fin (m + 1) ≃ Fin (m + 1))
+    (u : (ZMod (siFull m t))ˣ) (c : ZMod (siFull m t)) (b : ℕ → ℕ)
+    (hchild : ∀ i : Fin (m + 1),
+      G (d.succAbove (σ i))
+        = (u : ZMod (siFull m t)) * A i + c + (b i.val) • siSheet m t)
+    (hv : ValidTuple G) :
+    ValidTuple (siLiftParent m t A b
+      (((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t)) * (G d - c))) := by
+  have hvr : ValidTuple (fun j => G (siReindex d σ j)) :=
+    validTuple_reindex G (siReindex d σ) hv
+  have hvt : ValidTuple (fun j => G (siReindex d σ j) + (-c)) :=
+    validTuple_translate _ (-c) hvr
+  have hvu : ValidTuple (fun j =>
+      ((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t))
+        * (G (siReindex d σ j) + (-c))) :=
+    validTuple_unit_mul _ u⁻¹ hvt
+  have hform : (fun j => ((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t))
+        * (G (siReindex d σ j) + (-c)))
+      = siLiftParent m t A b
+          (((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t)) * (G d - c)) := by
+    funext j
+    induction j using Fin.lastCases with
+    | last => simp [siLiftParent, siReindex_last, sub_eq_add_neg]
+    | cast i =>
+      rw [siReindex_castSucc, hchild i]
+      simp only [siLiftParent, Fin.snoc_castSucc]
+      have hsm : ((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t))
+          * ((b i.val) • siSheet m t) = (b i.val) • siSheet m t := by
+        simp only [nsmul_eq_mul]
+        rw [← mul_assoc,
+          mul_comm (((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t)))
+            ((b i.val : ℕ) : ZMod (siFull m t)),
+          mul_assoc, unit_mul_siSheet hmt u⁻¹]
+      rw [show (u : ZMod (siFull m t)) * A i + c
+            + (b i.val) • siSheet m t + -c
+          = (u : ZMod (siFull m t)) * A i
+            + (b i.val) • siSheet m t from by ring,
+        mul_add, ← mul_assoc, Units.inv_mul, one_mul, hsm]
+  rwa [hform] at hvu
+
 /-- **The SI-lift classification, for an arbitrary affine child.**  A valid
 parent whose deletion-child at ANY coordinate is a unit multiple of the
 super-increasing block (reindexed arbitrarily) plus a constant, taken up to
 the sheet, has its remaining entry reducing to the next super-increasing
 entry after the same normalization. -/
-theorem siLift_affine_extra (hmt : t ≤ m) (hm5 : 5 ≤ m) (ht : 1 ≤ t)
+theorem siLift_affine_extra (hmt : t ≤ m) (hm5 : 4 ≤ m) (ht : 1 ≤ t)
     (htm : 2 ^ (t + 1) ≤ m + 2)
     (G : Fin (m + 2) → ZMod (siFull m t))
     (d : Fin (m + 2)) (σ : Fin (m + 1) ≃ Fin (m + 1))
@@ -241,41 +288,9 @@ theorem siLift_affine_extra (hmt : t ≤ m) (hm5 : 5 ≤ m) (ht : 1 ≤ t)
     (hv : ValidTuple G) :
     siReduce hmt
         (((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t)) * (G d - c))
-      = siReduce hmt ((2 ^ (m + 1) - 1 : ℕ) : ZMod (siFull m t)) := by
-  -- normalize: reindex, translate, divide by the unit
-  have hvr : ValidTuple (fun j => G (siReindex d σ j)) :=
-    validTuple_reindex G (siReindex d σ) hv
-  have hvt : ValidTuple (fun j => G (siReindex d σ j) + (-c)) :=
-    validTuple_translate _ (-c) hvr
-  have hvu : ValidTuple (fun j =>
-      ((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t))
-        * (G (siReindex d σ j) + (-c))) :=
-    validTuple_unit_mul _ u⁻¹ hvt
-  -- the normalized tuple IS the exact super-increasing parent
-  have hform : (fun j => ((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t))
-        * (G (siReindex d σ j) + (-c)))
-      = siLiftSI m t b
-          (((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t)) * (G d - c)) := by
-    funext j
-    induction j using Fin.lastCases with
-    | last => simp [siLiftSI, siLiftParent, siReindex_last, sub_eq_add_neg]
-    | cast i =>
-      rw [siReindex_castSucc, hchild i]
-      simp only [siLiftSI, siLiftParent, Fin.snoc_castSucc]
-      have hsm : ((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t))
-          * ((b i.val) • siSheet m t) = (b i.val) • siSheet m t := by
-        simp only [nsmul_eq_mul]
-        rw [← mul_assoc,
-          mul_comm (((u⁻¹ : (ZMod (siFull m t))ˣ) : ZMod (siFull m t)))
-            ((b i.val : ℕ) : ZMod (siFull m t)),
-          mul_assoc, unit_mul_siSheet hmt u⁻¹]
-      rw [show (u : ZMod (siFull m t)) * ((2 ^ i.val - 1 : ℕ) : _) + c
-            + (b i.val) • siSheet m t + -c
-          = (u : ZMod (siFull m t)) * ((2 ^ i.val - 1 : ℕ) : _)
-            + (b i.val) • siSheet m t from by ring,
-        mul_add, ← mul_assoc, Units.inv_mul, one_mul, hsm]
-  rw [hform] at hvu
-  exact siLiftSI_affine hmt hm5 ht htm b _ hvu
+      = siReduce hmt ((2 ^ (m + 1) - 1 : ℕ) : ZMod (siFull m t)) :=
+  siLiftSI_affine hmt hm5 ht htm b _
+    (siLiftParent_affine_normalize hmt _ G d σ u c b hchild hv)
 
 end Classify
 
