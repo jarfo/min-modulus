@@ -10564,3 +10564,8 @@ import MinModulus
 #print axioms MinModulus.StratumOne.reflected_parity
 #print axioms MinModulus.StratumOne.succ_ne_self
 #print axioms MinModulus.StratumOne.singleton_parity_fibre
+#print axioms MinModulus.StratumOne.sum_pow2_univ
+#print axioms MinModulus.StratumOne.crt_unique
+#print axioms MinModulus.StratumOne.reflected_not_valid_of_even_dim
+#print axioms MinModulus.StratumOne.reflected_rigid
+#print axioms MinModulus.StratumOne.antipodal_rigid

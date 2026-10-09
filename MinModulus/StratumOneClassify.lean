@@ -4,6 +4,7 @@ Released under Apache 2.0 license.
 -/
 import MinModulus.StratumOneWeight
 import MinModulus.StratumOneAntipodal
+import MinModulus.StratumOneReflected
 
 /-!
 # The stratum-one dichotomy
@@ -14,7 +15,8 @@ super-increasing block `2 ^ t - 1` modulo `M = 2 ^ d - 1`, and let `ē` be the
 residue of its extra entry.  Write `u = ē + 1`.
 
 * `u` of binary weight at least two is impossible (`StratumOneWeight`);
-* `u = 0`, i.e. `ē = -1`, is the reflected case;
+* `u = 0`, i.e. `ē = -1`, is the reflected case, and then `d` must be odd,
+  i.e. `n = d + 1` must be even;
 * `u = 2 ^ k`, i.e. `ē = 2 ^ k - 1`, forces an antipodal pair and a parity
   vector constant off that pair (`StratumOneAntipodal`).
 
@@ -33,14 +35,15 @@ variable {d n : ℕ} [NeZero d] {emb : ZMod d → Fin n} {ext : Fin n}
 whose block reduces to the super-increasing block has an extra residue of
 binary weight at most one: either `ē = -1`, or `ē = 2 ^ k - 1` for some `k`, in
 which case the extra coordinate and block position `k` form an antipodal pair
-and every block position other than `k` carries the same parity. -/
+and every block position other than `k` carries the same parity.  The reflected
+alternative additionally forces `n = d + 1` to be even. -/
 theorem stratum_one_dichotomy
     (g : Fin n → ZMod (2 * (2 ^ d - 1))) (hg : ValidTuple g) (hd : 1 < d)
     (hinj : Function.Injective emb) (hext : ∀ t, emb t ≠ ext)
     (hcover : ∀ i : Fin n, i = ext ∨ ∃ t, emb t = i)
     (hblk : ∀ t, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
       (g (emb t)) = pow2 t - 1) :
-    ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext) = -1
+    (ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext) = -1 ∧ Odd d)
     ∨ ∃ k : ZMod d,
         ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext)
           = pow2 k - 1
@@ -61,7 +64,12 @@ theorem stratum_one_dichotomy
     · left
       rw [Finset.card_eq_zero.mp hc] at hsum
       simp only [Finset.sum_empty] at hsum
-      linear_combination -hsum
+      have hrefl : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext)
+          = -1 := by linear_combination -hsum
+      refine ⟨hrefl, ?_⟩
+      rw [← Nat.not_even_iff_odd]
+      intro hev
+      exact reflected_not_valid_of_even_dim g hd hev hinj hext hcover hblk hrefl hg
     · right
       obtain ⟨k, hk⟩ := Finset.card_eq_one.mp hc
       rw [hk, Finset.sum_singleton] at hsum
@@ -103,7 +111,7 @@ theorem singleton_parity_fibre
       parityHom (2 ^ d - 1) (g i) = parityHom (2 ^ d - 1) (g i₀) + 1 := by
   classical
   have hd1 : 1 ≤ d := le_of_lt hd
-  rcases stratum_one_dichotomy g hg hd hinj hext hcover hblk with hrefl | ⟨k, _, hpair, hconst⟩
+  rcases stratum_one_dichotomy g hg hd hinj hext hcover hblk with ⟨hrefl, -⟩ | ⟨k, _, hpair, hconst⟩
   · -- the reflected branch: the extra coordinate is alone
     refine ⟨ext, fun i hi => ?_⟩
     rcases hcover i with rfl | ⟨t, rfl⟩
@@ -132,6 +140,76 @@ theorem singleton_parity_fibre
       · have htk : t ≠ k := fun h => hi (by rw [h])
         rw [hconst t (k + 1) htk (succ_ne_self hd k)]
         exact hstep _ _ hpq
+
+/-- **Rigidity of the reflected branch.**  A tuple in the branch `ē = -1` is
+determined by its extra entry alone: the block residues are fixed and every
+block parity is opposite to the extra's. -/
+theorem reflected_rigid
+    (g g' : Fin n → ZMod (2 * (2 ^ d - 1))) (hg : ValidTuple g) (hg' : ValidTuple g')
+    (hd : 1 < d) (hinj : Function.Injective emb) (hext : ∀ t, emb t ≠ ext)
+    (hcover : ∀ i : Fin n, i = ext ∨ ∃ t, emb t = i)
+    (hblk : ∀ t, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      (g (emb t)) = pow2 t - 1)
+    (hblk' : ∀ t, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      (g' (emb t)) = pow2 t - 1)
+    (hextra : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext) = -1)
+    (hextra' : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g' ext) = -1)
+    (hsame : g ext = g' ext) : g = g' := by
+  have hd1 : 1 ≤ d := le_of_lt hd
+  have h2d : 2 ≤ 2 ^ d := by
+    calc (2 : ℕ) = 2 ^ 1 := (pow_one 2).symm
+      _ ≤ 2 ^ d := Nat.pow_le_pow_right (by norm_num) hd1
+  have hM : 1 ≤ 2 ^ d - 1 := by omega
+  have hp := reflected_parity g hg hd hinj hext hcover hblk hextra
+  have hp' := reflected_parity g' hg' hd hinj hext hcover hblk' hextra'
+  funext i
+  rcases hcover i with rfl | ⟨t, rfl⟩
+  · exact hsame
+  · exact crt_unique hM (mersenne_odd hd1) (by rw [hblk t, hblk' t])
+      (by rw [hp t, hp' t, hsame])
+
+/-- **Rigidity of the antipodal branch.**  A tuple in the branch
+`ē = 2 ^ k - 1` is determined by two entries: the extra one and any block entry
+off the pair. -/
+theorem antipodal_rigid
+    (g g' : Fin n → ZMod (2 * (2 ^ d - 1))) (hg : ValidTuple g) (hg' : ValidTuple g')
+    (hd : 1 < d) (hinj : Function.Injective emb) (hext : ∀ t, emb t ≠ ext)
+    (hcover : ∀ i : Fin n, i = ext ∨ ∃ t, emb t = i)
+    (hblk : ∀ t, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      (g (emb t)) = pow2 t - 1)
+    (hblk' : ∀ t, ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1))
+      (g' (emb t)) = pow2 t - 1)
+    {k : ZMod d}
+    (hextra : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g ext)
+      = pow2 k - 1)
+    (hextra' : ZMod.castHom (dvd_mul_left (2 ^ d - 1) 2) (ZMod (2 ^ d - 1)) (g' ext)
+      = pow2 k - 1)
+    (hsame : g ext = g' ext) (hoff : g (emb (k + 1)) = g' (emb (k + 1))) : g = g' := by
+  have hd1 : 1 ≤ d := le_of_lt hd
+  have h2d : 2 ≤ 2 ^ d := by
+    calc (2 : ℕ) = 2 ^ 1 := (pow_one 2).symm
+      _ ≤ 2 ^ d := Nat.pow_le_pow_right (by norm_num) hd1
+  have hM : 1 ≤ 2 ^ d - 1 := by omega
+  have hodd : Odd (2 ^ d - 1) := mersenne_odd hd1
+  have hpk : parityHom (2 ^ d - 1) (g (emb k)) = parityHom (2 ^ d - 1) (g' (emb k)) := by
+    have hpair := antipodal_parity (g := g) hd1
+      (antipodal_pair hg hM (fun h => hext k h.symm) (by rw [hextra, hblk k]))
+    have hpair' := antipodal_parity (g := g') hd1
+      (antipodal_pair hg' hM (fun h => hext k h.symm) (by rw [hextra', hblk' k]))
+    rw [← hsame] at hpair'
+    have key : ∀ x y w : ZMod 2, w = x + 1 → w = y + 1 → x = y := by decide
+    exact key _ _ _ hpair hpair'
+  funext i
+  rcases hcover i with rfl | ⟨t, rfl⟩
+  · exact hsame
+  · by_cases htk : t = k
+    · subst htk
+      exact crt_unique hM hodd (by rw [hblk t, hblk' t]) hpk
+    · refine crt_unique hM hodd (by rw [hblk t, hblk' t]) ?_
+      rw [parity_const_off_pair g hg hd hinj hext hcover hblk hextra htk
+            (succ_ne_self hd k),
+        parity_const_off_pair g' hg' hd hinj hext hcover hblk' hextra' htk
+            (succ_ne_self hd k), hoff]
 
 end StratumOne
 
