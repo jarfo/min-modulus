@@ -10487,3 +10487,18 @@ import MinModulus
 #print axioms MinModulus.siLiftParent_affine_normalize
 #print axioms MinModulus.topSix_si
 #print axioms MinModulus.topSix_sporadic_not_valid
+
+-- Stratum one: the index-pair pigeonhole and the promotion-level calculus.
+#print axioms MinModulus.sub_mem_of_add_mem
+#print axioms MinModulus.eq_univ_of_add_invariant
+#print axioms MinModulus.exists_stratum_one_index_pair
+#print axioms MinModulus.StratumOne.two_pow_self
+#print axioms MinModulus.StratumOne.two_pow_mod
+#print axioms MinModulus.StratumOne.pow2_natCast
+#print axioms MinModulus.StratumOne.pow2_add
+#print axioms MinModulus.StratumOne.card_runSet
+#print axioms MinModulus.StratumOne.sum_pow2_runSet
+#print axioms MinModulus.StratumOne.coeffSum_levelVec
+#print axioms MinModulus.StratumOne.value_levelVec
+#print axioms MinModulus.StratumOne.coeffSum_assemble
+#print axioms MinModulus.StratumOne.value_assemble
