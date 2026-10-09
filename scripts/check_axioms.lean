@@ -10533,3 +10533,9 @@ import MinModulus
 #print axioms MinModulus.StratumOne.blockEmb_cover
 #print axioms MinModulus.StratumOne.two_mul_mersenne
 #print axioms MinModulus.StratumOne.not_validTuple_of_superIncreasing_block
+#print axioms MinModulus.StratumOne.exists_binary_support
+#print axioms MinModulus.StratumOne.sum_univ_two_pow
+#print axioms MinModulus.StratumOne.exists_pow2_support
+#print axioms MinModulus.StratumOne.card_image_add_one
+#print axioms MinModulus.StratumOne.sum_pow2_pred_image
+#print axioms MinModulus.StratumOne.not_validTuple_of_extra_weight

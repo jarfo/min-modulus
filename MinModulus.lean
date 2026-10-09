@@ -937,3 +937,4 @@ import MinModulus.StratumOneAssemble
 import MinModulus.StratumOneTriple
 import MinModulus.StratumOneCancel
 import MinModulus.StratumOneRivals
+import MinModulus.StratumOneWeight
