@@ -93,11 +93,12 @@ compatibility computation requires. -/
 theorem exists_stratum_one_index_pair (T : Finset (ZMod d)) (hne : T.Nonempty)
     (hlt : T.card < d) (c : ZMod d) :
     (∃ a ∈ T, a + c ∉ T.erase a) ∨
-      (∃ a ∈ T, a + (c - 1) ∉ T ∧ a + c ∈ T) := by
+      (∃ a ∈ T, a + (c - 1) ∉ T ∧ a + c ∈ T.erase a) := by
   by_cases hA : ∃ a ∈ T, a + c ∉ T.erase a
   · exact Or.inl hA
   push Not at hA
   -- every `a ∈ T` has `a + c ∈ T`
+  have hce : ∀ x ∈ T, x + c ∈ T.erase x := hA
   have hc : ∀ x ∈ T, x + c ∈ T := fun x hx => Finset.mem_of_mem_erase (hA x hx)
   by_cases hB : ∀ x ∈ T, x + (c - 1) ∈ T
   · exfalso
@@ -106,7 +107,7 @@ theorem exists_stratum_one_index_pair (T : Finset (ZMod d)) (hne : T.Nonempty)
     exact lt_irrefl _ hlt
   · push Not at hB
     obtain ⟨a, ha, hfail⟩ := hB
-    exact Or.inr ⟨a, ha, hfail, hc a ha⟩
+    exact Or.inr ⟨a, ha, hfail, hce a ha⟩
 
 end Pigeonhole
 

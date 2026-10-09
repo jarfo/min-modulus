@@ -934,3 +934,4 @@ import MinModulus.SILiftTarget
 import MinModulus.StratumOnePigeonhole
 import MinModulus.StratumOneLevels
 import MinModulus.StratumOneAssemble
+import MinModulus.StratumOneTriple

@@ -10502,3 +10502,11 @@ import MinModulus
 #print axioms MinModulus.StratumOne.value_levelVec
 #print axioms MinModulus.StratumOne.coeffSum_assemble
 #print axioms MinModulus.StratumOne.value_assemble
+#print axioms MinModulus.StratumOne.assemble_conLevel_apply
+#print axioms MinModulus.StratumOne.assemble_disLevel_apply
+#print axioms MinModulus.StratumOne.erase_diff_indicator
+#print axioms MinModulus.StratumOne.topIdx_not_mem_runSet
+#print axioms MinModulus.StratumOne.topIdx_ne_pred
+#print axioms MinModulus.StratumOne.compat_self
+#print axioms MinModulus.StratumOne.compat_pair
+#print axioms MinModulus.StratumOne.exists_compatible_pair
